@@ -126,7 +126,7 @@ export const projects: Project[] = [
   },
 ];
 
-export const getProject = (id: string) => projects.find((p) => p.id === id) ?? projects[0];
+export const getProject = (id: string) => projects.find((p) => p.id === id) ?? projects[0]!;
 
 export const healthTrend = [
   { month: "Mar", health: 61, security: 55, risk: 72 },
