@@ -20,7 +20,10 @@ import { Route as AppProjectsNewRouteImport } from './routes/app.projects.new'
 import { Route as AppProjectsIdIndexRouteImport } from './routes/app.projects.$id.index'
 import { Route as AppProjectsIdBlueprintRouteImport } from './routes/app.projects.$id.blueprint'
 import { Route as AppProjectsIdCodeHealthRouteImport } from './routes/app.projects.$id.code-health'
+import { Route as AppProjectsIdReportsRouteImport } from './routes/app.projects.$id.reports'
 import { Route as AppProjectsIdRequirementsRouteImport } from './routes/app.projects.$id.requirements'
+import { Route as AppProjectsIdRiskBusinessRouteImport } from './routes/app.projects.$id.risk-business'
+import { Route as AppProjectsIdSecurityRouteImport } from './routes/app.projects.$id.security'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -77,12 +80,28 @@ const AppProjectsIdCodeHealthRoute = AppProjectsIdCodeHealthRouteImport.update({
   path: '/code-health',
   getParentRoute: () => AppProjectsIdRoute,
 } as any)
+const AppProjectsIdReportsRoute = AppProjectsIdReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppProjectsIdRoute,
+} as any)
 const AppProjectsIdRequirementsRoute =
   AppProjectsIdRequirementsRouteImport.update({
     id: '/requirements',
     path: '/requirements',
     getParentRoute: () => AppProjectsIdRoute,
   } as any)
+const AppProjectsIdRiskBusinessRoute =
+  AppProjectsIdRiskBusinessRouteImport.update({
+    id: '/risk-business',
+    path: '/risk-business',
+    getParentRoute: () => AppProjectsIdRoute,
+  } as any)
+const AppProjectsIdSecurityRoute = AppProjectsIdSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => AppProjectsIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -95,7 +114,10 @@ export interface FileRoutesByFullPath {
   '/app/projects/': typeof AppProjectsIndexRoute
   '/app/projects/$id/blueprint': typeof AppProjectsIdBlueprintRoute
   '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
+  '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
+  '/app/projects/$id/risk-business': typeof AppProjectsIdRiskBusinessRoute
+  '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
   '/app/projects/$id/': typeof AppProjectsIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -107,7 +129,10 @@ export interface FileRoutesByTo {
   '/app/projects': typeof AppProjectsIndexRoute
   '/app/projects/$id/blueprint': typeof AppProjectsIdBlueprintRoute
   '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
+  '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
+  '/app/projects/$id/risk-business': typeof AppProjectsIdRiskBusinessRoute
+  '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
   '/app/projects/$id': typeof AppProjectsIdIndexRoute
 }
 export interface FileRoutesById {
@@ -122,7 +147,10 @@ export interface FileRoutesById {
   '/app/projects/': typeof AppProjectsIndexRoute
   '/app/projects/$id/blueprint': typeof AppProjectsIdBlueprintRoute
   '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
+  '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
+  '/app/projects/$id/risk-business': typeof AppProjectsIdRiskBusinessRoute
+  '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
   '/app/projects/$id/': typeof AppProjectsIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -138,7 +166,10 @@ export interface FileRouteTypes {
     | '/app/projects/'
     | '/app/projects/$id/blueprint'
     | '/app/projects/$id/code-health'
+    | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
+    | '/app/projects/$id/risk-business'
+    | '/app/projects/$id/security'
     | '/app/projects/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -150,7 +181,10 @@ export interface FileRouteTypes {
     | '/app/projects'
     | '/app/projects/$id/blueprint'
     | '/app/projects/$id/code-health'
+    | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
+    | '/app/projects/$id/risk-business'
+    | '/app/projects/$id/security'
     | '/app/projects/$id'
   id:
     | '__root__'
@@ -164,7 +198,10 @@ export interface FileRouteTypes {
     | '/app/projects/'
     | '/app/projects/$id/blueprint'
     | '/app/projects/$id/code-health'
+    | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
+    | '/app/projects/$id/risk-business'
+    | '/app/projects/$id/security'
     | '/app/projects/$id/'
   fileRoutesById: FileRoutesById
 }
@@ -254,11 +291,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsIdCodeHealthRouteImport
       parentRoute: typeof AppProjectsIdRoute
     }
+    '/app/projects/$id/reports': {
+      id: '/app/projects/$id/reports'
+      path: '/reports'
+      fullPath: '/app/projects/$id/reports'
+      preLoaderRoute: typeof AppProjectsIdReportsRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
     '/app/projects/$id/requirements': {
       id: '/app/projects/$id/requirements'
       path: '/requirements'
       fullPath: '/app/projects/$id/requirements'
       preLoaderRoute: typeof AppProjectsIdRequirementsRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
+    '/app/projects/$id/risk-business': {
+      id: '/app/projects/$id/risk-business'
+      path: '/risk-business'
+      fullPath: '/app/projects/$id/risk-business'
+      preLoaderRoute: typeof AppProjectsIdRiskBusinessRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
+    '/app/projects/$id/security': {
+      id: '/app/projects/$id/security'
+      path: '/security'
+      fullPath: '/app/projects/$id/security'
+      preLoaderRoute: typeof AppProjectsIdSecurityRouteImport
       parentRoute: typeof AppProjectsIdRoute
     }
   }
@@ -267,14 +325,20 @@ declare module '@tanstack/react-router' {
 interface AppProjectsIdRouteChildren {
   AppProjectsIdBlueprintRoute: typeof AppProjectsIdBlueprintRoute
   AppProjectsIdCodeHealthRoute: typeof AppProjectsIdCodeHealthRoute
+  AppProjectsIdReportsRoute: typeof AppProjectsIdReportsRoute
   AppProjectsIdRequirementsRoute: typeof AppProjectsIdRequirementsRoute
+  AppProjectsIdRiskBusinessRoute: typeof AppProjectsIdRiskBusinessRoute
+  AppProjectsIdSecurityRoute: typeof AppProjectsIdSecurityRoute
   AppProjectsIdIndexRoute: typeof AppProjectsIdIndexRoute
 }
 
 const AppProjectsIdRouteChildren: AppProjectsIdRouteChildren = {
   AppProjectsIdBlueprintRoute: AppProjectsIdBlueprintRoute,
   AppProjectsIdCodeHealthRoute: AppProjectsIdCodeHealthRoute,
+  AppProjectsIdReportsRoute: AppProjectsIdReportsRoute,
   AppProjectsIdRequirementsRoute: AppProjectsIdRequirementsRoute,
+  AppProjectsIdRiskBusinessRoute: AppProjectsIdRiskBusinessRoute,
+  AppProjectsIdSecurityRoute: AppProjectsIdSecurityRoute,
   AppProjectsIdIndexRoute: AppProjectsIdIndexRoute,
 }
 
