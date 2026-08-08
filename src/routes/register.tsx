@@ -95,10 +95,10 @@ function RegisterPage() {
             className="mt-1.5"
             value={values.name}
             placeholder="Priya Nair"
-            aria-invalid={!!errors.name}
+            aria-invalid={!!errors['name']}
             onChange={(e) => setValues((v) => ({ ...v, name: e.target.value }))}
           />
-          <FieldError message={errors.name} />
+          <FieldError message={errors['name']} />
         </div>
         <div>
           <Label htmlFor="email">Work or campus email</Label>
@@ -108,10 +108,10 @@ function RegisterPage() {
             className="mt-1.5"
             value={values.email}
             placeholder="you@company.com"
-            aria-invalid={!!errors.email}
+            aria-invalid={!!errors['email']}
             onChange={(e) => setValues((v) => ({ ...v, email: e.target.value }))}
           />
-          <FieldError message={errors.email} />
+          <FieldError message={errors['email']} />
         </div>
         <div>
           <Label htmlFor="password">Password</Label>
@@ -120,10 +120,10 @@ function RegisterPage() {
             type="password"
             className="mt-1.5"
             value={values.password}
-            aria-invalid={!!errors.password}
+            aria-invalid={!!errors['password']}
             onChange={(e) => setValues((v) => ({ ...v, password: e.target.value }))}
           />
-          <FieldError message={errors.password} />
+          <FieldError message={errors['password']} />
         </div>
         <div>
           <Label htmlFor="role">Role</Label>

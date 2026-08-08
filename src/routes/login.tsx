@@ -140,10 +140,10 @@ function LoginPage() {
             autoComplete="email"
             className="mt-1.5"
             value={values.email}
-            aria-invalid={!!errors.email}
+            aria-invalid={!!errors['email']}
             onChange={(e) => setValues((v) => ({ ...v, email: e.target.value }))}
           />
-          <FieldError message={errors.email} />
+          <FieldError message={errors['email']} />
         </div>
         <div>
           <div className="flex items-center justify-between">
@@ -156,10 +156,10 @@ function LoginPage() {
             autoComplete="current-password"
             className="mt-1.5"
             value={values.password}
-            aria-invalid={!!errors.password}
+            aria-invalid={!!errors['password']}
             onChange={(e) => setValues((v) => ({ ...v, password: e.target.value }))}
           />
-          <FieldError message={errors.password} />
+          <FieldError message={errors['password']} />
         </div>
         <Button type="submit" className="w-full" disabled={loading}>
           {loading ? (
