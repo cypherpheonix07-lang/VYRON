@@ -18,6 +18,9 @@ import { Route as AppProjectsIndexRouteImport } from './routes/app.projects.inde
 import { Route as AppProjectsIdRouteImport } from './routes/app.projects.$id'
 import { Route as AppProjectsNewRouteImport } from './routes/app.projects.new'
 import { Route as AppProjectsIdIndexRouteImport } from './routes/app.projects.$id.index'
+import { Route as AppProjectsIdBlueprintRouteImport } from './routes/app.projects.$id.blueprint'
+import { Route as AppProjectsIdCodeHealthRouteImport } from './routes/app.projects.$id.code-health'
+import { Route as AppProjectsIdRequirementsRouteImport } from './routes/app.projects.$id.requirements'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +67,22 @@ const AppProjectsIdIndexRoute = AppProjectsIdIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppProjectsIdRoute,
 } as any)
+const AppProjectsIdBlueprintRoute = AppProjectsIdBlueprintRouteImport.update({
+  id: '/blueprint',
+  path: '/blueprint',
+  getParentRoute: () => AppProjectsIdRoute,
+} as any)
+const AppProjectsIdCodeHealthRoute = AppProjectsIdCodeHealthRouteImport.update({
+  id: '/code-health',
+  path: '/code-health',
+  getParentRoute: () => AppProjectsIdRoute,
+} as any)
+const AppProjectsIdRequirementsRoute =
+  AppProjectsIdRequirementsRouteImport.update({
+    id: '/requirements',
+    path: '/requirements',
+    getParentRoute: () => AppProjectsIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -74,6 +93,9 @@ export interface FileRoutesByFullPath {
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
   '/app/projects/new': typeof AppProjectsNewRoute
   '/app/projects/': typeof AppProjectsIndexRoute
+  '/app/projects/$id/blueprint': typeof AppProjectsIdBlueprintRoute
+  '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
+  '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
   '/app/projects/$id/': typeof AppProjectsIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -83,6 +105,9 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/app/projects/new': typeof AppProjectsNewRoute
   '/app/projects': typeof AppProjectsIndexRoute
+  '/app/projects/$id/blueprint': typeof AppProjectsIdBlueprintRoute
+  '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
+  '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
   '/app/projects/$id': typeof AppProjectsIdIndexRoute
 }
 export interface FileRoutesById {
@@ -95,6 +120,9 @@ export interface FileRoutesById {
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
   '/app/projects/new': typeof AppProjectsNewRoute
   '/app/projects/': typeof AppProjectsIndexRoute
+  '/app/projects/$id/blueprint': typeof AppProjectsIdBlueprintRoute
+  '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
+  '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
   '/app/projects/$id/': typeof AppProjectsIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -108,6 +136,9 @@ export interface FileRouteTypes {
     | '/app/projects/$id'
     | '/app/projects/new'
     | '/app/projects/'
+    | '/app/projects/$id/blueprint'
+    | '/app/projects/$id/code-health'
+    | '/app/projects/$id/requirements'
     | '/app/projects/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -117,6 +148,9 @@ export interface FileRouteTypes {
     | '/app'
     | '/app/projects/new'
     | '/app/projects'
+    | '/app/projects/$id/blueprint'
+    | '/app/projects/$id/code-health'
+    | '/app/projects/$id/requirements'
     | '/app/projects/$id'
   id:
     | '__root__'
@@ -128,6 +162,9 @@ export interface FileRouteTypes {
     | '/app/projects/$id'
     | '/app/projects/new'
     | '/app/projects/'
+    | '/app/projects/$id/blueprint'
+    | '/app/projects/$id/code-health'
+    | '/app/projects/$id/requirements'
     | '/app/projects/$id/'
   fileRoutesById: FileRoutesById
 }
@@ -203,14 +240,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsIdIndexRouteImport
       parentRoute: typeof AppProjectsIdRoute
     }
+    '/app/projects/$id/blueprint': {
+      id: '/app/projects/$id/blueprint'
+      path: '/blueprint'
+      fullPath: '/app/projects/$id/blueprint'
+      preLoaderRoute: typeof AppProjectsIdBlueprintRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
+    '/app/projects/$id/code-health': {
+      id: '/app/projects/$id/code-health'
+      path: '/code-health'
+      fullPath: '/app/projects/$id/code-health'
+      preLoaderRoute: typeof AppProjectsIdCodeHealthRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
+    '/app/projects/$id/requirements': {
+      id: '/app/projects/$id/requirements'
+      path: '/requirements'
+      fullPath: '/app/projects/$id/requirements'
+      preLoaderRoute: typeof AppProjectsIdRequirementsRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
   }
 }
 
 interface AppProjectsIdRouteChildren {
+  AppProjectsIdBlueprintRoute: typeof AppProjectsIdBlueprintRoute
+  AppProjectsIdCodeHealthRoute: typeof AppProjectsIdCodeHealthRoute
+  AppProjectsIdRequirementsRoute: typeof AppProjectsIdRequirementsRoute
   AppProjectsIdIndexRoute: typeof AppProjectsIdIndexRoute
 }
 
 const AppProjectsIdRouteChildren: AppProjectsIdRouteChildren = {
+  AppProjectsIdBlueprintRoute: AppProjectsIdBlueprintRoute,
+  AppProjectsIdCodeHealthRoute: AppProjectsIdCodeHealthRoute,
+  AppProjectsIdRequirementsRoute: AppProjectsIdRequirementsRoute,
   AppProjectsIdIndexRoute: AppProjectsIdIndexRoute,
 }
 
