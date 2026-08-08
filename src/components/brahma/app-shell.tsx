@@ -67,7 +67,13 @@ const labelMap: Record<string, string> = {
   "risk-business": "Risk & Business",
 };
 
-function NavList({ onNavigate, collapsed }: { onNavigate?: () => void; collapsed?: boolean }) {
+function NavList({
+  onNavigate,
+  collapsed,
+}: {
+  onNavigate?: (() => void) | undefined;
+  collapsed?: boolean | undefined;
+}) {
   const { isAdmin } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -79,10 +85,9 @@ function NavList({ onNavigate, collapsed }: { onNavigate?: () => void; collapsed
   return (
     <nav className="flex flex-col gap-1 px-2" aria-label="Main navigation">
       {items.map((item) => {
-        const active =
-          item.exact || item.to === "/app/projects/new"
-            ? pathname === item.to
-            : pathname.startsWith(item.to) && pathname !== "/app/projects/new";
+        const active = item.exact
+          ? pathname === item.to
+          : pathname.startsWith(item.to) && !pathname.startsWith("/app/projects/new");
         return (
           <Link
             key={item.to}
@@ -109,8 +114,8 @@ function SidebarBody({
   collapsed,
   onNavigate,
 }: {
-  collapsed?: boolean;
-  onNavigate?: () => void;
+  collapsed?: boolean | undefined;
+  onNavigate?: (() => void) | undefined;
 }) {
   return (
     <div className="flex h-full flex-col gap-6 py-4">
@@ -193,7 +198,7 @@ function Breadcrumbs() {
           {i === crumbs.length - 1 ? (
             <span className="truncate text-foreground">{c.label}</span>
           ) : (
-            <Link to={c.href} className="truncate hover:text-foreground">
+            <Link to={c.href as never} className="truncate hover:text-foreground">
               {c.label}
             </Link>
           )}
@@ -207,7 +212,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, ready, logout } = useAuth();
-  const { toggle } = useTheme();
+  const { theme, toggle } = useTheme();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -294,8 +299,11 @@ export function AppShell({ children }: { children: ReactNode }) {
             <div className="ml-auto flex shrink-0 items-center gap-1">
               <NotificationBell />
               <Button variant="ghost" size="icon" onClick={toggle} aria-label="Toggle theme">
-                <Sun className="size-4 hidden light:block" aria-hidden />
-                <Moon className="size-4" aria-hidden />
+                {theme === "light" ? (
+                  <Moon className="size-4" aria-hidden />
+                ) : (
+                  <Sun className="size-4" aria-hidden />
+                )}
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
