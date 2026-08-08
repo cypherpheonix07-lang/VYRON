@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Hexagon } from "lucide-react";
 
-export function BrahmaLogo({ compact = false }: { compact?: boolean }) {
+export function BrahmaLogo({ compact }: { compact?: boolean | undefined }) {
   return (
     <Link to="/" className="flex items-center gap-2.5" aria-label="PROJECT BRAHMA home">
       <span className="relative grid size-8 shrink-0 place-items-center rounded-lg bg-primary/15 text-primary ring-1 ring-primary/30">
