@@ -14,12 +14,6 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as AppIndexRouteImport } from './routes/app.index'
-import { Route as AppAdminRouteImport } from './routes/app.admin'
-import { Route as AppReportsRouteImport } from './routes/app.reports'
-import { Route as AppSettingsRouteImport } from './routes/app.settings'
-import { Route as AppAdminIndexRouteImport } from './routes/app.admin.index'
-import { Route as AppAdminTemplatesRouteImport } from './routes/app.admin.templates'
-import { Route as AppAdminUsersRouteImport } from './routes/app.admin.users'
 import { Route as AppProjectsIndexRouteImport } from './routes/app.projects.index'
 import { Route as AppProjectsIdRouteImport } from './routes/app.projects.$id'
 import { Route as AppProjectsNewRouteImport } from './routes/app.projects.new'
@@ -55,36 +49,6 @@ const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
-} as any)
-const AppAdminRoute = AppAdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppReportsRoute = AppReportsRouteImport.update({
-  id: '/reports',
-  path: '/reports',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppSettingsRoute = AppSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppAdminRoute,
-} as any)
-const AppAdminTemplatesRoute = AppAdminTemplatesRouteImport.update({
-  id: '/templates',
-  path: '/templates',
-  getParentRoute: () => AppAdminRoute,
-} as any)
-const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
-  id: '/users',
-  path: '/users',
-  getParentRoute: () => AppAdminRoute,
 } as any)
 const AppProjectsIndexRoute = AppProjectsIndexRouteImport.update({
   id: '/projects/',
@@ -144,15 +108,9 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
-  '/app/admin': typeof AppAdminRouteWithChildren
-  '/app/reports': typeof AppReportsRoute
-  '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
-  '/app/admin/templates': typeof AppAdminTemplatesRoute
-  '/app/admin/users': typeof AppAdminUsersRoute
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
   '/app/projects/new': typeof AppProjectsNewRoute
-  '/app/admin/': typeof AppAdminIndexRoute
   '/app/projects/': typeof AppProjectsIndexRoute
   '/app/projects/$id/blueprint': typeof AppProjectsIdBlueprintRoute
   '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
@@ -166,13 +124,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
-  '/app/reports': typeof AppReportsRoute
-  '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
-  '/app/admin/templates': typeof AppAdminTemplatesRoute
-  '/app/admin/users': typeof AppAdminUsersRoute
   '/app/projects/new': typeof AppProjectsNewRoute
-  '/app/admin': typeof AppAdminIndexRoute
   '/app/projects': typeof AppProjectsIndexRoute
   '/app/projects/$id/blueprint': typeof AppProjectsIdBlueprintRoute
   '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
@@ -188,15 +141,9 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
-  '/app/admin': typeof AppAdminRouteWithChildren
-  '/app/reports': typeof AppReportsRoute
-  '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
-  '/app/admin/templates': typeof AppAdminTemplatesRoute
-  '/app/admin/users': typeof AppAdminUsersRoute
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
   '/app/projects/new': typeof AppProjectsNewRoute
-  '/app/admin/': typeof AppAdminIndexRoute
   '/app/projects/': typeof AppProjectsIndexRoute
   '/app/projects/$id/blueprint': typeof AppProjectsIdBlueprintRoute
   '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
@@ -213,15 +160,9 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/register'
-    | '/app/admin'
-    | '/app/reports'
-    | '/app/settings'
     | '/app/'
-    | '/app/admin/templates'
-    | '/app/admin/users'
     | '/app/projects/$id'
     | '/app/projects/new'
-    | '/app/admin/'
     | '/app/projects/'
     | '/app/projects/$id/blueprint'
     | '/app/projects/$id/code-health'
@@ -235,13 +176,8 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/register'
-    | '/app/reports'
-    | '/app/settings'
     | '/app'
-    | '/app/admin/templates'
-    | '/app/admin/users'
     | '/app/projects/new'
-    | '/app/admin'
     | '/app/projects'
     | '/app/projects/$id/blueprint'
     | '/app/projects/$id/code-health'
@@ -256,15 +192,9 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/register'
-    | '/app/admin'
-    | '/app/reports'
-    | '/app/settings'
     | '/app/'
-    | '/app/admin/templates'
-    | '/app/admin/users'
     | '/app/projects/$id'
     | '/app/projects/new'
-    | '/app/admin/'
     | '/app/projects/'
     | '/app/projects/$id/blueprint'
     | '/app/projects/$id/code-health'
@@ -318,48 +248,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
-    }
-    '/app/admin': {
-      id: '/app/admin'
-      path: '/admin'
-      fullPath: '/app/admin'
-      preLoaderRoute: typeof AppAdminRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/reports': {
-      id: '/app/reports'
-      path: '/reports'
-      fullPath: '/app/reports'
-      preLoaderRoute: typeof AppReportsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/settings': {
-      id: '/app/settings'
-      path: '/settings'
-      fullPath: '/app/settings'
-      preLoaderRoute: typeof AppSettingsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/admin/': {
-      id: '/app/admin/'
-      path: '/'
-      fullPath: '/app/admin/'
-      preLoaderRoute: typeof AppAdminIndexRouteImport
-      parentRoute: typeof AppAdminRoute
-    }
-    '/app/admin/templates': {
-      id: '/app/admin/templates'
-      path: '/templates'
-      fullPath: '/app/admin/templates'
-      preLoaderRoute: typeof AppAdminTemplatesRouteImport
-      parentRoute: typeof AppAdminRoute
-    }
-    '/app/admin/users': {
-      id: '/app/admin/users'
-      path: '/users'
-      fullPath: '/app/admin/users'
-      preLoaderRoute: typeof AppAdminUsersRouteImport
-      parentRoute: typeof AppAdminRoute
     }
     '/app/projects/': {
       id: '/app/projects/'
@@ -434,22 +322,6 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface AppAdminRouteChildren {
-  AppAdminTemplatesRoute: typeof AppAdminTemplatesRoute
-  AppAdminUsersRoute: typeof AppAdminUsersRoute
-  AppAdminIndexRoute: typeof AppAdminIndexRoute
-}
-
-const AppAdminRouteChildren: AppAdminRouteChildren = {
-  AppAdminTemplatesRoute: AppAdminTemplatesRoute,
-  AppAdminUsersRoute: AppAdminUsersRoute,
-  AppAdminIndexRoute: AppAdminIndexRoute,
-}
-
-const AppAdminRouteWithChildren = AppAdminRoute._addFileChildren(
-  AppAdminRouteChildren,
-)
-
 interface AppProjectsIdRouteChildren {
   AppProjectsIdBlueprintRoute: typeof AppProjectsIdBlueprintRoute
   AppProjectsIdCodeHealthRoute: typeof AppProjectsIdCodeHealthRoute
@@ -475,9 +347,6 @@ const AppProjectsIdRouteWithChildren = AppProjectsIdRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
-  AppAdminRoute: typeof AppAdminRouteWithChildren
-  AppReportsRoute: typeof AppReportsRoute
-  AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
   AppProjectsIdRoute: typeof AppProjectsIdRouteWithChildren
   AppProjectsNewRoute: typeof AppProjectsNewRoute
@@ -485,9 +354,6 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppAdminRoute: AppAdminRouteWithChildren,
-  AppReportsRoute: AppReportsRoute,
-  AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
   AppProjectsIdRoute: AppProjectsIdRouteWithChildren,
   AppProjectsNewRoute: AppProjectsNewRoute,
