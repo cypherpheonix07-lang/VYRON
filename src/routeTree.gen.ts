@@ -14,6 +14,7 @@ import { Route as AppRouteImport } from './routes/app'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppProjectsIndexRouteImport } from './routes/app.projects.index'
 import { Route as AppProjectsIdRouteImport } from './routes/app.projects.$id'
 import { Route as AppProjectsNewRouteImport } from './routes/app.projects.new'
@@ -48,6 +49,11 @@ const RegisterRoute = RegisterRouteImport.update({
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
 const AppProjectsIndexRoute = AppProjectsIndexRouteImport.update({
@@ -108,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
   '/app/projects/new': typeof AppProjectsNewRoute
@@ -124,6 +131,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
   '/app/projects/new': typeof AppProjectsNewRoute
   '/app/projects': typeof AppProjectsIndexRoute
@@ -141,6 +149,7 @@ export interface FileRoutesById {
   '/app': typeof AppRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
   '/app/projects/new': typeof AppProjectsNewRoute
@@ -160,6 +169,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/register'
+    | '/app/settings'
     | '/app/'
     | '/app/projects/$id'
     | '/app/projects/new'
@@ -176,6 +186,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/register'
+    | '/app/settings'
     | '/app'
     | '/app/projects/new'
     | '/app/projects'
@@ -192,6 +203,7 @@ export interface FileRouteTypes {
     | '/app'
     | '/login'
     | '/register'
+    | '/app/settings'
     | '/app/'
     | '/app/projects/$id'
     | '/app/projects/new'
@@ -247,6 +259,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/projects/': {
@@ -347,6 +366,7 @@ const AppProjectsIdRouteWithChildren = AppProjectsIdRoute._addFileChildren(
 )
 
 interface AppRouteChildren {
+  AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
   AppProjectsIdRoute: typeof AppProjectsIdRouteWithChildren
   AppProjectsNewRoute: typeof AppProjectsNewRoute
@@ -354,6 +374,7 @@ interface AppRouteChildren {
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
   AppProjectsIdRoute: AppProjectsIdRouteWithChildren,
   AppProjectsNewRoute: AppProjectsNewRoute,
@@ -371,13 +392,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
