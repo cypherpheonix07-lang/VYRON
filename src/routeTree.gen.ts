@@ -18,6 +18,7 @@ import { Route as AppAdminRouteImport } from './routes/app.admin'
 import { Route as AppReportsRouteImport } from './routes/app.reports'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppAdminIndexRouteImport } from './routes/app.admin.index'
+import { Route as AppAdminUsersRouteImport } from './routes/app.admin.users'
 import { Route as AppProjectsIndexRouteImport } from './routes/app.projects.index'
 import { Route as AppProjectsIdRouteImport } from './routes/app.projects.$id'
 import { Route as AppProjectsNewRouteImport } from './routes/app.projects.new'
@@ -72,6 +73,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
 const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
   getParentRoute: () => AppAdminRoute,
 } as any)
 const AppProjectsIndexRoute = AppProjectsIndexRouteImport.update({
@@ -136,6 +142,7 @@ export interface FileRoutesByFullPath {
   '/app/reports': typeof AppReportsRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
+  '/app/admin/users': typeof AppAdminUsersRoute
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
   '/app/projects/new': typeof AppProjectsNewRoute
   '/app/admin/': typeof AppAdminIndexRoute
@@ -155,6 +162,7 @@ export interface FileRoutesByTo {
   '/app/reports': typeof AppReportsRoute
   '/app/settings': typeof AppSettingsRoute
   '/app': typeof AppIndexRoute
+  '/app/admin/users': typeof AppAdminUsersRoute
   '/app/projects/new': typeof AppProjectsNewRoute
   '/app/admin': typeof AppAdminIndexRoute
   '/app/projects': typeof AppProjectsIndexRoute
@@ -176,6 +184,7 @@ export interface FileRoutesById {
   '/app/reports': typeof AppReportsRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/': typeof AppIndexRoute
+  '/app/admin/users': typeof AppAdminUsersRoute
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
   '/app/projects/new': typeof AppProjectsNewRoute
   '/app/admin/': typeof AppAdminIndexRoute
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/app/reports'
     | '/app/settings'
     | '/app/'
+    | '/app/admin/users'
     | '/app/projects/$id'
     | '/app/projects/new'
     | '/app/admin/'
@@ -218,6 +228,7 @@ export interface FileRouteTypes {
     | '/app/reports'
     | '/app/settings'
     | '/app'
+    | '/app/admin/users'
     | '/app/projects/new'
     | '/app/admin'
     | '/app/projects'
@@ -238,6 +249,7 @@ export interface FileRouteTypes {
     | '/app/reports'
     | '/app/settings'
     | '/app/'
+    | '/app/admin/users'
     | '/app/projects/$id'
     | '/app/projects/new'
     | '/app/admin/'
@@ -323,6 +335,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminIndexRouteImport
       parentRoute: typeof AppAdminRoute
     }
+    '/app/admin/users': {
+      id: '/app/admin/users'
+      path: '/users'
+      fullPath: '/app/admin/users'
+      preLoaderRoute: typeof AppAdminUsersRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
     '/app/projects/': {
       id: '/app/projects/'
       path: '/projects'
@@ -397,10 +416,12 @@ declare module '@tanstack/react-router' {
 }
 
 interface AppAdminRouteChildren {
+  AppAdminUsersRoute: typeof AppAdminUsersRoute
   AppAdminIndexRoute: typeof AppAdminIndexRoute
 }
 
 const AppAdminRouteChildren: AppAdminRouteChildren = {
+  AppAdminUsersRoute: AppAdminUsersRoute,
   AppAdminIndexRoute: AppAdminIndexRoute,
 }
 
