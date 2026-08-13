@@ -8,6 +8,7 @@ import {
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { Compass, Command } from "lucide-react";
 
 import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
@@ -15,20 +16,77 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 text-center">
+      <div className="surface border border-border/80 max-w-lg p-10 rounded-2xl space-y-6 relative overflow-hidden shadow-2xl">
+        <div className="pointer-events-none absolute inset-0 opacity-[0.03] bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-cyan-500 via-transparent to-transparent" />
+
+        <Compass className="size-16 text-cyan-400 mx-auto drop-shadow-[0_0_15px_rgba(34,211,238,0.45)]" />
+
+        <div className="space-y-2">
+          <h1 className="text-6xl font-extrabold text-foreground tracking-tighter drop-shadow-[0_0_12px_rgba(255,255,255,0.1)]">
+            404
+          </h1>
+          <h2 className="text-base font-semibold text-foreground">
+            This blueprint page does not exist.
+          </h2>
+          <p className="text-xs text-muted-foreground max-w-sm mx-auto leading-relaxed">
+            The platform route configuration is unmapped, or this sub-node is restricted. Explore
+            available modules using the shortcuts below.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap justify-center gap-3">
           <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            to="/app"
+            className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-primary-foreground transition-all hover:bg-primary/95 shadow-md"
           >
-            Go home
+            Back to Dashboard
           </Link>
+          <button
+            onClick={() => {
+              const event = new KeyboardEvent("keydown", {
+                key: "k",
+                metaKey: true,
+                bubbles: true,
+              });
+              window.dispatchEvent(event);
+            }}
+            className="inline-flex items-center gap-1.5 justify-center rounded-xl border border-border bg-secondary/40 px-4 py-2.5 text-xs font-semibold text-foreground transition-all hover:bg-secondary/60"
+          >
+            <Command className="size-3.5" /> Cmd+K Palette
+          </button>
+        </div>
+
+        <div className="border-t border-border/40 pt-5 text-left">
+          <p className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/60 mb-3">
+            Quick Navigation links
+          </p>
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            <Link
+              to="/app"
+              className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+            >
+              <span>&bull;</span> Dashboard
+            </Link>
+            <Link
+              to="/app/studio"
+              className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+            >
+              <span>&bull;</span> AI Studio
+            </Link>
+            <Link
+              to="/app/projects"
+              className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+            >
+              <span>&bull;</span> Project Index
+            </Link>
+            <Link
+              to="/app/reports"
+              className="text-muted-foreground hover:text-primary transition-colors flex items-center gap-1"
+            >
+              <span>&bull;</span> Reports Library
+            </Link>
+          </div>
         </div>
       </div>
     </div>

@@ -9,8 +9,11 @@ import {
   ShieldAlert,
   ShieldCheck,
   TrendingUp,
+  X,
+  CheckSquare,
 } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 import {
   Area,
   AreaChart,
@@ -37,6 +40,8 @@ import {
   StatusBadge,
 } from "@/components/brahma/primitives";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -57,7 +62,10 @@ export const Route = createFileRoute("/app/")({
         content: "Executive overview of project health, security posture and delivery risk.",
       },
       { property: "og:title", content: "Dashboard — PROJECT BRAHMA" },
-      { property: "og:description", content: "Portfolio health, security and delivery risk at a glance." },
+      {
+        property: "og:description",
+        content: "Portfolio health, security and delivery risk at a glance.",
+      },
     ],
   }),
   component: Dashboard,
@@ -83,6 +91,8 @@ const tooltipStyle = {
 
 function Dashboard() {
   const [state, setState] = useState<ViewState>("loaded");
+  const [showOnboarding, setShowOnboarding] = useState(true);
+  const [completedSteps, setCompletedSteps] = useState([true, true, true, false, false, false]);
 
   return (
     <>
@@ -147,12 +157,153 @@ function Dashboard() {
       {state === "loaded" ? (
         <>
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-            <StatCard label="Total projects" value={projects.length} icon={FolderKanban} delta={12} hint="vs last month" />
-            <StatCard label="Avg. health score" value="73" icon={Activity} delta={5} tone="success" hint="portfolio median 71" />
-            <StatCard label="Security risk" value="High" icon={ShieldCheck} tone="critical" hint="2 critical findings open" />
-            <StatCard label="Delivery risk" value="Medium" icon={TrendingUp} tone="warning" hint="1 project at risk" />
-            <StatCard label="Reports generated" value="318" icon={FileBarChart2} delta={9} hint="all time" />
+            <StatCard
+              label="Total projects"
+              value={projects.length}
+              icon={FolderKanban}
+              delta={12}
+              hint="vs last month"
+            />
+            <StatCard
+              label="Avg. health score"
+              value="73"
+              icon={Activity}
+              delta={5}
+              tone="success"
+              hint="portfolio median 71"
+            />
+            <StatCard
+              label="Security risk"
+              value="High"
+              icon={ShieldCheck}
+              tone="critical"
+              hint="2 critical findings open"
+            />
+            <StatCard
+              label="Delivery risk"
+              value="Medium"
+              icon={TrendingUp}
+              tone="warning"
+              hint="1 project at risk"
+            />
+            <StatCard
+              label="Reports generated"
+              value="318"
+              icon={FileBarChart2}
+              delta={9}
+              hint="all time"
+            />
           </div>
+
+          {showOnboarding && (
+            <Card className="surface border border-primary/20 bg-primary/4 relative overflow-hidden mt-4">
+              <CardContent className="p-6 relative flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex items-start gap-4">
+                  <div className="relative shrink-0 mt-1">
+                    <svg className="size-16 -rotate-90" aria-hidden="true">
+                      <circle
+                        cx="32"
+                        cy="32"
+                        r="28"
+                        className="stroke-muted-foreground/20 fill-none"
+                        strokeWidth="4"
+                      />
+                      <circle
+                        cx="32"
+                        cy="32"
+                        r="28"
+                        className="stroke-primary fill-none transition-all duration-300"
+                        strokeWidth="4"
+                        strokeDasharray="175"
+                        strokeDashoffset={
+                          175 -
+                          (175 * Math.round((completedSteps.filter(Boolean).length / 6) * 100)) /
+                            100
+                        }
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center text-xs font-bold font-mono text-primary">
+                      {Math.round((completedSteps.filter(Boolean).length / 6) * 100)}%
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-semibold flex items-center gap-2">
+                      Workspace Onboarding Checklist
+                      <Badge className="bg-primary/20 text-primary border-none text-[9px] px-1.5 h-4 font-mono">
+                        {completedSteps.filter(Boolean).length}/6 Done
+                      </Badge>
+                    </h3>
+                    <p className="text-xs text-muted-foreground max-w-md">
+                      Follow these steps to establish your workspace credentials, map functional
+                      blueprints, connect repositories, and sync your development lifecycle.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full md:w-auto">
+                  {[
+                    { label: "Create your first project", href: "/app/projects/new" },
+                    { label: "Connect a repository", href: "/app/projects/brahma-core" },
+                    { label: "Run a blueprint analysis", href: "/app/studio" },
+                    {
+                      label: "Review security findings",
+                      href: "/app/projects/brahma-core/security",
+                    },
+                    { label: "Export a report", href: "/app/reports" },
+                    { label: "Invite a teammate", href: "/app/team" },
+                  ].map((step, idx) => {
+                    const isDone = completedSteps[idx];
+                    return (
+                      <div
+                        key={step.label}
+                        className="flex items-center justify-between gap-2.5 p-2 rounded-lg border border-border/40 bg-zinc-950/40 text-xs hover:border-primary/25 transition-colors cursor-pointer"
+                        onClick={() => {
+                          const next = [...completedSteps];
+                          next[idx] = !isDone;
+                          setCompletedSteps(next);
+                          toast.success(
+                            !isDone
+                              ? `Completed: ${step.label}`
+                              : `Marked incomplete: ${step.label}`,
+                          );
+                        }}
+                      >
+                        <div className="flex items-center gap-2 min-w-0">
+                          <button
+                            type="button"
+                            className={`size-4 rounded border flex items-center justify-center transition-all ${
+                              isDone
+                                ? "bg-primary border-primary text-primary-foreground"
+                                : "border-border"
+                            }`}
+                            aria-label={`Mark step "${step.label}" as ${isDone ? "incomplete" : "complete"}`}
+                          >
+                            {isDone && <span className="text-[10px] font-bold">✓</span>}
+                          </button>
+                          <Link
+                            to={step.href as never}
+                            onClick={(e) => e.stopPropagation()}
+                            className="truncate text-muted-foreground hover:text-foreground hover:underline text-[11px]"
+                          >
+                            {step.label}
+                          </Link>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setShowOnboarding(false)}
+                  className="absolute top-3 right-3 text-muted-foreground hover:text-foreground"
+                  aria-label="Dismiss onboarding checklist"
+                >
+                  <X className="size-4" />
+                </button>
+              </CardContent>
+            </Card>
+          )}
 
           <div className="grid gap-4 lg:grid-cols-3">
             <SectionCard
@@ -174,18 +325,47 @@ function Dashboard() {
                       </linearGradient>
                     </defs>
                     <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="month" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
-                    <YAxis stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} domain={[0, 100]} />
+                    <XAxis
+                      dataKey="month"
+                      stroke="var(--muted-foreground)"
+                      fontSize={11}
+                      tickLine={false}
+                      axisLine={false}
+                    />
+                    <YAxis
+                      stroke="var(--muted-foreground)"
+                      fontSize={11}
+                      tickLine={false}
+                      axisLine={false}
+                      domain={[0, 100]}
+                    />
                     <Tooltip contentStyle={tooltipStyle} />
                     <Legend wrapperStyle={{ fontSize: 11 }} />
-                    <Area type="monotone" dataKey="health" name="Health" stroke="var(--chart-1)" fill="url(#gHealth)" strokeWidth={2} />
-                    <Area type="monotone" dataKey="security" name="Security" stroke="var(--chart-2)" fill="url(#gSec)" strokeWidth={2} />
+                    <Area
+                      type="monotone"
+                      dataKey="health"
+                      name="Health"
+                      stroke="var(--chart-1)"
+                      fill="url(#gHealth)"
+                      strokeWidth={2}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="security"
+                      name="Security"
+                      stroke="var(--chart-2)"
+                      fill="url(#gSec)"
+                      strokeWidth={2}
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
             </SectionCard>
 
-            <SectionCard title="Risk distribution" description="Delivery risk across active projects.">
+            <SectionCard
+              title="Risk distribution"
+              description="Delivery risk across active projects."
+            >
               <div className="h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
@@ -250,10 +430,18 @@ function Dashboard() {
                           <StatusBadge status={p.status} />
                         </TableCell>
                         <TableCell className="hidden sm:table-cell">
-                          {p.healthScore ? <ScoreBar value={p.healthScore} /> : <span className="text-xs text-muted-foreground">Pending</span>}
+                          {p.healthScore ? (
+                            <ScoreBar value={p.healthScore} />
+                          ) : (
+                            <span className="text-xs text-muted-foreground">Pending</span>
+                          )}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          {p.securityScore ? <ScoreBar value={p.securityScore} /> : <span className="text-xs text-muted-foreground">Pending</span>}
+                          {p.securityScore ? (
+                            <ScoreBar value={p.securityScore} />
+                          ) : (
+                            <span className="text-xs text-muted-foreground">Pending</span>
+                          )}
                         </TableCell>
                         <TableCell>
                           <RiskBadge level={p.deliveryRisk} />

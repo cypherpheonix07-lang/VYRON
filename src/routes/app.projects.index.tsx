@@ -38,10 +38,14 @@ export const Route = createFileRoute("/app/projects/")({
       { title: "Projects — PROJECT BRAHMA" },
       {
         name: "description",
-        content: "Search and filter every monitored project by status, risk level and health score.",
+        content:
+          "Search and filter every monitored project by status, risk level and health score.",
       },
       { property: "og:title", content: "Projects — PROJECT BRAHMA" },
-      { property: "og:description", content: "All monitored projects with health, risk and security scores." },
+      {
+        property: "og:description",
+        content: "All monitored projects with health, risk and security scores.",
+      },
     ],
   }),
   component: ProjectsPage,
@@ -62,7 +66,10 @@ function ProjectsPage() {
       projects.filter((p) => {
         const q = query.trim().toLowerCase();
         const matchesQuery =
-          !q || p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q) || p.domain.toLowerCase().includes(q);
+          !q ||
+          p.name.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          p.domain.toLowerCase().includes(q);
         const matchesStatus = status === "all" || p.status === status;
         const matchesRisk = risk === "all" || p.deliveryRisk === risk;
         const matchesHealth =
@@ -101,7 +108,10 @@ function ProjectsPage() {
 
       <div className="surface flex flex-col gap-3 rounded-xl p-3 lg:flex-row lg:items-center">
         <div className="relative min-w-0 flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+          <Search
+            className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground"
+            aria-hidden
+          />
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -112,25 +122,35 @@ function ProjectsPage() {
         </div>
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:w-auto">
           <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger aria-label="Filter by status"><SelectValue placeholder="Status" /></SelectTrigger>
+            <SelectTrigger aria-label="Filter by status">
+              <SelectValue placeholder="Status" />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All statuses</SelectItem>
               {["Analyzed", "Analyzing", "Needs Review", "At Risk", "Draft"].map((s) => (
-                <SelectItem key={s} value={s}>{s}</SelectItem>
+                <SelectItem key={s} value={s}>
+                  {s}
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
           <Select value={risk} onValueChange={setRisk}>
-            <SelectTrigger aria-label="Filter by risk"><SelectValue placeholder="Risk" /></SelectTrigger>
+            <SelectTrigger aria-label="Filter by risk">
+              <SelectValue placeholder="Risk" />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All risk levels</SelectItem>
               {["Low", "Medium", "High", "Critical"].map((s) => (
-                <SelectItem key={s} value={s}>{s} risk</SelectItem>
+                <SelectItem key={s} value={s}>
+                  {s} risk
+                </SelectItem>
               ))}
             </SelectContent>
           </Select>
           <Select value={health} onValueChange={setHealth}>
-            <SelectTrigger aria-label="Filter by health"><SelectValue placeholder="Health" /></SelectTrigger>
+            <SelectTrigger aria-label="Filter by health">
+              <SelectValue placeholder="Health" />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Any health</SelectItem>
               <SelectItem value="high">80 and above</SelectItem>
@@ -161,7 +181,10 @@ function ProjectsPage() {
 
       {state === "loading" ? <LoadingSkeleton variant="table" /> : null}
       {state === "error" ? (
-        <ErrorState description="The project index could not be loaded." onRetry={() => setState("loaded")} />
+        <ErrorState
+          description="The project index could not be loaded."
+          onRetry={() => setState("loaded")}
+        />
       ) : null}
       {state === "empty" ? (
         <EmptyState
@@ -219,7 +242,9 @@ function ProjectsPage() {
                   <div className="mt-4 flex items-center justify-between gap-2">
                     <span className="flex min-w-0 items-center gap-1.5 text-xs text-muted-foreground">
                       <GitBranch className="size-3.5 shrink-0" aria-hidden />
-                      <span className="truncate">{p.repoConnected ? p.repoUrl : "Repository not connected"}</span>
+                      <span className="truncate">
+                        {p.repoConnected ? p.repoUrl : "Repository not connected"}
+                      </span>
                     </span>
                     <RiskBadge level={p.deliveryRisk} />
                   </div>
@@ -246,15 +271,29 @@ function ProjectsPage() {
                   {filtered.map((p) => (
                     <TableRow key={p.id}>
                       <TableCell className="max-w-[240px]">
-                        <Link to="/app/projects/$id" params={{ id: p.id }} className="block truncate font-medium hover:text-primary">
+                        <Link
+                          to="/app/projects/$id"
+                          params={{ id: p.id }}
+                          className="block truncate font-medium hover:text-primary"
+                        >
                           {p.name}
                         </Link>
                       </TableCell>
-                      <TableCell><StatusBadge status={p.status} /></TableCell>
-                      <TableCell><ScoreBar value={p.healthScore} /></TableCell>
-                      <TableCell className="hidden md:table-cell"><ScoreBar value={p.securityScore} /></TableCell>
-                      <TableCell className="hidden tabular-nums md:table-cell">{p.riskScore}</TableCell>
-                      <TableCell><RiskBadge level={p.deliveryRisk} /></TableCell>
+                      <TableCell>
+                        <StatusBadge status={p.status} />
+                      </TableCell>
+                      <TableCell>
+                        <ScoreBar value={p.healthScore} />
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        <ScoreBar value={p.securityScore} />
+                      </TableCell>
+                      <TableCell className="hidden tabular-nums md:table-cell">
+                        {p.riskScore}
+                      </TableCell>
+                      <TableCell>
+                        <RiskBadge level={p.deliveryRisk} />
+                      </TableCell>
                       <TableCell className="hidden max-w-[220px] truncate text-xs text-muted-foreground lg:table-cell">
                         {p.repoConnected ? p.repoUrl : "Not connected"}
                       </TableCell>

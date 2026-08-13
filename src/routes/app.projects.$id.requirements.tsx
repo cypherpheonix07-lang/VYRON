@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AlertTriangle, Save } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { RequirementsOutput } from "@/lib/api";
 
 import { SectionCard } from "@/components/brahma/primitives";
 import { Badge } from "@/components/ui/badge";
@@ -13,9 +14,15 @@ export const Route = createFileRoute("/app/projects/$id/requirements")({
   head: () => ({
     meta: [
       { title: "Requirement analysis — PROJECT BRAHMA" },
-      { name: "description", content: "AI-extracted functional and non-functional requirements with confidence scores." },
+      {
+        name: "description",
+        content: "AI-extracted functional and non-functional requirements with confidence scores.",
+      },
       { property: "og:title", content: "Requirement analysis — PROJECT BRAHMA" },
-      { property: "og:description", content: "Structured requirements, actors, modules, constraints and entities." },
+      {
+        property: "og:description",
+        content: "Structured requirements, actors, modules, constraints and entities.",
+      },
     ],
   }),
   component: RequirementsTab,
@@ -24,13 +31,25 @@ export const Route = createFileRoute("/app/projects/$id/requirements")({
 function Confidence({ value }: { value: number }) {
   const tone = value >= 85 ? "var(--success)" : value >= 70 ? "var(--warning)" : "var(--critical)";
   return (
-    <Badge variant="outline" className="shrink-0 rounded-full tabular-nums" style={{ color: tone, borderColor: tone }}>
+    <Badge
+      variant="outline"
+      className="shrink-0 rounded-full tabular-nums"
+      style={{ color: tone, borderColor: tone }}
+    >
       {value}% confidence
     </Badge>
   );
 }
 
-function RequirementList({ items, title, description }: { items: RequirementItem[]; title: string; description: string }) {
+function RequirementList({
+  items,
+  title,
+  description,
+}: {
+  items: RequirementItem[];
+  title: string;
+  description: string;
+}) {
   const [editing, setEditing] = useState<string | null>(null);
   const [drafts, setDrafts] = useState<Record<string, string>>({});
 
@@ -57,7 +76,9 @@ function RequirementList({ items, title, description }: { items: RequirementItem
             </div>
             <div className="mt-2 flex items-center gap-2">
               {r.priority ? (
-                <Badge variant="outline" className="rounded-full text-[10px]">{r.priority} have</Badge>
+                <Badge variant="outline" className="rounded-full text-[10px]">
+                  {r.priority} have
+                </Badge>
               ) : null}
               {editing === r.id ? (
                 <Button
@@ -86,6 +107,56 @@ function RequirementsTab() {
   const { id } = Route.useParams();
   const p = getProject(id);
 
+  const [activeReqs] = useState(() => {
+    try {
+      const stored = localStorage.getItem("brahma_last_generated_requirements");
+      if (stored) {
+        const parsed = JSON.parse(stored) as RequirementsOutput;
+        const functional = (parsed.functional || []).map((f) => ({
+          id: f.id,
+          text: `${f.title}: ${f.desc}`,
+          confidence: Math.round(parsed.confidence * 100) || 92,
+          priority: "Must" as const,
+        }));
+        const nonFunctional = (parsed.non_functional || []).map((nf) => ({
+          id: nf.id,
+          text: `${nf.title}: ${nf.desc}`,
+          confidence: Math.round(parsed.confidence * 100) || 90,
+          priority: "Should" as const,
+        }));
+        const actors = (parsed.actors || []).map((a, idx: number) => ({
+          id: `ACT-0${idx + 1}`,
+          text: `${a.name}: ${a.desc}`,
+          confidence: 90,
+        }));
+        const modules = (parsed.modules || []).map((m, idx: number) => ({
+          id: `MOD-0${idx + 1}`,
+          text: `${m.name}: ${m.desc}`,
+          confidence: 90,
+        }));
+        const constraints = (parsed.constraints || []).map((c) => ({
+          id: c.id,
+          text: `${c.title}: ${c.desc}`,
+          confidence: 90,
+          priority: "Must" as const,
+        }));
+
+        return {
+          functional,
+          nonFunctional,
+          actors,
+          modules,
+          constraints,
+          assumptions: requirements.assumptions,
+          entities: requirements.entities,
+        };
+      }
+    } catch (e) {
+      console.error("Failed to parse stored requirements", e);
+    }
+    return requirements;
+  });
+
   return (
     <>
       {p.requirementClarity < 70 ? (
@@ -98,20 +169,48 @@ function RequirementsTab() {
             <span className="font-medium text-foreground">
               Requirement clarity is {p.requirementClarity}%.
             </span>{" "}
-            Ambiguous scope will reduce blueprint accuracy — clarify constraints and acceptance criteria
-            before generating architecture.
+            Ambiguous scope will reduce blueprint accuracy — clarify constraints and acceptance
+            criteria before generating architecture.
           </p>
         </div>
       ) : null}
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <RequirementList items={requirements.functional} title="Functional requirements" description="Behaviour the system must deliver." />
-        <RequirementList items={requirements.nonFunctional} title="Non-functional requirements" description="Performance, security and reliability targets." />
-        <RequirementList items={requirements.actors} title="Actors and users" description="Roles that interact with the system." />
-        <RequirementList items={requirements.modules} title="Modules" description="Proposed decomposition of the system." />
-        <RequirementList items={requirements.constraints} title="Constraints" description="Regulatory, platform and legacy limits." />
-        <RequirementList items={requirements.assumptions} title="Assumptions" description="Unverified premises that carry risk." />
-        <RequirementList items={requirements.entities} title="Data entities" description="Core domain objects detected in the brief." />
+        <RequirementList
+          items={activeReqs.functional}
+          title="Functional requirements"
+          description="Behaviour the system must deliver."
+        />
+        <RequirementList
+          items={activeReqs.nonFunctional}
+          title="Non-functional requirements"
+          description="Performance, security and reliability targets."
+        />
+        <RequirementList
+          items={activeReqs.actors}
+          title="Actors and users"
+          description="Roles that interact with the system."
+        />
+        <RequirementList
+          items={activeReqs.modules}
+          title="Modules"
+          description="Proposed decomposition of the system."
+        />
+        <RequirementList
+          items={activeReqs.constraints}
+          title="Constraints"
+          description="Regulatory, platform and legacy limits."
+        />
+        <RequirementList
+          items={activeReqs.assumptions}
+          title="Assumptions"
+          description="Unverified premises that carry risk."
+        />
+        <RequirementList
+          items={activeReqs.entities}
+          title="Data entities"
+          description="Core domain objects detected in the brief."
+        />
       </div>
     </>
   );

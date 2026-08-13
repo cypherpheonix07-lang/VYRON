@@ -11,19 +11,69 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as InviteRouteImport } from './routes/invite'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AppIndexRouteImport } from './routes/app.index'
+import { Route as AppActivityRouteImport } from './routes/app.activity'
+import { Route as AppAdminRouteImport } from './routes/app.admin'
+import { Route as AppBillingRouteImport } from './routes/app.billing'
+import { Route as AppExportsRouteImport } from './routes/app.exports'
+import { Route as AppIntegrationsRouteImport } from './routes/app.integrations'
+import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
+import { Route as AppReportsRouteImport } from './routes/app.reports'
+import { Route as AppSearchRouteImport } from './routes/app.search'
+import { Route as AppSettingsRouteImport } from './routes/app.settings'
+import { Route as AppTeamRouteImport } from './routes/app.team'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as AppAdminIndexRouteImport } from './routes/app.admin.index'
+import { Route as AppAdminAuditRouteImport } from './routes/app.admin.audit'
+import { Route as AppAdminModelsRouteImport } from './routes/app.admin.models'
+import { Route as AppAdminStudioRouteImport } from './routes/app.admin.studio'
+import { Route as AppAdminTemplatesRouteImport } from './routes/app.admin.templates'
+import { Route as AppAdminUsageRouteImport } from './routes/app.admin.usage'
+import { Route as AppAdminUsersRouteImport } from './routes/app.admin.users'
+import { Route as AppBillingInvoicesRouteImport } from './routes/app.billing.invoices'
+import { Route as AppBillingPlansRouteImport } from './routes/app.billing.plans'
+import { Route as AppBillingUsageRouteImport } from './routes/app.billing.usage'
 import { Route as AppProjectsIndexRouteImport } from './routes/app.projects.index'
 import { Route as AppProjectsIdRouteImport } from './routes/app.projects.$id'
 import { Route as AppProjectsNewRouteImport } from './routes/app.projects.new'
+import { Route as AppStudioIndexRouteImport } from './routes/app.studio.index'
+import { Route as AppStudioIdRouteImport } from './routes/app.studio.$id'
+import { Route as AppStudioCreateRouteImport } from './routes/app.studio.create'
+import { Route as AppStudioImportRouteImport } from './routes/app.studio.import'
+import { Route as AppStudioTemplatesRouteImport } from './routes/app.studio.templates'
 import { Route as AppProjectsIdIndexRouteImport } from './routes/app.projects.$id.index'
+import { Route as AppProjectsIdAnalyticsRouteImport } from './routes/app.projects.$id.analytics'
 import { Route as AppProjectsIdBlueprintRouteImport } from './routes/app.projects.$id.blueprint'
 import { Route as AppProjectsIdCodeHealthRouteImport } from './routes/app.projects.$id.code-health'
+import { Route as AppProjectsIdCollaborateRouteImport } from './routes/app.projects.$id.collaborate'
+import { Route as AppProjectsIdPublishRouteImport } from './routes/app.projects.$id.publish'
 import { Route as AppProjectsIdReportsRouteImport } from './routes/app.projects.$id.reports'
 import { Route as AppProjectsIdRequirementsRouteImport } from './routes/app.projects.$id.requirements'
 import { Route as AppProjectsIdRiskBusinessRouteImport } from './routes/app.projects.$id.risk-business'
 import { Route as AppProjectsIdSecurityRouteImport } from './routes/app.projects.$id.security'
+import { Route as AppProjectsIdTestsRouteImport } from './routes/app.projects.$id.tests'
+import { Route as AppProjectsIdVersionsRouteImport } from './routes/app.projects.$id.versions'
+import { Route as AppStudioIdIndexRouteImport } from './routes/app.studio.$id.index'
+import { Route as AppStudioIdAnalyticsRouteImport } from './routes/app.studio.$id.analytics'
+import { Route as AppStudioIdCollaborateRouteImport } from './routes/app.studio.$id.collaborate'
+import { Route as AppStudioIdDataRouteImport } from './routes/app.studio.$id.data'
+import { Route as AppStudioIdEditorRouteImport } from './routes/app.studio.$id.editor'
+import { Route as AppStudioIdGenerateRouteImport } from './routes/app.studio.$id.generate'
+import { Route as AppStudioIdIntegrationsRouteImport } from './routes/app.studio.$id.integrations'
+import { Route as AppStudioIdPlanRouteImport } from './routes/app.studio.$id.plan'
+import { Route as AppStudioIdPreviewRouteImport } from './routes/app.studio.$id.preview'
+import { Route as AppStudioIdPublishRouteImport } from './routes/app.studio.$id.publish'
+import { Route as AppStudioIdSecurityRouteImport } from './routes/app.studio.$id.security'
+import { Route as AppStudioIdSettingsRouteImport } from './routes/app.studio.$id.settings'
+import { Route as AppStudioIdTestsRouteImport } from './routes/app.studio.$id.tests'
+import { Route as AppStudioIdVersionsRouteImport } from './routes/app.studio.$id.versions'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -35,9 +85,24 @@ const AppRoute = AppRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InviteRoute = InviteRouteImport.update({
+  id: '/invite',
+  path: '/invite',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -45,10 +110,125 @@ const RegisterRoute = RegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VerifyEmailRoute = VerifyEmailRouteImport.update({
+  id: '/verify-email',
+  path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppRoute,
+} as any)
+const AppActivityRoute = AppActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAdminRoute = AppAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppBillingRoute = AppBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppExportsRoute = AppExportsRouteImport.update({
+  id: '/exports',
+  path: '/exports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppIntegrationsRoute = AppIntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppReportsRoute = AppReportsRouteImport.update({
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSearchRoute = AppSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTeamRoute = AppTeamRouteImport.update({
+  id: '/team',
+  path: '/team',
+  getParentRoute: () => AppRoute,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/auth/callback',
+  path: '/auth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminAuditRoute = AppAdminAuditRouteImport.update({
+  id: '/audit',
+  path: '/audit',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminModelsRoute = AppAdminModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminStudioRoute = AppAdminStudioRouteImport.update({
+  id: '/studio',
+  path: '/studio',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminTemplatesRoute = AppAdminTemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminUsageRoute = AppAdminUsageRouteImport.update({
+  id: '/usage',
+  path: '/usage',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppBillingInvoicesRoute = AppBillingInvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
+  getParentRoute: () => AppBillingRoute,
+} as any)
+const AppBillingPlansRoute = AppBillingPlansRouteImport.update({
+  id: '/plans',
+  path: '/plans',
+  getParentRoute: () => AppBillingRoute,
+} as any)
+const AppBillingUsageRoute = AppBillingUsageRouteImport.update({
+  id: '/usage',
+  path: '/usage',
+  getParentRoute: () => AppBillingRoute,
 } as any)
 const AppProjectsIndexRoute = AppProjectsIndexRouteImport.update({
   id: '/projects/',
@@ -65,9 +245,39 @@ const AppProjectsNewRoute = AppProjectsNewRouteImport.update({
   path: '/projects/new',
   getParentRoute: () => AppRoute,
 } as any)
+const AppStudioIndexRoute = AppStudioIndexRouteImport.update({
+  id: '/studio/',
+  path: '/studio/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStudioIdRoute = AppStudioIdRouteImport.update({
+  id: '/studio/$id',
+  path: '/studio/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStudioCreateRoute = AppStudioCreateRouteImport.update({
+  id: '/studio/create',
+  path: '/studio/create',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStudioImportRoute = AppStudioImportRouteImport.update({
+  id: '/studio/import',
+  path: '/studio/import',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppStudioTemplatesRoute = AppStudioTemplatesRouteImport.update({
+  id: '/studio/templates',
+  path: '/studio/templates',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppProjectsIdIndexRoute = AppProjectsIdIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => AppProjectsIdRoute,
+} as any)
+const AppProjectsIdAnalyticsRoute = AppProjectsIdAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
   getParentRoute: () => AppProjectsIdRoute,
 } as any)
 const AppProjectsIdBlueprintRoute = AppProjectsIdBlueprintRouteImport.update({
@@ -78,6 +288,17 @@ const AppProjectsIdBlueprintRoute = AppProjectsIdBlueprintRouteImport.update({
 const AppProjectsIdCodeHealthRoute = AppProjectsIdCodeHealthRouteImport.update({
   id: '/code-health',
   path: '/code-health',
+  getParentRoute: () => AppProjectsIdRoute,
+} as any)
+const AppProjectsIdCollaborateRoute =
+  AppProjectsIdCollaborateRouteImport.update({
+    id: '/collaborate',
+    path: '/collaborate',
+    getParentRoute: () => AppProjectsIdRoute,
+  } as any)
+const AppProjectsIdPublishRoute = AppProjectsIdPublishRouteImport.update({
+  id: '/publish',
+  path: '/publish',
   getParentRoute: () => AppProjectsIdRoute,
 } as any)
 const AppProjectsIdReportsRoute = AppProjectsIdReportsRouteImport.update({
@@ -102,114 +323,496 @@ const AppProjectsIdSecurityRoute = AppProjectsIdSecurityRouteImport.update({
   path: '/security',
   getParentRoute: () => AppProjectsIdRoute,
 } as any)
+const AppProjectsIdTestsRoute = AppProjectsIdTestsRouteImport.update({
+  id: '/tests',
+  path: '/tests',
+  getParentRoute: () => AppProjectsIdRoute,
+} as any)
+const AppProjectsIdVersionsRoute = AppProjectsIdVersionsRouteImport.update({
+  id: '/versions',
+  path: '/versions',
+  getParentRoute: () => AppProjectsIdRoute,
+} as any)
+const AppStudioIdIndexRoute = AppStudioIdIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdAnalyticsRoute = AppStudioIdAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdCollaborateRoute = AppStudioIdCollaborateRouteImport.update({
+  id: '/collaborate',
+  path: '/collaborate',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdDataRoute = AppStudioIdDataRouteImport.update({
+  id: '/data',
+  path: '/data',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdEditorRoute = AppStudioIdEditorRouteImport.update({
+  id: '/editor',
+  path: '/editor',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdGenerateRoute = AppStudioIdGenerateRouteImport.update({
+  id: '/generate',
+  path: '/generate',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdIntegrationsRoute = AppStudioIdIntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdPlanRoute = AppStudioIdPlanRouteImport.update({
+  id: '/plan',
+  path: '/plan',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdPreviewRoute = AppStudioIdPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdPublishRoute = AppStudioIdPublishRouteImport.update({
+  id: '/publish',
+  path: '/publish',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdSecurityRoute = AppStudioIdSecurityRouteImport.update({
+  id: '/security',
+  path: '/security',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdSettingsRoute = AppStudioIdSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdTestsRoute = AppStudioIdTestsRouteImport.update({
+  id: '/tests',
+  path: '/tests',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
+const AppStudioIdVersionsRoute = AppStudioIdVersionsRouteImport.update({
+  id: '/versions',
+  path: '/versions',
+  getParentRoute: () => AppStudioIdRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/invite': typeof InviteRoute
   '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/app/activity': typeof AppActivityRoute
+  '/app/admin': typeof AppAdminRouteWithChildren
+  '/app/billing': typeof AppBillingRouteWithChildren
+  '/app/exports': typeof AppExportsRoute
+  '/app/integrations': typeof AppIntegrationsRoute
+  '/app/notifications': typeof AppNotificationsRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/search': typeof AppSearchRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/team': typeof AppTeamRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/app/': typeof AppIndexRoute
+  '/app/admin/audit': typeof AppAdminAuditRoute
+  '/app/admin/models': typeof AppAdminModelsRoute
+  '/app/admin/studio': typeof AppAdminStudioRoute
+  '/app/admin/templates': typeof AppAdminTemplatesRoute
+  '/app/admin/usage': typeof AppAdminUsageRoute
+  '/app/admin/users': typeof AppAdminUsersRoute
+  '/app/billing/invoices': typeof AppBillingInvoicesRoute
+  '/app/billing/plans': typeof AppBillingPlansRoute
+  '/app/billing/usage': typeof AppBillingUsageRoute
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
   '/app/projects/new': typeof AppProjectsNewRoute
+  '/app/studio/$id': typeof AppStudioIdRouteWithChildren
+  '/app/studio/create': typeof AppStudioCreateRoute
+  '/app/studio/import': typeof AppStudioImportRoute
+  '/app/studio/templates': typeof AppStudioTemplatesRoute
+  '/app/admin/': typeof AppAdminIndexRoute
   '/app/projects/': typeof AppProjectsIndexRoute
+  '/app/studio/': typeof AppStudioIndexRoute
+  '/app/projects/$id/analytics': typeof AppProjectsIdAnalyticsRoute
   '/app/projects/$id/blueprint': typeof AppProjectsIdBlueprintRoute
   '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
+  '/app/projects/$id/collaborate': typeof AppProjectsIdCollaborateRoute
+  '/app/projects/$id/publish': typeof AppProjectsIdPublishRoute
   '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
   '/app/projects/$id/risk-business': typeof AppProjectsIdRiskBusinessRoute
   '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
+  '/app/projects/$id/tests': typeof AppProjectsIdTestsRoute
+  '/app/projects/$id/versions': typeof AppProjectsIdVersionsRoute
+  '/app/studio/$id/analytics': typeof AppStudioIdAnalyticsRoute
+  '/app/studio/$id/collaborate': typeof AppStudioIdCollaborateRoute
+  '/app/studio/$id/data': typeof AppStudioIdDataRoute
+  '/app/studio/$id/editor': typeof AppStudioIdEditorRoute
+  '/app/studio/$id/generate': typeof AppStudioIdGenerateRoute
+  '/app/studio/$id/integrations': typeof AppStudioIdIntegrationsRoute
+  '/app/studio/$id/plan': typeof AppStudioIdPlanRoute
+  '/app/studio/$id/preview': typeof AppStudioIdPreviewRoute
+  '/app/studio/$id/publish': typeof AppStudioIdPublishRoute
+  '/app/studio/$id/security': typeof AppStudioIdSecurityRoute
+  '/app/studio/$id/settings': typeof AppStudioIdSettingsRoute
+  '/app/studio/$id/tests': typeof AppStudioIdTestsRoute
+  '/app/studio/$id/versions': typeof AppStudioIdVersionsRoute
   '/app/projects/$id/': typeof AppProjectsIdIndexRoute
+  '/app/studio/$id/': typeof AppStudioIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/invite': typeof InviteRoute
   '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/app/activity': typeof AppActivityRoute
+  '/app/billing': typeof AppBillingRouteWithChildren
+  '/app/exports': typeof AppExportsRoute
+  '/app/integrations': typeof AppIntegrationsRoute
+  '/app/notifications': typeof AppNotificationsRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/search': typeof AppSearchRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/team': typeof AppTeamRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/app': typeof AppIndexRoute
+  '/app/admin/audit': typeof AppAdminAuditRoute
+  '/app/admin/models': typeof AppAdminModelsRoute
+  '/app/admin/studio': typeof AppAdminStudioRoute
+  '/app/admin/templates': typeof AppAdminTemplatesRoute
+  '/app/admin/usage': typeof AppAdminUsageRoute
+  '/app/admin/users': typeof AppAdminUsersRoute
+  '/app/billing/invoices': typeof AppBillingInvoicesRoute
+  '/app/billing/plans': typeof AppBillingPlansRoute
+  '/app/billing/usage': typeof AppBillingUsageRoute
   '/app/projects/new': typeof AppProjectsNewRoute
+  '/app/studio/create': typeof AppStudioCreateRoute
+  '/app/studio/import': typeof AppStudioImportRoute
+  '/app/studio/templates': typeof AppStudioTemplatesRoute
+  '/app/admin': typeof AppAdminIndexRoute
   '/app/projects': typeof AppProjectsIndexRoute
+  '/app/studio': typeof AppStudioIndexRoute
+  '/app/projects/$id/analytics': typeof AppProjectsIdAnalyticsRoute
   '/app/projects/$id/blueprint': typeof AppProjectsIdBlueprintRoute
   '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
+  '/app/projects/$id/collaborate': typeof AppProjectsIdCollaborateRoute
+  '/app/projects/$id/publish': typeof AppProjectsIdPublishRoute
   '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
   '/app/projects/$id/risk-business': typeof AppProjectsIdRiskBusinessRoute
   '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
+  '/app/projects/$id/tests': typeof AppProjectsIdTestsRoute
+  '/app/projects/$id/versions': typeof AppProjectsIdVersionsRoute
+  '/app/studio/$id/analytics': typeof AppStudioIdAnalyticsRoute
+  '/app/studio/$id/collaborate': typeof AppStudioIdCollaborateRoute
+  '/app/studio/$id/data': typeof AppStudioIdDataRoute
+  '/app/studio/$id/editor': typeof AppStudioIdEditorRoute
+  '/app/studio/$id/generate': typeof AppStudioIdGenerateRoute
+  '/app/studio/$id/integrations': typeof AppStudioIdIntegrationsRoute
+  '/app/studio/$id/plan': typeof AppStudioIdPlanRoute
+  '/app/studio/$id/preview': typeof AppStudioIdPreviewRoute
+  '/app/studio/$id/publish': typeof AppStudioIdPublishRoute
+  '/app/studio/$id/security': typeof AppStudioIdSecurityRoute
+  '/app/studio/$id/settings': typeof AppStudioIdSettingsRoute
+  '/app/studio/$id/tests': typeof AppStudioIdTestsRoute
+  '/app/studio/$id/versions': typeof AppStudioIdVersionsRoute
   '/app/projects/$id': typeof AppProjectsIdIndexRoute
+  '/app/studio/$id': typeof AppStudioIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/forgot-password': typeof ForgotPasswordRoute
+  '/invite': typeof InviteRoute
   '/login': typeof LoginRoute
+  '/onboarding': typeof OnboardingRoute
   '/register': typeof RegisterRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/verify-email': typeof VerifyEmailRoute
+  '/app/activity': typeof AppActivityRoute
+  '/app/admin': typeof AppAdminRouteWithChildren
+  '/app/billing': typeof AppBillingRouteWithChildren
+  '/app/exports': typeof AppExportsRoute
+  '/app/integrations': typeof AppIntegrationsRoute
+  '/app/notifications': typeof AppNotificationsRoute
+  '/app/reports': typeof AppReportsRoute
+  '/app/search': typeof AppSearchRoute
+  '/app/settings': typeof AppSettingsRoute
+  '/app/team': typeof AppTeamRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/app/': typeof AppIndexRoute
+  '/app/admin/audit': typeof AppAdminAuditRoute
+  '/app/admin/models': typeof AppAdminModelsRoute
+  '/app/admin/studio': typeof AppAdminStudioRoute
+  '/app/admin/templates': typeof AppAdminTemplatesRoute
+  '/app/admin/usage': typeof AppAdminUsageRoute
+  '/app/admin/users': typeof AppAdminUsersRoute
+  '/app/billing/invoices': typeof AppBillingInvoicesRoute
+  '/app/billing/plans': typeof AppBillingPlansRoute
+  '/app/billing/usage': typeof AppBillingUsageRoute
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
   '/app/projects/new': typeof AppProjectsNewRoute
+  '/app/studio/$id': typeof AppStudioIdRouteWithChildren
+  '/app/studio/create': typeof AppStudioCreateRoute
+  '/app/studio/import': typeof AppStudioImportRoute
+  '/app/studio/templates': typeof AppStudioTemplatesRoute
+  '/app/admin/': typeof AppAdminIndexRoute
   '/app/projects/': typeof AppProjectsIndexRoute
+  '/app/studio/': typeof AppStudioIndexRoute
+  '/app/projects/$id/analytics': typeof AppProjectsIdAnalyticsRoute
   '/app/projects/$id/blueprint': typeof AppProjectsIdBlueprintRoute
   '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
+  '/app/projects/$id/collaborate': typeof AppProjectsIdCollaborateRoute
+  '/app/projects/$id/publish': typeof AppProjectsIdPublishRoute
   '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
   '/app/projects/$id/risk-business': typeof AppProjectsIdRiskBusinessRoute
   '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
+  '/app/projects/$id/tests': typeof AppProjectsIdTestsRoute
+  '/app/projects/$id/versions': typeof AppProjectsIdVersionsRoute
+  '/app/studio/$id/analytics': typeof AppStudioIdAnalyticsRoute
+  '/app/studio/$id/collaborate': typeof AppStudioIdCollaborateRoute
+  '/app/studio/$id/data': typeof AppStudioIdDataRoute
+  '/app/studio/$id/editor': typeof AppStudioIdEditorRoute
+  '/app/studio/$id/generate': typeof AppStudioIdGenerateRoute
+  '/app/studio/$id/integrations': typeof AppStudioIdIntegrationsRoute
+  '/app/studio/$id/plan': typeof AppStudioIdPlanRoute
+  '/app/studio/$id/preview': typeof AppStudioIdPreviewRoute
+  '/app/studio/$id/publish': typeof AppStudioIdPublishRoute
+  '/app/studio/$id/security': typeof AppStudioIdSecurityRoute
+  '/app/studio/$id/settings': typeof AppStudioIdSettingsRoute
+  '/app/studio/$id/tests': typeof AppStudioIdTestsRoute
+  '/app/studio/$id/versions': typeof AppStudioIdVersionsRoute
   '/app/projects/$id/': typeof AppProjectsIdIndexRoute
+  '/app/studio/$id/': typeof AppStudioIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/app'
+    | '/forgot-password'
+    | '/invite'
     | '/login'
+    | '/onboarding'
     | '/register'
+    | '/reset-password'
+    | '/verify-email'
+    | '/app/activity'
+    | '/app/admin'
+    | '/app/billing'
+    | '/app/exports'
+    | '/app/integrations'
+    | '/app/notifications'
+    | '/app/reports'
+    | '/app/search'
+    | '/app/settings'
+    | '/app/team'
+    | '/auth/callback'
     | '/app/'
+    | '/app/admin/audit'
+    | '/app/admin/models'
+    | '/app/admin/studio'
+    | '/app/admin/templates'
+    | '/app/admin/usage'
+    | '/app/admin/users'
+    | '/app/billing/invoices'
+    | '/app/billing/plans'
+    | '/app/billing/usage'
     | '/app/projects/$id'
     | '/app/projects/new'
+    | '/app/studio/$id'
+    | '/app/studio/create'
+    | '/app/studio/import'
+    | '/app/studio/templates'
+    | '/app/admin/'
     | '/app/projects/'
+    | '/app/studio/'
+    | '/app/projects/$id/analytics'
     | '/app/projects/$id/blueprint'
     | '/app/projects/$id/code-health'
+    | '/app/projects/$id/collaborate'
+    | '/app/projects/$id/publish'
     | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
     | '/app/projects/$id/risk-business'
     | '/app/projects/$id/security'
+    | '/app/projects/$id/tests'
+    | '/app/projects/$id/versions'
+    | '/app/studio/$id/analytics'
+    | '/app/studio/$id/collaborate'
+    | '/app/studio/$id/data'
+    | '/app/studio/$id/editor'
+    | '/app/studio/$id/generate'
+    | '/app/studio/$id/integrations'
+    | '/app/studio/$id/plan'
+    | '/app/studio/$id/preview'
+    | '/app/studio/$id/publish'
+    | '/app/studio/$id/security'
+    | '/app/studio/$id/settings'
+    | '/app/studio/$id/tests'
+    | '/app/studio/$id/versions'
     | '/app/projects/$id/'
+    | '/app/studio/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/forgot-password'
+    | '/invite'
     | '/login'
+    | '/onboarding'
     | '/register'
+    | '/reset-password'
+    | '/verify-email'
+    | '/app/activity'
+    | '/app/billing'
+    | '/app/exports'
+    | '/app/integrations'
+    | '/app/notifications'
+    | '/app/reports'
+    | '/app/search'
+    | '/app/settings'
+    | '/app/team'
+    | '/auth/callback'
     | '/app'
+    | '/app/admin/audit'
+    | '/app/admin/models'
+    | '/app/admin/studio'
+    | '/app/admin/templates'
+    | '/app/admin/usage'
+    | '/app/admin/users'
+    | '/app/billing/invoices'
+    | '/app/billing/plans'
+    | '/app/billing/usage'
     | '/app/projects/new'
+    | '/app/studio/create'
+    | '/app/studio/import'
+    | '/app/studio/templates'
+    | '/app/admin'
     | '/app/projects'
+    | '/app/studio'
+    | '/app/projects/$id/analytics'
     | '/app/projects/$id/blueprint'
     | '/app/projects/$id/code-health'
+    | '/app/projects/$id/collaborate'
+    | '/app/projects/$id/publish'
     | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
     | '/app/projects/$id/risk-business'
     | '/app/projects/$id/security'
+    | '/app/projects/$id/tests'
+    | '/app/projects/$id/versions'
+    | '/app/studio/$id/analytics'
+    | '/app/studio/$id/collaborate'
+    | '/app/studio/$id/data'
+    | '/app/studio/$id/editor'
+    | '/app/studio/$id/generate'
+    | '/app/studio/$id/integrations'
+    | '/app/studio/$id/plan'
+    | '/app/studio/$id/preview'
+    | '/app/studio/$id/publish'
+    | '/app/studio/$id/security'
+    | '/app/studio/$id/settings'
+    | '/app/studio/$id/tests'
+    | '/app/studio/$id/versions'
     | '/app/projects/$id'
+    | '/app/studio/$id'
   id:
     | '__root__'
     | '/'
     | '/app'
+    | '/forgot-password'
+    | '/invite'
     | '/login'
+    | '/onboarding'
     | '/register'
+    | '/reset-password'
+    | '/verify-email'
+    | '/app/activity'
+    | '/app/admin'
+    | '/app/billing'
+    | '/app/exports'
+    | '/app/integrations'
+    | '/app/notifications'
+    | '/app/reports'
+    | '/app/search'
+    | '/app/settings'
+    | '/app/team'
+    | '/auth/callback'
     | '/app/'
+    | '/app/admin/audit'
+    | '/app/admin/models'
+    | '/app/admin/studio'
+    | '/app/admin/templates'
+    | '/app/admin/usage'
+    | '/app/admin/users'
+    | '/app/billing/invoices'
+    | '/app/billing/plans'
+    | '/app/billing/usage'
     | '/app/projects/$id'
     | '/app/projects/new'
+    | '/app/studio/$id'
+    | '/app/studio/create'
+    | '/app/studio/import'
+    | '/app/studio/templates'
+    | '/app/admin/'
     | '/app/projects/'
+    | '/app/studio/'
+    | '/app/projects/$id/analytics'
     | '/app/projects/$id/blueprint'
     | '/app/projects/$id/code-health'
+    | '/app/projects/$id/collaborate'
+    | '/app/projects/$id/publish'
     | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
     | '/app/projects/$id/risk-business'
     | '/app/projects/$id/security'
+    | '/app/projects/$id/tests'
+    | '/app/projects/$id/versions'
+    | '/app/studio/$id/analytics'
+    | '/app/studio/$id/collaborate'
+    | '/app/studio/$id/data'
+    | '/app/studio/$id/editor'
+    | '/app/studio/$id/generate'
+    | '/app/studio/$id/integrations'
+    | '/app/studio/$id/plan'
+    | '/app/studio/$id/preview'
+    | '/app/studio/$id/publish'
+    | '/app/studio/$id/security'
+    | '/app/studio/$id/settings'
+    | '/app/studio/$id/tests'
+    | '/app/studio/$id/versions'
     | '/app/projects/$id/'
+    | '/app/studio/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
+  InviteRoute: typeof InviteRoute
   LoginRoute: typeof LoginRoute
+  OnboardingRoute: typeof OnboardingRoute
   RegisterRoute: typeof RegisterRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  VerifyEmailRoute: typeof VerifyEmailRoute
+  AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -228,11 +831,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invite': {
+      id: '/invite'
+      path: '/invite'
+      fullPath: '/invite'
+      preLoaderRoute: typeof InviteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -242,12 +866,173 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/verify-email': {
+      id: '/verify-email'
+      path: '/verify-email'
+      fullPath: '/verify-email'
+      preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/': {
       id: '/app/'
       path: '/'
       fullPath: '/app/'
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/app/activity': {
+      id: '/app/activity'
+      path: '/activity'
+      fullPath: '/app/activity'
+      preLoaderRoute: typeof AppActivityRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/admin': {
+      id: '/app/admin'
+      path: '/admin'
+      fullPath: '/app/admin'
+      preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/billing': {
+      id: '/app/billing'
+      path: '/billing'
+      fullPath: '/app/billing'
+      preLoaderRoute: typeof AppBillingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/exports': {
+      id: '/app/exports'
+      path: '/exports'
+      fullPath: '/app/exports'
+      preLoaderRoute: typeof AppExportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/integrations': {
+      id: '/app/integrations'
+      path: '/integrations'
+      fullPath: '/app/integrations'
+      preLoaderRoute: typeof AppIntegrationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/notifications': {
+      id: '/app/notifications'
+      path: '/notifications'
+      fullPath: '/app/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/reports': {
+      id: '/app/reports'
+      path: '/reports'
+      fullPath: '/app/reports'
+      preLoaderRoute: typeof AppReportsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/search': {
+      id: '/app/search'
+      path: '/search'
+      fullPath: '/app/search'
+      preLoaderRoute: typeof AppSearchRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/team': {
+      id: '/app/team'
+      path: '/team'
+      fullPath: '/app/team'
+      preLoaderRoute: typeof AppTeamRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/auth/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/admin/': {
+      id: '/app/admin/'
+      path: '/'
+      fullPath: '/app/admin/'
+      preLoaderRoute: typeof AppAdminIndexRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/app/admin/audit': {
+      id: '/app/admin/audit'
+      path: '/audit'
+      fullPath: '/app/admin/audit'
+      preLoaderRoute: typeof AppAdminAuditRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/app/admin/models': {
+      id: '/app/admin/models'
+      path: '/models'
+      fullPath: '/app/admin/models'
+      preLoaderRoute: typeof AppAdminModelsRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/app/admin/studio': {
+      id: '/app/admin/studio'
+      path: '/studio'
+      fullPath: '/app/admin/studio'
+      preLoaderRoute: typeof AppAdminStudioRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/app/admin/templates': {
+      id: '/app/admin/templates'
+      path: '/templates'
+      fullPath: '/app/admin/templates'
+      preLoaderRoute: typeof AppAdminTemplatesRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/app/admin/usage': {
+      id: '/app/admin/usage'
+      path: '/usage'
+      fullPath: '/app/admin/usage'
+      preLoaderRoute: typeof AppAdminUsageRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/app/admin/users': {
+      id: '/app/admin/users'
+      path: '/users'
+      fullPath: '/app/admin/users'
+      preLoaderRoute: typeof AppAdminUsersRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/app/billing/invoices': {
+      id: '/app/billing/invoices'
+      path: '/invoices'
+      fullPath: '/app/billing/invoices'
+      preLoaderRoute: typeof AppBillingInvoicesRouteImport
+      parentRoute: typeof AppBillingRoute
+    }
+    '/app/billing/plans': {
+      id: '/app/billing/plans'
+      path: '/plans'
+      fullPath: '/app/billing/plans'
+      preLoaderRoute: typeof AppBillingPlansRouteImport
+      parentRoute: typeof AppBillingRoute
+    }
+    '/app/billing/usage': {
+      id: '/app/billing/usage'
+      path: '/usage'
+      fullPath: '/app/billing/usage'
+      preLoaderRoute: typeof AppBillingUsageRouteImport
+      parentRoute: typeof AppBillingRoute
     }
     '/app/projects/': {
       id: '/app/projects/'
@@ -270,11 +1055,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsNewRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/studio/': {
+      id: '/app/studio/'
+      path: '/studio'
+      fullPath: '/app/studio/'
+      preLoaderRoute: typeof AppStudioIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/studio/$id': {
+      id: '/app/studio/$id'
+      path: '/studio/$id'
+      fullPath: '/app/studio/$id'
+      preLoaderRoute: typeof AppStudioIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/studio/create': {
+      id: '/app/studio/create'
+      path: '/studio/create'
+      fullPath: '/app/studio/create'
+      preLoaderRoute: typeof AppStudioCreateRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/studio/import': {
+      id: '/app/studio/import'
+      path: '/studio/import'
+      fullPath: '/app/studio/import'
+      preLoaderRoute: typeof AppStudioImportRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/studio/templates': {
+      id: '/app/studio/templates'
+      path: '/studio/templates'
+      fullPath: '/app/studio/templates'
+      preLoaderRoute: typeof AppStudioTemplatesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/projects/$id/': {
       id: '/app/projects/$id/'
       path: '/'
       fullPath: '/app/projects/$id/'
       preLoaderRoute: typeof AppProjectsIdIndexRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
+    '/app/projects/$id/analytics': {
+      id: '/app/projects/$id/analytics'
+      path: '/analytics'
+      fullPath: '/app/projects/$id/analytics'
+      preLoaderRoute: typeof AppProjectsIdAnalyticsRouteImport
       parentRoute: typeof AppProjectsIdRoute
     }
     '/app/projects/$id/blueprint': {
@@ -289,6 +1116,20 @@ declare module '@tanstack/react-router' {
       path: '/code-health'
       fullPath: '/app/projects/$id/code-health'
       preLoaderRoute: typeof AppProjectsIdCodeHealthRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
+    '/app/projects/$id/collaborate': {
+      id: '/app/projects/$id/collaborate'
+      path: '/collaborate'
+      fullPath: '/app/projects/$id/collaborate'
+      preLoaderRoute: typeof AppProjectsIdCollaborateRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
+    '/app/projects/$id/publish': {
+      id: '/app/projects/$id/publish'
+      path: '/publish'
+      fullPath: '/app/projects/$id/publish'
+      preLoaderRoute: typeof AppProjectsIdPublishRouteImport
       parentRoute: typeof AppProjectsIdRoute
     }
     '/app/projects/$id/reports': {
@@ -319,26 +1160,188 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsIdSecurityRouteImport
       parentRoute: typeof AppProjectsIdRoute
     }
+    '/app/projects/$id/tests': {
+      id: '/app/projects/$id/tests'
+      path: '/tests'
+      fullPath: '/app/projects/$id/tests'
+      preLoaderRoute: typeof AppProjectsIdTestsRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
+    '/app/projects/$id/versions': {
+      id: '/app/projects/$id/versions'
+      path: '/versions'
+      fullPath: '/app/projects/$id/versions'
+      preLoaderRoute: typeof AppProjectsIdVersionsRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
+    '/app/studio/$id/': {
+      id: '/app/studio/$id/'
+      path: '/'
+      fullPath: '/app/studio/$id/'
+      preLoaderRoute: typeof AppStudioIdIndexRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/analytics': {
+      id: '/app/studio/$id/analytics'
+      path: '/analytics'
+      fullPath: '/app/studio/$id/analytics'
+      preLoaderRoute: typeof AppStudioIdAnalyticsRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/collaborate': {
+      id: '/app/studio/$id/collaborate'
+      path: '/collaborate'
+      fullPath: '/app/studio/$id/collaborate'
+      preLoaderRoute: typeof AppStudioIdCollaborateRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/data': {
+      id: '/app/studio/$id/data'
+      path: '/data'
+      fullPath: '/app/studio/$id/data'
+      preLoaderRoute: typeof AppStudioIdDataRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/editor': {
+      id: '/app/studio/$id/editor'
+      path: '/editor'
+      fullPath: '/app/studio/$id/editor'
+      preLoaderRoute: typeof AppStudioIdEditorRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/generate': {
+      id: '/app/studio/$id/generate'
+      path: '/generate'
+      fullPath: '/app/studio/$id/generate'
+      preLoaderRoute: typeof AppStudioIdGenerateRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/integrations': {
+      id: '/app/studio/$id/integrations'
+      path: '/integrations'
+      fullPath: '/app/studio/$id/integrations'
+      preLoaderRoute: typeof AppStudioIdIntegrationsRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/plan': {
+      id: '/app/studio/$id/plan'
+      path: '/plan'
+      fullPath: '/app/studio/$id/plan'
+      preLoaderRoute: typeof AppStudioIdPlanRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/preview': {
+      id: '/app/studio/$id/preview'
+      path: '/preview'
+      fullPath: '/app/studio/$id/preview'
+      preLoaderRoute: typeof AppStudioIdPreviewRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/publish': {
+      id: '/app/studio/$id/publish'
+      path: '/publish'
+      fullPath: '/app/studio/$id/publish'
+      preLoaderRoute: typeof AppStudioIdPublishRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/security': {
+      id: '/app/studio/$id/security'
+      path: '/security'
+      fullPath: '/app/studio/$id/security'
+      preLoaderRoute: typeof AppStudioIdSecurityRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/settings': {
+      id: '/app/studio/$id/settings'
+      path: '/settings'
+      fullPath: '/app/studio/$id/settings'
+      preLoaderRoute: typeof AppStudioIdSettingsRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/tests': {
+      id: '/app/studio/$id/tests'
+      path: '/tests'
+      fullPath: '/app/studio/$id/tests'
+      preLoaderRoute: typeof AppStudioIdTestsRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
+    '/app/studio/$id/versions': {
+      id: '/app/studio/$id/versions'
+      path: '/versions'
+      fullPath: '/app/studio/$id/versions'
+      preLoaderRoute: typeof AppStudioIdVersionsRouteImport
+      parentRoute: typeof AppStudioIdRoute
+    }
   }
 }
 
+interface AppAdminRouteChildren {
+  AppAdminAuditRoute: typeof AppAdminAuditRoute
+  AppAdminModelsRoute: typeof AppAdminModelsRoute
+  AppAdminStudioRoute: typeof AppAdminStudioRoute
+  AppAdminTemplatesRoute: typeof AppAdminTemplatesRoute
+  AppAdminUsageRoute: typeof AppAdminUsageRoute
+  AppAdminUsersRoute: typeof AppAdminUsersRoute
+  AppAdminIndexRoute: typeof AppAdminIndexRoute
+}
+
+const AppAdminRouteChildren: AppAdminRouteChildren = {
+  AppAdminAuditRoute: AppAdminAuditRoute,
+  AppAdminModelsRoute: AppAdminModelsRoute,
+  AppAdminStudioRoute: AppAdminStudioRoute,
+  AppAdminTemplatesRoute: AppAdminTemplatesRoute,
+  AppAdminUsageRoute: AppAdminUsageRoute,
+  AppAdminUsersRoute: AppAdminUsersRoute,
+  AppAdminIndexRoute: AppAdminIndexRoute,
+}
+
+const AppAdminRouteWithChildren = AppAdminRoute._addFileChildren(
+  AppAdminRouteChildren,
+)
+
+interface AppBillingRouteChildren {
+  AppBillingInvoicesRoute: typeof AppBillingInvoicesRoute
+  AppBillingPlansRoute: typeof AppBillingPlansRoute
+  AppBillingUsageRoute: typeof AppBillingUsageRoute
+}
+
+const AppBillingRouteChildren: AppBillingRouteChildren = {
+  AppBillingInvoicesRoute: AppBillingInvoicesRoute,
+  AppBillingPlansRoute: AppBillingPlansRoute,
+  AppBillingUsageRoute: AppBillingUsageRoute,
+}
+
+const AppBillingRouteWithChildren = AppBillingRoute._addFileChildren(
+  AppBillingRouteChildren,
+)
+
 interface AppProjectsIdRouteChildren {
+  AppProjectsIdAnalyticsRoute: typeof AppProjectsIdAnalyticsRoute
   AppProjectsIdBlueprintRoute: typeof AppProjectsIdBlueprintRoute
   AppProjectsIdCodeHealthRoute: typeof AppProjectsIdCodeHealthRoute
+  AppProjectsIdCollaborateRoute: typeof AppProjectsIdCollaborateRoute
+  AppProjectsIdPublishRoute: typeof AppProjectsIdPublishRoute
   AppProjectsIdReportsRoute: typeof AppProjectsIdReportsRoute
   AppProjectsIdRequirementsRoute: typeof AppProjectsIdRequirementsRoute
   AppProjectsIdRiskBusinessRoute: typeof AppProjectsIdRiskBusinessRoute
   AppProjectsIdSecurityRoute: typeof AppProjectsIdSecurityRoute
+  AppProjectsIdTestsRoute: typeof AppProjectsIdTestsRoute
+  AppProjectsIdVersionsRoute: typeof AppProjectsIdVersionsRoute
   AppProjectsIdIndexRoute: typeof AppProjectsIdIndexRoute
 }
 
 const AppProjectsIdRouteChildren: AppProjectsIdRouteChildren = {
+  AppProjectsIdAnalyticsRoute: AppProjectsIdAnalyticsRoute,
   AppProjectsIdBlueprintRoute: AppProjectsIdBlueprintRoute,
   AppProjectsIdCodeHealthRoute: AppProjectsIdCodeHealthRoute,
+  AppProjectsIdCollaborateRoute: AppProjectsIdCollaborateRoute,
+  AppProjectsIdPublishRoute: AppProjectsIdPublishRoute,
   AppProjectsIdReportsRoute: AppProjectsIdReportsRoute,
   AppProjectsIdRequirementsRoute: AppProjectsIdRequirementsRoute,
   AppProjectsIdRiskBusinessRoute: AppProjectsIdRiskBusinessRoute,
   AppProjectsIdSecurityRoute: AppProjectsIdSecurityRoute,
+  AppProjectsIdTestsRoute: AppProjectsIdTestsRoute,
+  AppProjectsIdVersionsRoute: AppProjectsIdVersionsRoute,
   AppProjectsIdIndexRoute: AppProjectsIdIndexRoute,
 }
 
@@ -346,18 +1349,86 @@ const AppProjectsIdRouteWithChildren = AppProjectsIdRoute._addFileChildren(
   AppProjectsIdRouteChildren,
 )
 
+interface AppStudioIdRouteChildren {
+  AppStudioIdAnalyticsRoute: typeof AppStudioIdAnalyticsRoute
+  AppStudioIdCollaborateRoute: typeof AppStudioIdCollaborateRoute
+  AppStudioIdDataRoute: typeof AppStudioIdDataRoute
+  AppStudioIdEditorRoute: typeof AppStudioIdEditorRoute
+  AppStudioIdGenerateRoute: typeof AppStudioIdGenerateRoute
+  AppStudioIdIntegrationsRoute: typeof AppStudioIdIntegrationsRoute
+  AppStudioIdPlanRoute: typeof AppStudioIdPlanRoute
+  AppStudioIdPreviewRoute: typeof AppStudioIdPreviewRoute
+  AppStudioIdPublishRoute: typeof AppStudioIdPublishRoute
+  AppStudioIdSecurityRoute: typeof AppStudioIdSecurityRoute
+  AppStudioIdSettingsRoute: typeof AppStudioIdSettingsRoute
+  AppStudioIdTestsRoute: typeof AppStudioIdTestsRoute
+  AppStudioIdVersionsRoute: typeof AppStudioIdVersionsRoute
+  AppStudioIdIndexRoute: typeof AppStudioIdIndexRoute
+}
+
+const AppStudioIdRouteChildren: AppStudioIdRouteChildren = {
+  AppStudioIdAnalyticsRoute: AppStudioIdAnalyticsRoute,
+  AppStudioIdCollaborateRoute: AppStudioIdCollaborateRoute,
+  AppStudioIdDataRoute: AppStudioIdDataRoute,
+  AppStudioIdEditorRoute: AppStudioIdEditorRoute,
+  AppStudioIdGenerateRoute: AppStudioIdGenerateRoute,
+  AppStudioIdIntegrationsRoute: AppStudioIdIntegrationsRoute,
+  AppStudioIdPlanRoute: AppStudioIdPlanRoute,
+  AppStudioIdPreviewRoute: AppStudioIdPreviewRoute,
+  AppStudioIdPublishRoute: AppStudioIdPublishRoute,
+  AppStudioIdSecurityRoute: AppStudioIdSecurityRoute,
+  AppStudioIdSettingsRoute: AppStudioIdSettingsRoute,
+  AppStudioIdTestsRoute: AppStudioIdTestsRoute,
+  AppStudioIdVersionsRoute: AppStudioIdVersionsRoute,
+  AppStudioIdIndexRoute: AppStudioIdIndexRoute,
+}
+
+const AppStudioIdRouteWithChildren = AppStudioIdRoute._addFileChildren(
+  AppStudioIdRouteChildren,
+)
+
 interface AppRouteChildren {
+  AppActivityRoute: typeof AppActivityRoute
+  AppAdminRoute: typeof AppAdminRouteWithChildren
+  AppBillingRoute: typeof AppBillingRouteWithChildren
+  AppExportsRoute: typeof AppExportsRoute
+  AppIntegrationsRoute: typeof AppIntegrationsRoute
+  AppNotificationsRoute: typeof AppNotificationsRoute
+  AppReportsRoute: typeof AppReportsRoute
+  AppSearchRoute: typeof AppSearchRoute
+  AppSettingsRoute: typeof AppSettingsRoute
+  AppTeamRoute: typeof AppTeamRoute
   AppIndexRoute: typeof AppIndexRoute
   AppProjectsIdRoute: typeof AppProjectsIdRouteWithChildren
   AppProjectsNewRoute: typeof AppProjectsNewRoute
+  AppStudioIdRoute: typeof AppStudioIdRouteWithChildren
+  AppStudioCreateRoute: typeof AppStudioCreateRoute
+  AppStudioImportRoute: typeof AppStudioImportRoute
+  AppStudioTemplatesRoute: typeof AppStudioTemplatesRoute
   AppProjectsIndexRoute: typeof AppProjectsIndexRoute
+  AppStudioIndexRoute: typeof AppStudioIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppActivityRoute: AppActivityRoute,
+  AppAdminRoute: AppAdminRouteWithChildren,
+  AppBillingRoute: AppBillingRouteWithChildren,
+  AppExportsRoute: AppExportsRoute,
+  AppIntegrationsRoute: AppIntegrationsRoute,
+  AppNotificationsRoute: AppNotificationsRoute,
+  AppReportsRoute: AppReportsRoute,
+  AppSearchRoute: AppSearchRoute,
+  AppSettingsRoute: AppSettingsRoute,
+  AppTeamRoute: AppTeamRoute,
   AppIndexRoute: AppIndexRoute,
   AppProjectsIdRoute: AppProjectsIdRouteWithChildren,
   AppProjectsNewRoute: AppProjectsNewRoute,
+  AppStudioIdRoute: AppStudioIdRouteWithChildren,
+  AppStudioCreateRoute: AppStudioCreateRoute,
+  AppStudioImportRoute: AppStudioImportRoute,
+  AppStudioTemplatesRoute: AppStudioTemplatesRoute,
   AppProjectsIndexRoute: AppProjectsIndexRoute,
+  AppStudioIndexRoute: AppStudioIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
@@ -365,8 +1436,14 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  ForgotPasswordRoute: ForgotPasswordRoute,
+  InviteRoute: InviteRoute,
   LoginRoute: LoginRoute,
+  OnboardingRoute: OnboardingRoute,
   RegisterRoute: RegisterRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  VerifyEmailRoute: VerifyEmailRoute,
+  AuthCallbackRoute: AuthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

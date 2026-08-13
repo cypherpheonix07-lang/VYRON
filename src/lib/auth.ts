@@ -1,60 +1,193 @@
 import { useCallback, useEffect, useState } from "react";
+import { supabase } from "./supabase";
+import { authService } from "../services/authService";
 
-export type Role = "Student" | "Faculty" | "Startup" | "Admin";
+export type Role = "Student" | "Faculty" | "Startup" | "Admin" | "Reviewer";
+
+export const studioFeatures = {
+  auth: true,
+  onboarding: true,
+  promptToBlueprint: true,
+  templateGallery: true,
+  importSources: true,
+  visualEditor: true,
+  codeEditor: true,
+  dataStudio: true,
+  integrationStudio: true,
+  testingStudio: true,
+  securityStudio: true,
+  collaboration: true,
+  publishWizard: true,
+  analytics: true,
+  adminStudio: true,
+  billing: false,
+};
 
 export interface User {
-  name: string;
+  id: string;
   email: string;
+  name: string;
   role: Role;
+  onboarded: boolean;
+  avatarUrl?: string;
+  isDemo?: boolean;
 }
 
-const KEY = "brahma.user";
-const EVENT = "brahma:auth";
+const DEMO_KEY = "brahma.demo_user";
 
-export function readUser(): User | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const raw = window.localStorage.getItem(KEY);
-    return raw ? (JSON.parse(raw) as User) : null;
-  } catch {
-    return null;
+// Helper to convert lowercase DB roles to PascalCase frontend roles
+export function dbRoleToAppRole(dbRole: string | null | undefined): Role {
+  if (!dbRole) return "Student";
+  const normalized = dbRole.toLowerCase();
+  switch (normalized) {
+    case "student":
+      return "Student";
+    case "faculty":
+      return "Faculty";
+    case "startup":
+      return "Startup";
+    case "admin":
+      return "Admin";
+    case "reviewer":
+      return "Reviewer";
+    default:
+      return "Student";
   }
 }
 
-export function signIn(user: User) {
-  window.localStorage.setItem(KEY, JSON.stringify(user));
-  window.dispatchEvent(new Event(EVENT));
-}
-
-export function signOut() {
-  window.localStorage.removeItem(KEY);
-  window.dispatchEvent(new Event(EVENT));
-}
-
-/** Mock auth: resolves after a short delay so loading states are visible. */
-export function mockAuthRequest<T>(value: T, ms = 900): Promise<T> {
-  return new Promise((resolve) => setTimeout(() => resolve(value), ms));
+// Helper to convert PascalCase frontend roles to lowercase DB roles
+export function appRoleToDbRole(appRole: Role): string {
+  return appRole.toLowerCase();
 }
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
 
+  // Helper to fetch profile details from Supabase
+  const fetchProfile = async (userId: string, email: string): Promise<User> => {
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("full_name, role, onboarded, avatar_url")
+        .eq("id", userId)
+        .single();
+
+      if (error || !data) {
+        console.error("Error fetching user profile:", error);
+        return {
+          id: userId,
+          email,
+          name: email.split("@")[0] || "User",
+          role: "Student",
+          onboarded: false,
+        };
+      }
+
+      return {
+        id: userId,
+        email,
+        name: data.full_name || email.split("@")[0] || "User",
+        role: dbRoleToAppRole(data.role),
+        onboarded: !!data.onboarded,
+        avatarUrl: data.avatar_url || undefined,
+      };
+    } catch (e) {
+      console.error("Profile query failed:", e);
+      return {
+        id: userId,
+        email,
+        name: email.split("@")[0] || "User",
+        role: "Student",
+        onboarded: false,
+      };
+    }
+  };
+
   useEffect(() => {
-    const sync = () => setUser(readUser());
-    sync();
-    setReady(true);
-    window.addEventListener(EVENT, sync);
-    window.addEventListener("storage", sync);
+    const initAuth = async () => {
+      try {
+        const {
+          data: { session },
+        } = await authService.getSession();
+        if (session?.user) {
+          if (authService.isDemoMode()) {
+            setUser(session.user as unknown as User);
+          } else {
+            const profile = await fetchProfile(
+              (session.user as { id: string; email?: string }).id,
+              (session.user as { id: string; email?: string }).email || "",
+            );
+            setUser(profile);
+          }
+        } else {
+          setUser(null);
+        }
+      } catch (err) {
+        console.error("Supabase session check failed:", err);
+        setUser(null);
+      } finally {
+        setReady(true);
+      }
+    };
+
+    initAuth();
+
+    // Listen to auth events via authService
+    const {
+      data: { subscription },
+    } = authService.onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        if (authService.isDemoMode()) {
+          setUser(session.user as unknown as User);
+        } else {
+          const profile = await fetchProfile(
+            (session.user as { id: string; email?: string }).id,
+            (session.user as { id: string; email?: string }).email || "",
+          );
+          setUser(profile);
+        }
+      } else {
+        setUser(null);
+      }
+      setReady(true);
+    });
+
     return () => {
-      window.removeEventListener(EVENT, sync);
-      window.removeEventListener("storage", sync);
+      subscription.unsubscribe();
     };
   }, []);
 
-  const logout = useCallback(() => signOut(), []);
+  const refresh = useCallback(async () => {
+    const {
+      data: { session },
+    } = await authService.getSession();
+    if (session?.user) {
+      if (authService.isDemoMode()) {
+        setUser(session.user as unknown as User);
+      } else {
+        const profile = await fetchProfile(
+          (session.user as { id: string; email?: string }).id,
+          (session.user as { id: string; email?: string }).email || "",
+        );
+        setUser(profile);
+      }
+    }
+  }, []);
 
-  return { user, ready, isAuthenticated: !!user, isAdmin: user?.role === "Admin", logout };
+  const logout = useCallback(async () => {
+    await authService.signOut();
+    setUser(null);
+  }, []);
+
+  return {
+    user,
+    ready,
+    isAuthenticated: !!user,
+    isAdmin: user?.role === "Admin",
+    logout,
+    refresh,
+  };
 }
 
 // ---------- Theme ----------

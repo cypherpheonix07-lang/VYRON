@@ -103,12 +103,17 @@ export function ScoreGauge({
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
   const pct = Math.max(0, Math.min(100, value));
-  const color =
-    pct >= 80 ? "var(--success)" : pct >= 60 ? "var(--warning)" : "var(--critical)";
+  const color = pct >= 80 ? "var(--success)" : pct >= 60 ? "var(--warning)" : "var(--critical)";
   return (
     <div className="flex flex-col items-center gap-2">
       <div className="relative" style={{ width: size, height: size }}>
-        <svg width={size} height={size} className="-rotate-90" role="img" aria-label={`${label ?? "Score"}: ${pct} out of 100`}>
+        <svg
+          width={size}
+          height={size}
+          className="-rotate-90"
+          role="img"
+          aria-label={`${label ?? "Score"}: ${pct} out of 100`}
+        >
           <circle
             cx={size / 2}
             cy={size / 2}
@@ -153,7 +158,10 @@ const riskClass: Record<RiskLevel, string> = {
 
 export function RiskBadge({ level, label }: { level: RiskLevel | Severity; label?: string }) {
   return (
-    <Badge variant="outline" className={cn("rounded-full font-medium", riskClass[level as RiskLevel])}>
+    <Badge
+      variant="outline"
+      className={cn("rounded-full font-medium", riskClass[level as RiskLevel])}
+    >
       {label ?? level}
     </Badge>
   );
@@ -314,9 +322,7 @@ export function SectionCard({
       <CardHeader className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
         <div className="min-w-0">
           <CardTitle className="text-base">{title}</CardTitle>
-          {description ? (
-            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
-          ) : null}
+          {description ? <p className="mt-1 text-sm text-muted-foreground">{description}</p> : null}
         </div>
         {action}
       </CardHeader>

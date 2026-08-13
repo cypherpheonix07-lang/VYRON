@@ -1,11 +1,4 @@
-import {
-  Background,
-  Controls,
-  MiniMap,
-  ReactFlow,
-  type Edge,
-  type Node,
-} from "@xyflow/react";
+import { Background, Controls, MiniMap, ReactFlow, type Edge, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useMemo, useState } from "react";
 
@@ -25,7 +18,7 @@ const kindTone: Record<string, string> = {
   External: "var(--critical)",
 };
 
-type BlueprintNode = (typeof blueprintNodes)[number];
+export type BlueprintNode = (typeof blueprintNodes)[number];
 
 export function ArchitectureCanvas({
   onSelect,
@@ -151,7 +144,10 @@ export function MobileArchitectureFallback({
         <li key={n.id}>
           <Button
             variant="outline"
-            className={cn("h-auto w-full justify-between px-3 py-2.5 text-left", active === n.id && "border-primary")}
+            className={cn(
+              "h-auto w-full justify-between px-3 py-2.5 text-left",
+              active === n.id && "border-primary",
+            )}
             onClick={() => {
               setActive(n.id);
               onSelect(n);

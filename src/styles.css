@@ -96,10 +96,11 @@
     color-mix(in oklab, var(--primary) 18%, transparent) 0%,
     transparent 60%
   );
-  --shadow-glow: 0 0 0 1px color-mix(in oklab, var(--primary) 22%, transparent),
+  --shadow-glow:
+    0 0 0 1px color-mix(in oklab, var(--primary) 22%, transparent),
     0 18px 50px -22px color-mix(in oklab, var(--primary) 40%, transparent);
-  --shadow-panel: 0 1px 0 0 color-mix(in oklab, white 6%, transparent) inset,
-    0 24px 60px -32px oklch(0 0 0 / 0.7);
+  --shadow-panel:
+    0 1px 0 0 color-mix(in oklab, white 6%, transparent) inset, 0 24px 60px -32px oklch(0 0 0 / 0.7);
 }
 
 .light {
@@ -143,7 +144,8 @@
 }
 
 @utility grid-backdrop {
-  background-image: linear-gradient(
+  background-image:
+    linear-gradient(
       to right,
       color-mix(in oklab, var(--border) 60%, transparent) 1px,
       transparent 1px

@@ -94,11 +94,26 @@ const features = [
 ];
 
 const steps = [
-  { title: "Input idea or requirement", body: "Paste a project brief, upload an SRS, or dictate the idea." },
-  { title: "AI extracts structured requirements", body: "Requirements, actors, modules and constraints with confidence scores." },
-  { title: "Generate architecture blueprint", body: "Services, data model, API routes and recommendations." },
-  { title: "Analyze code and security", body: "Connect a repository for health metrics and vulnerability findings." },
-  { title: "Predict risk and business impact", body: "Delivery risk, technical debt and KPI impact you can present." },
+  {
+    title: "Input idea or requirement",
+    body: "Paste a project brief, upload an SRS, or dictate the idea.",
+  },
+  {
+    title: "AI extracts structured requirements",
+    body: "Requirements, actors, modules and constraints with confidence scores.",
+  },
+  {
+    title: "Generate architecture blueprint",
+    body: "Services, data model, API routes and recommendations.",
+  },
+  {
+    title: "Analyze code and security",
+    body: "Connect a repository for health metrics and vulnerability findings.",
+  },
+  {
+    title: "Predict risk and business impact",
+    body: "Delivery risk, technical debt and KPI impact you can present.",
+  },
 ];
 
 const stack = [
@@ -193,18 +208,24 @@ function Landing() {
           style={{ background: "var(--gradient-hero)" }}
           aria-hidden
         />
-        <div className="pointer-events-none absolute inset-0 grid-backdrop opacity-[0.35]" aria-hidden />
+        <div
+          className="pointer-events-none absolute inset-0 grid-backdrop opacity-[0.35]"
+          aria-hidden
+        />
         <div className="relative mx-auto max-w-6xl px-4 py-20 sm:px-6 lg:py-28">
-          <Badge variant="outline" className="rounded-full border-primary/40 bg-primary/10 text-primary">
+          <Badge
+            variant="outline"
+            className="rounded-full border-primary/40 bg-primary/10 text-primary"
+          >
             <Sparkles className="size-3" aria-hidden /> Blueprint-driven engineering intelligence
           </Badge>
           <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
             From raw idea to <span className="text-gradient">validated software blueprint.</span>
           </h1>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            PROJECT BRAHMA turns a project brief into structured requirements, generates a reviewable
-            architecture, analyzes code health and security, predicts delivery risk, and maps every
-            technical issue to its business impact.
+            PROJECT BRAHMA turns a project brief into structured requirements, generates a
+            reviewable architecture, analyzes code health and security, predicts delivery risk, and
+            maps every technical issue to its business impact.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg">
@@ -225,7 +246,9 @@ function Landing() {
             ].map((s) => (
               <div key={s.v} className="surface rounded-xl px-4 py-4">
                 <dt className="text-2xl font-semibold tabular-nums">{s.k}</dt>
-                <dd className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">{s.v}</dd>
+                <dd className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
+                  {s.v}
+                </dd>
               </div>
             ))}
           </dl>
@@ -250,10 +273,22 @@ function Landing() {
           </div>
           <ul className="grid gap-3 sm:grid-cols-2">
             {[
-              { t: "Fragmented tooling", d: "Docs, diagrams, linters, scanners and spreadsheets that never share context." },
-              { t: "No requirement validation", d: "Ambiguity is discovered in sprint 4, not on day one." },
-              { t: "Invisible technical debt", d: "Complexity grows with no owner and no cost attached." },
-              { t: "Late security findings", d: "Critical issues surface after the release candidate is cut." },
+              {
+                t: "Fragmented tooling",
+                d: "Docs, diagrams, linters, scanners and spreadsheets that never share context.",
+              },
+              {
+                t: "No requirement validation",
+                d: "Ambiguity is discovered in sprint 4, not on day one.",
+              },
+              {
+                t: "Invisible technical debt",
+                d: "Complexity grows with no owner and no cost attached.",
+              },
+              {
+                t: "Late security findings",
+                d: "Critical issues surface after the release candidate is cut.",
+              },
             ].map((p) => (
               <li key={p.t} className="surface rounded-xl p-4">
                 <p className="text-sm font-medium">{p.t}</p>
@@ -267,15 +302,29 @@ function Landing() {
       {/* Solution */}
       <section className="border-y border-border/60 bg-card/30">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-          <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">The solution</p>
+          <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
+            The solution
+          </p>
           <h2 className="mt-3 max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl">
             One unified engineering intelligence platform
           </h2>
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {[
-              { icon: Braces, t: "Validated blueprint first", d: "Every project begins with structured, scored requirements and a generated architecture your reviewers can challenge." },
-              { icon: BarChart3, t: "Continuous quality signal", d: "Code health, security posture and delivery risk recalculated on every analysis run." },
-              { icon: Boxes, t: "Business alignment built in", d: "Findings are ranked by business impact, so the highest-value fix is always at the top." },
+              {
+                icon: Braces,
+                t: "Validated blueprint first",
+                d: "Every project begins with structured, scored requirements and a generated architecture your reviewers can challenge.",
+              },
+              {
+                icon: BarChart3,
+                t: "Continuous quality signal",
+                d: "Code health, security posture and delivery risk recalculated on every analysis run.",
+              },
+              {
+                icon: Boxes,
+                t: "Business alignment built in",
+                d: "Findings are ranked by business impact, so the highest-value fix is always at the top.",
+              },
             ].map((s) => (
               <Card key={s.t} className="surface">
                 <CardContent className="pt-2">
@@ -344,14 +393,16 @@ function Landing() {
               numbers.
             </p>
             <ul className="mt-6 space-y-2 text-sm">
-              {["Deterministic scoring model", "Traceable requirement-to-module mapping", "Exportable blueprint and report artifacts"].map(
-                (t) => (
-                  <li key={t} className="flex items-start gap-2 text-muted-foreground">
-                    <Check className="mt-0.5 size-4 shrink-0 text-[var(--success)]" aria-hidden />
-                    {t}
-                  </li>
-                ),
-              )}
+              {[
+                "Deterministic scoring model",
+                "Traceable requirement-to-module mapping",
+                "Exportable blueprint and report artifacts",
+              ].map((t) => (
+                <li key={t} className="flex items-start gap-2 text-muted-foreground">
+                  <Check className="mt-0.5 size-4 shrink-0 text-[var(--success)]" aria-hidden />
+                  {t}
+                </li>
+              ))}
             </ul>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -406,19 +457,51 @@ function Landing() {
           <div>
             <p className="text-sm font-medium">Product</p>
             <ul className="mt-3 space-y-2 text-xs text-muted-foreground">
-              <li><a href="#features" className="hover:text-foreground">Features</a></li>
-              <li><a href="#how-it-works" className="hover:text-foreground">How it works</a></li>
-              <li><Link to="/app" className="hover:text-foreground">Demo dashboard</Link></li>
-              <li><Link to="/app/projects/new" className="hover:text-foreground">New project</Link></li>
+              <li>
+                <a href="#features" className="hover:text-foreground">
+                  Features
+                </a>
+              </li>
+              <li>
+                <a href="#how-it-works" className="hover:text-foreground">
+                  How it works
+                </a>
+              </li>
+              <li>
+                <Link to="/app" className="hover:text-foreground">
+                  Demo dashboard
+                </Link>
+              </li>
+              <li>
+                <Link to="/app/projects/new" className="hover:text-foreground">
+                  New project
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
             <p className="text-sm font-medium">Resources</p>
             <ul className="mt-3 space-y-2 text-xs text-muted-foreground">
-              <li><a href="#technology" className="hover:text-foreground">Technology</a></li>
-              <li><a href="#features" className="hover:text-foreground">Scoring model</a></li>
-              <li><Link to="/app/reports" className="hover:text-foreground">Report samples</Link></li>
-              <li><Link to="/app/settings" className="hover:text-foreground">Integrations</Link></li>
+              <li>
+                <a href="#technology" className="hover:text-foreground">
+                  Technology
+                </a>
+              </li>
+              <li>
+                <a href="#features" className="hover:text-foreground">
+                  Scoring model
+                </a>
+              </li>
+              <li>
+                <Link to="/app/reports" className="hover:text-foreground">
+                  Report samples
+                </Link>
+              </li>
+              <li>
+                <Link to="/app/settings" className="hover:text-foreground">
+                  Integrations
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

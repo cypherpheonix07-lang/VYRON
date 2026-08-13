@@ -14,8 +14,12 @@ const tabs = [
   { to: "/app/projects/$id/blueprint", label: "Blueprint", exact: false },
   { to: "/app/projects/$id/code-health", label: "Code Health", exact: false },
   { to: "/app/projects/$id/security", label: "Security", exact: false },
+  { to: "/app/projects/$id/tests", label: "Tests", exact: false },
   { to: "/app/projects/$id/risk-business", label: "Risk & Business", exact: false },
-  { to: "/app/projects/$id/reports", label: "Reports", exact: false },
+  { to: "/app/projects/$id/versions", label: "Versions", exact: false },
+  { to: "/app/projects/$id/collaborate", label: "Collaborate", exact: false },
+  { to: "/app/projects/$id/publish", label: "Publish", exact: false },
+  { to: "/app/projects/$id/analytics", label: "Analytics", exact: false },
 ] as const;
 
 function ProjectLayout() {
@@ -27,8 +31,12 @@ function ProjectLayout() {
     <div className="space-y-6">
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 sm:flex sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="truncate text-xl font-semibold tracking-tight sm:text-2xl">{project.name}</h1>
-          <p className="mt-1 line-clamp-2 max-w-2xl text-sm text-muted-foreground">{project.description}</p>
+          <h1 className="truncate text-xl font-semibold tracking-tight sm:text-2xl">
+            {project.name}
+          </h1>
+          <p className="mt-1 line-clamp-2 max-w-2xl text-sm text-muted-foreground">
+            {project.description}
+          </p>
         </div>
         <StatusBadge status={project.status} />
       </header>
