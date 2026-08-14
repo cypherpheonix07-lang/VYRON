@@ -8,7 +8,7 @@ export const Route = createFileRoute("/app/billing")({
       { title: "Billing Console — PROJECT BRAHMA" },
       {
         name: "description",
-        content: "Upgrade plans, buy credit topups, and download invoice records.",
+        content: "Upgrade plans, scale seat quotas, and download invoice records.",
       },
     ],
   }),

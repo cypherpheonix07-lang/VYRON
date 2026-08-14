@@ -29,7 +29,6 @@ CREATE TABLE IF NOT EXISTS public.profiles (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
 );
 
--- Ensure all extended columns exist if table was already created
 DO $$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='profiles' AND column_name='display_name') THEN
@@ -50,7 +49,7 @@ BEGIN
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='profiles' AND column_name='proficiency') THEN
     ALTER TABLE public.profiles ADD COLUMN proficiency TEXT DEFAULT 'Intermediate';
   END IF;
-  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='milestone_deadline' AND column_name='milestone_deadline') THEN
+  IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='profiles' AND column_name='milestone_deadline') THEN
     ALTER TABLE public.profiles ADD COLUMN milestone_deadline DATE;
   END IF;
   IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_schema='public' AND table_name='profiles' AND column_name='timezone') THEN
@@ -64,11 +63,10 @@ BEGIN
   END IF;
 END $$;
 
--- Enable Row Level Security (RLS) on profiles
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 
 -- ------------------------------------------------------------------------------
--- 2. AUTH EVENTS TABLE (OBSERVABILITY)
+-- 2. AUTH EVENTS TABLE
 -- ------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.auth_events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -87,11 +85,10 @@ CREATE TABLE IF NOT EXISTS public.auth_events (
   created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
 );
 
--- Enable RLS on auth_events
 ALTER TABLE public.auth_events ENABLE ROW LEVEL SECURITY;
 
 -- ------------------------------------------------------------------------------
--- 3. USER INTEGRATIONS TABLE (OAUTH & TOKENS)
+-- 3. USER INTEGRATIONS TABLE
 -- ------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.user_integrations (
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -106,11 +103,10 @@ CREATE TABLE IF NOT EXISTS public.user_integrations (
   PRIMARY KEY (user_id, provider)
 );
 
--- Enable RLS on user_integrations
 ALTER TABLE public.user_integrations ENABLE ROW LEVEL SECURITY;
 
 -- ------------------------------------------------------------------------------
--- 4. INTEGRATION EVENTS TABLE (REALTIME PUSH FEED)
+-- 4. INTEGRATION EVENTS TABLE
 -- ------------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.integration_events (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -124,7 +120,6 @@ CREATE TABLE IF NOT EXISTS public.integration_events (
   created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
 );
 
--- Enable RLS on integration_events
 ALTER TABLE public.integration_events ENABLE ROW LEVEL SECURITY;
 
 -- ------------------------------------------------------------------------------
@@ -134,7 +129,6 @@ INSERT INTO storage.buckets (id, name, public)
 VALUES ('avatars', 'avatars', true)
 ON CONFLICT (id) DO NOTHING;
 
--- Storage RLS Policies
 DROP POLICY IF EXISTS "Public avatars access" ON storage.objects;
 CREATE POLICY "Public avatars access"
   ON storage.objects FOR SELECT
@@ -169,10 +163,8 @@ CREATE POLICY "Users can delete own avatar"
   );
 
 -- ------------------------------------------------------------------------------
--- 6. TRIGGERS & SECURITY FUNCTIONS
+-- 6. TRIGGERS & FUNCTIONS
 -- ------------------------------------------------------------------------------
-
--- Trigger: Auto-create profile on auth.users insert
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -217,7 +209,6 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW
   EXECUTE FUNCTION public.handle_new_user();
 
--- Trigger: Prevent Role Self-Change
 CREATE OR REPLACE FUNCTION public.prevent_role_self_change()
 RETURNS TRIGGER
 LANGUAGE plpgsql
@@ -248,7 +239,6 @@ CREATE TRIGGER tr_prevent_role_self_change
   FOR EACH ROW
   EXECUTE FUNCTION public.prevent_role_self_change();
 
--- Function: Admin Set User Role
 CREATE OR REPLACE FUNCTION public.set_user_role(target_user_id UUID, target_role TEXT)
 RETURNS VOID
 LANGUAGE plpgsql
@@ -277,10 +267,8 @@ END;
 $$;
 
 -- ------------------------------------------------------------------------------
--- 7. ROW LEVEL SECURITY (RLS) POLICIES
+-- 7. RLS POLICIES
 -- ------------------------------------------------------------------------------
-
--- PROFILES POLICIES
 DROP POLICY IF EXISTS "Authenticated users can view profiles" ON public.profiles;
 CREATE POLICY "Authenticated users can view profiles"
   ON public.profiles
@@ -307,7 +295,6 @@ CREATE POLICY "Admins have full profile access"
     )
   );
 
--- AUTH EVENTS POLICIES
 DROP POLICY IF EXISTS "Users can view own auth events" ON public.auth_events;
 CREATE POLICY "Users can view own auth events"
   ON public.auth_events
@@ -326,7 +313,6 @@ CREATE POLICY "Admins can view all auth events"
     )
   );
 
--- USER INTEGRATIONS POLICIES
 DROP POLICY IF EXISTS "Users can view own integrations" ON public.user_integrations;
 CREATE POLICY "Users can view own integrations"
   ON public.user_integrations
@@ -341,29 +327,9 @@ CREATE POLICY "Users can delete own integrations"
   TO authenticated
   USING (user_id = (SELECT auth.uid()));
 
--- INTEGRATION EVENTS POLICIES
 DROP POLICY IF EXISTS "Users can view own integration events" ON public.integration_events;
 CREATE POLICY "Users can view own integration events"
   ON public.integration_events
   FOR SELECT
   TO authenticated
   USING (user_id = (SELECT auth.uid()));
-
--- ------------------------------------------------------------------------------
--- 8. REALTIME REPLICATION CONFIGURATION
--- ------------------------------------------------------------------------------
--- Add tables to realtime publication if not already included
-DO $$
-BEGIN
-  BEGIN
-    ALTER PUBLICATION supabase_realtime ADD TABLE public.integration_events;
-  EXCEPTION WHEN OTHERS THEN
-    NULL;
-  END;
-
-  BEGIN
-    ALTER PUBLICATION supabase_realtime ADD TABLE public.profiles;
-  EXCEPTION WHEN OTHERS THEN
-    NULL;
-  END;
-END $$;

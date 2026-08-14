@@ -7,7 +7,7 @@ import { AuthLayout, FieldError } from "@/routes/login";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { supabase } from "@/lib/supabase";
+import { authService } from "@/services/authService";
 
 export const Route = createFileRoute("/invite")({
   head: () => ({
@@ -42,7 +42,7 @@ function InvitePage() {
         // If token in search parameters, set session via setSession
         const refreshToken = new URLSearchParams(window.location.search).get("refresh_token") || "";
         if (refreshToken) {
-          await supabase.auth.setSession({
+          await authService.setSession({
             access_token: accessToken,
             refresh_token: refreshToken,
           });
@@ -51,7 +51,7 @@ function InvitePage() {
         // If there's already an active session, let them set password
         const {
           data: { session },
-        } = await supabase.auth.getSession();
+        } = await authService.getSession();
         if (session) {
           setHasToken(true);
         } else {
@@ -87,9 +87,7 @@ function InvitePage() {
     setLoading(true);
     try {
       // Complete user signup/password setup
-      const { error } = await supabase.auth.updateUser({
-        password: password,
-      });
+      const { error } = await authService.updatePassword(password);
 
       if (error) {
         setFormError(error.message);

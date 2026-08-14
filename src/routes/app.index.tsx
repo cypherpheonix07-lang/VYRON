@@ -38,7 +38,9 @@ import {
   SectionCard,
   StatCard,
   StatusBadge,
+  CountdownCard,
 } from "@/components/brahma/primitives";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -155,7 +157,8 @@ function Dashboard() {
       ) : null}
 
       {state === "loaded" ? (
-        <>
+        <div className="space-y-4">
+          <CountdownCard targetDate="2026-09-15" milestoneTitle="Review 1 Milestone Defense" />
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
             <StatCard
               label="Total projects"
@@ -479,7 +482,7 @@ function Dashboard() {
               </ul>
             </SectionCard>
           </div>
-        </>
+        </div>
       ) : null}
     </>
   );

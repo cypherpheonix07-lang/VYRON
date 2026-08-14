@@ -205,11 +205,22 @@ function LoginPage() {
   // OAuth Sign In
   const handleOAuthLogin = async (provider: "google" | "github") => {
     setOauthLoading(provider);
+    setFormError(null);
+    toast.loading(`Redirecting to ${provider === "google" ? "Google" : "GitHub"}...`, {
+      id: "oauth-redirect",
+    });
     try {
       const { error } = await authService.signInWithOAuth(provider);
-      if (error) toast.error(error.message);
+      if (error) {
+        toast.dismiss("oauth-redirect");
+        setFormError(error.message);
+        toast.error(error.message);
+      }
     } catch (err) {
-      toast.error("OAuth redirect failed.");
+      toast.dismiss("oauth-redirect");
+      const msg = (err as Error).message || "OAuth redirect failed.";
+      setFormError(msg);
+      toast.error(msg);
     } finally {
       setOauthLoading(null);
     }
@@ -441,40 +452,49 @@ function LoginPage() {
         </div>
 
         {/* OAuth grid */}
-        <div className="grid grid-cols-2 gap-3">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => handleOAuthLogin("google")}
-            disabled={oauthLoading !== null}
-            className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2"
-          >
-            {oauthLoading === "google" ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <>
-                <Chrome className="size-4 text-red-400" />
-                <span>Google</span>
-              </>
+        {(authService.isOAuthProviderEnabled("google") ||
+          authService.isOAuthProviderEnabled("github")) && (
+          <div className="grid grid-cols-2 gap-3">
+            {authService.isOAuthProviderEnabled("google") && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleOAuthLogin("google")}
+                disabled={oauthLoading !== null}
+                className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2"
+                aria-label="Sign in with Google"
+              >
+                {oauthLoading === "google" ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <>
+                    <Chrome className="size-4 text-red-400" />
+                    <span>Google</span>
+                  </>
+                )}
+              </Button>
             )}
-          </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => handleOAuthLogin("github")}
-            disabled={oauthLoading !== null}
-            className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2"
-          >
-            {oauthLoading === "github" ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <>
-                <Github className="size-4 text-slate-300" />
-                <span>GitHub</span>
-              </>
+            {authService.isOAuthProviderEnabled("github") && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleOAuthLogin("github")}
+                disabled={oauthLoading !== null}
+                className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2"
+                aria-label="Sign in with GitHub"
+              >
+                {oauthLoading === "github" ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <>
+                    <Github className="size-4 text-slate-300" />
+                    <span>GitHub</span>
+                  </>
+                )}
+              </Button>
             )}
-          </Button>
-        </div>
+          </div>
+        )}
 
         {/* Register redirection */}
         <div className="text-center text-xs text-slate-400">

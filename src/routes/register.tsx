@@ -1,5 +1,14 @@
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { AlertCircle, Loader2, ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
+import {
+  AlertCircle,
+  Loader2,
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  Sparkles,
+  Chrome,
+  Github,
+} from "lucide-react";
 import { useState, type FormEvent, useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -80,7 +89,27 @@ function RegisterPage() {
   // Errors & States
   const [stepErrors, setStepErrors] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(0);
+
+  const handleOAuthRegister = async (provider: "google" | "github") => {
+    setOauthLoading(provider);
+    toast.loading(`Redirecting to ${provider === "google" ? "Google" : "GitHub"}...`, {
+      id: "oauth-register-redirect",
+    });
+    try {
+      const { error } = await authService.signInWithOAuth(provider);
+      if (error) {
+        toast.dismiss("oauth-register-redirect");
+        toast.error(error.message);
+      }
+    } catch (err) {
+      toast.dismiss("oauth-register-redirect");
+      toast.error((err as Error).message || "OAuth redirect failed.");
+    } finally {
+      setOauthLoading(null);
+    }
+  };
 
   // Redirect if already authenticated and onboarded
   useEffect(() => {
@@ -273,6 +302,62 @@ function RegisterPage() {
             >
               Continue <ArrowRight className="size-4 ml-1.5 shrink-0" />
             </Button>
+
+            {/* OAuth separator and grid */}
+            {(authService.isOAuthProviderEnabled("google") ||
+              authService.isOAuthProviderEnabled("github")) && (
+              <>
+                <div className="relative flex items-center justify-center my-3 select-none">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-slate-900" />
+                  </div>
+                  <span className="relative px-3 bg-[#0c1322] text-[10px] uppercase font-mono font-bold tracking-widest text-slate-500">
+                    Or sign up with
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {authService.isOAuthProviderEnabled("google") && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => handleOAuthRegister("google")}
+                      disabled={oauthLoading !== null}
+                      className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2"
+                      aria-label="Sign up with Google"
+                    >
+                      {oauthLoading === "google" ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : (
+                        <>
+                          <Chrome className="size-4 text-red-400" />
+                          <span>Google</span>
+                        </>
+                      )}
+                    </Button>
+                  )}
+                  {authService.isOAuthProviderEnabled("github") && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => handleOAuthRegister("github")}
+                      disabled={oauthLoading !== null}
+                      className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2"
+                      aria-label="Sign up with GitHub"
+                    >
+                      {oauthLoading === "github" ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : (
+                        <>
+                          <Github className="size-4 text-slate-300" />
+                          <span>GitHub</span>
+                        </>
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         )}
 

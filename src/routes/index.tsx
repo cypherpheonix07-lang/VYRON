@@ -26,6 +26,12 @@ import { BrahmaLogo } from "@/components/brahma/logo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  ShowcaseSceneRotator,
+  AlertTicker,
+  ReleaseGateAnimator,
+  MetricsStrip,
+} from "@/components/brahma/showcase-components";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -252,6 +258,27 @@ function Landing() {
               </div>
             ))}
           </dl>
+
+          {/* Interactive Live Blueprint & Risk Showcase Container */}
+          <div className="mt-12 space-y-4 rounded-2xl border border-primary/30 bg-zinc-950/70 p-5 sm:p-7 shadow-2xl backdrop-blur-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/50 pb-4">
+              <div>
+                <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-cyan-400">
+                  <span className="size-2 rounded-full bg-cyan-400 animate-ping" />
+                  Live Engine Telemetry & Blueprint Synthesis
+                </span>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Interactive multi-tier architecture, requirement traceability graph, and risk
+                  forecasting.
+                </p>
+              </div>
+              <ReleaseGateAnimator />
+            </div>
+
+            <AlertTicker />
+            <ShowcaseSceneRotator />
+            <MetricsStrip />
+          </div>
         </div>
       </section>
 

@@ -1,0 +1,13 @@
+project_id = "hbbunfizlwgvripgwzdo"
+
+[functions.log-auth-event]
+verify_jwt = false
+
+[functions.github-exchange]
+verify_jwt = true
+
+[functions.github-proxy]
+verify_jwt = true
+
+[functions.github-webhook]
+verify_jwt = false

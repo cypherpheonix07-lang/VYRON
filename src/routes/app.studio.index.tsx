@@ -179,6 +179,62 @@ function StudioDashboard() {
         </Button>
       </div>
 
+      {/* Goal-Driven Recommended Templates */}
+      <div className="rounded-xl border border-primary/25 bg-zinc-950/40 p-4 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="size-4 text-primary" />
+            <span className="text-xs font-bold uppercase tracking-wider text-foreground">
+              Recommended for Your Goals
+            </span>
+          </div>
+          <Link
+            to="/app/studio/templates"
+            className="text-xs text-primary hover:underline font-semibold"
+          >
+            Browse all 12 templates &rarr;
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          {[
+            {
+              title: "PCI-DSS Payment Orchestrator",
+              domain: "FinTech & Payments",
+              stack: "TypeScript + PostgreSQL + Redis",
+              gates: "5/5 Gates Passed",
+            },
+            {
+              title: "HIPAA Telemetry FHIR Engine",
+              domain: "Healthcare",
+              stack: "Go + TimescaleDB + Kafka",
+              gates: "0 Critical CVEs",
+            },
+            {
+              title: "Smart Classroom Vision & Attendance",
+              domain: "EdTech & IoT",
+              stack: "Python + OpenCV + FastAPI",
+              gates: "100% Traceability",
+            },
+          ].map((rec) => (
+            <div
+              key={rec.title}
+              onClick={() => {
+                window.location.href = `/app/studio/create?prompt=${encodeURIComponent(rec.title)}`;
+              }}
+              className="rounded-lg border border-border/70 bg-secondary/20 p-3 hover:border-primary/50 hover:bg-secondary/40 cursor-pointer transition-all space-y-1.5"
+            >
+              <div className="flex items-center justify-between text-[10px]">
+                <span className="text-primary font-semibold">{rec.domain}</span>
+                <span className="text-[var(--success)] font-mono">{rec.gates}</span>
+              </div>
+              <p className="text-xs font-bold text-foreground">{rec.title}</p>
+              <p className="text-[10px] text-muted-foreground font-mono">{rec.stack}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard label="Studio projects" value={projects.length} icon={FolderKanban} />

@@ -338,3 +338,47 @@ export function QuickLink({ to, children }: { to: string; children: ReactNode })
     </Button>
   );
 }
+
+export function CountdownCard({
+  targetDate,
+  milestoneTitle = "Review 1 Milestone Defense",
+}: {
+  targetDate?: string;
+  milestoneTitle?: string;
+}) {
+  const target = targetDate || "2026-09-15";
+  const daysLeft = Math.max(
+    1,
+    Math.ceil((new Date(target).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)),
+  );
+
+  return (
+    <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex items-center gap-3.5">
+        <div className="grid size-12 place-items-center rounded-xl bg-primary/15 text-primary border border-primary/20 shrink-0">
+          <span className="text-lg font-black font-mono">{daysLeft}d</span>
+        </div>
+        <div>
+          <div className="flex items-center gap-2">
+            <h4 className="text-sm font-semibold text-foreground">{milestoneTitle}</h4>
+            <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px]">
+              {daysLeft} Days Remaining
+            </Badge>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Target date:{" "}
+            {new Date(target).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}{" "}
+            &bull; All 4 quality gates must pass before defense.
+          </p>
+        </div>
+      </div>
+      <Button asChild size="sm" className="bg-primary text-primary-foreground text-xs shrink-0">
+        <Link to="/app/reports">Review Deliverables</Link>
+      </Button>
+    </div>
+  );
+}
