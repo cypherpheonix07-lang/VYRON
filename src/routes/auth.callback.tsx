@@ -69,9 +69,8 @@ function AuthCallbackPage() {
         if (isGitHubIntegration && ghCode) {
           try {
             const edgeUrl = `${import.meta.env["VITE_SUPABASE_URL"] || ""}/functions/v1/github-exchange`;
-            const {
-              data: { session },
-            } = await authService.getSession();
+            const sessionResult = await authService.getSession();
+            const session = sessionResult.ok ? sessionResult.data : null;
 
             if (session?.access_token) {
               await fetch(edgeUrl, {
@@ -110,12 +109,12 @@ function AuthCallbackPage() {
         // 3. Handle PKCE Code exchange if 'code' is in URL
         const authCode = searchParams.get("code");
         if (authCode) {
-          const { error: exchangeError } = await authService.exchangeCodeForSession(authCode);
-          if (exchangeError) {
+          const result = await authService.exchangeCodeForSession(authCode);
+          if (!result.ok) {
             if (isMounted) {
               setErrorDetails({
                 code: "code_exchange_failed",
-                message: exchangeError.message,
+                message: result.error?.message ?? "Code exchange failed.",
                 description: "Failed to exchange authorization code for active session token.",
               });
             }
@@ -130,16 +129,15 @@ function AuthCallbackPage() {
         }
 
         // 4. Retrieve or wait for established session
-        const {
-          data: { session },
-          error: sessionError,
-        } = await authService.getSession();
+        const sessionResult = await authService.getSession();
+        const session = sessionResult.ok ? sessionResult.data : null;
+        const sessionError = sessionResult.ok ? null : sessionResult.error;
 
         if (sessionError) {
           if (isMounted) {
             setErrorDetails({
               code: "session_error",
-              message: sessionError.message,
+              message: sessionError.message ?? "Session error.",
               description: "Could not retrieve established session.",
             });
           }

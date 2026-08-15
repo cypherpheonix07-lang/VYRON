@@ -64,10 +64,10 @@ function ResetPasswordPage() {
 
     setLoading(true);
     try {
-      const { error } = await authService.updatePassword(password);
+      const result = await authService.updatePassword(password);
 
-      if (error) {
-        setFormError(error.message);
+      if (!result.ok) {
+        setFormError(result.error?.message ?? "Failed to update password.");
       } else {
         toast.success("Password updated", {
           description:

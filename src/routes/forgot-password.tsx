@@ -41,10 +41,10 @@ function ForgotPasswordPage() {
     }
     setLoading(true);
     try {
-      const { error } = await authService.resetPasswordForEmail(email.trim());
+      const result = await authService.resetPasswordForEmail(email.trim());
 
-      if (error) {
-        toast.error(error.message);
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "Failed to send reset link.");
       } else {
         setSent(true);
         setCountdown(60);

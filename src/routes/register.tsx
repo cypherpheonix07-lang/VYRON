@@ -98,10 +98,10 @@ function RegisterPage() {
       id: "oauth-register-redirect",
     });
     try {
-      const { error } = await authService.signInWithOAuth(provider);
-      if (error) {
+      const result = await authService.signInWithOAuth(provider);
+      if (!result.ok) {
         toast.dismiss("oauth-register-redirect");
-        toast.error(error.message);
+        toast.error(result.error?.message ?? "OAuth redirect failed.");
       }
     } catch (err) {
       toast.dismiss("oauth-register-redirect");
@@ -168,7 +168,7 @@ function RegisterPage() {
 
     setLoading(true);
     try {
-      const { data, error } = await authService.signUp(email, password, {
+      const result = await authService.signUp(email, password, {
         data: {
           full_name: fullName,
           role: selectedRole.toLowerCase(),
@@ -182,8 +182,8 @@ function RegisterPage() {
         },
       });
 
-      if (error) {
-        toast.error(error.message);
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "Signup failed.");
       } else {
         toast.success("Account created! A confirmation code has been sent.");
         setStep(5); // Go to verification
@@ -208,10 +208,10 @@ function RegisterPage() {
 
     setLoading(true);
     try {
-      const { error } = await authService.verifyOtp(email, otpCode, "signup");
-      if (error) {
-        setVerificationError(error.message);
-        toast.error(error.message);
+      const result = await authService.verifyOtp(email, otpCode, "signup");
+      if (!result.ok) {
+        setVerificationError(result.error?.message ?? "Verification failed.");
+        toast.error(result.error?.message ?? "Verification failed.");
       } else {
         toast.success("Account confirmed successfully!");
         await refresh();

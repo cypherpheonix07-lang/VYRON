@@ -184,3 +184,113 @@
     border-radius: 999px;
   }
 }
+
+/* ================= REPORT STUDIO PRINT & PAPER STYLES ================= */
+.report-paper-container {
+  background-color: oklch(0.14 0.025 264);
+  min-height: 100vh;
+}
+
+.report-paper-page {
+  background-color: #ffffff;
+  color: #0f172a;
+  width: 210mm;
+  min-height: 297mm;
+  padding: 20mm 20mm;
+  margin: 0 auto 24px auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  border-radius: 2px;
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.report-paper-page h1,
+.report-paper-page h2,
+.report-paper-page h3,
+.report-paper-page h4 {
+  color: #0f172a;
+}
+
+.report-paper-page p,
+.report-paper-page span,
+.report-paper-page td,
+.report-paper-page th,
+.report-paper-page li {
+  color: #334155;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 11px;
+}
+
+.report-table th {
+  background-color: #f1f5f9;
+  color: #0f172a;
+  font-weight: 600;
+  border: 1px solid #cbd5e1;
+  padding: 6px 10px;
+  text-align: left;
+}
+
+.report-table td {
+  border: 1px solid #e2e8f0;
+  padding: 6px 10px;
+  color: #334155;
+}
+
+.report-table tr:nth-child(even) {
+  background-color: #f8fafc;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 12mm;
+}
+
+@media print {
+  /* Hide all app chrome, sidebars, header navigation and action toolbars */
+  body, html {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .no-print,
+  aside,
+  header,
+  nav,
+  .app-sidebar,
+  .app-topbar,
+  button,
+  .sonner-toaster {
+    display: none !important;
+  }
+
+  .report-paper-container {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .report-paper-page {
+    width: 100% !important;
+    min-height: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 12mm 10mm !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  .report-avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+}

@@ -107,17 +107,17 @@ export function useAuth() {
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const {
-          data: { session },
-        } = await authService.getSession();
-        if (session?.user) {
+        // authService.getSession() returns AuthResponse<Session|null>: { ok, data, error }
+        const result = await authService.getSession();
+        const session = result.ok ? result.data : null;
+
+        if (session && (session as { user?: unknown }).user) {
+          const sessionUser = (session as { user: { id: string; email?: string } }).user;
           if (authService.isDemoMode()) {
-            setUser(session.user as unknown as User);
+            // In demo mode, the "session" user is already a DemoUser
+            setUser(session as unknown as User);
           } else {
-            const profile = await fetchProfile(
-              (session.user as { id: string; email?: string }).id,
-              (session.user as { id: string; email?: string }).email || "",
-            );
+            const profile = await fetchProfile(sessionUser.id, sessionUser.email ?? "");
             setUser(profile);
           }
         } else {
@@ -141,10 +141,8 @@ export function useAuth() {
         if (authService.isDemoMode()) {
           setUser(session.user as unknown as User);
         } else {
-          const profile = await fetchProfile(
-            (session.user as { id: string; email?: string }).id,
-            (session.user as { id: string; email?: string }).email || "",
-          );
+          const sessionUser = session.user as { id: string; email?: string };
+          const profile = await fetchProfile(sessionUser.id, sessionUser.email ?? "");
           setUser(profile);
         }
       } else {
@@ -159,17 +157,14 @@ export function useAuth() {
   }, []);
 
   const refresh = useCallback(async () => {
-    const {
-      data: { session },
-    } = await authService.getSession();
-    if (session?.user) {
+    const result = await authService.getSession();
+    const session = result.ok ? result.data : null;
+    if (session && (session as { user?: unknown }).user) {
+      const sessionUser = (session as { user: { id: string; email?: string } }).user;
       if (authService.isDemoMode()) {
-        setUser(session.user as unknown as User);
+        setUser(session as unknown as User);
       } else {
-        const profile = await fetchProfile(
-          (session.user as { id: string; email?: string }).id,
-          (session.user as { id: string; email?: string }).email || "",
-        );
+        const profile = await fetchProfile(sessionUser.id, sessionUser.email ?? "");
         setUser(profile);
       }
     }

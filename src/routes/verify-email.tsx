@@ -65,10 +65,10 @@ function VerifyEmailPage() {
 
     setLoading(true);
     try {
-      const { error: err } = await authService.verifyOtp(email.trim(), otpCode, "signup");
-      if (err) {
-        setError(err.message);
-        toast.error(err.message);
+      const result = await authService.verifyOtp(email.trim(), otpCode, "signup");
+      if (!result.ok) {
+        setError(result.error?.message ?? "Verification failed.");
+        toast.error(result.error?.message ?? "Verification failed.");
       } else {
         toast.success("Verification successful!");
         await refresh();
@@ -89,9 +89,9 @@ function VerifyEmailPage() {
     }
     setLoading(true);
     try {
-      const { error: err } = await authService.resendOtp(email.trim(), "signup");
-      if (err) {
-        toast.error(err.message);
+      const result = await authService.resendOtp(email.trim(), "signup");
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "Failed to resend code.");
       } else {
         setCountdown(30);
         toast.success("Verification code resent successfully.");

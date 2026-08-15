@@ -123,14 +123,15 @@ function LoginPage() {
 
     setLoading(true);
     try {
-      const { data, error } = await authService.signInWithPassword(email, password);
+      const result = await authService.signInWithPassword(email, password);
 
-      if (error) {
+      if (!result.ok) {
         setLoginAttempts((prev) => prev + 1);
-        if (error.message.toLowerCase().includes("email not confirmed")) {
+        const code = result.error?.code;
+        if (code === "email_not_confirmed") {
           setFormError("email-not-confirmed");
         } else {
-          setFormError(error.message);
+          setFormError(result.error?.message ?? "Sign-in failed.");
         }
         return;
       }
@@ -154,9 +155,9 @@ function LoginPage() {
 
     setLoading(true);
     try {
-      const { error } = await authService.signInWithOtp(magicEmail);
-      if (error) {
-        toast.error(error.message);
+      const result = await authService.signInWithOtp(magicEmail);
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "Failed to send magic link.");
       } else {
         setMagicLinkSent(true);
         setCountdown(30);
@@ -173,9 +174,9 @@ function LoginPage() {
   const handleSSOSignIn = async (domain: string) => {
     setLoading(true);
     try {
-      const { error } = await authService.signInWithSSO(domain);
-      if (error) {
-        toast.error(error.message || "SSO initialization failed.");
+      const result = await authService.signInWithSSO(domain);
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "SSO initialization failed.");
       }
     } catch (err) {
       toast.error("SSO initialization failed.");
@@ -188,9 +189,9 @@ function LoginPage() {
   const handlePasskeySignIn = async () => {
     setLoading(true);
     try {
-      const { error } = await authService.signInWithPasskey();
-      if (error) {
-        toast.error(error.message);
+      const result = await authService.signInWithPasskey();
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "Passkey authentication failed.");
       } else {
         toast.success("Passkey authentication successful!");
         await refresh();
@@ -210,11 +211,12 @@ function LoginPage() {
       id: "oauth-redirect",
     });
     try {
-      const { error } = await authService.signInWithOAuth(provider);
-      if (error) {
+      const result = await authService.signInWithOAuth(provider);
+      if (!result.ok) {
         toast.dismiss("oauth-redirect");
-        setFormError(error.message);
-        toast.error(error.message);
+        const msg = result.error?.message ?? "OAuth redirect failed.";
+        setFormError(msg);
+        toast.error(msg);
       }
     } catch (err) {
       toast.dismiss("oauth-redirect");
@@ -231,7 +233,7 @@ function LoginPage() {
     setLoading(true);
     try {
       const demoEmail = `${role.toLowerCase()}.demo@brahma.dev`;
-      const { error } = await authService.signUp(demoEmail, "password123", {
+      const result = await authService.signUp(demoEmail, "password123", {
         data: {
           full_name:
             role === "Admin"
@@ -243,8 +245,8 @@ function LoginPage() {
         },
       });
 
-      if (error) {
-        toast.error(error.message);
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "Failed to seed demo session.");
       } else {
         toast.success(`Welcome to DEMO Workspace (${role})`);
         await refresh();
@@ -268,9 +270,9 @@ function LoginPage() {
             setLoading(true);
             try {
               // Mock/Supabase verification
-              const { error } = await authService.verifyOtp(email, code, "magiclink");
-              if (error) {
-                toast.error(error.message);
+              const result = await authService.verifyOtp(email, code, "magiclink");
+              if (!result.ok) {
+                toast.error(result.error?.message ?? "Verification failed.");
               } else {
                 toast.success("Security verification passed!");
                 await refresh();
@@ -307,7 +309,7 @@ function LoginPage() {
                   <Button
                     onClick={async () => {
                       if (!email) return;
-                      await authService.resendOtp(email, "signup");
+                      await authService.resendOtp(email, "signup").catch(() => undefined);
                       toast.success("Confirmation code resent!");
                     }}
                     variant="outline"

@@ -49,10 +49,8 @@ function InvitePage() {
         }
       } else {
         // If there's already an active session, let them set password
-        const {
-          data: { session },
-        } = await authService.getSession();
-        if (session) {
+        const result = await authService.getSession();
+        if (result.ok && result.data) {
           setHasToken(true);
         } else {
           setFormError(
@@ -87,10 +85,10 @@ function InvitePage() {
     setLoading(true);
     try {
       // Complete user signup/password setup
-      const { error } = await authService.updatePassword(password);
+      const result = await authService.updatePassword(password);
 
-      if (error) {
-        setFormError(error.message);
+      if (!result.ok) {
+        setFormError(result.error?.message ?? "Failed to accept invitation.");
       } else {
         toast.success("Account activated!", {
           description: "You have joined the workspace. Let's personalize your setup.",

@@ -63,6 +63,7 @@ import { Route as AppProjectsIdRiskBusinessRouteImport } from './routes/app.proj
 import { Route as AppProjectsIdSecurityRouteImport } from './routes/app.projects.$id.security'
 import { Route as AppProjectsIdTestsRouteImport } from './routes/app.projects.$id.tests'
 import { Route as AppProjectsIdVersionsRouteImport } from './routes/app.projects.$id.versions'
+import { Route as AppReportsIdViewRouteImport } from './routes/app.reports.$id.view'
 import { Route as AppStudioIdIndexRouteImport } from './routes/app.studio.$id.index'
 import { Route as AppStudioIdAnalyticsRouteImport } from './routes/app.studio.$id.analytics'
 import { Route as AppStudioIdCollaborateRouteImport } from './routes/app.studio.$id.collaborate'
@@ -351,6 +352,11 @@ const AppProjectsIdVersionsRoute = AppProjectsIdVersionsRouteImport.update({
   path: '/versions',
   getParentRoute: () => AppProjectsIdRoute,
 } as any)
+const AppReportsIdViewRoute = AppReportsIdViewRouteImport.update({
+  id: '/$id/view',
+  path: '/$id/view',
+  getParentRoute: () => AppReportsRoute,
+} as any)
 const AppStudioIdIndexRoute = AppStudioIdIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -441,7 +447,7 @@ export interface FileRoutesByFullPath {
   '/app/exports': typeof AppExportsRoute
   '/app/integrations': typeof AppIntegrationsRoute
   '/app/notifications': typeof AppNotificationsRoute
-  '/app/reports': typeof AppReportsRoute
+  '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/team': typeof AppTeamRoute
@@ -476,6 +482,7 @@ export interface FileRoutesByFullPath {
   '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
   '/app/projects/$id/tests': typeof AppProjectsIdTestsRoute
   '/app/projects/$id/versions': typeof AppProjectsIdVersionsRoute
+  '/app/reports/$id/view': typeof AppReportsIdViewRoute
   '/app/studio/$id/analytics': typeof AppStudioIdAnalyticsRoute
   '/app/studio/$id/collaborate': typeof AppStudioIdCollaborateRoute
   '/app/studio/$id/data': typeof AppStudioIdDataRoute
@@ -509,7 +516,7 @@ export interface FileRoutesByTo {
   '/app/exports': typeof AppExportsRoute
   '/app/integrations': typeof AppIntegrationsRoute
   '/app/notifications': typeof AppNotificationsRoute
-  '/app/reports': typeof AppReportsRoute
+  '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/team': typeof AppTeamRoute
@@ -542,6 +549,7 @@ export interface FileRoutesByTo {
   '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
   '/app/projects/$id/tests': typeof AppProjectsIdTestsRoute
   '/app/projects/$id/versions': typeof AppProjectsIdVersionsRoute
+  '/app/reports/$id/view': typeof AppReportsIdViewRoute
   '/app/studio/$id/analytics': typeof AppStudioIdAnalyticsRoute
   '/app/studio/$id/collaborate': typeof AppStudioIdCollaborateRoute
   '/app/studio/$id/data': typeof AppStudioIdDataRoute
@@ -578,7 +586,7 @@ export interface FileRoutesById {
   '/app/exports': typeof AppExportsRoute
   '/app/integrations': typeof AppIntegrationsRoute
   '/app/notifications': typeof AppNotificationsRoute
-  '/app/reports': typeof AppReportsRoute
+  '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/team': typeof AppTeamRoute
@@ -613,6 +621,7 @@ export interface FileRoutesById {
   '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
   '/app/projects/$id/tests': typeof AppProjectsIdTestsRoute
   '/app/projects/$id/versions': typeof AppProjectsIdVersionsRoute
+  '/app/reports/$id/view': typeof AppReportsIdViewRoute
   '/app/studio/$id/analytics': typeof AppStudioIdAnalyticsRoute
   '/app/studio/$id/collaborate': typeof AppStudioIdCollaborateRoute
   '/app/studio/$id/data': typeof AppStudioIdDataRoute
@@ -685,6 +694,7 @@ export interface FileRouteTypes {
     | '/app/projects/$id/security'
     | '/app/projects/$id/tests'
     | '/app/projects/$id/versions'
+    | '/app/reports/$id/view'
     | '/app/studio/$id/analytics'
     | '/app/studio/$id/collaborate'
     | '/app/studio/$id/data'
@@ -751,6 +761,7 @@ export interface FileRouteTypes {
     | '/app/projects/$id/security'
     | '/app/projects/$id/tests'
     | '/app/projects/$id/versions'
+    | '/app/reports/$id/view'
     | '/app/studio/$id/analytics'
     | '/app/studio/$id/collaborate'
     | '/app/studio/$id/data'
@@ -821,6 +832,7 @@ export interface FileRouteTypes {
     | '/app/projects/$id/security'
     | '/app/projects/$id/tests'
     | '/app/projects/$id/versions'
+    | '/app/reports/$id/view'
     | '/app/studio/$id/analytics'
     | '/app/studio/$id/collaborate'
     | '/app/studio/$id/data'
@@ -1234,6 +1246,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsIdVersionsRouteImport
       parentRoute: typeof AppProjectsIdRoute
     }
+    '/app/reports/$id/view': {
+      id: '/app/reports/$id/view'
+      path: '/$id/view'
+      fullPath: '/app/reports/$id/view'
+      preLoaderRoute: typeof AppReportsIdViewRouteImport
+      parentRoute: typeof AppReportsRoute
+    }
     '/app/studio/$id/': {
       id: '/app/studio/$id/'
       path: '/'
@@ -1375,6 +1394,18 @@ const AppBillingRouteWithChildren = AppBillingRoute._addFileChildren(
   AppBillingRouteChildren,
 )
 
+interface AppReportsRouteChildren {
+  AppReportsIdViewRoute: typeof AppReportsIdViewRoute
+}
+
+const AppReportsRouteChildren: AppReportsRouteChildren = {
+  AppReportsIdViewRoute: AppReportsIdViewRoute,
+}
+
+const AppReportsRouteWithChildren = AppReportsRoute._addFileChildren(
+  AppReportsRouteChildren,
+)
+
 interface AppProjectsIdRouteChildren {
   AppProjectsIdAnalyticsRoute: typeof AppProjectsIdAnalyticsRoute
   AppProjectsIdBlueprintRoute: typeof AppProjectsIdBlueprintRoute
@@ -1454,7 +1485,7 @@ interface AppRouteChildren {
   AppExportsRoute: typeof AppExportsRoute
   AppIntegrationsRoute: typeof AppIntegrationsRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
-  AppReportsRoute: typeof AppReportsRoute
+  AppReportsRoute: typeof AppReportsRouteWithChildren
   AppSearchRoute: typeof AppSearchRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppTeamRoute: typeof AppTeamRoute
@@ -1476,7 +1507,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppExportsRoute: AppExportsRoute,
   AppIntegrationsRoute: AppIntegrationsRoute,
   AppNotificationsRoute: AppNotificationsRoute,
-  AppReportsRoute: AppReportsRoute,
+  AppReportsRoute: AppReportsRouteWithChildren,
   AppSearchRoute: AppSearchRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppTeamRoute: AppTeamRoute,
