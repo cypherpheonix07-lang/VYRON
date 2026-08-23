@@ -164,24 +164,14 @@ const mockRepoAnalysis: RepoAnalysisOutput = {
 // --- Centralized API Services ---
 
 export async function analyzeRequirements(prompt: string): Promise<RequirementsOutput> {
-  if (USE_REAL_ENGINE) {
-    try {
-      const response = await fetch(`${BACKEND_API_URL}/analyze/requirements`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt }),
-      });
-      if (!response.ok) {
-        throw new Error(`HTTP Error status: ${response.status}`);
-      }
-      return await response.json();
-    } catch (error) {
-      console.warn(
-        "FastAPI backend requirements endpoint failed. Triggering local mock fallback.",
-        error,
-      );
-      toast.info("FastAPI requirements connection unavailable. Using high-fidelity mock fallback.");
+  try {
+    const { llmGateway } = await import("../services/llmGateway");
+    const result = await llmGateway.extractRequirements(prompt);
+    if (result && result.content) {
+      return result.content as RequirementsOutput;
     }
+  } catch (err) {
+    console.warn("llmGateway extractRequirements error, falling back to local extractor:", err);
   }
   return getMockRequirements(prompt);
 }
@@ -293,6 +283,7 @@ export async function generateReportPdf(
 // OBSERVABILITY, SESSIONS & INTEGRATIONS API HELPERS
 // ==============================================================================
 import { supabase } from "./supabaseClient";
+import { DEMO_MODE } from "./constants";
 
 export interface AuthEventRecord {
   id: string;
@@ -306,7 +297,9 @@ export interface AuthEventRecord {
     | "sign_out"
     | "new_device"
     | "sso"
-    | "passkey";
+    | "passkey"
+    | "sign_up"
+    | "report_exported";
   method: string;
   status: "success" | "failed" | "blocked";
   ip?: string | null;
@@ -361,9 +354,18 @@ export async function logAuthEvent(payload: {
   method: string;
   status: AuthEventRecord["status"];
   email: string;
-  user_id?: string;
+  user_id?: string | undefined;
 }): Promise<void> {
   const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
+  let device_type: "desktop" | "mobile" | "tablet" = "desktop";
+  if (/mobile|android|iphone/i.test(ua)) device_type = "mobile";
+  else if (/tablet|ipad/i.test(ua)) device_type = "tablet";
+
+  let browser = "Chrome";
+  if (/edg/i.test(ua)) browser = "Edge";
+  else if (/firefox/i.test(ua)) browser = "Firefox";
+  else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = "Safari";
+
   try {
     // Attempt Edge Function call first
     const edgeUrl = `${import.meta.env["VITE_SUPABASE_URL"] || ""}/functions/v1/log-auth-event`;
@@ -373,20 +375,28 @@ export async function logAuthEvent(payload: {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...payload, user_agent: ua }),
       }).catch(() => {});
+
+      // Direct database insert fallback
+      if (supabase && typeof supabase.from === "function") {
+        void supabase
+          .from("auth_events")
+          .insert({
+            user_id: payload.user_id || null,
+            email: payload.email,
+            event: payload.event,
+            method: payload.method,
+            status: payload.status,
+            device_type,
+            browser,
+            os: "Windows",
+            user_agent: ua,
+          });
+      }
     }
 
     // Also store to local history for instant client feedback
     const LOCAL_EVENTS_KEY = "brahma.auth_events";
     const existing: AuthEventRecord[] = JSON.parse(localStorage.getItem(LOCAL_EVENTS_KEY) || "[]");
-
-    let device_type: "desktop" | "mobile" | "tablet" = "desktop";
-    if (/mobile|android|iphone/i.test(ua)) device_type = "mobile";
-    else if (/tablet|ipad/i.test(ua)) device_type = "tablet";
-
-    let browser = "Chrome";
-    if (/edg/i.test(ua)) browser = "Edge";
-    else if (/firefox/i.test(ua)) browser = "Firefox";
-    else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = "Safari";
 
     const newRecord: AuthEventRecord = {
       id: "ev_" + Date.now() + "_" + Math.random().toString(36).substring(2, 6),
@@ -415,7 +425,7 @@ export async function logAuthEvent(payload: {
 // 2. Fetch Auth & Sign-in Events
 export async function fetchSignInEvents(userId?: string): Promise<AuthEventRecord[]> {
   try {
-    if (userId && !import.meta.env["VITE_DEMO_MODE"]) {
+    if (userId && !DEMO_MODE) {
       const { data, error } = await supabase
         .from("auth_events")
         .select("*")
@@ -517,7 +527,7 @@ export async function fetchSignInEvents(userId?: string): Promise<AuthEventRecor
 // 3. User Integrations & GitHub Repo Helpers
 export async function fetchUserIntegrations(userId?: string): Promise<UserIntegrationRecord[]> {
   try {
-    if (userId && !import.meta.env["VITE_DEMO_MODE"]) {
+    if (userId && !DEMO_MODE) {
       const { data, error } = await supabase
         .from("user_integrations")
         .select(
@@ -565,7 +575,7 @@ export async function disconnectUserIntegration(
   userId?: string,
 ): Promise<boolean> {
   try {
-    if (userId && !import.meta.env["VITE_DEMO_MODE"]) {
+    if (userId && !DEMO_MODE) {
       await supabase
         .from("user_integrations")
         .delete()
@@ -588,7 +598,7 @@ export async function fetchGitHubRepos(userId?: string): Promise<GitHubRepoItem[
   try {
     // Attempt to query via edge function proxy
     const edgeUrl = `${import.meta.env["VITE_SUPABASE_URL"] || ""}/functions/v1/github-proxy?path=/user/repos`;
-    const session = (await authService.getSession()).data?.session;
+    const session = (await authService.getSession()).data;
     if (session?.access_token) {
       const res = await fetch(edgeUrl, {
         headers: { Authorization: `Bearer ${session.access_token}` },

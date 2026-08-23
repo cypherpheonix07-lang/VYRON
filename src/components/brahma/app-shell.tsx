@@ -30,6 +30,7 @@ import {
   Eye,
   Lock,
   Loader2,
+  Github,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode, useRef } from "react";
 import { toast } from "sonner";
@@ -57,6 +58,7 @@ import {
 } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth, useTheme } from "@/lib/auth";
+import { authService } from "@/services/authService";
 import { notifications as mockNotifications, projects } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
@@ -77,6 +79,8 @@ const labelMap: Record<string, string> = {
   activity: "Activity Feed",
   exports: "Export Center",
   studio: "AI Studio",
+  preview: "AI Showcase",
+  github: "GitHub Mirror",
   notifications: "Notifications",
 };
 
@@ -86,6 +90,7 @@ const navGroups = [
     label: "MAIN",
     items: [
       { to: "/app", label: "Dashboard", icon: LayoutDashboard, exact: true },
+      { to: "/app/preview", label: "AI Showcase", icon: Eye, exact: true },
       { to: "/app/studio", label: "AI Studio", icon: Sparkles, exact: false },
       { to: "/app/projects", label: "Projects", icon: FolderKanban, exact: false },
       { to: "/app/projects/new", label: "New Project", icon: PlusCircle, exact: true },
@@ -95,6 +100,7 @@ const navGroups = [
   {
     label: "WORKSPACE",
     items: [
+      { to: "/app/github", label: "GitHub Mirror", icon: Github, exact: false },
       { to: "/app/integrations", label: "Integrations", icon: Cable, exact: true },
       { to: "/app/team", label: "Team Space", icon: Users, exact: true },
       { to: "/app/activity", label: "Activity Feed", icon: Activity, exact: true },
@@ -469,6 +475,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (ready) {
       if (!user) {
+        try {
+          sessionStorage.setItem("brahma_auth_redirect", pathname);
+        } catch {
+          // ignore sessionStorage restrictions
+        }
         navigate({ to: "/login", replace: true });
       } else if (!user.onboarded && pathname !== "/onboarding") {
         navigate({ to: "/onboarding", replace: true });
@@ -655,6 +666,20 @@ export function AppShell({ children }: { children: ReactNode }) {
         shortcut: "g d",
         category: "Navigation",
         icon: LayoutDashboard,
+      },
+      {
+        label: "Go to AI Tool Showcase",
+        href: "/app/preview",
+        shortcut: "",
+        category: "Navigation",
+        icon: Eye,
+      },
+      {
+        label: "Go to GitHub Live Mirror",
+        href: "/app/github",
+        shortcut: "g g",
+        category: "Navigation",
+        icon: Github,
       },
       {
         label: "Go to AI Studio",
@@ -964,6 +989,17 @@ export function AppShell({ children }: { children: ReactNode }) {
 
             {/* HEADER RIGHT ACTIONS */}
             <div className="ml-auto flex shrink-0 items-center gap-1.5">
+              {/* DEMO MODE INDICATOR */}
+              {(user?.isDemo || authService.isDemoMode()) && (
+                <Badge
+                  variant="outline"
+                  className="hidden sm:inline-flex items-center gap-1 border-amber-500/40 bg-amber-500/10 text-amber-400 text-[10px] uppercase font-mono px-2 py-0.5"
+                >
+                  <AlertTriangle className="size-3 shrink-0" />
+                  Demo Data Active — Read Only
+                </Badge>
+              )}
+
               {/* Keyboard info indicator */}
               <Button
                 variant="ghost"

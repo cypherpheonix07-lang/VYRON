@@ -9,7 +9,11 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
+    "test": "node verify-gates.js",
+    "verify": "node verify-step1-8.mjs",
+    "verify:step1-8": "node verify-step1-8.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

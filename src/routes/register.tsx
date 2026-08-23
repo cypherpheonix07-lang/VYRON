@@ -111,6 +111,32 @@ function RegisterPage() {
     }
   };
 
+  // Handle OAuth error params in URL on mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+    const errorDescription = params.get("error_description");
+    const errorCode = params.get("error_code");
+
+    if (error || errorDescription) {
+      const errorMessages: Record<string, string> = {
+        access_denied: "Sign up was cancelled. Please try again.",
+        server_error: "Authentication server error. Please try again.",
+        temporarily_unavailable: "Service temporarily unavailable.",
+        "403": "Your email is not authorized. Contact support.",
+      };
+
+      const message =
+        errorMessages[errorCode || error || ""] ||
+        errorDescription ||
+        "Sign up failed. Please try again.";
+
+      toast.error(message);
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
+
   // Redirect if already authenticated and onboarded
   useEffect(() => {
     if (ready && user) {

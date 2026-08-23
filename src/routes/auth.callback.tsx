@@ -171,13 +171,22 @@ function AuthCallbackPage() {
 
           toast.success(`Signed in with ${provider.charAt(0).toUpperCase() + provider.slice(1)}`);
 
+          // Check for intended redirect URL
+          const storedRedirect =
+            sessionStorage.getItem("brahma_auth_redirect") ||
+            sessionStorage.getItem("auth_redirect");
+          if (storedRedirect) {
+            sessionStorage.removeItem("brahma_auth_redirect");
+            sessionStorage.removeItem("auth_redirect");
+          }
+
           // Verify onboarding status
           if (authService.isDemoMode()) {
             const demoUser = session.user as { onboarded?: boolean; name?: string };
             if (!demoUser.onboarded || !demoUser.name) {
               navigate({ to: "/onboarding", replace: true });
             } else {
-              navigate({ to: "/app", replace: true });
+              navigate({ to: (storedRedirect || "/app") as "/app", replace: true });
             }
           } else {
             const { data: profile } = await supabase
@@ -190,7 +199,7 @@ function AuthCallbackPage() {
             if (!isComplete) {
               navigate({ to: "/onboarding", replace: true });
             } else {
-              navigate({ to: "/app", replace: true });
+              navigate({ to: (storedRedirect || "/app") as "/app", replace: true });
             }
           }
         } else {

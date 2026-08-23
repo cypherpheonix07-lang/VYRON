@@ -111,7 +111,7 @@ export function SignOutOtherSessionsModal() {
   const handleRevokeOthers = async () => {
     setLoading(true);
     try {
-      await authService.signOut({ scope: "others" });
+      await authService.signOut("others");
       toast.success("All other active sessions have been terminated.", {
         description: "Any other open browser tabs or mobile sessions have been logged out.",
       });

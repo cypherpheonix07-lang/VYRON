@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { supabase } from "./supabase";
-import { authService } from "../services/authService";
+import { authService, type DemoUser } from "../services/authService";
 
 export type Role = "Student" | "Faculty" | "Startup" | "Admin" | "Reviewer";
 
@@ -29,8 +29,11 @@ export interface User {
   name: string;
   role: Role;
   onboarded: boolean;
-  avatarUrl?: string;
-  isDemo?: boolean;
+  avatarUrl?: string | undefined;
+  isDemo?: boolean | undefined;
+  emailConfirmedAt?: string | undefined;
+  createdAt?: string | undefined;
+  lastSignInAt?: string | undefined;
 }
 
 const DEMO_KEY = "brahma.demo_user";
@@ -60,128 +63,301 @@ export function appRoleToDbRole(appRole: Role): string {
   return appRole.toLowerCase();
 }
 
-export function useAuth() {
+/**
+ * Client-safe profile bootstrap helper
+ * Calls ensure_profile RPC if present, or performs a safe insert
+ */
+export async function ensureProfile(
+  userId: string,
+  email: string,
+  metadata?: Record<string, unknown>,
+): Promise<void> {
+  if (authService.isDemoMode()) return;
+
+  try {
+    const { error: rpcError } = await supabase.rpc("ensure_profile");
+    if (!rpcError) return;
+  } catch {
+    // RPC may not exist in database yet, proceed to direct check
+  }
+
+  try {
+    const fullName =
+      (metadata?.["full_name"] as string) ||
+      (metadata?.["name"] as string) ||
+      email.split("@")[0] ||
+      "User";
+
+    const { data: existing } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("id", userId)
+      .maybeSingle();
+
+    if (!existing) {
+      await supabase.from("profiles").insert({
+        id: userId,
+        email,
+        full_name: fullName,
+        display_name: fullName,
+        role: "student",
+        onboarded: false,
+      });
+    }
+  } catch (e) {
+    console.warn("[auth] ensureProfile bootstrap warning:", e);
+  }
+}
+
+export interface AuthSessionState {
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  user: User | null;
+  userId: string | undefined;
+  email: string | undefined;
+  emailConfirmedAt: string | undefined;
+  sessionExpiresAt: number | undefined;
+  createdAt: string | undefined;
+  lastSignInAt: string | undefined;
+  error: string | null;
+  ready: boolean;
+  isAdmin: boolean;
+  refresh: () => Promise<void>;
+  logout: () => Promise<void>;
+}
+
+/**
+ * useAuthSession — Primary hook for session lifecycle & profile state
+ */
+export function useAuthSession(): AuthSessionState {
   const [user, setUser] = useState<User | null>(null);
-  const [ready, setReady] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [sessionExpiresAt, setSessionExpiresAt] = useState<number | undefined>(undefined);
+  const [emailConfirmedAt, setEmailConfirmedAt] = useState<string | undefined>(undefined);
+  const [createdAt, setCreatedAt] = useState<string | undefined>(undefined);
+  const [lastSignInAt, setLastSignInAt] = useState<string | undefined>(undefined);
 
   // Helper to fetch profile details from Supabase
-  const fetchProfile = async (userId: string, email: string): Promise<User> => {
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("full_name, role, onboarded, avatar_url")
-        .eq("id", userId)
-        .single();
+  const fetchProfile = useCallback(
+    async (
+      userId: string,
+      email: string,
+      sessionUserMeta?: {
+        confirmed_at?: string;
+        created_at?: string;
+        last_sign_in_at?: string;
+        user_metadata?: Record<string, unknown>;
+      },
+    ): Promise<User> => {
+      try {
+        // Try fetching profile with single retry
+        let data: { full_name?: string | null; role?: string | null; onboarded?: boolean | null; avatar_url?: string | null } | null = null;
+        let fetchErr = null;
 
-      if (error || !data) {
-        console.error("Error fetching user profile:", error);
+        const res = await supabase
+          .from("profiles")
+          .select("full_name, role, onboarded, avatar_url")
+          .eq("id", userId)
+          .maybeSingle();
+
+        data = res.data;
+        fetchErr = res.error;
+
+        // If profile row is missing, bootstrap it and try once more
+        if (!data && !fetchErr) {
+          await ensureProfile(userId, email, sessionUserMeta?.user_metadata);
+          const retryRes = await supabase
+            .from("profiles")
+            .select("full_name, role, onboarded, avatar_url")
+            .eq("id", userId)
+            .maybeSingle();
+          data = retryRes.data;
+          fetchErr = retryRes.error;
+        }
+
+        if (fetchErr) {
+          console.warn("[auth] Profile fetch warning:", fetchErr.message);
+        }
+
+        const resolvedName =
+          data?.full_name ||
+          (sessionUserMeta?.user_metadata?.["full_name"] as string) ||
+          email.split("@")[0] ||
+          "User";
+
+        return {
+          id: userId,
+          email,
+          name: resolvedName,
+          role: dbRoleToAppRole(data?.role),
+          onboarded: !!data?.onboarded,
+          avatarUrl: data?.avatar_url || (sessionUserMeta?.user_metadata?.["avatar_url"] as string) || undefined,
+          emailConfirmedAt: sessionUserMeta?.confirmed_at,
+          createdAt: sessionUserMeta?.created_at,
+          lastSignInAt: sessionUserMeta?.last_sign_in_at,
+        };
+      } catch (e) {
+        console.error("[auth] Profile query exception:", e);
         return {
           id: userId,
           email,
           name: email.split("@")[0] || "User",
           role: "Student",
           onboarded: false,
+          emailConfirmedAt: sessionUserMeta?.confirmed_at,
+          createdAt: sessionUserMeta?.created_at,
+          lastSignInAt: sessionUserMeta?.last_sign_in_at,
         };
       }
+    },
+    [],
+  );
 
-      return {
-        id: userId,
-        email,
-        name: data.full_name || email.split("@")[0] || "User",
-        role: dbRoleToAppRole(data.role),
-        onboarded: !!data.onboarded,
-        avatarUrl: data.avatar_url || undefined,
-      };
-    } catch (e) {
-      console.error("Profile query failed:", e);
-      return {
-        id: userId,
-        email,
-        name: email.split("@")[0] || "User",
-        role: "Student",
-        onboarded: false,
-      };
-    }
-  };
-
-  useEffect(() => {
-    const initAuth = async () => {
-      try {
-        // authService.getSession() returns AuthResponse<Session|null>: { ok, data, error }
-        const result = await authService.getSession();
-        const session = result.ok ? result.data : null;
-
-        if (session && (session as { user?: unknown }).user) {
-          const sessionUser = (session as { user: { id: string; email?: string } }).user;
-          if (authService.isDemoMode()) {
-            // In demo mode, the "session" user is already a DemoUser
-            setUser(session as unknown as User);
-          } else {
-            const profile = await fetchProfile(sessionUser.id, sessionUser.email ?? "");
-            setUser(profile);
-          }
-        } else {
-          setUser(null);
-        }
-      } catch (err) {
-        console.error("Supabase session check failed:", err);
-        setUser(null);
-      } finally {
-        setReady(true);
+  const syncSession = useCallback(async () => {
+    try {
+      setError(null);
+      const result = await authService.getSession();
+      if (!result.ok && result.error) {
+        setError(result.error.message);
       }
-    };
+      const session = result.ok ? result.data : null;
 
-    initAuth();
+      if (session && (session as { user?: unknown }).user) {
+        const sUser = (session as {
+          user: {
+            id: string;
+            email?: string;
+            confirmed_at?: string;
+            created_at?: string;
+            last_sign_in_at?: string;
+            user_metadata?: Record<string, unknown>;
+          };
+          expires_at?: number;
+        }).user;
 
-    // Listen to auth events via authService
-    const {
-      data: { subscription },
-    } = authService.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
+        setSessionExpiresAt(session.expires_at);
+        setEmailConfirmedAt(sUser.confirmed_at);
+        setCreatedAt(sUser.created_at);
+        setLastSignInAt(sUser.last_sign_in_at);
+
         if (authService.isDemoMode()) {
-          setUser(session.user as unknown as User);
+          const demoUser = (session as unknown as { user: DemoUser }).user;
+          setUser({
+            id: demoUser.id,
+            email: demoUser.email,
+            name: demoUser.name,
+            role: demoUser.role,
+            onboarded: demoUser.onboarded,
+            avatarUrl: demoUser.avatarUrl,
+            isDemo: true,
+          });
         } else {
-          const sessionUser = session.user as { id: string; email?: string };
-          const profile = await fetchProfile(sessionUser.id, sessionUser.email ?? "");
+          const profile = await fetchProfile(sUser.id, sUser.email ?? "", sUser);
           setUser(profile);
         }
       } else {
         setUser(null);
+        setSessionExpiresAt(undefined);
+        setEmailConfirmedAt(undefined);
       }
-      setReady(true);
+    } catch (err) {
+      console.error("[auth] Session sync failed:", err);
+      setError(err instanceof Error ? err.message : String(err));
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [fetchProfile]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    syncSession();
+
+    // Listen to Supabase auth events
+    const {
+      data: { subscription },
+    } = authService.onAuthStateChange(async (event, session) => {
+      if (!isMounted) return;
+
+      if (session?.user) {
+        if (authService.isDemoMode()) {
+          setUser(session.user as unknown as User);
+        } else {
+          const sUser = session.user as {
+            id: string;
+            email?: string;
+            confirmed_at?: string;
+            created_at?: string;
+            last_sign_in_at?: string;
+            user_metadata?: Record<string, unknown>;
+          };
+          setSessionExpiresAt((session as { expires_at?: number }).expires_at);
+          setEmailConfirmedAt(sUser.confirmed_at);
+          setCreatedAt(sUser.created_at);
+          setLastSignInAt(sUser.last_sign_in_at);
+
+          const profile = await fetchProfile(sUser.id, sUser.email ?? "", sUser);
+          if (isMounted) setUser(profile);
+        }
+      } else {
+        if (isMounted) {
+          setUser(null);
+          setSessionExpiresAt(undefined);
+          setEmailConfirmedAt(undefined);
+        }
+      }
+      if (isMounted) setIsLoading(false);
     });
 
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
     };
-  }, []);
-
-  const refresh = useCallback(async () => {
-    const result = await authService.getSession();
-    const session = result.ok ? result.data : null;
-    if (session && (session as { user?: unknown }).user) {
-      const sessionUser = (session as { user: { id: string; email?: string } }).user;
-      if (authService.isDemoMode()) {
-        setUser(session as unknown as User);
-      } else {
-        const profile = await fetchProfile(sessionUser.id, sessionUser.email ?? "");
-        setUser(profile);
-      }
-    }
-  }, []);
+  }, [syncSession, fetchProfile]);
 
   const logout = useCallback(async () => {
     await authService.signOut();
     setUser(null);
+    setSessionExpiresAt(undefined);
   }, []);
 
   return {
-    user,
-    ready,
+    isLoading,
     isAuthenticated: !!user,
+    user,
+    userId: user?.id,
+    email: user?.email,
+    emailConfirmedAt,
+    sessionExpiresAt,
+    createdAt,
+    lastSignInAt,
+    error,
+    ready: !isLoading,
     isAdmin: user?.role === "Admin",
+    refresh: syncSession,
     logout,
-    refresh,
+  };
+}
+
+/**
+ * useAuth — Compatible wrapper for useAuthSession
+ */
+export function useAuth() {
+  const session = useAuthSession();
+  return {
+    user: session.user,
+    ready: session.ready,
+    isLoading: session.isLoading,
+    isAuthenticated: session.isAuthenticated,
+    isAdmin: session.isAdmin,
+    error: session.error,
+    userId: session.userId,
+    email: session.email,
+    sessionExpiresAt: session.sessionExpiresAt,
+    logout: session.logout,
+    refresh: session.refresh,
   };
 }
 

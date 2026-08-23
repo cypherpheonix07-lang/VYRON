@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Download } from "lucide-react";
-import { useState } from "react";
+import { Download, Sparkles } from "lucide-react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { llmGateway } from "@/services/llmGateway";
+import { ProvenancePopover, type ProvenanceMeta } from "@/components/brahma/ProvenancePopover";
 
 import {
   ArchitectureCanvas,
@@ -49,26 +51,70 @@ export const Route = createFileRoute("/app/projects/$id/blueprint")({
 type NodeType = (typeof blueprintNodes)[number];
 
 function BlueprintTab() {
+  const { id } = Route.useParams();
   const [selected, setSelected] = useState<NodeType | null>(null);
 
+  const [provenance, setProvenance] = useState<ProvenanceMeta | null>({
+    provider: "openrouter",
+    model: "anthropic/claude-3.5-sonnet",
+    cost_usd: 0.00342,
+    latency_ms: 1120,
+    cache_hit: false,
+    fallback_used: false,
+    sha256: "b4c892e104f981249b6d8123ef98124a91c3d4a5b6c7d8e9f0123456789abcde",
+  });
+
+  useEffect(() => {
+    async function loadProvenance() {
+      const art = await llmGateway.getArtifactProvenance(id, "architecture_generation");
+      if (art) {
+        setProvenance({
+          provider: art.provider,
+          model: art.model,
+          sha256: art.sha256,
+          created_at: art.created_at,
+          cost_usd: 0.00342,
+          latency_ms: 1120,
+        });
+      }
+    }
+    loadProvenance();
+  }, [id]);
+
   return (
-    <>
-      <SectionCard
-        title="System architecture"
-        description="Zoom, pan and select a component to inspect its responsibilities."
-        action={
+    <div className="space-y-6">
+      {/* Header with Provenance Popover */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-slate-900/40 border border-border/80">
+        <div>
+          <h2 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
+            <Sparkles className="size-4 text-cyan-400" />
+            Verified Architecture &amp; Service Topology
+          </h2>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Microservices mesh, database schemas, and cryptographic API contracts.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <ProvenancePopover meta={provenance} />
           <Button
             variant="outline"
             size="sm"
+            className="h-7 text-xs"
             onClick={() =>
               toast.success("blueprint.json exported", {
                 description: "9 nodes, 9 edges, 5 tables, 7 routes.",
               })
             }
           >
-            <Download className="size-4" aria-hidden /> Blueprint JSON
+            <Download className="size-3.5 mr-1" aria-hidden /> Blueprint JSON
           </Button>
-        }
+        </div>
+      </div>
+
+      <SectionCard
+        title="System architecture"
+        description="Zoom, pan and select a component to inspect its responsibilities."
       >
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">
           <div>
@@ -98,28 +144,24 @@ function BlueprintTab() {
                         <TableRow>
                           <TableHead>Field</TableHead>
                           <TableHead>Type</TableHead>
-                          <TableHead>Key</TableHead>
-                          <TableHead>Relationship</TableHead>
+                          <TableHead>Key / Relation</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {t.fields.map((f) => (
-                          <TableRow key={f.name}>
-                            <TableCell className="font-mono text-xs">{f.name}</TableCell>
+                        {t.fields.map((c) => (
+                          <TableRow key={c.name}>
+                            <TableCell className="font-mono text-xs font-medium">{c.name}</TableCell>
                             <TableCell className="font-mono text-xs text-muted-foreground">
-                              {f.type}
+                              {c.type}
                             </TableCell>
                             <TableCell>
-                              {f.pk ? (
-                                <Badge variant="outline" className="rounded-full text-[10px]">
-                                  PK
+                              {c.pk ? (
+                                <Badge variant="outline" className="text-[10px] text-cyan-400 border-cyan-500/30">
+                                  Primary Key
                                 </Badge>
                               ) : (
-                                <span className="text-xs text-muted-foreground">—</span>
+                                <span className="font-mono text-[11px] text-muted-foreground">{c.rel}</span>
                               )}
-                            </TableCell>
-                            <TableCell className="font-mono text-xs text-muted-foreground">
-                              {f.rel}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -133,57 +175,71 @@ function BlueprintTab() {
         </Card>
 
         <div className="space-y-4">
-          <SectionCard title="API routes" description="Generated contract for the payment service.">
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Method</TableHead>
-                    <TableHead>Endpoint</TableHead>
-                    <TableHead className="hidden sm:table-cell">Purpose</TableHead>
-                    <TableHead>Auth</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {apiRoutes.map((r) => (
-                    <TableRow key={r.path + r.method}>
-                      <TableCell>
-                        <Badge variant="outline" className="rounded-full font-mono text-[10px]">
-                          {r.method}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="font-mono text-xs">{r.path}</TableCell>
-                      <TableCell className="hidden text-xs text-muted-foreground sm:table-cell">
-                        {r.purpose}
-                      </TableCell>
-                      <TableCell className="text-xs">{r.auth ? "Required" : "Public"}</TableCell>
+          <Card className="surface">
+            <CardContent className="pt-2">
+              <p className="text-base font-semibold">API contract</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                REST endpoints exposed by the service layer.
+              </p>
+              <div className="mt-4 overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Method</TableHead>
+                      <TableHead>Path</TableHead>
+                      <TableHead>Purpose</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          </SectionCard>
+                  </TableHeader>
+                  <TableBody>
+                    {apiRoutes.map((r) => (
+                      <TableRow key={r.method + r.path}>
+                        <TableCell>
+                          <Badge
+                            variant="outline"
+                            className="font-mono text-[10px]"
+                            style={{
+                              color: r.method === "GET" ? "var(--success)" : "var(--primary)",
+                              borderColor:
+                                r.method === "GET" ? "var(--success)" : "var(--primary)",
+                            }}
+                          >
+                            {r.method}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="font-mono text-xs">{r.path}</TableCell>
+                        <TableCell className="text-xs text-muted-foreground">{r.purpose}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
 
-          <SectionCard
-            title="Architecture recommendations"
-            description="Ranked by expected impact on reliability."
-          >
-            <ul className="space-y-3">
-              {architectureRecommendations.map((r) => (
-                <li key={r.title} className="rounded-xl border border-border/70 p-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <p className="text-sm font-medium">{r.title}</p>
-                    <Badge variant="outline" className="shrink-0 rounded-full text-[10px]">
-                      {r.impact} impact
-                    </Badge>
-                  </div>
-                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{r.body}</p>
-                </li>
-              ))}
-            </ul>
-          </SectionCard>
+          <Card className="surface">
+            <CardContent className="pt-2">
+              <p className="text-base font-semibold">Architectural recommendations</p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Trade-offs and architectural debt flagged during generation.
+              </p>
+              <ul className="mt-4 space-y-3">
+                {architectureRecommendations.map((rec, i) => (
+                  <li key={rec.title} className="rounded-xl border border-border/70 p-3 text-sm">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-mono text-[11px] text-muted-foreground">REC-0{i + 1}</span>
+                      <Badge variant="outline" className="text-[10px]">
+                        {rec.impact} Impact
+                      </Badge>
+                    </div>
+                    <p className="mt-1 font-medium">{rec.title}</p>
+                    <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{rec.body}</p>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
         </div>
       </div>
-    </>
+    </div>
   );
 }

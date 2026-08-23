@@ -134,9 +134,11 @@ const stack = [
 function Nav() {
   const [open, setOpen] = useState(false);
   const links = [
-    { href: "#features", label: "Features" },
-    { href: "#how-it-works", label: "How it works" },
-    { href: "#technology", label: "Technology" },
+    { href: "/preview", label: "AI Tool Showcase", isRoute: true },
+    { href: "/github", label: "GitHub Mirror", isRoute: true },
+    { href: "#features", label: "Features", isRoute: false },
+    { href: "#how-it-works", label: "How it works", isRoute: false },
+    { href: "#technology", label: "Technology", isRoute: false },
   ];
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur">
@@ -144,13 +146,23 @@ function Nav() {
         <BrahmaLogo />
         <nav className="ml-6 hidden items-center gap-6 md:flex" aria-label="Sections">
           {links.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              {l.label}
-            </a>
+            l.isRoute ? (
+              <Link
+                key={l.href}
+                to={l.href}
+                className="text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors"
+              >
+                {l.label}
+              </Link>
+            ) : (
+              <a
+                key={l.href}
+                href={l.href}
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {l.label}
+              </a>
+            )
           ))}
         </nav>
         <div className="ml-auto hidden items-center gap-2 md:flex">
@@ -178,14 +190,25 @@ function Nav() {
         <div className="border-t border-border/70 px-4 py-3 md:hidden">
           <div className="flex flex-col gap-1">
             {links.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="rounded-md px-2 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground"
-              >
-                {l.label}
-              </a>
+              l.isRoute ? (
+                <Link
+                  key={l.href}
+                  to={l.href}
+                  onClick={() => setOpen(false)}
+                  className="rounded-md px-2 py-2 text-sm font-semibold text-cyan-400 hover:bg-secondary"
+                >
+                  {l.label}
+                </Link>
+              ) : (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  className="rounded-md px-2 py-2 text-sm text-muted-foreground hover:bg-secondary hover:text-foreground"
+                >
+                  {l.label}
+                </a>
+              )
             ))}
             <div className="mt-2 flex gap-2">
               <Button asChild variant="outline" size="sm" className="flex-1">

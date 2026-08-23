@@ -35,7 +35,7 @@ export const Route = createFileRoute("/app/reports")({
   component: ReportsPage,
 });
 
-export function ReportsPage() {
+function ReportsPage() {
   const navigate = useNavigate();
   const [reports, setReports] = useState<ReportDocument[]>([]);
   const [search, setSearch] = useState("");
@@ -157,7 +157,7 @@ export function ReportsPage() {
         <ReportLibraryTable
           reports={filtered}
           onRegenerate={handleRegenerate}
-          onViewReport={(id) => navigate(`/app/reports/${id}/view`)}
+          onViewReport={(id) => navigate({ to: "/app/reports/$id/view", params: { id } })}
           userRole="admin"
         />
       </SectionCard>

@@ -1,8 +1,3 @@
-import { createBrowserClient } from "@supabase/ssr";
+export { supabase, getSupabaseClient } from "./supabaseClient";
+export { getSupabaseClient as createClient } from "./supabaseClient";
 
-export function createClient() {
-  return createBrowserClient(
-    import.meta.env["VITE_SUPABASE_URL"]!,
-    import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] || import.meta.env["VITE_SUPABASE_ANON_KEY"]!,
-  );
-}

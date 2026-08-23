@@ -11,13 +11,16 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppRouteImport } from './routes/app'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as DevelopersRouteImport } from './routes/developers'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as GithubRouteImport } from './routes/github'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as InviteRouteImport } from './routes/invite'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
+import { Route as PreviewRouteImport } from './routes/preview'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
@@ -26,13 +29,17 @@ import { Route as AppActivityRouteImport } from './routes/app.activity'
 import { Route as AppAdminRouteImport } from './routes/app.admin'
 import { Route as AppBillingRouteImport } from './routes/app.billing'
 import { Route as AppExportsRouteImport } from './routes/app.exports'
+import { Route as AppGithubRouteImport } from './routes/app.github'
 import { Route as AppIntegrationsRouteImport } from './routes/app.integrations'
 import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
+import { Route as AppPreviewRouteImport } from './routes/app.preview'
+import { Route as AppProfileRouteImport } from './routes/app.profile'
 import { Route as AppReportsRouteImport } from './routes/app.reports'
 import { Route as AppSearchRouteImport } from './routes/app.search'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppTeamRouteImport } from './routes/app.team'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as GithubCallbackRouteImport } from './routes/github.callback'
 import { Route as AppAdminIndexRouteImport } from './routes/app.admin.index'
 import { Route as AppAdminAuditRouteImport } from './routes/app.admin.audit'
 import { Route as AppAdminModelsRouteImport } from './routes/app.admin.models'
@@ -51,6 +58,7 @@ import { Route as AppStudioIdRouteImport } from './routes/app.studio.$id'
 import { Route as AppStudioCreateRouteImport } from './routes/app.studio.create'
 import { Route as AppStudioImportRouteImport } from './routes/app.studio.import'
 import { Route as AppStudioTemplatesRouteImport } from './routes/app.studio.templates'
+import { Route as AppTeamIdRouteImport } from './routes/app.team.$id'
 import { Route as AppProjectsIdIndexRouteImport } from './routes/app.projects.$id.index'
 import { Route as AppProjectsIdAnalyticsRouteImport } from './routes/app.projects.$id.analytics'
 import { Route as AppProjectsIdBlueprintRouteImport } from './routes/app.projects.$id.blueprint'
@@ -89,6 +97,11 @@ const AppRoute = AppRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoRoute = DemoRouteImport.update({
   id: '/demo',
   path: '/demo',
@@ -102,6 +115,11 @@ const DevelopersRoute = DevelopersRouteImport.update({
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GithubRoute = GithubRouteImport.update({
+  id: '/github',
+  path: '/github',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpRoute = HelpRouteImport.update({
@@ -122,6 +140,11 @@ const LoginRoute = LoginRouteImport.update({
 const OnboardingRoute = OnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreviewRoute = PreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -164,6 +187,11 @@ const AppExportsRoute = AppExportsRouteImport.update({
   path: '/exports',
   getParentRoute: () => AppRoute,
 } as any)
+const AppGithubRoute = AppGithubRouteImport.update({
+  id: '/github',
+  path: '/github',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppIntegrationsRoute = AppIntegrationsRouteImport.update({
   id: '/integrations',
   path: '/integrations',
@@ -172,6 +200,16 @@ const AppIntegrationsRoute = AppIntegrationsRouteImport.update({
 const AppNotificationsRoute = AppNotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPreviewRoute = AppPreviewRouteImport.update({
+  id: '/preview',
+  path: '/preview',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
   getParentRoute: () => AppRoute,
 } as any)
 const AppReportsRoute = AppReportsRouteImport.update({
@@ -195,9 +233,14 @@ const AppTeamRoute = AppTeamRouteImport.update({
   getParentRoute: () => AppRoute,
 } as any)
 const AuthCallbackRoute = AuthCallbackRouteImport.update({
-  id: '/auth/callback',
-  path: '/auth/callback',
-  getParentRoute: () => rootRouteImport,
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => AuthRoute,
+} as any)
+const GithubCallbackRoute = GithubCallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => GithubRoute,
 } as any)
 const AppAdminIndexRoute = AppAdminIndexRouteImport.update({
   id: '/',
@@ -288,6 +331,11 @@ const AppStudioTemplatesRoute = AppStudioTemplatesRouteImport.update({
   id: '/studio/templates',
   path: '/studio/templates',
   getParentRoute: () => AppRoute,
+} as any)
+const AppTeamIdRoute = AppTeamIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AppTeamRoute,
 } as any)
 const AppProjectsIdIndexRoute = AppProjectsIdIndexRouteImport.update({
   id: '/',
@@ -431,13 +479,16 @@ const AppStudioIdVersionsRoute = AppStudioIdVersionsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRouteWithChildren
   '/demo': typeof DemoRoute
   '/developers': typeof DevelopersRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/github': typeof GithubRouteWithChildren
   '/help': typeof HelpRoute
   '/invite': typeof InviteRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
+  '/preview': typeof PreviewRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verify-email': typeof VerifyEmailRoute
@@ -445,13 +496,17 @@ export interface FileRoutesByFullPath {
   '/app/admin': typeof AppAdminRouteWithChildren
   '/app/billing': typeof AppBillingRouteWithChildren
   '/app/exports': typeof AppExportsRoute
+  '/app/github': typeof AppGithubRoute
   '/app/integrations': typeof AppIntegrationsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/preview': typeof AppPreviewRoute
+  '/app/profile': typeof AppProfileRoute
   '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
-  '/app/team': typeof AppTeamRoute
+  '/app/team': typeof AppTeamRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
+  '/github/callback': typeof GithubCallbackRoute
   '/app/': typeof AppIndexRoute
   '/app/admin/audit': typeof AppAdminAuditRoute
   '/app/admin/models': typeof AppAdminModelsRoute
@@ -468,6 +523,7 @@ export interface FileRoutesByFullPath {
   '/app/studio/create': typeof AppStudioCreateRoute
   '/app/studio/import': typeof AppStudioImportRoute
   '/app/studio/templates': typeof AppStudioTemplatesRoute
+  '/app/team/$id': typeof AppTeamIdRoute
   '/app/admin/': typeof AppAdminIndexRoute
   '/app/projects/': typeof AppProjectsIndexRoute
   '/app/studio/': typeof AppStudioIndexRoute
@@ -501,26 +557,33 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRouteWithChildren
   '/demo': typeof DemoRoute
   '/developers': typeof DevelopersRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/github': typeof GithubRouteWithChildren
   '/help': typeof HelpRoute
   '/invite': typeof InviteRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
+  '/preview': typeof PreviewRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verify-email': typeof VerifyEmailRoute
   '/app/activity': typeof AppActivityRoute
   '/app/billing': typeof AppBillingRouteWithChildren
   '/app/exports': typeof AppExportsRoute
+  '/app/github': typeof AppGithubRoute
   '/app/integrations': typeof AppIntegrationsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/preview': typeof AppPreviewRoute
+  '/app/profile': typeof AppProfileRoute
   '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
-  '/app/team': typeof AppTeamRoute
+  '/app/team': typeof AppTeamRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
+  '/github/callback': typeof GithubCallbackRoute
   '/app': typeof AppIndexRoute
   '/app/admin/audit': typeof AppAdminAuditRoute
   '/app/admin/models': typeof AppAdminModelsRoute
@@ -535,6 +598,7 @@ export interface FileRoutesByTo {
   '/app/studio/create': typeof AppStudioCreateRoute
   '/app/studio/import': typeof AppStudioImportRoute
   '/app/studio/templates': typeof AppStudioTemplatesRoute
+  '/app/team/$id': typeof AppTeamIdRoute
   '/app/admin': typeof AppAdminIndexRoute
   '/app/projects': typeof AppProjectsIndexRoute
   '/app/studio': typeof AppStudioIndexRoute
@@ -570,13 +634,16 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRouteWithChildren
   '/demo': typeof DemoRoute
   '/developers': typeof DevelopersRoute
   '/forgot-password': typeof ForgotPasswordRoute
+  '/github': typeof GithubRouteWithChildren
   '/help': typeof HelpRoute
   '/invite': typeof InviteRoute
   '/login': typeof LoginRoute
   '/onboarding': typeof OnboardingRoute
+  '/preview': typeof PreviewRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/verify-email': typeof VerifyEmailRoute
@@ -584,13 +651,17 @@ export interface FileRoutesById {
   '/app/admin': typeof AppAdminRouteWithChildren
   '/app/billing': typeof AppBillingRouteWithChildren
   '/app/exports': typeof AppExportsRoute
+  '/app/github': typeof AppGithubRoute
   '/app/integrations': typeof AppIntegrationsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/preview': typeof AppPreviewRoute
+  '/app/profile': typeof AppProfileRoute
   '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
-  '/app/team': typeof AppTeamRoute
+  '/app/team': typeof AppTeamRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
+  '/github/callback': typeof GithubCallbackRoute
   '/app/': typeof AppIndexRoute
   '/app/admin/audit': typeof AppAdminAuditRoute
   '/app/admin/models': typeof AppAdminModelsRoute
@@ -607,6 +678,7 @@ export interface FileRoutesById {
   '/app/studio/create': typeof AppStudioCreateRoute
   '/app/studio/import': typeof AppStudioImportRoute
   '/app/studio/templates': typeof AppStudioTemplatesRoute
+  '/app/team/$id': typeof AppTeamIdRoute
   '/app/admin/': typeof AppAdminIndexRoute
   '/app/projects/': typeof AppProjectsIndexRoute
   '/app/studio/': typeof AppStudioIndexRoute
@@ -643,13 +715,16 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/app'
+    | '/auth'
     | '/demo'
     | '/developers'
     | '/forgot-password'
+    | '/github'
     | '/help'
     | '/invite'
     | '/login'
     | '/onboarding'
+    | '/preview'
     | '/register'
     | '/reset-password'
     | '/verify-email'
@@ -657,13 +732,17 @@ export interface FileRouteTypes {
     | '/app/admin'
     | '/app/billing'
     | '/app/exports'
+    | '/app/github'
     | '/app/integrations'
     | '/app/notifications'
+    | '/app/preview'
+    | '/app/profile'
     | '/app/reports'
     | '/app/search'
     | '/app/settings'
     | '/app/team'
     | '/auth/callback'
+    | '/github/callback'
     | '/app/'
     | '/app/admin/audit'
     | '/app/admin/models'
@@ -680,6 +759,7 @@ export interface FileRouteTypes {
     | '/app/studio/create'
     | '/app/studio/import'
     | '/app/studio/templates'
+    | '/app/team/$id'
     | '/app/admin/'
     | '/app/projects/'
     | '/app/studio/'
@@ -713,26 +793,33 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
     | '/demo'
     | '/developers'
     | '/forgot-password'
+    | '/github'
     | '/help'
     | '/invite'
     | '/login'
     | '/onboarding'
+    | '/preview'
     | '/register'
     | '/reset-password'
     | '/verify-email'
     | '/app/activity'
     | '/app/billing'
     | '/app/exports'
+    | '/app/github'
     | '/app/integrations'
     | '/app/notifications'
+    | '/app/preview'
+    | '/app/profile'
     | '/app/reports'
     | '/app/search'
     | '/app/settings'
     | '/app/team'
     | '/auth/callback'
+    | '/github/callback'
     | '/app'
     | '/app/admin/audit'
     | '/app/admin/models'
@@ -747,6 +834,7 @@ export interface FileRouteTypes {
     | '/app/studio/create'
     | '/app/studio/import'
     | '/app/studio/templates'
+    | '/app/team/$id'
     | '/app/admin'
     | '/app/projects'
     | '/app/studio'
@@ -781,13 +869,16 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/app'
+    | '/auth'
     | '/demo'
     | '/developers'
     | '/forgot-password'
+    | '/github'
     | '/help'
     | '/invite'
     | '/login'
     | '/onboarding'
+    | '/preview'
     | '/register'
     | '/reset-password'
     | '/verify-email'
@@ -795,13 +886,17 @@ export interface FileRouteTypes {
     | '/app/admin'
     | '/app/billing'
     | '/app/exports'
+    | '/app/github'
     | '/app/integrations'
     | '/app/notifications'
+    | '/app/preview'
+    | '/app/profile'
     | '/app/reports'
     | '/app/search'
     | '/app/settings'
     | '/app/team'
     | '/auth/callback'
+    | '/github/callback'
     | '/app/'
     | '/app/admin/audit'
     | '/app/admin/models'
@@ -818,6 +913,7 @@ export interface FileRouteTypes {
     | '/app/studio/create'
     | '/app/studio/import'
     | '/app/studio/templates'
+    | '/app/team/$id'
     | '/app/admin/'
     | '/app/projects/'
     | '/app/studio/'
@@ -853,17 +949,19 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  AuthRoute: typeof AuthRouteWithChildren
   DemoRoute: typeof DemoRoute
   DevelopersRoute: typeof DevelopersRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
+  GithubRoute: typeof GithubRouteWithChildren
   HelpRoute: typeof HelpRoute
   InviteRoute: typeof InviteRoute
   LoginRoute: typeof LoginRoute
   OnboardingRoute: typeof OnboardingRoute
+  PreviewRoute: typeof PreviewRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
-  AuthCallbackRoute: typeof AuthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -880,6 +978,13 @@ declare module '@tanstack/react-router' {
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo': {
@@ -901,6 +1006,13 @@ declare module '@tanstack/react-router' {
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/github': {
+      id: '/github'
+      path: '/github'
+      fullPath: '/github'
+      preLoaderRoute: typeof GithubRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help': {
@@ -929,6 +1041,13 @@ declare module '@tanstack/react-router' {
       path: '/onboarding'
       fullPath: '/onboarding'
       preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/preview': {
+      id: '/preview'
+      path: '/preview'
+      fullPath: '/preview'
+      preLoaderRoute: typeof PreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -987,6 +1106,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppExportsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/github': {
+      id: '/app/github'
+      path: '/github'
+      fullPath: '/app/github'
+      preLoaderRoute: typeof AppGithubRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/integrations': {
       id: '/app/integrations'
       path: '/integrations'
@@ -999,6 +1125,20 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/app/notifications'
       preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/preview': {
+      id: '/app/preview'
+      path: '/preview'
+      fullPath: '/app/preview'
+      preLoaderRoute: typeof AppPreviewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/profile': {
+      id: '/app/profile'
+      path: '/profile'
+      fullPath: '/app/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/reports': {
@@ -1031,10 +1171,17 @@ declare module '@tanstack/react-router' {
     }
     '/auth/callback': {
       id: '/auth/callback'
-      path: '/auth/callback'
+      path: '/callback'
       fullPath: '/auth/callback'
       preLoaderRoute: typeof AuthCallbackRouteImport
-      parentRoute: typeof rootRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/github/callback': {
+      id: '/github/callback'
+      path: '/callback'
+      fullPath: '/github/callback'
+      preLoaderRoute: typeof GithubCallbackRouteImport
+      parentRoute: typeof GithubRoute
     }
     '/app/admin/': {
       id: '/app/admin/'
@@ -1161,6 +1308,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/studio/templates'
       preLoaderRoute: typeof AppStudioTemplatesRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/app/team/$id': {
+      id: '/app/team/$id'
+      path: '/$id'
+      fullPath: '/app/team/$id'
+      preLoaderRoute: typeof AppTeamIdRouteImport
+      parentRoute: typeof AppTeamRoute
     }
     '/app/projects/$id/': {
       id: '/app/projects/$id/'
@@ -1406,6 +1560,17 @@ const AppReportsRouteWithChildren = AppReportsRoute._addFileChildren(
   AppReportsRouteChildren,
 )
 
+interface AppTeamRouteChildren {
+  AppTeamIdRoute: typeof AppTeamIdRoute
+}
+
+const AppTeamRouteChildren: AppTeamRouteChildren = {
+  AppTeamIdRoute: AppTeamIdRoute,
+}
+
+const AppTeamRouteWithChildren =
+  AppTeamRoute._addFileChildren(AppTeamRouteChildren)
+
 interface AppProjectsIdRouteChildren {
   AppProjectsIdAnalyticsRoute: typeof AppProjectsIdAnalyticsRoute
   AppProjectsIdBlueprintRoute: typeof AppProjectsIdBlueprintRoute
@@ -1483,12 +1648,15 @@ interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRouteWithChildren
   AppBillingRoute: typeof AppBillingRouteWithChildren
   AppExportsRoute: typeof AppExportsRoute
+  AppGithubRoute: typeof AppGithubRoute
   AppIntegrationsRoute: typeof AppIntegrationsRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
+  AppPreviewRoute: typeof AppPreviewRoute
+  AppProfileRoute: typeof AppProfileRoute
   AppReportsRoute: typeof AppReportsRouteWithChildren
   AppSearchRoute: typeof AppSearchRoute
   AppSettingsRoute: typeof AppSettingsRoute
-  AppTeamRoute: typeof AppTeamRoute
+  AppTeamRoute: typeof AppTeamRouteWithChildren
   AppIndexRoute: typeof AppIndexRoute
   AppProjectsIdRoute: typeof AppProjectsIdRouteWithChildren
   AppProjectsNewRoute: typeof AppProjectsNewRoute
@@ -1505,12 +1673,15 @@ const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRouteWithChildren,
   AppBillingRoute: AppBillingRouteWithChildren,
   AppExportsRoute: AppExportsRoute,
+  AppGithubRoute: AppGithubRoute,
   AppIntegrationsRoute: AppIntegrationsRoute,
   AppNotificationsRoute: AppNotificationsRoute,
+  AppPreviewRoute: AppPreviewRoute,
+  AppProfileRoute: AppProfileRoute,
   AppReportsRoute: AppReportsRouteWithChildren,
   AppSearchRoute: AppSearchRoute,
   AppSettingsRoute: AppSettingsRoute,
-  AppTeamRoute: AppTeamRoute,
+  AppTeamRoute: AppTeamRouteWithChildren,
   AppIndexRoute: AppIndexRoute,
   AppProjectsIdRoute: AppProjectsIdRouteWithChildren,
   AppProjectsNewRoute: AppProjectsNewRoute,
@@ -1524,20 +1695,43 @@ const AppRouteChildren: AppRouteChildren = {
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
+interface AuthRouteChildren {
+  AuthCallbackRoute: typeof AuthCallbackRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthCallbackRoute: AuthCallbackRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
+interface GithubRouteChildren {
+  GithubCallbackRoute: typeof GithubCallbackRoute
+}
+
+const GithubRouteChildren: GithubRouteChildren = {
+  GithubCallbackRoute: GithubCallbackRoute,
+}
+
+const GithubRouteWithChildren =
+  GithubRoute._addFileChildren(GithubRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  AuthRoute: AuthRouteWithChildren,
   DemoRoute: DemoRoute,
   DevelopersRoute: DevelopersRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
+  GithubRoute: GithubRouteWithChildren,
   HelpRoute: HelpRoute,
   InviteRoute: InviteRoute,
   LoginRoute: LoginRoute,
   OnboardingRoute: OnboardingRoute,
+  PreviewRoute: PreviewRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   VerifyEmailRoute: VerifyEmailRoute,
-  AuthCallbackRoute: AuthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

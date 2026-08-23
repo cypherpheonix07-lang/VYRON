@@ -124,7 +124,7 @@ export class BrahmaMockEngine {
   }
 
   private randPick<T>(arr: T[]): T {
-    return arr[this.randInt(0, arr.length - 1)];
+    return arr[this.randInt(0, arr.length - 1)]!;
   }
 
   public getUsers(): MockUser[] {
@@ -315,7 +315,7 @@ export class BrahmaMockEngine {
 
     const events: MockAuthEvent[] = [];
     for (let i = 0; i < count; i++) {
-      const geo = cities[i % cities.length];
+      const geo = cities[i % cities.length] || { ip: "127.0.0.1", city: "Bengaluru", country: "India" };
       const isFailedCluster = this.seed === "BETA" && i >= 2 && i <= 5;
       events.push({
         id: `auth-evt-${i + 1}`,
@@ -325,8 +325,8 @@ export class BrahmaMockEngine {
         method: isFailedCluster ? "Password (Repeated)" : i % 3 === 0 ? "GitHub OAuth" : "Password",
         status: isFailedCluster ? "failed" : "success",
         deviceType: i % 4 === 0 ? "mobile" : "desktop",
-        browser: browsers[i % browsers.length],
-        os: osList[i % osList.length],
+        browser: browsers[i % browsers.length] || "Chrome",
+        os: osList[i % osList.length] || "macOS",
         ip: geo.ip,
         city: geo.city,
         country: geo.country,
