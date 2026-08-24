@@ -595,3 +595,164 @@ BEGIN
   EXCEPTION WHEN OTHERS THEN NULL;
   END;
 END $$;
+
+-- ------------------------------------------------------------------------------
+-- 11. INDUSTRIAL LEVIATHAN HARDENING: OPTIMISTIC LOCKING, WORM AUDIT & INGEST
+-- ------------------------------------------------------------------------------
+
+-- Version columns for optimistic locking
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns 
+    WHERE table_schema='public' AND table_name='projects' AND column_name='version'
+  ) THEN
+    ALTER TABLE public.projects ADD COLUMN version INTEGER NOT NULL DEFAULT 1;
+  END IF;
+END $$;
+
+CREATE TABLE IF NOT EXISTS public.requirements (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id UUID NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
+  req_code TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT,
+  category TEXT NOT NULL DEFAULT 'functional' CHECK (category IN ('functional', 'non_functional', 'constraint', 'security')),
+  priority TEXT NOT NULL DEFAULT 'medium' CHECK (priority IN ('critical', 'high', 'medium', 'low')),
+  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'approved', 'implemented', 'verified', 'deprecated')),
+  version INTEGER NOT NULL DEFAULT 1,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now()),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now()),
+  UNIQUE(project_id, req_code)
+);
+
+ALTER TABLE public.requirements ENABLE ROW LEVEL SECURITY;
+
+CREATE TABLE IF NOT EXISTS public.blueprint_nodes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  project_id UUID NOT NULL REFERENCES public.projects(id) ON DELETE CASCADE,
+  node_key TEXT NOT NULL,
+  label TEXT NOT NULL,
+  node_type TEXT NOT NULL DEFAULT 'service' CHECK (node_type IN ('service', 'database', 'cache', 'gateway', 'queue', 'external')),
+  config JSONB NOT NULL DEFAULT '{}'::jsonb,
+  position JSONB NOT NULL DEFAULT '{"x": 0, "y": 0}'::jsonb,
+  version INTEGER NOT NULL DEFAULT 1,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now()),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now()),
+  UNIQUE(project_id, node_key)
+);
+
+ALTER TABLE public.blueprint_nodes ENABLE ROW LEVEL SECURITY;
+
+-- Optimistic Update RPC: update_project_optimistic
+CREATE OR REPLACE FUNCTION public.update_project_optimistic(
+  p_id UUID,
+  p_expected_version INTEGER,
+  p_name TEXT DEFAULT NULL,
+  p_description TEXT DEFAULT NULL,
+  p_health_score INTEGER DEFAULT NULL,
+  p_status TEXT DEFAULT NULL
+)
+RETURNS TABLE (
+  id UUID,
+  owner_id UUID,
+  name TEXT,
+  description TEXT,
+  health_score INTEGER,
+  status TEXT,
+  version INTEGER,
+  updated_at TIMESTAMPTZ
+)
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_updated_rows INTEGER;
+BEGIN
+  UPDATE public.projects
+  SET
+    name = COALESCE(p_name, projects.name),
+    description = COALESCE(p_description, projects.description),
+    health_score = COALESCE(p_health_score, projects.health_score),
+    status = COALESCE(p_status, projects.status),
+    version = projects.version + 1,
+    updated_at = timezone('utc'::text, now())
+  WHERE projects.id = p_id AND projects.version = p_expected_version;
+
+  GET DIAGNOSTICS v_updated_rows = ROW_COUNT;
+
+  IF v_updated_rows = 0 THEN
+    RAISE EXCEPTION 'BRA-409: Conflict (Concurrent Modification) - Expected version %, but the record was modified by another transaction or does not exist.', p_expected_version
+      USING ERRCODE = '40001';
+  END IF;
+
+  RETURN QUERY
+  SELECT 
+    p.id, p.owner_id, p.name, p.description, p.health_score, p.status, p.version, p.updated_at
+  FROM public.projects p
+  WHERE p.id = p_id;
+END;
+$$;
+
+-- Immutable WORM Audit Logs
+CREATE TABLE IF NOT EXISTS public.audit_logs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  tenant_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  actor_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  action TEXT NOT NULL,
+  resource_type TEXT NOT NULL,
+  resource_id TEXT,
+  payload JSONB NOT NULL DEFAULT '{}'::jsonb,
+  client_ip INET,
+  user_agent TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now())
+);
+
+ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+
+CREATE OR REPLACE FUNCTION public.prevent_audit_mutation()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+BEGIN
+  RAISE EXCEPTION 'BRA-403: Forbidden - Audit logs are strictly immutable (WORM policy enforced). UPDATE, DELETE, and TRUNCATE operations are permanently prohibited.'
+    USING ERRCODE = '42501';
+  RETURN NULL;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_prevent_audit_mutation_row ON public.audit_logs;
+CREATE TRIGGER trg_prevent_audit_mutation_row
+  BEFORE UPDATE OR DELETE ON public.audit_logs
+  FOR EACH ROW
+  EXECUTE FUNCTION public.prevent_audit_mutation();
+
+DROP TRIGGER IF EXISTS trg_prevent_audit_mutation_stmt ON public.audit_logs;
+CREATE TRIGGER trg_prevent_audit_mutation_stmt
+  BEFORE TRUNCATE ON public.audit_logs
+  FOR EACH STATEMENT
+  EXECUTE FUNCTION public.prevent_audit_mutation();
+
+REVOKE UPDATE, DELETE, TRUNCATE ON TABLE public.audit_logs FROM PUBLIC, anon, authenticated;
+
+-- Asynchronous Webhook Ingest Queue
+CREATE TABLE IF NOT EXISTS public.webhook_ingest (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  source TEXT NOT NULL DEFAULT 'github',
+  event_type TEXT NOT NULL,
+  delivery_id TEXT UNIQUE,
+  signature TEXT,
+  hmac_verified BOOLEAN NOT NULL DEFAULT true,
+  payload JSONB NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'processing', 'processed', 'failed')),
+  retry_count INTEGER NOT NULL DEFAULT 0,
+  error_log TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT timezone('utc'::text, now()),
+  processed_at TIMESTAMPTZ
+);
+
+ALTER TABLE public.webhook_ingest ENABLE ROW LEVEL SECURITY;
+

@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Outlet, createFileRoute, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   FileBarChart2,
   Download,
@@ -37,6 +37,7 @@ export const Route = createFileRoute("/app/reports")({
 
 function ReportsPage() {
   const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [reports, setReports] = useState<ReportDocument[]>([]);
   const [search, setSearch] = useState("");
   const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
@@ -98,6 +99,11 @@ function ReportsPage() {
       r.template.toLowerCase().includes(search.toLowerCase()) ||
       r.id.toLowerCase().includes(search.toLowerCase()),
   );
+
+  // If navigating to a child route like /app/reports/$id/view, mount the child Outlet
+  if (pathname !== "/app/reports" && pathname !== "/app/reports/") {
+    return <Outlet />;
+  }
 
   return (
     <div className="space-y-6">

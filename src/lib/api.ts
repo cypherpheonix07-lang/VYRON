@@ -184,6 +184,29 @@ export async function analyzeRepo(repoUrl: string): Promise<RepoAnalysisOutput> 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ repo_url: repoUrl }),
       });
+
+      if (response.status === 202) {
+        const accepted = await response.json();
+        const taskId = accepted.task_id;
+        
+        // Poll asynchronous decoupled worker queue
+        const maxPollAttempts = 30;
+        for (let attempt = 0; attempt < maxPollAttempts; attempt++) {
+          await new Promise((resolve) => setTimeout(resolve, 800));
+          const statusRes = await fetch(`${BACKEND_API_URL}/analyze/status/${taskId}`);
+          if (statusRes.ok) {
+            const taskData = await statusRes.json();
+            if (taskData.status === "SUCCESS" && taskData.result) {
+              return taskData.result as RepoAnalysisOutput;
+            }
+            if (taskData.status === "FAILURE") {
+              throw new Error(taskData.error || "Repository scan worker failed.");
+            }
+          }
+        }
+        throw new Error("Repository scan task polling timed out.");
+      }
+
       if (!response.ok) {
         throw new Error(`HTTP Error status: ${response.status}`);
       }
@@ -200,6 +223,33 @@ export async function analyzeRepo(repoUrl: string): Promise<RepoAnalysisOutput> 
   // Simulated network latency for high-fidelity experience
   await new Promise((resolve) => setTimeout(resolve, 1500));
   return mockRepoAnalysis;
+}
+
+export async function updateProjectOptimistic(
+  id: string,
+  expectedVersion: number,
+  updates: { name?: string; description?: string; health_score?: number; status?: string }
+) {
+  const response = await fetch(`${BACKEND_API_URL}/db/optimistic/project`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id,
+      expected_version: expectedVersion,
+      ...updates,
+    }),
+  });
+
+  if (response.status === 409) {
+    const err = await response.json();
+    throw new Error(err.detail?.message || "BRA-409: Conflict (Concurrent Modification)");
+  }
+
+  if (!response.ok) {
+    throw new Error(`Optimistic update failed with status ${response.status}`);
+  }
+
+  return await response.json();
 }
 
 export async function evaluateMetrics(
@@ -368,29 +418,47 @@ export async function logAuthEvent(payload: {
 
   try {
     // Attempt Edge Function call first
-    const edgeUrl = `${import.meta.env["VITE_SUPABASE_URL"] || ""}/functions/v1/log-auth-event`;
-    if (import.meta.env["VITE_SUPABASE_URL"]) {
-      fetch(edgeUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...payload, user_agent: ua }),
-      }).catch(() => {});
+    const supabaseUrl = import.meta.env["VITE_SUPABASE_URL"];
+    const anonKey = import.meta.env["VITE_SUPABASE_ANON_KEY"];
+    if (supabaseUrl) {
+      const edgeUrl = `${supabaseUrl}/functions/v1/log-auth-event`;
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      if (anonKey) {
+        headers["apikey"] = anonKey;
+        headers["Authorization"] = `Bearer ${anonKey}`;
+      }
+
+      try {
+        void fetch(edgeUrl, {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ ...payload, user_agent: ua }),
+        }).catch(() => {
+          // Edge Function offline/un-deployed; fallback to direct DB insert
+        });
+      } catch {
+        // Silently swallow fetch construction errors
+      }
 
       // Direct database insert fallback
       if (supabase && typeof supabase.from === "function") {
-        void supabase
-          .from("auth_events")
-          .insert({
-            user_id: payload.user_id || null,
-            email: payload.email,
-            event: payload.event,
-            method: payload.method,
-            status: payload.status,
-            device_type,
-            browser,
-            os: "Windows",
-            user_agent: ua,
-          });
+        void Promise.resolve(
+          supabase
+            .from("auth_events")
+            .insert({
+              user_id: payload.user_id || null,
+              email: payload.email,
+              event: payload.event,
+              method: payload.method,
+              status: payload.status,
+              device_type,
+              browser,
+              os: "Windows",
+              user_agent: ua,
+            })
+        ).catch(() => {});
       }
     }
 

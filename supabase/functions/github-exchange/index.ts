@@ -1,13 +1,22 @@
-// Supabase Edge Function: github-exchange
-// Exchanges GitHub OAuth code, retrieves user info, encrypts token server-side, and stores integration.
 import { withSupabase } from "npm:@supabase/server";
+
+export const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+};
 
 export default {
   fetch: withSupabase({ auth: "user" }, async (req, ctx) => {
+    if (req.method === "OPTIONS") {
+      return new Response("ok", { headers: corsHeaders });
+    }
+
     if (req.method !== "POST") {
       return new Response(JSON.stringify({ error: "Method not allowed" }), {
         status: 405,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     }
 

@@ -1,9 +1,18 @@
-// Supabase Edge Function: github-proxy
-// Authenticated proxy that decrypts the stored GitHub token server-side and queries the GitHub API.
 import { withSupabase } from "npm:@supabase/server";
+
+export const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
+};
 
 export default {
   fetch: withSupabase({ auth: "user" }, async (req, ctx) => {
+    if (req.method === "OPTIONS") {
+      return new Response("ok", { headers: corsHeaders });
+    }
+
     try {
       const url = new URL(req.url);
       const apiPath = url.searchParams.get("path") || "/user/repos";

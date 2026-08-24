@@ -2,12 +2,24 @@
 // Ingests auth events, resolves IP/Geo, parses UA, and records into auth_events table.
 import { withSupabase } from "npm:@supabase/server";
 
+export const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type, x-forwarded-for, cf-connecting-ip, x-real-ip",
+  "Access-Control-Allow-Methods": "POST, OPTIONS, GET",
+};
+
 export default {
   fetch: withSupabase({ auth: "none" }, async (req, ctx) => {
+    // 1. Handle CORS Preflight OPTIONS Request
+    if (req.method === "OPTIONS") {
+      return new Response("ok", { headers: corsHeaders });
+    }
+
     if (req.method !== "POST") {
       return new Response(JSON.stringify({ error: "Method not allowed" }), {
         status: 405,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     }
 
@@ -18,7 +30,7 @@ export default {
       if (!event || !method || !status || !email) {
         return new Response(JSON.stringify({ error: "Missing required fields" }), {
           status: 400,
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...corsHeaders },
         });
       }
 
@@ -86,19 +98,19 @@ export default {
         console.error("Failed to insert auth event:", error);
         return new Response(JSON.stringify({ error: error.message }), {
           status: 500,
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", ...corsHeaders },
         });
       }
 
       return new Response(JSON.stringify({ success: true, logged_event: event }), {
         status: 200,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     } catch (err) {
       console.error("log-auth-event exception:", err);
       return new Response(JSON.stringify({ error: (err as Error).message }), {
         status: 500,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...corsHeaders },
       });
     }
   }),
