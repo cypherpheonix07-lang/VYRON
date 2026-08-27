@@ -5,7 +5,7 @@
  * Server-side Edge Functions handle OpenRouter, Hugging Face, Semantic Caching,
  * Metering, and Provenance Vaulting.
  *
- * ZERO DIRECT CLIENT CALLS TO EXTERNAL LLM HOSTS (openrouter.ai / huggingface.co).
+ * ZERO DIRECT CLIENT CALLS TO EXTERNAL LLM HOSTS.
  */
 
 import { supabase } from "../lib/supabaseClient";
@@ -27,7 +27,7 @@ export interface LLMOptions {
   project_id?: string;
 }
 
-export interface LLMResponse<T = any> {
+export interface LLMResponse<T = unknown> {
   ok: boolean;
   content: T;
   provider: string;
@@ -44,7 +44,7 @@ export interface AIArtifactRow {
   id: string;
   project_id: string | null;
   kind: string;
-  content: any;
+  content: unknown;
   provider: string;
   model: string;
   sha256: string;
@@ -70,29 +70,68 @@ async function sha256Client(data: unknown): Promise<string> {
   return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
-function getLocalDeterministicArtifact(task: LLMTask, payload: any): any {
+function getLocalDeterministicArtifact(task: LLMTask, payload: unknown): Record<string, unknown> {
   if (task === "requirement_extraction") {
     return {
       modules: [
-        { name: "Core Authentication & IAM", desc: "Manages identity, MFA tokens, session auditing, and role verification." },
-        { name: "Data Processing Engine", desc: "Ingests inputs, processes state mutations, and dispatches validation signals." },
-        { name: "API Gateway & Security Proxy", desc: "Handles external handshakes, rate limiting, and audit logs." },
+        {
+          name: "Core Authentication & IAM",
+          desc: "Manages identity, MFA tokens, session auditing, and role verification.",
+        },
+        {
+          name: "Data Processing Engine",
+          desc: "Ingests inputs, processes state mutations, and dispatches validation signals.",
+        },
+        {
+          name: "API Gateway & Security Proxy",
+          desc: "Handles external handshakes, rate limiting, and audit logs.",
+        },
       ],
       actors: [
-        { name: "End User / Operator", desc: "Interacts with primary application workflows and dashboards." },
-        { name: "Platform Administrator", desc: "Configures access policies, reviews audits, and provisions resources." },
+        {
+          name: "End User / Operator",
+          desc: "Interacts with primary application workflows and dashboards.",
+        },
+        {
+          name: "Platform Administrator",
+          desc: "Configures access policies, reviews audits, and provisions resources.",
+        },
       ],
       functional: [
-        { id: "FR-01", title: "User Credential Verification", desc: "System authenticates users against secured identity store." },
-        { id: "FR-02", title: "Audit Event Ingestion", desc: "Captures and indexes all state mutations for compliance." },
-        { id: "FR-03", title: "Dynamic Access Control", desc: "Enforces role-based permissions on all protected routes." },
+        {
+          id: "FR-01",
+          title: "User Credential Verification",
+          desc: "System authenticates users against secured identity store.",
+        },
+        {
+          id: "FR-02",
+          title: "Audit Event Ingestion",
+          desc: "Captures and indexes all state mutations for compliance.",
+        },
+        {
+          id: "FR-03",
+          title: "Dynamic Access Control",
+          desc: "Enforces role-based permissions on all protected routes.",
+        },
       ],
       non_functional: [
-        { id: "NFR-01", title: "Sub-Second Latency", desc: "All 95th percentile operations resolve in under 500ms." },
-        { id: "NFR-02", title: "Zero Trust Architecture", desc: "All inter-service calls require signed JWT verification." },
+        {
+          id: "NFR-01",
+          title: "Sub-Second Latency",
+          desc: "All 95th percentile operations resolve in under 500ms.",
+        },
+        {
+          id: "NFR-02",
+          title: "Zero Trust Architecture",
+          desc: "All inter-service calls require signed JWT verification.",
+        },
       ],
       constraints: [
-        { id: "CON-01", title: "Data Residency", desc: "All persisted data must remain encrypted at rest with AES-256." },
+        {
+          id: "CON-01",
+          title: "Data Residency",
+          desc: "All persisted data must remain encrypted at rest with AES-256.",
+        },
       ],
       confidence: 0.95,
       fallback_notice: "Generated via BRAHMA deterministic template engine.",
@@ -104,10 +143,34 @@ function getLocalDeterministicArtifact(task: LLMTask, payload: any): any {
       system_name: "PROJECT-BRAHMA Distributed Microservices",
       topology: "Event-Driven CQRS Architecture",
       components: [
-        { id: "edge-gw", name: "Supabase Edge Gateway", type: "Gateway", tech: "Deno / TypeScript", port: 443 },
-        { id: "auth-srv", name: "IAM & Session Service", type: "Security", tech: "PostgreSQL RLS + GoTrue", port: 5432 },
-        { id: "analysis-srv", name: "Verification & AST Engine", type: "Core", tech: "Python / Rust Parser", port: 8000 },
-        { id: "realtime-pub", name: "Realtime Event Stream", type: "Broker", tech: "Supabase Realtime / WebSockets", port: 4000 },
+        {
+          id: "edge-gw",
+          name: "Supabase Edge Gateway",
+          type: "Gateway",
+          tech: "Deno / TypeScript",
+          port: 443,
+        },
+        {
+          id: "auth-srv",
+          name: "IAM & Session Service",
+          type: "Security",
+          tech: "PostgreSQL RLS + GoTrue",
+          port: 5432,
+        },
+        {
+          id: "analysis-srv",
+          name: "Verification & AST Engine",
+          type: "Core",
+          tech: "Python / Rust Parser",
+          port: 8000,
+        },
+        {
+          id: "realtime-pub",
+          name: "Realtime Event Stream",
+          type: "Broker",
+          tech: "Supabase Realtime / WebSockets",
+          port: 4000,
+        },
       ],
       connections: [
         { from: "edge-gw", to: "auth-srv", protocol: "gRPC", latency_target_ms: 15 },
@@ -161,12 +224,42 @@ function getLocalDeterministicArtifact(task: LLMTask, payload: any): any {
       suite_name: "Automated Integration & Security Matrix",
       total_tests: 6,
       test_cases: [
-        { id: "TC-01", name: "Valid Authentication Exchange", type: "Security", expected: "HTTP 200 with JWT" },
-        { id: "TC-02", name: "Tampered Token Injection", type: "Security", expected: "HTTP 401 Unauthorized" },
-        { id: "TC-03", name: "Rate Limit Threshold Burst", type: "Stress", expected: "HTTP 429 Too Many Requests" },
-        { id: "TC-04", name: "Schema Validation on Payload", type: "Integration", expected: "Passes Zod validation" },
-        { id: "TC-05", name: "Fallback Circuit Breaker Activation", type: "Resilience", expected: "Graceful template response" },
-        { id: "TC-06", name: "Database Audit Event Persistence", type: "Data", expected: "Row logged with SHA-256" },
+        {
+          id: "TC-01",
+          name: "Valid Authentication Exchange",
+          type: "Security",
+          expected: "HTTP 200 with JWT",
+        },
+        {
+          id: "TC-02",
+          name: "Tampered Token Injection",
+          type: "Security",
+          expected: "HTTP 401 Unauthorized",
+        },
+        {
+          id: "TC-03",
+          name: "Rate Limit Threshold Burst",
+          type: "Stress",
+          expected: "HTTP 429 Too Many Requests",
+        },
+        {
+          id: "TC-04",
+          name: "Schema Validation on Payload",
+          type: "Integration",
+          expected: "Passes Zod validation",
+        },
+        {
+          id: "TC-05",
+          name: "Fallback Circuit Breaker Activation",
+          type: "Resilience",
+          expected: "Graceful template response",
+        },
+        {
+          id: "TC-06",
+          name: "Database Audit Event Persistence",
+          type: "Data",
+          expected: "Row logged with SHA-256",
+        },
       ],
     };
   }
@@ -174,13 +267,15 @@ function getLocalDeterministicArtifact(task: LLMTask, payload: any): any {
   if (task === "report_prose") {
     return {
       title: "BRAHMA Architectural & Security Audit Report",
-      executive_summary: "The platform demonstrates resilient architectural design with zero-trust token handshakes, comprehensive audit event logging, and multi-tier LLM gateway fallback circuits.",
+      executive_summary:
+        "The platform demonstrates resilient architectural design with zero-trust token handshakes, comprehensive audit event logging, and multi-tier LLM gateway fallback circuits.",
       key_findings: [
         "All authentication flows are cryptographically verified via Supabase PKCE protocol.",
         "Role-based privilege boundaries prevent horizontal and vertical privilege escalation.",
         "Deterministic fallback mechanisms guarantee uninterrupted runtime availability.",
       ],
-      recommendation: "Proceed with production deployment following scheduled end-to-end load verification.",
+      recommendation:
+        "Proceed with production deployment following scheduled end-to-end load verification.",
     };
   }
 
@@ -192,9 +287,9 @@ function getLocalDeterministicArtifact(task: LLMTask, payload: any): any {
 
 // ─── CORE INVOCATION PIPELINE ─────────────────────────────────────────────────
 
-async function invokeGateway<T = any>(
+async function invokeGateway<T = unknown>(
   task: LLMTask,
-  payload: any,
+  payload: unknown,
   projectId?: string,
   options?: LLMOptions,
 ): Promise<LLMResponse<T>> {
@@ -218,7 +313,9 @@ async function invokeGateway<T = any>(
     });
 
     if (error || !data || data.ok === false) {
-      console.warn(`[llmGateway] Edge gateway warning (${error?.message || data?.error?.message}), triggering graceful local fallback.`);
+      console.warn(
+        `[llmGateway] Edge gateway warning (${error?.message || data?.error?.message}), triggering graceful local fallback.`,
+      );
       const content = getLocalDeterministicArtifact(task, payload) as T;
       const sha256 = await sha256Client(content);
       const latencyMs = Date.now() - startTime;
@@ -272,35 +369,40 @@ export const llmGateway = {
   /**
    * 2. Generate architectural topology, services, schemas, and security matrix.
    */
-  async generateArchitecture(requirements: any, projectId?: string, options?: LLMOptions) {
+  async generateArchitecture(requirements: unknown, projectId?: string, options?: LLMOptions) {
     return invokeGateway("architecture_generation", { requirements }, projectId, options);
   },
 
   /**
    * 3. Perform static AST and security code review with rule findings.
    */
-  async reviewCode(code: string, language: string = "typescript", projectId?: string, options?: LLMOptions) {
+  async reviewCode(
+    code: string,
+    language: string = "typescript",
+    projectId?: string,
+    options?: LLMOptions,
+  ) {
     return invokeGateway("code_review", { code, language }, projectId, options);
   },
 
   /**
    * 4. Synthesize integration and unit test matrices for a component/architecture.
    */
-  async generateTests(context: any, projectId?: string, options?: LLMOptions) {
+  async generateTests(context: unknown, projectId?: string, options?: LLMOptions) {
     return invokeGateway("test_generation", { context }, projectId, options);
   },
 
   /**
    * 5. Draft executive and academic SRS report prose.
    */
-  async draftReport(projectData: any, projectId?: string, options?: LLMOptions) {
+  async draftReport(projectData: unknown, projectId?: string, options?: LLMOptions) {
     return invokeGateway("report_prose", { projectData }, projectId, options);
   },
 
   /**
    * 6. Real-time engineering copilot query resolution.
    */
-  async copilot(query: string, context?: any, projectId?: string, options?: LLMOptions) {
+  async copilot(query: string, context?: unknown, projectId?: string, options?: LLMOptions) {
     return invokeGateway("copilot", { query, context }, projectId, options);
   },
 
@@ -317,16 +419,22 @@ export const llmGateway = {
         const dim = 384;
         const fallbackEmbeddings = texts.map((t) => {
           const vec = new Array<number>(dim).fill(0);
-          const words = t.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter(Boolean);
+          const words = t
+            .toLowerCase()
+            .replace(/[^a-z0-9\s]/g, "")
+            .split(/\s+/)
+            .filter(Boolean);
           words.forEach((word) => {
             let hash = 0;
-            for (let i = 0; i < word.length; i++) hash = ((hash << 5) - hash + word.charCodeAt(i)) | 0;
+            for (let i = 0; i < word.length; i++)
+              hash = ((hash << 5) - hash + word.charCodeAt(i)) | 0;
             const idx = Math.abs(hash) % dim;
             vec[idx] = (vec[idx] ?? 0) + 1;
             for (let i = 0; i < word.length - 2; i++) {
               const sub = word.substring(i, i + 3);
               let subHash = 0;
-              for (let j = 0; j < sub.length; j++) subHash = ((subHash << 5) - subHash + sub.charCodeAt(j)) | 0;
+              for (let j = 0; j < sub.length; j++)
+                subHash = ((subHash << 5) - subHash + sub.charCodeAt(j)) | 0;
               const subIdx = Math.abs(subHash) % dim;
               vec[subIdx] = (vec[subIdx] ?? 0) + 0.5;
             }
@@ -360,7 +468,12 @@ export const llmGateway = {
         const norm = Math.sqrt(vec.reduce((s, v) => s + v * v, 0)) || 1;
         return vec.map((v) => v / norm);
       });
-      return { ok: true, embeddings: fallbackEmbeddings, dim: 384, provider: "deterministic-fallback" };
+      return {
+        ok: true,
+        embeddings: fallbackEmbeddings,
+        dim: 384,
+        provider: "deterministic-fallback",
+      };
     }
   },
 
@@ -369,7 +482,11 @@ export const llmGateway = {
    */
   async getArtifactProvenance(projectId?: string, kind?: string): Promise<AIArtifactRow | null> {
     try {
-      let query = supabase.from("ai_artifacts").select("*").order("created_at", { ascending: false }).limit(1);
+      let query = supabase
+        .from("ai_artifacts")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(1);
       if (projectId) query = query.eq("project_id", projectId);
       if (kind) query = query.eq("kind", kind);
 
@@ -385,7 +502,8 @@ export const llmGateway = {
    * Cosine Similarity Helper for 2 Normalized Vectors
    */
   cosineSimilarity(vecA?: number[] | null, vecB?: number[] | null): number {
-    if (!vecA || !vecB || vecA.length === 0 || vecB.length === 0 || vecA.length !== vecB.length) return 0;
+    if (!vecA || !vecB || vecA.length === 0 || vecB.length === 0 || vecA.length !== vecB.length)
+      return 0;
     let dot = 0;
     let normA = 0;
     let normB = 0;

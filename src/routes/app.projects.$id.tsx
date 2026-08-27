@@ -12,6 +12,7 @@ const tabs = [
   { to: "/app/projects/$id", label: "Overview", exact: true },
   { to: "/app/projects/$id/requirements", label: "Requirements", exact: false },
   { to: "/app/projects/$id/blueprint", label: "Blueprint", exact: false },
+  { to: "/app/projects/$id/scans", label: "Scan History", exact: false },
   { to: "/app/projects/$id/code-health", label: "Code Health", exact: false },
   { to: "/app/projects/$id/security", label: "Security", exact: false },
   { to: "/app/projects/$id/tests", label: "Tests", exact: false },

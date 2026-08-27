@@ -209,7 +209,9 @@ function AuthCallbackPage() {
           } = authService.onAuthStateChange(async (event, currentSession) => {
             if (event === "SIGNED_IN" && currentSession?.user) {
               subscription.unsubscribe();
-              await authService.bootstrapProfile(currentSession.user as { id: string; email?: string });
+              await authService.bootstrapProfile(
+                currentSession.user as { id: string; email?: string },
+              );
               toast.success("Signed in successfully");
               navigate({ to: "/app", replace: true });
             }

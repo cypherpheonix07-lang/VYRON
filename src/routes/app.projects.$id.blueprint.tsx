@@ -150,17 +150,24 @@ function BlueprintTab() {
                       <TableBody>
                         {t.fields.map((c) => (
                           <TableRow key={c.name}>
-                            <TableCell className="font-mono text-xs font-medium">{c.name}</TableCell>
+                            <TableCell className="font-mono text-xs font-medium">
+                              {c.name}
+                            </TableCell>
                             <TableCell className="font-mono text-xs text-muted-foreground">
                               {c.type}
                             </TableCell>
                             <TableCell>
                               {c.pk ? (
-                                <Badge variant="outline" className="text-[10px] text-cyan-400 border-cyan-500/30">
+                                <Badge
+                                  variant="outline"
+                                  className="text-[10px] text-cyan-400 border-cyan-500/30"
+                                >
                                   Primary Key
                                 </Badge>
                               ) : (
-                                <span className="font-mono text-[11px] text-muted-foreground">{c.rel}</span>
+                                <span className="font-mono text-[11px] text-muted-foreground">
+                                  {c.rel}
+                                </span>
                               )}
                             </TableCell>
                           </TableRow>
@@ -199,8 +206,7 @@ function BlueprintTab() {
                             className="font-mono text-[10px]"
                             style={{
                               color: r.method === "GET" ? "var(--success)" : "var(--primary)",
-                              borderColor:
-                                r.method === "GET" ? "var(--success)" : "var(--primary)",
+                              borderColor: r.method === "GET" ? "var(--success)" : "var(--primary)",
                             }}
                           >
                             {r.method}
@@ -226,7 +232,9 @@ function BlueprintTab() {
                 {architectureRecommendations.map((rec, i) => (
                   <li key={rec.title} className="rounded-xl border border-border/70 p-3 text-sm">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="font-mono text-[11px] text-muted-foreground">REC-0{i + 1}</span>
+                      <span className="font-mono text-[11px] text-muted-foreground">
+                        REC-0{i + 1}
+                      </span>
                       <Badge variant="outline" className="text-[10px]">
                         {rec.impact} Impact
                       </Badge>

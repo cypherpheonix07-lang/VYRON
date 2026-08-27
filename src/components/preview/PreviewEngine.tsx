@@ -4,16 +4,7 @@ import { PreviewHeader, LayoutMode } from "./PreviewHeader";
 import { PreviewSidebar } from "./PreviewSidebar";
 import { PreviewCard } from "./PreviewCard";
 import { PreviewComparison } from "./PreviewComparison";
-import {
-  Sparkles,
-  Command,
-  Search,
-  Scale,
-  X,
-  Layers,
-  Check,
-  RotateCcw,
-} from "lucide-react";
+import { Sparkles, Command, Search, Scale, X, Layers, Check, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
@@ -22,7 +13,9 @@ export function PreviewEngine() {
   // Navigation and Filter States
   const [searchQuery, setSearchQuery] = useState("");
   const [layoutMode, setLayoutMode] = useState<LayoutMode>("grid");
-  const [selectedToolId, setSelectedToolId] = useState<string>(AI_TOOL_CATALOG[0]?.id || "v0-vercel");
+  const [selectedToolId, setSelectedToolId] = useState<string>(
+    AI_TOOL_CATALOG[0]?.id || "v0-vercel",
+  );
   const [selectedCategories, setSelectedCategories] = useState<ToolCategory[]>([]);
   const [filterOpenSource, setFilterOpenSource] = useState(false);
   const [filterHasApi, setFilterHasApi] = useState(false);
@@ -60,7 +53,9 @@ export function PreviewEngine() {
         tool.name.toLowerCase().includes(q) ||
         tool.tagline.toLowerCase().includes(q) ||
         tool.category.toLowerCase().includes(q) ||
-        tool.features.some((f) => f.name.toLowerCase().includes(q) || f.desc.toLowerCase().includes(q));
+        tool.features.some(
+          (f) => f.name.toLowerCase().includes(q) || f.desc.toLowerCase().includes(q),
+        );
 
       // Category filters
       const matchesCategory =
@@ -203,7 +198,9 @@ export function PreviewEngine() {
             filterRealtimePreview ||
             searchQuery) && (
             <div className="flex flex-wrap items-center gap-2 text-xs bg-zinc-950/40 p-3 rounded-xl border border-border/60">
-              <span className="text-[11px] text-muted-foreground">Active Filters ({filteredTools.length} results):</span>
+              <span className="text-[11px] text-muted-foreground">
+                Active Filters ({filteredTools.length} results):
+              </span>
               {selectedCategories.map((c) => (
                 <Badge key={c} variant="secondary" className="gap-1 text-[10px]">
                   {c}
@@ -213,7 +210,10 @@ export function PreviewEngine() {
               {filterRealtimePreview && (
                 <Badge variant="secondary" className="gap-1 text-[10px]">
                   Live Preview
-                  <X className="size-3 cursor-pointer" onClick={() => setFilterRealtimePreview(false)} />
+                  <X
+                    className="size-3 cursor-pointer"
+                    onClick={() => setFilterRealtimePreview(false)}
+                  />
                 </Badge>
               )}
               {filterGithubSync && (
@@ -250,12 +250,18 @@ export function PreviewEngine() {
             <div className="p-12 text-center rounded-2xl border border-border bg-zinc-950/60 space-y-4 max-w-md mx-auto my-12">
               <Search className="size-10 text-muted-foreground/40 mx-auto" />
               <div className="space-y-1">
-                <h4 className="text-sm font-semibold text-foreground">No matching AI platforms found</h4>
+                <h4 className="text-sm font-semibold text-foreground">
+                  No matching AI platforms found
+                </h4>
                 <p className="text-xs text-muted-foreground">
                   Try adjusting your search query or removing some category and capability filters.
                 </p>
               </div>
-              <Button size="sm" onClick={handleResetFilters} className="bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold">
+              <Button
+                size="sm"
+                onClick={handleResetFilters}
+                className="bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold"
+              >
                 Clear Filters
               </Button>
             </div>
@@ -353,7 +359,9 @@ export function PreviewEngine() {
                   <div className="flex items-center gap-2">
                     <span className="h-2 w-2 rounded-full bg-cyan-400" />
                     <span className="font-semibold text-white">{tool.name}</span>
-                    <span className="text-zinc-500 text-[11px] truncate max-w-xs">{tool.tagline}</span>
+                    <span className="text-zinc-500 text-[11px] truncate max-w-xs">
+                      {tool.tagline}
+                    </span>
                   </div>
                   <Badge variant="outline" className="text-[9px] border-zinc-800">
                     {tool.category}

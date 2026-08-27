@@ -68,18 +68,18 @@ graph TD
 
 ### Dimensional Evolution Comparative Summary:
 
-| Dimension | Enterprise Prototype (Before) | Industrial Leviathan Platform (After) |
-| :--- | :--- | :--- |
-| **D1: AI/ML Maturity** | Static generic LLM API calls with zero explainability. | Tenant-isolated LoRA adapters, FedAvg global weight updates, holdout drift monitors, SHAP/LIME attribution. |
-| **D2: Data Mesh** | Direct table updates with row overwrite. | Full Event Sourcing (`domain_events`), TimescaleDB hypertables, Neo4j graph dependency sync, Iceberg Data Lake. |
-| **D3: Zero-Trust Security** | Basic bearer tokens and static `.env` variables. | Istio strict mTLS, Vault/KMS 90-day secret rotation, FIPS 140-2 Level 3 HSM hardware signatures. |
-| **D4: SRE Observability** | Console print statements and basic health checks. | Strict SLO error budget trackers, OpenTelemetry distributed traces, weekly chaos engineering simulation. |
-| **D5: Global Scale** | Single instance uvicorn process. | Kubernetes HPA (5-100 pods), Cloudflare edge caching, 5 multi-region read replicas, tenant database sharding. |
-| **D6: Integration Ecosystem** | Generic webhook handler. | Kong API Gateway, Svix webhook relay with exponential retries, 100+ marketplace connectors, typed SDKs & CLI. |
-| **D7: Developer Platform** | Manual script execution. | Production Helm chart, custom Kubernetes Operator CRDs, DevContainers (<2 min setup), Terraform IaC provider. |
-| **D8: Predictive Analytics** | Retrospective metric display. | Pre-merge ML failure prediction, LLM token budget forecasting, dollar-value technical debt & ROI modeling. |
-| **D9: Vertical Specialization** | Single generic software report. | Modular compliance packs: FDA 21 CFR Part 11, DO-178C (DAL A-C), IEC 62304, NIST SP 800-53, SOX/PCI-DSS. |
-| **D10: AI Governance** | Unmonitored generation. | Published Model Cards, token bias scanner, Green AI carbon calculator (gCO2eq), HITL ethics gate, EU AI Act audit. |
+| Dimension                       | Enterprise Prototype (Before)                          | Industrial Leviathan Platform (After)                                                                              |
+| :------------------------------ | :----------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------- |
+| **D1: AI/ML Maturity**          | Static generic LLM API calls with zero explainability. | Tenant-isolated LoRA adapters, FedAvg global weight updates, holdout drift monitors, SHAP/LIME attribution.        |
+| **D2: Data Mesh**               | Direct table updates with row overwrite.               | Full Event Sourcing (`domain_events`), TimescaleDB hypertables, Neo4j graph dependency sync, Iceberg Data Lake.    |
+| **D3: Zero-Trust Security**     | Basic bearer tokens and static `.env` variables.       | Istio strict mTLS, Vault/KMS 90-day secret rotation, FIPS 140-2 Level 3 HSM hardware signatures.                   |
+| **D4: SRE Observability**       | Console print statements and basic health checks.      | Strict SLO error budget trackers, OpenTelemetry distributed traces, weekly chaos engineering simulation.           |
+| **D5: Global Scale**            | Single instance uvicorn process.                       | Kubernetes HPA (5-100 pods), Cloudflare edge caching, 5 multi-region read replicas, tenant database sharding.      |
+| **D6: Integration Ecosystem**   | Generic webhook handler.                               | Kong API Gateway, Svix webhook relay with exponential retries, 100+ marketplace connectors, typed SDKs & CLI.      |
+| **D7: Developer Platform**      | Manual script execution.                               | Production Helm chart, custom Kubernetes Operator CRDs, DevContainers (<2 min setup), Terraform IaC provider.      |
+| **D8: Predictive Analytics**    | Retrospective metric display.                          | Pre-merge ML failure prediction, LLM token budget forecasting, dollar-value technical debt & ROI modeling.         |
+| **D9: Vertical Specialization** | Single generic software report.                        | Modular compliance packs: FDA 21 CFR Part 11, DO-178C (DAL A-C), IEC 62304, NIST SP 800-53, SOX/PCI-DSS.           |
+| **D10: AI Governance**          | Unmonitored generation.                                | Published Model Cards, token bias scanner, Green AI carbon calculator (gCO2eq), HITL ethics gate, EU AI Act audit. |
 
 ---
 
@@ -137,17 +137,17 @@ gantt
 
 ## 💰 T3: INDUSTRIAL COST & INFRASTRUCTURE ESTIMATE
 
-| Category | Component / Vendor | Enterprise Monthly Cost | Annualized Total | Purpose & ROI Impact |
-| :--- | :--- | :--- | :--- | :--- |
-| **Compute & Containers** | AWS EKS / GKE (15x `c6i.4xlarge` nodes) | $5,850 / mo | $70,200 | Auto-scales 5-100 pods for concurrent scans & AST analysis. |
-| **Database & Caching** | Supabase Enterprise + Supavisor Pooler + Timescale | $2,400 / mo | $28,800 | Multi-region HA, 5 read replicas, 10K queries/sec. |
-| **Graph DB** | Neo4j Enterprise Cloud (AuraDB Dedicated) | $1,800 / mo | $21,600 | Real-time topological dependency resolution for blueprints. |
-| **Data Lake & Storage** | AWS S3 + Apache Iceberg + KMS HSM | $650 / mo | $7,800 | 50 TB immutable compliance archive & anonymized ML datasets. |
-| **Zero-Trust Security** | HashiCorp Vault Dedicated + AWS CloudHSM | $3,200 / mo | $38,400 | FIPS 140-2 Level 3 hardware keys & 90-day automatic rotation. |
-| **API Gateway & Relay** | Kong Enterprise + Svix Enterprise Webhooks | $1,450 / mo | $17,400 | Rate limiting, partner monetization, 99.99% webhook SLA. |
-| **SRE Observability** | Datadog / Grafana Cloud + OpenTelemetry | $1,200 / mo | $14,400 | SLO error budgets, distributed tracing, live alert routing. |
-| **Compliance Audits** | SOC 2 Type II, ISO 27001, FedRAMP, HIPAA | — | $65,000 / yr | Annual third-party penetration tests & formal audit certification. |
-| **TOTALS** | **Consolidated Industrial Infrastructure** | **$16,550 / mo** | **$263,600 / yr** | **Enterprise Value Generated: > $4.2M / yr** |
+| Category                 | Component / Vendor                                 | Enterprise Monthly Cost | Annualized Total  | Purpose & ROI Impact                                               |
+| :----------------------- | :------------------------------------------------- | :---------------------- | :---------------- | :----------------------------------------------------------------- |
+| **Compute & Containers** | AWS EKS / GKE (15x `c6i.4xlarge` nodes)            | $5,850 / mo             | $70,200           | Auto-scales 5-100 pods for concurrent scans & AST analysis.        |
+| **Database & Caching**   | Supabase Enterprise + Supavisor Pooler + Timescale | $2,400 / mo             | $28,800           | Multi-region HA, 5 read replicas, 10K queries/sec.                 |
+| **Graph DB**             | Neo4j Enterprise Cloud (AuraDB Dedicated)          | $1,800 / mo             | $21,600           | Real-time topological dependency resolution for blueprints.        |
+| **Data Lake & Storage**  | AWS S3 + Apache Iceberg + KMS HSM                  | $650 / mo               | $7,800            | 50 TB immutable compliance archive & anonymized ML datasets.       |
+| **Zero-Trust Security**  | HashiCorp Vault Dedicated + AWS CloudHSM           | $3,200 / mo             | $38,400           | FIPS 140-2 Level 3 hardware keys & 90-day automatic rotation.      |
+| **API Gateway & Relay**  | Kong Enterprise + Svix Enterprise Webhooks         | $1,450 / mo             | $17,400           | Rate limiting, partner monetization, 99.99% webhook SLA.           |
+| **SRE Observability**    | Datadog / Grafana Cloud + OpenTelemetry            | $1,200 / mo             | $14,400           | SLO error budgets, distributed tracing, live alert routing.        |
+| **Compliance Audits**    | SOC 2 Type II, ISO 27001, FedRAMP, HIPAA           | —                       | $65,000 / yr      | Annual third-party penetration tests & formal audit certification. |
+| **TOTALS**               | **Consolidated Industrial Infrastructure**         | **$16,550 / mo**        | **$263,600 / yr** | **Enterprise Value Generated: > $4.2M / yr**                       |
 
 ---
 
@@ -163,10 +163,10 @@ Enterprise Tech (EU AI Act & SRE):  $31.1 Billion TAM  ████████�
 TOTAL CONSOLIDATED MARKET OPPORTUNITY: $98.0 BILLION TAM
 ```
 
-* **Aerospace & Defense (DO-178C):** Mandates strict DAL A-C traceability and MC/DC coverage for FAA/EASA certified airborne software ($14.2B TAM).
-* **Pharma & MedTech (FDA 21 CFR Part 11 & IEC 62304):** Unlocks automated clinical audit trails and electronic dual-custody signatures ($18.5B TAM).
-* **Government & Federal (NIST 800-53 / FedRAMP High):** Replaces manual 6-month accreditation cycles with continuous automated security authorization ($11.8B TAM).
-* **Fintech & Banking (SOX § 404 / PCI-DSS v4.0):** Automated separation of duties and CDE isolation auditing prevents multi-million dollar regulatory fines ($22.4B TAM).
+- **Aerospace & Defense (DO-178C):** Mandates strict DAL A-C traceability and MC/DC coverage for FAA/EASA certified airborne software ($14.2B TAM).
+- **Pharma & MedTech (FDA 21 CFR Part 11 & IEC 62304):** Unlocks automated clinical audit trails and electronic dual-custody signatures ($18.5B TAM).
+- **Government & Federal (NIST 800-53 / FedRAMP High):** Replaces manual 6-month accreditation cycles with continuous automated security authorization ($11.8B TAM).
+- **Fintech & Banking (SOX § 404 / PCI-DSS v4.0):** Automated separation of duties and CDE isolation auditing prevents multi-million dollar regulatory fines ($22.4B TAM).
 
 ---
 

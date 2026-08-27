@@ -188,7 +188,7 @@ export async function analyzeRepo(repoUrl: string): Promise<RepoAnalysisOutput> 
       if (response.status === 202) {
         const accepted = await response.json();
         const taskId = accepted.task_id;
-        
+
         // Poll asynchronous decoupled worker queue
         const maxPollAttempts = 30;
         for (let attempt = 0; attempt < maxPollAttempts; attempt++) {
@@ -228,7 +228,7 @@ export async function analyzeRepo(repoUrl: string): Promise<RepoAnalysisOutput> 
 export async function updateProjectOptimistic(
   id: string,
   expectedVersion: number,
-  updates: { name?: string; description?: string; health_score?: number; status?: string }
+  updates: { name?: string; description?: string; health_score?: number; status?: string },
 ) {
   const response = await fetch(`${BACKEND_API_URL}/db/optimistic/project`, {
     method: "POST",
@@ -445,19 +445,17 @@ export async function logAuthEvent(payload: {
       // Direct database insert fallback
       if (supabase && typeof supabase.from === "function") {
         void Promise.resolve(
-          supabase
-            .from("auth_events")
-            .insert({
-              user_id: payload.user_id || null,
-              email: payload.email,
-              event: payload.event,
-              method: payload.method,
-              status: payload.status,
-              device_type,
-              browser,
-              os: "Windows",
-              user_agent: ua,
-            })
+          supabase.from("auth_events").insert({
+            user_id: payload.user_id || null,
+            email: payload.email,
+            event: payload.event,
+            method: payload.method,
+            status: payload.status,
+            device_type,
+            browser,
+            os: "Windows",
+            user_agent: ua,
+          }),
         ).catch(() => {});
       }
     }

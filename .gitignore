@@ -1,3 +1,9 @@
+# Environment & Secrets
+.env
+.env.*
+!.env.example
+.dev.vars
+
 # Logs
 logs
 *.log
@@ -18,7 +24,6 @@ dist-ssr
 
 # Wrangler / Cloudflare
 .wrangler/
-.dev.vars
 
 # Editor directories and files
 .vscode/*
@@ -30,3 +35,17 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+*.pyc
+
+# Binaries & Downloads
+*.exe
+*.zip
+istio-*/

@@ -63,9 +63,16 @@ export default {
       let country = "India";
       let city = "Bengaluru";
 
-      if (clientIp && clientIp !== "127.0.0.1" && !clientIp.startsWith("192.168.") && !clientIp.startsWith("10.")) {
+      if (
+        clientIp &&
+        clientIp !== "127.0.0.1" &&
+        !clientIp.startsWith("192.168.") &&
+        !clientIp.startsWith("10.")
+      ) {
         try {
-          const geoRes = await fetch(`https://ipwho.is/${clientIp}`, { signal: AbortSignal.timeout(1500) });
+          const geoRes = await fetch(`https://ipwho.is/${clientIp}`, {
+            signal: AbortSignal.timeout(1500),
+          });
           if (geoRes.ok) {
             const geoData = await geoRes.json();
             if (geoData.success) {

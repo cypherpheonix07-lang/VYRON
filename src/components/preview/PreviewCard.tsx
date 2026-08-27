@@ -37,7 +37,9 @@ export function PreviewCard({
   onToggleCompare,
   onSelectFocus,
 }: PreviewCardProps) {
-  const [activeTab, setActiveTab] = useState<"features" | "interactive" | "code" | "resources" | "embed">("features");
+  const [activeTab, setActiveTab] = useState<
+    "features" | "interactive" | "code" | "resources" | "embed"
+  >("features");
   const [isExpanded, setIsExpanded] = useState(layoutMode === "focus");
 
   const handleShare = () => {
@@ -96,7 +98,12 @@ export function PreviewCard({
             asChild
             className="h-7 w-7 text-muted-foreground hover:text-foreground"
           >
-            <a href={tool.officialUrl} target="_blank" rel="noopener noreferrer" title="Official site">
+            <a
+              href={tool.officialUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Official site"
+            >
               <ExternalLink className="size-3.5" />
             </a>
           </Button>
@@ -135,7 +142,9 @@ export function PreviewCard({
                 <span>ONLINE</span>
               </div>
             </div>
-            <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">{tool.tagline}</p>
+            <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
+              {tool.tagline}
+            </p>
           </div>
         </div>
 
@@ -262,18 +271,16 @@ export function PreviewCard({
         )}
 
         {activeTab === "embed" && (
-          <PreviewEmbed
-            toolName={tool.name}
-            url={tool.officialUrl}
-            category={tool.category}
-          />
+          <PreviewEmbed toolName={tool.name} url={tool.officialUrl} category={tool.category} />
         )}
       </div>
 
       {/* COMPARISON CALLOUT FOOTER */}
       <div className="border-t border-border/40 pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Vs. {tool.comparison.closestCompetitor}:</span>
+          <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+            Vs. {tool.comparison.closestCompetitor}:
+          </span>
           <span className="text-zinc-300 text-[11px]">{tool.comparison.keyDifference}</span>
         </div>
         <div className="flex items-center gap-2">

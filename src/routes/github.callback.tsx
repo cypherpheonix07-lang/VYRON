@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
+import { authService } from "@/services/authService";
 import { githubService } from "@/services/githubService";
 import { toast } from "sonner";
 
@@ -22,12 +23,10 @@ function GitHubCallbackPage() {
 
     async function handleAuth() {
       try {
-        const {
-          data: { session },
-          error,
-        } = await supabase.auth.getSession();
-
-        if (error) throw error;
+        const sessionRes = await authService.getSession();
+        if (!sessionRes.ok)
+          throw new Error(sessionRes.error?.message || "Failed to retrieve session");
+        const session = sessionRes.data;
 
         if (session?.provider_token) {
           githubService.setToken(session.provider_token);
@@ -92,7 +91,9 @@ function GitHubCallbackPage() {
             <CheckCircle2 className="size-8 text-emerald-400 mx-auto" />
             <div className="space-y-1">
               <h3 className="text-sm font-bold text-white">GitHub Connected</h3>
-              <p className="text-xs text-muted-foreground">Redirecting to your repository mirror...</p>
+              <p className="text-xs text-muted-foreground">
+                Redirecting to your repository mirror...
+              </p>
             </div>
           </>
         )}

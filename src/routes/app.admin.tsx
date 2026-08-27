@@ -11,7 +11,8 @@ export const Route = createFileRoute("/app/admin")({
       { title: "Admin Console — PROJECT BRAHMA" },
       {
         name: "description",
-        content: "Brahma platform usage metrics, audit logs, active users, and service status.",
+        content:
+          "Brahma platform usage metrics, audit logs, active users, task queues, and schema health.",
       },
     ],
   }),
@@ -21,6 +22,8 @@ export const Route = createFileRoute("/app/admin")({
 const subNavs = [
   { to: "/app/admin/studio", label: "Overview", exact: true },
   { to: "/app/admin/users", label: "Users", exact: true },
+  { to: "/app/admin/queue", label: "Queue Monitor", exact: true },
+  { to: "/app/admin/schema", label: "Schema Health", exact: true },
   { to: "/app/admin/templates", label: "Templates", exact: true },
   { to: "/app/admin/models", label: "Models Routing", exact: true },
   { to: "/app/admin/audit", label: "Audit Log", exact: true },
@@ -62,7 +65,7 @@ function AdminLayout() {
             Admin Console
           </h1>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Brahma platform usage metrics, audit logs, active users, and service status.
+            Brahma platform usage metrics, audit logs, queue depth, and service health.
           </p>
         </div>
       </header>

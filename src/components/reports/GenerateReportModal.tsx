@@ -112,7 +112,9 @@ export const GenerateReportModal: React.FC<GenerateReportModalProps> = ({
                 </SelectTrigger>
                 <SelectContent className="bg-slate-900 border-slate-800 text-slate-200 text-xs">
                   <SelectItem value="Academic IEEE">Academic IEEE Conference Paper</SelectItem>
-                  <SelectItem value="Technical Executive">Technical Executive Architecture Report</SelectItem>
+                  <SelectItem value="Technical Executive">
+                    Technical Executive Architecture Report
+                  </SelectItem>
                   <SelectItem value="Executive Summary">Executive Summary & Audit Brief</SelectItem>
                 </SelectContent>
               </Select>
@@ -131,7 +133,9 @@ export const GenerateReportModal: React.FC<GenerateReportModalProps> = ({
                 </SelectTrigger>
                 <SelectContent className="bg-slate-900 border-slate-800 text-slate-200 text-xs">
                   <SelectItem value="ALPHA">Seed ALPHA (Balanced Production Baseline)</SelectItem>
-                  <SelectItem value="BETA">Seed BETA (Critical Security Vulnerabilities)</SelectItem>
+                  <SelectItem value="BETA">
+                    Seed BETA (Critical Security Vulnerabilities)
+                  </SelectItem>
                   <SelectItem value="GAMMA">Seed GAMMA (Cold Start / Empty States)</SelectItem>
                   <SelectItem value="DELTA">Seed DELTA (Low Requirement Clarity)</SelectItem>
                   <SelectItem value="EPSILON">Seed EPSILON (Extreme Monorepo Scale)</SelectItem>
@@ -145,7 +149,8 @@ export const GenerateReportModal: React.FC<GenerateReportModalProps> = ({
                 Strict Non-Fabrication Guarantee:
               </p>
               <p>
-                All KPI cards, formulas, and performance tables are derived strictly from active project state. Unmeasured items are moved to Appendix D.
+                All KPI cards, formulas, and performance tables are derived strictly from active
+                project state. Unmeasured items are moved to Appendix D.
               </p>
             </div>
 
@@ -176,9 +181,7 @@ export const GenerateReportModal: React.FC<GenerateReportModalProps> = ({
             </div>
 
             <div className="space-y-1">
-              <p className="font-bold text-sm text-slate-100">
-                {PROGRESS_STEPS[currentStepIndex]}
-              </p>
+              <p className="font-bold text-sm text-slate-100">{PROGRESS_STEPS[currentStepIndex]}</p>
               <p className="text-xs text-slate-400 font-mono">
                 Step {currentStepIndex + 1} of 5 &bull; {progress}%
               </p>

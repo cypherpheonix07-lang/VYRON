@@ -115,6 +115,16 @@ const defaultRoutingState: RoutingRow[] = [
   },
 ];
 
+interface FallbackLogItem {
+  id: string;
+  task: string;
+  provider: string;
+  model: string;
+  cost_usd: number;
+  latency_ms: number;
+  created_at: string;
+}
+
 function AdminModelsPage() {
   const [routingRows, setRoutingRows] = useState<RoutingRow[]>(defaultRoutingState);
   const [costCap, setCostCap] = useState("2.00");
@@ -129,7 +139,7 @@ function AdminModelsPage() {
     fallbacks: 2,
   });
 
-  const [fallbackLogs, setFallbackLogs] = useState<any[]>([
+  const [fallbackLogs, setFallbackLogs] = useState<FallbackLogItem[]>([
     {
       id: "fb-1",
       task: "architecture_generation",
@@ -240,7 +250,8 @@ function AdminModelsPage() {
     );
     if (confirm) {
       toast.success("Key rotation handshake completed", {
-        description: "New server-side authorization credentials verified for OpenRouter and Hugging Face nodes.",
+        description:
+          "New server-side authorization credentials verified for OpenRouter and Hugging Face nodes.",
       });
     }
   };
@@ -257,12 +268,16 @@ function AdminModelsPage() {
             </h2>
           </div>
           <p className="text-xs text-slate-400">
-            Multi-tier routing with OpenRouter (Claude 3.5 Sonnet, GPT-4o Mini), Hugging Face, and Deterministic Resilient Templates.
+            Multi-tier routing with OpenRouter (Claude 3.5 Sonnet, GPT-4o Mini), Hugging Face, and
+            Deterministic Resilient Templates.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <Badge variant="outline" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30 text-xs px-2.5 py-1">
+          <Badge
+            variant="outline"
+            className="bg-emerald-500/10 text-emerald-400 border-emerald-500/30 text-xs px-2.5 py-1"
+          >
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse mr-1.5" />
             Gateway Live (Edge)
           </Badge>
@@ -306,7 +321,9 @@ function AdminModelsPage() {
                   </span>
                   <div>
                     <h4 className="text-xs font-semibold text-foreground">{prov.name}</h4>
-                    <p className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">{prov.desc}</p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5 line-clamp-1">
+                      {prov.desc}
+                    </p>
                   </div>
                 </div>
                 <span className="flex items-center gap-1">
@@ -353,7 +370,9 @@ function AdminModelsPage() {
                       <TableRow key={item.task} className="hover:bg-slate-900/40">
                         <TableCell className="text-xs font-medium py-3">
                           <div className="font-semibold text-slate-200">{item.label}</div>
-                          <div className="font-mono text-[10px] text-muted-foreground">{item.task}</div>
+                          <div className="font-mono text-[10px] text-muted-foreground">
+                            {item.task}
+                          </div>
                         </TableCell>
 
                         <TableCell>
@@ -364,7 +383,10 @@ function AdminModelsPage() {
                               onChange={(e) => setEditPrimary(e.target.value)}
                             />
                           ) : (
-                            <Badge variant="secondary" className="text-[10px] font-mono bg-cyan-500/10 text-cyan-300 border-cyan-500/20">
+                            <Badge
+                              variant="secondary"
+                              className="text-[10px] font-mono bg-cyan-500/10 text-cyan-300 border-cyan-500/20"
+                            >
                               {primary}
                             </Badge>
                           )}
@@ -378,7 +400,10 @@ function AdminModelsPage() {
                               onChange={(e) => setEditFallback(e.target.value)}
                             />
                           ) : (
-                            <Badge variant="outline" className="text-[10px] font-mono border-slate-700 text-slate-300">
+                            <Badge
+                              variant="outline"
+                              className="text-[10px] font-mono border-slate-700 text-slate-300"
+                            >
                               {fallback}
                             </Badge>
                           )}
@@ -400,7 +425,12 @@ function AdminModelsPage() {
                         <TableCell className="text-right">
                           {isEditing ? (
                             <div className="flex justify-end gap-1">
-                              <Button size="sm" variant="ghost" className="h-6 text-[10px]" onClick={() => setEditTask(null)}>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                className="h-6 text-[10px]"
+                                onClick={() => setEditTask(null)}
+                              >
                                 Cancel
                               </Button>
                               <Button
@@ -454,15 +484,24 @@ function AdminModelsPage() {
                 <TableBody>
                   {fallbackLogs.map((fb) => (
                     <TableRow key={fb.id}>
-                      <TableCell className="text-[11px] font-mono text-muted-foreground">{fb.created_at}</TableCell>
-                      <TableCell className="text-xs font-mono font-medium text-slate-300">{fb.task}</TableCell>
+                      <TableCell className="text-[11px] font-mono text-muted-foreground">
+                        {fb.created_at}
+                      </TableCell>
+                      <TableCell className="text-xs font-mono font-medium text-slate-300">
+                        {fb.task}
+                      </TableCell>
                       <TableCell>
-                        <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-400 border-amber-500/20 font-mono">
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] bg-amber-500/10 text-amber-400 border-amber-500/20 font-mono"
+                        >
                           {fb.provider}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-xs font-mono text-slate-300">{fb.model}</TableCell>
-                      <TableCell className="text-right text-xs font-mono text-slate-400">{fb.latency_ms} ms</TableCell>
+                      <TableCell className="text-right text-xs font-mono text-slate-400">
+                        {fb.latency_ms} ms
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -479,7 +518,9 @@ function AdminModelsPage() {
           >
             <div className="space-y-4">
               <div className="grid gap-1.5">
-                <Label htmlFor="cost-limit-cap" className="text-xs">Daily Spend Cap ($ USD)</Label>
+                <Label htmlFor="cost-limit-cap" className="text-xs">
+                  Daily Spend Cap ($ USD)
+                </Label>
                 <Input
                   id="cost-limit-cap"
                   type="number"
@@ -489,7 +530,8 @@ function AdminModelsPage() {
                   onChange={(e) => setCostCap(e.target.value)}
                 />
                 <p className="text-[10px] text-muted-foreground">
-                  At 80% ($1.60), models downgrade heavy→mid→free. At 100%, BRA-429 activates on non-critical tasks.
+                  At 80% ($1.60), models downgrade heavy→mid→free. At 100%, BRA-429 activates on
+                  non-critical tasks.
                 </p>
               </div>
 

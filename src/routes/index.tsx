@@ -145,7 +145,7 @@ function Nav() {
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3 sm:px-6">
         <BrahmaLogo />
         <nav className="ml-6 hidden items-center gap-6 md:flex" aria-label="Sections">
-          {links.map((l) => (
+          {links.map((l) =>
             l.isRoute ? (
               <Link
                 key={l.href}
@@ -162,8 +162,8 @@ function Nav() {
               >
                 {l.label}
               </a>
-            )
-          ))}
+            ),
+          )}
         </nav>
         <div className="ml-auto hidden items-center gap-2 md:flex">
           <Button asChild variant="ghost" size="sm">
@@ -189,7 +189,7 @@ function Nav() {
       {open ? (
         <div className="border-t border-border/70 px-4 py-3 md:hidden">
           <div className="flex flex-col gap-1">
-            {links.map((l) => (
+            {links.map((l) =>
               l.isRoute ? (
                 <Link
                   key={l.href}
@@ -208,8 +208,8 @@ function Nav() {
                 >
                   {l.label}
                 </a>
-              )
-            ))}
+              ),
+            )}
             <div className="mt-2 flex gap-2">
               <Button asChild variant="outline" size="sm" className="flex-1">
                 <Link to="/login">Login</Link>

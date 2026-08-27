@@ -58,6 +58,7 @@ import {
 } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth, useTheme } from "@/lib/auth";
+import { DemoModeToggle } from "@/components/ui/DemoModeToggle";
 import { authService } from "@/services/authService";
 import { notifications as mockNotifications, projects } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
@@ -988,17 +989,9 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
 
             {/* HEADER RIGHT ACTIONS */}
-            <div className="ml-auto flex shrink-0 items-center gap-1.5">
-              {/* DEMO MODE INDICATOR */}
-              {(user?.isDemo || authService.isDemoMode()) && (
-                <Badge
-                  variant="outline"
-                  className="hidden sm:inline-flex items-center gap-1 border-amber-500/40 bg-amber-500/10 text-amber-400 text-[10px] uppercase font-mono px-2 py-0.5"
-                >
-                  <AlertTriangle className="size-3 shrink-0" />
-                  Demo Data Active — Read Only
-                </Badge>
-              )}
+            <div className="ml-auto flex shrink-0 items-center gap-2">
+              {/* DEMO MODE SWITCH & TOGGLE */}
+              <DemoModeToggle />
 
               {/* Keyboard info indicator */}
               <Button

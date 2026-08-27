@@ -24,14 +24,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  Legend,
-} from "recharts";
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 
 interface GitHubOverviewProps {
   profile: GitHubUserProfile;
@@ -86,7 +79,11 @@ export function GitHubOverview({
   // Recently updated repos (top 5)
   const recentlyUpdatedRepos = useMemo(() => {
     return [...repos]
-      .sort((a, b) => new Date(b.pushed_at || b.updated_at).getTime() - new Date(a.pushed_at || a.updated_at).getTime())
+      .sort(
+        (a, b) =>
+          new Date(b.pushed_at || b.updated_at).getTime() -
+          new Date(a.pushed_at || a.updated_at).getTime(),
+      )
       .slice(0, 5);
   }, [repos]);
 
@@ -169,13 +166,21 @@ export function GitHubOverview({
                 </a>
               )}
               <span className="flex items-center gap-1 font-mono text-[11px] text-zinc-500">
-                <Calendar className="size-3" /> Joined {new Date(profile.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short" })}
+                <Calendar className="size-3" /> Joined{" "}
+                {new Date(profile.created_at).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                })}
               </span>
             </div>
           </div>
         </div>
 
-        <Button asChild size="sm" className="bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-white font-semibold text-xs gap-1.5 shrink-0">
+        <Button
+          asChild
+          size="sm"
+          className="bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-white font-semibold text-xs gap-1.5 shrink-0"
+        >
           <a href={profile.html_url} target="_blank" rel="noopener noreferrer">
             <span>View GitHub Profile</span>
             <ExternalLink className="size-3.5" />
@@ -190,7 +195,9 @@ export function GitHubOverview({
             <span>Repositories</span>
             <FolderGit2 className="size-4 text-cyan-400" />
           </div>
-          <div className="text-2xl font-extrabold text-white font-mono">{profile.public_repos || repos.length}</div>
+          <div className="text-2xl font-extrabold text-white font-mono">
+            {profile.public_repos || repos.length}
+          </div>
           <p className="text-[10px] text-zinc-500">Public &amp; Private Sync</p>
         </div>
 
@@ -218,7 +225,8 @@ export function GitHubOverview({
             <Users className="size-4 text-emerald-400" />
           </div>
           <div className="text-2xl font-extrabold text-white font-mono">
-            {profile.followers} <span className="text-xs text-zinc-500 font-normal">/ {profile.following}</span>
+            {profile.followers}{" "}
+            <span className="text-xs text-zinc-500 font-normal">/ {profile.following}</span>
           </div>
           <p className="text-[10px] text-zinc-500">Developer network</p>
         </div>
@@ -269,7 +277,9 @@ export function GitHubOverview({
             <h3 className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-2">
               <span className="size-2 rounded-full bg-cyan-400" /> Language Distribution
             </h3>
-            <p className="text-[11px] text-muted-foreground mt-0.5">Dominant languages across all your repositories</p>
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Dominant languages across all your repositories
+            </p>
           </div>
 
           <div className="h-56 w-full">
@@ -334,7 +344,10 @@ export function GitHubOverview({
                       {repo.name}
                     </span>
                     {repo.private && (
-                      <Badge variant="outline" className="text-[8px] h-3.5 px-1 border-amber-800/60 text-amber-400">
+                      <Badge
+                        variant="outline"
+                        className="text-[8px] h-3.5 px-1 border-amber-800/60 text-amber-400"
+                      >
                         Private
                       </Badge>
                     )}

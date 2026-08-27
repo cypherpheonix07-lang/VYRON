@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabaseClient";
+import { authService } from "./authService";
 import { toast } from "sonner";
 
 export interface GitHubUserProfile {
@@ -131,9 +132,8 @@ class GitHubService {
 
   private async hydrateToken(): Promise<string | null> {
     try {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
+      const res = await authService.getSession();
+      const session = res.data;
       if (session?.provider_token) {
         this.token = session.provider_token;
         return this.token;

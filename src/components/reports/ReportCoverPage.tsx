@@ -52,9 +52,7 @@ export const ReportCoverPage: React.FC<ReportCoverPageProps> = ({
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-950 font-sans">
             {doc.title}
           </h1>
-          <h2 className="text-lg font-medium text-slate-700 max-w-xl mx-auto">
-            {doc.subtitle}
-          </h2>
+          <h2 className="text-lg font-medium text-slate-700 max-w-xl mx-auto">{doc.subtitle}</h2>
           <p className="text-xs italic text-slate-500 font-serif max-w-lg mx-auto pt-2">
             “{doc.tagline}”
           </p>
@@ -70,9 +68,7 @@ export const ReportCoverPage: React.FC<ReportCoverPageProps> = ({
               <div key={member.regNo} className="flex justify-between items-center">
                 <div>
                   <span className="font-bold text-slate-900">{member.name}</span>
-                  <span className="text-[11px] text-slate-500 block">
-                    {member.role}
-                  </span>
+                  <span className="text-[11px] text-slate-500 block">{member.role}</span>
                 </div>
                 <span className="font-mono text-slate-600 bg-white px-2 py-0.5 rounded border border-slate-200 text-[11px]">
                   {member.regNo}

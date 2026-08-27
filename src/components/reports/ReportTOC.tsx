@@ -24,7 +24,11 @@ const TOC_ITEMS: TocItem[] = [
   { id: "sec-s14", title: "S14. Conclusion & Key Achievement Register", page: 11 },
   { id: "sec-app-a", title: "Appendix A. Comprehensive Platform Route Map", page: 12 },
   { id: "sec-app-b", title: "Appendix B. UI Component & Visualizer Inventory", page: 12 },
-  { id: "sec-app-c", title: "Appendix C. PostgreSQL Database Schema & Security Policies", page: 12 },
+  {
+    id: "sec-app-c",
+    title: "Appendix C. PostgreSQL Database Schema & Security Policies",
+    page: 12,
+  },
   { id: "sec-app-d", title: "Appendix D. Evidence Gaps & Pending Measurement Plans", page: 12 },
 ];
 

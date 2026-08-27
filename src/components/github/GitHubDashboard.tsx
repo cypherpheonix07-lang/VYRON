@@ -31,7 +31,9 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
 export function GitHubDashboard() {
-  const [activeTab, setActiveTab] = useState<"overview" | "repos" | "orgs" | "activity" | "starred">("overview");
+  const [activeTab, setActiveTab] = useState<
+    "overview" | "repos" | "orgs" | "activity" | "starred"
+  >("overview");
   const [selectedRepo, setSelectedRepo] = useState<GitHubRepoItem | null>(null);
 
   // Data States
@@ -48,35 +50,38 @@ export function GitHubDashboard() {
   const [isConnected, setIsConnected] = useState(false);
 
   // Sync data from GitHub
-  const fetchData = useCallback(async (forceRefresh = false) => {
-    try {
-      setIsRefreshing(true);
-      const userProfile = await githubService.fetchUserProfile(forceRefresh);
-      setProfile(userProfile);
-      setIsConnected(true);
+  const fetchData = useCallback(
+    async (forceRefresh = false) => {
+      try {
+        setIsRefreshing(true);
+        const userProfile = await githubService.fetchUserProfile(forceRefresh);
+        setProfile(userProfile);
+        setIsConnected(true);
 
-      const [repoList, orgList, eventList] = await Promise.all([
-        githubService.fetchRepositories(1, 100, "updated", forceRefresh),
-        githubService.fetchOrganizations(forceRefresh),
-        githubService.fetchActivityEvents(userProfile.login, 30, forceRefresh),
-      ]);
+        const [repoList, orgList, eventList] = await Promise.all([
+          githubService.fetchRepositories(1, 100, "updated", forceRefresh),
+          githubService.fetchOrganizations(forceRefresh),
+          githubService.fetchActivityEvents(userProfile.login, 30, forceRefresh),
+        ]);
 
-      setRepos(repoList || []);
-      setOrgs(orgList || []);
-      setEvents(eventList || []);
-      setRateLimit(githubService.getRateLimitStatus());
-    } catch (err: unknown) {
-      console.warn("[GitHubDashboard] Sync error:", err);
-      // Fallback demo user if not connected to live OAuth yet
-      if (!profile) {
-        setIsConnected(false);
+        setRepos(repoList || []);
+        setOrgs(orgList || []);
+        setEvents(eventList || []);
+        setRateLimit(githubService.getRateLimitStatus());
+      } catch (err: unknown) {
+        console.warn("[GitHubDashboard] Sync error:", err);
+        // Fallback demo user if not connected to live OAuth yet
+        if (!profile) {
+          setIsConnected(false);
+        }
+      } finally {
+        setLoading(false);
+        setIsRefreshing(false);
+        setSyncCountdown(30);
       }
-    } finally {
-      setLoading(false);
-      setIsRefreshing(false);
-      setSyncCountdown(30);
-    }
-  }, [profile]);
+    },
+    [profile],
+  );
 
   useEffect(() => {
     fetchData(false);
@@ -130,7 +135,10 @@ export function GitHubDashboard() {
                   SYNCED
                 </Badge>
               ) : (
-                <Badge variant="outline" className="h-5 px-1.5 text-[9px] font-mono border-amber-800 text-amber-400">
+                <Badge
+                  variant="outline"
+                  className="h-5 px-1.5 text-[9px] font-mono border-amber-800 text-amber-400"
+                >
                   DISCONNECTED
                 </Badge>
               )}
@@ -145,11 +153,14 @@ export function GitHubDashboard() {
           {/* Rate Limit Badge */}
           <div className="flex items-center gap-2 px-3 py-1 rounded-lg border border-border/80 bg-zinc-950/60 font-mono text-[11px]">
             <span className="text-muted-foreground">Rate Limit:</span>
-            <span className={`font-bold ${rateLimit.remaining < 500 ? "text-amber-400" : "text-cyan-400"}`}>
+            <span
+              className={`font-bold ${rateLimit.remaining < 500 ? "text-amber-400" : "text-cyan-400"}`}
+            >
               {rateLimit.remaining}/{rateLimit.limit}
             </span>
             <span className="text-[10px] text-zinc-500">
-              (resets in {Math.max(0, Math.round((rateLimit.resetTime.getTime() - Date.now()) / 60000))}m)
+              (resets in{" "}
+              {Math.max(0, Math.round((rateLimit.resetTime.getTime() - Date.now()) / 60000))}m)
             </span>
           </div>
 
@@ -165,7 +176,9 @@ export function GitHubDashboard() {
               disabled={isRefreshing}
               className="h-8 px-2.5 text-xs border-border bg-zinc-950/60 text-zinc-300 hover:text-white gap-1.5"
             >
-              <RefreshCw className={`size-3.5 ${isRefreshing ? "animate-spin text-cyan-400" : ""}`} />
+              <RefreshCw
+                className={`size-3.5 ${isRefreshing ? "animate-spin text-cyan-400" : ""}`}
+              />
               <span>Force Sync</span>
             </Button>
           </div>
@@ -277,12 +290,18 @@ export function GitHubDashboard() {
               <div className="p-12 text-center rounded-2xl border border-border bg-zinc-950/60 space-y-4 max-w-md mx-auto my-12">
                 <Github className="size-12 text-zinc-500 mx-auto" />
                 <div className="space-y-1">
-                  <h3 className="text-sm font-bold text-white">Connect GitHub to Start Mirroring</h3>
+                  <h3 className="text-sm font-bold text-white">
+                    Connect GitHub to Start Mirroring
+                  </h3>
                   <p className="text-xs text-zinc-400">
-                    Authenticate your GitHub account to access your repositories, branch trees, and live telemetry feeds.
+                    Authenticate your GitHub account to access your repositories, branch trees, and
+                    live telemetry feeds.
                   </p>
                 </div>
-                <Button onClick={handleConnectGitHub} className="bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-xs">
+                <Button
+                  onClick={handleConnectGitHub}
+                  className="bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-xs"
+                >
                   Connect GitHub Account
                 </Button>
               </div>
@@ -299,16 +318,27 @@ export function GitHubDashboard() {
               {orgs.length === 0 ? (
                 <div className="p-12 text-center rounded-2xl border border-border bg-zinc-950/60 space-y-2">
                   <Building className="size-8 text-zinc-600 mx-auto" />
-                  <p className="text-xs text-zinc-400">No public organizations found on your account.</p>
+                  <p className="text-xs text-zinc-400">
+                    No public organizations found on your account.
+                  </p>
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {orgs.map((org) => (
-                    <div key={org.id} className="p-4 rounded-xl border border-border bg-zinc-950 flex items-center gap-3">
-                      <img src={org.avatar_url} alt={org.login} className="size-10 rounded-xl border border-zinc-800" />
+                    <div
+                      key={org.id}
+                      className="p-4 rounded-xl border border-border bg-zinc-950 flex items-center gap-3"
+                    >
+                      <img
+                        src={org.avatar_url}
+                        alt={org.login}
+                        className="size-10 rounded-xl border border-zinc-800"
+                      />
                       <div>
                         <h4 className="text-xs font-bold text-white">{org.login}</h4>
-                        <p className="text-[11px] text-zinc-400 line-clamp-1">{org.description || "Organization"}</p>
+                        <p className="text-[11px] text-zinc-400 line-clamp-1">
+                          {org.description || "Organization"}
+                        </p>
                       </div>
                     </div>
                   ))}

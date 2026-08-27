@@ -1,13 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import {
-  AlertCircle,
-  Loader2,
-  ShieldCheck,
-  Lock,
-  Mail,
-  User,
-  ArrowRight,
-} from "lucide-react";
+import { AlertCircle, Loader2, ShieldCheck, Lock, Mail, User, ArrowRight } from "lucide-react";
 import { useState, type FormEvent, useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -64,8 +56,8 @@ function SetupErrorCard() {
       </div>
       <div className="space-y-3 pt-4 text-xs text-muted-foreground leading-relaxed">
         <p>
-          The application cannot establish a secure connection because Supabase environment variables
-          are not defined.
+          The application cannot establish a secure connection because Supabase environment
+          variables are not defined.
         </p>
         <div className="rounded-lg bg-zinc-950/80 p-3 font-mono text-[11px] text-zinc-300 border border-border/60 space-y-1">
           <p className="text-zinc-500"># 1. Copy sample environment file</p>
@@ -75,7 +67,8 @@ function SetupErrorCard() {
           <p>VITE_SUPABASE_ANON_KEY=sb_publishable_RwMBCD1LJxI4927JDU5fbQ_0tfswec4your-anon-key</p>
         </div>
         <p className="text-[11px] text-zinc-400">
-          Once configured, restart the dev server with <code className="text-primary font-mono">npm run dev</code>.
+          Once configured, restart the dev server with{" "}
+          <code className="text-primary font-mono">npm run dev</code>.
         </p>
       </div>
     </div>
@@ -106,7 +99,7 @@ function UnifiedAuthPage() {
   // Check if Supabase keys exist
   const hasSupabaseKeys = Boolean(
     import.meta.env["VITE_SUPABASE_URL"] &&
-      (import.meta.env["VITE_SUPABASE_ANON_KEY"] || import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"]),
+    (import.meta.env["VITE_SUPABASE_ANON_KEY"] || import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"]),
   );
 
   // Handle OAuth error params in URL on mount
@@ -285,7 +278,9 @@ function UnifiedAuthPage() {
             <div className="space-y-1.5">
               <h2 className="text-base font-bold text-foreground">Check your inbox</h2>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                We sent a secure verification link to <span className="font-semibold text-foreground">{signInEmail || signUpEmail}</span>. Click the link to complete authentication.
+                We sent a secure verification link to{" "}
+                <span className="font-semibold text-foreground">{signInEmail || signUpEmail}</span>.
+                Click the link to complete authentication.
               </p>
             </div>
             <Button
@@ -323,7 +318,10 @@ function UnifiedAuthPage() {
               </TabsList>
 
               {errors["form"] && (
-                <div className="mt-4 flex items-center gap-2 rounded-lg bg-destructive/15 p-3 text-xs text-destructive border border-destructive/25" role="alert">
+                <div
+                  className="mt-4 flex items-center gap-2 rounded-lg bg-destructive/15 p-3 text-xs text-destructive border border-destructive/25"
+                  role="alert"
+                >
                   <AlertCircle className="size-4 shrink-0" />
                   <span>{errors["form"]}</span>
                 </div>

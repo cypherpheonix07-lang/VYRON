@@ -88,7 +88,11 @@ export function PreviewCodePanel({ snippets }: PreviewCodePanelProps) {
                 <span className="table-cell">
                   {line.includes("//") || line.includes("#") ? (
                     <span className="text-zinc-500">{line}</span>
-                  ) : line.includes("import") || line.includes("export") || line.includes("function") || line.includes("const") || line.includes("return") ? (
+                  ) : line.includes("import") ||
+                    line.includes("export") ||
+                    line.includes("function") ||
+                    line.includes("const") ||
+                    line.includes("return") ? (
                     <span className="text-purple-400">{line}</span>
                   ) : line.includes("http") || line.includes("npx") ? (
                     <span className="text-cyan-300 font-semibold">{line}</span>

@@ -38,7 +38,10 @@ export function ProvenancePopover({ meta, className, compact }: ProvenancePopove
 
   if (!meta) {
     return (
-      <Badge variant="outline" className="text-xs text-muted-foreground border-border/60 gap-1.5 py-1 px-2.5">
+      <Badge
+        variant="outline"
+        className="text-xs text-muted-foreground border-border/60 gap-1.5 py-1 px-2.5"
+      >
         <Sparkles className="size-3 text-cyan-400" />
         AI Synthesized
       </Badge>
@@ -78,7 +81,9 @@ export function ProvenancePopover({ meta, className, compact }: ProvenancePopove
             size="sm"
             className="h-7 gap-1.5 px-2.5 text-xs bg-slate-900/60 hover:bg-slate-800 border-slate-700/60 text-slate-300 transition-colors shadow-xs"
           >
-            <ShieldCheck className={`size-3.5 ${isTemplate ? "text-amber-400" : "text-emerald-400"}`} />
+            <ShieldCheck
+              className={`size-3.5 ${isTemplate ? "text-amber-400" : "text-emerald-400"}`}
+            />
             <span className="font-mono text-[11px]">{meta.model || "brahma-kernel"}</span>
             {isCacheHit && (
               <span className="text-[10px] px-1.5 py-0.2 rounded bg-cyan-500/15 text-cyan-300 font-medium">
@@ -144,7 +149,11 @@ export function ProvenancePopover({ meta, className, compact }: ProvenancePopove
                 <Database className="size-3.5 text-slate-500" /> State
               </span>
               <span className="text-slate-200">
-                {isCacheHit ? "Semantic Cache Hit (0 cost)" : isTemplate ? "Fallback Chain Triggered" : "Direct Gateway Generation"}
+                {isCacheHit
+                  ? "Semantic Cache Hit (0 cost)"
+                  : isTemplate
+                    ? "Fallback Chain Triggered"
+                    : "Direct Gateway Generation"}
               </span>
             </div>
           </div>
@@ -159,7 +168,11 @@ export function ProvenancePopover({ meta, className, compact }: ProvenancePopove
                 onClick={handleCopyHash}
                 className="h-5 px-1.5 text-[10px] text-slate-400 hover:text-slate-200"
               >
-                {copied ? <Check className="size-3 text-emerald-400 mr-1" /> : <Copy className="size-3 mr-1" />}
+                {copied ? (
+                  <Check className="size-3 text-emerald-400 mr-1" />
+                ) : (
+                  <Copy className="size-3 mr-1" />
+                )}
                 {copied ? "Copied" : "Copy"}
               </Button>
             </div>

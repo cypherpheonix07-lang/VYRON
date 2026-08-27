@@ -157,7 +157,10 @@ const defaultProfileState: ExtendedProfileData = {
     company: "Center for Verified Computing",
     experience_years: 6,
     skills: ["Distributed Systems", "Rust", "PostgreSQL", "Formal Methods", "Microservices"],
-    certifications: ["AWS Solutions Architect Professional", "Certified Kubernetes Security Specialist"],
+    certifications: [
+      "AWS Solutions Architect Professional",
+      "Certified Kubernetes Security Specialist",
+    ],
   },
   engineering: {
     primary_stack: ["TypeScript", "PostgreSQL", "Deno", "Rust", "Docker"],
@@ -210,8 +213,16 @@ export function CompletenessRing({ data }: { data: ExtendedProfileData }) {
       { key: "handle", label: "Unique Handle", done: !!data.handle?.trim() },
       { key: "bio", label: "Professional Bio", done: !!data.bio?.trim() },
       { key: "academic", label: "Academic Credentials", done: !!data.academic?.institution },
-      { key: "skills", label: "Core Skills & Tech", done: (data.professional?.skills || []).length > 0 },
-      { key: "stack", label: "Primary Engineering Stack", done: (data.engineering?.primary_stack || []).length > 0 },
+      {
+        key: "skills",
+        label: "Core Skills & Tech",
+        done: (data.professional?.skills || []).length > 0,
+      },
+      {
+        key: "stack",
+        label: "Primary Engineering Stack",
+        done: (data.engineering?.primary_stack || []).length > 0,
+      },
       { key: "avatar", label: "Avatar & Identity", done: !!data.avatar_url },
       { key: "goals", label: "Quarterly Goals", done: (data.goals || []).length > 0 },
     ];
@@ -230,7 +241,14 @@ export function CompletenessRing({ data }: { data: ExtendedProfileData }) {
         <div className="flex items-center gap-3">
           <div className="relative size-16 shrink-0">
             <svg className="size-full -rotate-90" viewBox="0 0 68 68">
-              <circle cx="34" cy="34" r={radius} className="stroke-slate-800" strokeWidth="5" fill="transparent" />
+              <circle
+                cx="34"
+                cy="34"
+                r={radius}
+                className="stroke-slate-800"
+                strokeWidth="5"
+                fill="transparent"
+              />
               <circle
                 cx="34"
                 cy="34"
@@ -248,11 +266,22 @@ export function CompletenessRing({ data }: { data: ExtendedProfileData }) {
             </div>
           </div>
           <div>
-            <h4 className="text-xs font-semibold text-slate-100 uppercase tracking-wider font-mono">Profile Health</h4>
-            <p className="text-[11px] text-muted-foreground">{doneCount} of {checklist.length} dimensions verified</p>
+            <h4 className="text-xs font-semibold text-slate-100 uppercase tracking-wider font-mono">
+              Profile Health
+            </h4>
+            <p className="text-[11px] text-muted-foreground">
+              {doneCount} of {checklist.length} dimensions verified
+            </p>
           </div>
         </div>
-        <Badge variant="outline" className={percentage >= 80 ? "text-emerald-400 border-emerald-500/30" : "text-amber-400 border-amber-500/30"}>
+        <Badge
+          variant="outline"
+          className={
+            percentage >= 80
+              ? "text-emerald-400 border-emerald-500/30"
+              : "text-amber-400 border-amber-500/30"
+          }
+        >
           {percentage >= 80 ? "Exemplary" : "In Progress"}
         </Badge>
       </div>
@@ -286,7 +315,9 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
       try {
         if (readOnly || previewAsTeammate) {
           // STRICT SERVER-SIDE PRIVACY RPC
-          const { data, error } = await supabase.rpc("get_public_profile", { target_user_id: targetUserId });
+          const { data, error } = await supabase.rpc("get_public_profile", {
+            target_user_id: targetUserId,
+          });
           if (data && data.ok) {
             setProfile((prev) => ({
               ...prev,
@@ -300,7 +331,11 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
           }
         } else {
           // Direct load for owner
-          const { data } = await supabase.from("profiles").select("*").eq("id", targetUserId).maybeSingle();
+          const { data } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", targetUserId)
+            .maybeSingle();
           if (data) {
             setProfile((prev) => ({
               ...prev,
@@ -366,13 +401,13 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
   };
 
   // Helper updaters
-  const updateField = (key: keyof ExtendedProfileData, val: any) => {
+  const updateField = (key: keyof ExtendedProfileData, val: unknown) => {
     if (!isOwner) return;
     setProfile((prev) => ({ ...prev, [key]: val }));
     setHasUnsavedChanges(true);
   };
 
-  const updateAcademic = (key: keyof AcademicDetails, val: any) => {
+  const updateAcademic = (key: keyof AcademicDetails, val: unknown) => {
     if (!isOwner) return;
     setProfile((prev) => ({
       ...prev,
@@ -381,7 +416,7 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
     setHasUnsavedChanges(true);
   };
 
-  const updateProfessional = (key: keyof ProfessionalDetails, val: any) => {
+  const updateProfessional = (key: keyof ProfessionalDetails, val: unknown) => {
     if (!isOwner) return;
     setProfile((prev) => ({
       ...prev,
@@ -438,20 +473,35 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
             </div>
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2.5">
-                <h1 className="text-xl sm:text-2xl font-bold text-slate-100">{profile.full_name}</h1>
-                <Badge variant="outline" className="font-mono text-xs bg-cyan-500/10 text-cyan-300 border-cyan-500/25">
+                <h1 className="text-xl sm:text-2xl font-bold text-slate-100">
+                  {profile.full_name}
+                </h1>
+                <Badge
+                  variant="outline"
+                  className="font-mono text-xs bg-cyan-500/10 text-cyan-300 border-cyan-500/25"
+                >
                   @{profile.handle || "handle"}
                 </Badge>
                 {profile.pronouns && (
-                  <Badge variant="outline" className="text-[11px] text-muted-foreground border-border/60">
+                  <Badge
+                    variant="outline"
+                    className="text-[11px] text-muted-foreground border-border/60"
+                  >
                     {profile.pronouns}
                   </Badge>
                 )}
               </div>
-              <p className="text-xs sm:text-sm text-slate-300 font-medium">{profile.professional?.title || profile.academic?.department}</p>
+              <p className="text-xs sm:text-sm text-slate-300 font-medium">
+                {profile.professional?.title || profile.academic?.department}
+              </p>
               <div className="flex items-center gap-4 text-xs text-muted-foreground pt-1">
-                <span className="flex items-center gap-1.5"><MapPin className="size-3.5" /> {profile.location_city}, {profile.location_country}</span>
-                <span className="flex items-center gap-1.5"><Award className="size-3.5 text-cyan-400" /> {profile.role}</span>
+                <span className="flex items-center gap-1.5">
+                  <MapPin className="size-3.5" /> {profile.location_city},{" "}
+                  {profile.location_country}
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <Award className="size-3.5 text-cyan-400" /> {profile.role}
+                </span>
               </div>
             </div>
           </div>
@@ -526,7 +576,9 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
                       className="h-8 text-xs bg-slate-900/60"
                     />
                   ) : (
-                    <p className="text-xs font-semibold text-slate-200">{profile.academic?.institution || "—"}</p>
+                    <p className="text-xs font-semibold text-slate-200">
+                      {profile.academic?.institution || "—"}
+                    </p>
                   )}
                 </div>
 
@@ -539,7 +591,9 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
                       className="h-8 text-xs bg-slate-900/60"
                     />
                   ) : (
-                    <p className="text-xs font-semibold text-slate-200">{profile.academic?.department || "—"}</p>
+                    <p className="text-xs font-semibold text-slate-200">
+                      {profile.academic?.department || "—"}
+                    </p>
                   )}
                 </div>
 
@@ -552,7 +606,9 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
                       className="h-8 text-xs font-mono bg-slate-900/60"
                     />
                   ) : (
-                    <p className="text-xs font-mono text-cyan-300">{profile.academic?.register_number || "—"}</p>
+                    <p className="text-xs font-mono text-cyan-300">
+                      {profile.academic?.register_number || "—"}
+                    </p>
                   )}
                 </div>
 
@@ -565,7 +621,9 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
                       className="h-8 text-xs bg-slate-900/60"
                     />
                   ) : (
-                    <p className="text-xs font-semibold text-slate-200">{profile.academic?.advisor || "—"}</p>
+                    <p className="text-xs font-semibold text-slate-200">
+                      {profile.academic?.advisor || "—"}
+                    </p>
                   )}
                 </div>
               </div>
@@ -606,7 +664,9 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
                         className="h-8 text-xs bg-slate-900/60"
                       />
                     ) : (
-                      <p className="text-xs font-semibold text-slate-200">{profile.professional?.title || "—"}</p>
+                      <p className="text-xs font-semibold text-slate-200">
+                        {profile.professional?.title || "—"}
+                      </p>
                     )}
                   </div>
                   <div className="space-y-1.5">
@@ -618,7 +678,9 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
                         className="h-8 text-xs bg-slate-900/60"
                       />
                     ) : (
-                      <p className="text-xs font-semibold text-slate-200">{profile.professional?.company || "—"}</p>
+                      <p className="text-xs font-semibold text-slate-200">
+                        {profile.professional?.company || "—"}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -658,9 +720,16 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
                         value={newSkill}
                         onChange={(e) => setNewSkill(e.target.value)}
                         className="h-8 text-xs max-w-xs bg-slate-900/60"
-                        onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddSkill())}
+                        onKeyDown={(e) =>
+                          e.key === "Enter" && (e.preventDefault(), handleAddSkill())
+                        }
                       />
-                      <Button size="sm" variant="outline" onClick={handleAddSkill} className="h-8 text-xs">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={handleAddSkill}
+                        className="h-8 text-xs"
+                      >
                         Add
                       </Button>
                     </div>
@@ -678,19 +747,27 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
             >
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div className="p-3 rounded-xl bg-slate-900/40 border border-border/60 text-center space-y-1">
-                  <span className="text-xl font-bold font-mono text-cyan-400">{profile.engineering?.analyses_count || 32}</span>
+                  <span className="text-xl font-bold font-mono text-cyan-400">
+                    {profile.engineering?.analyses_count || 32}
+                  </span>
                   <p className="text-[11px] text-muted-foreground">Analyses Run</p>
                 </div>
                 <div className="p-3 rounded-xl bg-slate-900/40 border border-border/60 text-center space-y-1">
-                  <span className="text-xl font-bold font-mono text-emerald-400">{profile.engineering?.reports_exported || 16}</span>
+                  <span className="text-xl font-bold font-mono text-emerald-400">
+                    {profile.engineering?.reports_exported || 16}
+                  </span>
                   <p className="text-[11px] text-muted-foreground">Reports Exported</p>
                 </div>
                 <div className="p-3 rounded-xl bg-slate-900/40 border border-border/60 text-center space-y-1">
-                  <span className="text-xl font-bold font-mono text-indigo-400">{profile.engineering?.overrides_signed || 8}</span>
+                  <span className="text-xl font-bold font-mono text-indigo-400">
+                    {profile.engineering?.overrides_signed || 8}
+                  </span>
                   <p className="text-[11px] text-muted-foreground">Overrides Signed</p>
                 </div>
                 <div className="p-3 rounded-xl bg-slate-900/40 border border-border/60 text-center space-y-1">
-                  <span className="text-xl font-bold font-mono text-amber-400">{profile.engineering?.reviews_completed || 24}</span>
+                  <span className="text-xl font-bold font-mono text-amber-400">
+                    {profile.engineering?.reviews_completed || 24}
+                  </span>
                   <p className="text-[11px] text-muted-foreground">Reviews Signed</p>
                 </div>
               </div>
@@ -705,13 +782,23 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
             >
               <div className="space-y-3">
                 {profile.publications.map((pub) => (
-                  <div key={pub.id} className="p-3 rounded-xl bg-slate-900/40 border border-border/60 flex items-start justify-between gap-3">
+                  <div
+                    key={pub.id}
+                    className="p-3 rounded-xl bg-slate-900/40 border border-border/60 flex items-start justify-between gap-3"
+                  >
                     <div className="space-y-1">
                       <h5 className="text-xs font-semibold text-slate-200">{pub.title}</h5>
-                      <p className="text-[11px] text-muted-foreground">{pub.venue} • {pub.year}</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        {pub.venue} • {pub.year}
+                      </p>
                     </div>
                     {pub.url && (
-                      <a href={pub.url} target="_blank" rel="noreferrer" className="text-cyan-400 hover:text-cyan-300 p-1">
+                      <a
+                        href={pub.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-cyan-400 hover:text-cyan-300 p-1"
+                      >
                         <ExternalLink className="size-3.5" />
                       </a>
                     )}
@@ -727,11 +814,17 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
           <CompletenessRing data={profile} />
 
           {/* Quarterly Goals */}
-          <SectionCard title="Active Goals & Milestones" description="Milestones tracked for graduation and compliance.">
+          <SectionCard
+            title="Active Goals & Milestones"
+            description="Milestones tracked for graduation and compliance."
+          >
             <div className="space-y-3">
               <ul className="space-y-2">
                 {(profile.goals || []).map((goal, idx) => (
-                  <li key={idx} className="flex items-center justify-between gap-2 p-2 rounded-lg bg-slate-900/40 border border-slate-800/80 text-xs">
+                  <li
+                    key={idx}
+                    className="flex items-center justify-between gap-2 p-2 rounded-lg bg-slate-900/40 border border-slate-800/80 text-xs"
+                  >
                     <span className="flex items-center gap-2">
                       <Check className="size-3.5 text-emerald-400" />
                       <span className="text-slate-200">{goal}</span>
@@ -739,7 +832,12 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
                     {isOwner && (
                       <button
                         type="button"
-                        onClick={() => updateField("goals", (profile.goals || []).filter((_, i) => i !== idx))}
+                        onClick={() =>
+                          updateField(
+                            "goals",
+                            (profile.goals || []).filter((_, i) => i !== idx),
+                          )
+                        }
                         className="text-muted-foreground hover:text-red-400"
                       >
                         ×
@@ -758,7 +856,12 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
                     className="h-8 text-xs bg-slate-900/60"
                     onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), handleAddGoal())}
                   />
-                  <Button size="sm" variant="outline" onClick={handleAddGoal} className="h-8 text-xs">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={handleAddGoal}
+                    className="h-8 text-xs"
+                  >
                     Add
                   </Button>
                 </div>
@@ -768,10 +871,16 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
 
           {/* Privacy Visibility Summary Card */}
           {isOwner && (
-            <SectionCard title="Server-Enforced Privacy Matrix" description="Control what peers see on your public team profile.">
+            <SectionCard
+              title="Server-Enforced Privacy Matrix"
+              description="Control what peers see on your public team profile."
+            >
               <div className="space-y-2.5 text-xs">
                 {Object.entries(profile.visibility).map(([sec, vis]) => (
-                  <div key={sec} className="flex items-center justify-between py-1.5 border-b border-slate-900">
+                  <div
+                    key={sec}
+                    className="flex items-center justify-between py-1.5 border-b border-slate-900"
+                  >
                     <span className="capitalize text-slate-300">{sec}</span>
                     <Badge
                       variant="outline"
@@ -779,8 +888,8 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
                         vis === "public"
                           ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-[10px]"
                           : vis === "team"
-                          ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/20 text-[10px]"
-                          : "bg-zinc-800 text-zinc-400 border-zinc-700 text-[10px]"
+                            ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/20 text-[10px]"
+                            : "bg-zinc-800 text-zinc-400 border-zinc-700 text-[10px]"
                       }
                     >
                       {vis.toUpperCase()}

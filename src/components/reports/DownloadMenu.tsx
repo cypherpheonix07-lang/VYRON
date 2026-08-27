@@ -30,9 +30,12 @@ export const DownloadMenu: React.FC<DownloadMenuProps> = ({ doc, userRole = "adm
 
   const handleExport = async (format: "pdf" | "md" | "tex" | "json") => {
     if (isReviewer) {
-      toast.error("Reviewer Access Restricted: Read-only permission. Exporting documents is restricted to Owner/Faculty/Admin.", {
-        duration: 4000,
-      });
+      toast.error(
+        "Reviewer Access Restricted: Read-only permission. Exporting documents is restricted to Owner/Faculty/Admin.",
+        {
+          duration: 4000,
+        },
+      );
       return;
     }
 
@@ -83,7 +86,10 @@ export const DownloadMenu: React.FC<DownloadMenuProps> = ({ doc, userRole = "adm
           <span>Download Report</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56 bg-slate-900 border-slate-800 text-slate-100 shadow-2xl">
+      <DropdownMenuContent
+        align="end"
+        className="w-56 bg-slate-900 border-slate-800 text-slate-100 shadow-2xl"
+      >
         <DropdownMenuLabel className="text-xs text-slate-400 font-medium">
           Select Export Format
         </DropdownMenuLabel>

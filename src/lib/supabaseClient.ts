@@ -43,7 +43,7 @@ let _client: SupabaseClient | null = null;
 export function getSupabaseClient(): SupabaseClient {
   if (_client) return _client;
 
-  _client = createClient(supabaseUrl || "https://hbbunfizlwgvripgwzdo.supabase.co", supabaseAnonKey || "sb_publishable_placeholder", {
+  _client = createClient(supabaseUrl, supabaseAnonKey, {
     auth: {
       autoRefreshToken: true,
       persistSession: true,

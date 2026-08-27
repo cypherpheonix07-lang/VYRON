@@ -96,7 +96,10 @@ export const ReportViewerPage: React.FC<ReportViewerPageProps> = ({ reportId }) 
           <div className="h-4 w-px bg-border" />
           <div className="flex items-center gap-2">
             <span className="font-bold text-xs text-foreground font-mono">{doc.id}</span>
-            <Badge variant="outline" className="text-[10px] font-mono border-emerald-800 bg-emerald-950/40 text-emerald-400 gap-1">
+            <Badge
+              variant="outline"
+              className="text-[10px] font-mono border-emerald-800 bg-emerald-950/40 text-emerald-400 gap-1"
+            >
               <ShieldCheck className="size-3" /> SHA-256 Verified
             </Badge>
           </div>
@@ -140,10 +143,7 @@ export const ReportViewerPage: React.FC<ReportViewerPageProps> = ({ reportId }) 
         <ReportCoverPage doc={doc} pageNumber={1} totalPages={12} />
 
         {/* PAGES 2 to 12: Section Renderers */}
-        <ReportSectionRenderer
-          doc={doc}
-          onOpenAIDraft={(sec) => setAiDraftSection(sec)}
-        />
+        <ReportSectionRenderer doc={doc} onOpenAIDraft={(sec) => setAiDraftSection(sec)} />
       </div>
 
       {/* AI Drafting Drawer */}

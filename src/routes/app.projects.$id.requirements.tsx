@@ -67,9 +67,7 @@ function RequirementList({
           <li
             key={r.id}
             className={`rounded-xl border p-3 transition-colors ${
-              r.isDuplicate
-                ? "border-amber-500/40 bg-amber-500/5"
-                : "border-border/70 bg-card/40"
+              r.isDuplicate ? "border-amber-500/40 bg-amber-500/5" : "border-border/70 bg-card/40"
             }`}
           >
             <div className="flex items-start justify-between gap-3">

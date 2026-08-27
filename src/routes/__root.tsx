@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 import { Compass, Command } from "lucide-react";
 
 import { Toaster } from "@/components/ui/sonner";
+import { DemoModeProvider } from "@/contexts/DemoModeContext";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -181,9 +182,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
-      <Toaster position="top-right" richColors />
+      <DemoModeProvider>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+        <Toaster position="top-right" richColors />
+      </DemoModeProvider>
     </QueryClientProvider>
   );
 }

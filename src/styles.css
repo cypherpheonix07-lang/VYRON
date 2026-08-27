@@ -255,7 +255,8 @@
 
 @media print {
   /* Hide all app chrome, sidebars, header navigation and action toolbars */
-  body, html {
+  body,
+  html {
     background: #ffffff !important;
     color: #000000 !important;
   }

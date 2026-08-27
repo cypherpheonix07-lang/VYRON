@@ -8,10 +8,7 @@ interface ChainOfCustodyCardProps {
   className?: string;
 }
 
-export const ChainOfCustodyCard: React.FC<ChainOfCustodyCardProps> = ({
-  data,
-  className = "",
-}) => {
+export const ChainOfCustodyCard: React.FC<ChainOfCustodyCardProps> = ({ data, className = "" }) => {
   return (
     <div
       className={`rounded-lg border border-slate-200 bg-slate-50/80 p-4 text-xs text-slate-800 shadow-sm ${className}`}

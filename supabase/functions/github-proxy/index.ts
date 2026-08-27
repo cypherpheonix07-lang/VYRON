@@ -2,8 +2,7 @@ import { withSupabase } from "npm:@supabase/server";
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
 };
 
@@ -28,10 +27,13 @@ export default {
         .single();
 
       if (intErr || !integration) {
-        return new Response(JSON.stringify({ error: "GitHub account not connected for this user" }), {
-          status: 404,
-          headers: { "Content-Type": "application/json" },
-        });
+        return new Response(
+          JSON.stringify({ error: "GitHub account not connected for this user" }),
+          {
+            status: 404,
+            headers: { "Content-Type": "application/json" },
+          },
+        );
       }
 
       // If token is encrypted or plaintext

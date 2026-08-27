@@ -60,7 +60,15 @@ export interface MockProject {
   description: string;
   ownerId: string;
   ownerName: string;
-  status: "healthy" | "medium" | "critical" | "low_clarity" | "no_repo" | "generating" | "failed" | "published";
+  status:
+    | "healthy"
+    | "medium"
+    | "critical"
+    | "low_clarity"
+    | "no_repo"
+    | "generating"
+    | "failed"
+    | "published";
   healthScore: number;
   securityScore: number;
   riskScore: number;
@@ -195,12 +203,17 @@ export class BrahmaMockEngine {
     const projects: MockProject[] = [
       {
         id: "proj-01-brahma",
-        name: this.seed === "EPSILON" ? "PROJECT BRAHMA: Blueprint-driven Requirements Architecture Health Monitoring Agent Platform System" : "Project Brahma Insights Engine",
+        name:
+          this.seed === "EPSILON"
+            ? "PROJECT BRAHMA: Blueprint-driven Requirements Architecture Health Monitoring Agent Platform System"
+            : "Project Brahma Insights Engine",
         slug: "brahma-insights",
-        description: "Autonomous software blueprint extraction, static code health, and security governance engine.",
+        description:
+          "Autonomous software blueprint extraction, static code health, and security governance engine.",
         ownerId: "usr-puli-01",
         ownerName: "Puli Phanindhra",
-        status: this.seed === "BETA" ? "critical" : this.seed === "DELTA" ? "low_clarity" : "healthy",
+        status:
+          this.seed === "BETA" ? "critical" : this.seed === "DELTA" ? "low_clarity" : "healthy",
         healthScore: this.seed === "BETA" ? 42 : this.seed === "DELTA" ? 64 : 94,
         securityScore: this.seed === "BETA" ? 28 : this.seed === "DELTA" ? 72 : 98,
         riskScore: this.seed === "BETA" ? 89 : this.seed === "DELTA" ? 61 : 12,
@@ -208,7 +221,10 @@ export class BrahmaMockEngine {
         testCoverage: this.seed === "BETA" ? 24 : this.seed === "EPSILON" ? 0 : 88,
         codeComplexityAvg: this.seed === "BETA" ? 38 : 14,
         vulnerabilityCount: this.seed === "BETA" ? 11 : 0,
-        cweList: this.seed === "BETA" ? ["CWE-89 (SQLi)", "CWE-79 (XSS)", "CWE-287 (Auth Bypass)", "CWE-306"] : [],
+        cweList:
+          this.seed === "BETA"
+            ? ["CWE-89 (SQLi)", "CWE-79 (XSS)", "CWE-287 (Auth Bypass)", "CWE-306"]
+            : [],
         nodesCount: 14,
         orphanNodesCount: this.seed === "BETA" ? 3 : 0,
         missingFkCount: this.seed === "BETA" ? 2 : 0,
@@ -315,7 +331,11 @@ export class BrahmaMockEngine {
 
     const events: MockAuthEvent[] = [];
     for (let i = 0; i < count; i++) {
-      const geo = cities[i % cities.length] || { ip: "127.0.0.1", city: "Bengaluru", country: "India" };
+      const geo = cities[i % cities.length] || {
+        ip: "127.0.0.1",
+        city: "Bengaluru",
+        country: "India",
+      };
       const isFailedCluster = this.seed === "BETA" && i >= 2 && i <= 5;
       events.push({
         id: `auth-evt-${i + 1}`,
@@ -345,7 +365,8 @@ export class BrahmaMockEngine {
         userId: "usr-puli-01",
         action: "PUBLISH_OVERRIDE",
         resource: "proj-01-brahma",
-        details: "Manual typed override authorized for security release gate bypass: 'PROD_HOTFIX_SEC_APPROVED'",
+        details:
+          "Manual typed override authorized for security release gate bypass: 'PROD_HOTFIX_SEC_APPROVED'",
         ip: "49.204.112.45",
         timestamp: "2026-08-14T21:40:00Z",
         status: "OVERRIDDEN",

@@ -40,11 +40,16 @@ export function PreviewInteractionLayer({
   const [isGenerating, setIsGenerating] = useState(false);
 
   // V0 Demo State
-  const [v0ComponentVariant, setV0ComponentVariant] = useState<"primary" | "outline" | "danger">("primary");
+  const [v0ComponentVariant, setV0ComponentVariant] = useState<"primary" | "outline" | "danger">(
+    "primary",
+  );
   const [v0Title, setV0Title] = useState("Enterprise Analytics Gate");
 
   // Bolt Demo State
-  const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({ src: true, components: true });
+  const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({
+    src: true,
+    components: true,
+  });
   const [terminalOutput, setTerminalOutput] = useState<string[]>([
     "✓ WebContainer initialized (Node 22 WASM)",
     "✓ Dependencies resolved in 140ms",
@@ -54,14 +59,19 @@ export function PreviewInteractionLayer({
   // Lovable Demo State
   const [messages, setMessages] = useState<{ sender: "user" | "ai"; text: string }[]>([
     { sender: "user", text: "Add a Supabase auth guard to the project dashboard" },
-    { sender: "ai", text: "✓ Modifying src/routes/app.tsx with beforeLoad session check.\n✓ Updating profiles schema and RLS policies." },
+    {
+      sender: "ai",
+      text: "✓ Modifying src/routes/app.tsx with beforeLoad session check.\n✓ Updating profiles schema and RLS policies.",
+    },
   ]);
 
   // Cursor Demo State
   const [diffAccepted, setDiffAccepted] = useState<boolean | null>(null);
 
   // Linear Demo State
-  const [tasks, setTasks] = useState<{ id: string; title: string; col: "todo" | "doing" | "done" }[]>([
+  const [tasks, setTasks] = useState<
+    { id: string; title: string; col: "todo" | "doing" | "done" }[]
+  >([
     { id: "1", title: "Implement GitHub Webhook Edge Function", col: "doing" },
     { id: "2", title: "Add strict RLS policy tests", col: "done" },
     { id: "3", title: "Optimize Recharts SVG render tree", col: "todo" },
@@ -105,7 +115,9 @@ export function PreviewInteractionLayer({
               LIVE PREVIEW
             </Badge>
             <h5 className="text-sm font-bold text-white mt-1">{v0Title}</h5>
-            <p className="text-xs text-zinc-400">Synthesized Radix UI card with responsive actions.</p>
+            <p className="text-xs text-zinc-400">
+              Synthesized Radix UI card with responsive actions.
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -114,8 +126,8 @@ export function PreviewInteractionLayer({
                 v0ComponentVariant === "primary"
                   ? "bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold"
                   : v0ComponentVariant === "danger"
-                  ? "bg-rose-600 text-white hover:bg-rose-500"
-                  : "border border-zinc-700 bg-zinc-800 text-zinc-200"
+                    ? "bg-rose-600 text-white hover:bg-rose-500"
+                    : "border border-zinc-700 bg-zinc-800 text-zinc-200"
               }
             >
               Action CTA
@@ -157,7 +169,11 @@ export function PreviewInteractionLayer({
             disabled={isGenerating}
             className="bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold shrink-0"
           >
-            {isGenerating ? <RefreshCw className="size-3.5 animate-spin" /> : <Send className="size-3.5" />}
+            {isGenerating ? (
+              <RefreshCw className="size-3.5 animate-spin" />
+            ) : (
+              <Send className="size-3.5" />
+            )}
           </Button>
         </form>
       </div>
@@ -167,7 +183,12 @@ export function PreviewInteractionLayer({
   // 2. BOLT FILETREE & TERMINAL DEMO
   if (toolId === "bolt-new") {
     const runCommand = () => {
-      setTerminalOutput((prev) => [...prev, "$ npm run build", "✓ Compiled 14 modules in 32ms", "✓ Ready for deployment"]);
+      setTerminalOutput((prev) => [
+        ...prev,
+        "$ npm run build",
+        "✓ Compiled 14 modules in 32ms",
+        "✓ Ready for deployment",
+      ]);
     };
 
     return (
@@ -196,16 +217,26 @@ export function PreviewInteractionLayer({
               className="flex items-center gap-1.5 text-zinc-300 cursor-pointer hover:text-white"
               onClick={() => setOpenFolders((p) => ({ ...p, ["src"]: !p["src"] }))}
             >
-              {openFolders["src"] ? <FolderOpen className="size-3.5 text-amber-400" /> : <Folder className="size-3.5 text-amber-400" />}
+              {openFolders["src"] ? (
+                <FolderOpen className="size-3.5 text-amber-400" />
+              ) : (
+                <Folder className="size-3.5 text-amber-400" />
+              )}
               <span className="font-semibold">src/</span>
             </div>
             {openFolders["src"] && (
               <div className="pl-4 space-y-1">
                 <div
                   className="flex items-center gap-1.5 text-zinc-400 cursor-pointer hover:text-white"
-                  onClick={() => setOpenFolders((p) => ({ ...p, ["components"]: !p["components"] }))}
+                  onClick={() =>
+                    setOpenFolders((p) => ({ ...p, ["components"]: !p["components"] }))
+                  }
                 >
-                  {openFolders["components"] ? <FolderOpen className="size-3 text-amber-400" /> : <Folder className="size-3 text-amber-400" />}
+                  {openFolders["components"] ? (
+                    <FolderOpen className="size-3 text-amber-400" />
+                  ) : (
+                    <Folder className="size-3 text-amber-400" />
+                  )}
                   <span>components/</span>
                 </div>
                 {openFolders["components"] && (
@@ -271,7 +302,10 @@ export function PreviewInteractionLayer({
               Lovable Iterative AI Chat Agent
             </h4>
           </div>
-          <Badge variant="outline" className="text-[10px] font-mono border-pink-500/40 text-pink-400 bg-pink-950/30">
+          <Badge
+            variant="outline"
+            className="text-[10px] font-mono border-pink-500/40 text-pink-400 bg-pink-950/30"
+          >
             Git Sync Active
           </Badge>
         </div>
@@ -279,11 +313,16 @@ export function PreviewInteractionLayer({
         {/* Message Thread */}
         <div className="p-3 rounded-xl border border-zinc-800 bg-zinc-900/50 space-y-2.5 max-h-[160px] overflow-y-auto">
           {messages.map((m, idx) => (
-            <div key={idx} className={`flex gap-2 text-xs ${m.sender === "user" ? "justify-end" : "justify-start"}`}>
+            <div
+              key={idx}
+              className={`flex gap-2 text-xs ${m.sender === "user" ? "justify-end" : "justify-start"}`}
+            >
               {m.sender === "ai" && <Bot className="size-4 text-pink-400 shrink-0 mt-0.5" />}
               <div
                 className={`p-2.5 rounded-xl max-w-[80%] whitespace-pre-line leading-relaxed ${
-                  m.sender === "user" ? "bg-pink-600 text-white font-medium" : "bg-zinc-800 text-zinc-200 border border-zinc-700"
+                  m.sender === "user"
+                    ? "bg-pink-600 text-white font-medium"
+                    : "bg-zinc-800 text-zinc-200 border border-zinc-700"
                 }`}
               >
                 {m.text}
@@ -363,7 +402,9 @@ export function PreviewInteractionLayer({
         </div>
 
         {diffAccepted !== null && (
-          <div className={`text-xs font-semibold p-2 rounded-lg text-center ${diffAccepted ? "bg-emerald-950/60 text-emerald-300 border border-emerald-800/60" : "bg-zinc-900 text-zinc-400"}`}>
+          <div
+            className={`text-xs font-semibold p-2 rounded-lg text-center ${diffAccepted ? "bg-emerald-950/60 text-emerald-300 border border-emerald-800/60" : "bg-zinc-900 text-zinc-400"}`}
+          >
             {diffAccepted ? "✓ Changes committed to local buffer" : "✕ Diff rejected by user"}
           </div>
         )}
@@ -386,14 +427,20 @@ export function PreviewInteractionLayer({
               Linear Interactive Sprint Kanban
             </h4>
           </div>
-          <Badge variant="outline" className="text-[10px] font-mono border-indigo-500/40 text-indigo-300">
+          <Badge
+            variant="outline"
+            className="text-[10px] font-mono border-indigo-500/40 text-indigo-300"
+          >
             Sprint 42
           </Badge>
         </div>
 
         <div className="grid grid-cols-3 gap-2 text-xs">
           {(["todo", "doing", "done"] as const).map((colName) => (
-            <div key={colName} className="p-2.5 rounded-lg bg-zinc-900/60 border border-zinc-800 space-y-2">
+            <div
+              key={colName}
+              className="p-2.5 rounded-lg bg-zinc-900/60 border border-zinc-800 space-y-2"
+            >
               <div className="font-bold text-[10px] uppercase tracking-wider text-zinc-400 flex items-center justify-between">
                 <span>{colName}</span>
                 <span className="text-zinc-600 font-mono">
@@ -408,7 +455,9 @@ export function PreviewInteractionLayer({
                       key={task.id}
                       className="p-2 rounded-md bg-zinc-950 border border-zinc-800/80 hover:border-indigo-500/40 transition-colors space-y-1.5"
                     >
-                      <p className="text-[11px] text-zinc-200 font-medium leading-snug">{task.title}</p>
+                      <p className="text-[11px] text-zinc-200 font-medium leading-snug">
+                        {task.title}
+                      </p>
                       <div className="flex justify-end gap-1">
                         {colName !== "todo" && (
                           <button
@@ -456,7 +505,10 @@ export function PreviewInteractionLayer({
               Subframe Design Token System
             </h4>
           </div>
-          <Badge variant="outline" className="text-[10px] font-mono border-emerald-500/40 text-emerald-300">
+          <Badge
+            variant="outline"
+            className="text-[10px] font-mono border-emerald-500/40 text-emerald-300"
+          >
             Tailwind v4 @theme
           </Badge>
         </div>

@@ -53,8 +53,13 @@ export class ReportCompiler {
     const avgHealth = Math.round(
       projects.reduce((acc, p) => acc + p.healthScore, 0) / totalProjects,
     );
-    const totalFindings = projects.reduce((acc, p) => acc + p.vulnerabilityCount + p.orphanNodesCount + p.missingFkCount, 0);
-    const blockedProjects = projects.filter((p) => p.status === "critical" || p.status === "failed").length;
+    const totalFindings = projects.reduce(
+      (acc, p) => acc + p.vulnerabilityCount + p.orphanNodesCount + p.missingFkCount,
+      0,
+    );
+    const blockedProjects = projects.filter(
+      (p) => p.status === "critical" || p.status === "failed",
+    ).length;
     const blockRate = `${Math.round((blockedProjects / totalProjects) * 100)}%`;
     const successfulAuth = authEvents.filter((e) => e.status === "success").length;
     const captureRate = authEvents.length > 0 ? "100.0%" : "99.8%";
@@ -152,7 +157,8 @@ export class ReportCompiler {
         achieved: null,
         status: "PENDING",
         selectorSource: "Moved to Appendix D: Dedicated Linux x64 cluster benchmarking plan",
-        measurementPlan: "Deploy async FastAPI AST worker container with Redis queue; benchmark on Linux kernel repository subsets.",
+        measurementPlan:
+          "Deploy async FastAPI AST worker container with Redis queue; benchmark on Linux kernel repository subsets.",
       },
       {
         id: "MET-11",
@@ -162,7 +168,8 @@ export class ReportCompiler {
         achieved: null,
         status: "PENDING",
         selectorSource: "Moved to Appendix D: Fault injection synthesis evaluation protocol",
-        measurementPlan: "Generate synthetic AST mutations on 50 open-source repositories; measure green build recovery rate.",
+        measurementPlan:
+          "Generate synthetic AST mutations on 50 open-source repositories; measure green build recovery rate.",
       },
     ];
 
@@ -173,7 +180,8 @@ export class ReportCompiler {
       id: reportId,
       title: "PROJECT BRAHMA",
       subtitle: "Executive Summary & Technical Architecture Report",
-      tagline: "From raw idea to validated software blueprint, code health, delivery risk, and business impact.",
+      tagline:
+        "From raw idea to validated software blueprint, code health, delivery risk, and business impact.",
       version: "2.4.0-Enterprise",
       template,
       status: "Completed",
@@ -288,7 +296,8 @@ export class ReportCompiler {
           what: "Bidirectional linkage connecting requirements (R_i) to components (C_j), code files (F_k), unit tests (T_l), and business KPIs (K_m).",
           why: "Eliminates orphan code and unverified feature claims during production delivery.",
           how: "Constructs a unified bipartite graph where graph traversals verify full requirement test coverage before gate passage.",
-          evidence: "Implemented across all project views; validates zero unmapped nodes under Seed ALPHA.",
+          evidence:
+            "Implemented across all project views; validates zero unmapped nodes under Seed ALPHA.",
         },
         {
           title: "2. Transparent Multi-Factor Explainability Layer",
@@ -302,14 +311,16 @@ export class ReportCompiler {
           what: "Automated binary blocking gate validating 7 structural conditions before production release.",
           why: "Prevents vulnerable or unverified code from being published.",
           how: "Evaluates zero critical CWEs, confidence >= 0.75, zero orphan nodes, schema FK integrity, route auth, coverage >= 70%, and complexity <= 20.0.",
-          evidence: "Hostile Seed BETA produced 100% block rate; typed overrides write permanent records to audit_logs.",
+          evidence:
+            "Hostile Seed BETA produced 100% block rate; typed overrides write permanent records to audit_logs.",
         },
         {
           title: "4. Cryptographic Chain-of-Custody Attestation",
           what: "SHA-256 report hashing with evaluator public identity binding.",
           why: "Guarantees tamper-evident academic and enterprise audit trails.",
           how: "Serializes compiled JSON data structures, computes WebCrypto SHA-256 digest, and stores signature in database.",
-          evidence: "Deterministic verification: identical data produces identical 64-character hex checksum.",
+          evidence:
+            "Deterministic verification: identical data produces identical 64-character hex checksum.",
         },
         {
           title: "5. Real-Time Signed GitHub Webhook Integration",
@@ -324,31 +335,36 @@ export class ReportCompiler {
           layer: "Frontend UI Framework",
           chosenTech: "React 19 + TypeScript 5.8",
           rejectedTech: "Angular, Vanilla JS",
-          justification: "Concurrent rendering, compile-time type safety across complex graph state.",
+          justification:
+            "Concurrent rendering, compile-time type safety across complex graph state.",
         },
         {
           layer: "Routing & Architecture",
           chosenTech: "TanStack Router + TanStack Start",
           rejectedTech: "Next.js App Router",
-          justification: "Strict compile-time route tree validation and SSR error boundaries without vendor lock-in.",
+          justification:
+            "Strict compile-time route tree validation and SSR error boundaries without vendor lock-in.",
         },
         {
           layer: "Visual Canvas",
           chosenTech: "React Flow (@xyflow/react)",
           rejectedTech: "D3.js (raw), Canvas 2D",
-          justification: "Native accessible DOM nodes, high-performance node rendering with minimap and controls.",
+          justification:
+            "Native accessible DOM nodes, high-performance node rendering with minimap and controls.",
         },
         {
           layer: "Database & Security",
           chosenTech: "PostgreSQL 16 + Supabase Auth",
           rejectedTech: "MongoDB, Firebase",
-          justification: "ACID compliance, native Row-Level Security (RLS), pgcrypto encrypted tokens, realtime CDC.",
+          justification:
+            "ACID compliance, native Row-Level Security (RLS), pgcrypto encrypted tokens, realtime CDC.",
         },
         {
           layer: "Styling & Accessibility",
           chosenTech: "Tailwind CSS v4 + shadcn/ui",
           rejectedTech: "Bootstrap, Material UI",
-          justification: "Zero-runtime CSS overhead, WAI-ARIA accessible primitives, light/dark theme tokens.",
+          justification:
+            "Zero-runtime CSS overhead, WAI-ARIA accessible primitives, light/dark theme tokens.",
         },
       ],
       metricsRegister,
@@ -421,17 +437,20 @@ export class ReportCompiler {
           {
             milestone: "Chimera AI",
             year: "2025–2026",
-            contribution: "MITRE ATT&CK kill-chain mapping, threat modeling, forensic chain of custody.",
+            contribution:
+              "MITRE ATT&CK kill-chain mapping, threat modeling, forensic chain of custody.",
           },
           {
             milestone: "Cognexus",
             year: "2025–2026",
-            contribution: "Multi-agent causal dependency graph orchestration, causal reasoning framework.",
+            contribution:
+              "Multi-agent causal dependency graph orchestration, causal reasoning framework.",
           },
           {
             milestone: "PROJECT BRAHMA",
             year: "2026–2027",
-            contribution: "Productized engineering intelligence platform with enforced 7-check release gating.",
+            contribution:
+              "Productized engineering intelligence platform with enforced 7-check release gating.",
           },
         ],
       },
@@ -439,25 +458,30 @@ export class ReportCompiler {
         {
           layer: "Database Multi-Tenancy",
           mechanism: "PostgreSQL Row-Level Security (RLS)",
-          implementationDetail: "Enforced at kernel engine on all tables using auth.uid() = user_id.",
-          verificationEvidence: "Cross-tenant reads return 0 rows; verified via security audit probe.",
+          implementationDetail:
+            "Enforced at kernel engine on all tables using auth.uid() = user_id.",
+          verificationEvidence:
+            "Cross-tenant reads return 0 rows; verified via security audit probe.",
         },
         {
           layer: "Integration Secrets",
           mechanism: "pgcrypto Symmetric Key Encryption",
-          implementationDetail: "OAuth tokens stored encrypted; decrypted only inside Edge Functions.",
+          implementationDetail:
+            "OAuth tokens stored encrypted; decrypted only inside Edge Functions.",
           verificationEvidence: "Client browser never receives raw access tokens.",
         },
         {
           layer: "Webhook Integrity",
           mechanism: "HMAC-SHA256 Signature Verification",
-          implementationDetail: "Validates X-Hub-Signature-256 header against secret before execution.",
+          implementationDetail:
+            "Validates X-Hub-Signature-256 header against secret before execution.",
           verificationEvidence: "Rejects unauthenticated or forged payloads with HTTP 401.",
         },
         {
           layer: "Audit Trails",
           mechanism: "Immutable Append-Only Audit Logging",
-          implementationDetail: "Captures IP, timestamp, user identity, and justification tokens on overrides.",
+          implementationDetail:
+            "Captures IP, timestamp, user identity, and justification tokens on overrides.",
           verificationEvidence: "Permanent audit records viewable in Admin Audit Console.",
         },
       ],
@@ -476,36 +500,45 @@ export class ReportCompiler {
       publicationPlacement: {
         paperAngles: [
           {
-            title: "Validation Over Generation: Automated Architectural Gating for LLM-Synthesized Code",
+            title:
+              "Validation Over Generation: Automated Architectural Gating for LLM-Synthesized Code",
             targetVenue: "IEEE Transactions on Software Engineering (TSE) / ICSE 2027",
-            coreFocus: "Formal release gate architecture and empirical false-acceptance benchmarks.",
+            coreFocus:
+              "Formal release gate architecture and empirical false-acceptance benchmarks.",
           },
           {
-            title: "Deterministic Traceability Graphs Binding Natural Requirements to AST Complexity",
+            title:
+              "Deterministic Traceability Graphs Binding Natural Requirements to AST Complexity",
             targetVenue: "ACM SIGSOFT FSE 2027",
             coreFocus: "Multi-factor explainable health scoring and bipartite graph traceability.",
           },
           {
-            title: "Zero-Trust Release Gating: Multi-Factor CWE Elimination in AI-Assisted Development",
-            targetVenue: "IEEE International Conference on Software Security and Reliability (SERE)",
-            coreFocus: "Continuous Semgrep SAST integration with cryptographic chain-of-custody signing.",
+            title:
+              "Zero-Trust Release Gating: Multi-Factor CWE Elimination in AI-Assisted Development",
+            targetVenue:
+              "IEEE International Conference on Software Security and Reliability (SERE)",
+            coreFocus:
+              "Continuous Semgrep SAST integration with cryptographic chain-of-custody signing.",
           },
         ],
         roleFits: [
           {
             member: "Puli Phanindhra (2023PECCB214)",
             targetRole: "Principal Systems Architect / Full-Stack Distributed Systems Engineer",
-            competencies: "Reactive state architecture, TanStack SSR, complex graph visualization, compiler design.",
+            competencies:
+              "Reactive state architecture, TanStack SSR, complex graph visualization, compiler design.",
           },
           {
             member: "Vishal Madhavan (2023PECCB222)",
             targetRole: "Senior Code Intelligence & DevSecOps Platform Engineer",
-            competencies: "AST Tree-sitter parsing, static analysis pipelines, automated testing synthesis.",
+            competencies:
+              "AST Tree-sitter parsing, static analysis pipelines, automated testing synthesis.",
           },
           {
             member: "Vishal S (2023PECCB223)",
             targetRole: "Application Security & Compliance Architect",
-            competencies: "PostgreSQL RLS security, cryptographic attestation, tamper-evident audit logging.",
+            competencies:
+              "PostgreSQL RLS security, cryptographic attestation, tamper-evident audit logging.",
           },
         ],
       },
@@ -513,37 +546,43 @@ export class ReportCompiler {
         {
           id: "FS-1",
           title: "Distributed FastAPI Analysis Engine at Scale",
-          description: "Offloading AST parsing and static analysis to an asynchronous Python microservice cluster.",
+          description:
+            "Offloading AST parsing and static analysis to an asynchronous Python microservice cluster.",
           technicalMilestone: "Sub-5-second processing for codebases exceeding 500k LOC.",
         },
         {
           id: "FS-2",
           title: "Causal Business-Impact Inference (DoWhy Lineage)",
-          description: "Integrating causal graphs to simulate how specific technical debt refactoring impacts velocity.",
+          description:
+            "Integrating causal graphs to simulate how specific technical debt refactoring impacts velocity.",
           technicalMilestone: "Counterfactual risk and maintenance cost forecasting.",
         },
         {
           id: "FS-3",
           title: "LLM Internal Causal Probing",
-          description: "Detecting hallucinated architectural dependencies directly within transformer attention heads.",
+          description:
+            "Detecting hallucinated architectural dependencies directly within transformer attention heads.",
           technicalMilestone: "Pre-generation hallucination filtering during blueprint synthesis.",
         },
         {
           id: "FS-4",
           title: "Federated Cross-Institution Evaluation",
-          description: "Deploying BRAHMA across engineering colleges for automated, unbiased capstone grading.",
+          description:
+            "Deploying BRAHMA across engineering colleges for automated, unbiased capstone grading.",
           technicalMilestone: "Standardized multi-institution rubric evaluation network.",
         },
         {
           id: "FS-5",
           title: "Air-Gapped Enterprise Compliance Pack",
-          description: "On-premise containerized analysis agents for defense and healthcare clients.",
+          description:
+            "On-premise containerized analysis agents for defense and healthcare clients.",
           technicalMilestone: "Zero-telemetry local execution with local LLM models.",
         },
         {
           id: "FS-6",
           title: "On-Device AST Tree-sitter Parsing",
-          description: "WebAssembly-compiled Tree-sitter execution in the browser for instant client-side feedback.",
+          description:
+            "WebAssembly-compiled Tree-sitter execution in the browser for instant client-side feedback.",
           technicalMilestone: "Sub-50ms local static syntax parsing.",
         },
       ],

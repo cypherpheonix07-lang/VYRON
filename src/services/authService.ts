@@ -71,12 +71,16 @@ export interface DemoSession {
 
 const classify = (raw?: string): AuthErrorCode => {
   const m = (raw ?? "").toLowerCase();
-  if (m.includes("invalid login credentials") || m.includes("invalid credentials")) return "invalid_credentials";
+  if (m.includes("invalid login credentials") || m.includes("invalid credentials"))
+    return "invalid_credentials";
   if (m.includes("email not confirmed")) return "email_not_confirmed";
-  if (m.includes("already registered") || m.includes("user already registered")) return "email_exists";
+  if (m.includes("already registered") || m.includes("user already registered"))
+    return "email_exists";
   if (m.includes("rate limit") || m.includes("too many")) return "rate_limited";
-  if (m.includes("api key") || m.includes("anon key") || m.includes("invalid key")) return "invalid_api_key";
-  if (m.includes("failed to fetch") || m.includes("network") || m.includes("fetch")) return "network";
+  if (m.includes("api key") || m.includes("anon key") || m.includes("invalid key"))
+    return "invalid_api_key";
+  if (m.includes("failed to fetch") || m.includes("network") || m.includes("fetch"))
+    return "network";
   if (m.includes("password") && m.includes("weak")) return "weak_password";
   if (m.includes("provider") || m.includes("oauth")) return "provider_error";
   return "unknown";
@@ -95,7 +99,7 @@ const HUMAN: Record<AuthErrorCode, string> = {
   unknown: "Unexpected authentication error.",
 };
 
-const fail = <T,>(raw?: string): AuthResponse<T> => {
+const fail = <T>(raw?: string): AuthResponse<T> => {
   const code = classify(raw);
   return { ok: false, error: { code, message: HUMAN[code], raw } };
 };
@@ -134,10 +138,21 @@ export const authService = {
         },
       });
       if (error) {
-        logAuthEvent({ event: "sign_up", method: "Password", status: "failed", email: cleanEmail }).catch(() => undefined);
+        logAuthEvent({
+          event: "sign_up",
+          method: "Password",
+          status: "failed",
+          email: cleanEmail,
+        }).catch(() => undefined);
         return fail(error.message);
       }
-      logAuthEvent({ event: "sign_up", method: "Password", status: "success", email: cleanEmail, user_id: data.user?.id }).catch(() => undefined);
+      logAuthEvent({
+        event: "sign_up",
+        method: "Password",
+        status: "success",
+        email: cleanEmail,
+        user_id: data.user?.id,
+      }).catch(() => undefined);
       return { ok: true, data: { user: data.user, session: data.session } };
     } catch (e: unknown) {
       return fail(e instanceof Error ? e.message : String(e));
@@ -150,10 +165,7 @@ export const authService = {
     return this.signInWithPassword(email, password);
   },
 
-  async signInWithPassword(
-    email: string,
-    password: string,
-  ): Promise<AuthResponse<Session>> {
+  async signInWithPassword(email: string, password: string): Promise<AuthResponse<Session>> {
     const cleanEmail = email.trim();
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -161,10 +173,21 @@ export const authService = {
         password,
       });
       if (error) {
-        logAuthEvent({ event: "failed_password", method: "Password", status: "failed", email: cleanEmail }).catch(() => undefined);
+        logAuthEvent({
+          event: "failed_password",
+          method: "Password",
+          status: "failed",
+          email: cleanEmail,
+        }).catch(() => undefined);
         return fail(error.message);
       }
-      logAuthEvent({ event: "signed_in", method: "Password", status: "success", email: cleanEmail, user_id: data.user?.id }).catch(() => undefined);
+      logAuthEvent({
+        event: "signed_in",
+        method: "Password",
+        status: "success",
+        email: cleanEmail,
+        user_id: data.user?.id,
+      }).catch(() => undefined);
       return { ok: true, data: data.session as Session };
     } catch (e: unknown) {
       return fail(e instanceof Error ? e.message : String(e));
@@ -227,9 +250,7 @@ export const authService = {
     }
   },
 
-  async signInWithOAuth(
-    provider: "google" | "github" | "gitlab",
-  ): Promise<AuthResponse> {
+  async signInWithOAuth(provider: "google" | "github" | "gitlab"): Promise<AuthResponse> {
     if (provider === "google") return this.signInWithGoogle();
     if (provider === "github") return this.signInWithGitHub();
     return fail(`OAuth provider ${provider} is not configured.`);
@@ -246,7 +267,12 @@ export const authService = {
       const { error } = await supabase.auth.signOut({ scope });
       if (error) return fail(error.message);
 
-      logAuthEvent({ event: "sign_out", method: scope === "others" ? "Revoke Other Sessions" : "Session", status: "success", email: emailForLog }).catch(() => undefined);
+      logAuthEvent({
+        event: "sign_out",
+        method: scope === "others" ? "Revoke Other Sessions" : "Session",
+        status: "success",
+        email: emailForLog,
+      }).catch(() => undefined);
       return { ok: true };
     } catch (e: unknown) {
       return fail(e instanceof Error ? e.message : String(e));
@@ -339,7 +365,12 @@ export const authService = {
         options: { emailRedirectTo: getRedirectUrl() },
       });
       if (error) return fail(error.message);
-      logAuthEvent({ event: "magic_link", method: "Magic Link", status: "success", email: cleanEmail }).catch(() => undefined);
+      logAuthEvent({
+        event: "magic_link",
+        method: "Magic Link",
+        status: "success",
+        email: cleanEmail,
+      }).catch(() => undefined);
       return { ok: true };
     } catch (e: unknown) {
       return fail(e instanceof Error ? e.message : String(e));

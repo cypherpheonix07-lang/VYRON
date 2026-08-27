@@ -12,18 +12,10 @@ interface ReportSectionRendererProps {
 
 const TOTAL_PAGES = 12;
 
-function PageWrapper({
-  pageNumber,
-  children,
-}: {
-  pageNumber: number;
-  children: React.ReactNode;
-}) {
+function PageWrapper({ pageNumber, children }: { pageNumber: number; children: React.ReactNode }) {
   return (
     <div className="report-paper-page">
-      <div className="space-y-4 font-sans text-xs text-slate-800 leading-relaxed">
-        {children}
-      </div>
+      <div className="space-y-4 font-sans text-xs text-slate-800 leading-relaxed">{children}</div>
       <div className="border-t border-slate-200 pt-2 mt-auto flex justify-between items-center text-[10px] font-mono text-slate-400">
         <span>PROJECT BRAHMA — Executive Summary Report 2026–2027</span>
         <span>
@@ -79,7 +71,9 @@ export const ReportSectionRenderer: React.FC<ReportSectionRendererProps> = ({
               </span>
             </div>
             <div className="bg-slate-50 border border-slate-200 p-2 rounded">
-              <span className="text-[10px] text-slate-500 block uppercase">Blueprints Generated</span>
+              <span className="text-[10px] text-slate-500 block uppercase">
+                Blueprints Generated
+              </span>
               <span className="text-base font-bold text-slate-900">
                 <MetricSourceTooltip
                   value={doc.kpis.blueprintsGenerated}
@@ -155,7 +149,9 @@ export const ReportSectionRenderer: React.FC<ReportSectionRendererProps> = ({
                   <div key={r.category}>
                     <div className="flex justify-between text-[10px] font-mono text-slate-600 mb-0.5">
                       <span>{r.category}</span>
-                      <span>{r.percentage}% ({r.count})</span>
+                      <span>
+                        {r.percentage}% ({r.count})
+                      </span>
                     </div>
                     <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
                       <div
@@ -164,8 +160,8 @@ export const ReportSectionRenderer: React.FC<ReportSectionRendererProps> = ({
                           r.percentage > 50
                             ? "bg-emerald-600"
                             : r.percentage > 25
-                            ? "bg-amber-600"
-                            : "bg-rose-600"
+                              ? "bg-amber-600"
+                              : "bg-rose-600"
                         }`}
                       />
                     </div>
@@ -196,7 +192,8 @@ export const ReportSectionRenderer: React.FC<ReportSectionRendererProps> = ({
             S5. System Architecture & Module Pipeline
           </h2>
           <p className="text-slate-600 mb-2">
-            PROJECT BRAHMA organizes automated engineering intelligence across eight sequential modules (M1–M8) operating under strict state contracts:
+            PROJECT BRAHMA organizes automated engineering intelligence across eight sequential
+            modules (M1–M8) operating under strict state contracts:
           </p>
 
           <table className="report-table">
@@ -225,7 +222,10 @@ export const ReportSectionRenderer: React.FC<ReportSectionRendererProps> = ({
               End-to-End Execution Data Flow:
             </h4>
             <p className="text-[11px] text-slate-600 leading-relaxed font-mono">
-              Inbound Webhook / Spec &rarr; M1 Entity Parsing &rarr; M2 React Flow Graph & Schema &rarr; M3 KPI Matrix &rarr; M4 Tree-sitter Complexity &rarr; M5 Semgrep SAST CWE &rarr; M6 Symbolic Test Suite &rarr; M7 Risk Score &rarr; M8 Deterministic 7-Check Release Gate &rarr; SHA-256 Signed Attestation.
+              Inbound Webhook / Spec &rarr; M1 Entity Parsing &rarr; M2 React Flow Graph & Schema
+              &rarr; M3 KPI Matrix &rarr; M4 Tree-sitter Complexity &rarr; M5 Semgrep SAST CWE
+              &rarr; M6 Symbolic Test Suite &rarr; M7 Risk Score &rarr; M8 Deterministic 7-Check
+              Release Gate &rarr; SHA-256 Signed Attestation.
             </p>
           </div>
         </div>
@@ -265,7 +265,8 @@ export const ReportSectionRenderer: React.FC<ReportSectionRendererProps> = ({
               Deterministic Mathematical Scoring Formulas:
             </span>
             <p className="text-slate-300">
-              Health = 100 - [ 0.35 &times; v(G) + 0.40 &times; (100 - TestCoverage) + 0.25 &times; TechDebtRatio ]
+              Health = 100 - [ 0.35 &times; v(G) + 0.40 &times; (100 - TestCoverage) + 0.25 &times;
+              TechDebtRatio ]
             </p>
             <p className="text-slate-300 pt-1">
               Security = 100 - &sum; [ SeverityWeight(CWE_i) &times; ExploitabilityIndex(CWE_i) ]
@@ -281,7 +282,8 @@ export const ReportSectionRenderer: React.FC<ReportSectionRendererProps> = ({
             S7. Technology Stack & Architectural Decision Register
           </h2>
           <p className="text-slate-600 mb-2">
-            The platform architecture rejects monolithic, opaque runtimes in favor of verifiable cloud-native primitives:
+            The platform architecture rejects monolithic, opaque runtimes in favor of verifiable
+            cloud-native primitives:
           </p>
 
           <table className="report-table">
@@ -322,7 +324,8 @@ export const ReportSectionRenderer: React.FC<ReportSectionRendererProps> = ({
           <MetricStatusTable metrics={doc.metricsRegister} />
 
           <p className="text-[10px] text-slate-500 italic mt-2">
-            Note: Hovering over any achieved metric in the web viewer exposes its exact mathematical selector and benchmark dataset.
+            Note: Hovering over any achieved metric in the web viewer exposes its exact mathematical
+            selector and benchmark dataset.
           </p>
         </div>
       </PageWrapper>
@@ -490,9 +493,7 @@ export const ReportSectionRenderer: React.FC<ReportSectionRendererProps> = ({
                 <span className="font-bold text-slate-900 text-xs block">
                   {f.id}: {f.title}
                 </span>
-                <span className="text-[10px] text-slate-600 block my-0.5">
-                  {f.description}
-                </span>
+                <span className="text-[10px] text-slate-600 block my-0.5">{f.description}</span>
                 <span className="text-[9px] font-mono text-cyan-800 block">
                   Milestone: {f.technicalMilestone}
                 </span>
@@ -540,20 +541,31 @@ export const ReportSectionRenderer: React.FC<ReportSectionRendererProps> = ({
             </div>
 
             <div>
-              <h4 className="font-bold text-slate-900 uppercase">Appendix B: Component Inventory</h4>
-              <p className="text-slate-600 font-mono">{doc.appendices.bComponentInventory.join(" | ")}</p>
+              <h4 className="font-bold text-slate-900 uppercase">
+                Appendix B: Component Inventory
+              </h4>
+              <p className="text-slate-600 font-mono">
+                {doc.appendices.bComponentInventory.join(" | ")}
+              </p>
             </div>
 
             <div>
-              <h4 className="font-bold text-slate-900 uppercase">Appendix C: Database Schema & RLS Summary</h4>
+              <h4 className="font-bold text-slate-900 uppercase">
+                Appendix C: Database Schema & RLS Summary
+              </h4>
               <p className="text-slate-600 font-mono">{doc.appendices.cSqlSchemaSummary}</p>
             </div>
 
             <div>
-              <h4 className="font-bold text-slate-900 uppercase">Appendix D: Evidence Gaps & Measurement Plans</h4>
+              <h4 className="font-bold text-slate-900 uppercase">
+                Appendix D: Evidence Gaps & Measurement Plans
+              </h4>
               <div className="space-y-1 mt-1">
                 {doc.appendices.dEvidenceGaps.map((g) => (
-                  <div key={g.metricName} className="bg-slate-50 p-1.5 rounded border border-slate-200 font-mono">
+                  <div
+                    key={g.metricName}
+                    className="bg-slate-50 p-1.5 rounded border border-slate-200 font-mono"
+                  >
                     <span className="font-bold text-slate-800">{g.metricName}</span>
                     <p className="text-slate-600">{g.plan}</p>
                   </div>
@@ -562,9 +574,14 @@ export const ReportSectionRenderer: React.FC<ReportSectionRendererProps> = ({
             </div>
 
             <div className="pt-2 border-t border-slate-200">
-              <h4 className="font-bold text-slate-900 uppercase">Appendix E: Academic References (IEEE Format)</h4>
+              <h4 className="font-bold text-slate-900 uppercase">
+                Appendix E: Academic References (IEEE Format)
+              </h4>
               <p className="text-slate-600 font-mono leading-tight">
-                [1] E. Gamma et al., Design Patterns, Addison-Wesley, 1994. [2] M. Fowler, Refactoring, Addison-Wesley, 2018. [3] T. J. McCabe, "A Complexity Measure," IEEE TSE, 1976. [4] J. Brooke, "SUS: A Quick and Dirty Usability Scale," 1996. [5] OWASP Foundation, "OWASP Top Ten Web Application Security Risks," 2021.
+                [1] E. Gamma et al., Design Patterns, Addison-Wesley, 1994. [2] M. Fowler,
+                Refactoring, Addison-Wesley, 2018. [3] T. J. McCabe, "A Complexity Measure," IEEE
+                TSE, 1976. [4] J. Brooke, "SUS: A Quick and Dirty Usability Scale," 1996. [5] OWASP
+                Foundation, "OWASP Top Ten Web Application Security Risks," 2021.
               </p>
             </div>
           </div>

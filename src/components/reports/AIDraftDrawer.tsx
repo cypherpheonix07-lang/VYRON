@@ -51,7 +51,9 @@ export const AIDraftDrawer: React.FC<AIDraftDrawerProps> = ({
     const found = FORBIDDEN_WORDS.filter((w) => lower.includes(w));
     if (found.length > 0) {
       setValidationErrors(
-        found.map((w) => `Prohibited marketing adjective detected: "${w}". Use cold factual precision.`),
+        found.map(
+          (w) => `Prohibited marketing adjective detected: "${w}". Use cold factual precision.`,
+        ),
       );
       return false;
     }
@@ -91,7 +93,10 @@ export const AIDraftDrawer: React.FC<AIDraftDrawerProps> = ({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-full sm:max-w-xl bg-slate-900 border-slate-800 text-slate-100 p-6 flex flex-col justify-between">
+      <SheetContent
+        side="right"
+        className="w-full sm:max-w-xl bg-slate-900 border-slate-800 text-slate-100 p-6 flex flex-col justify-between"
+      >
         <div className="space-y-4">
           <SheetHeader>
             <div className="flex items-center gap-2">
@@ -101,7 +106,8 @@ export const AIDraftDrawer: React.FC<AIDraftDrawerProps> = ({
               </SheetTitle>
             </div>
             <SheetDescription className="text-slate-400 text-xs">
-              Generates executive prose strictly derived from verified platform metrics. Marketing buzzwords are strictly rejected.
+              Generates executive prose strictly derived from verified platform metrics. Marketing
+              buzzwords are strictly rejected.
             </SheetDescription>
           </SheetHeader>
 

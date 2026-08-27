@@ -37,7 +37,9 @@ interface GitHubRepoListProps {
 
 export function GitHubRepoList({ repos, onSelectRepo }: GitHubRepoListProps) {
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"all" | "public" | "private" | "forks" | "archived">("all");
+  const [typeFilter, setTypeFilter] = useState<"all" | "public" | "private" | "forks" | "archived">(
+    "all",
+  );
   const [sortBy, setSortBy] = useState<"updated" | "stars" | "name" | "size">("updated");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
@@ -61,7 +63,10 @@ export function GitHubRepoList({ repos, onSelectRepo }: GitHubRepoListProps) {
         if (sortBy === "stars") return (b.stargazers_count || 0) - (a.stargazers_count || 0);
         if (sortBy === "name") return a.name.localeCompare(b.name);
         if (sortBy === "size") return (b.size || 0) - (a.size || 0);
-        return new Date(b.pushed_at || b.updated_at).getTime() - new Date(a.pushed_at || a.updated_at).getTime();
+        return (
+          new Date(b.pushed_at || b.updated_at).getTime() -
+          new Date(a.pushed_at || a.updated_at).getTime()
+        );
       });
   }, [repos, search, typeFilter, sortBy]);
 
@@ -142,7 +147,9 @@ export function GitHubRepoList({ repos, onSelectRepo }: GitHubRepoListProps) {
         <div className="p-12 text-center rounded-2xl border border-border bg-zinc-950/60 space-y-3">
           <FolderGit2 className="size-10 text-muted-foreground/40 mx-auto" />
           <h4 className="text-sm font-semibold text-white">No repositories match your criteria</h4>
-          <p className="text-xs text-muted-foreground">Try clearing your filters or search keywords.</p>
+          <p className="text-xs text-muted-foreground">
+            Try clearing your filters or search keywords.
+          </p>
         </div>
       ) : viewMode === "grid" ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -162,11 +169,17 @@ export function GitHubRepoList({ repos, onSelectRepo }: GitHubRepoListProps) {
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
                     {repo.private ? (
-                      <Badge variant="outline" className="text-[9px] border-amber-800/60 text-amber-400 bg-amber-950/30 px-1 py-0 h-4 flex items-center gap-0.5">
+                      <Badge
+                        variant="outline"
+                        className="text-[9px] border-amber-800/60 text-amber-400 bg-amber-950/30 px-1 py-0 h-4 flex items-center gap-0.5"
+                      >
                         <Lock className="size-2.5" /> Private
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="text-[9px] border-zinc-700 text-zinc-400 px-1 py-0 h-4">
+                      <Badge
+                        variant="outline"
+                        className="text-[9px] border-zinc-700 text-zinc-400 px-1 py-0 h-4"
+                      >
                         Public
                       </Badge>
                     )}
@@ -189,7 +202,9 @@ export function GitHubRepoList({ repos, onSelectRepo }: GitHubRepoListProps) {
                       </span>
                     ))}
                     {repo.topics.length > 3 && (
-                      <span className="text-[9px] text-zinc-500 font-mono">+{repo.topics.length - 3}</span>
+                      <span className="text-[9px] text-zinc-500 font-mono">
+                        +{repo.topics.length - 3}
+                      </span>
                     )}
                   </div>
                 )}
@@ -250,7 +265,10 @@ export function GitHubRepoList({ repos, onSelectRepo }: GitHubRepoListProps) {
                     {repo.name}
                   </span>
                   {repo.private && (
-                    <Badge variant="outline" className="text-[8px] h-3.5 border-amber-800 text-amber-400">
+                    <Badge
+                      variant="outline"
+                      className="text-[8px] h-3.5 border-amber-800 text-amber-400"
+                    >
                       Private
                     </Badge>
                   )}

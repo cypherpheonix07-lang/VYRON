@@ -1,4 +1,13 @@
-import { Sparkles, LayoutGrid, List, Maximize2, Search, SlidersHorizontal, Scale, RefreshCw } from "lucide-react";
+import {
+  Sparkles,
+  LayoutGrid,
+  List,
+  Maximize2,
+  Search,
+  SlidersHorizontal,
+  Scale,
+  RefreshCw,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -42,13 +51,19 @@ export function PreviewHeader({
         </div>
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-sm font-bold text-foreground tracking-tight">AI Tool Ecosystem Engine</h1>
-            <Badge variant="outline" className="h-5 px-1.5 text-[9px] font-mono border-cyan-500/30 text-cyan-400 bg-cyan-950/30">
+            <h1 className="text-sm font-bold text-foreground tracking-tight">
+              AI Tool Ecosystem Engine
+            </h1>
+            <Badge
+              variant="outline"
+              className="h-5 px-1.5 text-[9px] font-mono border-cyan-500/30 text-cyan-400 bg-cyan-950/30"
+            >
               LIVE 2026
             </Badge>
           </div>
           <p className="text-[11px] text-muted-foreground">
-            Preview, inspect, benchmark &amp; extract UI patterns from {totalTools} top generative tools
+            Preview, inspect, benchmark &amp; extract UI patterns from {totalTools} top generative
+            tools
           </p>
         </div>
       </div>
@@ -73,7 +88,9 @@ export function PreviewHeader({
           className="h-8 px-2.5 text-xs text-muted-foreground hover:text-foreground border-border bg-zinc-950/40 hidden sm:inline-flex items-center gap-1.5"
           title="Open Command Palette"
         >
-          <span className="text-[10px] font-mono font-bold bg-zinc-800 px-1 py-0.5 rounded border border-zinc-700">⌘K</span>
+          <span className="text-[10px] font-mono font-bold bg-zinc-800 px-1 py-0.5 rounded border border-zinc-700">
+            ⌘K
+          </span>
         </Button>
 
         {/* Comparison Mode Toggle */}
@@ -101,7 +118,9 @@ export function PreviewHeader({
           <button
             onClick={() => onLayoutChange("grid")}
             className={`p-1.5 rounded-md transition-colors ${
-              layoutMode === "grid" ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"
+              layoutMode === "grid"
+                ? "bg-primary/20 text-primary"
+                : "text-muted-foreground hover:text-foreground"
             }`}
             title="Grid Layout"
           >
@@ -110,7 +129,9 @@ export function PreviewHeader({
           <button
             onClick={() => onLayoutChange("list")}
             className={`p-1.5 rounded-md transition-colors ${
-              layoutMode === "list" ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"
+              layoutMode === "list"
+                ? "bg-primary/20 text-primary"
+                : "text-muted-foreground hover:text-foreground"
             }`}
             title="Compact List Layout"
           >
@@ -119,7 +140,9 @@ export function PreviewHeader({
           <button
             onClick={() => onLayoutChange("focus")}
             className={`p-1.5 rounded-md transition-colors ${
-              layoutMode === "focus" ? "bg-primary/20 text-primary" : "text-muted-foreground hover:text-foreground"
+              layoutMode === "focus"
+                ? "bg-primary/20 text-primary"
+                : "text-muted-foreground hover:text-foreground"
             }`}
             title="Focus Mode (Single Tool Fullscreen)"
           >

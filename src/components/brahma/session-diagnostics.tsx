@@ -280,15 +280,11 @@ export function SessionDiagnosticsPanel() {
               </div>
               <div className="flex justify-between py-1 border-b border-border/20">
                 <span className="text-muted-foreground">Supabase Project URL</span>
-                <span className="font-mono text-[10px] text-muted-foreground">
-                  {maskedUrl}
-                </span>
+                <span className="font-mono text-[10px] text-muted-foreground">{maskedUrl}</span>
               </div>
               <div className="flex justify-between py-1">
                 <span className="text-muted-foreground">Anon API Key</span>
-                <span className="font-mono text-[10px] text-muted-foreground">
-                  {maskedAnonKey}
-                </span>
+                <span className="font-mono text-[10px] text-muted-foreground">{maskedAnonKey}</span>
               </div>
             </div>
           </div>
@@ -298,7 +294,8 @@ export function SessionDiagnosticsPanel() {
         <div className="flex items-center gap-2 text-[11px] text-muted-foreground/70 font-mono bg-zinc-950/60 p-3 rounded-lg border border-border/40">
           <Terminal className="size-3.5 text-primary shrink-0" />
           <span>
-            Security guarantee: Raw session tokens, JWT signatures, and database secret keys are never exposed in UI memory or diagnostic logs.
+            Security guarantee: Raw session tokens, JWT signatures, and database secret keys are
+            never exposed in UI memory or diagnostic logs.
           </span>
         </div>
       </div>

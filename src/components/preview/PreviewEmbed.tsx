@@ -1,5 +1,13 @@
 import { useState } from "react";
-import { ExternalLink, RefreshCw, Smartphone, Tablet, Monitor, ShieldCheck, AlertTriangle } from "lucide-react";
+import {
+  ExternalLink,
+  RefreshCw,
+  Smartphone,
+  Tablet,
+  Monitor,
+  ShieldCheck,
+  AlertTriangle,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -99,7 +107,9 @@ export function PreviewEmbed({ toolName, url, category }: PreviewEmbedProps) {
 
       {/* Frame Container */}
       <div className="flex-1 bg-zinc-950 p-4 flex justify-center items-center min-h-[460px] overflow-hidden">
-        <div className={`w-full transition-all duration-300 flex flex-col justify-center items-center ${getWidth()}`}>
+        <div
+          className={`w-full transition-all duration-300 flex flex-col justify-center items-center ${getWidth()}`}
+        >
           {!hasFrameError ? (
             <iframe
               key={key}
@@ -112,11 +122,19 @@ export function PreviewEmbed({ toolName, url, category }: PreviewEmbedProps) {
           ) : (
             <div className="p-8 text-center max-w-md space-y-3 bg-zinc-900/60 rounded-2xl border border-zinc-800">
               <AlertTriangle className="size-8 text-amber-400 mx-auto" />
-              <h4 className="text-sm font-semibold text-white">Direct Embedding Restricted by Provider</h4>
+              <h4 className="text-sm font-semibold text-white">
+                Direct Embedding Restricted by Provider
+              </h4>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                {toolName} enforces an <code>X-Frame-Options: SAMEORIGIN</code> security policy preventing in-page frame execution. You can explore the live service directly in an external tab.
+                {toolName} enforces an <code>X-Frame-Options: SAMEORIGIN</code> security policy
+                preventing in-page frame execution. You can explore the live service directly in an
+                external tab.
               </p>
-              <Button asChild size="sm" className="bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold">
+              <Button
+                asChild
+                size="sm"
+                className="bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold"
+              >
                 <a href={url} target="_blank" rel="noopener noreferrer">
                   Launch {toolName} in new tab &rarr;
                 </a>

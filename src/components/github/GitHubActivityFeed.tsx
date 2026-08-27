@@ -21,7 +21,9 @@ export function GitHubActivityFeed({ events }: GitHubActivityFeedProps) {
       <div className="p-12 text-center rounded-2xl border border-border bg-zinc-950/60 space-y-3">
         <Activity className="size-10 text-muted-foreground/40 mx-auto" />
         <h4 className="text-sm font-semibold text-white">No recent GitHub activity</h4>
-        <p className="text-xs text-muted-foreground">Recent pushes, PRs, and events will appear here.</p>
+        <p className="text-xs text-muted-foreground">
+          Recent pushes, PRs, and events will appear here.
+        </p>
       </div>
     );
   }
@@ -32,7 +34,9 @@ export function GitHubActivityFeed({ events }: GitHubActivityFeedProps) {
       case "PushEvent": {
         const commits = (payload["commits"] as unknown[]) || [];
         const commitCount = commits.length || 1;
-        const refStr = payload["ref"] ? String(payload["ref"]).replace("refs/heads/", "") : "branch";
+        const refStr = payload["ref"]
+          ? String(payload["ref"]).replace("refs/heads/", "")
+          : "branch";
         return {
           icon: GitCommit,
           label: "Pushed",
@@ -113,7 +117,10 @@ export function GitHubActivityFeed({ events }: GitHubActivityFeedProps) {
                 <div className="space-y-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="text-xs font-bold text-white">{event.actor.login}</span>
-                    <Badge variant="outline" className={`text-[9px] font-mono px-1.5 h-4 border ${meta.badgeColor}`}>
+                    <Badge
+                      variant="outline"
+                      className={`text-[9px] font-mono px-1.5 h-4 border ${meta.badgeColor}`}
+                    >
                       {meta.label}
                     </Badge>
                     <a
@@ -130,7 +137,10 @@ export function GitHubActivityFeed({ events }: GitHubActivityFeedProps) {
               </div>
 
               <span className="text-[10px] text-zinc-500 font-mono shrink-0">
-                {new Date(event.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                {new Date(event.created_at).toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
               </span>
             </div>
           );

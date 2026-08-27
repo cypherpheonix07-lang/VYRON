@@ -3,15 +3,24 @@
 # =====================================================================
 $ErrorActionPreference = "Continue"
 
-$rootDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-if (-not $rootDir) { $rootDir = Get-Location }
+$scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+if (-not $scriptDir) { $scriptDir = (Get-Location).Path }
 
-$frontendDir = $rootDir
-$backendDir = Join-Path $rootDir "brahma-engine"
+if (Test-Path "$scriptDir\brahma-engine\main.py") {
+    $backendDir = "$scriptDir\brahma-engine"
+    $frontendDir = if (Test-Path "$scriptDir\brahma-insights-main\package.json") { "$scriptDir\brahma-insights-main" } else { $scriptDir }
+} elseif (Test-Path "$scriptDir\..\brahma-engine\main.py") {
+    $backendDir = (Resolve-Path "$scriptDir\..\brahma-engine").Path
+    $frontendDir = $scriptDir
+} else {
+    $backendDir = "$scriptDir\brahma-engine"
+    $frontendDir = $scriptDir
+}
 
 Write-Host "=====================================================" -ForegroundColor Cyan
 Write-Host "  PROJECT BRAHMA - Fullstack Launcher" -ForegroundColor Cyan
-Write-Host "  Root: $rootDir" -ForegroundColor Gray
+Write-Host "  Frontend: $frontendDir" -ForegroundColor Gray
+Write-Host "  Backend : $backendDir" -ForegroundColor Gray
 Write-Host "=====================================================`n" -ForegroundColor Cyan
 
 # ---- [1/4] CHECK PYTHON & START BACKEND ----

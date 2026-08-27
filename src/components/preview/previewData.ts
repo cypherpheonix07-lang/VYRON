@@ -1,9 +1,5 @@
 export type ToolCategory =
-  | "UI Builder"
-  | "Code Agent"
-  | "Design AI"
-  | "Full Stack"
-  | "Productivity & Ops";
+  "UI Builder" | "Code Agent" | "Design AI" | "Full Stack" | "Productivity & Ops";
 
 export interface ToolFeature {
   id: string;
@@ -11,7 +7,17 @@ export interface ToolFeature {
   desc: string;
   icon: string;
   highlight?: string;
-  interactiveType?: "prompt" | "filetree" | "chat" | "editor" | "canvas" | "kanban" | "table" | "diff" | "token" | "sandbox";
+  interactiveType?:
+    | "prompt"
+    | "filetree"
+    | "chat"
+    | "editor"
+    | "canvas"
+    | "kanban"
+    | "table"
+    | "diff"
+    | "token"
+    | "sandbox";
 }
 
 export interface CodeSnippet {
@@ -157,7 +163,8 @@ export function MetricCard({ title, value, change }: { title: string; value: str
     comparison: {
       bestFor: "Rapid React & Tailwind UI component generation and prototyping",
       closestCompetitor: "Bolt.new",
-      keyDifference: "Focuses exclusively on isolated component blocks rather than full-stack node runtimes.",
+      keyDifference:
+        "Focuses exclusively on isolated component blocks rather than full-stack node runtimes.",
       strengths: ["Clean copy-paste code", "Radix UI accessibility", "Instant CLI sync"],
       weaknesses: ["No backend database provisioning", "No persistent Node runtime"],
       ratings: { speed: 95, codeQuality: 92, designFidelity: 96, ecosystem: 90 },
@@ -181,8 +188,16 @@ export function MetricCard({ title, value, change }: { title: string; value: str
       },
     ],
     changelog: [
-      { version: "v2.8", date: "2026-08-10", summary: "Added Tailwind v4 @theme support and direct Vercel deployment." },
-      { version: "v2.7", date: "2026-07-28", summary: "Introduced Figma-to-v0 vector synchronization." },
+      {
+        version: "v2.8",
+        date: "2026-08-10",
+        summary: "Added Tailwind v4 @theme support and direct Vercel deployment.",
+      },
+      {
+        version: "v2.7",
+        date: "2026-07-28",
+        summary: "Introduced Figma-to-v0 vector synchronization.",
+      },
     ],
   },
   {
@@ -256,7 +271,8 @@ export function MetricCard({ title, value, change }: { title: string; value: str
     comparison: {
       bestFor: "End-to-end full-stack app creation with active terminal and package installations",
       closestCompetitor: "Lovable.dev / Replit Agent",
-      keyDifference: "Zero backend container cost by running WebAssembly Node.js directly in your browser tab.",
+      keyDifference:
+        "Zero backend container cost by running WebAssembly Node.js directly in your browser tab.",
       strengths: ["Client-side execution", "Instant npm package install", "Real terminal"],
       weaknesses: ["Memory limits on huge repositories", "No native Docker daemon support"],
       ratings: { speed: 90, codeQuality: 88, designFidelity: 86, ecosystem: 94 },
@@ -272,7 +288,11 @@ export function MetricCard({ title, value, change }: { title: string; value: str
       },
     ],
     changelog: [
-      { version: "v1.9", date: "2026-08-14", summary: "Added deep GitHub PR creation and automated git rebase support." },
+      {
+        version: "v1.9",
+        date: "2026-08-14",
+        summary: "Added deep GitHub PR creation and automated git rebase support.",
+      },
     ],
   },
   {
@@ -341,8 +361,13 @@ export const Route = createFileRoute('/dashboard')({
     comparison: {
       bestFor: "Non-engineers and product teams building production apps with clean git sync",
       closestCompetitor: "v0 / Bolt.new",
-      keyDifference: "True two-way GitHub repository synchronization and native Supabase integration.",
-      strengths: ["True Git bidirectional sync", "Click-to-edit DOM inspector", "Supabase automation"],
+      keyDifference:
+        "True two-way GitHub repository synchronization and native Supabase integration.",
+      strengths: [
+        "True Git bidirectional sync",
+        "Click-to-edit DOM inspector",
+        "Supabase automation",
+      ],
       weaknesses: ["Slightly higher prompt latency on multi-file refactors"],
       ratings: { speed: 88, codeQuality: 94, designFidelity: 92, ecosystem: 92 },
     },
@@ -357,7 +382,11 @@ export const Route = createFileRoute('/dashboard')({
       },
     ],
     changelog: [
-      { version: "v3.2", date: "2026-08-18", summary: "Introduced Multi-file visual diff inspection and rollbacks." },
+      {
+        version: "v3.2",
+        date: "2026-08-18",
+        summary: "Introduced Multi-file visual diff inspection and rollbacks.",
+      },
     ],
   },
   {
@@ -408,7 +437,8 @@ export const Route = createFileRoute('/dashboard')({
       {
         language: "markdown",
         title: ".cursorrules Context Config",
-        description: "Project-level agent instructions for strict TypeScript and Supabase standards",
+        description:
+          "Project-level agent instructions for strict TypeScript and Supabase standards",
         code: `# Cursor Agent Guidelines
 - Always use strict TypeScript with zero \`any\` types.
 - Follow Supabase RLS security standards: never query sensitive tables without auth.uid().
@@ -416,9 +446,11 @@ export const Route = createFileRoute('/dashboard')({
       },
     ],
     comparison: {
-      bestFor: "Professional developers demanding deep local VS Code integration and fast autocompletion",
+      bestFor:
+        "Professional developers demanding deep local VS Code integration and fast autocompletion",
       closestCompetitor: "GitHub Copilot / Windsurf",
-      keyDifference: "Full multi-file Composer agent that directly writes to your local filesystem.",
+      keyDifference:
+        "Full multi-file Composer agent that directly writes to your local filesystem.",
       strengths: ["Lightning autocomplete", "Full repository indexing", "Zero cloud lock-in"],
       weaknesses: ["Desktop application only — no browser-only preview"],
       ratings: { speed: 98, codeQuality: 96, designFidelity: 80, ecosystem: 98 },
@@ -434,7 +466,11 @@ export const Route = createFileRoute('/dashboard')({
       },
     ],
     changelog: [
-      { version: "v0.45", date: "2026-08-20", summary: "Added Claude 3.7 Sonnet hybrid reasoning support in Composer." },
+      {
+        version: "v0.45",
+        date: "2026-08-20",
+        summary: "Added Claude 3.7 Sonnet hybrid reasoning support in Composer.",
+      },
     ],
   },
   {
@@ -493,7 +529,8 @@ def list_projects(db: Session = Depends(get_db)):
     comparison: {
       bestFor: "Building and hosting full Python / Node apps without managing cloud infrastructure",
       closestCompetitor: "Bolt.new / Lovable.dev",
-      keyDifference: "Complete native cloud container hosting and PostgreSQL provisioning included.",
+      keyDifference:
+        "Complete native cloud container hosting and PostgreSQL provisioning included.",
       strengths: ["Managed database hosting", "Zero-devops deploy", "Mobile app support"],
       weaknesses: ["Proprietary hosting runtime", "Higher subscription tier"],
       ratings: { speed: 85, codeQuality: 86, designFidelity: 84, ecosystem: 90 },
@@ -509,7 +546,11 @@ def list_projects(db: Session = Depends(get_db)):
       },
     ],
     changelog: [
-      { version: "v2.1", date: "2026-08-05", summary: "Added automated database schema migration rollbacks." },
+      {
+        version: "v2.1",
+        date: "2026-08-05",
+        summary: "Added automated database schema migration rollbacks.",
+      },
     ],
   },
   {
@@ -569,7 +610,8 @@ def list_projects(db: Session = Depends(get_db)):
       },
     ],
     comparison: {
-      bestFor: "Frontend teams wanting visual drag-and-drop design that outputs human-quality React code",
+      bestFor:
+        "Frontend teams wanting visual drag-and-drop design that outputs human-quality React code",
       closestCompetitor: "Builder.io / Subframe",
       keyDifference: "Runs directly on your existing React codebase without an external SDK.",
       strengths: ["High visual fidelity", "Clean code output", "Figma design parity"],
@@ -587,7 +629,11 @@ def list_projects(db: Session = Depends(get_db)):
       },
     ],
     changelog: [
-      { version: "v1.4", date: "2026-07-22", summary: "Added direct Tailwind v4 theme property editor." },
+      {
+        version: "v1.4",
+        date: "2026-07-22",
+        summary: "Added direct Tailwind v4 theme property editor.",
+      },
     ],
   },
   {
@@ -667,7 +713,11 @@ export function AnimatedHero() {
       },
     ],
     changelog: [
-      { version: "v5.2", date: "2026-08-12", summary: "Added automated AI SEO metadata and sitemap optimization." },
+      {
+        version: "v5.2",
+        date: "2026-08-12",
+        summary: "Added automated AI SEO metadata and sitemap optimization.",
+      },
     ],
   },
   {
@@ -727,9 +777,11 @@ export function AnimatedHero() {
       },
     ],
     comparison: {
-      bestFor: "Engineering teams demanding peak productivity, keyboard shortcuts, and issue tracking",
+      bestFor:
+        "Engineering teams demanding peak productivity, keyboard shortcuts, and issue tracking",
       closestCompetitor: "Jira / GitHub Projects",
-      keyDifference: "Sub-50ms optimistic UI updates, flawless keyboard shortcuts, and modern aesthetics.",
+      keyDifference:
+        "Sub-50ms optimistic UI updates, flawless keyboard shortcuts, and modern aesthetics.",
       strengths: ["Extreme speed", "Keyboard-first workflow", "Flawless GitHub sync"],
       weaknesses: ["Focused purely on issue management, not code generation"],
       ratings: { speed: 99, codeQuality: 98, designFidelity: 98, ecosystem: 95 },
@@ -745,7 +797,11 @@ export function AnimatedHero() {
       },
     ],
     changelog: [
-      { version: "v2026.8", date: "2026-08-16", summary: "Added automated AI PR summary generation linked to issues." },
+      {
+        version: "v2026.8",
+        date: "2026-08-16",
+        summary: "Added automated AI PR summary generation linked to issues.",
+      },
     ],
   },
   {
@@ -818,7 +874,11 @@ export function StatusPill({ status }: { status: "active" | "failed" | "pending"
       },
     ],
     changelog: [
-      { version: "v2.0", date: "2026-08-01", summary: "Added native support for React 19 forwardRef removal." },
+      {
+        version: "v2.0",
+        date: "2026-08-01",
+        summary: "Added native support for React 19 forwardRef removal.",
+      },
     ],
   },
   {
@@ -873,7 +933,8 @@ LIMIT {{ tablePagination.pageSize }};`,
     comparison: {
       bestFor: "Internal administrative dashboards and database operations tooling",
       closestCompetitor: "AppSmith AI",
-      keyDifference: "Unmatched enterprise security, audit logging, and native database connectors.",
+      keyDifference:
+        "Unmatched enterprise security, audit logging, and native database connectors.",
       strengths: ["Fast database connection", "Enterprise RBAC", "50+ pre-built components"],
       weaknesses: ["Proprietary runtime; not suited for public consumer frontends"],
       ratings: { speed: 91, codeQuality: 82, designFidelity: 80, ecosystem: 94 },
@@ -889,7 +950,11 @@ LIMIT {{ tablePagination.pageSize }};`,
       },
     ],
     changelog: [
-      { version: "v3.80", date: "2026-08-09", summary: "Added automated vector semantic search across connected Postgres tables." },
+      {
+        version: "v3.80",
+        date: "2026-08-09",
+        summary: "Added automated vector semantic search across connected Postgres tables.",
+      },
     ],
   },
 ];

@@ -43,6 +43,8 @@ import { Route as GithubCallbackRouteImport } from './routes/github.callback'
 import { Route as AppAdminIndexRouteImport } from './routes/app.admin.index'
 import { Route as AppAdminAuditRouteImport } from './routes/app.admin.audit'
 import { Route as AppAdminModelsRouteImport } from './routes/app.admin.models'
+import { Route as AppAdminQueueRouteImport } from './routes/app.admin.queue'
+import { Route as AppAdminSchemaRouteImport } from './routes/app.admin.schema'
 import { Route as AppAdminStudioRouteImport } from './routes/app.admin.studio'
 import { Route as AppAdminTemplatesRouteImport } from './routes/app.admin.templates'
 import { Route as AppAdminUsageRouteImport } from './routes/app.admin.usage'
@@ -68,6 +70,7 @@ import { Route as AppProjectsIdPublishRouteImport } from './routes/app.projects.
 import { Route as AppProjectsIdReportsRouteImport } from './routes/app.projects.$id.reports'
 import { Route as AppProjectsIdRequirementsRouteImport } from './routes/app.projects.$id.requirements'
 import { Route as AppProjectsIdRiskBusinessRouteImport } from './routes/app.projects.$id.risk-business'
+import { Route as AppProjectsIdScansRouteImport } from './routes/app.projects.$id.scans'
 import { Route as AppProjectsIdSecurityRouteImport } from './routes/app.projects.$id.security'
 import { Route as AppProjectsIdTestsRouteImport } from './routes/app.projects.$id.tests'
 import { Route as AppProjectsIdVersionsRouteImport } from './routes/app.projects.$id.versions'
@@ -257,6 +260,16 @@ const AppAdminModelsRoute = AppAdminModelsRouteImport.update({
   path: '/models',
   getParentRoute: () => AppAdminRoute,
 } as any)
+const AppAdminQueueRoute = AppAdminQueueRouteImport.update({
+  id: '/queue',
+  path: '/queue',
+  getParentRoute: () => AppAdminRoute,
+} as any)
+const AppAdminSchemaRoute = AppAdminSchemaRouteImport.update({
+  id: '/schema',
+  path: '/schema',
+  getParentRoute: () => AppAdminRoute,
+} as any)
 const AppAdminStudioRoute = AppAdminStudioRouteImport.update({
   id: '/studio',
   path: '/studio',
@@ -385,6 +398,11 @@ const AppProjectsIdRiskBusinessRoute =
     path: '/risk-business',
     getParentRoute: () => AppProjectsIdRoute,
   } as any)
+const AppProjectsIdScansRoute = AppProjectsIdScansRouteImport.update({
+  id: '/scans',
+  path: '/scans',
+  getParentRoute: () => AppProjectsIdRoute,
+} as any)
 const AppProjectsIdSecurityRoute = AppProjectsIdSecurityRouteImport.update({
   id: '/security',
   path: '/security',
@@ -510,6 +528,8 @@ export interface FileRoutesByFullPath {
   '/app/': typeof AppIndexRoute
   '/app/admin/audit': typeof AppAdminAuditRoute
   '/app/admin/models': typeof AppAdminModelsRoute
+  '/app/admin/queue': typeof AppAdminQueueRoute
+  '/app/admin/schema': typeof AppAdminSchemaRoute
   '/app/admin/studio': typeof AppAdminStudioRoute
   '/app/admin/templates': typeof AppAdminTemplatesRoute
   '/app/admin/usage': typeof AppAdminUsageRoute
@@ -535,6 +555,7 @@ export interface FileRoutesByFullPath {
   '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
   '/app/projects/$id/risk-business': typeof AppProjectsIdRiskBusinessRoute
+  '/app/projects/$id/scans': typeof AppProjectsIdScansRoute
   '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
   '/app/projects/$id/tests': typeof AppProjectsIdTestsRoute
   '/app/projects/$id/versions': typeof AppProjectsIdVersionsRoute
@@ -587,6 +608,8 @@ export interface FileRoutesByTo {
   '/app': typeof AppIndexRoute
   '/app/admin/audit': typeof AppAdminAuditRoute
   '/app/admin/models': typeof AppAdminModelsRoute
+  '/app/admin/queue': typeof AppAdminQueueRoute
+  '/app/admin/schema': typeof AppAdminSchemaRoute
   '/app/admin/studio': typeof AppAdminStudioRoute
   '/app/admin/templates': typeof AppAdminTemplatesRoute
   '/app/admin/usage': typeof AppAdminUsageRoute
@@ -610,6 +633,7 @@ export interface FileRoutesByTo {
   '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
   '/app/projects/$id/risk-business': typeof AppProjectsIdRiskBusinessRoute
+  '/app/projects/$id/scans': typeof AppProjectsIdScansRoute
   '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
   '/app/projects/$id/tests': typeof AppProjectsIdTestsRoute
   '/app/projects/$id/versions': typeof AppProjectsIdVersionsRoute
@@ -665,6 +689,8 @@ export interface FileRoutesById {
   '/app/': typeof AppIndexRoute
   '/app/admin/audit': typeof AppAdminAuditRoute
   '/app/admin/models': typeof AppAdminModelsRoute
+  '/app/admin/queue': typeof AppAdminQueueRoute
+  '/app/admin/schema': typeof AppAdminSchemaRoute
   '/app/admin/studio': typeof AppAdminStudioRoute
   '/app/admin/templates': typeof AppAdminTemplatesRoute
   '/app/admin/usage': typeof AppAdminUsageRoute
@@ -690,6 +716,7 @@ export interface FileRoutesById {
   '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
   '/app/projects/$id/risk-business': typeof AppProjectsIdRiskBusinessRoute
+  '/app/projects/$id/scans': typeof AppProjectsIdScansRoute
   '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
   '/app/projects/$id/tests': typeof AppProjectsIdTestsRoute
   '/app/projects/$id/versions': typeof AppProjectsIdVersionsRoute
@@ -746,6 +773,8 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/admin/audit'
     | '/app/admin/models'
+    | '/app/admin/queue'
+    | '/app/admin/schema'
     | '/app/admin/studio'
     | '/app/admin/templates'
     | '/app/admin/usage'
@@ -771,6 +800,7 @@ export interface FileRouteTypes {
     | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
     | '/app/projects/$id/risk-business'
+    | '/app/projects/$id/scans'
     | '/app/projects/$id/security'
     | '/app/projects/$id/tests'
     | '/app/projects/$id/versions'
@@ -823,6 +853,8 @@ export interface FileRouteTypes {
     | '/app'
     | '/app/admin/audit'
     | '/app/admin/models'
+    | '/app/admin/queue'
+    | '/app/admin/schema'
     | '/app/admin/studio'
     | '/app/admin/templates'
     | '/app/admin/usage'
@@ -846,6 +878,7 @@ export interface FileRouteTypes {
     | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
     | '/app/projects/$id/risk-business'
+    | '/app/projects/$id/scans'
     | '/app/projects/$id/security'
     | '/app/projects/$id/tests'
     | '/app/projects/$id/versions'
@@ -900,6 +933,8 @@ export interface FileRouteTypes {
     | '/app/'
     | '/app/admin/audit'
     | '/app/admin/models'
+    | '/app/admin/queue'
+    | '/app/admin/schema'
     | '/app/admin/studio'
     | '/app/admin/templates'
     | '/app/admin/usage'
@@ -925,6 +960,7 @@ export interface FileRouteTypes {
     | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
     | '/app/projects/$id/risk-business'
+    | '/app/projects/$id/scans'
     | '/app/projects/$id/security'
     | '/app/projects/$id/tests'
     | '/app/projects/$id/versions'
@@ -1204,6 +1240,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminModelsRouteImport
       parentRoute: typeof AppAdminRoute
     }
+    '/app/admin/queue': {
+      id: '/app/admin/queue'
+      path: '/queue'
+      fullPath: '/app/admin/queue'
+      preLoaderRoute: typeof AppAdminQueueRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
+    '/app/admin/schema': {
+      id: '/app/admin/schema'
+      path: '/schema'
+      fullPath: '/app/admin/schema'
+      preLoaderRoute: typeof AppAdminSchemaRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
     '/app/admin/studio': {
       id: '/app/admin/studio'
       path: '/studio'
@@ -1379,6 +1429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsIdRiskBusinessRouteImport
       parentRoute: typeof AppProjectsIdRoute
     }
+    '/app/projects/$id/scans': {
+      id: '/app/projects/$id/scans'
+      path: '/scans'
+      fullPath: '/app/projects/$id/scans'
+      preLoaderRoute: typeof AppProjectsIdScansRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
     '/app/projects/$id/security': {
       id: '/app/projects/$id/security'
       path: '/security'
@@ -1511,6 +1568,8 @@ declare module '@tanstack/react-router' {
 interface AppAdminRouteChildren {
   AppAdminAuditRoute: typeof AppAdminAuditRoute
   AppAdminModelsRoute: typeof AppAdminModelsRoute
+  AppAdminQueueRoute: typeof AppAdminQueueRoute
+  AppAdminSchemaRoute: typeof AppAdminSchemaRoute
   AppAdminStudioRoute: typeof AppAdminStudioRoute
   AppAdminTemplatesRoute: typeof AppAdminTemplatesRoute
   AppAdminUsageRoute: typeof AppAdminUsageRoute
@@ -1521,6 +1580,8 @@ interface AppAdminRouteChildren {
 const AppAdminRouteChildren: AppAdminRouteChildren = {
   AppAdminAuditRoute: AppAdminAuditRoute,
   AppAdminModelsRoute: AppAdminModelsRoute,
+  AppAdminQueueRoute: AppAdminQueueRoute,
+  AppAdminSchemaRoute: AppAdminSchemaRoute,
   AppAdminStudioRoute: AppAdminStudioRoute,
   AppAdminTemplatesRoute: AppAdminTemplatesRoute,
   AppAdminUsageRoute: AppAdminUsageRoute,
@@ -1580,6 +1641,7 @@ interface AppProjectsIdRouteChildren {
   AppProjectsIdReportsRoute: typeof AppProjectsIdReportsRoute
   AppProjectsIdRequirementsRoute: typeof AppProjectsIdRequirementsRoute
   AppProjectsIdRiskBusinessRoute: typeof AppProjectsIdRiskBusinessRoute
+  AppProjectsIdScansRoute: typeof AppProjectsIdScansRoute
   AppProjectsIdSecurityRoute: typeof AppProjectsIdSecurityRoute
   AppProjectsIdTestsRoute: typeof AppProjectsIdTestsRoute
   AppProjectsIdVersionsRoute: typeof AppProjectsIdVersionsRoute
@@ -1595,6 +1657,7 @@ const AppProjectsIdRouteChildren: AppProjectsIdRouteChildren = {
   AppProjectsIdReportsRoute: AppProjectsIdReportsRoute,
   AppProjectsIdRequirementsRoute: AppProjectsIdRequirementsRoute,
   AppProjectsIdRiskBusinessRoute: AppProjectsIdRiskBusinessRoute,
+  AppProjectsIdScansRoute: AppProjectsIdScansRoute,
   AppProjectsIdSecurityRoute: AppProjectsIdSecurityRoute,
   AppProjectsIdTestsRoute: AppProjectsIdTestsRoute,
   AppProjectsIdVersionsRoute: AppProjectsIdVersionsRoute,

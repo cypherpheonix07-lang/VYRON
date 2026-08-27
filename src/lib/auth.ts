@@ -152,7 +152,12 @@ export function useAuthSession(): AuthSessionState {
     ): Promise<User> => {
       try {
         // Try fetching profile with single retry
-        let data: { full_name?: string | null; role?: string | null; onboarded?: boolean | null; avatar_url?: string | null } | null = null;
+        let data: {
+          full_name?: string | null;
+          role?: string | null;
+          onboarded?: boolean | null;
+          avatar_url?: string | null;
+        } | null = null;
         let fetchErr = null;
 
         const res = await supabase
@@ -192,7 +197,10 @@ export function useAuthSession(): AuthSessionState {
           name: resolvedName,
           role: dbRoleToAppRole(data?.role),
           onboarded: !!data?.onboarded,
-          avatarUrl: data?.avatar_url || (sessionUserMeta?.user_metadata?.["avatar_url"] as string) || undefined,
+          avatarUrl:
+            data?.avatar_url ||
+            (sessionUserMeta?.user_metadata?.["avatar_url"] as string) ||
+            undefined,
           emailConfirmedAt: sessionUserMeta?.confirmed_at,
           createdAt: sessionUserMeta?.created_at,
           lastSignInAt: sessionUserMeta?.last_sign_in_at,
@@ -224,17 +232,19 @@ export function useAuthSession(): AuthSessionState {
       const session = result.ok ? result.data : null;
 
       if (session && (session as { user?: unknown }).user) {
-        const sUser = (session as {
-          user: {
-            id: string;
-            email?: string;
-            confirmed_at?: string;
-            created_at?: string;
-            last_sign_in_at?: string;
-            user_metadata?: Record<string, unknown>;
-          };
-          expires_at?: number;
-        }).user;
+        const sUser = (
+          session as {
+            user: {
+              id: string;
+              email?: string;
+              confirmed_at?: string;
+              created_at?: string;
+              last_sign_in_at?: string;
+              user_metadata?: Record<string, unknown>;
+            };
+            expires_at?: number;
+          }
+        ).user;
 
         setSessionExpiresAt(session.expires_at);
         setEmailConfirmedAt(sUser.confirmed_at);

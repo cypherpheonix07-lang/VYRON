@@ -80,12 +80,18 @@ export const ReportLibraryTable: React.FC<ReportLibraryTableProps> = ({
                   </div>
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline" className="text-[10px] font-mono border-border bg-secondary/50">
+                  <Badge
+                    variant="outline"
+                    className="text-[10px] font-mono border-border bg-secondary/50"
+                  >
                     {rep.template}
                   </Badge>
                 </TableCell>
                 <TableCell>
-                  <span className="font-mono text-[10px] text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded border border-border/80 truncate block max-w-[120px]" title={rep.chainOfCustody.hashSha256}>
+                  <span
+                    className="font-mono text-[10px] text-muted-foreground bg-muted/60 px-1.5 py-0.5 rounded border border-border/80 truncate block max-w-[120px]"
+                    title={rep.chainOfCustody.hashSha256}
+                  >
                     {rep.chainOfCustody.hashSha256.slice(0, 12)}...
                   </span>
                 </TableCell>

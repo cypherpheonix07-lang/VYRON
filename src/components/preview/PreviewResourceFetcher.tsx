@@ -97,9 +97,13 @@ export function PreviewResourceFetcher({
             <Badge className="bg-emerald-950 text-emerald-400 border border-emerald-800 text-[9px] font-mono shrink-0">
               {changelog[0]?.version}
             </Badge>
-            <span className="text-[11px] text-muted-foreground truncate">{changelog[0]?.summary}</span>
+            <span className="text-[11px] text-muted-foreground truncate">
+              {changelog[0]?.summary}
+            </span>
           </div>
-          <span className="text-[10px] font-mono text-muted-foreground shrink-0">{changelog[0]?.date}</span>
+          <span className="text-[10px] font-mono text-muted-foreground shrink-0">
+            {changelog[0]?.date}
+          </span>
         </div>
       )}
     </div>

@@ -3,7 +3,11 @@
 // Verifies HMAC-SHA256 signature, enqueues raw payload into webhook_ingest table, and immediately returns 200 OK (<50ms).
 import { withSupabase } from "npm:@supabase/server";
 
-async function verifySignature(secret: string, headerSig: string | null, payload: string): Promise<boolean> {
+async function verifySignature(
+  secret: string,
+  headerSig: string | null,
+  payload: string,
+): Promise<boolean> {
   if (!headerSig || !headerSig.startsWith("sha256=")) return false;
   const signature = headerSig.replace("sha256=", "");
 
@@ -13,7 +17,7 @@ async function verifySignature(secret: string, headerSig: string | null, payload
     encoder.encode(secret),
     { name: "HMAC", hash: "SHA-256" },
     false,
-    ["sign"]
+    ["sign"],
   );
 
   const signed = await crypto.subtle.sign("HMAC", key, encoder.encode(payload));
@@ -45,10 +49,10 @@ export default {
       // 1. Fast HMAC-SHA256 verification (<2ms)
       const isValid = await verifySignature(webhookSecret, signatureHeader, rawPayload);
       if (!isValid) {
-        return new Response(
-          JSON.stringify({ error: "Unauthorized: Invalid HMAC signature" }),
-          { status: 401, headers: { "Content-Type": "application/json" } }
-        );
+        return new Response(JSON.stringify({ error: "Unauthorized: Invalid HMAC signature" }), {
+          status: 401,
+          headers: { "Content-Type": "application/json" },
+        });
       }
 
       const parsedPayload = JSON.parse(rawPayload);
@@ -81,7 +85,7 @@ export default {
               delivery_id: deliveryId,
               status: "already_queued",
             }),
-            { status: 200, headers: { "Content-Type": "application/json" } }
+            { status: 200, headers: { "Content-Type": "application/json" } },
           );
         }
         throw ingestError;
@@ -105,14 +109,14 @@ export default {
             "Content-Type": "application/json",
             "X-Response-Time-Ms": elapsedMs.toString(),
           },
-        }
+        },
       );
     } catch (err) {
       console.error("[github-webhook] Fatal error during webhook ingestion:", err);
-      return new Response(
-        JSON.stringify({ error: (err as Error).message }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
-      );
+      return new Response(JSON.stringify({ error: (err as Error).message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
     }
   }),
 };

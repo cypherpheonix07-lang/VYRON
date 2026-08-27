@@ -173,7 +173,10 @@ export function GitHubRepoDetail({ repo, onBack }: GitHubRepoDetailProps) {
                 <FolderGit2 className="size-5 text-cyan-400" />
                 <h2 className="text-base font-bold text-white tracking-tight">{repo.name}</h2>
                 {repo.private ? (
-                  <Badge variant="outline" className="text-[9px] border-amber-800 text-amber-400 bg-amber-950/30">
+                  <Badge
+                    variant="outline"
+                    className="text-[9px] border-amber-800 text-amber-400 bg-amber-950/30"
+                  >
                     <Lock className="size-2.5 mr-1" /> Private
                   </Badge>
                 ) : (
@@ -209,7 +212,12 @@ export function GitHubRepoDetail({ repo, onBack }: GitHubRepoDetailProps) {
             </Select>
 
             {/* Direct Open */}
-            <Button asChild variant="outline" size="sm" className="h-8 px-2.5 text-xs border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-white gap-1">
+            <Button
+              asChild
+              variant="outline"
+              size="sm"
+              className="h-8 px-2.5 text-xs border-zinc-800 bg-zinc-900 text-zinc-300 hover:text-white gap-1"
+            >
               <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
                 <span>GitHub</span>
                 <ExternalLink className="size-3" />
@@ -289,13 +297,15 @@ export function GitHubRepoDetail({ repo, onBack }: GitHubRepoDetailProps) {
                         isSelected
                           ? "bg-cyan-500/20 text-cyan-300 font-semibold border border-cyan-500/30"
                           : isFile
-                          ? "text-zinc-400 hover:bg-zinc-900 hover:text-white"
-                          : "text-amber-400/90 font-bold hover:bg-zinc-900"
+                            ? "text-zinc-400 hover:bg-zinc-900 hover:text-white"
+                            : "text-amber-400/90 font-bold hover:bg-zinc-900"
                       }`}
                     >
                       <div className="flex items-center gap-1.5 truncate">
                         {isFile ? (
-                          item.path.endsWith(".ts") || item.path.endsWith(".tsx") || item.path.endsWith(".js") ? (
+                          item.path.endsWith(".ts") ||
+                          item.path.endsWith(".tsx") ||
+                          item.path.endsWith(".js") ? (
                             <FileCode className="size-3 text-cyan-400 shrink-0" />
                           ) : (
                             <FileText className="size-3 text-zinc-400 shrink-0" />
@@ -375,7 +385,9 @@ export function GitHubRepoDetail({ repo, onBack }: GitHubRepoDetailProps) {
             <h3 className="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-2">
               <GitCommit className="size-4 text-cyan-400" /> Recent Commits ({selectedBranch})
             </h3>
-            <span className="text-xs text-muted-foreground font-mono">Top {commits.length} commits</span>
+            <span className="text-xs text-muted-foreground font-mono">
+              Top {commits.length} commits
+            </span>
           </div>
 
           {loadingCommits ? (
@@ -389,16 +401,24 @@ export function GitHubRepoDetail({ repo, onBack }: GitHubRepoDetailProps) {
                 <div key={c.sha} className="py-3 flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3 min-w-0">
                     {c.author?.avatar_url ? (
-                      <img src={c.author.avatar_url} alt="" className="size-7 rounded-full border border-zinc-700 shrink-0" />
+                      <img
+                        src={c.author.avatar_url}
+                        alt=""
+                        className="size-7 rounded-full border border-zinc-700 shrink-0"
+                      />
                     ) : (
                       <div className="size-7 rounded-full bg-zinc-800 flex items-center justify-center text-zinc-400 shrink-0">
                         <User className="size-3.5" />
                       </div>
                     )}
                     <div className="space-y-0.5 min-w-0">
-                      <p className="text-xs font-bold text-white truncate leading-snug">{c.commit.message}</p>
+                      <p className="text-xs font-bold text-white truncate leading-snug">
+                        {c.commit.message}
+                      </p>
                       <div className="flex items-center gap-2 text-[11px] text-zinc-400 font-mono">
-                        <span className="text-cyan-400 font-semibold">{c.author?.login || c.commit.author.name}</span>
+                        <span className="text-cyan-400 font-semibold">
+                          {c.author?.login || c.commit.author.name}
+                        </span>
                         <span>committed {new Date(c.commit.author.date).toLocaleDateString()}</span>
                       </div>
                     </div>
@@ -429,7 +449,9 @@ export function GitHubRepoDetail({ repo, onBack }: GitHubRepoDetailProps) {
       {activeTab === "clone" && (
         <div className="rounded-2xl border border-border/80 bg-zinc-950/70 p-6 space-y-6 shadow-xl">
           <div>
-            <h3 className="text-sm font-bold text-white tracking-tight">Clone &amp; Workspace Import Engine</h3>
+            <h3 className="text-sm font-bold text-white tracking-tight">
+              Clone &amp; Workspace Import Engine
+            </h3>
             <p className="text-xs text-muted-foreground mt-0.5">
               Clone this repository directly to your workstation or launch in your preferred IDE.
             </p>
@@ -446,7 +468,11 @@ export function GitHubRepoDetail({ repo, onBack }: GitHubRepoDetailProps) {
                   onClick={() => handleCopyCommand(cloneCommands.https, "https")}
                   className="h-6 px-2 text-[10px] border-zinc-700 bg-zinc-800 text-zinc-200 hover:text-white"
                 >
-                  {copiedClone === "https" ? <Check className="size-2.5 text-emerald-400 mr-1" /> : <Copy className="size-2.5 mr-1" />}
+                  {copiedClone === "https" ? (
+                    <Check className="size-2.5 text-emerald-400 mr-1" />
+                  ) : (
+                    <Copy className="size-2.5 mr-1" />
+                  )}
                   Copy
                 </Button>
               </div>
@@ -465,7 +491,11 @@ export function GitHubRepoDetail({ repo, onBack }: GitHubRepoDetailProps) {
                   onClick={() => handleCopyCommand(cloneCommands.ssh, "ssh")}
                   className="h-6 px-2 text-[10px] border-zinc-700 bg-zinc-800 text-zinc-200 hover:text-white"
                 >
-                  {copiedClone === "ssh" ? <Check className="size-2.5 text-emerald-400 mr-1" /> : <Copy className="size-2.5 mr-1" />}
+                  {copiedClone === "ssh" ? (
+                    <Check className="size-2.5 text-emerald-400 mr-1" />
+                  ) : (
+                    <Copy className="size-2.5 mr-1" />
+                  )}
                   Copy
                 </Button>
               </div>

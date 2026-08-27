@@ -9,6 +9,7 @@ This document provides architectural documentation, Mermaid sequence diagrams, s
 PROJECT BRAHMA utilizes **Supabase Auth** as the primary identity provider and session manager, coupled with a browser singleton client (`src/lib/supabaseClient.ts`), a centralized service wrapper (`src/services/authService.ts`), and reactive React hooks (`useAuthSession` / `useAuth` in `src/lib/auth.ts`).
 
 ### Core Security Invariants
+
 - **Row Level Security (RLS)**: Enforced on all tables in `public` schema. User data is partitioned by `auth.uid() = id`.
 - **Zero Client Secrets**: Service role keys are forbidden in client code. Only the anon key is used in the browser.
 - **Secure Token Storage**: Session tokens (`access_token`, `refresh_token`) are managed exclusively in `localStorage` under key `brahma.supabase.auth` via `@supabase/supabase-js` storage adapters. No raw JWT tokens are mirrored in React state or plain objects.
@@ -34,7 +35,7 @@ sequenceDiagram
     UI->>Service: signInWithPassword(email, password)
     Service->>SupaClient: auth.signInWithPassword({ email, password })
     SupaClient->>SupaAuth: POST /auth/v1/token?grant_type=password
-    
+
     alt Invalid Credentials
         SupaAuth-->>SupaClient: 400 Bad Request (Invalid login credentials)
         SupaClient-->>Service: { error: AuthError }
@@ -73,7 +74,7 @@ sequenceDiagram
     UI->>Service: signUp(email, password, { data: { full_name, role } })
     Service->>SupaClient: auth.signUp({ email, password, options: { data } })
     SupaClient->>SupaAuth: POST /auth/v1/signup
-    
+
     alt Email Confirmation Required
         SupaAuth->>Trigger: Fire handle_new_user() on auth.users insert
         Trigger->>DB: INSERT INTO public.profiles (id, email, full_name, role, onboarded)
@@ -137,6 +138,7 @@ Is session loading (ready === false)?
 ## 6. Profile Bootstrap (`ensure_profile` RPC)
 
 To prevent chicken-and-egg race conditions during user signup or OAuth logins:
+
 1. **Trigger**: Database trigger `handle_new_user()` executes on `auth.users` `AFTER INSERT` as `SECURITY DEFINER`.
 2. **RPC Fallback**: `public.ensure_profile()` can be called safely by authenticated clients:
    ```sql
@@ -189,12 +191,12 @@ To prevent chicken-and-egg race conditions during user signup or OAuth logins:
 
 ## 8. Troubleshooting Guide
 
-| Issue | Root Cause | Solution |
-| :--- | :--- | :--- |
-| **Missing environment error on `/auth`** | Missing `VITE_SUPABASE_URL` or `VITE_SUPABASE_ANON_KEY` | Set valid keys in `.env.local` and restart dev server. |
-| **Invalid Login Credentials** | User does not exist or password mismatch | Verify user in Supabase Authentication dashboard or use "Sign Up". |
-| **Email Not Confirmed** | Supabase project requires email confirmation | Check inbox for verification link or disable "Confirm email" in Supabase Auth settings for dev. |
-| **RLS Recursion (`42P17`)** | Policy on `profiles` calls a function querying `profiles` | Apply non-recursive RLS policy `USING (auth.uid() = id)`. |
-| **Profile Not Found after Sign-in** | `handle_new_user` trigger failed or didn't execute | `ensureProfile()` in `src/lib/auth.ts` will automatically bootstrap the profile on first session query. |
-| **Token Refresh Failed** | Refresh token revoked or expired | Supabase client resets session to null; user is cleanly redirected to `/auth`. |
-| **Redirect Loop between `/` and `/auth`** | Protected route checks unready state before session completes | Ensure route checks `ready === true` before redirecting. |
+| Issue                                     | Root Cause                                                    | Solution                                                                                                |
+| :---------------------------------------- | :------------------------------------------------------------ | :------------------------------------------------------------------------------------------------------ |
+| **Missing environment error on `/auth`**  | Missing `VITE_SUPABASE_URL` or `VITE_SUPABASE_ANON_KEY`       | Set valid keys in `.env.local` and restart dev server.                                                  |
+| **Invalid Login Credentials**             | User does not exist or password mismatch                      | Verify user in Supabase Authentication dashboard or use "Sign Up".                                      |
+| **Email Not Confirmed**                   | Supabase project requires email confirmation                  | Check inbox for verification link or disable "Confirm email" in Supabase Auth settings for dev.         |
+| **RLS Recursion (`42P17`)**               | Policy on `profiles` calls a function querying `profiles`     | Apply non-recursive RLS policy `USING (auth.uid() = id)`.                                               |
+| **Profile Not Found after Sign-in**       | `handle_new_user` trigger failed or didn't execute            | `ensureProfile()` in `src/lib/auth.ts` will automatically bootstrap the profile on first session query. |
+| **Token Refresh Failed**                  | Refresh token revoked or expired                              | Supabase client resets session to null; user is cleanly redirected to `/auth`.                          |
+| **Redirect Loop between `/` and `/auth`** | Protected route checks unready state before session completes | Ensure route checks `ready === true` before redirecting.                                                |

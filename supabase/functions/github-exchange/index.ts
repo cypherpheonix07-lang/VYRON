@@ -2,8 +2,7 @@ import { withSupabase } from "npm:@supabase/server";
 
 export const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
@@ -35,9 +34,10 @@ export default {
       if (!clientId || !clientSecret) {
         return new Response(
           JSON.stringify({
-            error: "GitHub OAuth credentials not configured on server (GITHUB_CLIENT_ID / GITHUB_CLIENT_SECRET missing).",
+            error:
+              "GitHub OAuth credentials not configured on server (GITHUB_CLIENT_ID / GITHUB_CLIENT_SECRET missing).",
           }),
-          { status: 500, headers: { "Content-Type": "application/json" } }
+          { status: 500, headers: { "Content-Type": "application/json" } },
         );
       }
 
@@ -69,8 +69,10 @@ export default {
 
       if (!accessToken) {
         return new Response(
-          JSON.stringify({ error: tokenData.error_description || "Failed to obtain access token from GitHub" }),
-          { status: 400, headers: { "Content-Type": "application/json" } }
+          JSON.stringify({
+            error: tokenData.error_description || "Failed to obtain access token from GitHub",
+          }),
+          { status: 400, headers: { "Content-Type": "application/json" } },
         );
       }
 
@@ -143,7 +145,7 @@ export default {
         {
           status: 200,
           headers: { "Content-Type": "application/json" },
-        }
+        },
       );
     } catch (err) {
       console.error("github-exchange exception:", err);

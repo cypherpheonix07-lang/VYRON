@@ -1,8 +1,5 @@
 import { useMemo } from "react";
-import {
-  AIToolItem,
-  ToolCategory,
-} from "./previewData";
+import { AIToolItem, ToolCategory } from "./previewData";
 import { Badge } from "@/components/ui/badge";
 import { Check, Filter, Layers, Zap, Code2, Globe, Cpu, Scale } from "lucide-react";
 

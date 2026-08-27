@@ -34,14 +34,38 @@ assert(
 );
 
 // 2. Documentation Artifacts Verification
-assert(fs.existsSync("./RUN_PROJECT.md"), "RUN_PROJECT.md present", "Comprehensive run & build documentation");
-assert(fs.existsSync("./AUTH_SESSION_FLOW.md"), "AUTH_SESSION_FLOW.md present", "Mermaid diagrams & lifecycle docs");
-assert(fs.existsSync("./MOCK_AUDIT.md"), "MOCK_AUDIT.md present", "Zero mock leak audit & gating table");
+assert(
+  fs.existsSync("./RUN_PROJECT.md"),
+  "RUN_PROJECT.md present",
+  "Comprehensive run & build documentation",
+);
+assert(
+  fs.existsSync("./AUTH_SESSION_FLOW.md"),
+  "AUTH_SESSION_FLOW.md present",
+  "Mermaid diagrams & lifecycle docs",
+);
+assert(
+  fs.existsSync("./MOCK_AUDIT.md"),
+  "MOCK_AUDIT.md present",
+  "Zero mock leak audit & gating table",
+);
 
 // 3. Auth Route & Session Hooks Verification
-assert(fs.existsSync("./src/routes/auth.tsx"), "Unified /auth route present", "Tabbed sign in/up with validation & error states");
-assert(fs.existsSync("./src/routes/auth.callback.tsx"), "/auth/callback route present", "OAuth & code exchange handler");
-assert(fs.existsSync("./src/components/brahma/session-diagnostics.tsx"), "SessionDiagnosticsPanel component present", "Zero raw secrets exposed");
+assert(
+  fs.existsSync("./src/routes/auth.tsx"),
+  "Unified /auth route present",
+  "Tabbed sign in/up with validation & error states",
+);
+assert(
+  fs.existsSync("./src/routes/auth.callback.tsx"),
+  "/auth/callback route present",
+  "OAuth & code exchange handler",
+);
+assert(
+  fs.existsSync("./src/components/brahma/session-diagnostics.tsx"),
+  "SessionDiagnosticsPanel component present",
+  "Zero raw secrets exposed",
+);
 
 const authSource = fs.readFileSync("./src/lib/auth.ts", "utf8");
 assert(
@@ -67,7 +91,11 @@ if (SUPABASE_URL && SUPABASE_ANON_KEY) {
   });
 
   const { data: sessionData, error: sessionErr } = await supabase.auth.getSession();
-  assert(!sessionErr, "Live Supabase getSession()", "Session ping returned HTTP 200 without transport errors");
+  assert(
+    !sessionErr,
+    "Live Supabase getSession()",
+    "Session ping returned HTTP 200 without transport errors",
+  );
 
   // Verify Non-Recursive RLS Policy structure in schema migration
   const schemaMigration = fs.readFileSync("./src/lib/profiles_schema.sql", "utf8");
