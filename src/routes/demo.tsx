@@ -116,7 +116,7 @@ function DemoAutopilotPage() {
   if (!active) return null;
 
   return (
-    <div className="min-h-screen bg-[#0B1220] text-slate-100 p-6 md:p-12 font-sans flex flex-col justify-between">
+    <div className="min-h-screen bg-[var(--surface-base)] text-[var(--text-primary)] p-6 md:p-12 font-sans flex flex-col justify-between">
       {/* Top bar */}
       <header className="flex items-center justify-between border-b border-border/40 pb-6">
         <div className="flex items-center gap-3">

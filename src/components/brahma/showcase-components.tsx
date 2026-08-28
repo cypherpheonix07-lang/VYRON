@@ -126,8 +126,8 @@ export function BlueprintGraphAnimated({
         {/* Animated Dashed Edge Connections */}
         <defs>
           <linearGradient id="edgeGlow" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#22D3EE" stopOpacity="0.8" />
-            <stop offset="100%" stopColor="#6366F1" stopOpacity="0.8" />
+            <stop offset="0%" stopColor="oklch(0.79 0.13 205)" stopOpacity="0.8" />
+            <stop offset="100%" stopColor="oklch(0.58 0.19 279)" stopOpacity="0.8" />
           </linearGradient>
         </defs>
 

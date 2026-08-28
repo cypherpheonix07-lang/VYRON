@@ -242,17 +242,17 @@ function AuthCallbackPage() {
   }, [navigate]);
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-[#0B1220] px-4 font-sans">
+    <div className="relative flex min-h-screen items-center justify-center bg-[var(--surface-base)] px-4 font-sans">
       <div
         className="pointer-events-none absolute inset-0 opacity-20"
         style={{
-          backgroundImage: "radial-gradient(#22D3EE 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(var(--color-primary) 1px, transparent 1px)",
           backgroundSize: "24px 24px",
         }}
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[#0b1220] via-[#0f172a]/95 to-[#1e1b4b]/40"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[var(--surface-base)] via-[var(--surface-sunken)]/95 to-[var(--surface-overlay)]/40"
         aria-hidden
       />
 

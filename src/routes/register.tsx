@@ -337,7 +337,7 @@ function RegisterPage() {
                   <div className="absolute inset-0 flex items-center">
                     <div className="w-full border-t border-slate-900" />
                   </div>
-                  <span className="relative px-3 bg-[#0c1322] text-[10px] uppercase font-mono font-bold tracking-widest text-slate-500">
+                  <span className="relative px-3 bg-[var(--surface-base)] text-[10px] uppercase font-mono font-bold tracking-widest text-slate-500">
                     Or sign up with
                   </span>
                 </div>

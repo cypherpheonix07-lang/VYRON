@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CheckCircle2, XCircle, ChevronDown, ChevronUp, AlertCircle } from "lucide-react";
+import { Check, X, ChevronDown, ChevronUp, AlertTriangle, ShieldAlert } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface GateResultData {
@@ -15,18 +15,21 @@ export interface GateResultData {
 export interface GateCardProps {
   gate: GateResultData;
   className?: string;
+  onOverrideRequest?: (gateId: number) => void;
 }
 
-export function GateCard({ gate, className }: GateCardProps) {
+export function GateCard({ gate, className, onOverrideRequest }: GateCardProps) {
   const [expanded, setExpanded] = useState(!gate.passed);
+  const isHardBlock = !gate.passed && (gate.gate_id === 1 || gate.gate_id === 2);
+  const canOverride = !gate.passed && gate.gate_id >= 3 && gate.gate_id <= 7;
 
   return (
     <div
       className={cn(
-        "rounded-xl border p-4 transition-all",
+        "rounded-[0.75rem] border p-4 transition-all bg-[var(--surface-raised)]",
         gate.passed
-          ? "border-emerald-500/20 bg-emerald-950/10 hover:border-emerald-500/30"
-          : "border-rose-500/30 bg-rose-950/20 hover:border-rose-500/40",
+          ? "border-[var(--color-success)]/20 hover:border-[var(--color-success)]/40"
+          : "border-[var(--color-danger)]/30 hover:border-[var(--color-danger)]/50",
         className,
       )}
     >
@@ -34,57 +37,85 @@ export function GateCard({ gate, className }: GateCardProps) {
         <div className="flex items-start gap-3 flex-1 min-w-0">
           <div
             className={cn(
-              "size-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 shadow-sm font-mono text-xs font-bold",
+              "size-8 rounded-[var(--radius-sm)] flex items-center justify-center shrink-0 mt-0.5 shadow-sm font-mono text-xs font-bold",
               gate.passed
-                ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                : "bg-rose-500/10 text-rose-400 border border-rose-500/30",
+                ? "bg-[var(--color-success)]/10 text-[var(--color-success)] border border-[var(--color-success)]/20"
+                : "bg-[var(--color-danger)]/10 text-[var(--color-danger)] border border-[var(--color-danger)]/30",
             )}
           >
-            {gate.gate_id}
+            {String(gate.gate_id).padStart(2, "0")}
           </div>
 
-          <div className="space-y-1 flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <h4 className="text-xs font-semibold text-foreground truncate">{gate.gate_name}</h4>
+          <div className="space-y-1.5 flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h4 className="text-xs font-semibold text-[var(--text-primary)] font-sans">{gate.gate_name}</h4>
               <span
                 className={cn(
-                  "inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono uppercase font-bold",
+                  "inline-flex items-center gap-1 px-2 py-0.5 rounded-[var(--radius-sm)] text-[10px] font-mono uppercase font-bold tracking-wider",
                   gate.passed
-                    ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                    : "bg-rose-500/10 text-rose-400 border border-rose-500/30",
+                    ? "bg-[var(--color-success)]/15 text-[var(--color-success)] border border-[var(--color-success)]/30"
+                    : "bg-[var(--color-danger)]/15 text-[var(--color-danger)] border border-[var(--color-danger)]/30",
                 )}
               >
-                {gate.passed ? (
-                  <CheckCircle2 className="size-2.5" />
-                ) : (
-                  <XCircle className="size-2.5" />
-                )}
+                {gate.passed ? <Check className="size-3 stroke-[2.5]" /> : <X className="size-3 stroke-[2.5]" />}
                 {gate.passed ? "PASS" : "FAIL"}
               </span>
+
+              {isHardBlock && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-[var(--radius-sm)] text-[10px] font-mono uppercase font-bold bg-[var(--color-danger)]/20 text-[var(--color-danger)] border border-[var(--color-danger)]/40">
+                  <ShieldAlert className="size-3" /> HARD BLOCK — Cannot override
+                </span>
+              )}
             </div>
-            <p className="text-[11px] text-muted-foreground font-mono truncate">{gate.evidence}</p>
+
+            <p className="text-[12px] text-[var(--text-secondary)] font-mono">{gate.evidence}</p>
+
+            {/* Score vs Threshold horizontal bar */}
+            <div className="w-full bg-[var(--surface-sunken)] rounded-[var(--radius-sm)] h-1.5 overflow-hidden mt-2">
+              <div
+                className={cn(
+                  "h-full transition-all duration-300",
+                  gate.passed ? "bg-[var(--gate-pass)]" : "bg-[var(--gate-fail)]",
+                )}
+                style={{
+                  width: `${Math.min(100, Math.max(10, (gate.score / (gate.threshold || 1)) * 100))}%`,
+                }}
+              />
+            </div>
           </div>
         </div>
 
-        {gate.recommendation && (
-          <button
-            onClick={() => setExpanded(!expanded)}
-            type="button"
-            className="p-1 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-            aria-label="Toggle recommendation"
-          >
-            {expanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
-          </button>
-        )}
+        <div className="flex items-center gap-1.5 shrink-0">
+          {canOverride && onOverrideRequest && (
+            <button
+              onClick={() => onOverrideRequest(gate.gate_id)}
+              type="button"
+              className="px-2 py-1 rounded-[var(--radius-sm)] text-[11px] font-mono border border-[var(--border-default)] hover:bg-[var(--surface-overlay)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+            >
+              Request Override
+            </button>
+          )}
+
+          {gate.recommendation && (
+            <button
+              onClick={() => setExpanded(!expanded)}
+              type="button"
+              className="p-1 rounded-[var(--radius-sm)] text-[var(--text-tertiary)] hover:text-[var(--text-primary)] hover:bg-[var(--surface-overlay)] transition-colors"
+              aria-label="Toggle recommendation"
+            >
+              {expanded ? <ChevronUp className="size-4" /> : <ChevronDown className="size-4" />}
+            </button>
+          )}
+        </div>
       </div>
 
       {expanded && gate.recommendation && (
-        <div className="mt-3 pt-3 border-t border-rose-500/20 space-y-1 text-left">
-          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-rose-300">
-            <AlertCircle className="size-3 text-rose-400" />
+        <div className="mt-3 pt-3 border-t border-[var(--color-warning)]/20 border-l-2 border-l-[var(--color-warning)] pl-3 space-y-1 text-left bg-[var(--color-warning)]/5 rounded-r-[var(--radius-sm)] py-2">
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-[var(--color-warning)] font-sans">
+            <AlertTriangle className="size-3.5" />
             <span>Remediation Recommendation</span>
           </div>
-          <p className="text-xs text-muted-foreground leading-relaxed pl-4">
+          <p className="text-xs text-[var(--text-secondary)] italic leading-relaxed font-sans">
             {gate.recommendation}
           </p>
         </div>

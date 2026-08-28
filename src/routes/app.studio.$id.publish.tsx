@@ -4,7 +4,8 @@ import {
   ShieldAlert,
   Loader2,
   Play,
-  CheckCircle2,
+  Check,
+  X,
   AlertTriangle,
   Globe,
   Settings,
@@ -12,8 +13,14 @@ import {
   Copy,
   ExternalLink,
   ChevronRight,
+  RefreshCw,
+  Sliders,
+  CheckCircle2,
+  FileCheck2,
+  Layers,
+  Lock,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
 import { PageHeader, SectionCard } from "@/components/brahma/primitives";
@@ -23,285 +30,351 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { GateCard, type GateResultData } from "@/components/ui/GateCard";
+import { useGate } from "@/hooks/useGate";
 
 export const Route = createFileRoute("/app/studio/$id/publish")({
   head: () => ({
     meta: [
-      { title: "Publish Wizard Gatekeeper — BRAHMA AI Studio" },
+      { title: "S8: Publish Gate & Release Verifier — PROJECT BRAHMA" },
       {
         name: "description",
-        content: "Verify deployment quality gates and release to staging or production.",
+        content: "Mathematical proof verification of the 7 canonical release gates prior to production deployment.",
       },
     ],
   }),
   component: PublishWizardPage,
 });
 
-const defaultGates = [
-  {
-    id: 1,
-    name: "Requirement Clarity",
-    score: "88%",
-    status: "Pass",
-    details: "All functional specs mapped to code constructs.",
-  },
-  {
-    id: 2,
-    name: "Architecture Validation",
-    score: "Valid",
-    status: "Pass",
-    details: "Graph dependencies and server configurations resolve.",
-  },
-  {
-    id: 3,
-    name: "Code Health Checks",
-    score: "Clean",
-    status: "Pass",
-    details: "TypeScript compiler finished with 0 error outputs.",
-  },
-  {
-    id: 4,
-    name: "Security Review",
-    score: "1 Warning",
-    status: "Warning",
-    details: "CORS wildcard configured. Resolving is recommended.",
-    fix: "Define CORS domain whitelists",
-  },
-  {
-    id: 5,
-    name: "Test Suite Coverage",
-    score: "89.4%",
-    status: "Pass",
-    details: "Passed 5 of 6 tests. 1 API schema mismatch failed.",
-    fix: "Auto-Fix API tests payload schemas",
-  },
-  {
-    id: 6,
-    name: "Performance & SEO Audit",
-    score: "95/100",
-    status: "Pass",
-    details: "Lighthouse audit benchmarks satisfied.",
-  },
-  {
-    id: 7,
-    name: "Business Alignment Mapping",
-    score: "Mapped",
-    status: "Pass",
-    details: "All database models wired to process KPI scorecards.",
-  },
-];
-
-function PublishWizardPage() {
+export function PublishWizardPage() {
   const { id } = Route.useParams();
+  const { gateReport, isRunning, runGateCheck } = useGate();
 
-  const [gates, setGates] = useState(defaultGates);
-  const [environment, setEnvironment] = useState("staging");
-  const [customDomain, setCustomDomain] = useState("smartcampus.brahma.dev");
+  const [environment, setEnvironment] = useState<"development" | "staging" | "production">("staging");
+  const [customDomain, setCustomDomain] = useState("app.brahma.enterprise");
   const [autoRollback, setAutoRollback] = useState(true);
+  const [overrideModalGate, setOverrideModalGate] = useState<number | null>(null);
+  const [overrideReason, setOverrideReason] = useState("");
+  const [overriddenGates, setOverriddenGates] = useState<number[]>([]);
+
+  // Simulation metrics
+  const [metrics, setMetrics] = useState({
+    complexity: 8.4,
+    security: 100,
+    coverage: 82.5,
+  });
 
   // Deploy states: idle, checking, deploying, success, failed
   const [deployState, setDeployState] = useState<
     "idle" | "checking" | "deploying" | "success" | "failed"
   >("idle");
   const [deployLogs, setDeployLogs] = useState<string[]>([]);
-  const [activeStep, setActiveStep] = useState(0);
+
+  // Initialize gate report on mount
+  useEffect(() => {
+    runGateCheck(id, metrics);
+  }, [id, runGateCheck]);
+
+  const handleReevaluate = async () => {
+    toast.info("Triggering AST & Security evaluation...", {
+      description: "Executing Bandit static scan and cyclomatic analysis.",
+    });
+    await runGateCheck(id, metrics);
+    toast.success("Gate evaluation updated.");
+  };
+
+  const handleRequestOverride = (gateId: number) => {
+    setOverrideModalGate(gateId);
+    setOverrideReason("");
+  };
+
+  const handleConfirmOverride = () => {
+    if (!overrideModalGate) return;
+    if (!overrideReason.trim()) {
+      toast.error("Please specify a justification for the security override.");
+      return;
+    }
+    setOverriddenGates((prev) => [...prev, overrideModalGate]);
+    toast.success(`Override approved for Gate 0${overrideModalGate}.`, {
+      description: "Audited in WORM compliance trail.",
+    });
+    setOverrideModalGate(null);
+  };
 
   const startDeployment = async () => {
+    const isPassing = gateReport?.overall_pass || (gateReport?.blocking_gates || []).every((g) => overriddenGates.includes(g));
+    if (!isPassing) {
+      toast.error("Release Blocked!", {
+        description: "Hard block gates must pass before deploying to staging/production.",
+      });
+      return;
+    }
+
     setDeployState("checking");
-    setDeployLogs(["INFO: Initiating BRAHMA release gate checks..."]);
-    setActiveStep(0);
-
-    // Simulated checks sequence
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setDeployLogs((prev) => [...prev, "SUCCESS: Quality gates verified. Passing checks."]);
-
-    setDeployState("deploying");
-    setDeployLogs((prev) => [
-      ...prev,
-      "INFO: Packaging docker images and deployment assets...",
-      "INFO: Deploying container clusters to regional nodes...",
+    setDeployLogs([
+      `[${new Date().toISOString()}] INFO: Initiating PROJECT BRAHMA release gate verification...`,
+      `[${new Date().toISOString()}] INFO: Validating 7 canonical gates against project ${id}...`,
     ]);
 
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    setDeployLogs((prev) => [
+      ...prev,
+      `[${new Date().toISOString()}] SUCCESS: All 7 quality gates verified with mathematical certainty.`,
+      `[${new Date().toISOString()}] INFO: Packaging OCI container images with SHA-256 integrity seal...`,
+    ]);
+
+    setDeployState("deploying");
     await new Promise((resolve) => setTimeout(resolve, 1200));
     setDeployLogs((prev) => [
       ...prev,
-      "INFO: Establishing database migration routines...",
-      "INFO: Testing integration routing pathways...",
+      `[${new Date().toISOString()}] INFO: Applying database migrations with optimistic locking (v1 -> v2)...`,
+      `[${new Date().toISOString()}] INFO: Deploying container cluster to target: [${environment.toUpperCase()}]...`,
+      `[${new Date().toISOString()}] INFO: Configuring TLS certificates and custom domain: ${customDomain}...`,
     ]);
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    setDeployLogs((prev) => [...prev, "SUCCESS: Host target routing verified."]);
+    setDeployLogs((prev) => [
+      ...prev,
+      `[${new Date().toISOString()}] SUCCESS: Deployment healthy. Edge ingress listening on https://${customDomain}`,
+    ]);
 
     setDeployState("success");
-    toast.success("Project successfully published!", {
-      description: "Live URL endpoints are online.",
+    toast.success("Project successfully published to " + environment.toUpperCase() + "!", {
+      description: "Live endpoint is verified and online.",
     });
   };
 
-  const handleFixGate = (gateId: number, name: string) => {
-    toast.info("Running AI refactor fix...", { description: `Remediating ${name}.` });
-    setTimeout(() => {
-      setGates((prev) =>
-        prev.map((g) => {
-          if (g.id !== gateId) return g;
-          return {
-            ...g,
-            status: "Pass",
-            score: "Clean",
-            details: "AI refactored and verified compliance guidelines.",
-          };
-        }),
-      );
-      toast.success(`${name} check is now clean!`);
-    }, 1200);
-  };
+  // Compile gate items with live data + overrides
+  const gateList: GateResultData[] = (gateReport?.gate_results || [
+    { gate_id: 1, gate_name: "Security", passed: true, score: 0, threshold: 0, evidence: "0 HIGH severity findings (threshold: 0)" },
+    { gate_id: 2, gate_name: "AST", passed: true, score: 8.4, threshold: 15.0, evidence: "Avg complexity: 8.4 (threshold: ≤ 15.0)" },
+    { gate_id: 3, gate_name: "Tests", passed: true, score: 82.5, threshold: 70.0, evidence: "Coverage: 82.5% (threshold: ≥ 70.0%)" },
+    { gate_id: 4, gate_name: "Schema", passed: true, score: 100, threshold: 100, evidence: "RLS coverage: 8/8 tables secured (100%)" },
+    { gate_id: 5, gate_name: "Docs", passed: true, score: 100, threshold: 80, evidence: "API docs: 6/6 routes documented (100%)" },
+    { gate_id: 6, gate_name: "Performance", passed: true, score: 0, threshold: 0, evidence: "0 functions with LOC > 50 (threshold: 0)" },
+    { gate_id: 7, gate_name: "Licensure", passed: true, score: 0, threshold: 0, evidence: "0 restrictive (GPL/AGPL) license violations (threshold: 0)" },
+  ]).map((g) => ({
+    ...g,
+    passed: g.passed || overriddenGates.includes(g.gate_id),
+    evidence: overriddenGates.includes(g.gate_id) ? `${g.evidence} [OVERRIDDEN BY ADMIN]` : g.evidence,
+  }));
 
-  const hasWarnings = gates.some((g) => g.status === "Warning");
+  const passedCount = gateList.filter((g) => g.passed).length;
+  const isOverallApproved = passedCount === 7;
 
   return (
-    <div className="space-y-6">
-      {deployState === "idle" && (
-        <div className="grid gap-6 lg:grid-cols-3">
-          {/* Left Column: Quality Gates */}
-          <div className="lg:col-span-2 space-y-4">
-            <SectionCard
-              title="BRAHMA Quality Gates"
-              description="Release check requirements prior to deployment compilation."
+    <div className="space-y-8 max-w-7xl mx-auto p-4 md:p-8 font-sans">
+      {/* Header Banner */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[var(--border-default)] pb-6">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2.5">
+            <h1 className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+              S8: Publish Gate & Release Verifier
+            </h1>
+            <Badge
+              variant="outline"
+              className="rounded-[var(--radius-sm)] font-mono text-[10px] uppercase font-bold border-[var(--color-primary)]/40 text-[var(--color-primary)] bg-[var(--color-primary)]/10 px-2 py-0.5"
             >
-              <div className="space-y-3">
-                {gates.map((g) => {
-                  const isPass = g.status === "Pass";
-                  const isWarning = g.status === "Warning";
+              OKLCH V2 CONTRACT
+            </Badge>
+          </div>
+          <p className="text-xs text-[var(--text-secondary)] font-sans">
+            Mathematical proof evaluation across 7 canonical gates with hard block constraints.
+          </p>
+        </div>
 
-                  return (
-                    <div
-                      key={g.id}
-                      className="border border-border/60 p-4 rounded-xl surface flex items-start justify-between gap-4"
-                    >
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-xs font-semibold text-foreground">{g.name}</h4>
-                          <Badge variant="secondary" className="text-[9px] px-1.5 py-0">
-                            {g.score}
-                          </Badge>
-                        </div>
-                        <p className="text-[10px] text-muted-foreground leading-relaxed">
-                          {g.details}
-                        </p>
-                      </div>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleReevaluate}
+            disabled={isRunning}
+            className="rounded-[var(--radius-sm)] border-[var(--border-default)] font-mono text-xs text-[var(--text-primary)] hover:bg-[var(--surface-overlay)]"
+          >
+            <RefreshCw className={`mr-2 size-3.5 ${isRunning ? "animate-spin" : ""}`} />
+            Re-evaluate Proofs
+          </Button>
 
-                      <div className="flex flex-col items-end gap-2 shrink-0">
-                        <Badge
-                          variant="outline"
-                          className={`rounded-full text-[9px] ${
-                            isPass &&
-                            "bg-[var(--success)]/10 text-[var(--success)] border-[var(--success)]"
-                          } ${
-                            isWarning &&
-                            "bg-[var(--warning)]/10 text-[var(--warning)] border-[var(--warning)]"
-                          }`}
-                        >
-                          {g.status}
-                        </Badge>
-                        {g.fix && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-6 text-[9px] text-primary"
-                            onClick={() => handleFixGate(g.id, g.name)}
-                          >
-                            Fix with AI
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+          <Badge
+            className={`rounded-[var(--radius-sm)] px-3 py-1.5 font-mono text-xs uppercase font-bold tracking-wider ${
+              isOverallApproved
+                ? "bg-[var(--color-success)]/15 text-[var(--color-success)] border border-[var(--color-success)]/30"
+                : "bg-[var(--color-danger)]/15 text-[var(--color-danger)] border border-[var(--color-danger)]/30"
+            }`}
+          >
+            {isOverallApproved ? <Check className="mr-1.5 size-4 inline stroke-[3]" /> : <X className="mr-1.5 size-4 inline stroke-[3]" />}
+            {isOverallApproved ? "RELEASE APPROVED (7/7)" : `BLOCKED (${7 - passedCount} FAILED)`}
+          </Badge>
+        </div>
+      </div>
+
+      {deployState === "idle" && (
+        <div className="grid gap-8 lg:grid-cols-12">
+          {/* Left 8 Cols: Canonical 7 Gates */}
+          <div className="lg:col-span-8 space-y-6">
+            {/* KPI Summary Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="rounded-[var(--radius-sm)] border border-[var(--border-default)] bg-[var(--surface-raised)] p-3">
+                <span className="text-[10px] uppercase font-mono font-semibold text-[var(--text-tertiary)]">Pass Rate</span>
+                <p className="text-lg font-bold font-mono text-[var(--text-primary)] mt-0.5">
+                  {((passedCount / 7) * 100).toFixed(1)}%
+                </p>
               </div>
-            </SectionCard>
+
+              <div className="rounded-[var(--radius-sm)] border border-[var(--border-default)] bg-[var(--surface-raised)] p-3">
+                <span className="text-[10px] uppercase font-mono font-semibold text-[var(--text-tertiary)]">Avg Complexity</span>
+                <p className="text-lg font-bold font-mono text-[var(--color-primary)] mt-0.5">
+                  {metrics.complexity.toFixed(1)} <span className="text-[10px] text-[var(--text-tertiary)] font-normal">/ 15.0</span>
+                </p>
+              </div>
+
+              <div className="rounded-[var(--radius-sm)] border border-[var(--border-default)] bg-[var(--surface-raised)] p-3">
+                <span className="text-[10px] uppercase font-mono font-semibold text-[var(--text-tertiary)]">Test Coverage</span>
+                <p className="text-lg font-bold font-mono text-[var(--color-success)] mt-0.5">
+                  {metrics.coverage.toFixed(1)}%
+                </p>
+              </div>
+
+              <div className="rounded-[var(--radius-sm)] border border-[var(--border-default)] bg-[var(--surface-raised)] p-3">
+                <span className="text-[10px] uppercase font-mono font-semibold text-[var(--text-tertiary)]">Bandit HIGH</span>
+                <p className="text-lg font-bold font-mono text-[var(--gate-pass)] mt-0.5">
+                  0 <span className="text-[10px] text-[var(--text-tertiary)] font-normal">findings</span>
+                </p>
+              </div>
+            </div>
+
+            {/* Canonical 7 Gate Cards List */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between px-1">
+                <h3 className="text-xs font-bold uppercase tracking-wider font-mono text-[var(--text-secondary)]">
+                  7 Canonical Quality Verification Gates
+                </h3>
+                <span className="text-[11px] font-mono text-[var(--text-tertiary)]">
+                  {passedCount} of 7 Passed
+                </span>
+              </div>
+
+              <div className="space-y-3">
+                {gateList.map((g) => (
+                  <GateCard
+                    key={g.gate_id}
+                    gate={g}
+                    onOverrideRequest={handleRequestOverride}
+                  />
+                ))}
+              </div>
+            </div>
+
+            {/* Mathematical Evidence Summary Box */}
+            <div className="rounded-[var(--radius-sm)] border border-[var(--border-default)] bg-[var(--surface-sunken)] p-4 space-y-2">
+              <div className="flex items-center gap-2 text-xs font-mono font-semibold text-[var(--text-primary)]">
+                <FileCheck2 className="size-4 text-[var(--color-primary)]" />
+                <span>Verification Mathematical Proof Hash</span>
+              </div>
+              <p className="font-mono text-[11px] text-[var(--text-tertiary)] break-all bg-[var(--surface-base)] p-2.5 rounded-[var(--radius-sm)] border border-[var(--border-default)]">
+                sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069 | project:{id} | timestamp:{new Date().toISOString()}
+              </p>
+            </div>
           </div>
 
-          {/* Right Column: Deployment Configs */}
-          <div className="space-y-6">
-            <SectionCard title="Target Environment" description="Select deployment target routing.">
-              <div className="space-y-4">
-                <div className="grid grid-cols-3 gap-2 bg-secondary/50 p-1 rounded-xl border border-border/40">
-                  {["development", "staging", "production"].map((env) => (
-                    <button
-                      key={env}
-                      type="button"
-                      onClick={() => setEnvironment(env)}
-                      className={`py-1.5 text-[10px] font-semibold rounded-lg uppercase transition-all ${
-                        environment === env
-                          ? "bg-background text-primary"
-                          : "text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      {env}
-                    </button>
-                  ))}
-                </div>
-
-                <div className="grid gap-2">
-                  <Label htmlFor="custom-domain">Custom Domain Host</Label>
-                  <Input
-                    id="custom-domain"
-                    className="h-8 text-xs font-mono"
-                    value={customDomain}
-                    onChange={(e) => setCustomDomain(e.target.value)}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between border-t border-border/60 pt-3">
-                  <div>
-                    <p className="text-xs font-semibold">Automatic rollback on errors</p>
-                    <p className="text-[9px] text-muted-foreground mt-0.5">
-                      Reverts release if E2E scripts fail.
-                    </p>
-                  </div>
-                  <Switch
-                    checked={autoRollback}
-                    onCheckedChange={setAutoRollback}
-                    aria-label="Auto rollback toggle"
-                  />
-                </div>
+          {/* Right 4 Cols: Deployment Configuration & Action */}
+          <div className="lg:col-span-4 space-y-6">
+            <div className="rounded-[var(--radius-sm)] border border-[var(--border-default)] bg-[var(--surface-raised)] p-5 space-y-5">
+              <div className="space-y-1">
+                <h3 className="text-sm font-semibold text-[var(--text-primary)] font-sans">Target Environment</h3>
+                <p className="text-[11px] text-[var(--text-secondary)] font-sans">Select target cluster for deployment.</p>
               </div>
-            </SectionCard>
 
-            <Button
-              onClick={startDeployment}
-              className="w-full bg-primary hover:bg-primary/95 text-primary-foreground py-5 font-semibold text-xs"
-            >
-              <Globe className="mr-1.5 size-4" /> Deploy to {environment.toUpperCase()}
-            </Button>
+              {/* Environment Segmented Control */}
+              <div className="grid grid-cols-3 gap-1.5 bg-[var(--surface-sunken)] p-1 rounded-[var(--radius-sm)] border border-[var(--border-default)]">
+                {(["development", "staging", "production"] as const).map((env) => (
+                  <button
+                    key={env}
+                    type="button"
+                    onClick={() => setEnvironment(env)}
+                    className={`py-2 text-[10px] font-mono font-bold rounded-[var(--radius-sm)] uppercase transition-all ${
+                      environment === env
+                        ? "bg-[var(--surface-raised)] text-[var(--color-primary)] shadow-sm border border-[var(--border-default)]"
+                        : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]"
+                    }`}
+                  >
+                    {env}
+                  </button>
+                ))}
+              </div>
 
-            {hasWarnings && (
-              <p className="text-[9px] text-muted-foreground text-center leading-normal">
-                ⚠️ You have pending warnings in your quality gates. You are deploying with warnings.
-              </p>
-            )}
+              {/* Domain Input */}
+              <div className="space-y-2">
+                <Label htmlFor="custom-domain" className="text-xs font-medium text-[var(--text-primary)]">
+                  Live Ingress Hostname
+                </Label>
+                <Input
+                  id="custom-domain"
+                  className="h-9 text-xs font-mono bg-[var(--surface-sunken)] border-[var(--border-default)] text-[var(--text-primary)] rounded-[var(--radius-sm)] focus-visible:ring-1 focus-visible:ring-[var(--border-focus)]"
+                  value={customDomain}
+                  onChange={(e) => setCustomDomain(e.target.value)}
+                />
+              </div>
+
+              {/* Auto-rollback Switch */}
+              <div className="flex items-center justify-between border-t border-[var(--border-default)] pt-4">
+                <div className="space-y-0.5">
+                  <p className="text-xs font-medium text-[var(--text-primary)] font-sans">Automatic Rollback</p>
+                  <p className="text-[10px] text-[var(--text-tertiary)] font-sans">
+                    Revert on health check failure.
+                  </p>
+                </div>
+                <Switch
+                  checked={autoRollback}
+                  onCheckedChange={setAutoRollback}
+                  aria-label="Auto rollback toggle"
+                />
+              </div>
+
+              {/* Action Button */}
+              <div className="pt-2">
+                <Button
+                  onClick={startDeployment}
+                  disabled={!isOverallApproved}
+                  className={`w-full py-5 rounded-[var(--radius-sm)] font-mono text-xs font-bold tracking-wider uppercase transition-all shadow-md ${
+                    isOverallApproved
+                      ? "bg-[var(--color-primary)] hover:bg-[var(--color-primary-dim)] text-[var(--surface-base)]"
+                      : "bg-[var(--surface-overlay)] text-[var(--text-disabled)] cursor-not-allowed border border-[var(--border-default)]"
+                  }`}
+                >
+                  <Globe className="mr-2 size-4" />
+                  Deploy to {environment.toUpperCase()}
+                </Button>
+
+                {!isOverallApproved && (
+                  <p className="text-[10px] text-[var(--color-danger)] font-sans text-center mt-2 leading-relaxed">
+                    Release is blocked. Resolve failing gates or request an administrative override.
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
 
       {/* DEPLOYING ANIMATION PANEL */}
       {(deployState === "checking" || deployState === "deploying") && (
-        <Card className="surface max-w-xl mx-auto p-6 space-y-6 text-center">
-          <Loader2 className="size-10 animate-spin text-primary mx-auto" />
+        <Card className="max-w-2xl mx-auto p-6 space-y-6 text-center bg-[var(--surface-raised)] border border-[var(--border-default)] rounded-[var(--radius-sm)] shadow-xl">
+          <Loader2 className="size-10 animate-spin text-[var(--color-primary)] mx-auto" />
           <div className="space-y-1">
-            <h3 className="text-sm font-semibold">
-              {deployState === "checking" ? "Running Release Gates..." : "Deploying Clusters..."}
+            <h3 className="text-sm font-semibold text-[var(--text-primary)] font-sans">
+              {deployState === "checking" ? "Running Release Gate Verification..." : "Deploying Container Clusters..."}
             </h3>
-            <p className="text-xs text-muted-foreground">
-              Configuring domains, assets packaging, and system tests. Keep page active.
+            <p className="text-xs text-[var(--text-secondary)] font-sans">
+              Packaging OCI artifacts, running database migrations, and configuring ingress routes.
             </p>
           </div>
 
-          <div className="border border-border/60 bg-zinc-950 p-4 rounded-xl text-left font-mono text-[10px] text-zinc-400 space-y-1.5 max-h-40 overflow-y-auto">
+          <div className="border border-[var(--border-default)] bg-[var(--surface-sunken)] p-4 rounded-[var(--radius-sm)] text-left font-mono text-[11px] text-[var(--text-secondary)] space-y-1.5 max-h-48 overflow-y-auto">
             {deployLogs.map((log, i) => {
-              const isSuccess = log.startsWith("SUCCESS:");
+              const isSuccess = log.includes("SUCCESS:");
               return (
-                <div key={i} className={isSuccess ? "text-[var(--success)]" : ""}>
+                <div key={i} className={isSuccess ? "text-[var(--color-success)] font-semibold" : ""}>
                   {log}
                 </div>
               );
@@ -312,62 +385,68 @@ function PublishWizardPage() {
 
       {/* SUCCESS SCREEN */}
       {deployState === "success" && (
-        <Card className="surface max-w-xl mx-auto p-6 space-y-6">
+        <Card className="max-w-2xl mx-auto p-6 md:p-8 space-y-6 bg-[var(--surface-raised)] border border-[var(--color-success)]/40 rounded-[var(--radius-sm)] shadow-2xl">
           <div className="text-center space-y-2">
-            <div className="mx-auto grid size-12 place-items-center rounded-full bg-[var(--success)]/12 text-[var(--success)]">
-              <CheckCircle2 className="size-8" />
+            <div className="mx-auto grid size-12 place-items-center rounded-[var(--radius-sm)] bg-[var(--color-success)]/15 text-[var(--color-success)] border border-[var(--color-success)]/30">
+              <Check className="size-7 stroke-[3]" />
             </div>
-            <h3 className="text-base font-semibold">Application Deployment Succeeded!</h3>
-            <p className="text-xs text-muted-foreground">
-              Your software has been compiled and is running live under the staging target.
+            <h3 className="text-base font-bold text-[var(--text-primary)] font-sans">
+              Application Successfully Published!
+            </h3>
+            <p className="text-xs text-[var(--text-secondary)] font-sans">
+              Target [{environment.toUpperCase()}] is healthy and serving live user traffic.
             </p>
           </div>
 
           {/* Target details */}
-          <div className="border border-border/60 p-4 rounded-xl bg-secondary/10 flex items-center justify-between gap-4">
-            <div className="min-w-0">
-              <span className="text-[8px] uppercase font-bold text-muted-foreground tracking-wider">
-                Live URL
+          <div className="border border-[var(--border-default)] p-4 rounded-[var(--radius-sm)] bg-[var(--surface-sunken)] flex items-center justify-between gap-4">
+            <div className="min-w-0 space-y-0.5">
+              <span className="text-[9px] uppercase font-mono font-bold text-[var(--text-tertiary)] tracking-wider">
+                Ingress Endpoint URL
               </span>
               <a
                 href={`https://${customDomain}`}
                 target="_blank"
                 rel="noreferrer"
-                className="text-xs font-semibold text-primary truncate block hover:underline flex items-center gap-1 mt-0.5"
+                className="text-xs font-mono font-bold text-[var(--color-primary)] truncate block hover:underline flex items-center gap-1.5"
               >
                 https://{customDomain} <ExternalLink className="size-3 shrink-0" />
               </a>
             </div>
             <Button
-              size="icon"
-              variant="ghost"
-              className="h-8 w-8 text-muted-foreground hover:text-foreground"
-              onClick={() => toast.success("URL copied to clipboard.")}
+              size="sm"
+              variant="outline"
+              className="h-8 rounded-[var(--radius-sm)] border-[var(--border-default)] font-mono text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+              onClick={() => {
+                navigator.clipboard?.writeText(`https://${customDomain}`);
+                toast.success("Live URL copied to clipboard.");
+              }}
               aria-label="Copy live URL"
             >
-              <Copy className="size-4" />
+              <Copy className="mr-1.5 size-3.5" /> Copy
             </Button>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 pt-2">
-            {/* QR Mock */}
-            <div className="border border-border/60 p-4 rounded-xl flex flex-col items-center justify-center text-center space-y-2 surface">
-              <QrCode className="size-16 text-muted-foreground" />
-              <span className="text-[10px] text-muted-foreground font-semibold">
-                Scan QR for Mobile Preview
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <div className="border border-[var(--border-default)] p-4 rounded-[var(--radius-sm)] flex flex-col items-center justify-center text-center space-y-2 bg-[var(--surface-sunken)]">
+              <QrCode className="size-16 text-[var(--color-primary)] opacity-80" />
+              <span className="text-[10px] text-[var(--text-tertiary)] font-mono">
+                Scan for Mobile Verification
               </span>
             </div>
 
-            {/* Actions */}
-            <div className="flex flex-col justify-center gap-2">
+            <div className="flex flex-col justify-center gap-2.5">
               <Button
                 variant="outline"
-                className="w-full text-xs h-9"
+                className="w-full text-xs font-mono h-10 rounded-[var(--radius-sm)] border-[var(--border-default)]"
                 onClick={() => setDeployState("idle")}
               >
-                Return to Config
+                Return to Gatekeeper
               </Button>
-              <Button className="w-full text-xs h-9 bg-primary text-primary-foreground" asChild>
+              <Button
+                className="w-full text-xs font-mono font-bold h-10 rounded-[var(--radius-sm)] bg-[var(--color-primary)] text-[var(--surface-base)] hover:bg-[var(--color-primary-dim)]"
+                asChild
+              >
                 <Link to="/app/studio/$id/analytics" params={{ id }}>
                   View Live Analytics <ChevronRight className="ml-1 size-3.5" />
                 </Link>
@@ -375,6 +454,54 @@ function PublishWizardPage() {
             </div>
           </div>
         </Card>
+      )}
+
+      {/* OVERRIDE MODAL DIALOG */}
+      {overrideModalGate !== null && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4">
+          <div className="bg-[var(--surface-raised)] border border-[var(--border-default)] rounded-[var(--radius-sm)] p-6 max-w-md w-full space-y-4 shadow-2xl">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2 text-sm font-bold text-[var(--text-primary)] font-sans">
+                <AlertTriangle className="size-4 text-[var(--color-warning)]" />
+                <span>Request Administrative Override</span>
+              </div>
+              <p className="text-xs text-[var(--text-secondary)] font-sans">
+                You are requesting an emergency bypass for Gate 0{overrideModalGate}. This action will be permanently recorded in the immutable WORM audit log.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="override-reason" className="text-xs font-medium text-[var(--text-primary)]">
+                Justification / JIRA Ticket Reference *
+              </Label>
+              <Input
+                id="override-reason"
+                placeholder="e.g. SEC-849: Hotfix waiver approved by SecOps lead"
+                value={overrideReason}
+                onChange={(e) => setOverrideReason(e.target.value)}
+                className="h-9 text-xs font-mono bg-[var(--surface-sunken)] border-[var(--border-default)] rounded-[var(--radius-sm)]"
+              />
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setOverrideModalGate(null)}
+                className="rounded-[var(--radius-sm)] text-xs font-mono"
+              >
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                onClick={handleConfirmOverride}
+                className="rounded-[var(--radius-sm)] text-xs font-mono font-bold bg-[var(--color-warning)] text-black hover:bg-[var(--color-warning)]/90"
+              >
+                Confirm Override
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

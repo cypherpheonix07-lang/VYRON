@@ -91,7 +91,7 @@ export function PreviewFeatureGrid({ features, accentColor }: PreviewFeatureGrid
               <div className="flex items-center justify-between">
                 <div
                   className="size-8 rounded-lg flex items-center justify-center border border-zinc-800 bg-zinc-900 group-hover:scale-105 transition-transform"
-                  style={{ color: accentColor || "#22D3EE" }}
+                  style={{ color: accentColor || "var(--color-primary)" }}
                 >
                   <Icon className="size-4" />
                 </div>

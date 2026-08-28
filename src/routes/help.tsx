@@ -58,7 +58,7 @@ function HelpCenterPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0B1220] text-slate-100 p-6 md:p-12 font-sans">
+    <div className="min-h-screen bg-[var(--surface-base)] text-[var(--text-primary)] p-6 md:p-12 font-sans">
       <header className="max-w-6xl mx-auto flex items-center justify-between border-b border-border/40 pb-6 mb-8">
         <div className="flex items-center gap-3">
           <BrahmaLogo />

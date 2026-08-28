@@ -67,18 +67,18 @@ export function AuthLayout({
   };
 
   return (
-    <div className="relative flex min-h-screen w-screen bg-[#0B1220] text-slate-100 overflow-hidden font-sans">
+    <div className="relative flex min-h-screen w-screen bg-[var(--surface-base)] text-[var(--text-primary)] overflow-hidden font-sans">
       {/* Background grids */}
       <div
         className="pointer-events-none absolute inset-0 opacity-15"
         style={{
-          backgroundImage: "radial-gradient(#22D3EE 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(var(--color-primary) 1px, transparent 1px)",
           backgroundSize: "24px 24px",
         }}
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[#0b1220] via-[#0f172a]/95 to-[#1e1b4b]/40"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[var(--surface-base)] via-[var(--surface-sunken)]/95 to-[var(--surface-overlay)]/40"
         aria-hidden
       />
 
@@ -298,12 +298,12 @@ export function ShowcasePanel() {
 
           {/* Node 2: AST Parser */}
           <circle cx="220" cy="70" r="24" className="fill-slate-900 stroke-cyan-500/60 stroke-2" />
-          <path d="M 214 70 L 226 70 M 220 64 L 220 76" stroke="#22d3ee" strokeWidth="1.5" />
+          <path d="M 214 70 L 226 70 M 220 64 L 220 76" stroke="var(--color-primary)" strokeWidth="1.5" />
           <text
             x="220"
             y="108"
             textAnchor="middle"
-            fill="#94a3b8"
+            fill="var(--text-secondary)"
             fontSize="10"
             className="font-mono"
           >
