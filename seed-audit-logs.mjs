@@ -15,12 +15,7 @@ async function main() {
   const { data: usersData } = await supabase.auth.admin.listUsers({ perPage: 10 });
   const anchorUserId = usersData.users[0].id;
 
-  const models = [
-    "claude-3-5-sonnet-20241022",
-    "gpt-4o",
-    "deepseek-coder",
-    "gemini-1.5-pro",
-  ];
+  const models = ["claude-3-5-sonnet-20241022", "gpt-4o", "deepseek-coder", "gemini-1.5-pro"];
 
   for (let b = 0; b < 10; b++) {
     const auditBatch = [];
@@ -36,7 +31,7 @@ async function main() {
           model: model,
           prompt_tokens: tokensIn,
           completion_tokens: tokensOut,
-          cost_usd: Number(((tokensIn * 0.000003) + (tokensOut * 0.000015)).toFixed(6)),
+          cost_usd: Number((tokensIn * 0.000003 + tokensOut * 0.000015).toFixed(6)),
           latency_ms: 120 + Math.floor(Math.random() * 450),
           cache_hit: Math.random() > 0.65,
         }),
@@ -51,7 +46,9 @@ async function main() {
     }
   }
 
-  const { count: lCount } = await supabase.from("audit_logs").select("*", { count: "exact", head: true });
+  const { count: lCount } = await supabase
+    .from("audit_logs")
+    .select("*", { count: "exact", head: true });
   console.log(`\n✓ SUCCESS: Audit / LLM Logs live count: ${lCount} rows`);
 }
 

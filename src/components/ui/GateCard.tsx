@@ -48,7 +48,9 @@ export function GateCard({ gate, className, onOverrideRequest }: GateCardProps) 
 
           <div className="space-y-1.5 flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <h4 className="text-xs font-semibold text-[var(--text-primary)] font-sans">{gate.gate_name}</h4>
+              <h4 className="text-xs font-semibold text-[var(--text-primary)] font-sans">
+                {gate.gate_name}
+              </h4>
               <span
                 className={cn(
                   "inline-flex items-center gap-1 px-2 py-0.5 rounded-[var(--radius-sm)] text-[10px] font-mono uppercase font-bold tracking-wider",
@@ -57,7 +59,11 @@ export function GateCard({ gate, className, onOverrideRequest }: GateCardProps) 
                     : "bg-[var(--color-danger)]/15 text-[var(--color-danger)] border border-[var(--color-danger)]/30",
                 )}
               >
-                {gate.passed ? <Check className="size-3 stroke-[2.5]" /> : <X className="size-3 stroke-[2.5]" />}
+                {gate.passed ? (
+                  <Check className="size-3 stroke-[2.5]" />
+                ) : (
+                  <X className="size-3 stroke-[2.5]" />
+                )}
                 {gate.passed ? "PASS" : "FAIL"}
               </span>
 

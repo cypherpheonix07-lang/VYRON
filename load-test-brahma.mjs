@@ -114,7 +114,9 @@ async function runLoadSimulation() {
   const results = [];
   const startTime = Date.now();
 
-  console.log(`[LOAD-TEST] Launching ${CONCURRENCY} concurrent workers against 5 platform tiers...`);
+  console.log(
+    `[LOAD-TEST] Launching ${CONCURRENCY} concurrent workers against 5 platform tiers...`,
+  );
 
   async function worker(workerId) {
     while (Date.now() - startTime < DURATION_MS) {
@@ -153,7 +155,9 @@ async function runLoadSimulation() {
   console.log("════════════════════════════════════════════════════════════════════");
   console.log(`- Duration:          ${totalTimeSec.toFixed(2)}s`);
   console.log(`- Total Requests:    ${totalRequests}`);
-  console.log(`- Success Rate:      ${((successfulRequests / totalRequests) * 100).toFixed(2)}% (${successfulRequests}/${totalRequests})`);
+  console.log(
+    `- Success Rate:      ${((successfulRequests / totalRequests) * 100).toFixed(2)}% (${successfulRequests}/${totalRequests})`,
+  );
   console.log(`- Error Rate:        ${errorRate}%`);
   console.log(`- Throughput:        ${throughput} req/s`);
   console.log(`- Global P50:        ${globalMetrics.p50} ms`);
@@ -168,7 +172,9 @@ async function runLoadSimulation() {
     const tierLatencies = records.map((r) => r.latency);
     const tierMetrics = calculatePercentiles(tierLatencies);
     const tierErrors = records.filter((r) => !r.ok).length;
-    console.log(`► ${tier.padEnd(22)}: Req: ${String(records.length).padEnd(4)} | P50: ${String(tierMetrics.p50 + "ms").padEnd(8)} | P95: ${String(tierMetrics.p95 + "ms").padEnd(8)} | Avg: ${String(tierMetrics.avg + "ms").padEnd(8)} | Errors: ${tierErrors}`);
+    console.log(
+      `► ${tier.padEnd(22)}: Req: ${String(records.length).padEnd(4)} | P50: ${String(tierMetrics.p50 + "ms").padEnd(8)} | P95: ${String(tierMetrics.p95 + "ms").padEnd(8)} | Avg: ${String(tierMetrics.avg + "ms").padEnd(8)} | Errors: ${tierErrors}`,
+    );
   }
   console.log("════════════════════════════════════════════════════════════════════");
 }

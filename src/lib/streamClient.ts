@@ -39,7 +39,7 @@ export async function streamLLMResponse(options: StreamOptions): Promise<string>
   let fullText = "";
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/llm/stream", {
+    const requestInit: RequestInit = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -50,8 +50,12 @@ export async function streamLLMResponse(options: StreamOptions): Promise<string>
         system_prompt,
         project_id,
       }),
-      signal,
-    });
+    };
+    if (signal) {
+      requestInit.signal = signal;
+    }
+
+    const response = await fetch("http://127.0.0.1:8000/llm/stream", requestInit);
 
     if (!response.ok) {
       throw new Error(`LLM Stream failed with HTTP ${response.status}`);
@@ -97,11 +101,11 @@ export async function streamLLMResponse(options: StreamOptions): Promise<string>
     }
 
     return fullText;
-  } catch (err: any) {
-    if (err.name === "AbortError") {
+  } catch (err: unknown) {
+    if (err instanceof Error && err.name === "AbortError") {
       console.log("[StreamClient] Request aborted by user.");
     } else {
-      onError?.(err);
+      onError?.(err instanceof Error ? err : new Error(String(err)));
     }
     throw err;
   }

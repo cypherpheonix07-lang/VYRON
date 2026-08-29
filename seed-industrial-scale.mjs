@@ -27,7 +27,14 @@ async function main() {
 
   // 1. Seed 5,000 Auth Events
   console.log("[SEED] Inserting 5,000 auth events in 10 batches of 500...");
-  const authMethods = ["password", "magic_link", "sso_saml", "passkey", "oauth_github", "oauth_google"];
+  const authMethods = [
+    "password",
+    "magic_link",
+    "sso_saml",
+    "passkey",
+    "oauth_github",
+    "oauth_google",
+  ];
   const authStatuses = ["success", "success", "success", "failed", "blocked"];
   const browsers = ["Chrome 124.0", "Firefox 125.0", "Safari 17.4", "Edge 124.0"];
   const countries = ["US", "IN", "DE", "GB", "SG", "JP"];
@@ -40,7 +47,12 @@ async function main() {
       const method = authMethods[Math.floor(Math.random() * authMethods.length)];
       authEventsBatch.push({
         user_id: anchorUserId,
-        event: status === "success" ? (method === "sso_saml" ? "sso_saml_login" : "login_success") : "login_failed",
+        event:
+          status === "success"
+            ? method === "sso_saml"
+              ? "sso_saml_login"
+              : "login_success"
+            : "login_failed",
         method: method,
         status: status,
         country: countries[i % countries.length],
@@ -60,12 +72,7 @@ async function main() {
 
   // 2. Seed 10,000 Audit & LLM Invocation Logs
   console.log("[SEED] Inserting 10,000 LLM & audit invocation logs in 10 batches of 1000...");
-  const models = [
-    "claude-3-5-sonnet-20241022",
-    "gpt-4o",
-    "deepseek-coder",
-    "gemini-1.5-pro",
-  ];
+  const models = ["claude-3-5-sonnet-20241022", "gpt-4o", "deepseek-coder", "gemini-1.5-pro"];
   for (let b = 0; b < 10; b++) {
     const auditBatch = [];
     for (let i = 0; i < 1000; i++) {
@@ -82,7 +89,7 @@ async function main() {
           model: model,
           prompt_tokens: tokensIn,
           completion_tokens: tokensOut,
-          cost_usd: Number(((tokensIn * 0.000003) + (tokensOut * 0.000015)).toFixed(6)),
+          cost_usd: Number((tokensIn * 0.000003 + tokensOut * 0.000015).toFixed(6)),
           latency_ms: 120 + Math.floor(Math.random() * 450),
           cache_hit: Math.random() > 0.65,
         },
@@ -98,17 +105,13 @@ async function main() {
 
   // 3. Verify Final Counts
   console.log("\n[VERIFY] Querying live database row counts...");
-  const [
-    { count: pCount },
-    { count: aCount },
-    { count: lCount },
-    { count: nCount },
-  ] = await Promise.all([
-    supabase.from("projects").select("*", { count: "exact", head: true }),
-    supabase.from("auth_events").select("*", { count: "exact", head: true }),
-    supabase.from("audit_logs").select("*", { count: "exact", head: true }),
-    supabase.from("notifications").select("*", { count: "exact", head: true }),
-  ]);
+  const [{ count: pCount }, { count: aCount }, { count: lCount }, { count: nCount }] =
+    await Promise.all([
+      supabase.from("projects").select("*", { count: "exact", head: true }),
+      supabase.from("auth_events").select("*", { count: "exact", head: true }),
+      supabase.from("audit_logs").select("*", { count: "exact", head: true }),
+      supabase.from("notifications").select("*", { count: "exact", head: true }),
+    ]);
 
   const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
   console.log(`\n════════════════════════════════════════════════════════════════════`);

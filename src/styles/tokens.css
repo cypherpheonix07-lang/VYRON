@@ -1,104 +1,109 @@
 :root {
   /* ═══ OKLCH COLOR SYSTEM — V2 LIVE CONTRACT ═══ */
   /* Background surfaces */
-  --surface-base:       oklch(0.19 0.032 264);
-  --surface-raised:     oklch(0.23 0.028 264);
-  --surface-overlay:    oklch(0.27 0.025 264);
-  --surface-sunken:     oklch(0.15 0.035 264);
-  --surface-glass:      oklch(0.23 0.028 264 / 0.72);
+  --surface-base: oklch(0.19 0.032 264);
+  --surface-raised: oklch(0.23 0.028 264);
+  --surface-overlay: oklch(0.27 0.025 264);
+  --surface-sunken: oklch(0.15 0.035 264);
+  --surface-glass: oklch(0.23 0.028 264 / 0.72);
 
   /* Brand tokens */
-  --color-primary:      oklch(0.79 0.13  205);
-  --color-primary-dim:  oklch(0.65 0.11  205);
-  --color-accent:       oklch(0.58 0.19  279);
-  --color-accent-dim:   oklch(0.46 0.16  279);
+  --color-primary: oklch(0.79 0.13 205);
+  --color-primary-dim: oklch(0.65 0.11 205);
+  --color-accent: oklch(0.58 0.19 279);
+  --color-accent-dim: oklch(0.46 0.16 279);
 
   /* Semantic tokens */
-  --color-success:      oklch(0.72 0.17  145);
-  --color-warning:      oklch(0.82 0.19   70);
-  --color-danger:       oklch(0.62 0.22   25);
-  --color-info:         oklch(0.72 0.14  230);
+  --color-success: oklch(0.72 0.17 145);
+  --color-warning: oklch(0.82 0.19 70);
+  --color-danger: oklch(0.62 0.22 25);
+  --color-info: oklch(0.72 0.14 230);
 
   /* Gate status tokens */
-  --gate-pass:          oklch(0.72 0.17  145);
-  --gate-fail:          oklch(0.62 0.22   25);
-  --gate-pending:       oklch(0.55 0.00    0);
-  --gate-running:       oklch(0.79 0.13  205);
+  --gate-pass: oklch(0.72 0.17 145);
+  --gate-fail: oklch(0.62 0.22 25);
+  --gate-pending: oklch(0.55 0 0);
+  --gate-running: oklch(0.79 0.13 205);
 
   /* Text tokens */
-  --text-primary:       oklch(0.94 0.012 264);
-  --text-secondary:     oklch(0.70 0.018 264);
-  --text-tertiary:      oklch(0.52 0.012 264);
-  --text-disabled:      oklch(0.38 0.008 264);
-  --text-gradient:      linear-gradient(
-                          135deg,
-                          oklch(0.79 0.13 205),
-                          oklch(0.58 0.19 279)
-                        );
+  --text-primary: oklch(0.94 0.012 264);
+  --text-secondary: oklch(0.7 0.018 264);
+  --text-tertiary: oklch(0.52 0.012 264);
+  --text-disabled: oklch(0.38 0.008 264);
+  --text-gradient: linear-gradient(135deg, oklch(0.79 0.13 205), oklch(0.58 0.19 279));
 
   /* Border tokens */
-  --border-default:     oklch(0.32 0.020 264);
-  --border-strong:      oklch(0.42 0.018 264);
-  --border-focus:       oklch(0.79 0.13  205);
+  --border-default: oklch(0.32 0.02 264);
+  --border-strong: oklch(0.42 0.018 264);
+  --border-focus: oklch(0.79 0.13 205);
 
   /* ═══ TYPOGRAPHY ═══ */
-  --font-sans:   'Inter', 'Geist', system-ui, sans-serif;
-  --font-mono:   'JetBrains Mono', 'Fira Code', monospace;
+  --font-sans: "Inter", "Geist", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
   /* Type scale */
-  --text-xs:   11px;  --text-sm:   13px;
-  --text-base: 15px;  --text-lg:   17px;
-  --text-xl:   20px;  --text-2xl:  24px;
-  --text-3xl:  30px;  --text-4xl:  38px;
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-lg: 17px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 38px;
 
   /* Line heights */
-  --leading-tight:  1.2;
+  --leading-tight: 1.2;
   --leading-normal: 1.5;
-  --leading-loose:  1.75;
+  --leading-loose: 1.75;
 
   /* ═══ SPACING (4/8pt grid) ═══ */
-  --space-1:  4px;   --space-2:  8px;
-  --space-3:  12px;  --space-4:  16px;
-  --space-5:  20px;  --space-6:  24px;
-  --space-8:  32px;  --space-10: 40px;
-  --space-12: 48px;  --space-16: 64px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
 
   /* ═══ GEOMETRY ═══ */
   --radius-base: 0.75rem;
-  --radius-sm:   calc(var(--radius-base) * 0.5);
-  --radius-lg:   calc(var(--radius-base) * 1.5);
+  --radius-sm: calc(var(--radius-base) * 0.5);
+  --radius-lg: calc(var(--radius-base) * 1.5);
   --radius-full: 9999px;
 
   /* ═══ MOTION ═══ */
-  --motion-fast:   150ms ease-out;
+  --motion-fast: 150ms ease-out;
   --motion-normal: 250ms ease-out;
-  --motion-slow:   400ms ease-out;
+  --motion-slow: 400ms ease-out;
 
   /* ═══ GRID BACKDROP ═══ */
   --grid-backdrop: url("data:image/svg+xml,%3Csvg width='56' height='56' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M56 0H0v56' fill='none' stroke='oklch(0.30 0.020 264)' stroke-width='0.5'/%3E%3C/svg%3E");
 
   /* ═══ SHADOWS ═══ */
-  --shadow-sm:  0 1px  3px oklch(0 0 0 / 0.30);
-  --shadow-md:  0 4px 12px oklch(0 0 0 / 0.40);
-  --shadow-lg:  0 12px 32px oklch(0 0 0 / 0.50);
+  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.3);
+  --shadow-md: 0 4px 12px oklch(0 0 0 / 0.4);
+  --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.5);
   --shadow-glow: 0 0 20px oklch(0.79 0.13 205 / 0.25);
 }
 
 /* ═══ LIGHT THEME OVERRIDES ═══ */
 .light {
-  --surface-base:    oklch(0.97 0.008 264);
-  --surface-raised:  oklch(1.00 0.000   0);
-  --surface-overlay: oklch(0.94 0.010 264);
-  --surface-sunken:  oklch(0.91 0.012 264);
-  --surface-glass:   oklch(0.98 0.005 264 / 0.85);
-  --text-primary:    oklch(0.15 0.025 264);
-  --text-secondary:  oklch(0.38 0.018 264);
-  --text-tertiary:   oklch(0.55 0.012 264);
-  --border-default:  oklch(0.86 0.012 264);
-  --border-strong:   oklch(0.74 0.016 264);
-  --shadow-sm:  0 1px  3px oklch(0 0 0 / 0.08);
-  --shadow-md:  0 4px 12px oklch(0 0 0 / 0.12);
-  --shadow-lg:  0 12px 32px oklch(0 0 0 / 0.16);
+  --surface-base: oklch(0.97 0.008 264);
+  --surface-raised: oklch(1 0 0);
+  --surface-overlay: oklch(0.94 0.01 264);
+  --surface-sunken: oklch(0.91 0.012 264);
+  --surface-glass: oklch(0.98 0.005 264 / 0.85);
+  --text-primary: oklch(0.15 0.025 264);
+  --text-secondary: oklch(0.38 0.018 264);
+  --text-tertiary: oklch(0.55 0.012 264);
+  --border-default: oklch(0.86 0.012 264);
+  --border-strong: oklch(0.74 0.016 264);
+  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.08);
+  --shadow-md: 0 4px 12px oklch(0 0 0 / 0.12);
+  --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.16);
 }
 
 /* ═══ ANTI-PATTERNS — VIOLATION = BUILD FAILURE ═══ */
@@ -112,7 +117,9 @@
 
 /* ═══ ACCESSIBILITY ═══ */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
@@ -120,9 +127,18 @@
 
 /* ═══ PRINT ENGINE ═══ */
 @media print {
-  @page { size: A4 portrait; margin: 12mm; }
-  .no-print { display: none !important; }
-  .page-break { page-break-before: always; }
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .page-break {
+    page-break-before: always;
+  }
   /* NO glass on printed output — ever */
-  [class*="glass"] { backdrop-filter: none !important; }
+  [class*="glass"] {
+    backdrop-filter: none !important;
+  }
 }

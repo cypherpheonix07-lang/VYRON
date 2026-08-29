@@ -298,7 +298,11 @@ export function ShowcasePanel() {
 
           {/* Node 2: AST Parser */}
           <circle cx="220" cy="70" r="24" className="fill-slate-900 stroke-cyan-500/60 stroke-2" />
-          <path d="M 214 70 L 226 70 M 220 64 L 220 76" stroke="var(--color-primary)" strokeWidth="1.5" />
+          <path
+            d="M 214 70 L 226 70 M 220 64 L 220 76"
+            stroke="var(--color-primary)"
+            strokeWidth="1.5"
+          />
           <text
             x="220"
             y="108"

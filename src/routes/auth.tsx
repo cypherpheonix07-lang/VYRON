@@ -63,8 +63,8 @@ function SetupErrorCard() {
           <p className="text-zinc-500"># 1. Copy sample environment file</p>
           <p className="text-primary">cp .env.example .env.local</p>
           <p className="text-zinc-500 pt-1"># 2. Add your Supabase project keys</p>
-          <p>VITE_SUPABASE_URL=https://hbbunfizlwgvripgwzdo.supabase.co</p>
-          <p>VITE_SUPABASE_ANON_KEY=sb_publishable_RwMBCD1LJxI4927JDU5fbQ_0tfswec4your-anon-key</p>
+          <p>VITE_SUPABASE_URL=https://your-project-id.supabase.co</p>
+          <p>VITE_SUPABASE_ANON_KEY=sb_publishable_your_anon_key</p>
         </div>
         <p className="text-[11px] text-zinc-400">
           Once configured, restart the dev server with{" "}

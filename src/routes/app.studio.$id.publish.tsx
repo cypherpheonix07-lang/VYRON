@@ -39,7 +39,8 @@ export const Route = createFileRoute("/app/studio/$id/publish")({
       { title: "S8: Publish Gate & Release Verifier — PROJECT BRAHMA" },
       {
         name: "description",
-        content: "Mathematical proof verification of the 7 canonical release gates prior to production deployment.",
+        content:
+          "Mathematical proof verification of the 7 canonical release gates prior to production deployment.",
       },
     ],
   }),
@@ -50,7 +51,9 @@ export function PublishWizardPage() {
   const { id } = Route.useParams();
   const { gateReport, isRunning, runGateCheck } = useGate();
 
-  const [environment, setEnvironment] = useState<"development" | "staging" | "production">("staging");
+  const [environment, setEnvironment] = useState<"development" | "staging" | "production">(
+    "staging",
+  );
   const [customDomain, setCustomDomain] = useState("app.brahma.enterprise");
   const [autoRollback, setAutoRollback] = useState(true);
   const [overrideModalGate, setOverrideModalGate] = useState<number | null>(null);
@@ -102,7 +105,9 @@ export function PublishWizardPage() {
   };
 
   const startDeployment = async () => {
-    const isPassing = gateReport?.overall_pass || (gateReport?.blocking_gates || []).every((g) => overriddenGates.includes(g));
+    const isPassing =
+      gateReport?.overall_pass ||
+      (gateReport?.blocking_gates || []).every((g) => overriddenGates.includes(g));
     if (!isPassing) {
       toast.error("Release Blocked!", {
         description: "Hard block gates must pass before deploying to staging/production.",
@@ -145,18 +150,71 @@ export function PublishWizardPage() {
   };
 
   // Compile gate items with live data + overrides
-  const gateList: GateResultData[] = (gateReport?.gate_results || [
-    { gate_id: 1, gate_name: "Security", passed: true, score: 0, threshold: 0, evidence: "0 HIGH severity findings (threshold: 0)" },
-    { gate_id: 2, gate_name: "AST", passed: true, score: 8.4, threshold: 15.0, evidence: "Avg complexity: 8.4 (threshold: ≤ 15.0)" },
-    { gate_id: 3, gate_name: "Tests", passed: true, score: 82.5, threshold: 70.0, evidence: "Coverage: 82.5% (threshold: ≥ 70.0%)" },
-    { gate_id: 4, gate_name: "Schema", passed: true, score: 100, threshold: 100, evidence: "RLS coverage: 8/8 tables secured (100%)" },
-    { gate_id: 5, gate_name: "Docs", passed: true, score: 100, threshold: 80, evidence: "API docs: 6/6 routes documented (100%)" },
-    { gate_id: 6, gate_name: "Performance", passed: true, score: 0, threshold: 0, evidence: "0 functions with LOC > 50 (threshold: 0)" },
-    { gate_id: 7, gate_name: "Licensure", passed: true, score: 0, threshold: 0, evidence: "0 restrictive (GPL/AGPL) license violations (threshold: 0)" },
-  ]).map((g) => ({
+  const gateList: GateResultData[] = (
+    gateReport?.gate_results || [
+      {
+        gate_id: 1,
+        gate_name: "Security",
+        passed: true,
+        score: 0,
+        threshold: 0,
+        evidence: "0 HIGH severity findings (threshold: 0)",
+      },
+      {
+        gate_id: 2,
+        gate_name: "AST",
+        passed: true,
+        score: 8.4,
+        threshold: 15.0,
+        evidence: "Avg complexity: 8.4 (threshold: ≤ 15.0)",
+      },
+      {
+        gate_id: 3,
+        gate_name: "Tests",
+        passed: true,
+        score: 82.5,
+        threshold: 70.0,
+        evidence: "Coverage: 82.5% (threshold: ≥ 70.0%)",
+      },
+      {
+        gate_id: 4,
+        gate_name: "Schema",
+        passed: true,
+        score: 100,
+        threshold: 100,
+        evidence: "RLS coverage: 8/8 tables secured (100%)",
+      },
+      {
+        gate_id: 5,
+        gate_name: "Docs",
+        passed: true,
+        score: 100,
+        threshold: 80,
+        evidence: "API docs: 6/6 routes documented (100%)",
+      },
+      {
+        gate_id: 6,
+        gate_name: "Performance",
+        passed: true,
+        score: 0,
+        threshold: 0,
+        evidence: "0 functions with LOC > 50 (threshold: 0)",
+      },
+      {
+        gate_id: 7,
+        gate_name: "Licensure",
+        passed: true,
+        score: 0,
+        threshold: 0,
+        evidence: "0 restrictive (GPL/AGPL) license violations (threshold: 0)",
+      },
+    ]
+  ).map((g) => ({
     ...g,
     passed: g.passed || overriddenGates.includes(g.gate_id),
-    evidence: overriddenGates.includes(g.gate_id) ? `${g.evidence} [OVERRIDDEN BY ADMIN]` : g.evidence,
+    evidence: overriddenGates.includes(g.gate_id)
+      ? `${g.evidence} [OVERRIDDEN BY ADMIN]`
+      : g.evidence,
   }));
 
   const passedCount = gateList.filter((g) => g.passed).length;
@@ -202,7 +260,11 @@ export function PublishWizardPage() {
                 : "bg-[var(--color-danger)]/15 text-[var(--color-danger)] border border-[var(--color-danger)]/30"
             }`}
           >
-            {isOverallApproved ? <Check className="mr-1.5 size-4 inline stroke-[3]" /> : <X className="mr-1.5 size-4 inline stroke-[3]" />}
+            {isOverallApproved ? (
+              <Check className="mr-1.5 size-4 inline stroke-[3]" />
+            ) : (
+              <X className="mr-1.5 size-4 inline stroke-[3]" />
+            )}
             {isOverallApproved ? "RELEASE APPROVED (7/7)" : `BLOCKED (${7 - passedCount} FAILED)`}
           </Badge>
         </div>
@@ -215,30 +277,44 @@ export function PublishWizardPage() {
             {/* KPI Summary Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="rounded-[var(--radius-sm)] border border-[var(--border-default)] bg-[var(--surface-raised)] p-3">
-                <span className="text-[10px] uppercase font-mono font-semibold text-[var(--text-tertiary)]">Pass Rate</span>
+                <span className="text-[10px] uppercase font-mono font-semibold text-[var(--text-tertiary)]">
+                  Pass Rate
+                </span>
                 <p className="text-lg font-bold font-mono text-[var(--text-primary)] mt-0.5">
                   {((passedCount / 7) * 100).toFixed(1)}%
                 </p>
               </div>
 
               <div className="rounded-[var(--radius-sm)] border border-[var(--border-default)] bg-[var(--surface-raised)] p-3">
-                <span className="text-[10px] uppercase font-mono font-semibold text-[var(--text-tertiary)]">Avg Complexity</span>
+                <span className="text-[10px] uppercase font-mono font-semibold text-[var(--text-tertiary)]">
+                  Avg Complexity
+                </span>
                 <p className="text-lg font-bold font-mono text-[var(--color-primary)] mt-0.5">
-                  {metrics.complexity.toFixed(1)} <span className="text-[10px] text-[var(--text-tertiary)] font-normal">/ 15.0</span>
+                  {metrics.complexity.toFixed(1)}{" "}
+                  <span className="text-[10px] text-[var(--text-tertiary)] font-normal">
+                    / 15.0
+                  </span>
                 </p>
               </div>
 
               <div className="rounded-[var(--radius-sm)] border border-[var(--border-default)] bg-[var(--surface-raised)] p-3">
-                <span className="text-[10px] uppercase font-mono font-semibold text-[var(--text-tertiary)]">Test Coverage</span>
+                <span className="text-[10px] uppercase font-mono font-semibold text-[var(--text-tertiary)]">
+                  Test Coverage
+                </span>
                 <p className="text-lg font-bold font-mono text-[var(--color-success)] mt-0.5">
                   {metrics.coverage.toFixed(1)}%
                 </p>
               </div>
 
               <div className="rounded-[var(--radius-sm)] border border-[var(--border-default)] bg-[var(--surface-raised)] p-3">
-                <span className="text-[10px] uppercase font-mono font-semibold text-[var(--text-tertiary)]">Bandit HIGH</span>
+                <span className="text-[10px] uppercase font-mono font-semibold text-[var(--text-tertiary)]">
+                  Bandit HIGH
+                </span>
                 <p className="text-lg font-bold font-mono text-[var(--gate-pass)] mt-0.5">
-                  0 <span className="text-[10px] text-[var(--text-tertiary)] font-normal">findings</span>
+                  0{" "}
+                  <span className="text-[10px] text-[var(--text-tertiary)] font-normal">
+                    findings
+                  </span>
                 </p>
               </div>
             </div>
@@ -256,11 +332,7 @@ export function PublishWizardPage() {
 
               <div className="space-y-3">
                 {gateList.map((g) => (
-                  <GateCard
-                    key={g.gate_id}
-                    gate={g}
-                    onOverrideRequest={handleRequestOverride}
-                  />
+                  <GateCard key={g.gate_id} gate={g} onOverrideRequest={handleRequestOverride} />
                 ))}
               </div>
             </div>
@@ -272,7 +344,8 @@ export function PublishWizardPage() {
                 <span>Verification Mathematical Proof Hash</span>
               </div>
               <p className="font-mono text-[11px] text-[var(--text-tertiary)] break-all bg-[var(--surface-base)] p-2.5 rounded-[var(--radius-sm)] border border-[var(--border-default)]">
-                sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069 | project:{id} | timestamp:{new Date().toISOString()}
+                sha256:7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069 | project:
+                {id} | timestamp:{new Date().toISOString()}
               </p>
             </div>
           </div>
@@ -281,8 +354,12 @@ export function PublishWizardPage() {
           <div className="lg:col-span-4 space-y-6">
             <div className="rounded-[var(--radius-sm)] border border-[var(--border-default)] bg-[var(--surface-raised)] p-5 space-y-5">
               <div className="space-y-1">
-                <h3 className="text-sm font-semibold text-[var(--text-primary)] font-sans">Target Environment</h3>
-                <p className="text-[11px] text-[var(--text-secondary)] font-sans">Select target cluster for deployment.</p>
+                <h3 className="text-sm font-semibold text-[var(--text-primary)] font-sans">
+                  Target Environment
+                </h3>
+                <p className="text-[11px] text-[var(--text-secondary)] font-sans">
+                  Select target cluster for deployment.
+                </p>
               </div>
 
               {/* Environment Segmented Control */}
@@ -305,7 +382,10 @@ export function PublishWizardPage() {
 
               {/* Domain Input */}
               <div className="space-y-2">
-                <Label htmlFor="custom-domain" className="text-xs font-medium text-[var(--text-primary)]">
+                <Label
+                  htmlFor="custom-domain"
+                  className="text-xs font-medium text-[var(--text-primary)]"
+                >
                   Live Ingress Hostname
                 </Label>
                 <Input
@@ -319,7 +399,9 @@ export function PublishWizardPage() {
               {/* Auto-rollback Switch */}
               <div className="flex items-center justify-between border-t border-[var(--border-default)] pt-4">
                 <div className="space-y-0.5">
-                  <p className="text-xs font-medium text-[var(--text-primary)] font-sans">Automatic Rollback</p>
+                  <p className="text-xs font-medium text-[var(--text-primary)] font-sans">
+                    Automatic Rollback
+                  </p>
                   <p className="text-[10px] text-[var(--text-tertiary)] font-sans">
                     Revert on health check failure.
                   </p>
@@ -363,7 +445,9 @@ export function PublishWizardPage() {
           <Loader2 className="size-10 animate-spin text-[var(--color-primary)] mx-auto" />
           <div className="space-y-1">
             <h3 className="text-sm font-semibold text-[var(--text-primary)] font-sans">
-              {deployState === "checking" ? "Running Release Gate Verification..." : "Deploying Container Clusters..."}
+              {deployState === "checking"
+                ? "Running Release Gate Verification..."
+                : "Deploying Container Clusters..."}
             </h3>
             <p className="text-xs text-[var(--text-secondary)] font-sans">
               Packaging OCI artifacts, running database migrations, and configuring ingress routes.
@@ -374,7 +458,10 @@ export function PublishWizardPage() {
             {deployLogs.map((log, i) => {
               const isSuccess = log.includes("SUCCESS:");
               return (
-                <div key={i} className={isSuccess ? "text-[var(--color-success)] font-semibold" : ""}>
+                <div
+                  key={i}
+                  className={isSuccess ? "text-[var(--color-success)] font-semibold" : ""}
+                >
                   {log}
                 </div>
               );
@@ -466,12 +553,16 @@ export function PublishWizardPage() {
                 <span>Request Administrative Override</span>
               </div>
               <p className="text-xs text-[var(--text-secondary)] font-sans">
-                You are requesting an emergency bypass for Gate 0{overrideModalGate}. This action will be permanently recorded in the immutable WORM audit log.
+                You are requesting an emergency bypass for Gate 0{overrideModalGate}. This action
+                will be permanently recorded in the immutable WORM audit log.
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="override-reason" className="text-xs font-medium text-[var(--text-primary)]">
+              <Label
+                htmlFor="override-reason"
+                className="text-xs font-medium text-[var(--text-primary)]"
+              >
                 Justification / JIRA Ticket Reference *
               </Label>
               <Input
