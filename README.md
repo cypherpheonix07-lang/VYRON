@@ -1,856 +1,518 @@
-# Brahma Insights
+<div align="center">
 
-Build a production-ready, modern, responsive frontend for PROJECT BRAHMA.
+<br/>
 
-PROJECT NAME:
+```
+██████╗ ██████╗  █████╗ ██╗  ██╗███╗   ███╗ █████╗
+██╔══██╗██╔══██╗██╔══██╗██║  ██║████╗ ████║██╔══██╗
+██████╔╝██████╔╝███████║███████║██╔████╔██║███████║
+██╔══██╗██╔══██╗██╔══██║██╔══██║██║╚██╔╝██║██╔══██║
+██████╔╝██║  ██║██║  ██║██║  ██║██║ ╚═╝ ██║██║  ██║
+╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝
+```
 
-PROJECT BRAHMA
+### **Blueprint-driven Requirements Architecture Health Monitoring Agent**
 
-Blueprint-driven Requirements Architecture Health Monitoring Agent
+*From raw idea to validated software blueprint — in minutes.*
 
-CORE IDEOLOGY:
+<br/>
 
-Every software project should begin with an intelligent, validated blueprint and continuously connect engineering quality to business impact. The frontend must feel like a serious enterprise SaaS platform for software engineering intelligence. It must not look like a generic AI chatbot or a basic student CRUD app.
+[![](https://img.shields.io/badge/STATUS-ACTIVE_DEVELOPMENT-22D3EE?style=for-the-badge&labelColor=0B1220)](https://github.com/cypherpheonix07-lang)
+[![](https://img.shields.io/badge/VERSION-1.0.0-6366F1?style=for-the-badge&labelColor=0B1220)](https://github.com/cypherpheonix07-lang)
+[![](https://img.shields.io/badge/LICENSE-MIT-22C55E?style=for-the-badge&labelColor=0B1220)](LICENSE)
 
-PRODUCT PURPOSE:
+<br/>
 
-PROJECT BRAHMA helps users convert a project idea or requirement into a structured software blueprint, analyze code quality and security, predict delivery risk, and map technical issues to business impact.
+[![React](https://img.shields.io/badge/React_18-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript_5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_3-0F172A?style=flat-square&logo=tailwindcss&logoColor=38BDF8)](https://tailwindcss.com)
+[![Vite](https://img.shields.io/badge/Vite_5-646CFF?style=flat-square&logo=vite&logoColor=FFD62E)](https://vitejs.dev)
+[![Supabase](https://img.shields.io/badge/Supabase-1C1C1C?style=flat-square&logo=supabase&logoColor=3ECF8E)](https://supabase.com)
 
-TARGET USERS:
+<br/>
 
-Engineering students, startup founders, software teams, faculty reviewers, and engineering managers.
+[**🚀 Live Demo**](#) &nbsp;·&nbsp; [**📸 Screenshots**](#screenshots) &nbsp;·&nbsp; [**📖 Docs**](#documentation) &nbsp;·&nbsp; [**🐛 Report Bug**](../../issues) &nbsp;·&nbsp; [**💡 Request Feature**](../../issues)
 
-DESIGN DIRECTION:
+<br/>
 
-- Modern enterprise SaaS.
+</div>
 
-- Dark theme by default with optional light theme.
+---
 
-- Primary background: deep navy, near black, for example #0B1220.
+## What is PROJECT BRAHMA?
 
-- Surface background: dark slate with subtle transparency and border glow.
+Most software teams juggle 6+ tools to go from idea to shipped product — a requirements doc here, an architecture diagram there, a separate security scanner, another risk spreadsheet, and no single place where it all connects.
 
-- Accent colors: cyan #22D3EE, indigo #6366F1, amber #F59E0B for warnings, green #22C55E for success, red #EF4444 for critical issues.
+**BRAHMA collapses that stack into one platform.**
 
-- Typography: Inter or similar clean professional font.
+Feed it a raw project idea or an SRS document. BRAHMA extracts structured requirements, generates a validated architecture blueprint, analyzes code quality and security posture, predicts delivery risk, and maps every technical issue to its business impact — all inside a single enterprise-grade dashboard.
 
-- Rounded cards, soft borders, subtle shadows, clean spacing, strong data visualization.
+```
+┌─────────────────────────────────────────────────────────────┐
+│                      INPUT LAYER                            │
+│   Raw Idea  ·  SRS Document  ·  GitHub Repository          │
+└───────────────────────────┬─────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│                   BRAHMA INTELLIGENCE                       │
+│                                                             │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐  │
+│  │ Requirements │  │ Architecture │  │   Business KPI   │  │
+│  │ Extraction   │  │  Generator   │  │     Mapper       │  │
+│  └──────────────┘  └──────────────┘  └──────────────────┘  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐  │
+│  │ Code Health  │  │  Security    │  │  Delivery Risk   │  │
+│  │   Engine     │  │  Reviewer    │  │   Predictor      │  │
+│  └──────────────┘  └──────────────┘  └──────────────────┘  │
+└───────────────────────────┬─────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│                      OUTPUT LAYER                           │
+│  Blueprint  ·  Risk Report  ·  Executive PDF  ·  Dashboard  │
+└─────────────────────────────────────────────────────────────┘
+```
 
-- Minimal glassmorphism, not overly flashy.
+---
 
-- Professional, intelligent, precise, trustworthy.
+## Core Modules
 
-- Fully responsive for desktop, tablet, and mobile.
+<table>
+<tr>
+<td width="50%">
 
-- Accessibility-conscious: readable contrast, focus states, keyboard-friendly navigation.
+### 🧠 Requirement Intelligence
+Extracts functional and non-functional requirements from free-form text or uploaded SRS documents. Each extracted item carries an AI confidence score, with visual warnings when requirement clarity is below threshold.
 
-- No lorem ipsum. Use realistic sample data related to software projects, code analysis, security issues, and risk scoring.
-
-TECH STACK EXPECTATION:
-
-Use React, TypeScript, Tailwind CSS, shadcn/ui style components, React Router, Lucide icons, Recharts for charts, and React Flow for architecture visualization. Use mock data and mock API functions. Do not implement a real backend. All data should be deterministic and realistic.
-
-INFORMATION ARCHITECTURE:
-
-Create the following route structure:
-
-PUBLIC PAGES:
-
-/ → Landing page
-
-/login → Login page
-
-/register → Register page
-
-APP PAGES:
-
-/app → Dashboard
-
-/app/projects → Project list
-
-/app/projects/new → New project wizard
-
-/app/projects/:id → Project overview
-
-/app/projects/:id/requirements → Requirement analysis
-
-/app/projects/:id/blueprint → Architecture blueprint
-
-/app/projects/:id/code-health → Code health analysis
-
-/app/projects/:id/security → Security analysis
-
-/app/projects/:id/risk-business → Risk and business impact
-
-/app/projects/:id/reports → Reports and export
-
-/app/settings → Settings
-
-/app/admin → Admin dashboard, visible only for admin role
-
-LANDING PAGE REQUIREMENTS:
-
-Create a high-converting professional landing page with:
-
-1. Navbar with logo, Features, How it works, Technology, Login, Get Started.
-
-2. Hero section with headline: “From raw idea to validated software blueprint.”
-
-3. Subheadline explaining AI-powered requirement analysis, architecture generation, code health, security, risk prediction, and business impact mapping.
-
-4. Primary CTA: “Create Project”.
-
-5. Secondary CTA: “View Demo Dashboard”.
-
-6. Problem section showing fragmented tools and missing validation.
-
-7. Solution section showing BRAHMA as one unified engineering intelligence platform.
-
-8. Feature grid with 8 features:
-
-   - Requirement Intelligence
-
-   - Architecture Generator
-
-   - Business KPI Mapper
-
-   - Code Health Engine
-
-   - Security Reviewer
-
-   - Delivery Risk Predictor
-
-   - Report Generator
-
-   - Engineering Dashboard
-
-9. Workflow section with 5 steps:
-
-   - Input idea or requirement
-
-   - AI extracts structured requirements
-
-   - Generate architecture blueprint
-
-   - Analyze code and security
-
-   - Predict risk and business impact
-
-10. Technology stack section.
-
-11. Final CTA section.
-
-12. Footer with product, resources, documentation, GitHub, contact.
-
-AUTH PAGES REQUIREMENTS:
-
-Login and register pages must be clean and centered.
-
-Fields:
-
-- Login: email, password.
-
-- Register: name, email, password, role selection: Student, Faculty, Startup, Admin.
-
-Include validation states, loading state, error state, and success toast.
-
-Include mock authentication behavior.
-
-APP SHELL REQUIREMENTS:
-
-Create a reusable authenticated app layout with:
-
-- Collapsible sidebar.
-
-- Top bar with project selector, search, notifications, theme toggle, user profile menu.
-
-- Breadcrumbs.
-
-- Responsive mobile drawer navigation.
-
-- Sidebar items:
-
-  Dashboard
-
-  Projects
-
-  New Project
-
-  Reports
-
-  Settings
-
-  Admin
-
-- Active route highlighting.
-
-- Empty notification state and loaded notification state.
-
-DASHBOARD REQUIREMENTS:
-
-The dashboard must show an executive overview of engineering intelligence.
-
-Include:
-
-1. KPI cards:
-
-   - Total Projects
-
-   - Average Health Score
-
-   - Security Risk Level
-
-   - Delivery Risk Level
-
-   - Reports Generated
-
-2. Recent projects table:
-
-   - Project name
-
-   - Status
-
-   - Health score
-
-   - Security score
-
-   - Delivery risk
-
-   - Last updated
-
-3. Project health trend chart.
-
-4. Risk distribution chart.
-
-5. Recent activity feed.
-
-6. Empty state when no projects exist.
-
-7. Loading skeleton state.
-
-8. Error state with retry button.
-
-PROJECT LIST PAGE REQUIREMENTS:
-
-Create a professional project list page with:
-
-- Search input.
-
-- Filters by status, risk level, health score.
-
-- Grid and table view toggle.
-
-- Project cards showing name, description, status badge, health score, risk score, security score.
-
-- Create project button.
-
-- Empty state.
-
-- Loading state.
-
-- Error state.
-
-NEW PROJECT WIZARD REQUIREMENTS:
-
-Create a 4-step wizard.
-
-STEP 1: Project Information
-
-Fields:
-
-- Project name
-
-- Description
-
-- Domain
-
-- Target users
-
-- Team size
-
-- Expected deadline
-
-STEP 2: Requirement Input
-
-Options:
-
-- Textarea for raw project idea.
-
-- Upload SRS or requirement document mock field.
-
-- Optional voice input mock button.
-
-- Example prompt button: “Load sample project idea”.
-
-STEP 3: Repository Connection
-
-Options:
-
-- Connect GitHub repository mock.
-
-- Paste repository URL.
-
-- Use sample repository.
-
-- Show connected/disconnected state.
-
-STEP 4: Analysis Options
-
-Toggles:
-
-- Architecture generation
-
-- Code health analysis
-
-- Security review
-
-- Risk prediction
-
-- Business KPI mapping
-
-Wizard requirements:
-
-- Step indicator.
-
-- Validation errors.
-
-- Back and Next buttons.
-
-- Final button: “Generate Blueprint”.
-
-- On submit, show analysis progress state with steps:
-
-  Parsing requirements
-
-  Generating architecture
-
-  Mapping business KPIs
-
-  Analyzing code
-
-  Calculating risk
-
-  Preparing dashboard
-
-PROJECT DETAIL PAGE REQUIREMENTS:
-
-Create a tabbed project detail layout with:
-
-- Overview
-
-- Requirements
-
-- Blueprint
-
-- Code Health
-
-- Security
-
-- Risk & Business
-
-- Reports
-
-PROJECT OVERVIEW TAB:
-
-Show:
-
-- Project title and status.
-
-- Health score gauge.
-
-- Security score.
-
-- Delivery risk score.
-
-- Business impact score.
-
-- Requirement clarity score.
-
-- Last analysis timestamp.
-
-- Quick actions:
-
-  Run Analysis
-
-  Export Report
-
-  Connect Repository
-
-  View Blueprint
-
-REQUIREMENTS TAB:
-
-Show structured AI-extracted requirements:
-
-- Functional requirements list.
-
-- Non-functional requirements list.
-
-- Actors/users.
-
-- Modules.
-
-- Constraints.
-
-- Assumptions.
-
-- Data entities.
-
-- Editable fields with save state.
-
-- Confidence score for each extracted item.
-
-- Warning state when requirement clarity is low.
-
-BLUEPRINT TAB:
-
-This is the most important visual page.
-
-Create an architecture blueprint canvas.
-
-Include:
-
-1. React Flow graph showing system architecture:
-
-   - Frontend
-
-   - Backend
-
-   - Database
-
-   - AI service
-
-   - Authentication
-
-   - File storage
-
-   - Background worker
-
-   - External APIs
-
-2. Node details panel when a node is selected.
-
-3. Database schema table:
-
-   - Table name
-
-   - Fields
-
-   - Type
-
-   - Primary key
-
-   - Relationships
-
-4. API routes table:
-
-   - Method
-
-   - Endpoint
-
-   - Purpose
-
-   - Auth required
-
-5. Architecture recommendations cards.
-
-6. Download blueprint JSON mock button.
-
-CODE HEALTH TAB:
-
-Show code quality analysis:
-
-- Overall health score.
-
-- Maintainability chart.
-
-- Complexity chart.
-
-- Duplication percentage.
-
-- Test coverage estimate.
-
-- Dependency risk.
-
-- File-level issues table:
-
-  - File name
-
-  - Complexity
-
-  - Issues
-
-  - Severity
-
-  - Recommendation
-
-- Loading state while analysis runs.
-
-- Empty state if repository is not connected.
-
-SECURITY TAB:
-
-Show security analysis:
-
-- Security score.
-
-- Critical, high, medium, low vulnerability count cards.
-
-- Vulnerability table:
-
-  - Title
-
-  - Severity
-
-  - CWE ID
-
-  - File/location
-
-  - Description
-
-  - Recommendation
-
-- Severity badges.
-
-- Remediation checklist.
-
-- Empty state when no vulnerabilities found.
-
-- Error state when security analysis fails.
-
-RISK & BUSINESS TAB:
-
-Show business impact mapping:
-
-- Delivery risk score.
-
-- Technical debt score.
-
-- Release readiness score.
-
-- Business impact matrix.
-
-- KPI cards:
-
-  Cost impact
-
-  Time impact
-
-  Quality impact
-
-  Risk exposure
-
-  Maintainability
-
-- Chart: Technical issues vs business impact.
-
-- Recommendation list:
-
-  - Fix high-severity security issues first.
-
-  - Reduce complexity in critical modules.
-
-  - Add missing API tests.
-
-  - Improve requirement clarity.
-
-  - Prioritize modules with high business impact.
-
-REPORTS TAB:
-
-Show:
-
-- Generated reports table.
-
-- Report type:
-
-  Academic report
-
-  Technical report
-
-  Executive summary
-
-- Status:
-
-  Generating
-
-  Completed
-
-  Failed
-
-- Download PDF mock button.
-
-- Generate new report button.
-
-- Report preview modal with sections:
-
-  Executive Summary
-
-  Requirements
-
-  Architecture
-
-  Code Health
-
-  Security
-
-  Risk
-
-  Business Impact
-
-  Recommendations
-
-SETTINGS PAGE REQUIREMENTS:
-
-Create settings page with tabs:
-
-- Profile
-
-- Workspace
-
-- Integrations
-
-- Notifications
-
-- Appearance
-
-- API Keys
-
-Include:
-
-- Profile form with name, email, role.
-
-- GitHub integration connect/disconnect mock.
-
-- LLM API key input field.
-
-- Notification toggles:
-
-  Analysis completed
-
-  Security alert
-
-  Report ready
-
-  Delivery risk warning
-
-- Theme selector:
-
-  Dark
-
-  Light
-
-  System
-
-- Save button with success toast.
-
-ADMIN PAGE REQUIREMENTS:
-
-Create admin dashboard visible only for admin role.
-
-Include:
-
-- Total users.
-
-- Total projects.
-
-- Total analyses.
-
-- Total reports.
-
-- Usage chart.
-
-- Recent users table.
-
-- Audit log table.
-
-- System health status.
-
-COMPONENT HIERARCHY:
-
-Create reusable components:
-
-- AppShell
-
-- Sidebar
-
-- Topbar
-
-- Breadcrumbs
-
-- PageHeader
-
-- StatCard
-
-- ScoreGauge
-
-- RiskBadge
-
-- StatusBadge
-
-- ProjectCard
-
-- ProjectTable
-
-- WizardStep
-
-- RequirementCard
-
-- ArchitectureCanvas
-
-- SchemaTable
-
-- ApiRouteTable
-
-- CodeHealthChart
-
-- SecurityVulnerabilityTable
-
-- RiskMatrix
-
-- BusinessImpactChart
-
-- ReportTable
-
-- EmptyState
-
-- LoadingSkeleton
-
-- ErrorState
-
-- SuccessToast
-
-- Modal
-
-- Tabs
-
-- SearchInput
-
-- FilterBar
-
-STATE MANAGEMENT:
-
-Use clear UI state patterns:
-
-- Authentication loading state.
-
-- Project list loading state.
-
-- Project creation loading state.
-
-- Analysis running state.
-
-- Analysis success state.
-
-- Analysis failure state.
-
-- Empty project state.
-
-- No repository connected state.
-
-- Report generating state.
-
-- Settings saved state.
-
-- Form validation error state.
-
-USER FLOW:
-
-Design the primary user flow:
-
-1. User lands on homepage.
-
-2. User clicks Get Started.
-
-3. User registers or logs in.
-
-4. User arrives at dashboard.
-
-5. User clicks New Project.
-
-6. User completes 4-step wizard.
-
-7. System shows analysis progress.
-
-8. User is redirected to project overview.
-
-9. User explores Requirements, Blueprint, Code Health, Security, Risk & Business, and Reports.
-
-10. User exports report.
-
-MOCK DATA REQUIREMENTS:
-
-Create realistic mock data for:
-
-- 5 sample projects.
-
-- At least 1 project with high health score.
-
-- 1 project with medium risk.
-
-- 1 project with critical security issues.
-
-- 1 project with incomplete requirements.
-
-- 1 project with repository not connected.
-
-- Sample architecture graph nodes and edges.
-
-- Sample database schema.
-
-- Sample API routes.
-
-- Sample code health metrics.
-
-- Sample security vulnerabilities.
-
-- Sample business KPI impact scores.
-
-- Sample report history.
-
-- Sample notifications.
-
-RESPONSIVE REQUIREMENTS:
-
-- Desktop: full sidebar, multi-column dashboard, large charts.
-
-- Tablet: collapsible sidebar, stacked cards, responsive tables.
-
-- Mobile: bottom navigation or drawer, simplified tables, card-based layouts, wizard becomes vertical stacked steps.
-
-- Architecture canvas should support zoom, pan, and mobile-friendly fallback.
-
-FINAL REQUIREMENTS:
-
-- The UI must feel production-ready, clean, and enterprise-grade.
-
-- Do not create childish or overly decorative visuals.
-
-- Do not use placeholder text like “Lorem ipsum”.
-
-- Every page must have loading, empty, error, and success states where relevant.
-
-- The design should communicate software engineering intelligence, trust, clarity, and business alignment.
-
-- The final frontend should be suitable for academic demo, investor review, hackathon presentation, and SaaS prototype.
-
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/76b66fb0-f11c-4584-aa67-046562f7147f).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+</td>
+<td width="50%">
+
+### 🏗️ Architecture Generator
+Renders an interactive React Flow canvas — zoomable, pannable, fully navigable — with nodes for Frontend, Backend, Database, AI Service, Auth, File Storage, Workers, and External APIs. Click any node for a detail panel.
+
+</td>
+</tr>
+<tr>
+<td>
+
+### 📊 Business KPI Mapper
+Translates technical debt, complexity, and security issues into cost, time, quality, and risk exposure metrics that engineering managers and stakeholders actually read.
+
+</td>
+<td>
+
+### 🔬 Code Health Engine
+File-level quality analysis: maintainability index, cyclomatic complexity, duplication %, test coverage estimate, and dependency risk — rendered in sortable tables and Recharts visualizations.
+
+</td>
+</tr>
+<tr>
+<td>
+
+### 🔐 Security Reviewer
+Surfaces vulnerabilities sorted by severity (Critical → High → Medium → Low) with CWE IDs, file locations, descriptions, and fix recommendations. Includes a remediation checklist with progress tracking.
+
+</td>
+<td>
+
+### 📈 Delivery Risk Predictor
+Scores release readiness and technical debt against project timeline. Outputs a prioritized remediation list so teams know what to fix before the next release gate.
+
+</td>
+</tr>
+<tr>
+<td>
+
+### 📄 Report Generator
+Produces Academic, Technical, and Executive Summary reports with a structured preview modal. Downloadable as PDF — suitable for faculty review, investor decks, and internal engineering audits.
+
+</td>
+<td>
+
+### 🖥️ Engineering Dashboard
+Executive overview with KPI cards, health trend line charts, risk distribution, and an activity feed. Skeleton loading states, empty states, and error recovery built in.
+
+</td>
+</tr>
+</table>
+
+---
+
+## Screenshots
+
+> *Screenshots will appear here once the first production build is deployed.*
+
+| Dashboard | Blueprint Canvas | Security Analysis |
+|:---------:|:----------------:|:-----------------:|
+| Coming soon | Coming soon | Coming soon |
+
+---
+
+## Tech Stack
+
+```
+Layer               Technology
+─────────────────────────────────────────────────────────────
+UI Framework        React 18 + TypeScript 5
+Build Tooling       Vite 5
+Styling             Tailwind CSS v3
+Component Layer     shadcn/ui (Radix UI primitives)
+Routing             React Router v6
+Icons               Lucide React
+Data Visualization  Recharts
+Graph / Canvas      React Flow
+State Management    React Context + useState / useReducer
+Backend (planned)   Supabase (Auth, DB, Storage)
+Data (current)      Deterministic mock data — zero backend required
+```
+
+---
+
+## Project Structure
+
+```
+brahma/
+├── public/
+│   └── assets/                         # Static assets
+│
+├── src/
+│   ├── components/
+│   │   ├── ui/                         # shadcn/ui base primitives
+│   │   │
+│   │   ├── shell/                      # App layout
+│   │   │   ├── AppShell.tsx            # Root authenticated layout
+│   │   │   ├── Sidebar.tsx             # Collapsible nav sidebar
+│   │   │   ├── Topbar.tsx              # Project selector, search, theme
+│   │   │   └── Breadcrumbs.tsx         # Route-aware breadcrumbs
+│   │   │
+│   │   ├── common/                     # Shared UI atoms
+│   │   │   ├── StatCard.tsx
+│   │   │   ├── ScoreGauge.tsx
+│   │   │   ├── RiskBadge.tsx
+│   │   │   ├── StatusBadge.tsx
+│   │   │   ├── EmptyState.tsx
+│   │   │   ├── LoadingSkeleton.tsx
+│   │   │   ├── ErrorState.tsx
+│   │   │   └── SuccessToast.tsx
+│   │   │
+│   │   ├── projects/                   # Project-scoped components
+│   │   │   ├── ProjectCard.tsx
+│   │   │   ├── ProjectTable.tsx
+│   │   │   └── WizardStep.tsx
+│   │   │
+│   │   ├── blueprint/                  # Architecture visualization
+│   │   │   ├── ArchitectureCanvas.tsx  # React Flow graph
+│   │   │   ├── SchemaTable.tsx         # DB schema renderer
+│   │   │   └── ApiRouteTable.tsx       # REST endpoint table
+│   │   │
+│   │   ├── analysis/                   # Analysis modules
+│   │   │   ├── CodeHealthChart.tsx
+│   │   │   ├── SecurityVulnerabilityTable.tsx
+│   │   │   ├── RiskMatrix.tsx
+│   │   │   └── BusinessImpactChart.tsx
+│   │   │
+│   │   └── reports/
+│   │       └── ReportTable.tsx
+│   │
+│   ├── pages/
+│   │   ├── public/                     # Unauthenticated routes
+│   │   │   ├── Landing.tsx
+│   │   │   ├── Login.tsx
+│   │   │   └── Register.tsx
+│   │   │
+│   │   └── app/                        # Authenticated routes
+│   │       ├── Dashboard.tsx
+│   │       ├── ProjectList.tsx
+│   │       ├── NewProject.tsx
+│   │       ├── project/                # Per-project tabs
+│   │       │   ├── Overview.tsx
+│   │       │   ├── Requirements.tsx
+│   │       │   ├── Blueprint.tsx
+│   │       │   ├── CodeHealth.tsx
+│   │       │   ├── Security.tsx
+│   │       │   ├── RiskBusiness.tsx
+│   │       │   └── Reports.tsx
+│   │       ├── Settings.tsx
+│   │       └── Admin.tsx               # Admin role only
+│   │
+│   ├── data/mock/                      # Deterministic seed data
+│   │   ├── projects.ts
+│   │   ├── requirements.ts
+│   │   ├── blueprint.ts
+│   │   ├── codeHealth.ts
+│   │   ├── security.ts
+│   │   ├── risk.ts
+│   │   └── reports.ts
+│   │
+│   ├── hooks/                          # Custom React hooks
+│   │   ├── useAuth.ts
+│   │   ├── useProject.ts
+│   │   └── useTheme.ts
+│   │
+│   ├── context/
+│   │   ├── AuthContext.tsx
+│   │   └── ThemeContext.tsx
+│   │
+│   ├── types/index.ts                  # Global TypeScript types
+│   ├── lib/utils.ts                    # Utility helpers
+│   ├── router/index.tsx                # Route definitions
+│   └── main.tsx
+│
+├── package.json
+├── tailwind.config.ts
+├── tsconfig.json
+└── vite.config.ts
+```
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+| Tool | Minimum Version |
+|------|----------------|
+| Node.js | 18.x |
+| npm | 9.x |
+
+> pnpm and yarn are also supported.
+
+### Local Development
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/cypherpheonix07-lang/project-brahma.git
+cd project-brahma
+
+# 2. Install dependencies
+npm install
+
+# 3. Start the dev server
 npm run dev
 ```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Available Scripts
+
+```bash
+npm run dev        # Start Vite dev server with HMR
+npm run build      # TypeScript check + production build → /dist
+npm run preview    # Serve the production build locally
+npm run lint       # ESLint across the codebase
+```
+
+### Demo Credentials
+
+The app ships with mock authentication. No real accounts required.
+
+| Role | Email | Password | Access |
+|------|-------|----------|--------|
+| 👑 Admin | `admin@brahma.dev` | `brahma2024` | All routes incl. `/app/admin` |
+| 🎓 Faculty | `faculty@brahma.dev` | `brahma2024` | Full app, no admin panel |
+| 📚 Student | `student@brahma.dev` | `brahma2024` | Full app, no admin panel |
+| 🚀 Startup | `startup@brahma.dev` | `brahma2024` | Full app, no admin panel |
+
+> **Note:** The Admin role is the only role that can access `/app/admin`. All other roles are silently redirected to `/app`.
+
+---
+
+## Route Map
+
+### Public
+
+| Route | Page |
+|-------|------|
+| `/` | Landing — hero, features, workflow, CTA |
+| `/login` | Login with email + password |
+| `/register` | Registration with role selection |
+
+### App (Authenticated)
+
+| Route | Page |
+|-------|------|
+| `/app` | Executive dashboard — KPIs, trends, activity |
+| `/app/projects` | Project list — search, filter, grid/table toggle |
+| `/app/projects/new` | 4-step new project wizard |
+| `/app/projects/:id` | Project overview — tabbed layout |
+| `/app/projects/:id/requirements` | AI-extracted requirement analysis |
+| `/app/projects/:id/blueprint` | Architecture canvas + schema + API routes |
+| `/app/projects/:id/code-health` | Code quality metrics + file-level issues |
+| `/app/projects/:id/security` | Vulnerability table + remediation checklist |
+| `/app/projects/:id/risk-business` | Delivery risk + business KPI mapping |
+| `/app/projects/:id/reports` | Report history + PDF export |
+| `/app/settings` | Profile · integrations · notifications · theme |
+| `/app/admin` | Admin panel *(admin role only)* |
+
+---
+
+## User Flow
+
+```
+Landing Page
+    │
+    └─► Register / Login
+            │
+            ▼
+        Dashboard  ◄──────────────────────────┐
+            │                                 │
+            └─► New Project Wizard (4 Steps)  │
+                    │                         │
+                    │  Step 1: Project Info   │
+                    │  Step 2: Requirements   │
+                    │  Step 3: Repository     │
+                    │  Step 4: Analysis       │
+                    │                         │
+                    └─► Analysis Progress     │
+                            │                 │
+                            ▼                 │
+                       Project Overview ──────┘
+                            │
+                    ┌───────┼────────┬──────────┬───────────┐
+                    │       │        │          │           │
+                    ▼       ▼        ▼          ▼           ▼
+               Blueprint  Code    Security  Risk &      Reports
+                Canvas   Health             Business    & Export
+```
+
+---
+
+## Mock Data Scenarios
+
+Five deterministic sample projects ship with the codebase, each demonstrating a distinct system state:
+
+| Project | Scenario | Key Metrics |
+|---------|----------|-------------|
+| **SmartCampus ERP** | Healthy baseline | Health: 94 · Security: 91 · Risk: Low |
+| **FinTrack Pro** | Active analysis / medium risk | Health: 72 · Security: 68 · Risk: Medium |
+| **MedConnect** | Critical security vulnerabilities | Health: 61 · Security: 31 · Risk: High |
+| **LegalDocs AI** | Low-clarity requirements | Health: 55 · Clarity: 38% · Risk: Medium |
+| **DevOps Sentinel** | Repository not connected | Health: — · Code: Pending · Blueprint: Ready |
+
+Each project includes: structured requirements, React Flow nodes and edges, database schema, API routes, file-level code health metrics, CVE/CWE vulnerability records, KPI impact scores, and report history.
+
+---
+
+## Design System
+
+### Color Palette
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `base` | `#0B1220` | Page background |
+| `surface` | `#131E30` | Cards, panels |
+| `surface-raised` | `#1A2640` | Modals, dropdowns |
+| `cyan` | `#22D3EE` | Primary accent, links, highlights |
+| `indigo` | `#6366F1` | Secondary accent, charts |
+| `amber` | `#F59E0B` | Warnings, medium risk |
+| `green` | `#22C55E` | Success, healthy scores |
+| `red` | `#EF4444` | Critical issues, errors |
+
+### Typography
+
+```
+Font Family   Inter (Google Fonts)
+─────────────────────────────────────────
+Display       48px · weight 700
+H1            32px · weight 700
+H2            24px · weight 600
+H3            20px · weight 600
+Body          16px · weight 400
+Label         14px · weight 500
+Caption       12px · weight 400
+```
+
+### Theming
+
+Dark mode is default. Theme can be switched to **Light** or **System** from the Topbar or `/app/settings`. Preference is persisted to `localStorage`.
+
+### Responsive Breakpoints
+
+| Viewport | Behavior |
+|----------|----------|
+| Desktop (≥1280px) | Full sidebar, multi-column dashboard, large charts |
+| Tablet (768–1279px) | Collapsible sidebar, stacked cards, scrollable tables |
+| Mobile (<768px) | Drawer navigation, card-first layout, vertical wizard |
+
+---
+
+## Contributing
+
+Contributions, issues, and feature requests are welcome.
+
+```bash
+# Fork → clone → branch → commit → PR
+
+git checkout -b feat/your-feature-name
+```
+
+**Commit format** — [Conventional Commits](https://www.conventionalcommits.org):
+
+```
+feat:      New feature
+fix:       Bug fix
+refactor:  Code change with no feature/fix
+docs:      Documentation only
+style:     Formatting, no logic change
+test:      Adding or fixing tests
+chore:     Build system, dependency updates
+```
+
+**Before opening a PR:**
+- `npm run build` must pass with zero TypeScript errors
+- `npm run lint` must report no violations
+- For new pages/components, include loading, empty, and error states
+- Open an issue first for significant changes or new modules
+
+---
+
+## Roadmap
+
+- [x] Landing page with full feature sections
+- [x] Auth pages with mock authentication and role-gating
+- [x] App shell — collapsible sidebar, topbar, breadcrumbs
+- [x] Dashboard with KPI cards, charts, and activity feed
+- [x] Project list with search, filter, and grid/table toggle
+- [x] 4-step new project wizard with analysis progress
+- [x] Project detail — Requirements, Blueprint, Code Health, Security, Risk, Reports
+- [x] Admin panel
+- [x] Settings — profile, integrations, notifications, appearance
+- [ ] Supabase backend integration
+- [ ] Real AI requirement extraction via LLM API
+- [ ] GitHub OAuth repository connection
+- [ ] PDF report generation (server-side)
+- [ ] Collaborative project workspaces
+- [ ] Email notifications and webhook alerts
+
+---
+
+## Acknowledgements
+
+Built as part of the **CodeSapiens** engineering community — a 1,000+ member student-led coding community at Panimalar Engineering College, Chennai.
+
+[codesapiens.in](https://codesapiens.in) &nbsp;·&nbsp; Chennai, Tamil Nadu
+
+---
+
+## License
+
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for full text.
+
+---
+
+<div align="center">
+
+<br/>
+
+Designed and built by **Puli**
+
+[![GitHub](https://img.shields.io/badge/@cypherpheonix07--lang-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/cypherpheonix07-lang)
+
+<br/>
+
+*PROJECT BRAHMA — Engineering intelligence, not just code.*
+
+<br/>
+
+</div>
