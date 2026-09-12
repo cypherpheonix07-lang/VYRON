@@ -1,0 +1,54 @@
+[
+  {
+    "id": "intent_greeting",
+    "patterns": [
+      "hello",
+      "hi",
+      "hey",
+      "greetings",
+      "good morning",
+      "good evening",
+      "who are you",
+      "what can you do"
+    ],
+    "response": "Hello! I am the **PROJECT BRAHMA Intelligence Assistant**. I can help you analyze architectural blueprints, investigate static AST complexity, explain security vulnerabilities, review failing release gates, and calibrate benchmarks with Kaggle datasets.\n\nTry asking:\n- *\"Explain the FinLedger security failures\"*\n- *\"Why did the AST gate fail?\"*\n- *\"Show the microservices blueprint\"*\n- *\"What is our release gate status?\"*",
+    "category": "general"
+  },
+  {
+    "id": "intent_real_data_isolation",
+    "patterns": [
+      "real data",
+      "my production data",
+      "my other project",
+      "real projects",
+      "private repo",
+      "supabase user data"
+    ],
+    "response": "You are currently in **Demo Mode**, operating in a safe read-only sandbox using the synthetic FinLedger benchmark.\n\nTo access your live Supabase projects, private GitHub repositories, or production telemetry, please exit Demo Mode using the **Exit Demo** button in the top banner or header toggle.",
+    "category": "general"
+  },
+  {
+    "id": "intent_kaggle_dataset",
+    "patterns": [
+      "kaggle",
+      "dataset",
+      "calibrate",
+      "load dataset",
+      "training data"
+    ],
+    "response": "You can connect and calibrate live software metrics using the **Kaggle Dataset Connector** in Settings. We support automated search, previewing top records, and re-calibrating the demo benchmark's cyclomatic and defect distributions against real-world corpora.",
+    "category": "general"
+  },
+  {
+    "id": "intent_help",
+    "patterns": [
+      "help",
+      "commands",
+      "what commands",
+      "how do i use this",
+      "options"
+    ],
+    "response": "You can use slash commands or natural language:\n\n- `/analyze`: Launch real-time analysis pipeline\n- `/gates`: Check status across all 7 architectural gates\n- `/blueprint`: Inspect system nodes and dataflow edges\n- `/dataset`: Browse and calibrate Kaggle datasets\n- `/remediate`: Generate remediation plan for high findings",
+    "category": "general"
+  }
+]

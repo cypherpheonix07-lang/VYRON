@@ -1,0 +1,62 @@
+[
+  {
+    "id": "intent_security_failures",
+    "patterns": [
+      "security failures",
+      "vulnerabilities",
+      "bandit",
+      "cwe",
+      "explain security",
+      "why did security gate fail",
+      "high security findings"
+    ],
+    "response": "The **Security & Vulnerability Gate** failed with a score of **45 / 80** [cite:Security Gate:FinLedger Static Audit:sec001]. We identified **8 HIGH severity vulnerabilities**:\n\n1. **Hardcoded JWT Secret** in `finledger/auth/token_manager.py:48` (CWE-798)\n2. **Bypassable Assertion** in `finledger/payment/processor.py:210` (Bandit B101)\n3. **Insecure MD5 Hash** in `finledger/ledger/hash_chain.py:38` (CWE-327)\n4. **Unencrypted 0.0.0.0 Bind** in `finledger/gateway/proxy.py:114` (Bandit B104)\n5. **Low Entropy Session IDs** in `finledger/auth/session.py:72` (CWE-287)\n6. **Plaintext PAN Logging** in `finledger/payment/card_vault.py:89` (CWE-319)\n7. **Untrusted Pickle Deserialization** in `finledger/risk/engine.py:195` (CWE-20)\n8. **SQL String Interpolation** in `finledger/compliance/export.py:58` (CWE-89)\n\nAll 8 must be remediated before production promotion.",
+    "category": "analysis",
+    "citations": [
+      { "label": "Security Gate", "source": "FinLedger Static Audit", "sha256": "sec001" }
+    ]
+  },
+  {
+    "id": "intent_ast_complexity",
+    "patterns": [
+      "ast gate",
+      "cyclomatic complexity",
+      "ccn",
+      "complexity failure",
+      "why did ast fail",
+      "high complexity"
+    ],
+    "response": "The **AST & Structural Complexity Gate** failed with a score of **61 / 70** [cite:AST Gate:Tree-Sitter Complexity Metric:ast002].\n\n- **Average Project CCN**: 18.3 (Threshold is 15.0)\n- **Peak Complexity**: `process_multi_currency_settlement` at **CCN 34** in `finledger/payment/processor.py`\n- **Second Peak**: `evaluate_transaction_risk` at **CCN 29** in `finledger/risk/engine.py`\n\nRefactoring recommendation: Extract foreign exchange conversion and idempotency state machines into discrete pipeline stages to drop CCN below 15.",
+    "category": "analysis",
+    "citations": [
+      { "label": "AST Gate", "source": "Tree-Sitter Complexity Metric", "sha256": "ast002" }
+    ]
+  },
+  {
+    "id": "intent_gate_status",
+    "patterns": [
+      "gate status",
+      "which gates are failing",
+      "release blocked",
+      "can we deploy",
+      "is release ready"
+    ],
+    "response": "Release is currently **BLOCKED** [cite:Release Gate:Brahma Gate Evaluator:rel003]. 2 of 7 gates failed:\n\n- ❌ **Gate 1 (Security)**: Score 45 (Threshold 80) — 8 HIGH findings\n- ❌ **Gate 2 (AST Complexity)**: Score 61 (Threshold 70) — Avg CCN 18.3\n- ✅ **Gate 3 (Tests)**: Score 72 (Threshold 70)\n- ✅ **Gate 4 (Schema)**: Score 100 (Threshold 90)\n- ✅ **Gate 5 (Docs & Provenance)**: Score 81 (Threshold 75)\n- ✅ **Gate 6 (Performance)**: Score 77 (Threshold 75)\n- ✅ **Gate 7 (Licensure)**: Score 100 (Threshold 100)\n\nBoth Gate 1 and Gate 2 are hard blocks.",
+    "category": "analysis",
+    "citations": [
+      { "label": "Release Gate", "source": "Brahma Gate Evaluator", "sha256": "rel003" }
+    ]
+  },
+  {
+    "id": "intent_remediation_plan",
+    "patterns": [
+      "how to fix",
+      "remediation",
+      "fix vulnerabilities",
+      "repair plan",
+      "how do I pass gates"
+    ],
+    "response": "Here is the recommended 3-step remediation playbook:\n\n1. **Security Fixes**: Replace `JWT_SECRET` fallback with mandatory env variable; replace `assert` with explicit exceptions in `processor.py`; replace MD5 with SHA-256 in `hash_chain.py`.\n2. **Complexity Refactor**: Break `process_multi_currency_settlement` into validation, rate lock, and ledger post helpers.\n3. **Re-Run Pipeline**: Trigger **Run Analysis** to verify all 7 gates transition to green.",
+    "category": "analysis"
+  }
+]

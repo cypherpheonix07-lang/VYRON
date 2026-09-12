@@ -1,0 +1,55 @@
+/**
+ * PROJECT BRAHMA — DEMO MODE CSS TOKEN OVERRIDES (PHASE H, I, FL-02-A)
+ * Applied strictly when body.demo-mode is active.
+ * Warm amber theme visually distinguishing simulated demo sessions from live production.
+ */
+
+body.demo-mode {
+  --demo-amber-primary: oklch(0.82 0.16 85);
+  --demo-amber-surface: oklch(0.18 0.035 85);
+  --demo-amber-border: oklch(0.68 0.18 85);
+  --demo-amber-glow: rgba(245, 158, 11, 0.25);
+}
+
+/* Sticky Demo Banner */
+.demo-banner-sticky {
+  background: var(--demo-amber-primary, #f59e0b) !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 20px var(--demo-amber-glow, rgba(245, 158, 11, 0.2));
+}
+
+/* Sidebar indicator in demo mode */
+body.demo-mode aside {
+  border-left: 2px solid var(--demo-amber-border, #f59e0b) !important;
+}
+
+/* Topbar demo chip */
+body.demo-mode .demo-mode-badge {
+  background-color: var(--demo-amber-surface, #291e0a) !important;
+  border-color: var(--demo-amber-border, #f59e0b) !important;
+  color: var(--demo-amber-primary, #f59e0b) !important;
+}
+
+/* Subtle amber underline indicator for demo data cards */
+body.demo-mode .card,
+body.demo-mode [data-demo-container="true"] {
+  border-bottom: 1px solid var(--demo-amber-border, rgba(245, 158, 11, 0.3));
+}
+
+/* Single 500ms flash on initial mount */
+@keyframes demoMountFlash {
+  0% { opacity: 0.2; transform: translateY(-4px); }
+  50% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 1; }
+}
+
+.animate-demo-mount {
+  animation: demoMountFlash 500ms ease-out 1;
+}
+
+@media print {
+  .demo-banner-sticky,
+  .no-print-demo {
+    display: none !important;
+  }
+}

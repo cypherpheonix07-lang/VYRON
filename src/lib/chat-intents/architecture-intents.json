@@ -1,0 +1,43 @@
+[
+  {
+    "id": "intent_blueprint_topology",
+    "patterns": [
+      "architecture",
+      "blueprint",
+      "microservices",
+      "services",
+      "topology",
+      "how is finledger structured",
+      "show blueprint"
+    ],
+    "response": "The **FinLedger Microservices Architecture** consists of **12 distributed microservice nodes** [cite:Topology Blueprint:Graph Inference Engine:topo001]:\n\n- **Edge Tier**: `APIGateway` routing HTTP/2 & gRPC traffic with 2000 rps rate limiting.\n- **Core Services**: `AuthService` (OAuth2/OIDC), `PaymentProcessor` (FastAPI), and `UserService`.\n- **Data & Ledger**: `LedgerService` (PostgreSQL immutable double-entry journal), `AuditLogger` (ClickHouse), and `DataWarehouse` (Parquet/DuckDB).\n- **Resilience & Risk**: `RiskEngine` (PyTorch anomaly scoring < 25ms SLA), `ComplianceChecker` (PCI-DSS daemon), `MessageBroker` (AMQP event spine), and `NotificationService`.\n\nAll state transitions enforce strict cryptographic hash chaining.",
+    "category": "architecture",
+    "citations": [
+      { "label": "Topology Blueprint", "source": "Graph Inference Engine", "sha256": "topo001" }
+    ]
+  },
+  {
+    "id": "intent_pci_dss",
+    "patterns": [
+      "pci dss",
+      "compliance",
+      "cardholder data",
+      "pan",
+      "audit trail"
+    ],
+    "response": "FinLedger enforces **PCI-DSS Level 1** compliance controls:\n\n- Primary Account Numbers (PAN) are tokenized before hitting persistence.\n- The double-entry ledger in `LedgerService` uses an append-only WAL with cryptographic Merkle verification.\n- All inter-service communications between `APIGateway`, `PaymentProcessor`, and `LedgerService` require mTLS with RSA-4096 certificate bundles.",
+    "category": "architecture"
+  },
+  {
+    "id": "intent_tech_stack",
+    "patterns": [
+      "tech stack",
+      "technologies",
+      "languages",
+      "frameworks",
+      "database"
+    ],
+    "response": "FinLedger utilizes a polyglot microservice stack:\n\n- **Languages**: Python (FastAPI, PyTorch), TypeScript (Web Frontend), Go (Report Engine)\n- **Databases**: PostgreSQL 16 (Ledger), ClickHouse (Audit Trail), Redis 7 (Rate Limiting & Slotted Windows)\n- **Event Spine**: RabbitMQ / Kafka Cluster with AMQP dead-letter queues\n- **ML Runtime**: ONNX Runtime scoring sub-25ms inference",
+    "category": "architecture"
+  }
+]
