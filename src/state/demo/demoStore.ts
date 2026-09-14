@@ -359,6 +359,20 @@ class DemoStore {
     this.notify();
   }
 
+  public resetSimulation() {
+    this.state = {
+      ...this.state,
+      simulatedEvents: [],
+      recentEvents: [],
+      anomalyTimeline: [],
+      totalSimulatedEvents: 0,
+      anomaliesTriggered: 0,
+      isSimulatorRunning: false,
+      simulatorStatus: "STOPPED",
+    };
+    this.notify();
+  }
+
   public subscribe(listener: DemoListener): () => void {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);

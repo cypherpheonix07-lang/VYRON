@@ -38,10 +38,19 @@ function GitHubOAuthCallbackPage() {
 
         if (isMounted) {
           setStatus("success");
-          toast.success(`Connected GitHub account: @${result.login}`);
+          const accountNames = result.accounts.map((a) => `@${a.login}`).join(", ");
+          toast.success(`Connected GitHub: ${accountNames || `@${result.login}`}`);
+
+          const savedProjectId = sessionStorage.getItem("brahma_github_oauth_project_id");
+          sessionStorage.removeItem("brahma_github_oauth_project_id");
+
           setTimeout(() => {
-            navigate({ to: "/app/settings", search: { tab: "connectors", success: "github" } as any });
-          }, 1000);
+            if (savedProjectId) {
+              navigate({ to: `/app/projects/${savedProjectId}/integrations` as any });
+            } else {
+              navigate({ to: "/app/connectors" as any });
+            }
+          }, 1200);
         }
       } catch (err: unknown) {
         const msg = err instanceof Error ? err.message : String(err);
@@ -50,7 +59,7 @@ function GitHubOAuthCallbackPage() {
           setErrorMessage(msg);
           toast.error(`GitHub authentication failed: ${msg}`);
           setTimeout(() => {
-            navigate({ to: "/app/settings", search: { tab: "connectors", error: msg } as any });
+            navigate({ to: "/app/connectors" as any });
           }, 3000);
         }
       }

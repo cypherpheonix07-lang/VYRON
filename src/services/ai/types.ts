@@ -53,7 +53,7 @@ export interface AICompletionRequest {
 
 export interface AICompletionResponse {
   model: AIModelType;
-  provider: "ANTHROPIC" | "MOONSHOT" | "OPENAI" | "MOCK";
+  provider: "ANTHROPIC" | "MOONSHOT" | "OPENAI" | "OPENROUTER" | "MOCK";
   text: string;
   toolCalls?: AIToolCall[] | undefined;
   usage: {
@@ -68,7 +68,7 @@ export interface AICompletionResponse {
 
 export interface AIAdapter {
   id: AIModelType;
-  providerName: "ANTHROPIC" | "MOONSHOT" | "OPENAI" | "MOCK";
+  providerName: "ANTHROPIC" | "MOONSHOT" | "OPENAI" | "OPENROUTER" | "MOCK";
   isAvailable(): boolean;
   complete(request: AICompletionRequest): Promise<AICompletionResponse>;
 }

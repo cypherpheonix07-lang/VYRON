@@ -183,7 +183,7 @@ export const ProjectWizardShell: React.FC<WizardShellProps> = ({
           .from("projects")
           .update({ draft_state: draftObj, updated_at: new Date().toISOString() })
           .eq("owner_id", userSession.session.user.id)
-          .is("status", "draft");
+          .eq("status", "draft");
       }
     } catch (e) {
       console.warn("[Autosave] Failed to write draft_state:", e);
@@ -233,7 +233,7 @@ export const ProjectWizardShell: React.FC<WizardShellProps> = ({
           .from("projects")
           .update({ draft_state: null })
           .eq("owner_id", userSession.session.user.id)
-          .is("status", "draft");
+          .eq("status", "draft");
 
         // Write telemetry event
         await supabase.from("activity_events").insert({

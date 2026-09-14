@@ -7,7 +7,7 @@ const EDGE_PATH = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge
 const BROWSER_PATH = fs.existsSync(CHROME_PATH) ? CHROME_PATH : EDGE_PATH;
 const PORT = 9225;
 
-const artifactDir = process.env.ARTIFACT_DIR || "C:\\Users\\Admin\\.gemini\\antigravity-ide\\brain\\a5ee063e-6505-4c63-b691-a63c3f3a2038";
+const artifactDir = process.env.ARTIFACT_DIR || "C:\\Users\\Admin\\.gemini\\antigravity-ide\\brain\\608200fc-3e38-4831-ad35-75f7422598e3";
 
 async function sleep(ms) {
   return new Promise((r) => setTimeout(r, ms));

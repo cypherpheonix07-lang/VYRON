@@ -298,63 +298,89 @@ async function invokeGateway<T = unknown>(
 
   const startTime = Date.now();
 
-  try {
-    // 1. Invoke Supabase Edge Function: llm-gateway
-    const { data, error } = await supabase.functions.invoke("llm-gateway", {
-      body: {
-        task,
-        project_id: projectId || null,
-        payload,
-        options: {
-          ...options,
-          force_template: isForceTemplate,
-        },
-      },
-    });
+  if (!isForceTemplate) {
+    // 1. Primary: Query Server-Side Brahma AI Gateway 2.0
+    try {
+      const serverRes = await fetch("/api/ai/gateway", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          task,
+          projectId: projectId || null,
+          messages: [
+            {
+              role: "user",
+              content: typeof payload === "string" ? payload : JSON.stringify(payload),
+            },
+          ],
+          structuredOutputSchema: { type: "object" },
+          temperature: options?.temperature ?? 0.1,
+          maxTokens: options?.max_tokens ?? 2048,
+        }),
+      });
 
-    if (error || !data || data.ok === false) {
-      console.warn(
-        `[llmGateway] Edge gateway warning (${error?.message || data?.error?.message}), triggering graceful local fallback.`,
-      );
-      const content = getLocalDeterministicArtifact(task, payload) as T;
-      const sha256 = await sha256Client(content);
-      const latencyMs = Date.now() - startTime;
-
-      return {
-        ok: true,
-        content,
-        provider: "template",
-        model: `deterministic-${task.split("_")[0]}`,
-        cache_hit: false,
-        fallback_used: true,
-        cost_usd: 0.0,
-        latency_ms: latencyMs,
-        sha256,
-        error: error ? { code: "BRA-EDGE-FALLBACK", message: error.message } : null,
-      };
+      if (serverRes.ok) {
+        const serverData = await serverRes.json();
+        if (serverData.ok && (serverData.structuredData || serverData.text)) {
+          return {
+            ok: true,
+            content: (serverData.structuredData || serverData.text) as T,
+            provider: serverData.provider,
+            model: serverData.model,
+            cache_hit: serverData.cacheHit ?? false,
+            fallback_used: serverData.fallbackUsed ?? false,
+            cost_usd: serverData.usage?.estimatedCostUsd ?? 0.0,
+            latency_ms: serverData.latencyMs || Date.now() - startTime,
+            sha256: serverData.sha256 || (await sha256Client(serverData.structuredData || serverData.text)),
+            error: null,
+          };
+        }
+      }
+    } catch {
+      // Server endpoint not reachable or network error; proceed to Supabase Edge Function
     }
 
-    return data as LLMResponse<T>;
-  } catch (err) {
-    console.warn("[llmGateway] Network exception, using local deterministic fallback:", err);
-    const content = getLocalDeterministicArtifact(task, payload) as T;
-    const sha256 = await sha256Client(content);
-    const latencyMs = Date.now() - startTime;
+    // 2. Secondary: Query Supabase Edge Function llm-gateway
+    try {
+      const { data, error } = await supabase.functions.invoke("llm-gateway", {
+        body: {
+          task,
+          project_id: projectId || null,
+          payload,
+          options: {
+            ...options,
+            force_template: isForceTemplate,
+          },
+        },
+      });
 
-    return {
-      ok: true,
-      content,
-      provider: "template",
-      model: `deterministic-${task.split("_")[0]}`,
-      cache_hit: false,
-      fallback_used: true,
-      cost_usd: 0.0,
-      latency_ms: latencyMs,
-      sha256,
-      error: null,
-    };
+      if (!error && data && data.ok) {
+        return data as LLMResponse<T>;
+      }
+    } catch {
+      // Edge function unreachable
+    }
   }
+
+  // 3. Graceful Local Deterministic Template Fallback (Circuit Breaker Level 3)
+  const content = getLocalDeterministicArtifact(task, payload) as T;
+  const sha256 = await sha256Client(content);
+  const latencyMs = Date.now() - startTime;
+
+  return {
+    ok: true,
+    content,
+    provider: "template",
+    model: `deterministic-${task.split("_")[0]}`,
+    cache_hit: false,
+    fallback_used: true,
+    cost_usd: 0.0,
+    latency_ms: latencyMs,
+    sha256,
+    error: isForceTemplate ? null : { code: "BRA-GATEWAY-FALLBACK", message: "Executed deterministic fallback template." },
+  };
 }
+
 
 // ─── PUBLIC SDK API ───────────────────────────────────────────────────────────
 

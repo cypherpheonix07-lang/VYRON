@@ -33,6 +33,13 @@ import {
   Github,
   Database,
   Play,
+  Puzzle,
+  Bot,
+  Target,
+  Compass,
+  GitPullRequest,
+  FlaskConical,
+  Layers,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode, useRef } from "react";
 import { toast } from "sonner";
@@ -65,7 +72,7 @@ import { DemoBanner } from "@/components/demo/DemoBanner";
 import { CopilotDrawer } from "@/components/copilot/CopilotDrawer";
 import { CopilotFloatingButton } from "@/components/copilot/CopilotFloatingButton";
 import { authService } from "@/services/authService";
-import { notifications as mockNotifications, projects } from "@/lib/mock-data";
+import { notifications as mockNotifications, projects as mockProjects } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import { useProjects } from "@/hooks/useProjects";
 import { WorkspacePulse } from "./WorkspacePulse";
@@ -94,6 +101,11 @@ const labelMap: Record<string, string> = {
   analysis: "Live Analysis",
   datasets: "Kaggle Ingestion",
   connectors: "MCP Connectors",
+  chat: "Copilot Studio",
+  missions: "Mission Center",
+  drift: "Architecture Drift",
+  impact: "Change Impact",
+  simulation: "Simulation Lab",
 };
 
 // Grouped Sidebar configuration
@@ -105,12 +117,23 @@ const navGroups = [
       { to: "/app/analysis", label: "Live Analysis", icon: Activity, exact: false },
       { to: "/app/datasets", label: "Kaggle Datasets", icon: Database, exact: false },
       { to: "/app/connectors", label: "MCP Connectors", icon: Cable, exact: false },
+      { to: "/app/plugins", label: "Plugin Center", icon: Puzzle, exact: false },
       { to: "/discover", label: "AI Discovery", icon: Sparkles, exact: false },
       { to: "/app/preview", label: "AI Showcase", icon: Eye, exact: true },
       { to: "/app/studio", label: "AI Studio", icon: Sparkles, exact: false },
       { to: "/app/projects", label: "Projects", icon: FolderKanban, exact: false },
       { to: "/app/projects/new", label: "New Project", icon: PlusCircle, exact: true },
       { to: "/app/reports", label: "Reports", icon: FileBarChart2, exact: true },
+    ],
+  },
+  {
+    label: "INTELLIGENCE CONTROL PLANE",
+    items: [
+      { to: "/app/chat", label: "Copilot Studio", icon: Bot, exact: false },
+      { to: "/app/missions", label: "Mission Center", icon: Target, exact: false },
+      { to: "/app/drift", label: "Architecture Drift", icon: Compass, exact: false },
+      { to: "/app/impact", label: "Change Impact", icon: GitPullRequest, exact: false },
+      { to: "/app/simulation", label: "Simulation Lab", icon: FlaskConical, exact: false },
     ],
   },
   {
@@ -132,8 +155,10 @@ function NavList({
   onNavigate?: (() => void) | undefined;
   collapsed?: boolean | undefined;
 }) {
-  const { isAdmin } = useAuth();
-  const { draftCount } = useProjects();
+  const { user } = useAuth();
+  const isAdmin = user?.role === "Admin";
+  const { draftCount, projects: liveProjects } = useProjects();
+  const availableProjects = liveProjects.length > 0 ? liveProjects : mockProjects;
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   const systemGroupItems = [
@@ -400,15 +425,17 @@ function NotificationBell() {
 
 function Breadcrumbs() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { projects: liveProjects } = useProjects();
+  const availableProjects = liveProjects.length > 0 ? liveProjects : mockProjects;
   const crumbs = useMemo(() => {
     const parts = pathname.split("/").filter(Boolean);
     let href = "";
     return parts.map((part) => {
       href += `/${part}`;
-      const project = projects.find((p) => p.id === part);
+      const project = availableProjects.find((p) => p.id === part);
       return { label: project?.name ?? labelMap[part] ?? part, href };
     });
-  }, [pathname]);
+  }, [pathname, availableProjects]);
 
   return (
     <ol className="flex min-w-0 items-center gap-1 text-xs text-muted-foreground">
@@ -433,7 +460,10 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, ready, logout } = useAuth();
   const { theme, toggle } = useTheme();
-  const { draftCount } = useProjects();
+  const { projects: liveProjects, draftCount } = useProjects();
+  const availableProjects = useMemo(() => {
+    return liveProjects && liveProjects.length > 0 ? liveProjects : mockProjects;
+  }, [liveProjects]);
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -544,7 +574,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   }, []);
 
   const activeProject =
-    projects.find((p) => pathname.includes(`/app/projects/${p.id}`))?.id ?? "all";
+    availableProjects.find((p) => pathname.includes(`/app/projects/${p.id}`))?.id ?? "all";
 
   // Mock global search index data matching Part 7 Requirements
   const searchIndex = useMemo(() => {
@@ -612,6 +642,70 @@ export function AppShell({ children }: { children: ReactNode }) {
         href: "/app/studio/templates",
         badge: "Template",
         icon: BrahmaLogo,
+      },
+      {
+        category: "Missions",
+        title: "MSN-SETTLE-01: Zero-Loss Settlement Verification",
+        subtitle: "Multi-step agentic mission verifying idempotent settlements",
+        href: "/app/missions",
+        badge: "Mission",
+        icon: Compass,
+      },
+      {
+        category: "Drift",
+        title: "DFT-01: Settlement Engine Missing from Repository AST",
+        subtitle: "Structural divergence between blueprint and observed source code",
+        href: "/app/drift",
+        badge: "Drift",
+        icon: Layers,
+      },
+      {
+        category: "Impact",
+        title: "IMP-01: Direct & Transitive Blast Radius Analysis",
+        subtitle: "Blast radius computation for payment gateway changes",
+        href: "/app/impact",
+        badge: "Impact",
+        icon: Activity,
+      },
+      {
+        category: "Decisions",
+        title: "ADR-001: SHA-256 HMAC for Webhook Signatures",
+        subtitle: "Cryptographically sealed architectural decision record",
+        href: "/app/missions",
+        badge: "ADR",
+        icon: ShieldCheck,
+      },
+      {
+        category: "Simulation",
+        title: "SIM-01: 11 Concrete Anomaly Scenarios",
+        subtitle: "Interactive failure injection and deterministic reset lab",
+        href: "/app/simulation",
+        badge: "Simulation",
+        icon: Sparkles,
+      },
+      {
+        category: "Datasets",
+        title: "IEEE-CIS Fraud & Transaction Drift Benchmark",
+        subtitle: "Kaggle benchmark partition with 12,480 live transactions",
+        href: "/app/datasets",
+        badge: "Dataset",
+        icon: Database,
+      },
+      {
+        category: "Plugins",
+        title: "Claude-Inspired Extensibility Plugins",
+        subtitle: "Manifest-governed plugins for analysis, GitHub, and reports",
+        href: "/app/plugins",
+        badge: "Plugin",
+        icon: Puzzle,
+      },
+      {
+        category: "Policies",
+        title: "POL-SEC-01: Release Gate Blocking Rules",
+        subtitle: "Deterministic release gating with formal exception governance",
+        href: "/app/simulation",
+        badge: "Policy",
+        icon: ShieldAlert,
       },
     ];
   }, []);
@@ -740,6 +834,69 @@ export function AppShell({ children }: { children: ReactNode }) {
         shortcut: "",
         category: "Action",
         icon: Sparkles,
+      },
+      {
+        label: "Open Copilot Full-Screen Studio",
+        href: "/app/chat",
+        shortcut: "c",
+        category: "Intelligence Control Plane",
+        icon: Bot,
+      },
+      {
+        label: "Go to Engineering Missions",
+        href: "/app/missions",
+        shortcut: "g m",
+        category: "Intelligence Control Plane",
+        icon: Compass,
+      },
+      {
+        label: "Run Architecture Drift Analysis",
+        href: "/app/drift",
+        shortcut: "g d",
+        category: "Intelligence Control Plane",
+        icon: Layers,
+      },
+      {
+        label: "Run Change Impact Blast Radius",
+        href: "/app/impact",
+        shortcut: "g i",
+        category: "Intelligence Control Plane",
+        icon: Activity,
+      },
+      {
+        label: "Open Engineering Simulation Lab",
+        href: "/app/simulation",
+        shortcut: "g s",
+        category: "Intelligence Control Plane",
+        icon: Sparkles,
+      },
+      {
+        label: "Go to Plugin Platform",
+        href: "/app/plugins",
+        shortcut: "",
+        category: "Extensibility",
+        icon: Puzzle,
+      },
+      {
+        label: "Go to Enterprise Connectors",
+        href: "/app/connectors",
+        shortcut: "",
+        category: "Integrations",
+        icon: Cable,
+      },
+      {
+        label: "Go to Dataset Intelligence",
+        href: "/app/datasets",
+        shortcut: "",
+        category: "Data Intelligence",
+        icon: Database,
+      },
+      {
+        label: "Open System Self-Diagnostics",
+        href: "/app/settings",
+        shortcut: "",
+        category: "System Health",
+        icon: ShieldCheck,
       },
     ];
     if (paletteFilter.trim() === "") return navs;
@@ -871,7 +1028,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               </SelectTrigger>
               <SelectContent className="bg-zinc-950 border border-border">
                 <SelectItem value="all">All projects</SelectItem>
-                {projects.map((p) => (
+                {availableProjects.map((p) => (
                   <SelectItem key={p.id} value={p.id}>
                     {p.name}
                   </SelectItem>

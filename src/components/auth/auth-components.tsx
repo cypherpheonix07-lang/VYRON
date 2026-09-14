@@ -13,6 +13,7 @@ import {
   Users2,
   Check,
   AlertTriangle,
+  AlertCircle,
   Play,
   HelpCircle,
   User,
@@ -1539,5 +1540,16 @@ export function ResendCountdown({
     >
       Resend Verification Code
     </button>
+  );
+}
+
+// 21. FieldError
+export function FieldError({ message }: { message?: string | undefined }) {
+  if (!message) return null;
+  return (
+    <p className="mt-1 flex items-center gap-1 text-[11px] text-red-400" role="alert">
+      <AlertCircle className="size-3 shrink-0" aria-hidden />
+      <span>{message}</span>
+    </p>
   );
 }

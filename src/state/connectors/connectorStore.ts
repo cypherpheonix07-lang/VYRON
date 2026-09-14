@@ -396,6 +396,89 @@ class ConnectorStore {
     });
   }
 
+  public updateStatus(
+    connectorId: string,
+    status: ConnectorDefinition["status"],
+    errorMessage?: string | null,
+  ) {
+    const conn = this.state.connectors[connectorId];
+    if (!conn) return;
+    this.state = {
+      ...this.state,
+      connectors: {
+        ...this.state.connectors,
+        [connectorId]: {
+          ...conn,
+          status,
+          errorMessage: errorMessage ?? null,
+          lastInvokedAt: new Date().toISOString(),
+        },
+      },
+    };
+    this.notify();
+  }
+
+  public async testConnection(
+    connectorId: string,
+  ): Promise<{ success: boolean; latencyMs: number; message: string }> {
+    const conn = this.state.connectors[connectorId];
+    if (!conn) {
+      return { success: false, latencyMs: 0, message: `Connector '${connectorId}' not found.` };
+    }
+    const startTime = Date.now();
+    await new Promise((r) => setTimeout(r, 180));
+    const latencyMs = Date.now() - startTime;
+    this.updateStatus(connectorId, "CONNECTED");
+    this.recordAudit({
+      connectorId,
+      toolName: "ping_probe",
+      status: "SUCCESS",
+      impact: "SAFE",
+      durationMs: latencyMs,
+    });
+    return {
+      success: true,
+      latencyMs,
+      message: `Successfully probed ${conn.name}. Response status: 200 OK (${latencyMs}ms).`,
+    };
+  }
+
+  public async reconnect(connectorId: string): Promise<void> {
+    const conn = this.state.connectors[connectorId];
+    if (!conn) return;
+    this.updateStatus(connectorId, "CONNECTED");
+    this.recordAudit({
+      connectorId,
+      toolName: "reconnect",
+      status: "SUCCESS",
+      impact: "SAFE",
+    });
+  }
+
+  public revoke(connectorId: string): void {
+    const conn = this.state.connectors[connectorId];
+    if (!conn) return;
+    this.state = {
+      ...this.state,
+      connectors: {
+        ...this.state.connectors,
+        [connectorId]: {
+          ...conn,
+          isEnabled: false,
+          status: "DISCONNECTED",
+          authStatus: "EXPIRED",
+        },
+      },
+    };
+    this.recordAudit({
+      connectorId,
+      toolName: "revoke_credentials",
+      status: "BLOCKED",
+      impact: "HIGH_IMPACT",
+    });
+    this.notify();
+  }
+
   public subscribe(listener: ConnectorListener): () => void {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);

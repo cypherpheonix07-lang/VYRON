@@ -15,8 +15,9 @@ import { z } from "zod";
 
 import { useAuth } from "../lib/auth";
 import { authService } from "../services/authService";
-import { AuthLayout, FieldError } from "./login";
 import {
+  AuthLayout,
+  FieldError,
   PasswordInput,
   StrengthMeter,
   ChecklistChips,
@@ -52,6 +53,8 @@ export const Route = createFileRoute("/register")({
   }),
   component: RegisterPage,
 });
+
+const SIGNUP_DRAFT_KEY = "brahma.signup_draft";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -91,6 +94,74 @@ function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<string | null>(null);
   const [countdown, setCountdown] = useState(0);
+
+  // Load draft registration state from sessionStorage on mount
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem(SIGNUP_DRAFT_KEY);
+      if (saved) {
+        const draft = JSON.parse(saved);
+        if (draft.fullName) setFullName(draft.fullName);
+        if (draft.email) setEmail(draft.email);
+        if (draft.selectedRole) setSelectedRole(draft.selectedRole);
+        if (draft.organization) setOrganization(draft.organization);
+        if (draft.teamSize) setTeamSize(draft.teamSize);
+        if (Array.isArray(draft.selectedGoals)) setSelectedGoals(draft.selectedGoals);
+        if (draft.technicalLevel) setTechnicalLevel(draft.technicalLevel);
+        if (draft.targetDeadline) setTargetDeadline(draft.targetDeadline);
+        if (draft.workspaceName) setWorkspaceName(draft.workspaceName);
+        if (Array.isArray(draft.teammateEmails)) setTeammateEmails(draft.teammateEmails);
+        if (draft.themePreference) setThemePreference(draft.themePreference);
+        if (draft.inviteCode) setInviteCode(draft.inviteCode);
+        if (typeof draft.step === "number" && draft.step >= 1 && draft.step <= 5) {
+          setStep(draft.step);
+          if (draft.step === 5) {
+            setCountdown(30);
+          }
+        }
+      }
+    } catch {
+      // Ignore corrupted draft
+    }
+  }, []);
+
+  // Sync draft state to sessionStorage
+  useEffect(() => {
+    try {
+      const draft = {
+        step,
+        fullName,
+        email,
+        selectedRole,
+        organization,
+        teamSize,
+        selectedGoals,
+        technicalLevel,
+        targetDeadline,
+        workspaceName,
+        teammateEmails,
+        themePreference,
+        inviteCode,
+      };
+      sessionStorage.setItem(SIGNUP_DRAFT_KEY, JSON.stringify(draft));
+    } catch {
+      // Storage unavailable or disabled
+    }
+  }, [
+    step,
+    fullName,
+    email,
+    selectedRole,
+    organization,
+    teamSize,
+    selectedGoals,
+    technicalLevel,
+    targetDeadline,
+    workspaceName,
+    teammateEmails,
+    themePreference,
+    inviteCode,
+  ]);
 
   const handleOAuthRegister = async (provider: "google" | "github") => {
     setOauthLoading(provider);
@@ -239,6 +310,7 @@ function RegisterPage() {
         setVerificationError(result.error?.message ?? "Verification failed.");
         toast.error(result.error?.message ?? "Verification failed.");
       } else {
+        sessionStorage.removeItem(SIGNUP_DRAFT_KEY);
         toast.success("Account confirmed successfully!");
         await refresh();
         navigate({ to: "/onboarding" });
@@ -579,7 +651,15 @@ function RegisterPage() {
                 {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : "Confirm and Launch"}
               </Button>
 
-              <div className="text-center">
+              <div className="flex items-center justify-between text-xs pt-1">
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="text-slate-400 hover:text-cyan-400 underline font-medium transition-colors"
+                >
+                  Change Email Address
+                </button>
+
                 <ResendCountdown
                   initialSeconds={countdown}
                   onTrigger={async () => {
@@ -594,17 +674,15 @@ function RegisterPage() {
         )}
 
         {/* Back to Login link */}
-        {step < 5 && (
-          <div className="text-center text-xs text-slate-400 pt-2 border-t border-slate-900">
-            <span>Already have a workspace account? </span>
-            <Link
-              to="/login"
-              className="text-cyan-400/80 hover:text-cyan-400 underline font-semibold select-none"
-            >
-              Sign In
-            </Link>
-          </div>
-        )}
+        <div className="text-center text-xs text-slate-400 pt-2 border-t border-slate-900">
+          <span>Already have a workspace account? </span>
+          <Link
+            to="/login"
+            className="text-cyan-400/80 hover:text-cyan-400 underline font-semibold select-none"
+          >
+            Sign In
+          </Link>
+        </div>
       </div>
     </AuthLayout>
   );

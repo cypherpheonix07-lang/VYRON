@@ -1,7 +1,7 @@
 /**
- * PROJECT BRAHMA — ANTHROPIC CLAUDE 3.7 / 3.5 SONNET ADAPTER
- * Connects to Anthropic API for complex reasoning, architectural synthesis, and tool-calling.
- * Gracefully falls back to deterministic simulation when API credentials are not set.
+ * PROJECT BRAHMA — ANTHROPIC CLAUDE ADAPTER (SECURED VIA SERVER GATEWAY)
+ * Routes exclusively through Brahma AI Gateway 2.0 (via OpenRouter or Server Direct).
+ * ZERO API keys in the browser or frontend bundle.
  */
 
 import { AIAdapter, AICompletionRequest, AICompletionResponse, AIToolCall } from "../types";
@@ -14,121 +14,68 @@ export class ClaudeAdapter implements AIAdapter {
   private fallbackAdapter = new MockAIAdapter();
 
   public isAvailable(): boolean {
-    const metaEnv = (import.meta as unknown as { env?: Record<string, string | undefined> }).env;
-    const apiKey =
-      typeof window !== "undefined"
-        ? metaEnv?.["VITE_ANTHROPIC_API_KEY"]
-        : process.env["VITE_ANTHROPIC_API_KEY"];
-    return Boolean(apiKey && apiKey.length > 5);
+    return true; // Governed by server-side AI Gateway
   }
 
   public async complete(request: AICompletionRequest): Promise<AICompletionResponse> {
-    const metaEnv = (import.meta as unknown as { env?: Record<string, string | undefined> }).env;
-    const apiKey =
-      typeof window !== "undefined"
-        ? metaEnv?.["VITE_ANTHROPIC_API_KEY"]
-        : process.env["VITE_ANTHROPIC_API_KEY"];
-
-    if (!apiKey || apiKey === "mock_key") {
-      // Fallback with Claude branding
-      const mockRes = await this.fallbackAdapter.complete(request);
-      return {
-        ...mockRes,
-        model: "CLAUDE_SONNET",
-        provider: "ANTHROPIC",
-        text: `[Anthropic Claude 3.7 Sonnet Execution Engine]\n\n${mockRes.text}`,
-      };
-    }
-
     const startTime = Date.now();
     try {
-      const messages = request.messages.map((m) => ({
-        role: m.role === "system" ? "assistant" : m.role,
-        content: m.content,
-      }));
-
-      const payload: Record<string, unknown> = {
-        model: "claude-3-7-sonnet-20250219",
-        max_tokens: request.maxTokens || 2048,
-        messages,
-        system:
-          request.systemPrompt ||
-          "You are Brahma AI Copilot, an enterprise-grade AI analytics architect.",
-      };
-
-      if (request.tools && request.tools.length > 0) {
-        payload["tools"] = request.tools.map((t) => ({
-          name: t.name,
-          description: t.description,
-          input_schema: t.parameters,
-        }));
-      }
-
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const res = await fetch("/api/ai/gateway", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": apiKey,
-          "anthropic-version": "2023-06-01",
-          "dangerously-allow-browser": "true",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          task: request.taskType || "architecture_review",
+          providerOverride: "openrouter",
+          modelOverride: "anthropic/claude-3.5-sonnet",
+          systemPrompt: request.systemPrompt,
+          messages: request.messages,
+          temperature: request.temperature ?? 0.2,
+          maxTokens: request.maxTokens ?? 2048,
+          tools: request.tools,
+        }),
       });
 
-      if (!response.ok) {
-        throw new Error(
-          `Anthropic API returned status ${response.status}: ${await response.text()}`,
-        );
+      if (res.ok) {
+        const data = await res.json();
+        const durationMs = Date.now() - startTime;
+        const text = data.text || "";
+        const verificationHash = data.sha256 || generateVerificationHash(`${this.id}:${text}:${durationMs}`);
+
+        const toolCalls: AIToolCall[] = (data.toolCalls || []).map((tc: any) => ({
+          id: tc.id,
+          name: tc.function?.name || tc.name,
+          arguments: typeof tc.function?.arguments === "string"
+            ? JSON.parse(tc.function.arguments)
+            : tc.arguments || {},
+        }));
+
+        return {
+          model: "CLAUDE_SONNET",
+          provider: "ANTHROPIC",
+          text,
+          toolCalls: toolCalls.length > 0 ? toolCalls : undefined,
+          usage: {
+            promptTokens: data.usage?.promptTokens || 0,
+            completionTokens: data.usage?.completionTokens || 0,
+            totalTokens: data.usage?.totalTokens || 0,
+          },
+          durationMs,
+          verificationHash,
+          rawResponse: data,
+        };
       }
 
-      const data = await response.json();
-      const durationMs = Date.now() - startTime;
-
-      let responseText = "";
-      const toolCalls: AIToolCall[] = [];
-
-      if (Array.isArray(data.content)) {
-        for (const block of data.content) {
-          if (block.type === "text") {
-            responseText += block.text;
-          } else if (block.type === "tool_use") {
-            toolCalls.push({
-              id: block.id,
-              name: block.name,
-              arguments: block.input || {},
-            });
-          }
-        }
-      }
-
-      const hashPayload = `${this.id}:${responseText}:${durationMs}`;
-      const verificationHash = generateVerificationHash(hashPayload);
-
-      return {
-        model: "CLAUDE_SONNET",
-        provider: "ANTHROPIC",
-        text: responseText,
-        toolCalls: toolCalls.length > 0 ? toolCalls : undefined,
-        usage: {
-          promptTokens: data.usage?.input_tokens || 0,
-          completionTokens: data.usage?.output_tokens || 0,
-          totalTokens: (data.usage?.input_tokens || 0) + (data.usage?.output_tokens || 0),
-        },
-        durationMs,
-        verificationHash,
-        rawResponse: data,
-      };
+      throw new Error(`Server gateway returned HTTP ${res.status}`);
     } catch (err: unknown) {
-      console.warn(
-        "Claude API call failed or rate-limited; switching to deterministic execution engine.",
-        err,
-      );
+      console.warn("Claude server gateway call failed; using deterministic fallback.", err);
       const fallbackRes = await this.fallbackAdapter.complete(request);
       return {
         ...fallbackRes,
         model: "CLAUDE_SONNET",
         provider: "ANTHROPIC",
-        text: `[Anthropic Claude 3.7 Sonnet Offline Runner]\n\n${fallbackRes.text}`,
+        text: `[Anthropic Claude 3.5 Sonnet Fallback Engine]\n\n${fallbackRes.text}`,
       };
     }
   }

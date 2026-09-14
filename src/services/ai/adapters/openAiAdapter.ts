@@ -1,7 +1,7 @@
 /**
- * PROJECT BRAHMA — OPENAI GPT-4O ADAPTER
- * Connects to OpenAI API for structured schema extraction and high-speed classification.
- * Falls back to deterministic simulation if API key is not configured.
+ * PROJECT BRAHMA — OPENAI CLIENT ADAPTER (SECURED VIA SERVER GATEWAY)
+ * Routes exclusively through Brahma AI Gateway 2.0.
+ * ZERO API keys in the browser or frontend bundle.
  */
 
 import { AIAdapter, AICompletionRequest, AICompletionResponse } from "../types";
@@ -14,88 +14,61 @@ export class OpenAiAdapter implements AIAdapter {
   private fallbackAdapter = new MockAIAdapter();
 
   public isAvailable(): boolean {
-    const metaEnv = (import.meta as unknown as { env?: Record<string, string | undefined> }).env;
-    const apiKey =
-      typeof window !== "undefined"
-        ? metaEnv?.["VITE_OPENAI_API_KEY"]
-        : process.env["VITE_OPENAI_API_KEY"];
-    return Boolean(apiKey && apiKey.length > 5);
+    return true; // Governed by server-side AI Gateway
   }
 
   public async complete(request: AICompletionRequest): Promise<AICompletionResponse> {
-    const metaEnv = (import.meta as unknown as { env?: Record<string, string | undefined> }).env;
-    const apiKey =
-      typeof window !== "undefined"
-        ? metaEnv?.["VITE_OPENAI_API_KEY"]
-        : process.env["VITE_OPENAI_API_KEY"];
-
-    if (!apiKey || apiKey === "mock_key") {
-      const mockRes = await this.fallbackAdapter.complete(request);
-      return {
-        ...mockRes,
-        model: "OPENAI_GPT4O",
-        provider: "OPENAI",
-        text: `[OpenAI GPT-4o Structured Pipeline]\n\n${mockRes.text}`,
-      };
-    }
-
     const startTime = Date.now();
     try {
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      const res = await fetch("/api/ai/gateway", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify({
-          model: "gpt-4o",
-          messages: [
-            {
-              role: "system",
-              content:
-                request.systemPrompt ||
-                "You are an analytical assistant generating structured analysis.",
-            },
-            ...request.messages,
-          ],
+          task: request.taskType || "copilot",
+          providerOverride: "openai",
+          modelOverride: "gpt-4o",
+          systemPrompt: request.systemPrompt,
+          messages: request.messages,
           temperature: request.temperature ?? 0.2,
-          max_tokens: request.maxTokens ?? 2048,
+          maxTokens: request.maxTokens ?? 2048,
+          tools: request.tools,
         }),
       });
 
-      if (!response.ok) {
-        throw new Error(`OpenAI API error ${response.status}: ${await response.text()}`);
+      if (res.ok) {
+        const data = await res.json();
+        const durationMs = Date.now() - startTime;
+        const text = data.text || "";
+        const verificationHash = data.sha256 || generateVerificationHash(`${this.id}:${text}:${durationMs}`);
+
+        return {
+          model: "OPENAI_GPT4O",
+          provider: "OPENAI",
+          text,
+          usage: {
+            promptTokens: data.usage?.promptTokens || 0,
+            completionTokens: data.usage?.completionTokens || 0,
+            totalTokens: data.usage?.totalTokens || 0,
+          },
+          durationMs,
+          verificationHash,
+          rawResponse: data,
+        };
       }
 
-      const data = await response.json();
-      const durationMs = Date.now() - startTime;
-      const text = data.choices?.[0]?.message?.content || "";
-
-      const hashPayload = `${this.id}:${text}:${durationMs}`;
-      const verificationHash = generateVerificationHash(hashPayload);
-
-      return {
-        model: "OPENAI_GPT4O",
-        provider: "OPENAI",
-        text,
-        usage: {
-          promptTokens: data.usage?.prompt_tokens || 0,
-          completionTokens: data.usage?.completion_tokens || 0,
-          totalTokens: data.usage?.total_tokens || 0,
-        },
-        durationMs,
-        verificationHash,
-        rawResponse: data,
-      };
+      throw new Error(`Server gateway returned HTTP ${res.status}`);
     } catch (err: unknown) {
-      console.warn("OpenAI API call failed; falling back to deterministic execution engine.", err);
+      console.warn("OpenAI server gateway call failed; using deterministic fallback.", err);
       const fallbackRes = await this.fallbackAdapter.complete(request);
       return {
         ...fallbackRes,
         model: "OPENAI_GPT4O",
         provider: "OPENAI",
-        text: `[OpenAI GPT-4o Offline Runner]\n\n${fallbackRes.text}`,
+        text: `[OpenAI GPT-4o Fallback Engine]\n\n${fallbackRes.text}`,
       };
     }
   }
 }
+

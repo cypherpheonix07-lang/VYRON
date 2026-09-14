@@ -17,12 +17,11 @@ import {
   MagicLinkSent,
   RateLimitBanner,
   DemoAccessButton,
+  FieldError,
 } from "../components/auth/auth-components";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
-
-export { AuthLayout };
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -44,16 +43,6 @@ const schema = z.object({
   email: z.string().trim().min(1, "Email is required").email("Enter a valid email address"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
-
-export function FieldError({ message }: { message?: string | undefined }) {
-  if (!message) return null;
-  return (
-    <p className="mt-1 flex items-center gap-1 text-[11px] text-red-400" role="alert">
-      <AlertCircle className="size-3 shrink-0" aria-hidden />
-      <span>{message}</span>
-    </p>
-  );
-}
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -108,10 +97,20 @@ function LoginPage() {
   // Redirect if already authenticated
   useEffect(() => {
     if (ready && user) {
+      const rawTarget =
+        sessionStorage.getItem("brahma_auth_redirect") ||
+        sessionStorage.getItem("auth_redirect");
+      let safeRedirect: string | null = null;
+      if (rawTarget && rawTarget.startsWith("/") && !rawTarget.startsWith("//")) {
+        safeRedirect = rawTarget;
+        sessionStorage.removeItem("brahma_auth_redirect");
+        sessionStorage.removeItem("auth_redirect");
+      }
+
       if (!user.onboarded) {
         navigate({ to: "/onboarding", replace: true });
       } else {
-        navigate({ to: "/app", replace: true });
+        navigate({ to: (safeRedirect || "/app") as "/app", replace: true });
       }
     }
   }, [ready, user, navigate]);
@@ -260,25 +259,29 @@ function LoginPage() {
     setLoading(true);
     try {
       const demoEmail = `${role.toLowerCase()}.demo@brahma.dev`;
-      const result = await authService.signUp(demoEmail, "password123", {
-        data: {
-          full_name:
+      const localDemoSession = {
+        access_token: "demo-token-" + Date.now(),
+        refresh_token: "demo-refresh-token",
+        expires_at: Math.floor(Date.now() / 1000) + 86400,
+        user: {
+          id: `demo-${role.toLowerCase()}-uuid`,
+          email: demoEmail,
+          name:
             role === "Admin"
               ? "Priya Nair"
               : role === "Faculty"
                 ? "Dr. Arjun Mehta"
                 : "Student User",
-          role: role.toLowerCase(),
+          role: (role === "Admin" ? "admin" : role === "Faculty" ? "faculty" : "student") as any,
+          onboarded: true,
+          isDemo: true,
         },
-      });
-
-      if (!result.ok) {
-        toast.error(result.error?.message ?? "Failed to seed demo session.");
-      } else {
-        toast.success(`Welcome to DEMO Workspace (${role})`);
-        await refresh();
-        navigate({ to: "/app" });
-      }
+      };
+      localStorage.setItem("brahma_demo_session", JSON.stringify(localDemoSession));
+      localStorage.setItem("brahma_demo_mode", "true");
+      toast.success(`Welcome to DEMO Workspace (${role})`);
+      await refresh();
+      window.location.href = "/app/admin/models";
     } catch (err) {
       toast.error("Failed to seed demo session.");
     } finally {
@@ -333,18 +336,32 @@ function LoginPage() {
                 <div className="space-y-1.5">
                   <p className="font-semibold">Email address not confirmed</p>
                   <p className="text-slate-400">Please confirm your email address to log in.</p>
-                  <Button
-                    onClick={async () => {
-                      if (!email) return;
-                      await authService.resendOtp(email, "signup").catch(() => undefined);
-                      toast.success("Confirmation code resent!");
-                    }}
-                    variant="outline"
-                    size="sm"
-                    className="border-slate-800 text-xs text-cyan-400 hover:text-cyan-300"
-                  >
-                    Resend Code
-                  </Button>
+                  <div className="flex gap-2 pt-1">
+                    <Button
+                      onClick={async () => {
+                        if (!email) return;
+                        await authService.resendOtp(email, "signup").catch(() => undefined);
+                        toast.success("Confirmation code resent!");
+                      }}
+                      variant="outline"
+                      size="sm"
+                      className="border-slate-800 text-xs text-cyan-400 hover:text-cyan-300"
+                    >
+                      Resend Code
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        navigate({
+                          to: "/verify-email",
+                          search: { email: email.trim() } as never,
+                        });
+                      }}
+                      size="sm"
+                      className="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-semibold text-xs"
+                    >
+                      Enter Code
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <p>{formError}</p>

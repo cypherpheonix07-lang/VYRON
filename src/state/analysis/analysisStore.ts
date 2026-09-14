@@ -122,10 +122,55 @@ function createDefaultStages(): AnalysisStageState[] {
   }));
 }
 
+export interface AnalysisRunSummary {
+  id: string;
+  targetDatasetId: string;
+  targetDatasetName: string;
+  mode: AppMode;
+  status: AnalysisStatus;
+  startedAt: string;
+  completedAt?: string | undefined;
+  durationMs: number;
+  recordsProcessed: number;
+  overallRiskScore: number;
+  findingsCount: number;
+  verificationHash?: string | undefined;
+}
+
 type AnalysisListener = (run: AnalysisRun) => void;
 
 class AnalysisStore {
   private run: AnalysisRun;
+  private history: AnalysisRunSummary[] = [
+    {
+      id: "run_prev_091",
+      targetDatasetId: "ieee_fraud_benchmark",
+      targetDatasetName: "IEEE-CIS Fraud Benchmark (Baseline)",
+      mode: "NORMAL",
+      status: "COMPLETED",
+      startedAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+      completedAt: new Date(Date.now() - 1000 * 60 * 43).toISOString(),
+      durationMs: 124000,
+      recordsProcessed: 12480,
+      overallRiskScore: 38,
+      findingsCount: 4,
+      verificationHash: "sha256_9a4f210d7e8b3c1a45e90f23b1234a6789c0def",
+    },
+    {
+      id: "run_prev_090",
+      targetDatasetId: "brazilian_ecommerce",
+      targetDatasetName: "Olist E-Commerce Ingestion",
+      mode: "NORMAL",
+      status: "COMPLETED",
+      startedAt: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
+      completedAt: new Date(Date.now() - 1000 * 60 * 178).toISOString(),
+      durationMs: 140000,
+      recordsProcessed: 8920,
+      overallRiskScore: 24,
+      findingsCount: 2,
+      verificationHash: "sha256_b38c2901ef456789abcd0123456789abcdef012",
+    },
+  ];
   private listeners: Set<AnalysisListener> = new Set();
   private timer: ReturnType<typeof setInterval> | null = null;
 
@@ -212,8 +257,27 @@ class AnalysisStore {
           new Date(this.run.telemetry.endTime).getTime() -
           new Date(this.run.telemetry.startTime).getTime();
       }
+      this.history.unshift({
+        id: this.run.id,
+        targetDatasetId: this.run.targetDatasetId,
+        targetDatasetName: this.run.targetDatasetName,
+        mode: this.run.mode,
+        status: this.run.status,
+        startedAt: this.run.telemetry.startTime || new Date().toISOString(),
+        completedAt: this.run.telemetry.endTime || new Date().toISOString(),
+        durationMs: this.run.telemetry.totalDurationMs,
+        recordsProcessed: this.run.telemetry.recordsProcessed,
+        overallRiskScore: this.run.telemetry.overallRiskScore,
+        findingsCount: this.run.findings.length,
+        verificationHash: this.run.telemetry.verificationHash || undefined,
+      });
+      if (this.history.length > 20) this.history.pop();
     }
     this.emit();
+  }
+
+  public getHistory(): AnalysisRunSummary[] {
+    return [...this.history];
   }
 
   public updateStage(

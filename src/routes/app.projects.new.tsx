@@ -43,7 +43,7 @@ export const Route = createFileRoute("/app/projects/new")({
             .from("projects")
             .select("draft_state")
             .eq("owner_id", userRes.data.id)
-            .is("status", "draft")
+            .eq("status", "draft")
             .not("draft_state", "is", null)
             .order("updated_at", { ascending: false })
             .limit(1)

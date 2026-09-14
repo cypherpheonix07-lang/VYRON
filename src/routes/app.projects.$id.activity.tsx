@@ -26,7 +26,7 @@ const SECTION_TYPE_MAPPING: Record<SectionTab, ActivityEventType[] | null> = {
   system: ["integration_connect", "auth_anomaly"],
 };
 
-export function ProjectActivityPage() {
+function ProjectActivityPage() {
   const { id } = Route.useParams();
   const project = getProject(id);
   const [activeTab, setActiveTab] = useState<SectionTab>("stream");

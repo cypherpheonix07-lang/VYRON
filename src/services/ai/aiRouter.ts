@@ -11,6 +11,7 @@ import { AIAdapter, AICompletionRequest, AICompletionResponse } from "./types";
 import { ClaudeAdapter } from "./adapters/claudeAdapter";
 import { KimiAdapter } from "./adapters/kimiAdapter";
 import { OpenAiAdapter } from "./adapters/openAiAdapter";
+import { OpenRouterAdapter } from "./adapters/openRouterAdapter";
 import { MockAIAdapter } from "./adapters/mockAdapter";
 import { AIModelType } from "../../state/copilot/copilotStore";
 
@@ -23,11 +24,12 @@ export class AIRouter {
     this.adapters.set("CLAUDE_SONNET", new ClaudeAdapter());
     this.adapters.set("KIMI_K3", new KimiAdapter());
     this.adapters.set("OPENAI_GPT4O", new OpenAiAdapter());
+    this.adapters.set("OPENROUTER_AUTO", new OpenRouterAdapter());
     this.adapters.set("MOCK_DETERMINISTIC", this.mockAdapter);
   }
 
   public getAdapter(model: AIModelType): AIAdapter {
-    return this.adapters.get(model) || this.mockAdapter;
+    return this.adapters.get(model) || this.adapters.get("OPENROUTER_AUTO") || this.mockAdapter;
   }
 
   public resolveModel(request: AICompletionRequest): AIModelType {
@@ -40,12 +42,13 @@ export class AIRouter {
       case "EXPLAINABILITY":
         return "CLAUDE_SONNET";
       case "LONG_CONTEXT_RAG":
-        return "KIMI_K3";
+        return "OPENROUTER_AUTO";
       case "STRUCTURED_EXTRACTION":
         return "OPENAI_GPT4O";
       case "DEMO_SIMULATION":
-      default:
         return "MOCK_DETERMINISTIC";
+      default:
+        return "OPENROUTER_AUTO";
     }
   }
 
@@ -66,3 +69,4 @@ export class AIRouter {
 }
 
 export const aiRouter = new AIRouter();
+

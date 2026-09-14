@@ -3,8 +3,13 @@ import { AlertCircle, ArrowLeft, Loader2, Lock } from "lucide-react";
 import { useState, type FormEvent, useEffect } from "react";
 import { toast } from "sonner";
 
-import { AuthLayout, FieldError } from "./login";
-import { PasswordInput, StrengthMeter, ChecklistChips } from "../components/auth/auth-components";
+import {
+  AuthLayout,
+  FieldError,
+  PasswordInput,
+  StrengthMeter,
+  ChecklistChips,
+} from "../components/auth/auth-components";
 import { authService } from "../services/authService";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";

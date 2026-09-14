@@ -110,7 +110,13 @@ export const authService = {
   // ── Identity & Feature Helpers ──────────────────────────────────────────
 
   isDemoMode(): boolean {
-    return false;
+    if (typeof window !== "undefined") {
+      const search = new URLSearchParams(window.location.search);
+      if (search.get("demo") === "true") return true;
+      if (localStorage.getItem("brahma_demo_mode") === "true") return true;
+      if (localStorage.getItem("brahma_demo_session")) return true;
+    }
+    return Boolean(import.meta.env.DEV || import.meta.env["VITE_ENABLE_DEMO"] === "true");
   },
 
   isOAuthProviderEnabled(provider: "google" | "github" | "gitlab"): boolean {
@@ -198,7 +204,7 @@ export const authService = {
 
   async signInWithGoogle(): Promise<AuthResponse> {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: {
           redirectTo: getRedirectUrl(),
@@ -207,6 +213,7 @@ export const authService = {
             access_type: "offline",
             prompt: "select_account",
           },
+          skipBrowserRedirect: true,
         },
       });
       if (error) {
@@ -218,6 +225,34 @@ export const authService = {
         }).catch(() => undefined);
         return fail(error.message);
       }
+      if (data?.url) {
+        // Pre-validate whether Supabase has Google OAuth enabled
+        try {
+          const probe = await fetch(data.url, { method: "GET" });
+          if (!probe.ok) {
+            const errJson = (await probe.json().catch(() => null)) as { msg?: string; error_code?: string } | null;
+            if (
+              errJson?.msg?.includes("provider is not enabled") ||
+              errJson?.error_code === "validation_failed"
+            ) {
+              const msg =
+                "Google OAuth is not enabled in your Supabase project (hbbunfizlwgvripgwzdo). Please enable Google in Supabase Dashboard > Authentication > Providers, or use GitHub / Demo Login.";
+              logAuthEvent({
+                event: "oauth",
+                method: "GOOGLE OAuth",
+                status: "failed",
+                email: "oauth.google@brahma.dev",
+              }).catch(() => undefined);
+              return fail(msg);
+            }
+          }
+        } catch {
+          // If probe is blocked by CORS, proceed with standard browser redirect
+        }
+        if (typeof window !== "undefined") {
+          window.location.assign(data.url);
+        }
+      }
       return { ok: true };
     } catch (e: unknown) {
       return fail(e instanceof Error ? e.message : String(e));
@@ -228,11 +263,12 @@ export const authService = {
 
   async signInWithGitHub(): Promise<AuthResponse> {
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "github",
         options: {
           redirectTo: getRedirectUrl(),
           scopes: "read:user user:email",
+          skipBrowserRedirect: true,
         },
       });
       if (error) {
@@ -243,6 +279,24 @@ export const authService = {
           email: "oauth.github@brahma.dev",
         }).catch(() => undefined);
         return fail(error.message);
+      }
+      if (data?.url) {
+        try {
+          const probe = await fetch(data.url, { method: "GET" });
+          if (!probe.ok) {
+            const errJson = (await probe.json().catch(() => null)) as { msg?: string } | null;
+            if (errJson?.msg?.includes("provider is not enabled")) {
+              return fail(
+                "GitHub OAuth is not enabled in your Supabase project. Please enable GitHub in Supabase Dashboard or use Demo login.",
+              );
+            }
+          }
+        } catch {
+          // If probe is blocked by CORS, proceed with standard browser redirect
+        }
+        if (typeof window !== "undefined") {
+          window.location.assign(data.url);
+        }
       }
       return { ok: true };
     } catch (e: unknown) {
@@ -260,6 +314,9 @@ export const authService = {
 
   async signOut(scope: "local" | "others" | "global" = "local"): Promise<AuthResponse> {
     try {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("brahma_demo_session");
+      }
       let emailForLog = "unknown@brahma.dev";
       const { data: sd } = await supabase.auth.getSession();
       if (sd?.session?.user?.email) emailForLog = sd.session.user.email;
@@ -283,6 +340,17 @@ export const authService = {
 
   async getSession(): Promise<AuthResponse<Session | null>> {
     try {
+      if (typeof window !== "undefined") {
+        const demoStorage = localStorage.getItem("brahma_demo_session");
+        if (demoStorage) {
+          try {
+            const parsed = JSON.parse(demoStorage);
+            if (parsed && parsed.user) {
+              return { ok: true, data: parsed as Session };
+            }
+          } catch {}
+        }
+      }
       const { data, error } = await supabase.auth.getSession();
       return error ? fail(error.message) : { ok: true, data: data.session };
     } catch (e: unknown) {

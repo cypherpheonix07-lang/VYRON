@@ -33,6 +33,11 @@ export class EventSimulatorService {
     demoStore.setSimulatorRunning(false);
   }
 
+  public reset() {
+    this.stop();
+    demoStore.resetSimulation();
+  }
+
   public setSpeed(eps: number) {
     const wasRunning = this.isRunning;
     if (wasRunning) {

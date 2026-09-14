@@ -98,9 +98,10 @@ export function RunAnalysisModal({ open, onOpenChange }: RunAnalysisModalProps) 
                 onChange={(e) => setSelectedModel(e.target.value as AIModelType)}
                 className="w-full text-xs rounded-md bg-secondary/50 border border-border/60 text-foreground p-2 focus:outline-none focus:ring-1 focus:ring-primary"
               >
+                <option value="OPENROUTER_AUTO">OpenRouter Multi-Model (High Availability)</option>
+                <option value="OPENAI_GPT4O">GPT-4o (OpenAI Direct / Failover)</option>
                 <option value="CLAUDE_SONNET">Claude 3.7 Sonnet (Anthropic)</option>
                 <option value="KIMI_K3">Kimi K3 MoE (Moonshot)</option>
-                <option value="OPENAI_GPT4O">GPT-4o (OpenAI)</option>
                 <option value="MOCK_DETERMINISTIC">Deterministic Mock Engine</option>
               </select>
             </div>

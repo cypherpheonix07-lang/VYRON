@@ -13,7 +13,7 @@ import {
   CheckSquare,
   Play,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { useAppMode } from "@/state/mode/useAppMode";
 import { SimulatorControls } from "@/components/demo/SimulatorControls";
@@ -58,7 +58,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { activityFeed, healthTrend, projects, riskDistribution } from "@/lib/mock-data";
+import { activityFeed, healthTrend, projects as mockProjects, riskDistribution } from "@/lib/mock-data";
+import { useProjects } from "@/hooks/useProjects";
+import { ProactiveInsightsBanner } from "@/components/copilot/ProactiveInsightsBanner";
 
 export const Route = createFileRoute("/app/")({
   head: () => ({
@@ -101,6 +103,35 @@ function Dashboard() {
   const [state, setState] = useState<ViewState>("loaded");
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [completedSteps, setCompletedSteps] = useState([true, true, true, false, false, false]);
+
+  const { projects: liveProjects } = useProjects();
+  const displayProjects = useMemo(() => {
+    if (!liveProjects || liveProjects.length === 0) return mockProjects;
+    return liveProjects.map((lp) => ({
+      id: lp.id,
+      name: lp.name,
+      description: lp.description || "",
+      domain: lp.domain || "General",
+      status: (lp.status as "Analyzed" | "Analyzing" | "Draft" | "Needs Review" | "At Risk") || "Analyzed",
+      healthScore: lp.health_score ?? 75,
+      securityScore: 80,
+      businessImpactScore: 78,
+      requirementClarity: 85,
+      deliveryRisk: (lp.health_score && lp.health_score > 80 ? "Low" : lp.health_score && lp.health_score > 60 ? "Medium" : "High") as "Low" | "Medium" | "High" | "Critical",
+      riskScore: lp.health_score ? 100 - lp.health_score : 25,
+      repoConnected: !!lp.repo_full_name,
+      teamSize: 5,
+      deadline: "2026-10-30",
+      lastUpdated: lp.created_at || new Date().toISOString(),
+      lastAnalysis: lp.created_at || new Date().toISOString(),
+    }));
+  }, [liveProjects]);
+
+  const avgHealth = useMemo(() => {
+    return Math.round(
+      displayProjects.reduce((acc, p) => acc + (p.healthScore || 70), 0) / Math.max(displayProjects.length, 1)
+    );
+  }, [displayProjects]);
 
   return (
     <>
@@ -184,22 +215,23 @@ function Dashboard() {
 
       {state === "loaded" ? (
         <div className="space-y-4">
+          <ProactiveInsightsBanner compact maxItems={1} />
           <CountdownCard targetDate="2026-09-15" milestoneTitle="Review 1 Milestone Defense" />
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
             <StatCard
               label="Total projects"
-              value={projects.length}
+              value={displayProjects.length}
               icon={FolderKanban}
               delta={12}
-              hint="vs last month"
+              hint="live portfolio"
             />
             <StatCard
               label="Avg. health score"
-              value="73"
+              value={String(avgHealth)}
               icon={Activity}
               delta={5}
-              tone="success"
-              hint="portfolio median 71"
+              tone={avgHealth >= 70 ? "success" : "warning"}
+              hint={`portfolio average (${displayProjects.length} projects)`}
             />
             <StatCard
               label="Security risk"
@@ -443,7 +475,7 @@ function Dashboard() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {projects.map((p) => (
+                    {displayProjects.map((p) => (
                       <TableRow key={p.id}>
                         <TableCell className="max-w-[220px]">
                           <Link

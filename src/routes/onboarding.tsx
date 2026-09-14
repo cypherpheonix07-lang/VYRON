@@ -21,7 +21,7 @@ import {
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 
-import { AuthLayout } from "@/routes/login";
+import { AuthLayout } from "@/components/auth/auth-components";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";

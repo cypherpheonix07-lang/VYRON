@@ -10,40 +10,48 @@ import {
   revokeGitHubToken,
   getStoredGitHubToken,
   getStoredGitHubUser,
-  GitHubTokenResult,
 } from "@/lib/github/oauth";
-import { getAuthenticatedUser, getUserOrganizations, GitHubUser, GitHubOrg } from "@/lib/github/api";
+import { getAuthenticatedUser, getUserOrganizations, fetchConnectedAccounts, GitHubUser, GitHubOrg } from "@/lib/github/api";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 
 export function GitHubAccountCard({ className = "" }: { className?: string }) {
-  const [token, setToken] = useState<string | null>(() => getStoredGitHubToken());
+  const [accounts, setAccounts] = useState<any[]>([]);
   const [user, setUser] = useState<GitHubUser | null>(null);
   const [orgs, setOrgs] = useState<GitHubOrg[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!token) return;
     let isMounted = true;
     setLoading(true);
 
-    Promise.all([getAuthenticatedUser(token), getUserOrganizations(token)])
-      .then(([userData, orgsData]) => {
+    const loadData = async () => {
+      try {
+        const accs = await fetchConnectedAccounts();
         if (!isMounted) return;
-        setUser(userData);
-        setOrgs(orgsData);
-      })
-      .catch((err) => {
+        setAccounts(accs);
+        if (accs.length > 0) {
+          const [userData, orgsData] = await Promise.all([
+            getAuthenticatedUser(accs[0]?.login),
+            getUserOrganizations(),
+          ]);
+          if (!isMounted) return;
+          setUser(userData);
+          setOrgs(orgsData);
+        }
+      } catch (err) {
         console.warn("Failed to load GitHub user:", err);
-      })
-      .finally(() => {
+      } finally {
         if (isMounted) setLoading(false);
-      });
+      }
+    };
+
+    loadData();
 
     return () => {
       isMounted = false;
     };
-  }, [token]);
+  }, []);
 
   const handleConnect = () => {
     initiateGitHubOAuth();
@@ -51,13 +59,13 @@ export function GitHubAccountCard({ className = "" }: { className?: string }) {
 
   const handleDisconnect = async () => {
     await revokeGitHubToken();
-    setToken(null);
+    setAccounts([]);
     setUser(null);
     setOrgs([]);
     toast.info("GitHub account disconnected");
   };
 
-  const isConnected = Boolean(token);
+  const isConnected = accounts.length > 0;
 
   return (
     <div className={`rounded-xl border border-zinc-800 bg-zinc-950 p-5 space-y-4 ${className}`}>

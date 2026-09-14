@@ -24,6 +24,7 @@ import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as PreviewRouteImport } from './routes/preview'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as ShowcaseRouteImport } from './routes/showcase'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppActivityRouteImport } from './routes/app.activity'
@@ -33,15 +34,20 @@ import { Route as AppBillingRouteImport } from './routes/app.billing'
 import { Route as AppChatRouteImport } from './routes/app.chat'
 import { Route as AppConnectorsRouteImport } from './routes/app.connectors'
 import { Route as AppDatasetsRouteImport } from './routes/app.datasets'
+import { Route as AppDriftRouteImport } from './routes/app.drift'
 import { Route as AppExportsRouteImport } from './routes/app.exports'
 import { Route as AppGithubRouteImport } from './routes/app.github'
+import { Route as AppImpactRouteImport } from './routes/app.impact'
 import { Route as AppIntegrationsRouteImport } from './routes/app.integrations'
+import { Route as AppMissionsRouteImport } from './routes/app.missions'
 import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
+import { Route as AppPluginsRouteImport } from './routes/app.plugins'
 import { Route as AppPreviewRouteImport } from './routes/app.preview'
 import { Route as AppProfileRouteImport } from './routes/app.profile'
 import { Route as AppReportsRouteImport } from './routes/app.reports'
 import { Route as AppSearchRouteImport } from './routes/app.search'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
+import { Route as AppSimulationRouteImport } from './routes/app.simulation'
 import { Route as AppTeamRouteImport } from './routes/app.team'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthGithubCallbackRouteImport } from './routes/auth.github-callback'
@@ -177,6 +183,11 @@ const ResetPasswordRoute = ResetPasswordRouteImport.update({
   path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ShowcaseRoute = ShowcaseRouteImport.update({
+  id: '/showcase',
+  path: '/showcase',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
   path: '/verify-email',
@@ -222,6 +233,11 @@ const AppDatasetsRoute = AppDatasetsRouteImport.update({
   path: '/datasets',
   getParentRoute: () => AppRoute,
 } as any)
+const AppDriftRoute = AppDriftRouteImport.update({
+  id: '/drift',
+  path: '/drift',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppExportsRoute = AppExportsRouteImport.update({
   id: '/exports',
   path: '/exports',
@@ -232,14 +248,29 @@ const AppGithubRoute = AppGithubRouteImport.update({
   path: '/github',
   getParentRoute: () => AppRoute,
 } as any)
+const AppImpactRoute = AppImpactRouteImport.update({
+  id: '/impact',
+  path: '/impact',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppIntegrationsRoute = AppIntegrationsRouteImport.update({
   id: '/integrations',
   path: '/integrations',
   getParentRoute: () => AppRoute,
 } as any)
+const AppMissionsRoute = AppMissionsRouteImport.update({
+  id: '/missions',
+  path: '/missions',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppNotificationsRoute = AppNotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPluginsRoute = AppPluginsRouteImport.update({
+  id: '/plugins',
+  path: '/plugins',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPreviewRoute = AppPreviewRouteImport.update({
@@ -265,6 +296,11 @@ const AppSearchRoute = AppSearchRouteImport.update({
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSimulationRoute = AppSimulationRouteImport.update({
+  id: '/simulation',
+  path: '/simulation',
   getParentRoute: () => AppRoute,
 } as any)
 const AppTeamRoute = AppTeamRouteImport.update({
@@ -583,6 +619,7 @@ export interface FileRoutesByFullPath {
   '/preview': typeof PreviewRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/showcase': typeof ShowcaseRoute
   '/verify-email': typeof VerifyEmailRoute
   '/app/activity': typeof AppActivityRoute
   '/app/admin': typeof AppAdminRouteWithChildren
@@ -591,15 +628,20 @@ export interface FileRoutesByFullPath {
   '/app/chat': typeof AppChatRoute
   '/app/connectors': typeof AppConnectorsRoute
   '/app/datasets': typeof AppDatasetsRoute
+  '/app/drift': typeof AppDriftRoute
   '/app/exports': typeof AppExportsRoute
   '/app/github': typeof AppGithubRoute
+  '/app/impact': typeof AppImpactRoute
   '/app/integrations': typeof AppIntegrationsRoute
+  '/app/missions': typeof AppMissionsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/plugins': typeof AppPluginsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/profile': typeof AppProfileRoute
   '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/simulation': typeof AppSimulationRoute
   '/app/team': typeof AppTeamRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
@@ -676,6 +718,7 @@ export interface FileRoutesByTo {
   '/preview': typeof PreviewRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/showcase': typeof ShowcaseRoute
   '/verify-email': typeof VerifyEmailRoute
   '/app/activity': typeof AppActivityRoute
   '/app/analysis': typeof AppAnalysisRoute
@@ -683,15 +726,20 @@ export interface FileRoutesByTo {
   '/app/chat': typeof AppChatRoute
   '/app/connectors': typeof AppConnectorsRoute
   '/app/datasets': typeof AppDatasetsRoute
+  '/app/drift': typeof AppDriftRoute
   '/app/exports': typeof AppExportsRoute
   '/app/github': typeof AppGithubRoute
+  '/app/impact': typeof AppImpactRoute
   '/app/integrations': typeof AppIntegrationsRoute
+  '/app/missions': typeof AppMissionsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/plugins': typeof AppPluginsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/profile': typeof AppProfileRoute
   '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/simulation': typeof AppSimulationRoute
   '/app/team': typeof AppTeamRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
@@ -768,6 +816,7 @@ export interface FileRoutesById {
   '/preview': typeof PreviewRoute
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/showcase': typeof ShowcaseRoute
   '/verify-email': typeof VerifyEmailRoute
   '/app/activity': typeof AppActivityRoute
   '/app/admin': typeof AppAdminRouteWithChildren
@@ -776,15 +825,20 @@ export interface FileRoutesById {
   '/app/chat': typeof AppChatRoute
   '/app/connectors': typeof AppConnectorsRoute
   '/app/datasets': typeof AppDatasetsRoute
+  '/app/drift': typeof AppDriftRoute
   '/app/exports': typeof AppExportsRoute
   '/app/github': typeof AppGithubRoute
+  '/app/impact': typeof AppImpactRoute
   '/app/integrations': typeof AppIntegrationsRoute
+  '/app/missions': typeof AppMissionsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/plugins': typeof AppPluginsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/profile': typeof AppProfileRoute
   '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
+  '/app/simulation': typeof AppSimulationRoute
   '/app/team': typeof AppTeamRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
@@ -864,6 +918,7 @@ export interface FileRouteTypes {
     | '/preview'
     | '/register'
     | '/reset-password'
+    | '/showcase'
     | '/verify-email'
     | '/app/activity'
     | '/app/admin'
@@ -872,15 +927,20 @@ export interface FileRouteTypes {
     | '/app/chat'
     | '/app/connectors'
     | '/app/datasets'
+    | '/app/drift'
     | '/app/exports'
     | '/app/github'
+    | '/app/impact'
     | '/app/integrations'
+    | '/app/missions'
     | '/app/notifications'
+    | '/app/plugins'
     | '/app/preview'
     | '/app/profile'
     | '/app/reports'
     | '/app/search'
     | '/app/settings'
+    | '/app/simulation'
     | '/app/team'
     | '/auth/callback'
     | '/auth/github-callback'
@@ -957,6 +1017,7 @@ export interface FileRouteTypes {
     | '/preview'
     | '/register'
     | '/reset-password'
+    | '/showcase'
     | '/verify-email'
     | '/app/activity'
     | '/app/analysis'
@@ -964,15 +1025,20 @@ export interface FileRouteTypes {
     | '/app/chat'
     | '/app/connectors'
     | '/app/datasets'
+    | '/app/drift'
     | '/app/exports'
     | '/app/github'
+    | '/app/impact'
     | '/app/integrations'
+    | '/app/missions'
     | '/app/notifications'
+    | '/app/plugins'
     | '/app/preview'
     | '/app/profile'
     | '/app/reports'
     | '/app/search'
     | '/app/settings'
+    | '/app/simulation'
     | '/app/team'
     | '/auth/callback'
     | '/auth/github-callback'
@@ -1048,6 +1114,7 @@ export interface FileRouteTypes {
     | '/preview'
     | '/register'
     | '/reset-password'
+    | '/showcase'
     | '/verify-email'
     | '/app/activity'
     | '/app/admin'
@@ -1056,15 +1123,20 @@ export interface FileRouteTypes {
     | '/app/chat'
     | '/app/connectors'
     | '/app/datasets'
+    | '/app/drift'
     | '/app/exports'
     | '/app/github'
+    | '/app/impact'
     | '/app/integrations'
+    | '/app/missions'
     | '/app/notifications'
+    | '/app/plugins'
     | '/app/preview'
     | '/app/profile'
     | '/app/reports'
     | '/app/search'
     | '/app/settings'
+    | '/app/simulation'
     | '/app/team'
     | '/auth/callback'
     | '/auth/github-callback'
@@ -1143,6 +1215,7 @@ export interface RootRouteChildren {
   PreviewRoute: typeof PreviewRoute
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ShowcaseRoute: typeof ShowcaseRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
 }
 
@@ -1253,6 +1326,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/showcase': {
+      id: '/showcase'
+      path: '/showcase'
+      fullPath: '/showcase'
+      preLoaderRoute: typeof ShowcaseRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verify-email': {
       id: '/verify-email'
       path: '/verify-email'
@@ -1316,6 +1396,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDatasetsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/drift': {
+      id: '/app/drift'
+      path: '/drift'
+      fullPath: '/app/drift'
+      preLoaderRoute: typeof AppDriftRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/exports': {
       id: '/app/exports'
       path: '/exports'
@@ -1330,6 +1417,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppGithubRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/impact': {
+      id: '/app/impact'
+      path: '/impact'
+      fullPath: '/app/impact'
+      preLoaderRoute: typeof AppImpactRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/integrations': {
       id: '/app/integrations'
       path: '/integrations'
@@ -1337,11 +1431,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIntegrationsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/missions': {
+      id: '/app/missions'
+      path: '/missions'
+      fullPath: '/app/missions'
+      preLoaderRoute: typeof AppMissionsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/notifications': {
       id: '/app/notifications'
       path: '/notifications'
       fullPath: '/app/notifications'
       preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/plugins': {
+      id: '/app/plugins'
+      path: '/plugins'
+      fullPath: '/app/plugins'
+      preLoaderRoute: typeof AppPluginsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/preview': {
@@ -1377,6 +1485,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/app/settings'
       preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/simulation': {
+      id: '/app/simulation'
+      path: '/simulation'
+      fullPath: '/app/simulation'
+      preLoaderRoute: typeof AppSimulationRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/team': {
@@ -1954,15 +2069,20 @@ interface AppRouteChildren {
   AppChatRoute: typeof AppChatRoute
   AppConnectorsRoute: typeof AppConnectorsRoute
   AppDatasetsRoute: typeof AppDatasetsRoute
+  AppDriftRoute: typeof AppDriftRoute
   AppExportsRoute: typeof AppExportsRoute
   AppGithubRoute: typeof AppGithubRoute
+  AppImpactRoute: typeof AppImpactRoute
   AppIntegrationsRoute: typeof AppIntegrationsRoute
+  AppMissionsRoute: typeof AppMissionsRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
+  AppPluginsRoute: typeof AppPluginsRoute
   AppPreviewRoute: typeof AppPreviewRoute
   AppProfileRoute: typeof AppProfileRoute
   AppReportsRoute: typeof AppReportsRouteWithChildren
   AppSearchRoute: typeof AppSearchRoute
   AppSettingsRoute: typeof AppSettingsRoute
+  AppSimulationRoute: typeof AppSimulationRoute
   AppTeamRoute: typeof AppTeamRouteWithChildren
   AppIndexRoute: typeof AppIndexRoute
   AppProjectsIdRoute: typeof AppProjectsIdRouteWithChildren
@@ -1984,15 +2104,20 @@ const AppRouteChildren: AppRouteChildren = {
   AppChatRoute: AppChatRoute,
   AppConnectorsRoute: AppConnectorsRoute,
   AppDatasetsRoute: AppDatasetsRoute,
+  AppDriftRoute: AppDriftRoute,
   AppExportsRoute: AppExportsRoute,
   AppGithubRoute: AppGithubRoute,
+  AppImpactRoute: AppImpactRoute,
   AppIntegrationsRoute: AppIntegrationsRoute,
+  AppMissionsRoute: AppMissionsRoute,
   AppNotificationsRoute: AppNotificationsRoute,
+  AppPluginsRoute: AppPluginsRoute,
   AppPreviewRoute: AppPreviewRoute,
   AppProfileRoute: AppProfileRoute,
   AppReportsRoute: AppReportsRouteWithChildren,
   AppSearchRoute: AppSearchRoute,
   AppSettingsRoute: AppSettingsRoute,
+  AppSimulationRoute: AppSimulationRoute,
   AppTeamRoute: AppTeamRouteWithChildren,
   AppIndexRoute: AppIndexRoute,
   AppProjectsIdRoute: AppProjectsIdRouteWithChildren,
@@ -2047,6 +2172,7 @@ const rootRouteChildren: RootRouteChildren = {
   PreviewRoute: PreviewRoute,
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ShowcaseRoute: ShowcaseRoute,
   VerifyEmailRoute: VerifyEmailRoute,
 }
 export const routeTree = rootRouteImport

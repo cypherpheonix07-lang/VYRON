@@ -83,3 +83,41 @@ export interface PluginPrompt {
   arguments: ArgDef[];
   render: (args: Record<string, string>) => string;
 }
+
+export type PluginLifecycleState = "INSTALLED" | "ACTIVE" | "DISABLED" | "ERROR";
+export type PluginHealthStatus = "HEALTHY" | "DEGRADED" | "OFFLINE";
+export type PluginCategory =
+  | "ANALYTICS"
+  | "INGESTION"
+  | "GOVERNANCE"
+  | "COMPLIANCE"
+  | "ARCHITECTURE"
+  | "UTILITY";
+
+export interface PluginManifest {
+  id: string;
+  name: string;
+  version: string;
+  author: string;
+  description: string;
+  icon: string;
+  category: PluginCategory;
+  lifecycleState: PluginLifecycleState;
+  healthStatus: PluginHealthStatus;
+  permissions: string[];
+  dependencies: string[];
+  capabilities: string[];
+  supportedModes: ("NORMAL" | "DEMO")[];
+  tools: string[];
+  lastActiveAt?: string | undefined;
+}
+
+export interface PluginAuditEvent {
+  id: string;
+  timestamp: string;
+  pluginId: string;
+  action: "ACTIVATED" | "DEACTIVATED" | "TOOL_INVOKED" | "ERROR";
+  userId?: string | undefined;
+  details: string;
+  verificationHash: string;
+}

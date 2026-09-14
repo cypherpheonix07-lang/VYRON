@@ -251,14 +251,14 @@ export function useAuthSession(): AuthSessionState {
         setCreatedAt(sUser.created_at);
         setLastSignInAt(sUser.last_sign_in_at);
 
-        if (authService.isDemoMode()) {
+        if (authService.isDemoMode() || Boolean((session as any)?.user?.isDemo)) {
           const demoUser = (session as unknown as { user: DemoUser }).user;
           setUser({
             id: demoUser.id,
             email: demoUser.email,
             name: demoUser.name,
-            role: demoUser.role,
-            onboarded: demoUser.onboarded,
+            role: dbRoleToAppRole(demoUser.role),
+            onboarded: true,
             avatarUrl: demoUser.avatarUrl,
             isDemo: true,
           });
@@ -292,8 +292,17 @@ export function useAuthSession(): AuthSessionState {
       if (!isMounted) return;
 
       if (session?.user) {
-        if (authService.isDemoMode()) {
-          setUser(session.user as unknown as User);
+        if (authService.isDemoMode() || Boolean((session as any)?.user?.isDemo)) {
+          const raw = session.user as any;
+          setUser({
+            id: raw.id,
+            email: raw.email || "",
+            name: raw.name || "Demo User",
+            role: dbRoleToAppRole(raw.role),
+            onboarded: true,
+            avatarUrl: raw.avatarUrl,
+            isDemo: true,
+          });
         } else {
           const sUser = session.user as {
             id: string;
@@ -312,10 +321,14 @@ export function useAuthSession(): AuthSessionState {
           if (isMounted) setUser(profile);
         }
       } else {
-        if (isMounted) {
-          setUser(null);
-          setSessionExpiresAt(undefined);
-          setEmailConfirmedAt(undefined);
+        const hasDemoStorage =
+          typeof window !== "undefined" && Boolean(localStorage.getItem("brahma_demo_session"));
+        if (!authService.isDemoMode() && !hasDemoStorage) {
+          if (isMounted) {
+            setUser(null);
+            setSessionExpiresAt(undefined);
+            setEmailConfirmedAt(undefined);
+          }
         }
       }
       if (isMounted) setIsLoading(false);

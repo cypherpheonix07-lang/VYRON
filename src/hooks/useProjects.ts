@@ -71,12 +71,18 @@ export function useProjects() {
       // Query active draft count for current user
       const userRes = await authService.getUser();
       if (userRes.data?.id) {
-        const { count } = await supabase
-          .from("projects")
-          .select("*", { count: "exact", head: true })
-          .eq("owner_id", userRes.data.id)
-          .is("status", "draft")
-          .not("draft_state", "is", null);
+        let count: number | null = 0;
+        try {
+          const { count: c } = await supabase
+            .from("projects")
+            .select("*", { count: "exact", head: true })
+            .eq("owner_id", userRes.data.id)
+            .eq("status", "draft")
+            .not("draft_state", "is", null);
+          count = c;
+        } catch {
+          // graceful fallback
+        }
 
         let localCount = 0;
         try {

@@ -138,7 +138,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "PROJECT BRAHMA — Engineering Intelligence Platform" },
+      { title: "VYRON — Engineering Intelligence Platform" },
       {
         name: "description",
         content:
@@ -155,6 +155,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap",
       },
+      {
+        rel: "icon",
+        type: "image/svg+xml",
+        href: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' fill='none'%3E%3Crect width='32' height='32' rx='8' fill='%230B132B'/%3E%3Cpath d='M16 6L24.66 11V21L16 26L7.34 21V11L16 6Z' stroke='%2322D3EE' stroke-width='2.2' stroke-linejoin='round' fill='rgba(34, 211, 238, 0.15)'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%236366F1'/%3E%3C/svg%3E",
+      },
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),

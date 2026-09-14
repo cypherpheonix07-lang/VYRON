@@ -1,31 +1,74 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Plug,
   Shield,
-  ShieldAlert,
-  CheckCircle,
-  XCircle,
   Lock,
   Unlock,
   Clock,
   Activity,
-  FileText,
+  FolderGit2,
+  Trash2,
+  ExternalLink,
+  GitBranch,
+  CheckCircle2,
+  Sparkles,
 } from "lucide-react";
 import {
   connectorStore,
   ConnectorState,
-  ConnectorTool,
   AuditLogEntry,
 } from "@/state/connectors/connectorStore";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { InlineCopilotAssistant } from "@/components/copilot/InlineCopilotAssistant";
+import { GitHubConnectorCard } from "@/components/github/GitHubConnectorCard";
+import {
+  GitHubAccountSelector,
+  type GitHubAccountItem,
+} from "@/components/github/GitHubAccountSelector";
+import { GitHubRepoSelector } from "@/components/github/GitHubRepoSelector";
+import type { GitHubRepoItem } from "@/components/github/GitHubRepoCard";
+import { fetchConnectedAccounts } from "@/lib/github/api";
+import { initiateGitHubOAuth, revokeGitHubToken } from "@/lib/github/oauth";
+import { useProjects, type Project } from "@/hooks/useProjects";
+import { useRepoBinding } from "@/hooks/useRepoBinding";
+import { useDemoMode } from "@/contexts/DemoModeContext";
+import { supabase } from "@/lib/supabaseClient";
+import { toast } from "sonner";
+
+interface BoundRepoSummary {
+  id: string;
+  project_id: string;
+  repo_full_name: string;
+  default_branch: string;
+  private: boolean;
+  language: string | null;
+  sync_status: string;
+  last_synced_at: string | null;
+}
 
 export function ConnectorRegistryView({ className }: { className?: string }) {
   const [connectors, setConnectors] = useState<ConnectorState[]>(() =>
     connectorStore.getConnectors(),
   );
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>(() => connectorStore.getAuditLogs());
-  const [selectedConnectorId, setSelectedConnectorId] = useState<string>("kaggle");
+  const [selectedConnectorId, setSelectedConnectorId] = useState<string>("github");
+
+  // GitHub Connector State
+  const [accounts, setAccounts] = useState<GitHubAccountItem[]>([]);
+  const [accountsLoading, setAccountsLoading] = useState(false);
+  const [linkedRepos, setLinkedRepos] = useState<BoundRepoSummary[]>([]);
+  const [accountSelectorOpen, setAccountSelectorOpen] = useState(false);
+  const [repoSelectorOpen, setRepoSelectorOpen] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState<GitHubAccountItem | null>(null);
+
+  const { projects } = useProjects();
+  const { link, unlink, isLinking, isUnlinking } = useRepoBinding();
+  const { isDemo } = useDemoMode();
+
+  // Selected project for linking (defaults to first project if available)
+  const activeProject: Project | undefined = projects[0];
 
   useEffect(() => {
     return connectorStore.subscribe((state) => {
@@ -33,6 +76,35 @@ export function ConnectorRegistryView({ className }: { className?: string }) {
       setAuditLogs([...state.auditLogs]);
     });
   }, []);
+
+  const loadGitHubData = useCallback(async () => {
+    setAccountsLoading(true);
+    try {
+      const accs = await fetchConnectedAccounts();
+      setAccounts(accs);
+      if (accs.length > 0 && !selectedAccount) {
+        setSelectedAccount(accs[0] ?? null);
+      }
+
+      // Fetch linked repos
+      const { data: repoData, error: repoErr } = await supabase
+        .from("project_repos")
+        .select("id, project_id, repo_full_name, default_branch, private, language, sync_status, last_synced_at")
+        .order("created_at", { ascending: false });
+
+      if (!repoErr && repoData) {
+        setLinkedRepos(repoData as BoundRepoSummary[]);
+      }
+    } catch (err) {
+      console.warn("Failed to load GitHub connector details:", err);
+    } finally {
+      setAccountsLoading(false);
+    }
+  }, [selectedAccount]);
+
+  useEffect(() => {
+    loadGitHubData();
+  }, [loadGitHubData]);
 
   const selectedConnector = connectors.find((c) => c.id === selectedConnectorId) || connectors[0];
 
@@ -42,6 +114,64 @@ export function ConnectorRegistryView({ className }: { className?: string }) {
 
   const handleToggleToolAuth = (connectorId: string, toolName: string, currentAuth: boolean) => {
     connectorStore.setToolAuthorization(connectorId, toolName, !currentAuth);
+  };
+
+  const handleConnectGitHub = () => {
+    initiateGitHubOAuth(window.location.pathname);
+  };
+
+  const handleDisconnectGitHub = async () => {
+    try {
+      await revokeGitHubToken();
+      setAccounts([]);
+      setSelectedAccount(null);
+      setLinkedRepos([]);
+      toast.info("GitHub account disconnected", {
+        description: "Credentials revoked and local identity associations removed.",
+      });
+    } catch {
+      toast.error("Failed to disconnect GitHub account");
+    }
+  };
+
+  const handleAddRepositoryClick = () => {
+    if (accounts.length === 0) {
+      handleConnectGitHub();
+      return;
+    }
+    if (accounts.length === 1) {
+      setSelectedAccount(accounts[0] ?? null);
+      setRepoSelectorOpen(true);
+    } else {
+      setAccountSelectorOpen(true);
+    }
+  };
+
+  const handleAccountSelected = (acc: GitHubAccountItem) => {
+    setSelectedAccount(acc);
+    setAccountSelectorOpen(false);
+    setRepoSelectorOpen(true);
+  };
+
+  const handleLinkRepositories = async (selectedRepos: GitHubRepoItem[]) => {
+    const targetProjectId = activeProject?.id || "default-global-project";
+    const targetAccountId = selectedAccount?.id || accounts[0]?.id || "default-account";
+
+    await link(targetProjectId, targetAccountId, selectedRepos);
+    setRepoSelectorOpen(false);
+    await loadGitHubData();
+  };
+
+  const handleUnlinkRepo = async (repoId: string, repoName: string) => {
+    try {
+      await unlink(repoId);
+      setLinkedRepos((prev) => prev.filter((r) => r.id !== repoId));
+      toast.success(`Unlinked repository ${repoName}`);
+    } catch (err) {
+      toast.error(`Failed to unlink ${repoName}`, {
+        description: (err as Error).message,
+      });
+    }
   };
 
   return (
@@ -59,12 +189,21 @@ export function ConnectorRegistryView({ className }: { className?: string }) {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          {isDemo && (
+            <Badge variant="outline" className="text-[10px] bg-amber-500/15 text-amber-400 border-amber-500/30 flex items-center gap-1 font-bold">
+              <Sparkles className="size-3" />
+              <span>SIMULATED SANDBOX</span>
+            </Badge>
+          )}
           <span className="text-xs text-muted-foreground">Connected Services:</span>
           <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-primary/20 text-primary">
             {connectors.filter((c) => c.isEnabled).length} / {connectors.length} ACTIVE
           </span>
         </div>
       </div>
+
+      {/* Embedded Contextual Copilot Intelligence */}
+      <InlineCopilotAssistant pageContext="connectors" />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left: Connector Cards */}
@@ -91,7 +230,14 @@ export function ConnectorRegistryView({ className }: { className?: string }) {
                       {c.type.slice(0, 3)}
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-foreground">{c.name}</h4>
+                      <div className="flex items-center gap-2">
+                        <h4 className="text-sm font-bold text-foreground">{c.name}</h4>
+                        {isDemo && (
+                          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/30 font-bold">
+                            SIMULATED
+                          </span>
+                        )}
+                      </div>
                       <span className="text-[11px] font-mono text-muted-foreground">
                         {c.tools.length} exposed MCP tools
                       </span>
@@ -121,8 +267,89 @@ export function ConnectorRegistryView({ className }: { className?: string }) {
           })}
         </div>
 
-        {/* Right: Tool Authorization Matrix & Audit Log */}
+        {/* Right: Connector Hub Panel & Tool Permissions */}
         <div className="lg:col-span-7 space-y-6">
+          {/* Active GitHub Connector First-Class Integration */}
+          {selectedConnectorId === "github" && (
+            <div className="space-y-4">
+              <GitHubConnectorCard
+                accounts={accounts}
+                isLoading={accountsLoading}
+                onConnectGitHub={handleConnectGitHub}
+                onAddRepository={handleAddRepositoryClick}
+                onDisconnect={handleDisconnectGitHub}
+              />
+
+              {/* Linked Repositories Overview */}
+              {linkedRepos.length > 0 && (
+                <div className="p-4 rounded-xl border border-border/50 bg-card/40 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <FolderGit2 className="size-4 text-primary" />
+                      <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">
+                        Bound Codebases ({linkedRepos.length})
+                      </h4>
+                    </div>
+                    <Badge variant="outline" className="border-border text-[10px] font-mono">
+                      Webhook Automated
+                    </Badge>
+                  </div>
+
+                  <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
+                    {linkedRepos.map((repo) => (
+                      <div
+                        key={repo.id}
+                        className="p-3 rounded-lg border border-border/40 bg-zinc-950/60 flex items-center justify-between text-xs"
+                      >
+                        <div className="space-y-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-semibold text-foreground font-mono">
+                              {repo.repo_full_name}
+                            </span>
+                            <Badge
+                              variant="outline"
+                              className={cn(
+                                "text-[10px] font-mono",
+                                repo.sync_status === "synced"
+                                  ? "border-emerald-500/30 text-emerald-400 bg-emerald-500/10"
+                                  : "border-amber-500/30 text-amber-400 bg-amber-500/10",
+                              )}
+                            >
+                              {repo.sync_status}
+                            </Badge>
+                          </div>
+                          <div className="flex items-center gap-3 text-[11px] text-muted-foreground font-mono">
+                            <span className="flex items-center gap-1">
+                              <GitBranch className="size-3 text-muted-foreground" />
+                              {repo.default_branch || "main"}
+                            </span>
+                            {repo.language && (
+                              <span className="text-primary">{repo.language}</span>
+                            )}
+                            {repo.last_synced_at && (
+                              <span>Synced: {new Date(repo.last_synced_at).toLocaleTimeString()}</span>
+                            )}
+                          </div>
+                        </div>
+
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          disabled={isUnlinking}
+                          onClick={() => handleUnlinkRepo(repo.id, repo.repo_full_name)}
+                          className="text-muted-foreground hover:text-destructive h-8 px-2"
+                          title="Unlink repository"
+                        >
+                          <Trash2 className="size-3.5" />
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Tool Permissions */}
           {selectedConnector && (
             <div className="p-5 rounded-2xl border border-border/40 bg-card/60 backdrop-blur-xl space-y-4">
@@ -258,6 +485,25 @@ export function ConnectorRegistryView({ className }: { className?: string }) {
           </div>
         </div>
       </div>
+
+      {/* Account Selector Dialog */}
+      <GitHubAccountSelector
+        open={accountSelectorOpen}
+        accounts={accounts}
+        onSelect={handleAccountSelected}
+        onClose={() => setAccountSelectorOpen(false)}
+      />
+
+      {/* Repository Selector Dialog */}
+      {selectedAccount && (
+        <GitHubRepoSelector
+          open={repoSelectorOpen}
+          account={selectedAccount}
+          projectId={activeProject?.id || "default-global-project"}
+          onLink={handleLinkRepositories}
+          onClose={() => setRepoSelectorOpen(false)}
+        />
+      )}
     </div>
   );
 }

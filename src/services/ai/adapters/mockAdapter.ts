@@ -23,7 +23,113 @@ export class MockAIAdapter implements AIAdapter {
     let textResponse = "";
     let toolCalls = undefined;
 
-    if (lower.includes("fraud") || lower.includes("anomaly") || lower.includes("iqr")) {
+    if (lower.includes("drift") || lower.includes("ast") || lower.includes("boundary violation")) {
+      textResponse =
+        `**Brahma Architecture Drift Analysis [Blueprint vs AST Reality]**\n\n` +
+        `• **Evaluated Modules**: 14 declared blueprint services against repository AST.\n` +
+        `• **Drift Findings Detected**: 3 structural violations:\n` +
+        `  - \`MISSING_COMPONENT\`: Service \`srv-settlement\` declared in blueprint but missing from repository implementation.\n` +
+        `  - \`UNAUTHORIZED_DEPENDENCY\`: Package \`pyjwt@2.8.0\` detected without architectural policy sign-off.\n` +
+        `  - \`BOUNDARY_VIOLATION\`: Service \`srv-auth\` communicates directly with \`srv-ledger\` bypassing settlement gateway.\n` +
+        `• **Confidence**: 98.4% AST parser resolution with zero AST parsing ambiguity.\n` +
+        `• **Remediation Recommendation**: Isolate payment gateway boundary and scaffold missing settlement engine.`;
+      if (request.tools && request.tools.some((t) => t.name === "detect_architecture_drift")) {
+        toolCalls = [
+          {
+            id: `call_${Date.now()}`,
+            name: "detect_architecture_drift",
+            arguments: { projectId: "proj-brahma", saveSnapshot: true },
+          },
+        ];
+      }
+    } else if (lower.includes("impact") || lower.includes("blast radius") || lower.includes("transitive")) {
+      textResponse =
+        `**Brahma Change Impact Engine [Blast Radius Analysis]**\n\n` +
+        `• **Scope**: Modification to \`src/services/settlementEngine.ts\` and API contracts.\n` +
+        `• **Direct Impact**: 4 source modules, 2 API endpoints (\`POST /v1/settlements\`, \`GET /v1/settlements/:id\`).\n` +
+        `• **Transitive Blast Radius**: 3 dependent services (\`srv-billing\`, \`srv-reporting\`, \`srv-audit\`).\n` +
+        `• **Test Invalidation**: Invalidates 2 test suites (\`test_settlement_idempotency.py\`, \`test_audit_trail.py\`).\n` +
+        `• **Release Blocker**: Blocker detected on Gate G4 (Deterministic Verification).\n` +
+        `• **Recommended Review Order**: 1. Settlement Engine -> 2. Invalidation Tests -> 3. Idempotency Keys.`;
+      if (request.tools && request.tools.some((t) => t.name === "analyze_change_impact")) {
+        toolCalls = [
+          {
+            id: `call_${Date.now()}`,
+            name: "analyze_change_impact",
+            arguments: { changedFile: "src/services/settlementEngine.ts" },
+          },
+        ];
+      }
+    } else if (lower.includes("mission") || lower.includes("review project") || lower.includes("release review") || lower.includes("objective")) {
+      textResponse =
+        `**Brahma Engineering Mission Coordinator [Autonomous Goal Execution]**\n\n` +
+        `• **Mission Objective**: Pre-Release Architecture & Verification Audit.\n` +
+        `• **Task Breakdown**:\n` +
+        `  1. \`Step 1\`: Scan Architecture & Detect Drift (Specialist: \`DATA_QUALITY\`)\n` +
+        `  2. \`Step 2\`: Analyze Security CWEs & AST Findings (Specialist: \`SECURITY_ANALYST\`)\n` +
+        `  3. \`Step 3\`: Synthesize Verification Report & Cryptographic Integrity Seal (Specialist: \`REPORT_GENERATOR\`)\n` +
+        `• **Audit Verification**: Mission created with SHA-256 evidence chain and operator approval checkpoints.`;
+      if (request.tools && request.tools.some((t) => t.name === "start_engineering_mission")) {
+        toolCalls = [
+          {
+            id: `call_${Date.now()}`,
+            name: "start_engineering_mission",
+            arguments: { title: "Pre-Release Verification Mission", objective: "Audit architecture drift and release gates" },
+          },
+        ];
+      }
+    } else if (lower.includes("time machine") || lower.includes("health drop") || lower.includes("why did health") || lower.includes("regression")) {
+      textResponse =
+        `**Brahma Engineering Time Machine [Historical Regression Analysis]**\n\n` +
+        `• **Regression Root Cause**: Project health declined from 94 to 78 starting at Commit \`c-789a1b\` ('Refactor settlement retry loop').\n` +
+        `• **Deterioration Factors**:\n` +
+        `  - Test coverage dropped by 14% due to un-implemented settlement retry requirement.\n` +
+        `  - Hardcoded secret string introduced in \`authService.ts\` triggering CWE-798 alert.\n` +
+        `  - Circular dependency introduced between \`srv-auth\` and \`srv-ledger\`.\n` +
+        `• **Confidence**: 96.7% deterministic correlation across historical health snapshots.`;
+      if (request.tools && request.tools.some((t) => t.name === "compare_time_machine_snapshots")) {
+        toolCalls = [
+          {
+            id: `call_${Date.now()}`,
+            name: "compare_time_machine_snapshots",
+            arguments: { baseSnapshotId: "snap-baseline", targetSnapshotId: "snap-regression" },
+          },
+        ];
+      }
+    } else if (lower.includes("policy") || lower.includes("release gate") || lower.includes("blocking") || lower.includes("exception")) {
+      textResponse =
+        `**Brahma Policy Engine [Release Gate Evaluation]**\n\n` +
+        `• **Evaluation Result**: 5 of 7 release gates passing. 2 blocking violations detected:\n` +
+        `  - \`POL-SEC-01\`: Unresolved High-Severity Security finding (CWE-89 SQL query string builder).\n` +
+        `  - \`POL-ARCH-02\`: Architecture drift detected without approved exception grant.\n` +
+        `• **Active Exceptions**: 0 active exception grants on record.\n` +
+        `• **Remediation**: Resolve blocking CWE-89 finding or submit formal exception with cryptographic authorization.`;
+      if (request.tools && request.tools.some((t) => t.name === "evaluate_engineering_policies")) {
+        toolCalls = [
+          {
+            id: `call_${Date.now()}`,
+            name: "evaluate_engineering_policies",
+            arguments: { releaseCandidate: "rc-2.0" },
+          },
+        ];
+      }
+    } else if (lower.includes("simulation") || lower.includes("scenario") || lower.includes("lab")) {
+      textResponse =
+        `**Brahma Engineering Simulation Lab [Scenario State]**\n\n` +
+        `• **Active Scenario**: Scenario 01 — Architecture Drift & Boundary Violation.\n` +
+        `• **Simulated Anomalies**: Missing settlement component, AST boundary drift, and synthetic transaction velocity deviations.\n` +
+        `• **Isolation Guarantee**: Zero live database mutations; state isolated to in-memory session.\n` +
+        `• **Controls**: You can switch scenarios or reset the simulation back to pristine baseline at any time.`;
+      if (request.tools && request.tools.some((t) => t.name === "run_simulation_scenario")) {
+        toolCalls = [
+          {
+            id: `call_${Date.now()}`,
+            name: "run_simulation_scenario",
+            arguments: { scenarioId: "SCENARIO_01_DRIFT" },
+          },
+        ];
+      }
+    } else if (lower.includes("fraud") || lower.includes("anomaly") || lower.includes("iqr")) {
       textResponse =
         `**Brahma Anomaly Engine [SHAP Analysis & IQR Scoring]**\n\n` +
         `• **Evaluated Records**: 12,480 live transactions across the IEEE-CIS benchmark.\n` +
@@ -70,9 +176,12 @@ export class MockAIAdapter implements AIAdapter {
         `Analyzing request: "${lastUserMessage.slice(0, 80)}${lastUserMessage.length > 80 ? "..." : ""}"\n\n` +
         `The Brahma live analytics engine is fully synchronized. Available commands:\n` +
         `1. Run 12-stage analysis on current dataset\n` +
-        `2. Inspect data contracts and schema drift\n` +
-        `3. Review detected entity anomalies and SHAP attribution\n` +
-        `4. Simulate synthetic fraud surges in Demo Mode`;
+        `2. Detect architecture drift against blueprint\n` +
+        `3. Analyze change impact & blast radius\n` +
+        `4. Launch autonomous engineering missions\n` +
+        `5. Evaluate release policies & gates\n` +
+        `6. Review detected entity anomalies and SHAP attribution\n` +
+        `7. Simulate synthetic fraud surges in Demo Mode`;
     }
 
     const durationMs = Math.max(80, Date.now() - startTime);

@@ -36,7 +36,7 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PROJECT BRAHMA — From raw idea to validated software blueprint" },
+      { title: "VYRON — From raw idea to validated software blueprint" },
       {
         name: "description",
         content:
@@ -44,7 +44,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "PROJECT BRAHMA — From raw idea to validated software blueprint",
+        content: "VYRON — From raw idea to validated software blueprint",
       },
       {
         property: "og:description",
@@ -134,38 +134,31 @@ const stack = [
 function Nav() {
   const [open, setOpen] = useState(false);
   const links = [
-    { href: "/preview", label: "AI Tool Showcase", isRoute: true },
-    { href: "/github", label: "GitHub Mirror", isRoute: true },
-    { href: "#features", label: "Features", isRoute: false },
-    { href: "#how-it-works", label: "How it works", isRoute: false },
-    { href: "#technology", label: "Technology", isRoute: false },
+    { href: "/showcase#showcase", label: "AI Tool Showcase", isRoute: true },
+    { href: "/showcase#github", label: "GitHub Mirror", isRoute: true },
+    { href: "/showcase#features", label: "Features", isRoute: true },
+    { href: "/showcase#how-it-works", label: "How it works", isRoute: true },
+    { href: "/showcase#technology", label: "Technology", isRoute: true },
   ];
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3 sm:px-6">
         <BrahmaLogo />
         <nav className="ml-6 hidden items-center gap-6 md:flex" aria-label="Sections">
-          {links.map((l) =>
-            l.isRoute ? (
-              <Link
-                key={l.href}
-                to={l.href}
-                className="text-sm font-semibold text-cyan-400 hover:text-cyan-300 transition-colors"
-              >
-                {l.label}
-              </Link>
-            ) : (
-              <a
-                key={l.href}
-                href={l.href}
-                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {l.label}
-              </a>
-            ),
-          )}
+          {links.map((l) => (
+            <Link
+              key={l.href}
+              to={l.href}
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:text-primary"
+            >
+              {l.label}
+            </Link>
+          ))}
         </nav>
         <div className="ml-auto hidden items-center gap-2 md:flex">
+          <Button asChild variant="outline" size="sm" className="border-primary/30 text-primary hover:bg-primary/10">
+            <Link to="/showcase">Product Showcase</Link>
+          </Button>
           <Button asChild variant="ghost" size="sm">
             <Link to="/login">Login</Link>
           </Button>

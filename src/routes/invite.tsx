@@ -3,7 +3,7 @@ import { AlertCircle, CheckCircle2, Loader2, Lock, ShieldCheck } from "lucide-re
 import { useState, type FormEvent, useEffect } from "react";
 import { toast } from "sonner";
 
-import { AuthLayout, FieldError } from "@/routes/login";
+import { AuthLayout, FieldError } from "@/components/auth/auth-components";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

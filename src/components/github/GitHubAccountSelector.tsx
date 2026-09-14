@@ -21,10 +21,10 @@ import {
 } from "lucide-react";
 
 export interface GitHubAccountItem {
-  id?: string;
+  id?: string | undefined;
   login: string;
   type: "user" | "organization";
-  avatar_url?: string;
+  avatar_url?: string | undefined;
 }
 
 export interface GitHubAccountSelectorProps {

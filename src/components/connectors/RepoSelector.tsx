@@ -27,10 +27,9 @@ export function RepoSelector({
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const token = getStoredGitHubToken() || "gho_mock_default";
     setLoading(true);
 
-    Promise.all([listUserRepos(token), getUserOrganizations(token)])
+    Promise.all([listUserRepos(), getUserOrganizations()])
       .then(([reposData, orgsData]) => {
         setRepos(reposData);
         setOrgs(orgsData);

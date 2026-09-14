@@ -1,5 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { PublishWizardPage } from "./app.studio.$id.publish";
+import { createFileRoute } from "@tanstack/react-router";
+import { PublishWizardView } from "@/components/studio/PublishWizardView";
 
 export const Route = createFileRoute("/app/projects/$id/publish")({
   head: () => ({
@@ -11,5 +11,10 @@ export const Route = createFileRoute("/app/projects/$id/publish")({
       },
     ],
   }),
-  component: PublishWizardPage,
+  component: PublishProjectRoute,
 });
+
+function PublishProjectRoute() {
+  const { id } = Route.useParams();
+  return <PublishWizardView projectId={id} />;
+}

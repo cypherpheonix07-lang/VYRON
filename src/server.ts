@@ -1,5 +1,10 @@
 import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
+import { gatewayEngine } from "./server/ai/gatewayEngine";
+import { modelRegistry } from "./server/ai/modelRegistry";
+import { modelRouter } from "./server/ai/modelRouter";
+import { openAiServerAdapter } from "./server/ai/adapters/openAiServerAdapter";
+import { openRouterServerAdapter } from "./server/ai/adapters/openRouterServerAdapter";
 
 function renderFallbackErrorHtml(): string {
   return `<!doctype html>
@@ -73,9 +78,147 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+const jsonHeaders = {
+  "Content-Type": "application/json",
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
+
+async function handleAiServerRoutes(request: Request): Promise<Response | null> {
+  const url = new URL(request.url);
+  const path = url.pathname;
+
+  if (path === "/favicon.svg") {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#0B132B"/><path d="M16 6L24.66 11V21L16 26L7.34 21V11L16 6Z" stroke="#22D3EE" stroke-width="2.2" stroke-linejoin="round" fill="rgba(34, 211, 238, 0.15)"/><circle cx="16" cy="16" r="3" fill="#6366F1"/></svg>`;
+    return new Response(svg, {
+      status: 200,
+      headers: {
+        "Content-Type": "image/svg+xml",
+        "Cache-Control": "public, max-age=31536000, immutable",
+      },
+    });
+  }
+
+  if (path === "/favicon.ico") {
+    try {
+      const fs = await import("fs");
+      const pathModule = await import("path");
+      const iconPath = pathModule.resolve(process.cwd(), "public", "favicon.ico");
+      if (fs.existsSync(iconPath)) {
+        const buffer = fs.readFileSync(iconPath);
+        return new Response(buffer, {
+          status: 200,
+          headers: {
+            "Content-Type": "image/x-icon",
+            "Cache-Control": "public, max-age=31536000, immutable",
+          },
+        });
+      }
+    } catch {
+      // fallback to svg response if fs is unavailable
+    }
+    const fallbackSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#0B132B"/><path d="M16 6L24.66 11V21L16 26L7.34 21V11L16 6Z" stroke="#22D3EE" stroke-width="2.2" stroke-linejoin="round" fill="rgba(34, 211, 238, 0.15)"/><circle cx="16" cy="16" r="3" fill="#6366F1"/></svg>`;
+    return new Response(fallbackSvg, {
+      status: 200,
+      headers: {
+        "Content-Type": "image/svg+xml",
+        "Cache-Control": "public, max-age=31536000, immutable",
+      },
+    });
+  }
+
+  if (request.method === "OPTIONS" && path.startsWith("/api/ai")) {
+    return new Response(null, { status: 204, headers: jsonHeaders });
+  }
+
+  if (path === "/api/ai/health") {
+    const health = await gatewayEngine.getHealth();
+    return new Response(JSON.stringify(health), { status: 200, headers: jsonHeaders });
+  }
+
+  if (path === "/api/ai/models") {
+    const models = modelRegistry.listModels();
+    return new Response(JSON.stringify({ models }), { status: 200, headers: jsonHeaders });
+  }
+
+  if (path === "/api/ai/observability") {
+    const metrics = gatewayEngine.getObservability();
+    return new Response(JSON.stringify(metrics), { status: 200, headers: jsonHeaders });
+  }
+
+  if (path === "/api/ai/test-connection" && request.method === "POST") {
+    try {
+      const body = await request.json();
+      const provider = body.provider;
+      if (provider === "openai") {
+        const result = await openAiServerAdapter.healthCheck();
+        return new Response(JSON.stringify(result), { status: 200, headers: jsonHeaders });
+      } else if (provider === "openrouter") {
+        const result = await openRouterServerAdapter.healthCheck();
+        return new Response(JSON.stringify(result), { status: 200, headers: jsonHeaders });
+      } else {
+        return new Response(
+          JSON.stringify({ error: "Unknown provider" }),
+          { status: 400, headers: jsonHeaders },
+        );
+      }
+    } catch (err: unknown) {
+      return new Response(
+        JSON.stringify({ error: (err as Error).message }),
+        { status: 500, headers: jsonHeaders },
+      );
+    }
+  }
+
+  if (path === "/api/ai/override-policy" && request.method === "POST") {
+    try {
+      const body = await request.json();
+      const { task, provider, model } = body;
+      if (task && provider && model) {
+        modelRouter.setAdminOverride(task, provider, model);
+        return new Response(
+          JSON.stringify({ ok: true, message: `Admin override applied for task ${task}` }),
+          { status: 200, headers: jsonHeaders },
+        );
+      }
+      return new Response(
+        JSON.stringify({ ok: false, message: "Missing required fields" }),
+        { status: 400, headers: jsonHeaders },
+      );
+    } catch (err: unknown) {
+      return new Response(
+        JSON.stringify({ error: (err as Error).message }),
+        { status: 500, headers: jsonHeaders },
+      );
+    }
+  }
+
+  if (path === "/api/ai/gateway" && request.method === "POST") {
+    try {
+      const body = await request.json();
+      const response = await gatewayEngine.execute(body);
+      return new Response(JSON.stringify(response), { status: 200, headers: jsonHeaders });
+    } catch (err: unknown) {
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: { code: "GATEWAY_ERROR", message: (err as Error).message },
+        }),
+        { status: 500, headers: jsonHeaders },
+      );
+    }
+  }
+
+  return null;
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const aiResponse = await handleAiServerRoutes(request);
+      if (aiResponse) return aiResponse;
+
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
@@ -88,3 +231,4 @@ export default {
     }
   },
 };
+

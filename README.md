@@ -3,30 +3,30 @@
 <br/>
 
 ```
-██████╗ ██████╗  █████╗ ██╗  ██╗███╗   ███╗ █████╗
-██╔══██╗██╔══██╗██╔══██╗██║  ██║████╗ ████║██╔══██╗
-██████╔╝██████╔╝███████║███████║██╔████╔██║███████║
-██╔══██╗██╔══██╗██╔══██║██╔══██║██║╚██╔╝██║██╔══██║
-██████╔╝██║  ██║██║  ██║██║  ██║██║ ╚═╝ ██║██║  ██║
-╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝
+██╗   ██╗██╗   ██╗██████╗  ██████╗ ███╗   ██╗
+██║   ██║╚██╗ ██╔╝██╔══██╗██╔═══██╗████╗  ██║
+██║   ██║ ╚████╔╝ ██████╔╝██║   ██║██╔██╗ ██║
+╚██╗ ██╔╝  ╚██╔╝  ██╔══██╗██║   ██║██║╚██╗██║
+ ╚████╔╝    ██║   ██║  ██║╚██████╔╝██║ ╚████║
+  ╚═══╝     ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
 ```
 
-### **Blueprint-driven Requirements Architecture Health Monitoring Agent**
+### **Enterprise Engineering Intelligence, Architecture Governance & Code Quality Platform**
 
 *From raw idea to validated software blueprint — in minutes.*
 
 <br/>
 
 [![](https://img.shields.io/badge/STATUS-ACTIVE_DEVELOPMENT-22D3EE?style=for-the-badge&labelColor=0B1220)](https://github.com/cypherpheonix07-lang)
-[![](https://img.shields.io/badge/VERSION-1.0.0-6366F1?style=for-the-badge&labelColor=0B1220)](https://github.com/cypherpheonix07-lang)
+[![](https://img.shields.io/badge/VERSION-2.5.0-6366F1?style=for-the-badge&labelColor=0B1220)](https://github.com/cypherpheonix07-lang)
 [![](https://img.shields.io/badge/LICENSE-MIT-22C55E?style=for-the-badge&labelColor=0B1220)](LICENSE)
 
 <br/>
 
-[![React](https://img.shields.io/badge/React_18-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev)
+[![React](https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript_5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_3-0F172A?style=flat-square&logo=tailwindcss&logoColor=38BDF8)](https://tailwindcss.com)
-[![Vite](https://img.shields.io/badge/Vite_5-646CFF?style=flat-square&logo=vite&logoColor=FFD62E)](https://vitejs.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_4-0F172A?style=flat-square&logo=tailwindcss&logoColor=38BDF8)](https://tailwindcss.com)
+[![Vite](https://img.shields.io/badge/Vite_8-646CFF?style=flat-square&logo=vite&logoColor=FFD62E)](https://vitejs.dev)
 [![Supabase](https://img.shields.io/badge/Supabase-1C1C1C?style=flat-square&logo=supabase&logoColor=3ECF8E)](https://supabase.com)
 
 <br/>
@@ -39,13 +39,13 @@
 
 ---
 
-## What is PROJECT BRAHMA?
+## What is VYRON?
 
 Most software teams juggle 6+ tools to go from idea to shipped product — a requirements doc here, an architecture diagram there, a separate security scanner, another risk spreadsheet, and no single place where it all connects.
 
-**BRAHMA collapses that stack into one platform.**
+**VYRON collapses that stack into one platform.**
 
-Feed it a raw project idea or an SRS document. BRAHMA extracts structured requirements, generates a validated architecture blueprint, analyzes code quality and security posture, predicts delivery risk, and maps every technical issue to its business impact — all inside a single enterprise-grade dashboard.
+Feed it a raw project idea or an SRS document. VYRON extracts structured requirements, generates a validated architecture blueprint, analyzes code quality and security posture, predicts delivery risk, and maps every technical issue to its business impact — all inside a single enterprise-grade dashboard.
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -55,7 +55,7 @@ Feed it a raw project idea or an SRS document. BRAHMA extracts structured requir
                             │
                             ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                   BRAHMA INTELLIGENCE                       │
+│                    VYRON INTELLIGENCE                       │
 │                                                             │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────┐  │
 │  │ Requirements │  │ Architecture │  │   Business KPI   │  │

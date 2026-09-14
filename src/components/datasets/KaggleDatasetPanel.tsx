@@ -14,6 +14,7 @@ import { KaggleConnector, KaggleDatasetMetadata } from "@/services/connectors/ka
 import { Button } from "@/components/ui/button";
 import { analysisOrchestrator } from "@/services/orchestrator/analysisOrchestrator";
 import { useAnalysisStream } from "@/state/analysis/useAnalysisStream";
+import { InlineCopilotAssistant } from "@/components/copilot/InlineCopilotAssistant";
 import { cn } from "@/lib/utils";
 
 export function KaggleDatasetPanel({ className }: { className?: string }) {
@@ -88,6 +89,9 @@ export function KaggleDatasetPanel({ className }: { className?: string }) {
           </Button>
         </form>
       </div>
+
+      {/* Embedded Contextual Copilot Intelligence */}
+      <InlineCopilotAssistant pageContext="datasets" />
 
       {/* Dataset Grid & Schema Inspector */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
