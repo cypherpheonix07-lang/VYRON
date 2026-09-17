@@ -2,7 +2,7 @@
   "v1": {
     "name": "V1: Realtime Latency (<2s)",
     "pass": true,
-    "details": "Broadcast ping-to-receive roundtrip confirmed: 39ms (< 2000ms threshold)."
+    "details": "Broadcast ping-to-receive roundtrip confirmed: 30ms (< 2000ms threshold)."
   },
   "v2": {
     "name": "V2: Pause Buffer Control",
@@ -22,7 +22,7 @@
   "v5": {
     "name": "V5: 1000-Event Stream Performance",
     "pass": true,
-    "details": "Processed and partitioned 1,000 events in 2.86ms (< 50ms requirement), ensuring rock-solid 60fps rendering in virtualized view."
+    "details": "Processed and partitioned 1,000 events in 3.11ms (< 50ms requirement), ensuring rock-solid 60fps rendering in virtualized view."
   },
   "v6": {
     "name": "V6: CSV Export Honors Active Filters",

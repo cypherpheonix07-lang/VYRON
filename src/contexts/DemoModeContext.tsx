@@ -82,6 +82,35 @@ export function DemoModeProvider({ children }: { children: ReactNode }) {
     }
   }, [session.isDemo]);
 
+  // Two-way reactive synchronization: Subscribe to external modeStore changes
+  useEffect(() => {
+    return modeStore.subscribe((state) => {
+      const shouldBeDemo = state.mode === "DEMO";
+      setSession((prev) => {
+        if (prev.isDemo === shouldBeDemo) return prev;
+        const updated = {
+          isDemo: shouldBeDemo,
+          demoProjectId: shouldBeDemo ? prev.demoProjectId || "demo-project-brahma-showcase" : null,
+          demoDomain: prev.demoDomain || "fintech",
+          activatedAt: shouldBeDemo ? prev.activatedAt || Date.now() : 0,
+          demoSessionId: shouldBeDemo ? prev.demoSessionId || crypto.randomUUID() : "",
+        };
+        if (typeof window !== "undefined") {
+          if (shouldBeDemo) {
+            sessionStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+            window.dispatchEvent(
+              new CustomEvent("brahma:demo:activated", { detail: updated }),
+            );
+          } else {
+            sessionStorage.removeItem(STORAGE_KEY);
+            window.dispatchEvent(new CustomEvent("brahma:demo:deactivated"));
+          }
+        }
+        return updated;
+      });
+    });
+  }, []);
+
   const saveSession = (newSession: typeof session) => {
     setSession(newSession);
     modeStore.setMode(newSession.isDemo ? "DEMO" : "NORMAL");

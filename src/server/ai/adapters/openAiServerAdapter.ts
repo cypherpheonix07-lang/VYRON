@@ -19,7 +19,11 @@ function computeSha256(data: unknown): string {
   return crypto.createHash("sha256").update(jsonStr).digest("hex");
 }
 
-export class OpenAiServerAdapter {
+import { IAIProvider, ProviderCapabilities } from "../providers/types";
+
+export class OpenAiServerAdapter implements IAIProvider {
+  public readonly id: "openai" = "openai";
+  public readonly name = "OpenAI Direct";
   private static instance: OpenAiServerAdapter | null = null;
   private readonly baseUrl = "https://api.openai.com/v1";
 
@@ -30,6 +34,25 @@ export class OpenAiServerAdapter {
       OpenAiServerAdapter.instance = new OpenAiServerAdapter();
     }
     return OpenAiServerAdapter.instance;
+  }
+
+  public getCapabilities(): ProviderCapabilities {
+    return {
+      providerId: "openai",
+      name: "OpenAI Direct API Engine",
+      streaming: true,
+      toolCalling: true,
+      structuredOutput: true,
+      multimodal: true,
+      defaultModel: "gpt-4o",
+      fallbackProvider: "openrouter",
+      supportedModels: [
+        "gpt-4o",
+        "gpt-4o-mini",
+        "o1-preview",
+        "o3-mini",
+      ],
+    };
   }
 
   private getApiKey(): string | undefined {
@@ -323,6 +346,21 @@ export class OpenAiServerAdapter {
         recoverable: true,
       },
     };
+  }
+
+  public async generate(request: InferenceRequest): Promise<InferenceResponse> {
+    return this.complete(request);
+  }
+
+  public async generateStructured<T>(
+    request: InferenceRequest,
+    schema: Record<string, unknown>,
+  ): Promise<InferenceResponse<T>> {
+    const enrichedRequest: InferenceRequest = {
+      ...request,
+      structuredOutputSchema: schema,
+    };
+    return (await this.complete(enrichedRequest)) as InferenceResponse<T>;
   }
 }
 

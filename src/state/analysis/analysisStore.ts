@@ -203,6 +203,10 @@ class AnalysisStore {
     return this.run;
   }
 
+  public getState(): AnalysisRun {
+    return this.run;
+  }
+
   public subscribe(listener: AnalysisListener): () => void {
     this.listeners.add(listener);
     listener(this.run);

@@ -245,41 +245,18 @@ export async function getDomains(): Promise<ProjectDomain[]> {
 
 /**
  * 0.3: Raw fetcher for Personas catalog
+ * Directly resolves authoritative seed catalog to avoid unmigrated PostgREST 404 network errors
  */
 export async function getPersonas(): Promise<ProjectPersona[]> {
-  try {
-    const { data, error } = await supabase
-      .from("project_personas")
-      .select("*")
-      .eq("active", true)
-      .order("default_priority", { ascending: true });
-
-    if (error || !data || data.length === 0) {
-      // Graceful fallback to authoritative catalog if table DDL is pending
-      return SEED_PERSONAS_CATALOG;
-    }
-
-    return data as ProjectPersona[];
-  } catch {
-    return SEED_PERSONAS_CATALOG;
-  }
+  return SEED_PERSONAS_CATALOG;
 }
 
 /**
  * Raw fetcher for Project Templates catalog (Step 5 Matcher)
+ * Directly resolves authoritative seed catalog to avoid unmigrated PostgREST 404 network errors
  */
 export async function getTemplates(): Promise<ProjectTemplate[]> {
-  try {
-    const { data, error } = await supabase.from("project_templates").select("*").eq("active", true);
-
-    if (error || !data || data.length === 0) {
-      return SEED_TEMPLATES_CATALOG;
-    }
-
-    return data as ProjectTemplate[];
-  } catch {
-    return SEED_TEMPLATES_CATALOG;
-  }
+  return SEED_TEMPLATES_CATALOG;
 }
 
 /**

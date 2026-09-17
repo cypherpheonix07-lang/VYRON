@@ -14,9 +14,14 @@ export * from "./githubConnector";
 export * from "./figmaConnector";
 export * from "./notionConnector";
 export * from "./customMcpConnector";
+export * from "./connectorCatalog";
+export * from "./connectorFabric";
+export * from "./connectorToolBroker";
+export * from "./connectorMarketplace";
 
 export const kaggleConnector = new KaggleConnector();
 export const gitHubConnector = new GitHubConnector();
 export const figmaConnector = new FigmaConnector();
 export const notionConnector = new NotionConnector();
 export const customMcpConnector = new CustomMcpConnector();
+

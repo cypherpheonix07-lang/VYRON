@@ -11,3 +11,4 @@ export * from "./copilotRealtimeListener";
 export * from "./copilotProactiveEngine";
 export * from "./copilotPlanner";
 export * from "./copilotExecutionEngine";
+export * from "./copilotDispatcher";

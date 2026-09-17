@@ -11,6 +11,7 @@ export default tseslint.config(
       "dist",
       ".output",
       ".vinxi",
+      ".chrome-demo-profile",
       "brahma-engine",
       "supabase/functions",
       "routeTree.gen.ts",

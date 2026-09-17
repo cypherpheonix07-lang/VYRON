@@ -101,20 +101,7 @@ export function InlineCopilotAssistant({
 
   const handlePromptClick = async (promptText: string) => {
     setDrawerOpen(true);
-    if (copilotPlanner.isComplexGoal(promptText)) {
-      setActiveTab("plan");
-      const plan = copilotPlanner.formulatePlan(promptText, mode);
-      setActivePlan(plan);
-      toast.success(`Formulated dynamic plan: ${plan.goal}`);
-      setIsExecuting(true);
-      try {
-        await copilotExecutionEngine.executePlan(plan, mode);
-      } finally {
-        setIsExecuting(false);
-      }
-    } else {
-      sendMessage(promptText);
-    }
+    sendMessage(promptText);
     if (onActionTriggered) onActionTriggered(promptText);
   };
 
@@ -124,21 +111,7 @@ export function InlineCopilotAssistant({
     const text = query.trim();
     setQuery("");
     setDrawerOpen(true);
-
-    if (copilotPlanner.isComplexGoal(text)) {
-      setActiveTab("plan");
-      const plan = copilotPlanner.formulatePlan(text, mode);
-      setActivePlan(plan);
-      toast.success(`Formulated dynamic plan: ${plan.goal}`);
-      setIsExecuting(true);
-      try {
-        await copilotExecutionEngine.executePlan(plan, mode);
-      } finally {
-        setIsExecuting(false);
-      }
-    } else {
-      sendMessage(text);
-    }
+    sendMessage(text);
     if (onActionTriggered) onActionTriggered(text);
   };
 

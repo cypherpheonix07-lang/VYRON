@@ -1,22 +1,33 @@
 /**
- * PROJECT BRAHMA — ENGINEERING MISSION ENGINE
+ * PROJECT BRAHMA / VYRON — ENGINEERING MISSION ENGINE (PHASE 07)
  * High-level goal-oriented autonomous execution units.
  * Organizes multi-step plans, specialist agent assignments, collected evidence,
- * human approvals, and cryptographic audit seals.
+ * human approvals, cryptographic audit seals, and durable learning.
+ *
+ * 10 Mission Lifecycle States:
+ * CREATED | PLANNED | RUNNING | BLOCKED | AWAITING_APPROVAL | COMPLETED | VERIFIED | FAILED | CANCELLED | LEARNED
+ *
  * Strictly ZERO SQL.
  */
 
 import { generateVerificationHash } from "@/services/ai/cryptoUtils";
 import { SpecialistAgentType } from "@/services/copilot/copilotAgentOrchestrator";
+import { UserAuthority } from "@/types/engineeringEntity";
 
 export type MissionStatus =
+  | "CREATED"
+  | "PLANNED"
   | "PLANNING"
+  | "RUNNING"
   | "IN_PROGRESS"
   | "PAUSED"
+  | "BLOCKED"
   | "AWAITING_APPROVAL"
   | "COMPLETED"
+  | "VERIFIED"
+  | "FAILED"
   | "CANCELLED"
-  | "FAILED";
+  | "LEARNED";
 
 export interface MissionTaskStep {
   id: string;
@@ -36,12 +47,22 @@ export interface EngineeringMission {
   priority: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
   projectId: string;
   creator: string;
+  authority?: UserAuthority | undefined;
+  constraints?: string[] | undefined;
+  evidenceRequirements?: string[] | undefined;
+  successCriteria?: string[] | undefined;
+  failureCriteria?: string[] | undefined;
+  timeBudgetMs?: number | undefined;
+  costBudgetUsd?: number | undefined;
+  confidenceTarget?: number | undefined;
   steps: MissionTaskStep[];
   currentStepIndex: number;
   evidence: Array<{ id: string; title: string; hash: string }>;
   findings: Array<{ id: string; description: string; severity: string }>;
   artifacts: Array<{ id: string; name: string; type: string; url: string }>;
   verificationHash?: string | undefined;
+  verifiedBy?: string | undefined;
+  learnings?: string[] | undefined;
   startedAt: string;
   completedAt?: string | undefined;
 }
@@ -68,6 +89,10 @@ export class MissionEngine {
     priority?: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW" | undefined;
     projectId?: string | undefined;
     creator?: string | undefined;
+    authority?: UserAuthority | undefined;
+    constraints?: string[] | undefined;
+    evidenceRequirements?: string[] | undefined;
+    successCriteria?: string[] | undefined;
     steps?: MissionTaskStep[] | undefined;
   }): EngineeringMission {
     const id = `msn_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
@@ -102,6 +127,10 @@ export class MissionEngine {
       priority: params.priority || "HIGH",
       projectId: params.projectId || "proj-brahma",
       creator: params.creator || "AI Copilot Orchestrator",
+      authority: params.authority || "STAFF_ENGINEER",
+      constraints: params.constraints || ["Zero raw SQL", "Strict dual-mode isolation"],
+      evidenceRequirements: params.evidenceRequirements || ["AST validation", "Security proof"],
+      successCriteria: params.successCriteria || ["All steps passed with verification seal"],
       steps: defaultSteps,
       currentStepIndex: 0,
       evidence: [],
@@ -152,13 +181,40 @@ export class MissionEngine {
     this.notify();
   }
 
+  public verifyMission(missionId: string, verifiedBy: string): void {
+    const mission = this.missions.find((m) => m.id === missionId);
+    if (!mission) return;
+
+    mission.status = "VERIFIED";
+    mission.verifiedBy = verifiedBy;
+    this.notify();
+  }
+
+  public learnMission(missionId: string, learnings: string[]): void {
+    const mission = this.missions.find((m) => m.id === missionId);
+    if (!mission) return;
+
+    mission.status = "LEARNED";
+    mission.learnings = learnings;
+    this.notify();
+  }
+
+  public blockMission(missionId: string, reason: string): void {
+    const mission = this.missions.find((m) => m.id === missionId);
+    if (!mission) return;
+
+    mission.status = "BLOCKED";
+    mission.findings.push({ id: `blocker_${Date.now()}`, description: reason, severity: "CRITICAL" });
+    this.notify();
+  }
+
   public advanceStep(
     missionId: string,
     resultSummary: string,
     evidenceTitle?: string,
   ): void {
     const mission = this.missions.find((m) => m.id === missionId);
-    if (!mission || mission.status !== "IN_PROGRESS") return;
+    if (!mission || (mission.status !== "IN_PROGRESS" && mission.status !== "RUNNING")) return;
 
     const cur = mission.steps[mission.currentStepIndex];
     if (cur) {
@@ -231,6 +287,7 @@ export class MissionEngine {
         priority: "CRITICAL",
         projectId: "proj-brahma",
         creator: "Chief Architect (Puli Phanindhra)",
+        authority: "CHIEF_ARCHITECT",
         currentStepIndex: 2,
         startedAt: "2026-09-12T10:00:00Z",
         completedAt: "2026-09-12T10:04:15Z",
@@ -280,6 +337,7 @@ export class MissionEngine {
         priority: "HIGH",
         projectId: "proj-brahma",
         creator: "Copilot Autonomous Engine",
+        authority: "STAFF_ENGINEER",
         currentStepIndex: 1,
         startedAt: new Date().toISOString(),
         steps: [

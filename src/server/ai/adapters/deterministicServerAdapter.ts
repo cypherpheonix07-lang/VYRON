@@ -13,7 +13,11 @@ function computeSha256(data: unknown): string {
   return crypto.createHash("sha256").update(jsonStr).digest("hex");
 }
 
-export class DeterministicServerAdapter {
+import { IAIProvider, ProviderCapabilities } from "../providers/types";
+
+export class DeterministicServerAdapter implements IAIProvider {
+  public readonly id: "deterministic" = "deterministic";
+  public readonly name = "Deterministic Fallback Engine";
   private static instance: DeterministicServerAdapter | null = null;
 
   private constructor() {}
@@ -23,6 +27,23 @@ export class DeterministicServerAdapter {
       DeterministicServerAdapter.instance = new DeterministicServerAdapter();
     }
     return DeterministicServerAdapter.instance;
+  }
+
+  public getCapabilities(): ProviderCapabilities {
+    return {
+      providerId: "deterministic",
+      name: "Deterministic Offline Synthesis Engine",
+      streaming: false,
+      toolCalling: true,
+      structuredOutput: true,
+      multimodal: false,
+      defaultModel: "deterministic-v2",
+      fallbackProvider: "deterministic",
+      supportedModels: [
+        "deterministic-v2",
+        "deterministic-offline",
+      ],
+    };
   }
 
   public isConfigured(): boolean {
@@ -277,6 +298,21 @@ export class DeterministicServerAdapter {
       sha256,
       error: null,
     };
+  }
+
+  public async generate(request: InferenceRequest): Promise<InferenceResponse> {
+    return this.complete(request);
+  }
+
+  public async generateStructured<T>(
+    request: InferenceRequest,
+    schema: Record<string, unknown>,
+  ): Promise<InferenceResponse<T>> {
+    const enrichedRequest: InferenceRequest = {
+      ...request,
+      structuredOutputSchema: schema,
+    };
+    return (await this.complete(enrichedRequest)) as InferenceResponse<T>;
   }
 }
 

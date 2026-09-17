@@ -31,7 +31,7 @@ if (existsSync(envPath)) {
 
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL || env.VITE_SUPABASE_URL;
 const SUPABASE_KEY =
-  process.env.SUPABASE_SECRET_KEY || env.SUPABASE_SECRET_KEY || env.VITE_SUPABASE_ANON_KEY;
+  process.env.VITE_SUPABASE_ANON_KEY || env.VITE_SUPABASE_ANON_KEY || env.SUPABASE_PUBLISHABLE_KEY;
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 

@@ -4,7 +4,7 @@ import { AnalysisDashboardView } from "@/components/analysis/AnalysisDashboardVi
 export const Route = createFileRoute("/app/analysis")({
   head: () => ({
     meta: [
-      { title: "Live 12-Stage Analysis — PROJECT BRAHMA" },
+      { title: "Live 12-Stage Analysis — VYRON" },
       {
         name: "description",
         content:

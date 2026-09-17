@@ -4,7 +4,7 @@ import { ConnectorRegistryView } from "@/components/connectors/ConnectorRegistry
 export const Route = createFileRoute("/app/connectors")({
   head: () => ({
     meta: [
-      { title: "MCP Connectors — PROJECT BRAHMA" },
+      { title: "MCP Connectors — VYRON" },
       {
         name: "description",
         content: "Manage Model Context Protocol integrations and granular tool authorizations.",

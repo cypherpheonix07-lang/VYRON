@@ -9,6 +9,7 @@ import {
   CopilotAction,
 } from "./copilotStore";
 import { useAppMode } from "../mode/useAppMode";
+import { copilotDispatcher } from "@/services/copilot/copilotDispatcher";
 
 export function useCopilot() {
   const { mode } = useAppMode();
@@ -41,13 +42,16 @@ export function useCopilot() {
     [mode],
   );
 
+  const submitPrompt = useCallback(
+    async (text: string, options?: import("@/services/copilot/copilotDispatcher").DispatchOptions) => {
+      await copilotDispatcher.dispatch(text, { mode, ...options });
+    },
+    [mode],
+  );
+
   const sendMessage = useCallback(
     (text: string, metadata?: CopilotMessage["metadata"]) => {
-      copilotStore.addMessage(mode, {
-        sender: "USER",
-        text,
-        metadata,
-      });
+      void copilotDispatcher.dispatch(text, { mode, metadata });
     },
     [mode],
   );
@@ -112,6 +116,13 @@ export function useCopilot() {
     isLoading: currentSession.isLoading,
     activeModel: currentSession.activeModel,
     activeSpecialist: currentSession.activeSpecialist,
+    thinkingMode: currentSession.thinkingMode,
+    thinkingDepth: currentSession.thinkingDepth,
+    responseDetail: currentSession.responseDetail,
+    evidenceMode: currentSession.evidenceMode,
+    toolDepth: currentSession.toolDepth,
+    activeSkills: currentSession.activeSkills,
+    activeConnectors: currentSession.activeConnectors,
     pendingApproval: currentSession.pendingApproval,
     activePlan: currentSession.activePlan,
     executionStatus: currentSession.executionStatus,
@@ -120,12 +131,23 @@ export function useCopilot() {
     setActiveTab,
     setModel,
     sendMessage,
+    submitPrompt,
     addAssistantMessage,
     setLoading,
     setPendingApproval,
     setActivePlan,
     updatePlanStep,
     setExecutionStatus,
+    setThinkingMode: (tm: import("./copilotStore").ThinkingState) => copilotStore.setThinkingMode(mode, tm),
+    setThinkingDepth: (td: import("./copilotStore").ThinkingDepthLevel) => copilotStore.setThinkingDepth(mode, td),
+    setResponseDetail: (rd: import("./copilotStore").ResponseDetailLevel) => copilotStore.setResponseDetail(mode, rd),
+    setEvidenceMode: (em: import("./copilotStore").EvidenceMode) => copilotStore.setEvidenceMode(mode, em),
+    setToolDepth: (td: number) => copilotStore.setToolDepth(mode, td),
+    setActiveSkills: (skills: string[]) => copilotStore.setActiveSkills(mode, skills),
+    toggleActiveSkill: (skillId: string) => copilotStore.toggleActiveSkill(mode, skillId),
+    setActiveConnectors: (conns: string[]) => copilotStore.setActiveConnectors(mode, conns),
+    toggleActiveConnector: (connId: string) => copilotStore.toggleActiveConnector(mode, connId),
     clearMessages,
   };
 }
+

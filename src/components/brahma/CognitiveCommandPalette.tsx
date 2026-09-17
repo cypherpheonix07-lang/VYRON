@@ -3,6 +3,8 @@ import { Search, Terminal, Zap, Shield, Sparkles, X } from 'lucide-react';
 import { starkDB, type ConceptRecord } from '../../kernel/db';
 import { JailbreakProtocol } from '../../anti/jailbreak';
 import { SensoryIntegrationLayer } from '../../void/sensory';
+import { copilotDispatcher } from '../../services/copilot/copilotDispatcher';
+import { copilotStore } from '../../state/copilot/copilotStore';
 
 interface CognitiveCommandPaletteProps {
   isOpen: boolean;
@@ -36,11 +38,17 @@ export function CognitiveCommandPalette({ isOpen, onClose, onSelectConcept }: Co
 
   const handleCommandSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!query.trim()) return;
     if (query.startsWith(':')) {
       const res = JailbreakProtocol.executeCommand(query);
       setTerminalOutput(res.output);
       SensoryIntegrationLayer.triggerHaptic('warning_shock');
       SensoryIntegrationLayer.playCognitiveChime(520, 0.3);
+    } else {
+      const naturalQuery = query.trim();
+      copilotStore.setDrawerOpen(true);
+      onClose();
+      void copilotDispatcher.dispatch(naturalQuery);
     }
   };
 

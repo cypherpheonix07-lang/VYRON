@@ -2,6 +2,7 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Bell,
   ChevronRight,
+  ChevronDown,
   FileBarChart2,
   FolderKanban,
   LayoutDashboard,
@@ -40,6 +41,11 @@ import {
   GitPullRequest,
   FlaskConical,
   Layers,
+  Brain,
+  Server,
+  Terminal,
+  BarChart3,
+  CheckSquare,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode, useRef } from "react";
 import { toast } from "sonner";
@@ -67,6 +73,7 @@ import {
 } from "@/components/ui/select";
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth, useTheme } from "@/lib/auth";
+import { useAppMode } from "@/state/mode/useAppMode";
 import { DemoModeToggle } from "@/components/ui/DemoModeToggle";
 import { DemoBanner } from "@/components/demo/DemoBanner";
 import { CopilotDrawer } from "@/components/copilot/CopilotDrawer";
@@ -76,6 +83,7 @@ import { notifications as mockNotifications, projects as mockProjects } from "@/
 import { cn } from "@/lib/utils";
 import { useProjects } from "@/hooks/useProjects";
 import { WorkspacePulse } from "./WorkspacePulse";
+import { copilotRealtimeListener } from "@/services/copilot/copilotRealtimeListener";
 
 const labelMap: Record<string, string> = {
   app: "Dashboard",
@@ -108,7 +116,137 @@ const labelMap: Record<string, string> = {
   simulation: "Simulation Lab",
 };
 
-// Grouped Sidebar configuration
+export interface NavItem {
+  to: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  exact?: boolean;
+}
+
+export interface NavDomain {
+  id: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  items: NavItem[];
+  adminOnly?: boolean;
+}
+
+// 11 Core Engineering Domains
+export const NAV_DOMAINS: NavDomain[] = [
+  {
+    id: "discover",
+    label: "DISCOVER",
+    icon: Compass,
+    items: [
+      { to: "/app", label: "Command Center", icon: LayoutDashboard, exact: true },
+      { to: "/app/search", label: "Global Search", icon: Search, exact: false },
+      { to: "/app/activity", label: "Activity Feed", icon: Activity, exact: true },
+      { to: "/app/notifications", label: "Notifications", icon: Bell, exact: true },
+    ],
+  },
+  {
+    id: "engineering",
+    label: "ENGINEERING",
+    icon: FolderKanban,
+    items: [
+      { to: "/app/projects", label: "All Projects", icon: FolderKanban, exact: true },
+      { to: "/app/projects/new", label: "New Project", icon: PlusCircle, exact: true },
+      { to: "/app/studio/templates", label: "Project Templates", icon: Layers, exact: false },
+    ],
+  },
+  {
+    id: "intelligence",
+    label: "INTELLIGENCE",
+    icon: Brain,
+    items: [
+      { to: "/discover", label: "ATLAS Knowledge Graph", icon: Sparkles, exact: false },
+      { to: "/app/drift", label: "Architecture Drift", icon: Compass, exact: false },
+      { to: "/app/impact", label: "Change Impact", icon: GitPullRequest, exact: false },
+      { to: "/app/missions", label: "Decisions & Missions", icon: Target, exact: false },
+    ],
+  },
+  {
+    id: "analysis",
+    label: "ANALYSIS",
+    icon: Activity,
+    items: [
+      { to: "/app/analysis", label: "Live 12-Stage Analysis", icon: Activity, exact: false },
+      { to: "/app/reports", label: "Reports & Findings", icon: FileBarChart2, exact: true },
+      { to: "/app/preview", label: "AI Showcase", icon: Eye, exact: true },
+    ],
+  },
+  {
+    id: "release",
+    label: "RELEASE",
+    icon: ShieldCheck,
+    items: [
+      { to: "/app/missions", label: "Release Gates", icon: ShieldCheck, exact: false },
+      { to: "/app/exports", label: "Export Center", icon: Download, exact: true },
+    ],
+  },
+  {
+    id: "simulation",
+    label: "SIMULATION",
+    icon: FlaskConical,
+    items: [
+      { to: "/app/simulation", label: "Simulation Lab", icon: FlaskConical, exact: false },
+    ],
+  },
+  {
+    id: "ai",
+    label: "AI",
+    icon: Bot,
+    items: [
+      { to: "/app/chat", label: "Copilot Studio", icon: Bot, exact: false },
+      { to: "/app/studio", label: "AI Studio", icon: Sparkles, exact: false },
+      { to: "/app/admin/models", label: "Model Governance", icon: Brain, exact: false },
+    ],
+  },
+  {
+    id: "integrations",
+    label: "INTEGRATIONS",
+    icon: Cable,
+    items: [
+      { to: "/app/datasets", label: "Kaggle Datasets", icon: Database, exact: false },
+      { to: "/app/connectors", label: "MCP Connectors", icon: Cable, exact: false },
+      { to: "/app/plugins", label: "Plugin Center", icon: Puzzle, exact: false },
+      { to: "/app/github", label: "GitHub Mirror", icon: Github, exact: false },
+      { to: "/app/integrations", label: "Integrations Hub", icon: Cable, exact: true },
+    ],
+  },
+  {
+    id: "governance",
+    label: "GOVERNANCE",
+    icon: ShieldAlert,
+    items: [
+      { to: "/app/admin/audit", label: "Audit Trail", icon: ShieldAlert, exact: false },
+      { to: "/app/team", label: "Team & Access Control", icon: Users, exact: true },
+    ],
+  },
+  {
+    id: "platform",
+    label: "PLATFORM",
+    icon: Settings,
+    items: [
+      { to: "/app/settings", label: "Settings & Health", icon: Settings, exact: true },
+      { to: "/app/admin/usage", label: "Usage & Telemetry", icon: BarChart3, exact: false },
+    ],
+  },
+  {
+    id: "admin",
+    label: "ADMIN",
+    icon: ShieldCheck,
+    adminOnly: true,
+    items: [
+      { to: "/app/admin", label: "Admin Console", icon: ShieldCheck, exact: true },
+      { to: "/app/admin/users", label: "User Directory", icon: Users, exact: false },
+      { to: "/app/admin/queue", label: "Task Queue", icon: Server, exact: false },
+      { to: "/app/admin/schema", label: "Schema Inspector", icon: Database, exact: false },
+    ],
+  },
+];
+
+// Preserved grouped navigation alias for mobile bar & backward compatibility
 const navGroups = [
   {
     label: "MAIN",
@@ -156,97 +294,251 @@ function NavList({
   collapsed?: boolean | undefined;
 }) {
   const { user } = useAuth();
+  const { mode } = useAppMode();
   const isAdmin = user?.role === "Admin";
   const { draftCount, projects: liveProjects } = useProjects();
   const availableProjects = liveProjects.length > 0 ? liveProjects : mockProjects;
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
-  const systemGroupItems = [
-    { to: "/app/settings", label: "Settings", icon: Settings, exact: true },
-    ...(isAdmin
-      ? ([{ to: "/app/admin", label: "Admin console", icon: ShieldCheck, exact: false }] as const)
-      : []),
-  ];
+  // Contextual Mode Detection
+  const isSimulationRoute = pathname === "/app/simulation";
+  const projectRouteMatch = pathname.match(/^\/app\/projects\/([a-zA-Z0-9_-]+)/);
+  const activeProjectId = projectRouteMatch && projectRouteMatch[1] !== "new" ? projectRouteMatch[1] : null;
+  const focusedProject = activeProjectId ? availableProjects.find((p) => p.id === activeProjectId) : null;
+
+  // 4 Contextual Navigation Modes: GLOBAL, PROJECT, SIMULATION, DEMO
+  const contextualNavMode: "GLOBAL" | "PROJECT" | "SIMULATION" | "DEMO" =
+    mode === "DEMO"
+      ? "DEMO"
+      : isSimulationRoute
+        ? "SIMULATION"
+        : focusedProject
+          ? "PROJECT"
+          : "GLOBAL";
+
+  // Collapsible Accordion Domains State with localStorage persistence
+  const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>(() => {
+    try {
+      const stored = localStorage.getItem("vyron_nav_expanded");
+      if (stored) return JSON.parse(stored);
+    } catch {
+      // ignore
+    }
+    return {
+      discover: true,
+      engineering: true,
+      intelligence: true,
+      analysis: true,
+      release: false,
+      simulation: false,
+      ai: false,
+      integrations: false,
+      governance: false,
+      platform: false,
+      admin: false,
+    };
+  });
+
+  // Auto-expand domain containing current route
+  useEffect(() => {
+    const activeDomain = NAV_DOMAINS.find((d) =>
+      d.items.some((item) => (item.exact ? pathname === item.to : pathname.startsWith(item.to))),
+    );
+    if (activeDomain && !expandedDomains[activeDomain.id]) {
+      setExpandedDomains((prev) => {
+        const next = { ...prev, [activeDomain.id]: true };
+        try {
+          localStorage.setItem("vyron_nav_expanded", JSON.stringify(next));
+        } catch {
+          // ignore
+        }
+        return next;
+      });
+    }
+  }, [pathname]);
+
+  const toggleDomain = (domainId: string) => {
+    setExpandedDomains((prev) => {
+      const next = { ...prev, [domainId]: !prev[domainId] };
+      try {
+        localStorage.setItem("vyron_nav_expanded", JSON.stringify(next));
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
 
   return (
-    <nav className="flex flex-col gap-5 px-2" aria-label="Main navigation">
-      {/* Render Main Group */}
-      {navGroups.map((group) => (
-        <div key={group.label} className="space-y-1">
-          {!collapsed && (
-            <p className="px-3 text-[10px] font-bold text-muted-foreground/60 tracking-wider">
-              {group.label}
-            </p>
-          )}
-          <div className="space-y-0.5">
-            {group.items.map((item) => {
-              const active = item.exact
-                ? pathname === item.to
-                : pathname.startsWith(item.to) && !pathname.startsWith("/app/projects/new");
-              const isNewProject = item.to === "/app/projects/new";
-              return (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  onClick={onNavigate}
-                  title={collapsed ? item.label : undefined}
-                  className={cn(
-                    "relative flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
-                    active
-                      ? "bg-primary/12 text-primary shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--primary)_20%,transparent)]"
-                      : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-                  )}
-                >
-                  <item.icon className="size-4 shrink-0" aria-hidden />
-                  {!collapsed ? (
-                    <span className="flex-1 flex items-center justify-between min-w-0">
-                      <span className="truncate">{item.label}</span>
-                      {isNewProject && draftCount > 0 && (
-                        <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-mono leading-none">
-                          {draftCount}
-                        </span>
-                      )}
-                    </span>
-                  ) : isNewProject && draftCount > 0 ? (
-                    <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-amber-400 ring-2 ring-sidebar" />
-                  ) : null}
-                </Link>
-              );
-            })}
+    <nav className="flex flex-col gap-3 px-2" aria-label="Main navigation">
+      {/* 1. Contextual Simulation Mode Indicator */}
+      {isSimulationRoute && !collapsed && (
+        <div className="mx-1 mb-1 rounded-lg border border-cyan-500/40 bg-cyan-950/40 p-2.5 shadow-sm">
+          <div className="flex items-center gap-2">
+            <FlaskConical className="h-4 w-4 text-cyan-400 animate-pulse shrink-0" />
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">Simulation Twin Active</p>
+              <p className="text-[9px] text-cyan-200/70 truncate">Hypothetical what-if state isolated</p>
+            </div>
           </div>
         </div>
-      ))}
+      )}
 
-      {/* Render System Group */}
-      <div className="space-y-1">
-        {!collapsed && (
-          <p className="px-3 text-[10px] font-bold text-muted-foreground/60 tracking-wider">
-            SYSTEM
-          </p>
-        )}
-        <div className="space-y-0.5">
-          {systemGroupItems.map((item) => {
-            const active = item.exact ? pathname === item.to : pathname.startsWith(item.to);
-            return (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={onNavigate}
-                title={collapsed ? item.label : undefined}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-xs font-semibold transition-colors",
-                  active
-                    ? "bg-primary/12 text-primary shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--primary)_20%,transparent)]"
-                    : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-foreground",
-                )}
-              >
-                <item.icon className="size-4 shrink-0" aria-hidden />
-                {!collapsed ? <span className="truncate">{item.label}</span> : null}
-              </Link>
-            );
-          })}
+      {/* 2. Contextual Project Workspace Navigation */}
+      {focusedProject && !collapsed && (
+        <div className="mx-1 mb-2 rounded-xl border border-primary/30 bg-primary/[0.04] p-2.5 space-y-2">
+          <div className="flex items-center justify-between gap-1">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-primary/20 text-primary">
+                <FolderKanban className="h-3.5 w-3.5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-[10px] font-mono text-primary/80 uppercase tracking-wider">PROJECT WORKSPACE</p>
+                <p className="text-xs font-bold text-foreground truncate">{focusedProject.name}</p>
+              </div>
+            </div>
+            <Link
+              to="/app/projects"
+              onClick={onNavigate}
+              className="text-[9px] text-muted-foreground hover:text-foreground font-mono hover:underline"
+            >
+              Exit
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-1 pt-1 border-t border-border/40 text-[10px]">
+            <Link
+              to={`/app/projects/${activeProjectId}` as never}
+              onClick={onNavigate}
+              className="px-2 py-1 rounded hover:bg-white/5 text-muted-foreground hover:text-foreground truncate"
+            >
+              • Overview
+            </Link>
+            <Link
+              to={`/app/projects/${activeProjectId}/requirements` as never}
+              onClick={onNavigate}
+              className="px-2 py-1 rounded hover:bg-white/5 text-muted-foreground hover:text-foreground truncate"
+            >
+              • Requirements
+            </Link>
+            <Link
+              to={`/app/projects/${activeProjectId}/blueprint` as never}
+              onClick={onNavigate}
+              className="px-2 py-1 rounded hover:bg-white/5 text-muted-foreground hover:text-foreground truncate"
+            >
+              • Blueprint
+            </Link>
+            <Link
+              to={`/app/projects/${activeProjectId}/code-health` as never}
+              onClick={onNavigate}
+              className="px-2 py-1 rounded hover:bg-white/5 text-muted-foreground hover:text-foreground truncate"
+            >
+              • Code Health
+            </Link>
+            <Link
+              to={`/app/projects/${activeProjectId}/security` as never}
+              onClick={onNavigate}
+              className="px-2 py-1 rounded hover:bg-white/5 text-muted-foreground hover:text-foreground truncate"
+            >
+              • Security
+            </Link>
+            <Link
+              to={`/app/projects/${activeProjectId}/tests` as never}
+              onClick={onNavigate}
+              className="px-2 py-1 rounded hover:bg-white/5 text-muted-foreground hover:text-foreground truncate"
+            >
+              • Tests
+            </Link>
+            <Link
+              to={`/app/projects/${activeProjectId}/analytics` as never}
+              onClick={onNavigate}
+              className="px-2 py-1 rounded hover:bg-white/5 text-muted-foreground hover:text-foreground truncate"
+            >
+              • Analytics
+            </Link>
+            <Link
+              to={`/app/projects/${activeProjectId}/reports` as never}
+              onClick={onNavigate}
+              className="px-2 py-1 rounded hover:bg-white/5 text-muted-foreground hover:text-foreground truncate"
+            >
+              • Reports
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* 3. 11 Core Engineering Domains (Collapsible Accordions) */}
+      {NAV_DOMAINS.map((domain) => {
+        if (domain.adminOnly && !isAdmin) return null;
+        const isExpanded = expandedDomains[domain.id] ?? false;
+        const DomainIcon = domain.icon;
+        const hasActiveChild = domain.items.some((item) =>
+          item.exact ? pathname === item.to : pathname.startsWith(item.to) && !pathname.startsWith("/app/projects/new"),
+        );
+
+        return (
+          <div key={domain.id} className="space-y-1">
+            {!collapsed ? (
+              <button
+                type="button"
+                onClick={() => toggleDomain(domain.id)}
+                className="w-full flex items-center justify-between px-2.5 py-1 text-[10px] font-bold text-muted-foreground/75 hover:text-foreground tracking-wider uppercase transition-colors rounded hover:bg-white/[0.02]"
+              >
+                <span className="flex items-center gap-1.5">
+                  <DomainIcon className="h-3 w-3 text-primary/70" />
+                  <span className={hasActiveChild ? "text-primary font-bold" : ""}>{domain.label}</span>
+                </span>
+                <ChevronDown
+                  className={cn(
+                    "h-3 w-3 transition-transform duration-200 opacity-60",
+                    isExpanded ? "transform rotate-0" : "transform -rotate-90",
+                  )}
+                />
+              </button>
+            ) : (
+              <div className="h-px bg-border/40 my-1 mx-2" />
+            )}
+
+            {(isExpanded || collapsed) && (
+              <div className="space-y-0.5 pl-1 sm:pl-1.5">
+                {domain.items.map((item) => {
+                  const active = item.exact
+                    ? pathname === item.to
+                    : pathname.startsWith(item.to) && !pathname.startsWith("/app/projects/new");
+                  const isNewProject = item.to === "/app/projects/new";
+                  return (
+                    <Link
+                      key={item.to}
+                      to={item.to}
+                      onClick={onNavigate}
+                      title={collapsed ? item.label : undefined}
+                      className={cn(
+                        "relative flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
+                        active
+                          ? "bg-primary/12 text-primary font-semibold shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--primary)_20%,transparent)]"
+                          : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+                      )}
+                    >
+                      <item.icon className="size-4 shrink-0" aria-hidden />
+                      {!collapsed ? (
+                        <span className="flex-1 flex items-center justify-between min-w-0">
+                          <span className="truncate">{item.label}</span>
+                          {isNewProject && draftCount > 0 && (
+                            <span className="ml-1.5 px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-mono leading-none">
+                              {draftCount}
+                            </span>
+                          )}
+                        </span>
+                      ) : isNewProject && draftCount > 0 ? (
+                        <span className="absolute top-1.5 right-1.5 size-2 rounded-full bg-amber-400 ring-2 ring-sidebar" />
+                      ) : null}
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
     </nav>
   );
 }
@@ -492,6 +784,11 @@ export function AppShell({ children }: { children: ReactNode }) {
       }
     }
   }, [ready, user, pathname, navigate]);
+
+  // Global Copilot Realtime Event Listener Initialization
+  useEffect(() => {
+    copilotRealtimeListener.initialize();
+  }, []);
 
   // Global keyboard listeners for Cmd+K and ? and sequences
   useEffect(() => {

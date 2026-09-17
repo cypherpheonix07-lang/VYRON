@@ -1,16 +1,66 @@
 /**
- * PROJECT BRAHMA — DUAL-MODE COPILOT STATE STORE
+ * PROJECT BRAHMA / VYRON — DUAL-MODE COPILOT STATE STORE (PHASE 20)
  * Enforces strict isolation between NORMAL mode context (production architecture, live data)
  * and DEMO mode context (synthetic datasets, simulated event streams).
- * Supports multi-mode viewports (Drawer, Pinned Side-Panel, Fullscreen Studio) and multi-tab workflows.
+ * Supports multi-mode viewports (Drawer, Pinned Side-Panel, Fullscreen Studio) and 8 Studio Experience Modes:
+ * CHAT | INVESTIGATION | MISSION | ARCHITECTURE | RELEASE | SIMULATION | DECISION | EVIDENCE
+ * Strictly ZERO SQL.
  */
 
 import { AppMode } from "../mode/modeStore";
 import type { DynamicExecutionPlan, PlanStep } from "@/services/copilot/copilotPlanner";
+import type { CopilotIntentType } from "@/services/copilot/copilotIntentGateway";
+import type { EpistemicKnowledgeState } from "@/services/copilot/copilotEpistemicEngine";
 
 export type AIModelType = "CLAUDE_SONNET" | "KIMI_K3" | "OPENAI_GPT4O" | "OPENROUTER_AUTO" | "MOCK_DETERMINISTIC";
 export type CopilotViewMode = "DRAWER" | "SIDE_PANEL" | "FULL_STUDIO";
-export type CopilotTab = "chat" | "plan" | "tools" | "agents" | "memory" | "context" | "actions";
+export type CopilotTab =
+  | "chat"
+  | "plan"
+  | "tools"
+  | "agents"
+  | "skills"
+  | "connectors"
+  | "memory"
+  | "context"
+  | "actions"
+  | "deliberation"
+  | "decisions"
+  | "release";
+
+export type StudioExperienceMode =
+  | "CHAT"
+  | "INVESTIGATION"
+  | "THINK"
+  | "MISSION"
+  | "ARCHITECTURE"
+  | "REQUIREMENTS"
+  | "SECURITY"
+  | "DATA"
+  | "RELEASE"
+  | "SIMULATION"
+  | "DECISION"
+  | "EVIDENCE"
+  | "SKILL_BUILDER"
+  | "CONNECTOR_MANAGER";
+
+export type ThinkingState =
+  | "THINK_DISABLED"
+  | "THINK_ENABLED"
+  | "THINK_AUTO"
+  | "THINK_DEEP"
+  | "THINK_HIGH_STAKES";
+
+export type ThinkingDepthLevel = 0 | 1 | 2 | 3 | 4 | 5;
+
+export type ResponseDetailLevel =
+  | "CONCISE"
+  | "STANDARD"
+  | "DETAILED"
+  | "ENGINEERING_DEEP_DIVE"
+  | "FULL_EVIDENCE_REPORT";
+
+export type EvidenceMode = "STRICT" | "STANDARD" | "RELAXED";
 
 export type ActionType =
   | "RUN_ANALYSIS"
@@ -53,6 +103,41 @@ export interface CopilotAction {
   isHighImpact?: boolean;
 }
 
+export interface UserSafeReasoningSummary {
+  understood: string;
+  contextUsed: string[];
+  plan: string[];
+  checks: string[];
+  findings: string[];
+  constraints: string[];
+  confidence: number;
+  unknown: string[];
+  conclusion: string;
+}
+
+export interface EvidenceBadgeItem {
+  id: string;
+  badge: "VERIFIED" | "DERIVED" | "INFERRED" | "UNKNOWN" | "STALE" | "CONFLICTED";
+  label: string;
+  source: string;
+  hash?: string;
+  provenanceUri?: string;
+  retrievedAt?: string;
+  status?: string;
+  confidence?: number;
+}
+
+export interface ExactAnswerPayload {
+  directAnswer: string;
+  reasoningSummary?: UserSafeReasoningSummary;
+  evidenceBadges?: EvidenceBadgeItem[];
+  detailedExplanation?: string;
+  assumptions?: string[];
+  uncertainties?: string[];
+  recommendedNextStep?: string;
+  proposedActions?: CopilotAction[];
+}
+
 export interface CopilotMessage {
   id: string;
   sender: "USER" | "ASSISTANT" | "SYSTEM";
@@ -68,6 +153,18 @@ export interface CopilotMessage {
         verificationHash?: string | undefined;
         evidence?: Record<string, unknown> | undefined;
         planId?: string | undefined;
+        intent?: CopilotIntentType | undefined;
+        intentConfidence?: number | undefined;
+        reasoningTraceId?: string | undefined;
+        epistemicState?: EpistemicKnowledgeState | undefined;
+        deliberationId?: string | undefined;
+        exactAnswer?: ExactAnswerPayload | undefined;
+        thinkingDepth?: ThinkingDepthLevel | undefined;
+        thinkingMode?: ThinkingState | undefined;
+        responseDetail?: ResponseDetailLevel | undefined;
+        activeSpecialistAgent?: string | undefined;
+        activeSkills?: string[] | undefined;
+        activeConnectors?: string[] | undefined;
       }
     | undefined;
 }
@@ -77,6 +174,13 @@ export interface CopilotModeSession {
   isLoading: boolean;
   activeModel: AIModelType;
   activeSpecialist?: string | undefined;
+  thinkingMode: ThinkingState;
+  thinkingDepth: ThinkingDepthLevel;
+  responseDetail: ResponseDetailLevel;
+  evidenceMode: EvidenceMode;
+  toolDepth: number;
+  activeSkills: string[];
+  activeConnectors: string[];
   pendingApproval?: CopilotAction | null | undefined;
   activePlan?: DynamicExecutionPlan | null | undefined;
   executionStatus?: "IDLE" | "PLANNING" | "EXECUTING" | "PAUSED" | "COMPLETED" | "FAILED" | undefined;
@@ -91,6 +195,7 @@ export interface CopilotState {
   isDrawerOpen: boolean;
   viewMode: CopilotViewMode;
   activeTab: CopilotTab;
+  studioMode: StudioExperienceMode;
   normalSession: CopilotModeSession;
   demoSession: CopilotModeSession;
 }
@@ -103,12 +208,14 @@ function createInitialSession(mode: AppMode): CopilotModeSession {
     sender: "ASSISTANT",
     text:
       mode === "NORMAL"
-        ? "Welcome to Vyron AI Copilot (Production Mode). I am the application-native intelligence layer across your workspace. I can coordinate live 12-stage analysis, enforce schema quality contracts, inspect AST code health, and govern MCP connectors with verifiable cryptographic provenance."
+        ? "Welcome to Vyron AI Copilot (Production Mode). I am the cognitive operating layer of Vyron Engineering Intelligence. I coordinate live 12-stage analysis, enforce schema quality contracts, inspect AST code health, and govern MCP connectors with verifiable cryptographic provenance."
         : "Welcome to Vyron AI Copilot (Demo Simulation Mode). I am your technical demonstration narrator and reviewer co-pilot, actively monitoring the isolated IEEE-CIS benchmark and synthetic domain event streams. All actions run in a safe sandbox with zero live production write risks.",
     timestamp: new Date().toISOString(),
     mode,
     metadata: {
       model: "CLAUDE_SONNET",
+      intent: "QUESTION",
+      intentConfidence: 1.0,
       suggestedActions:
         mode === "NORMAL"
           ? [
@@ -144,6 +251,13 @@ function createInitialSession(mode: AppMode): CopilotModeSession {
     messages: [initialGreeting],
     isLoading: false,
     activeModel: "CLAUDE_SONNET",
+    thinkingMode: "THINK_ENABLED",
+    thinkingDepth: 2,
+    responseDetail: "STANDARD",
+    evidenceMode: "STANDARD",
+    toolDepth: 3,
+    activeSkills: ["owasp_security_review", "architecture_drift_audit", "data_contract_verification"],
+    activeConnectors: ["github", "kaggle"],
     pendingApproval: null,
     activePlan: null,
     executionStatus: "IDLE",
@@ -160,6 +274,7 @@ class CopilotStore {
       isDrawerOpen: false,
       viewMode: "DRAWER",
       activeTab: "chat",
+      studioMode: "CHAT",
       normalSession: createInitialSession("NORMAL"),
       demoSession: createInitialSession("DEMO"),
     };
@@ -202,12 +317,77 @@ class CopilotStore {
     this.emit();
   }
 
+  public setStudioMode(mode: StudioExperienceMode) {
+    this.state.studioMode = mode;
+    this.emit();
+  }
+
   public setModel(mode: AppMode, model: AIModelType) {
     if (mode === "NORMAL") {
       this.state.normalSession.activeModel = model;
     } else {
       this.state.demoSession.activeModel = model;
     }
+    this.emit();
+  }
+
+  public setThinkingMode(mode: AppMode, thinkingMode: ThinkingState) {
+    const session = mode === "NORMAL" ? this.state.normalSession : this.state.demoSession;
+    session.thinkingMode = thinkingMode;
+    this.emit();
+  }
+
+  public setThinkingDepth(mode: AppMode, depth: ThinkingDepthLevel) {
+    const session = mode === "NORMAL" ? this.state.normalSession : this.state.demoSession;
+    session.thinkingDepth = depth;
+    this.emit();
+  }
+
+  public setResponseDetail(mode: AppMode, detail: ResponseDetailLevel) {
+    const session = mode === "NORMAL" ? this.state.normalSession : this.state.demoSession;
+    session.responseDetail = detail;
+    this.emit();
+  }
+
+  public setEvidenceMode(mode: AppMode, evidenceMode: EvidenceMode) {
+    const session = mode === "NORMAL" ? this.state.normalSession : this.state.demoSession;
+    session.evidenceMode = evidenceMode;
+    this.emit();
+  }
+
+  public setToolDepth(mode: AppMode, depth: number) {
+    const session = mode === "NORMAL" ? this.state.normalSession : this.state.demoSession;
+    session.toolDepth = depth;
+    this.emit();
+  }
+
+  public setActiveSkills(mode: AppMode, skills: string[]) {
+    const session = mode === "NORMAL" ? this.state.normalSession : this.state.demoSession;
+    session.activeSkills = [...skills];
+    this.emit();
+  }
+
+  public toggleActiveSkill(mode: AppMode, skillId: string) {
+    const session = mode === "NORMAL" ? this.state.normalSession : this.state.demoSession;
+    const exists = session.activeSkills.includes(skillId);
+    session.activeSkills = exists
+      ? session.activeSkills.filter((s) => s !== skillId)
+      : [...session.activeSkills, skillId];
+    this.emit();
+  }
+
+  public setActiveConnectors(mode: AppMode, connectors: string[]) {
+    const session = mode === "NORMAL" ? this.state.normalSession : this.state.demoSession;
+    session.activeConnectors = [...connectors];
+    this.emit();
+  }
+
+  public toggleActiveConnector(mode: AppMode, connectorId: string) {
+    const session = mode === "NORMAL" ? this.state.normalSession : this.state.demoSession;
+    const exists = session.activeConnectors.includes(connectorId);
+    session.activeConnectors = exists
+      ? session.activeConnectors.filter((c) => c !== connectorId)
+      : [...session.activeConnectors, connectorId];
     this.emit();
   }
 

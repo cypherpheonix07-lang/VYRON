@@ -1,7 +1,11 @@
 /**
- * PROJECT BRAHMA — ENGINEERING INVESTIGATION ENGINE
+ * PROJECT BRAHMA / VYRON — ENGINEERING INVESTIGATION ENGINE (PHASE 07)
  * Orchestrates root-cause investigation cases for critical security vulnerabilities,
  * performance regressions, and pipeline anomalies.
+ *
+ * Investigation Lifecycle Representation:
+ * QUESTION → OBSERVATIONS → EVIDENCE → HYPOTHESES → ANALYSES → TESTS → ACTIONS → CONCLUSION → UNRESOLVED QUESTIONS
+ *
  * Strictly ZERO SQL.
  */
 
@@ -28,12 +32,17 @@ export interface EngineeringInvestigation {
   id: string;
   findingId: string;
   title: string;
+  question?: string | undefined;
+  observations?: string[] | undefined;
   status: "OPEN" | "INVESTIGATING" | "CONCLUDED";
   severity: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
   affectedSystems: string[];
   evidenceChain: InvestigationEvidenceItem[];
   hypotheses: RootCauseHypothesis[];
+  executedTests?: string[] | undefined;
+  actionsTaken?: string[] | undefined;
   conclusion?: string | undefined;
+  unresolvedQuestions?: string[] | undefined;
   recommendedRemediations: string[];
   assignedSpecialist: string;
   createdAt: string;
@@ -59,6 +68,8 @@ export class InvestigationEngine {
   public createInvestigation(params: {
     findingId: string;
     title: string;
+    question?: string | undefined;
+    observations?: string[] | undefined;
     severity?: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW" | undefined;
     affectedSystems?: string[] | undefined;
     assignedSpecialist?: string | undefined;
@@ -70,11 +81,16 @@ export class InvestigationEngine {
       id,
       findingId: params.findingId,
       title: params.title,
+      question: params.question || `What is the root cause of finding '${params.title}'?`,
+      observations: params.observations || ["AST static code scanner flagged high-risk vulnerability."],
       status: "OPEN",
       severity: params.severity || "HIGH",
       affectedSystems: params.affectedSystems || ["srv-settlement", "services/billing/query.ts"],
       evidenceChain: [],
       hypotheses: [],
+      executedTests: [],
+      actionsTaken: [],
+      unresolvedQuestions: ["Are there secondary downstream replicas affected?"],
       recommendedRemediations: [],
       assignedSpecialist: params.assignedSpecialist || "Security Sentinel",
       createdAt: now,
@@ -103,7 +119,6 @@ export class InvestigationEngine {
     };
 
     inv.evidenceChain.push(item);
-    if (inv.status === "OPEN") inv.status = "INVESTIGATING";
     return item;
   }
 
@@ -115,18 +130,20 @@ export class InvestigationEngine {
     if (!inv) throw new Error(`Investigation ${investigationId} not found.`);
 
     const id = `hyp_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
-    const fullHyp: RootCauseHypothesis = {
+    const item: RootCauseHypothesis = {
       ...hypothesis,
       id,
     };
-    inv.hypotheses.push(fullHyp);
-    return fullHyp;
+
+    inv.hypotheses.push(item);
+    return item;
   }
 
   public concludeInvestigation(
     investigationId: string,
     conclusion: string,
     remediations: string[],
+    unresolved?: string[],
   ): EngineeringInvestigation {
     const inv = this.investigations.find((i) => i.id === investigationId);
     if (!inv) throw new Error(`Investigation ${investigationId} not found.`);
@@ -135,8 +152,9 @@ export class InvestigationEngine {
     inv.status = "CONCLUDED";
     inv.conclusion = conclusion;
     inv.recommendedRemediations = remediations;
+    if (unresolved) inv.unresolvedQuestions = unresolved;
     inv.concludedAt = now;
-    inv.verificationHash = generateVerificationHash(`${inv.id}:${conclusion}:${now}`);
+    inv.verificationHash = generateVerificationHash(`${investigationId}:${conclusion}:${now}`);
 
     return inv;
   }
@@ -154,50 +172,52 @@ export class InvestigationEngine {
   }
 
   private seedBaselineInvestigations(): void {
+    const baselineId = "inv_sec_cwe89";
     this.investigations = [
       {
-        id: "inv_001",
-        findingId: "SEC-GH-101",
-        title: "Dynamic SQL Parameter Concatenation in Billing Query Builder",
+        id: baselineId,
+        findingId: "f1",
+        title: "Root Cause Investigation: CWE-89 Dynamic Query Parameter Concatenation",
+        question: "How did dynamic SQL concatenation penetrate the settlement DAO layer?",
+        observations: [
+          "services/billing/query.ts line 42 contains raw string template concatenation.",
+          "AST complexity score in settlement router is CCN 18.",
+        ],
         status: "CONCLUDED",
         severity: "HIGH",
-        affectedSystems: ["srv-settlement", "services/billing/query.ts"],
-        assignedSpecialist: "Security Sentinel",
-        createdAt: "2026-09-11T14:30:00Z",
-        concludedAt: "2026-09-11T14:48:22Z",
-        conclusion: "Confirmed CWE-89 injection vulnerability caused by raw template literal string concatenation inside merchant transaction filter builder.",
-        verificationHash: generateVerificationHash("inv_001:CWE-89:CONCLUDED"),
+        affectedSystems: ["srv-settlement", "services/billing/query.ts", "aurora-db-postgres"],
         evidenceChain: [
           {
-            id: "ev_101",
-            source: "services/billing/query.ts:42",
+            id: "ev_01",
+            source: "Static AST Analyzer (Bandit Rule B608)",
             type: "AST_CODE",
-            content: "const query = `SELECT * FROM settlements WHERE merchant_id = '${merchantId}'`;",
-            timestamp: "2026-09-11T14:31:00Z",
-            hash: "c23a...1109",
-          },
-          {
-            id: "ev_102",
-            source: "Bandit AST Security Scanner",
-            type: "RUNTIME_LOG",
-            content: "Flagged AST node ast.BinOp (Formatted string query builder) with confidence HIGH.",
-            timestamp: "2026-09-11T14:32:15Z",
-            hash: "9102...fa81",
+            content: "const query = `SELECT * FROM settlements WHERE account_id = '${input.accountId}'`;",
+            timestamp: "2026-09-12T10:01:00Z",
+            hash: "c29d...5184",
           },
         ],
         hypotheses: [
           {
-            id: "hyp_1",
-            description: "Merchant ID variable is not sanitized or parameterized before query construction.",
+            id: "hyp_01",
+            description: "Developer bypassed DAO wrapper to execute dynamic filtering under sprint deadline.",
             likelihood: "CONFIRMED",
-            confidence: 0.98,
-            supportingEvidenceIds: ["ev_101", "ev_102"],
+            confidence: 0.95,
+            supportingEvidenceIds: ["ev_01"],
           },
         ],
+        executedTests: ["bandit -r services/billing", "tests/unit/test_settlement_dao.ts"],
+        actionsTaken: ["Generated AST Parameterized Query Patch in copilotActionEngine"],
+        conclusion: "Confirmed CWE-89 injection risk caused by direct string template query interpolation bypassing DAO abstraction.",
+        unresolvedQuestions: ["Are there legacy microservice forks using the deprecated query pattern?"],
         recommendedRemediations: [
-          "Refactor query builder to use parameterized placeholders ($1, $2) or Supabase typed SDK.",
-          "Add automated pre-commit hook scanning for unparameterized SQL template literals.",
+          "Refactor services/billing/query.ts to use parameterized query placeholder ($1, $2)",
+          "Enforce ESLint no-raw-sql rule across billing codebase",
+          "Record Architecture Decision ADR-001 re-affirming DAO parameter isolation",
         ],
+        assignedSpecialist: "Security Analyst Sentinel",
+        createdAt: "2026-09-12T10:00:30Z",
+        concludedAt: "2026-09-12T10:03:45Z",
+        verificationHash: generateVerificationHash("inv_sec_cwe89:CONCLUDED"),
       },
     ];
   }

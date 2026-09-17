@@ -12,25 +12,28 @@ import {
   X,
   CheckSquare,
   Play,
+  Layers,
+  Cpu,
+  Server,
+  Lock,
+  Compass,
+  Sparkles,
+  Fingerprint,
+  CheckCircle2,
+  AlertTriangle,
+  ArrowUpRight,
+  RefreshCw,
+  GitPullRequest,
+  Box,
+  Binary,
+  Radio,
+  Zap,
 } from "lucide-react";
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { useAppMode } from "@/state/mode/useAppMode";
 import { SimulatorControls } from "@/components/demo/SimulatorControls";
 import { AnomalyTimeline } from "@/components/demo/AnomalyTimeline";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  Cell,
-  Legend,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 
 import {
   EmptyState,
@@ -44,6 +47,7 @@ import {
   StatusBadge,
   CountdownCard,
 } from "@/components/brahma/primitives";
+import { cn } from "@/lib/utils";
 import { WorkspacePulse } from "@/components/brahma/WorkspacePulse";
 
 import { Button } from "@/components/ui/button";
@@ -58,19 +62,42 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { activityFeed, healthTrend, projects as mockProjects, riskDistribution } from "@/lib/mock-data";
+import { activityFeed, projects as mockProjects } from "@/lib/mock-data";
 import { useProjects } from "@/hooks/useProjects";
 import { ProactiveInsightsBanner } from "@/components/copilot/ProactiveInsightsBanner";
+import { architectureDriftEngine } from "@/services/intelligence/driftEngine";
+import { decisionEngine } from "@/services/intelligence/decisionEngine";
+import { policyEngine } from "@/services/policy/policyEngine";
+import { engineeringKnowledgeGraph } from "@/services/intelligence/knowledgeGraph";
+import { generateVerificationHash } from "@/services/ai/cryptoUtils";
+
+// 12-SURFACE INTERACTIVE SYSTEM DIRECTIVE COMPONENTS
+import { useCommandCenter } from "@/state/commandCenter/commandCenterStore";
+import { UniversalDetailDrawer } from "@/components/dashboard/UniversalDetailDrawer";
+import { GlobalCommandContextBar } from "@/components/dashboard/GlobalCommandContextBar";
+import { TemporalHealthExplorer } from "@/components/dashboard/TemporalHealthExplorer";
+import { RiskUniverse } from "@/components/dashboard/RiskUniverse";
+import { EngineeringReadinessSystem } from "@/components/dashboard/EngineeringReadinessSystem";
+import { LiveSignalRadarField } from "@/components/dashboard/LiveSignalRadarField";
+import { ReleaseControlSurface } from "@/components/dashboard/ReleaseControlSurface";
+import { LivingArchitectureCanvas } from "@/components/dashboard/LivingArchitectureCanvas";
+import { DriftInvestigationSurface } from "@/components/dashboard/DriftInvestigationSurface";
+import { RuntimeIntelligenceCockpit } from "@/components/dashboard/RuntimeIntelligenceCockpit";
+import { TrustComplianceSurface } from "@/components/dashboard/TrustComplianceSurface";
+import { AtlasSystemExplorer } from "@/components/dashboard/AtlasSystemExplorer";
+import { CopilotPartnerCard } from "@/components/dashboard/CopilotPartnerCard";
+import { EvidenceExplorer } from "@/components/dashboard/EvidenceExplorer";
+import { TimeMachineComparator } from "@/components/dashboard/TimeMachineComparator";
 
 export const Route = createFileRoute("/app/")({
   head: () => ({
     meta: [
-      { title: "Dashboard — PROJECT BRAHMA" },
+      { title: "Dashboard — VYRON" },
       {
         name: "description",
         content: "Executive overview of project health, security posture and delivery risk.",
       },
-      { property: "og:title", content: "Dashboard — PROJECT BRAHMA" },
+      { property: "og:title", content: "Dashboard — VYRON" },
       {
         property: "og:description",
         content: "Portfolio health, security and delivery risk at a glance.",
@@ -90,19 +117,12 @@ const activityIcon = {
 
 type ViewState = "loaded" | "loading" | "empty" | "error";
 
-const tooltipStyle = {
-  background: "var(--popover)",
-  border: "1px solid var(--border)",
-  borderRadius: 10,
-  fontSize: 12,
-  color: "var(--popover-foreground)",
-};
-
 function Dashboard() {
   const { mode } = useAppMode();
   const [state, setState] = useState<ViewState>("loaded");
-  const [showOnboarding, setShowOnboarding] = useState(true);
-  const [completedSteps, setCompletedSteps] = useState([true, true, true, false, false, false]);
+  const [showTimeMachine, setShowTimeMachine] = useState(false);
+
+  const { selectEntity } = useCommandCenter();
 
   const { projects: liveProjects } = useProjects();
   const displayProjects = useMemo(() => {
@@ -132,6 +152,20 @@ function Dashboard() {
       displayProjects.reduce((acc, p) => acc + (p.healthScore || 70), 0) / Math.max(displayProjects.length, 1)
     );
   }, [displayProjects]);
+
+  // Operational Engines Live Telemetry Queries
+  const driftEval = useMemo(() => architectureDriftEngine.evaluateDrift(), []);
+  const policyEval = useMemo(() => policyEngine.evaluateAllPolicies(), []);
+  const decisions = useMemo(
+    () =>
+      typeof decisionEngine?.listDecisions === "function"
+        ? decisionEngine.listDecisions()
+        : typeof decisionEngine?.getDecisions === "function"
+          ? decisionEngine.getDecisions()
+          : [],
+    [],
+  );
+  const graphData = useMemo(() => engineeringKnowledgeGraph.exportGraphData(), []);
 
   return (
     <>
@@ -168,6 +202,19 @@ function Dashboard() {
           </>
         }
       />
+
+      {/* PHASE 02: GLOBAL COMMAND CONTEXT BAR */}
+      <GlobalCommandContextBar
+        showTimeMachine={showTimeMachine}
+        onToggleTimeMachine={() => setShowTimeMachine((prev) => !prev)}
+      />
+
+      {/* PHASE 18: TIME MACHINE COMPARATOR */}
+      {showTimeMachine && (
+        <div className="my-2">
+          <TimeMachineComparator />
+        </div>
+      )}
 
       {/* DEMO MODE REAL-TIME SIMULATION SUITE */}
       {mode === "DEMO" && (
@@ -217,240 +264,143 @@ function Dashboard() {
         <div className="space-y-4">
           <ProactiveInsightsBanner compact maxItems={1} />
           <CountdownCard targetDate="2026-09-15" milestoneTitle="Review 1 Milestone Defense" />
+
+          {/* KPI STAT CARDS */}
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-            <StatCard
-              label="Total projects"
-              value={displayProjects.length}
-              icon={FolderKanban}
-              delta={12}
-              hint="live portfolio"
-            />
-            <StatCard
-              label="Avg. health score"
-              value={String(avgHealth)}
-              icon={Activity}
-              delta={5}
-              tone={avgHealth >= 70 ? "success" : "warning"}
-              hint={`portfolio average (${displayProjects.length} projects)`}
-            />
-            <StatCard
-              label="Security risk"
-              value="High"
-              icon={ShieldCheck}
-              tone="critical"
-              hint="2 critical findings open"
-            />
-            <StatCard
-              label="Delivery risk"
-              value="Medium"
-              icon={TrendingUp}
-              tone="warning"
-              hint="1 project at risk"
-            />
-            <StatCard
-              label="Reports generated"
-              value="318"
-              icon={FileBarChart2}
-              delta={9}
-              hint="all time"
-            />
+            <div
+              className="cursor-pointer transition-transform hover:scale-[1.02]"
+              onClick={() =>
+                selectEntity({
+                  type: "project",
+                  id: "portfolio-overview",
+                  name: `Portfolio Overview (${displayProjects.length} Projects)`,
+                  details: "Complete portfolio breakdown across active engineering workspaces.",
+                  severity: "LOW",
+                  status: "ACTIVE",
+                })
+              }
+            >
+              <StatCard
+                label="Total projects"
+                value={displayProjects.length}
+                icon={FolderKanban}
+                delta={12}
+                hint="live portfolio"
+              />
+            </div>
+
+            <div
+              className="cursor-pointer transition-transform hover:scale-[1.02]"
+              onClick={() =>
+                selectEntity({
+                  type: "metric",
+                  id: "avg-health",
+                  name: "Portfolio Average Health Score",
+                  details: `Weighted rolling average across ${displayProjects.length} active monitored projects.`,
+                  severity: avgHealth >= 70 ? "LOW" : "HIGH",
+                  status: "EVALUATED",
+                })
+              }
+            >
+              <StatCard
+                label="Avg. health score"
+                value={String(avgHealth)}
+                icon={Activity}
+                delta={5}
+                tone={avgHealth >= 70 ? "success" : "warning"}
+                hint={`portfolio average (${displayProjects.length} projects)`}
+              />
+            </div>
+
+            <div
+              className="cursor-pointer transition-transform hover:scale-[1.02]"
+              onClick={() =>
+                selectEntity({
+                  type: "finding",
+                  id: "security-risk-summary",
+                  name: "Security Posture Risk Overview",
+                  details: "2 high/critical findings active (CWE-89 and fallback secret).",
+                  severity: "CRITICAL",
+                  status: "OPEN",
+                })
+              }
+            >
+              <StatCard
+                label="Security risk"
+                value="High"
+                icon={ShieldCheck}
+                tone="critical"
+                hint="2 critical findings open"
+              />
+            </div>
+
+            <div
+              className="cursor-pointer transition-transform hover:scale-[1.02]"
+              onClick={() =>
+                selectEntity({
+                  type: "risk",
+                  id: "delivery-risk-summary",
+                  name: "Delivery Risk Overview",
+                  details: "VaultLedger Admin Console currently flagged at risk for milestone release.",
+                  severity: "MEDIUM",
+                  status: "MONITORED",
+                })
+              }
+            >
+              <StatCard
+                label="Delivery risk"
+                value="Medium"
+                icon={TrendingUp}
+                tone="warning"
+                hint="1 project at risk"
+              />
+            </div>
+
+            <div
+              className="cursor-pointer transition-transform hover:scale-[1.02]"
+              onClick={() =>
+                selectEntity({
+                  type: "evidence",
+                  id: "reports-ledger-summary",
+                  name: "Compliance Reports Ledger",
+                  details: "318 formal tamper-evident analysis reports compiled all-time.",
+                  severity: "LOW",
+                  status: "SEALED",
+                })
+              }
+            >
+              <StatCard
+                label="Reports generated"
+                value="318"
+                icon={FileBarChart2}
+                delta={9}
+                hint="all time"
+              />
+            </div>
           </div>
 
-          {showOnboarding && (
-            <Card className="surface border border-primary/20 bg-primary/4 relative overflow-hidden mt-4">
-              <CardContent className="p-6 relative flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="flex items-start gap-4">
-                  <div className="relative shrink-0 mt-1">
-                    <svg className="size-16 -rotate-90" aria-hidden="true">
-                      <circle
-                        cx="32"
-                        cy="32"
-                        r="28"
-                        className="stroke-muted-foreground/20 fill-none"
-                        strokeWidth="4"
-                      />
-                      <circle
-                        cx="32"
-                        cy="32"
-                        r="28"
-                        className="stroke-primary fill-none transition-all duration-300"
-                        strokeWidth="4"
-                        strokeDasharray="175"
-                        strokeDashoffset={
-                          175 -
-                          (175 * Math.round((completedSteps.filter(Boolean).length / 6) * 100)) /
-                            100
-                        }
-                      />
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center text-xs font-bold font-mono text-primary">
-                      {Math.round((completedSteps.filter(Boolean).length / 6) * 100)}%
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="text-sm font-semibold flex items-center gap-2">
-                      Workspace Onboarding Checklist
-                      <Badge className="bg-primary/20 text-primary border-none text-[9px] px-1.5 h-4 font-mono">
-                        {completedSteps.filter(Boolean).length}/6 Done
-                      </Badge>
-                    </h3>
-                    <p className="text-xs text-muted-foreground max-w-md">
-                      Follow these steps to establish your workspace credentials, map functional
-                      blueprints, connect repositories, and sync your development lifecycle.
-                    </p>
-                  </div>
-                </div>
+          {/* SECTION 3: ENGINEERING READINESS SYSTEM (PHASE 06) */}
+          <EngineeringReadinessSystem />
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 w-full md:w-auto">
-                  {[
-                    { label: "Create your first project", href: "/app/projects/new" },
-                    { label: "Connect a repository", href: "/app/projects/brahma-core" },
-                    { label: "Run a blueprint analysis", href: "/app/studio" },
-                    {
-                      label: "Review security findings",
-                      href: "/app/projects/brahma-core/security",
-                    },
-                    { label: "Export a report", href: "/app/reports" },
-                    { label: "Invite a teammate", href: "/app/team" },
-                  ].map((step, idx) => {
-                    const isDone = completedSteps[idx];
-                    return (
-                      <div
-                        key={step.label}
-                        className="flex items-center justify-between gap-2.5 p-2 rounded-lg border border-border/40 bg-zinc-950/40 text-xs hover:border-primary/25 transition-colors cursor-pointer"
-                        onClick={() => {
-                          const next = [...completedSteps];
-                          next[idx] = !isDone;
-                          setCompletedSteps(next);
-                          toast.success(
-                            !isDone
-                              ? `Completed: ${step.label}`
-                              : `Marked incomplete: ${step.label}`,
-                          );
-                        }}
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <button
-                            type="button"
-                            className={`size-4 rounded border flex items-center justify-center transition-all ${
-                              isDone
-                                ? "bg-primary border-primary text-primary-foreground"
-                                : "border-border"
-                            }`}
-                            aria-label={`Mark step "${step.label}" as ${isDone ? "incomplete" : "complete"}`}
-                          >
-                            {isDone && <span className="text-[10px] font-bold">✓</span>}
-                          </button>
-                          <Link
-                            to={step.href as never}
-                            onClick={(e) => e.stopPropagation()}
-                            className="truncate text-muted-foreground hover:text-foreground hover:underline text-[11px]"
-                          >
-                            {step.label}
-                          </Link>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setShowOnboarding(false)}
-                  className="absolute top-3 right-3 text-muted-foreground hover:text-foreground"
-                  aria-label="Dismiss onboarding checklist"
-                >
-                  <X className="size-4" />
-                </button>
-              </CardContent>
-            </Card>
-          )}
-
+          {/* SURFACE 1: PROJECT HEALTH TREND & SURFACE 2: RISK DISTRIBUTION (PHASE 04 & PHASE 05) */}
           <div className="grid gap-4 lg:grid-cols-3">
             <SectionCard
               className="lg:col-span-2"
               title="Project health trend"
               description="Six-month rolling average across all monitored projects."
             >
-              <div className="h-64 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={healthTrend} margin={{ left: -18, right: 6, top: 6 }}>
-                    <defs>
-                      <linearGradient id="gHealth" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="var(--chart-1)" stopOpacity={0.45} />
-                        <stop offset="100%" stopColor="var(--chart-1)" stopOpacity={0} />
-                      </linearGradient>
-                      <linearGradient id="gSec" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="var(--chart-2)" stopOpacity={0.35} />
-                        <stop offset="100%" stopColor="var(--chart-2)" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
-                    <XAxis
-                      dataKey="month"
-                      stroke="var(--muted-foreground)"
-                      fontSize={11}
-                      tickLine={false}
-                      axisLine={false}
-                    />
-                    <YAxis
-                      stroke="var(--muted-foreground)"
-                      fontSize={11}
-                      tickLine={false}
-                      axisLine={false}
-                      domain={[0, 100]}
-                    />
-                    <Tooltip contentStyle={tooltipStyle} />
-                    <Legend wrapperStyle={{ fontSize: 11 }} />
-                    <Area
-                      type="monotone"
-                      dataKey="health"
-                      name="Health"
-                      stroke="var(--chart-1)"
-                      fill="url(#gHealth)"
-                      strokeWidth={2}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="security"
-                      name="Security"
-                      stroke="var(--chart-2)"
-                      fill="url(#gSec)"
-                      strokeWidth={2}
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
+              <TemporalHealthExplorer />
             </SectionCard>
 
             <SectionCard
               title="Risk distribution"
               description="Delivery risk across active projects."
             >
-              <div className="h-64 w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={riskDistribution}
-                      dataKey="value"
-                      nameKey="name"
-                      innerRadius={52}
-                      outerRadius={82}
-                      paddingAngle={3}
-                      stroke="var(--background)"
-                    >
-                      {riskDistribution.map((d) => (
-                        <Cell key={d.name} fill={d.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip contentStyle={tooltipStyle} />
-                    <Legend wrapperStyle={{ fontSize: 11 }} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
+              <RiskUniverse />
             </SectionCard>
           </div>
 
+          {/* SECTION 2: RECENT PROJECTS & RECENT ACTIVITY */}
           <div className="grid gap-4 lg:grid-cols-3">
             <SectionCard
               className="lg:col-span-2"
@@ -476,15 +426,31 @@ function Dashboard() {
                   </TableHeader>
                   <TableBody>
                     {displayProjects.map((p) => (
-                      <TableRow key={p.id}>
+                      <TableRow
+                        key={p.id}
+                        className="cursor-pointer hover:bg-muted/40 transition-colors"
+                        onClick={() =>
+                          selectEntity({
+                            type: "project",
+                            id: p.id,
+                            name: p.name,
+                            details: p.description,
+                            status: p.status,
+                            severity: p.deliveryRisk === "Critical" ? "CRITICAL" : p.deliveryRisk === "High" ? "HIGH" : "LOW",
+                            metadata: {
+                              domain: p.domain,
+                              healthScore: p.healthScore,
+                              securityScore: p.securityScore,
+                              repoConnected: p.repoConnected,
+                              deadline: p.deadline,
+                            },
+                          })
+                        }
+                      >
                         <TableCell className="max-w-[220px]">
-                          <Link
-                            to="/app/projects/$id"
-                            params={{ id: p.id }}
-                            className="block truncate font-medium hover:text-primary"
-                          >
+                          <span className="block truncate font-medium hover:text-primary">
                             {p.name}
-                          </Link>
+                          </span>
                           <span className="text-xs text-muted-foreground">{p.domain}</span>
                         </TableCell>
                         <TableCell>
@@ -528,7 +494,20 @@ function Dashboard() {
                 {activityFeed.map((a) => {
                   const Icon = activityIcon[a.kind];
                   return (
-                    <li key={a.id} className="flex gap-3">
+                    <li
+                      key={a.id}
+                      className="flex gap-3 cursor-pointer p-1 rounded-lg hover:bg-zinc-900/30 transition-colors"
+                      onClick={() =>
+                        selectEntity({
+                          type: "anomaly",
+                          id: a.id,
+                          name: a.title,
+                          details: a.detail,
+                          severity: a.kind === "security" ? "HIGH" : "LOW",
+                          timestamp: a.time,
+                        })
+                      }
+                    >
                       <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-lg bg-secondary text-primary">
                         <Icon className="size-4" aria-hidden />
                       </span>
@@ -543,8 +522,140 @@ function Dashboard() {
               </ul>
             </SectionCard>
           </div>
+
+          {/* SECTION 3: INTELLIGENCE ENGINE & ANOMALY RADAR & SECTION 4: RELEASE READINESS */}
+          <div className="grid gap-4 lg:grid-cols-3">
+            <SectionCard
+              className="lg:col-span-2"
+              title="Intelligence engine & anomaly radar"
+              description="Continuous anomaly detection and telemetry correlations across microservices."
+              action={
+                <Button asChild variant="outline" size="sm">
+                  <Link to="/app/activity">View pipeline stream</Link>
+                </Button>
+              }
+            >
+              <LiveSignalRadarField />
+            </SectionCard>
+
+            {/* SECTION 4: RELEASE READINESS & GOVERNANCE GATES */}
+            <SectionCard
+              title="Release readiness & gates"
+              description="Policy evaluation and production promotion status."
+              action={
+                <Button asChild variant="outline" size="sm">
+                  <Link to={"/app/release" as never}>Inspect gates</Link>
+                </Button>
+              }
+            >
+              <ReleaseControlSurface />
+            </SectionCard>
+          </div>
+
+          {/* SECTION 5: ARCHITECTURE TOPOLOGY & SECTION 6: ARCHITECTURE DRIFT */}
+          <div className="grid gap-4 lg:grid-cols-2">
+            {/* SECTION 5: ARCHITECTURE TOPOLOGY */}
+            <SectionCard
+              title="Architecture topology & services"
+              description="Live service contracts and node relationships."
+              action={
+                <Button asChild variant="outline" size="sm">
+                  <Link to={"/app/graph" as never}>Explore graph</Link>
+                </Button>
+              }
+            >
+              <LivingArchitectureCanvas />
+            </SectionCard>
+
+            {/* SECTION 6: ARCHITECTURE DRIFT */}
+            <SectionCard
+              title="Architecture drift detection"
+              description="Structural divergence between blueprint and implementation."
+              action={
+                <Button asChild variant="outline" size="sm">
+                  <Link to={"/app/drift" as never}>Manage drift</Link>
+                </Button>
+              }
+            >
+              <DriftInvestigationSurface />
+            </SectionCard>
+          </div>
+
+          {/* SECTION 7: SECURITY & COMPLIANCE & SECTION 8: RUNTIME TELEMETRY */}
+          <div className="grid gap-4 lg:grid-cols-2">
+            {/* SECTION 7: SECURITY & COMPLIANCE POSTURE */}
+            <SectionCard
+              title="Security & compliance posture"
+              description="Vulnerability radar, static AST findings, and policy controls."
+              action={
+                <Button asChild variant="outline" size="sm">
+                  <Link to={"/app/compliance" as never}>View audit trail</Link>
+                </Button>
+              }
+            >
+              <TrustComplianceSurface />
+            </SectionCard>
+
+            {/* SECTION 8: RUNTIME & SUBSYSTEM TELEMETRY */}
+            <SectionCard
+              title="Runtime & subsystem telemetry"
+              description="Live service latencies and availability metrics."
+              action={
+                <Button asChild variant="outline" size="sm">
+                  <Link to={"/app/telemetry" as never}>Full metrics</Link>
+                </Button>
+              }
+            >
+              <RuntimeIntelligenceCockpit />
+            </SectionCard>
+          </div>
+
+          {/* SECTION 9: ATLAS KNOWLEDGE GRAPH & SECTION 10: COPILOT PARTNER */}
+          <div className="grid gap-4 lg:grid-cols-2">
+            {/* SECTION 9: ATLAS KNOWLEDGE GRAPH */}
+            <SectionCard
+              title="ATLAS knowledge graph topology"
+              description="14 engineering relationship types connecting architectural assets."
+              action={
+                <Button asChild variant="outline" size="sm">
+                  <Link to={"/app/graph" as never}>Query ATLAS</Link>
+                </Button>
+              }
+            >
+              <AtlasSystemExplorer />
+            </SectionCard>
+
+            {/* SECTION 10: COPILOT ENGINEERING PARTNER */}
+            <SectionCard
+              title="Copilot engineering partner"
+              description="AI-augmented orchestration, proactive actions and investigation."
+              action={
+                <Button asChild variant="outline" size="sm">
+                  <Link to={"/app/copilot" as never}>Open Copilot</Link>
+                </Button>
+              }
+            >
+              <CopilotPartnerCard />
+            </SectionCard>
+          </div>
+
+          {/* SECTION 11: CRYPTOGRAPHIC EVIDENCE & AUDIT TRAIL */}
+          <SectionCard
+            title="Cryptographic evidence & audit trail"
+            description="Tamper-evident verification hashes sealing all architectural evaluations."
+            action={
+              <Button asChild variant="outline" size="sm">
+                <Link to={"/app/evidence" as never}>View ledger</Link>
+              </Button>
+            }
+          >
+            <EvidenceExplorer />
+          </SectionCard>
         </div>
       ) : null}
+
+      {/* PHASE 17: UNIVERSAL DETAIL DRAWER */}
+      <UniversalDetailDrawer />
     </>
   );
 }

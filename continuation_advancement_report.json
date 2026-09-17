@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-09-17T15:12:36.328Z",
+  "total": 7,
+  "passed": 7,
+  "results": [
+    {
+      "testId": "C1",
+      "description": "VYRON Branding & System Directive Coherence across Routes & Context Engine",
+      "passed": true,
+      "detail": "Context: normal=true, demo=true; All 5 target routes branded VYRON: true"
+    },
+    {
+      "testId": "C2",
+      "description": "Kaggle Discovery Quality Breakdown, Compatibility Matrix & Benchmark Datasets",
+      "passed": true,
+      "detail": "Metrics Interface: true, Compatibility: true, Benchmarks (NASA/NIST): true, UI gauges: true"
+    },
+    {
+      "testId": "C3",
+      "description": "Domain-Specific Schema-Aware Partition Synthesis (Clinical, Defect, CVE, E-Comm, Fraud)",
+      "passed": true,
+      "detail": "Synthesizer: true, Clinical: true, Software: true, CVE: true, E-Comm: true, Fraud: true"
+    },
+    {
+      "testId": "C4",
+      "description": "Global Pipeline Real-Time Event Synchronization in AppShell & Copilot FullScreen Studio",
+      "passed": true,
+      "detail": "AppShell listener init: true, FullScreen Studio listener init: true"
+    },
+    {
+      "testId": "C5",
+      "description": "Deterministic Demo Mode Scenario Switching, Pristine Baseline Reset & Copilot Action Binding",
+      "passed": true,
+      "detail": "Store reset: true, Store switch: true, UI button: true, Copilot action handler: true"
+    },
+    {
+      "testId": "C6",
+      "description": "Dual-Mode Copilot Isolation & Dedicated System Prompt Directives",
+      "passed": true,
+      "detail": "Branching: true, Safety Directive: true"
+    },
+    {
+      "testId": "C7",
+      "description": "Zero Raw SQL Compliance across All Modified Source Files",
+      "passed": true,
+      "detail": "No raw query patterns detected in modified files"
+    }
+  ]
+}

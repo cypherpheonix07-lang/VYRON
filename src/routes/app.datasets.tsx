@@ -4,7 +4,7 @@ import { KaggleDatasetPanel } from "@/components/datasets/KaggleDatasetPanel";
 export const Route = createFileRoute("/app/datasets")({
   head: () => ({
     meta: [
-      { title: "Kaggle Ingestion Hub — PROJECT BRAHMA" },
+      { title: "Kaggle Ingestion Hub — VYRON" },
       {
         name: "description",
         content:

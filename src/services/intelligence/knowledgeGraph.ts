@@ -29,14 +29,27 @@ export type EntityType =
 export type KnowledgeGraphNodeType = EntityType;
 
 export type EdgeType =
+  | "REQUIRES"
+  | "IMPLEMENTS"
+  | "DEPENDS_ON"
+  | "CALLS"
+  | "EXPOSES"
+  | "OWNED_BY"
+  | "VALIDATED_BY"
+  | "TESTED_BY"
+  | "AFFECTS"
+  | "VIOLATES"
+  | "DERIVED_FROM"
+  | "OBSERVED_BY"
+  | "DEPLOYED_AS"
+  | "SUPERSEDES"
   | "PROVENANCE"
   | "IMPACTS"
-  | "DEPENDS_ON"
-  | "IMPLEMENTS"
   | "VERIFIES"
   | "MITIGATES"
   | "DRIFT_FROM"
-  | "CAUSED_BY";
+  | "CAUSED_BY"
+  | "JUSTIFIED_BY";
 
 export interface GraphNode {
   id: string;
@@ -54,12 +67,32 @@ export interface GraphEdge {
   type: EdgeType;
   label?: string | undefined;
   weight?: number | undefined;
+  provenance?: string | undefined;
+  confidence?: number | undefined;
   metadata?: Record<string, unknown> | undefined;
 }
 
 export interface GraphExportData {
   nodes: GraphNode[];
   edges: GraphEdge[];
+}
+
+export interface CytoscapeElement {
+  data: {
+    id: string;
+    label?: string;
+    source?: string;
+    target?: string;
+    type?: string;
+    [key: string]: unknown;
+  };
+}
+
+export interface CytoscapeExport {
+  elements: {
+    nodes: CytoscapeElement[];
+    edges: CytoscapeElement[];
+  };
 }
 
 export class EngineeringKnowledgeGraph {
@@ -201,6 +234,213 @@ export class EngineeringKnowledgeGraph {
       nodes: Array.from(this.nodes.values()),
       edges: Array.from(this.edges.values()),
     };
+  }
+
+  /**
+   * Dependency cycle detection using Tarjan's / DFS approach
+   */
+  public detectCycles(): string[][] {
+    const visited = new Set<string>();
+    const recStack = new Set<string>();
+    const cycles: string[][] = [];
+
+    const dfs = (nodeId: string, currentPath: string[]) => {
+      visited.add(nodeId);
+      recStack.add(nodeId);
+      const neighbors = this.adjacency.get(nodeId) || new Set();
+
+      for (const neighbor of neighbors) {
+        if (!visited.has(neighbor)) {
+          dfs(neighbor, [...currentPath, neighbor]);
+        } else if (recStack.has(neighbor)) {
+          const cycleStart = currentPath.indexOf(neighbor);
+          if (cycleStart !== -1) {
+            cycles.push([...currentPath.slice(cycleStart), neighbor]);
+          } else {
+            cycles.push([nodeId, neighbor]);
+          }
+        }
+      }
+      recStack.delete(nodeId);
+    };
+
+    for (const nodeId of this.nodes.keys()) {
+      if (!visited.has(nodeId)) {
+        dfs(nodeId, [nodeId]);
+      }
+    }
+
+    return cycles;
+  }
+
+  /**
+   * Finds all test suites impacted by an entity modification
+   */
+  public findImpactedTests(entityId: string): GraphNode[] {
+    const subgraph = this.getImpactSubgraph(entityId, 5);
+    const impactedTests: GraphNode[] = [];
+
+    // Directly in subgraph
+    for (const node of subgraph.nodes) {
+      if (node.type === "test") {
+        impactedTests.push(node);
+      }
+    }
+
+    // Also check reverse connections (tests that verify entities in the subgraph)
+    for (const node of subgraph.nodes) {
+      const rev = this.reverseAdjacency.get(node.id) || new Set();
+      for (const parentId of rev) {
+        const parent = this.nodes.get(parentId);
+        if (parent && parent.type === "test" && !impactedTests.some(t => t.id === parent.id)) {
+          impactedTests.push(parent);
+        }
+      }
+    }
+
+    return impactedTests;
+  }
+
+  /**
+   * Finds orphaned entities with no incoming or outgoing connections
+   */
+  public findOrphanedEntities(): GraphNode[] {
+    const orphans: GraphNode[] = [];
+    for (const [id, node] of this.nodes.entries()) {
+      const outCount = this.adjacency.get(id)?.size || 0;
+      const inCount = this.reverseAdjacency.get(id)?.size || 0;
+      if (outCount === 0 && inCount === 0) {
+        orphans.push(node);
+      }
+    }
+    return orphans;
+  }
+
+  /**
+   * Cytoscape-compatible JSON export
+   */
+  public exportCytoscape(): CytoscapeExport {
+    return {
+      elements: {
+        nodes: Array.from(this.nodes.values()).map(n => ({
+          data: {
+            id: n.id,
+            label: n.label,
+            type: n.type,
+            healthScore: n.healthScore,
+            riskLevel: n.riskLevel,
+            ...n.metadata,
+          },
+        })),
+        edges: Array.from(this.edges.values()).map(e => ({
+          data: {
+            id: e.id,
+            source: e.source,
+            target: e.target,
+            type: e.type,
+            label: e.label || e.type,
+            weight: e.weight,
+            ...e.metadata,
+          },
+        })),
+      },
+    };
+  }
+
+  /**
+   * DOT / Graphviz format export
+   */
+  public exportDot(): string {
+    let dot = "digraph AtlasEngineeringGraph {\n";
+    dot += "  rankdir=LR;\n";
+    dot += "  node [shape=box, style=\"rounded,filled\", color=\"#4f46e5\", fontname=\"Helvetica\"];\n";
+
+    for (const node of this.nodes.values()) {
+      const safeLabel = node.label.replace(/"/g, '\\"');
+      dot += `  "${node.id}" [label="${safeLabel}\\n(${node.type})"];\n`;
+    }
+
+    for (const edge of this.edges.values()) {
+      const safeType = (edge.label || edge.type).replace(/"/g, '\\"');
+      dot += `  "${edge.source}" -> "${edge.target}" [label="${safeType}"];\n`;
+    }
+
+    dot += "}\n";
+    return dot;
+  }
+
+  /**
+   * JSON-LD format export
+   */
+  public exportJsonLd(): Record<string, unknown> {
+    return {
+      "@context": {
+        "@vocab": "https://vyron.ai/schema/engineering#",
+        id: "@id",
+        type: "@type",
+      },
+      "@graph": Array.from(this.nodes.values()).map(node => ({
+        "@id": node.id,
+        "@type": node.type,
+        name: node.label,
+        healthScore: node.healthScore,
+        riskLevel: node.riskLevel,
+        outgoingRelations: Array.from(this.adjacency.get(node.id) || []).map(targetId => ({
+          target: targetId,
+        })),
+      })),
+    };
+  }
+
+  /**
+   * Extracts relevant context subgraph for Copilot queries
+   */
+  public extractContextSubgraph(query: string, maxNodes = 10): GraphExportData {
+    const tokens = query.toLowerCase().split(/\s+/).filter(t => t.length > 2);
+    const matchedNodeIds = new Set<string>();
+
+    for (const [id, node] of this.nodes.entries()) {
+      const labelLower = node.label.toLowerCase();
+      const typeLower = node.type.toLowerCase();
+      if (tokens.some(t => labelLower.includes(t) || typeLower.includes(t))) {
+        matchedNodeIds.add(id);
+        if (matchedNodeIds.size >= maxNodes) break;
+      }
+    }
+
+    if (matchedNodeIds.size === 0) {
+      // Return top-level architecture components as fallback
+      const fallbackNodes = Array.from(this.nodes.values()).slice(0, 5);
+      return { nodes: fallbackNodes, edges: [] };
+    }
+
+    // Expand 1-hop around matched nodes
+    const contextNodes = new Set<string>(matchedNodeIds);
+    const contextEdges: GraphEdge[] = [];
+
+    for (const id of matchedNodeIds) {
+      const outIds = this.adjacency.get(id) || new Set();
+      for (const targetId of outIds) {
+        contextNodes.add(targetId);
+      }
+      const inIds = this.reverseAdjacency.get(id) || new Set();
+      for (const sourceId of inIds) {
+        contextNodes.add(sourceId);
+      }
+    }
+
+    for (const edge of this.edges.values()) {
+      if (contextNodes.has(edge.source) && contextNodes.has(edge.target)) {
+        contextEdges.push(edge);
+      }
+    }
+
+    const resultNodes = Array.from(contextNodes)
+      .map(id => this.nodes.get(id))
+      .filter((n): n is GraphNode => n !== undefined)
+      .slice(0, maxNodes * 2);
+
+    return { nodes: resultNodes, edges: contextEdges };
   }
 
   private seedDefaultKnowledgeGraph(): void {

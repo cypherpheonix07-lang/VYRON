@@ -37,6 +37,8 @@ import {
   History,
   RotateCcw,
   ArrowRight,
+  Code2,
+  Plug,
 } from "lucide-react";
 import { useCopilot } from "@/state/copilot/useCopilot";
 import { aiRouter } from "@/services/ai/aiRouter";
@@ -51,7 +53,16 @@ import { copilotMemory, MemoryLayer, MemoryEntry } from "@/services/copilot/copi
 import { copilotRealtimeListener } from "@/services/copilot/copilotRealtimeListener";
 import { copilotPlanner, DynamicExecutionPlan, PlanStep } from "@/services/copilot/copilotPlanner";
 import { copilotExecutionEngine } from "@/services/copilot/copilotExecutionEngine";
+import { copilotDispatcher } from "@/services/copilot/copilotDispatcher";
+import { copilotReasoningGraph } from "@/services/copilot/copilotReasoningGraph";
 import { ProactiveInsightsBanner } from "@/components/copilot/ProactiveInsightsBanner";
+import { ThinkingControlsBar } from "@/components/copilot/ThinkingControlsBar";
+import { ExactAnswerCard } from "@/components/copilot/ExactAnswerCard";
+import { SkillBuilderModal } from "@/components/copilot/SkillBuilderModal";
+import { ConnectorMarketplaceView } from "@/components/copilot/ConnectorMarketplaceView";
+import { ActionPreviewModal } from "@/components/copilot/ActionPreviewModal";
+import { skillRegistry, GovernedSkill } from "@/services/skills";
+import { ActionPreviewPayload, connectorFabric } from "@/services/connectors";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
@@ -87,7 +98,22 @@ export function CopilotDrawer() {
   const [selectedMemoryLayer, setSelectedMemoryLayer] = useState<string>("ALL");
   const [memoryEntries, setMemoryEntries] = useState<MemoryEntry[]>([]);
   const [delegatingAgent, setDelegatingAgent] = useState<SpecialistAgentType | null>(null);
+  const [expandedTraces, setExpandedTraces] = useState<Record<string, boolean>>({});
+  const [isSkillBuilderOpen, setIsSkillBuilderOpen] = useState(false);
+  const [previewAction, setPreviewAction] = useState<ActionPreviewPayload | null>(null);
+  const [skillsList, setSkillsList] = useState<GovernedSkill[]>(() => skillRegistry.listSkills());
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const toggleTrace = (traceId: string) => {
+    setExpandedTraces((prev) => ({ ...prev, [traceId]: !prev[traceId] }));
+  };
+
+  // Subscribe to skills changes
+  useEffect(() => {
+    return skillRegistry.subscribe((skills) => {
+      setSkillsList(skills);
+    });
+  }, []);
 
   // Initialize real-time event listener
   useEffect(() => {
@@ -123,112 +149,15 @@ export function CopilotDrawer() {
 
     if (!promptOverride) setInputText("");
 
-    // Check if goal is complex - autonomously formulate and execute plan
-    if (copilotPlanner.isComplexGoal(text)) {
-      sendMessage(text);
-      setActiveTab("plan");
-      const plan = copilotPlanner.formulatePlan(text, mode, liveContext?.dataset.name);
-      setActivePlan(plan);
-      copilotStore.setActivePlan(mode, plan);
-      toast.success(`Formulated dynamic plan: ${plan.goal}`);
-      setIsExecutingPlan(true);
-      try {
-        await copilotExecutionEngine.executePlan(plan, mode);
-      } catch (err: unknown) {
-        toast.error(`Execution error: ${err instanceof Error ? err.message : String(err)}`);
-      } finally {
-        setIsExecutingPlan(false);
-      }
-      return;
-    }
-
-    sendMessage(text);
-    setLoading(true);
-
-    try {
-      const systemPrompt = copilotContextEngine.generateSystemPrompt();
-
-      const response = await aiRouter.routeAndComplete({
-        taskType: mode === "DEMO" ? "DEMO_SIMULATION" : "REASONING",
-        modelOverride: activeModel,
-        messages: [
-          ...messages.slice(-6).map((m) => ({
-            role: (m.sender === "USER"
-              ? "user"
-              : m.sender === "ASSISTANT"
-                ? "assistant"
-                : "system") as "user" | "assistant" | "system",
-            content: m.text,
-          })),
-          { role: "user", content: text },
-        ],
-        systemPrompt,
-      });
-
-      const citations = [
-        `Mode: ${mode}`,
-        `Model: ${response.model}`,
-        liveContext?.analysis.currentStageName ? `Stage: ${liveContext.analysis.currentStageName}` : "System: Governed",
-      ];
-
-      let dynamicSuggestedActions: CopilotAction[] = [];
-      const lower = text.toLowerCase();
-      if (lower.includes("drift") || lower.includes("ast") || lower.includes("boundary")) {
-        dynamicSuggestedActions = [
-          { id: "act_drift", label: "Run Architecture Drift Detection", actionType: "DETECT_ARCHITECTURE_DRIFT" },
-          { id: "act_impact", label: "Analyze Change Impact", actionType: "ANALYZE_CHANGE_IMPACT" },
-        ];
-      } else if (lower.includes("impact") || lower.includes("blast radius") || lower.includes("transitive")) {
-        dynamicSuggestedActions = [
-          { id: "act_impact", label: "Analyze Change Impact", actionType: "ANALYZE_CHANGE_IMPACT" },
-          { id: "act_mission", label: "Start Verification Mission", actionType: "START_ENGINEERING_MISSION" },
-        ];
-      } else if (lower.includes("mission") || lower.includes("review project") || lower.includes("objective")) {
-        dynamicSuggestedActions = [
-          { id: "act_mission", label: "Launch Release Verification Mission", actionType: "START_ENGINEERING_MISSION" },
-          { id: "act_pol", label: "Evaluate Release Policies", actionType: "EVALUATE_ENGINEERING_POLICIES" },
-        ];
-      } else if (lower.includes("time machine") || lower.includes("health drop") || lower.includes("why did health") || lower.includes("regression")) {
-        dynamicSuggestedActions = [
-          { id: "act_tm", label: "Compare Historical Snapshots", actionType: "COMPARE_TIME_MACHINE_SNAPSHOTS" },
-          { id: "act_drift", label: "Detect Current Drift", actionType: "DETECT_ARCHITECTURE_DRIFT" },
-        ];
-      } else if (lower.includes("policy") || lower.includes("release gate") || lower.includes("blocking")) {
-        dynamicSuggestedActions = [
-          { id: "act_pol", label: "Evaluate Release Policies", actionType: "EVALUATE_ENGINEERING_POLICIES" },
-          { id: "act_mission", label: "Start Mission for Gate Blockers", actionType: "START_ENGINEERING_MISSION" },
-        ];
-      } else if (lower.includes("simulation") || lower.includes("scenario") || lower.includes("lab")) {
-        dynamicSuggestedActions = [
-          { id: "act_sim", label: "Run Drift Anomaly Scenario", actionType: "RUN_SIMULATION_SCENARIO" },
-          { id: "act_rst", label: "Reset Demo Baseline", actionType: "RESET_DEMO" },
-        ];
-      } else {
-        dynamicSuggestedActions =
-          mode === "NORMAL"
-            ? [
-                { id: "act_1", label: "Run Full 12-Stage Pipeline", actionType: "RUN_ANALYSIS" },
-                { id: "act_drift", label: "Detect Architecture Drift", actionType: "DETECT_ARCHITECTURE_DRIFT" },
-              ]
-            : [
-                { id: "act_inj", label: "Inject Anomaly Surge", actionType: "INJECT_DEMO_ANOMALY" },
-                { id: "act_rst", label: "Reset Demo Baseline", actionType: "RESET_DEMO" },
-              ];
-      }
-
-      addAssistantMessage(response.text, {
-        model: response.model,
-        verificationHash: response.verificationHash,
-        reasoningDurationMs: response.durationMs,
-        citations,
-        suggestedActions: dynamicSuggestedActions,
-      });
-    } catch (err: unknown) {
-      const errMsg = err instanceof Error ? err.message : String(err);
-      addAssistantMessage(`I encountered an unexpected error completing your request: ${errMsg}`);
-    } finally {
-      setLoading(false);
-    }
+    await copilotDispatcher.dispatch(text, {
+      mode,
+      modelOverride: activeModel,
+      onPlanCreated: () => {
+        setActiveTab("plan");
+        setIsExecutingPlan(true);
+      },
+    });
+    setIsExecutingPlan(false);
   };
 
   const handleGeneratePlan = async () => {
@@ -477,12 +406,14 @@ export function CopilotDrawer() {
             </div>
           </div>
 
-          {/* Navigation Tabs (All 7 Tabs) */}
-          <div className="grid grid-cols-7 gap-1 p-1 rounded-xl bg-background/60 border border-border/50 text-[10px] font-semibold">
+          {/* Navigation Tabs (9 Tabs, responsive scroll) */}
+          <div className="flex items-center gap-1 overflow-x-auto p-1 rounded-xl bg-background/60 border border-border/50 text-[10px] font-semibold no-scrollbar">
             {[
               { id: "chat", label: "Chat", icon: Sparkles },
               { id: "plan", label: "Plan", icon: Layers },
               { id: "tools", label: "Tools", icon: Wrench },
+              { id: "skills", label: "Skills", icon: Code2 },
+              { id: "connectors", label: "Connectors", icon: Plug },
               { id: "agents", label: "Agents", icon: Users },
               { id: "memory", label: "Memory", icon: Brain },
               { id: "context", label: "Context", icon: Cpu },
@@ -494,7 +425,7 @@ export function CopilotDrawer() {
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as CopilotTab)}
                   className={cn(
-                    "py-1 px-1 rounded-lg transition-all flex flex-col items-center justify-center gap-0.5",
+                    "py-1 px-2 rounded-lg transition-all flex items-center justify-center gap-1 whitespace-nowrap shrink-0",
                     activeTab === tab.id
                       ? "bg-primary text-primary-foreground shadow-sm"
                       : "text-muted-foreground hover:text-foreground",
@@ -579,44 +510,103 @@ export function CopilotDrawer() {
                           : "bg-secondary/75 text-foreground border border-border/50 rounded-tl-none shadow-sm",
                     )}
                   >
-                    <div className="whitespace-pre-wrap">{msg.text}</div>
+                    {msg.sender === "ASSISTANT" && msg.metadata?.exactAnswer ? (
+                      <ExactAnswerCard
+                        exactAnswer={msg.metadata.exactAnswer}
+                        fallbackText={msg.text}
+                        agentName={msg.metadata.activeSpecialistAgent || msg.metadata.model}
+                        onExecuteAction={handleExecuteSuggestedAction}
+                      />
+                    ) : (
+                      <>
+                        {/* Intent and Epistemic Badges for Assistant */}
+                        {msg.sender === "ASSISTANT" && (msg.metadata?.intent || msg.metadata?.epistemicState) && (
+                          <div className="flex items-center gap-1.5 mb-2 flex-wrap">
+                            {msg.metadata.intent && (
+                              <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-primary/20 text-primary border border-primary/30">
+                                [{msg.metadata.intent}] {msg.metadata.intentConfidence !== undefined ? `${Math.round(msg.metadata.intentConfidence * 100)}%` : ""}
+                              </span>
+                            )}
+                            {msg.metadata.epistemicState && (
+                              <span className="px-1.5 py-0.5 rounded text-[9px] font-mono text-muted-foreground bg-background/60 border border-border/40">
+                                EPISTEMIC: {msg.metadata.epistemicState}
+                              </span>
+                            )}
+                          </div>
+                        )}
 
-                    {/* Citations / Provenance Badges */}
-                    {msg.metadata?.citations && msg.metadata.citations.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mt-2.5 pt-2 border-t border-border/30">
-                        {msg.metadata.citations.map((c, idx) => (
-                          <span
-                            key={idx}
-                            className="px-2 py-0.5 rounded-md bg-background/60 text-muted-foreground border border-border/40 text-[10px] font-mono"
-                          >
-                            {c}
-                          </span>
-                        ))}
-                      </div>
-                    )}
+                        <div className="whitespace-pre-wrap">{msg.text}</div>
 
-                    {/* Verification Seal */}
-                    {msg.metadata?.verificationHash && (
-                      <div className="mt-2 text-[9px] font-mono text-muted-foreground/70 flex items-center gap-1">
-                        <Shield className="size-2.5 text-emerald-400" />
-                        <span>SHA-256: {msg.metadata.verificationHash.slice(0, 16)}...</span>
-                      </div>
-                    )}
+                        {/* Citations / Provenance Badges */}
+                        {msg.metadata?.citations && msg.metadata.citations.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-2.5 pt-2 border-t border-border/30">
+                            {msg.metadata.citations.map((c, idx) => (
+                              <span
+                                key={idx}
+                                className="px-2 py-0.5 rounded-md bg-background/60 text-muted-foreground border border-border/40 text-[10px] font-mono"
+                              >
+                                {c}
+                              </span>
+                            ))}
+                          </div>
+                        )}
 
-                    {/* Interactive Suggested Actions */}
-                    {msg.metadata?.suggestedActions && msg.metadata.suggestedActions.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 mt-3 pt-2.5 border-t border-border/40">
-                        {msg.metadata.suggestedActions.map((action) => (
-                          <button
-                            key={action.id}
-                            onClick={() => handleExecuteSuggestedAction(action)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-all shadow-sm active:scale-95"
-                          >
-                            <Zap className="size-3 text-primary animate-pulse" />
-                            <span>{action.label}</span>
-                          </button>
-                        ))}
-                      </div>
+                        {/* Verification Seal */}
+                        {msg.metadata?.verificationHash && (
+                          <div className="mt-2 text-[9px] font-mono text-muted-foreground/70 flex items-center gap-1">
+                            <Shield className="size-2.5 text-emerald-400" />
+                            <span>SHA-256: {msg.metadata.verificationHash.slice(0, 16)}...</span>
+                          </div>
+                        )}
+
+                        {/* Interactive Suggested Actions */}
+                        {msg.metadata?.suggestedActions && msg.metadata.suggestedActions.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mt-3 pt-2.5 border-t border-border/40">
+                            {msg.metadata.suggestedActions.map((action) => (
+                              <button
+                                key={action.id}
+                                onClick={() => handleExecuteSuggestedAction(action)}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-all shadow-sm active:scale-95"
+                              >
+                                <Zap className="size-3 text-primary animate-pulse" />
+                                <span>{action.label}</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Reasoning Trace DAG Expander */}
+                        {msg.sender === "ASSISTANT" && msg.metadata?.reasoningTraceId && (
+                          <div className="mt-2.5 pt-2 border-t border-border/30">
+                            <button
+                              type="button"
+                              onClick={() => toggleTrace(msg.metadata!.reasoningTraceId!)}
+                              className="flex items-center gap-1 text-[10px] font-mono text-primary hover:underline"
+                            >
+                              <Brain className="size-3" />
+                              <span>{expandedTraces[msg.metadata.reasoningTraceId] ? "Hide" : "View"} Reasoning Trace DAG</span>
+                              <ChevronRight className={cn("size-2.5 transition-transform", expandedTraces[msg.metadata.reasoningTraceId] && "rotate-90")} />
+                            </button>
+                            {expandedTraces[msg.metadata.reasoningTraceId] && (() => {
+                              const trace = copilotReasoningGraph.getTrace(msg.metadata!.reasoningTraceId!);
+                              if (!trace) return <div className="text-[10px] text-muted-foreground mt-1">Trace archived</div>;
+                              return (
+                                <div className="mt-2 p-2 rounded-lg bg-background/70 border border-border/40 text-[10px] font-mono space-y-1">
+                                  <div><span className="text-muted-foreground">Goal:</span> {trace.goal}</div>
+                                  <div><span className="text-muted-foreground">Understood:</span> {trace.userVisibleTrace.understood}</div>
+                                  <div><span className="text-muted-foreground">Graph DAG:</span> {trace.nodes.length} nodes, {trace.edges.length} edges</div>
+                                  {trace.userVisibleTrace.hypotheses && trace.userVisibleTrace.hypotheses.length > 0 && (
+                                    <div><span className="text-muted-foreground">Hypotheses:</span> {trace.userVisibleTrace.hypotheses.length} evaluated</div>
+                                  )}
+                                  {trace.userVisibleTrace.unknowns && trace.userVisibleTrace.unknowns.length > 0 && (
+                                    <div className="text-amber-400">Unknown: {trace.userVisibleTrace.unknowns[0]}</div>
+                                  )}
+                                </div>
+                              );
+                            })()}
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -675,6 +665,14 @@ export function CopilotDrawer() {
                   {prompt}
                 </button>
               ))}
+            </div>
+
+            {/* Thinking Controls Bar */}
+            <div className="px-3 pt-2 border-t border-border/30 bg-background/50">
+              <ThinkingControlsBar
+                onOpenSkillBuilder={() => setIsSkillBuilderOpen(true)}
+                onOpenConnectorMarketplace={() => setActiveTab("connectors")}
+              />
             </div>
 
             {/* Input Bar */}
@@ -893,6 +891,92 @@ export function CopilotDrawer() {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* TAB: SKILLS */}
+        {activeTab === "skills" && (
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-border/40">
+              <div>
+                <h4 className="text-xs font-bold text-foreground">Governed Skill Runtime</h4>
+                <p className="text-[11px] text-muted-foreground">Versioned, air-gap tested, and trust-classified capabilities.</p>
+              </div>
+              <Button
+                size="sm"
+                onClick={() => setIsSkillBuilderOpen(true)}
+                className="h-7 text-xs gap-1 bg-primary text-primary-foreground font-bold shadow-sm"
+              >
+                <Sparkles className="size-3" />
+                <span>Synthesize Skill</span>
+              </Button>
+            </div>
+
+            <div className="space-y-2.5">
+              {skillsList.map((skill) => (
+                <div
+                  key={skill.skillId}
+                  className="p-3.5 rounded-xl bg-secondary/30 border border-border/40 space-y-2 hover:border-primary/40 transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Code2 className="size-4 text-primary" />
+                      <span className="text-xs font-bold text-foreground">{skill.name}</span>
+                      <Badge variant="outline" className="text-[9px] font-mono">
+                        v{skill.version}
+                      </Badge>
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className={cn(
+                        "text-[9px] font-mono",
+                        skill.provenance.trustLevel === "TRUSTED" && "bg-emerald-500/10 text-emerald-400 border-emerald-500/30",
+                        skill.provenance.trustLevel === "VERIFIED" && "bg-cyan-500/10 text-cyan-400 border-cyan-500/30",
+                        skill.provenance.trustLevel === "COMMUNITY" && "bg-purple-500/10 text-purple-400 border-purple-500/30",
+                        skill.provenance.trustLevel === "UNKNOWN" && "bg-amber-500/10 text-amber-400 border-amber-500/30",
+                        skill.provenance.trustLevel === "BLOCKED" && "bg-rose-500/10 text-rose-400 border-rose-500/30",
+                      )}
+                    >
+                      {skill.provenance.trustLevel}
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{skill.description}</p>
+                  <div className="flex items-center justify-between pt-1 border-t border-border/20 text-[10px] font-mono text-muted-foreground">
+                    <span>Domain: {skill.domain} • Tests: {skill.testSuite.length} cases</span>
+                    <button
+                      onClick={async () => {
+                        try {
+                          if (skill.status === "ACTIVE") {
+                            skillRegistry.disableSkill(skill.skillId);
+                            toast.info(`Skill ${skill.name} disabled.`);
+                          } else {
+                            await skillRegistry.activateSkill(skill.skillId);
+                            toast.success(`Skill ${skill.name} activated.`);
+                          }
+                        } catch (err: unknown) {
+                          toast.error(`Skill update failed: ${err instanceof Error ? err.message : String(err)}`);
+                        }
+                      }}
+                      className={cn(
+                        "px-2 py-0.5 rounded text-[10px] font-bold border transition-colors",
+                        skill.status === "ACTIVE"
+                          ? "bg-emerald-500/20 text-emerald-400 border-emerald-500/40"
+                          : "bg-secondary text-muted-foreground border-border/60",
+                      )}
+                    >
+                      {skill.status}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB: CONNECTORS */}
+        {activeTab === "connectors" && (
+          <div className="flex-1 overflow-hidden flex flex-col p-2">
+            <ConnectorMarketplaceView className="flex-1" />
           </div>
         )}
 
@@ -1138,6 +1222,18 @@ export function CopilotDrawer() {
             </div>
           </div>
         )}
+
+        {/* Skill Builder Modal */}
+        <SkillBuilderModal
+          isOpen={isSkillBuilderOpen}
+          onClose={() => setIsSkillBuilderOpen(false)}
+        />
+
+        {/* Action Preview Modal */}
+        <ActionPreviewModal
+          preview={previewAction}
+          onClose={() => setPreviewAction(null)}
+        />
       </SheetContent>
     </Sheet>
   );

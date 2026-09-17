@@ -46,33 +46,24 @@ interface Step1Props {
   errors: Record<string, string>;
 }
 
-// 24 Curated Lucide Icons
-const WIZARD_ICONS = [
-  { name: "Folder", component: Folder },
-  { name: "Globe", component: Globe },
-  { name: "Smartphone", component: Smartphone },
-  { name: "Server", component: Server },
-  { name: "Brain", component: Brain },
-  { name: "Shield", component: Shield },
-  { name: "Terminal", component: Terminal },
-  { name: "Database", component: Database },
-  { name: "Cpu", component: Cpu },
-  { name: "Bot", component: Bot },
-  { name: "Rocket", component: Rocket },
-  { name: "Layers", component: Layers },
-  { name: "Code", component: Code },
-  { name: "Zap", component: Zap },
-  { name: "BarChart", component: BarChart },
-  { name: "Activity", component: Activity },
-  { name: "Lock", component: Lock },
-  { name: "Box", component: Box },
-  { name: "Workflow", component: Workflow },
-  { name: "Cloud", component: Cloud },
-  { name: "Sparkles", component: Sparkles },
-  { name: "Wand2", component: Wand2 },
-  { name: "Compass", component: Compass },
-  { name: "Radio", component: Radio },
-];
+import {
+  WORKSPACE_ICON_TAXONOMY,
+  WORKSPACE_CATEGORIES,
+  getWorkspaceIconByName,
+  type WorkspaceCategory,
+} from "@/data/workspaceTaxonomy";
+
+// 24 Curated Lucide Icons derived from Canonical Taxonomy
+const WIZARD_ICONS = WORKSPACE_ICON_TAXONOMY.map((item) => ({
+  name: item.name,
+  component: item.icon,
+  shortLabel: item.shortLabel,
+  longLabel: item.longLabel,
+  description: item.description,
+  category: item.category,
+  suggestedTechnologies: item.suggestedTechnologies,
+  suggestedWorkflows: item.suggestedWorkflows,
+}));
 
 // Curated Cover Gradient Presets
 const COVER_GRADIENTS = [
@@ -113,6 +104,7 @@ export const Step1Identity: React.FC<Step1Props> = ({ payload, onChange, errors 
   const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(
     Boolean(payload.slug && payload.slug !== generateSlug(payload.name)),
   );
+  const [iconCategoryFilter, setIconCategoryFilter] = useState<string>("ALL");
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newName = e.target.value;
@@ -334,11 +326,43 @@ export const Step1Identity: React.FC<Step1Props> = ({ payload, onChange, errors 
         )}
       </div>
 
-      {/* Lucide Icon Picker (24 Subset) */}
-      <div className="space-y-2">
-        <Label className="text-sm font-medium">Select Workspace Icon (24 Core Subset)</Label>
+      {/* Lucide Icon Picker (24 Semantic Categories) */}
+      <div className="space-y-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <Label className="text-sm font-medium">Select Workspace Icon (24 Semantic Categories)</Label>
+          <div className="flex flex-wrap items-center gap-1">
+            <button
+              type="button"
+              onClick={() => setIconCategoryFilter("ALL")}
+              className={`px-2 py-0.5 text-[10px] font-semibold rounded-md border transition-colors ${
+                iconCategoryFilter === "ALL"
+                  ? "border-primary/50 bg-primary/20 text-primary"
+                  : "border-border/50 text-muted-foreground hover:bg-muted/40"
+              }`}
+            >
+              All (24)
+            </button>
+            {WORKSPACE_CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setIconCategoryFilter(cat)}
+                className={`px-2 py-0.5 text-[10px] font-semibold rounded-md border transition-colors ${
+                  iconCategoryFilter === cat
+                    ? "border-primary/50 bg-primary/20 text-primary"
+                    : "border-border/50 text-muted-foreground hover:bg-muted/40"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="grid grid-cols-6 sm:grid-cols-8 md:grid-cols-12 gap-2 rounded-lg border border-border/70 bg-card/30 p-3">
-          {WIZARD_ICONS.map(({ name, component: IconComponent }) => {
+          {WIZARD_ICONS.filter(
+            (i) => iconCategoryFilter === "ALL" || i.category === iconCategoryFilter,
+          ).map(({ name, component: IconComponent, shortLabel, category }) => {
             const isSelected = payload.icon === name;
             return (
               <button
@@ -346,18 +370,65 @@ export const Step1Identity: React.FC<Step1Props> = ({ payload, onChange, errors 
                 type="button"
                 onClick={() => onChange({ icon: name })}
                 aria-pressed={isSelected}
-                aria-label={`Select ${name} icon`}
-                className={`flex h-10 w-10 items-center justify-center rounded-lg border transition-all ${
+                aria-label={`Select ${shortLabel} icon`}
+                title={`${shortLabel} (${category})`}
+                className={`group relative flex h-10 w-10 items-center justify-center rounded-lg border transition-all ${
                   isSelected
                     ? "border-primary bg-primary/20 text-primary ring-2 ring-primary/40 shadow-sm"
                     : "border-border/50 bg-background/50 text-muted-foreground hover:border-primary/40 hover:text-foreground hover:bg-card"
                 }`}
               >
-                <IconComponent className="h-5 w-5" aria-hidden="true" />
+                <IconComponent className="h-5 w-5 transition-transform group-hover:scale-110" aria-hidden="true" />
               </button>
             );
           })}
         </div>
+
+        {/* Rich Taxonomy Metadata Card for Selected Icon */}
+        {(() => {
+          const selectedMeta = getWorkspaceIconByName(payload.icon) || WORKSPACE_ICON_TAXONOMY[0];
+          if (!selectedMeta) return null;
+          const IconComp = selectedMeta.icon;
+          return (
+            <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 space-y-2">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-md border border-primary/30 bg-primary/15 text-primary">
+                    <IconComp className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-foreground flex items-center gap-1.5">
+                      <span>{selectedMeta.longLabel}</span>
+                      <span className="text-[10px] font-mono font-normal text-muted-foreground">
+                        [#{selectedMeta.index}]
+                      </span>
+                    </h4>
+                    <p className="text-[10px] font-medium text-primary/80">{selectedMeta.category}</p>
+                  </div>
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground leading-relaxed">{selectedMeta.description}</p>
+              <div className="flex flex-wrap items-center gap-3 pt-1 border-t border-border/40 text-[10px]">
+                <div className="flex items-center gap-1 flex-wrap">
+                  <span className="text-muted-foreground font-medium">Suggested Tech:</span>
+                  {selectedMeta.suggestedTechnologies.map((tech) => (
+                    <span key={tech} className="px-1.5 py-0.2 bg-muted/70 text-foreground font-mono rounded">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex items-center gap-1 flex-wrap">
+                  <span className="text-muted-foreground font-medium">Workflows:</span>
+                  {selectedMeta.suggestedWorkflows.map((wf) => (
+                    <span key={wf} className="px-1.5 py-0.2 bg-primary/10 text-primary rounded">
+                      {wf}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          );
+        })()}
       </div>
 
       {/* Cover Gradient Picker */}

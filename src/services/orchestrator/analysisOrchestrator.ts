@@ -94,27 +94,7 @@ export class AnalysisOrchestrator {
         if (stageId === 1) {
           // STAGE 1: Data Acquisition & Ingestion
           await this.delay(stageDuration * 0.4, signal);
-          records =
-            mode === "DEMO"
-              ? [...selectedDemo.sampleRows]
-              : [
-                  { id: "TX-1001", user_id: "USR-9921", amount: 489.5, ip_address: "192.168.1.10", velocity_last_hour: 12, is_cross_border: true, timestamp: "2026-09-14T08:00:00Z" },
-                  { id: "TX-1002", user_id: "USR-8812", amount: 24.0, ip_address: "10.0.0.12", velocity_last_hour: 1, is_cross_border: false, timestamp: "2026-09-14T08:02:10Z" },
-                  { id: "TX-1003", user_id: "USR-9921", amount: 940.0, ip_address: "185.220.101.5", velocity_last_hour: 15, is_cross_border: true, timestamp: "2026-09-14T08:04:30Z" },
-                  { id: "TX-1004", user_id: "USR-3450", amount: 110.2, ip_address: "10.0.0.45", velocity_last_hour: 2, is_cross_border: false, timestamp: "2026-09-14T08:07:00Z" },
-                  { id: "TX-1005", user_id: "USR-9921", amount: 1520.0, ip_address: "185.220.101.5", velocity_last_hour: 18, is_cross_border: true, timestamp: "2026-09-14T08:09:40Z" },
-                  { id: "TX-1006", user_id: "USR-4421", amount: 62.0, ip_address: "172.16.0.4", velocity_last_hour: 1, is_cross_border: false, timestamp: "2026-09-14T08:12:00Z" },
-                  { id: "TX-1007", user_id: "USR-7731", amount: 780.0, ip_address: "194.26.29.11", velocity_last_hour: 9, is_cross_border: true, timestamp: "2026-09-14T08:15:20Z" },
-                  { id: "TX-1008", user_id: "USR-1092", amount: 15.5, ip_address: "10.0.0.88", velocity_last_hour: 1, is_cross_border: false, timestamp: "2026-09-14T08:18:00Z" },
-                  { id: "TX-1009", user_id: "USR-5520", amount: 320.0, ip_address: "192.168.1.15", velocity_last_hour: 3, is_cross_border: false, timestamp: "2026-09-14T08:21:00Z" },
-                  { id: "TX-1010", user_id: "USR-9921", amount: 2150.0, ip_address: "185.220.101.5", velocity_last_hour: 22, is_cross_border: true, timestamp: "2026-09-14T08:24:10Z" },
-                  { id: "TX-1011", user_id: "USR-6631", amount: 85.0, ip_address: "10.0.0.99", velocity_last_hour: 2, is_cross_border: false, timestamp: "2026-09-14T08:27:00Z" },
-                  { id: "TX-1012", user_id: "USR-7731", amount: 890.0, ip_address: "194.26.29.11", velocity_last_hour: 11, is_cross_border: true, timestamp: "2026-09-14T08:30:00Z" },
-                  { id: "TX-1013", user_id: "USR-2041", amount: 45.0, ip_address: "172.16.0.22", velocity_last_hour: 1, is_cross_border: false, timestamp: "2026-09-14T08:33:00Z" },
-                  { id: "TX-1014", user_id: "USR-9921", amount: 3200.0, ip_address: "185.220.101.5", velocity_last_hour: 26, is_cross_border: true, timestamp: "2026-09-14T08:36:00Z" },
-                  { id: "TX-1015", user_id: "USR-1180", amount: 19.99, ip_address: "10.0.0.105", velocity_last_hour: 1, is_cross_border: false, timestamp: "2026-09-14T08:39:00Z" },
-                  { id: "TX-1016", user_id: "USR-8812", amount: 32.5, ip_address: "10.0.0.12", velocity_last_hour: 2, is_cross_border: false, timestamp: "2026-09-14T08:42:00Z" },
-                ];
+          records = this.synthesizePartitionForDataset(datasetId, datasetName, mode);
 
           analysisStore.updateTelemetry({
             recordsProcessed: records.length,
@@ -126,7 +106,7 @@ export class AnalysisOrchestrator {
             progressPercent: 100,
             durationMs: stageDuration,
             summary: `Ingested ${records.length} partition records from ${datasetName}.`,
-            metrics: { recordsIngested: records.length, bufferType: "IN_MEMORY_PARTITION" },
+            metrics: { recordsIngested: records.length, bufferType: "IN_MEMORY_PARTITION", datasetId },
           });
         } else if (stageId === 2) {
           // STAGE 2: Schema Validation
@@ -412,6 +392,82 @@ export class AnalysisOrchestrator {
       this.activeRunId = null;
       throw err;
     }
+  }
+
+  public synthesizePartitionForDataset(
+    datasetId: string,
+    datasetName: string,
+    mode: AppMode,
+  ): Array<Record<string, unknown>> {
+    const dLower = (datasetId + " " + datasetName).toLowerCase();
+
+    if (dLower.includes("clinical") || dLower.includes("appointment") || dLower.includes("medical")) {
+      return [
+        { id: "APPT-5601", user_id: "PAT-1082", amount: 150.0, ip_address: "10.14.2.1", velocity_last_hour: 4, is_cross_border: false, scheduled_lag_days: 14, no_show: "No" },
+        { id: "APPT-5602", user_id: "PAT-2094", amount: 45.0, ip_address: "10.14.2.1", velocity_last_hour: 1, is_cross_border: false, scheduled_lag_days: 2, no_show: "No" },
+        { id: "APPT-5603", user_id: "PAT-9912", amount: 620.0, ip_address: "192.168.10.88", velocity_last_hour: 16, is_cross_border: true, scheduled_lag_days: 45, no_show: "Yes" },
+        { id: "APPT-5604", user_id: "PAT-3310", amount: 85.0, ip_address: "10.14.2.5", velocity_last_hour: 2, is_cross_border: false, scheduled_lag_days: 5, no_show: "No" },
+        { id: "APPT-5605", user_id: "PAT-9912", amount: 780.0, ip_address: "192.168.10.88", velocity_last_hour: 19, is_cross_border: true, scheduled_lag_days: 60, no_show: "Yes" },
+        { id: "APPT-5606", user_id: "PAT-4412", amount: 50.0, ip_address: "10.14.2.9", velocity_last_hour: 1, is_cross_border: false, scheduled_lag_days: 1, no_show: "No" },
+        { id: "APPT-5607", user_id: "PAT-8812", amount: 390.0, ip_address: "172.20.4.12", velocity_last_hour: 8, is_cross_border: true, scheduled_lag_days: 30, no_show: "Yes" },
+        { id: "APPT-5608", user_id: "PAT-1190", amount: 35.0, ip_address: "10.14.2.3", velocity_last_hour: 1, is_cross_border: false, scheduled_lag_days: 3, no_show: "No" },
+        { id: "APPT-5609", user_id: "PAT-9912", amount: 1450.0, ip_address: "192.168.10.88", velocity_last_hour: 24, is_cross_border: true, scheduled_lag_days: 75, no_show: "Yes" },
+        { id: "APPT-5610", user_id: "PAT-6620", amount: 110.0, ip_address: "10.14.2.7", velocity_last_hour: 2, is_cross_border: false, scheduled_lag_days: 7, no_show: "No" },
+      ];
+    }
+
+    if (dLower.includes("ecommerce") || dLower.includes("olist") || dLower.includes("brazilian")) {
+      return [
+        { id: "ORD-8801", user_id: "CUST-4410", amount: 89.9, ip_address: "177.18.20.1", velocity_last_hour: 2, is_cross_border: false, freight_value: 12.5, status: "delivered" },
+        { id: "ORD-8802", user_id: "CUST-1092", amount: 34.0, ip_address: "177.18.20.4", velocity_last_hour: 1, is_cross_border: false, freight_value: 8.2, status: "delivered" },
+        { id: "ORD-8803", user_id: "CUST-9921", amount: 1280.0, ip_address: "189.40.110.55", velocity_last_hour: 14, is_cross_border: true, freight_value: 94.0, status: "shipped" },
+        { id: "ORD-8804", user_id: "CUST-3318", amount: 120.0, ip_address: "177.18.20.8", velocity_last_hour: 2, is_cross_border: false, freight_value: 15.0, status: "delivered" },
+        { id: "ORD-8805", user_id: "CUST-9921", amount: 2450.0, ip_address: "189.40.110.55", velocity_last_hour: 21, is_cross_border: true, freight_value: 140.0, status: "processing" },
+        { id: "ORD-8806", user_id: "CUST-5520", amount: 55.0, ip_address: "177.18.20.12", velocity_last_hour: 1, is_cross_border: false, freight_value: 9.8, status: "delivered" },
+        { id: "ORD-8807", user_id: "CUST-7740", amount: 690.0, ip_address: "191.240.12.9", velocity_last_hour: 9, is_cross_border: true, freight_value: 65.0, status: "delivered" },
+        { id: "ORD-8808", user_id: "CUST-9921", amount: 3100.0, ip_address: "189.40.110.55", velocity_last_hour: 28, is_cross_border: true, freight_value: 185.0, status: "processing" },
+      ];
+    }
+
+    if (dLower.includes("nasa") || dLower.includes("defect") || dLower.includes("mccabe")) {
+      return [
+        { id: "MOD-101", user_id: "DEV-SYS", amount: 240.0, ip_address: "127.0.0.1", velocity_last_hour: 6, is_cross_border: false, complexity: 12, defect: false },
+        { id: "MOD-102", user_id: "DEV-NAV", amount: 890.0, ip_address: "127.0.0.1", velocity_last_hour: 18, is_cross_border: false, complexity: 34, defect: true },
+        { id: "MOD-103", user_id: "DEV-SYS", amount: 110.0, ip_address: "127.0.0.1", velocity_last_hour: 3, is_cross_border: false, complexity: 8, defect: false },
+        { id: "MOD-104", user_id: "DEV-COMM", amount: 1450.0, ip_address: "127.0.0.1", velocity_last_hour: 26, is_cross_border: true, complexity: 48, defect: true },
+        { id: "MOD-105", user_id: "DEV-TLM", amount: 320.0, ip_address: "127.0.0.1", velocity_last_hour: 7, is_cross_border: false, complexity: 15, defect: false },
+      ];
+    }
+
+    if (dLower.includes("cwe") || dLower.includes("nvd") || dLower.includes("vulnerab")) {
+      return [
+        { id: "CVE-2026-1044", user_id: "PKG-AUTH", amount: 98.0, ip_address: "192.88.99.1", velocity_last_hour: 15, is_cross_border: true, cwe: "CWE-89", cvss: 9.8 },
+        { id: "CVE-2026-2189", user_id: "PKG-UI", amount: 54.0, ip_address: "192.88.99.4", velocity_last_hour: 4, is_cross_border: false, cwe: "CWE-79", cvss: 5.4 },
+        { id: "CVE-2026-3301", user_id: "PKG-AUTH", amount: 88.0, ip_address: "192.88.99.1", velocity_last_hour: 18, is_cross_border: true, cwe: "CWE-287", cvss: 8.8 },
+        { id: "CVE-2026-4420", user_id: "PKG-API", amount: 42.0, ip_address: "192.88.99.8", velocity_last_hour: 2, is_cross_border: false, cwe: "CWE-200", cvss: 4.2 },
+        { id: "CVE-2026-5590", user_id: "PKG-AUTH", amount: 96.0, ip_address: "192.88.99.1", velocity_last_hour: 22, is_cross_border: true, cwe: "CWE-502", cvss: 9.6 },
+      ];
+    }
+
+    // Default: IEEE-CIS Credit Card Fraud Analytics Benchmark
+    return [
+      { id: "TX-1001", user_id: "USR-9921", amount: 489.5, ip_address: "192.168.1.10", velocity_last_hour: 12, is_cross_border: true, timestamp: "2026-09-14T08:00:00Z" },
+      { id: "TX-1002", user_id: "USR-8812", amount: 24.0, ip_address: "10.0.0.12", velocity_last_hour: 1, is_cross_border: false, timestamp: "2026-09-14T08:02:10Z" },
+      { id: "TX-1003", user_id: "USR-9921", amount: 940.0, ip_address: "185.220.101.5", velocity_last_hour: 15, is_cross_border: true, timestamp: "2026-09-14T08:04:30Z" },
+      { id: "TX-1004", user_id: "USR-3450", amount: 110.2, ip_address: "10.0.0.45", velocity_last_hour: 2, is_cross_border: false, timestamp: "2026-09-14T08:07:00Z" },
+      { id: "TX-1005", user_id: "USR-9921", amount: 1520.0, ip_address: "185.220.101.5", velocity_last_hour: 18, is_cross_border: true, timestamp: "2026-09-14T08:09:40Z" },
+      { id: "TX-1006", user_id: "USR-4421", amount: 62.0, ip_address: "172.16.0.4", velocity_last_hour: 1, is_cross_border: false, timestamp: "2026-09-14T08:12:00Z" },
+      { id: "TX-1007", user_id: "USR-7731", amount: 780.0, ip_address: "194.26.29.11", velocity_last_hour: 9, is_cross_border: true, timestamp: "2026-09-14T08:15:20Z" },
+      { id: "TX-1008", user_id: "USR-1092", amount: 15.5, ip_address: "10.0.0.88", velocity_last_hour: 1, is_cross_border: false, timestamp: "2026-09-14T08:18:00Z" },
+      { id: "TX-1009", user_id: "USR-5520", amount: 320.0, ip_address: "192.168.1.15", velocity_last_hour: 3, is_cross_border: false, timestamp: "2026-09-14T08:21:00Z" },
+      { id: "TX-1010", user_id: "USR-9921", amount: 2150.0, ip_address: "185.220.101.5", velocity_last_hour: 22, is_cross_border: true, timestamp: "2026-09-14T08:24:10Z" },
+      { id: "TX-1011", user_id: "USR-6631", amount: 85.0, ip_address: "10.0.0.99", velocity_last_hour: 2, is_cross_border: false, timestamp: "2026-09-14T08:27:00Z" },
+      { id: "TX-1012", user_id: "USR-7731", amount: 890.0, ip_address: "194.26.29.11", velocity_last_hour: 11, is_cross_border: true, timestamp: "2026-09-14T08:30:00Z" },
+      { id: "TX-1013", user_id: "USR-2041", amount: 45.0, ip_address: "172.16.0.22", velocity_last_hour: 1, is_cross_border: false, timestamp: "2026-09-14T08:33:00Z" },
+      { id: "TX-1014", user_id: "USR-9921", amount: 3200.0, ip_address: "185.220.101.5", velocity_last_hour: 26, is_cross_border: true, timestamp: "2026-09-14T08:36:00Z" },
+      { id: "TX-1015", user_id: "USR-1180", amount: 19.99, ip_address: "10.0.0.105", velocity_last_hour: 1, is_cross_border: false, timestamp: "2026-09-14T08:39:00Z" },
+      { id: "TX-1016", user_id: "USR-8812", amount: 32.5, ip_address: "10.0.0.12", velocity_last_hour: 2, is_cross_border: false, timestamp: "2026-09-14T08:42:00Z" },
+    ];
   }
 
   private delay(ms: number, signal?: AbortSignal): Promise<void> {

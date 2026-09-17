@@ -5,6 +5,7 @@ import { modelRegistry } from "./server/ai/modelRegistry";
 import { modelRouter } from "./server/ai/modelRouter";
 import { openAiServerAdapter } from "./server/ai/adapters/openAiServerAdapter";
 import { openRouterServerAdapter } from "./server/ai/adapters/openRouterServerAdapter";
+import { providerRegistry } from "./server/ai/providerRegistry";
 
 function renderFallbackErrorHtml(): string {
   return `<!doctype html>
@@ -140,6 +141,86 @@ async function handleAiServerRoutes(request: Request): Promise<Response | null> 
   if (path === "/api/ai/models") {
     const models = modelRegistry.listModels();
     return new Response(JSON.stringify({ models }), { status: 200, headers: jsonHeaders });
+  }
+
+  if (path === "/api/ai/providers") {
+    const providers = providerRegistry.listProviders();
+    return new Response(JSON.stringify({ providers }), { status: 200, headers: jsonHeaders });
+  }
+
+  if (path === "/api/ai/chat" && request.method === "POST") {
+    try {
+      const body = await request.json();
+      const response = await gatewayEngine.execute({
+        task: body.task || "lightweight_chat",
+        messages: body.messages || [],
+        systemPrompt: body.systemPrompt,
+        providerOverride: body.provider,
+        modelOverride: body.model,
+        temperature: body.temperature,
+      });
+      return new Response(JSON.stringify(response), { status: 200, headers: jsonHeaders });
+    } catch (err: unknown) {
+      return new Response(
+        JSON.stringify({ ok: false, error: (err as Error).message }),
+        { status: 500, headers: jsonHeaders },
+      );
+    }
+  }
+
+  if (path === "/api/ai/agent/run" && request.method === "POST") {
+    try {
+      const body = await request.json();
+      const response = await gatewayEngine.execute({
+        task: body.task || "agent_orchestration",
+        messages: body.messages || [],
+        systemPrompt: body.systemPrompt,
+        providerOverride: body.provider,
+        modelOverride: body.model,
+        tools: body.tools,
+        structuredOutputSchema: body.structuredOutputSchema,
+        projectId: body.projectId,
+      });
+      return new Response(JSON.stringify(response), { status: 200, headers: jsonHeaders });
+    } catch (err: unknown) {
+      return new Response(
+        JSON.stringify({ ok: false, error: (err as Error).message }),
+        { status: 500, headers: jsonHeaders },
+      );
+    }
+  }
+
+  if (
+    (path === "/api/ai/project/discover" ||
+      path === "/api/ai/project/analyze" ||
+      path === "/api/ai/project/validate" ||
+      path === "/api/ai/project/challenge") &&
+    request.method === "POST"
+  ) {
+    try {
+      const body = await request.json();
+      const taskMap: Record<string, string> = {
+        "/api/ai/project/discover": "requirement_analysis",
+        "/api/ai/project/analyze": "architecture_review",
+        "/api/ai/project/validate": "deep_analysis",
+        "/api/ai/project/challenge": "security_analysis",
+      };
+      const response = await gatewayEngine.execute({
+        task: taskMap[path] || "deep_analysis",
+        messages: body.messages || [{ role: "user", content: body.intent || body.payload || "" }],
+        systemPrompt: body.systemPrompt,
+        providerOverride: body.provider,
+        modelOverride: body.model,
+        structuredOutputSchema: body.structuredOutputSchema,
+        projectId: body.projectId,
+      });
+      return new Response(JSON.stringify(response), { status: 200, headers: jsonHeaders });
+    } catch (err: unknown) {
+      return new Response(
+        JSON.stringify({ ok: false, error: (err as Error).message }),
+        { status: 500, headers: jsonHeaders },
+      );
+    }
   }
 
   if (path === "/api/ai/observability") {

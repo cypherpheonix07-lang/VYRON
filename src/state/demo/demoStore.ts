@@ -373,6 +373,48 @@ class DemoStore {
     this.notify();
   }
 
+  public resetToBaseline() {
+    this.state = {
+      ...this.state,
+      selectedDatasetId: "ieee_fraud_benchmark",
+      simulatedEvents: [],
+      recentEvents: [],
+      anomalyTimeline: [],
+      totalSimulatedEvents: 0,
+      anomaliesTriggered: 0,
+      isSimulatorRunning: false,
+      simulatorStatus: "STOPPED",
+      eventsPerSecond: 25,
+      eventRate: 25,
+      metrics: {
+        ...this.state.metrics,
+        currentThroughput: 25,
+      },
+    };
+    this.notify();
+  }
+
+  public switchScenario(scenarioId: string) {
+    let targetDataset = "ieee_fraud_benchmark";
+    if (scenarioId.includes("clinical") || scenarioId.includes("appointment")) {
+      targetDataset = "clinical_scheduling";
+    } else if (scenarioId.includes("ecommerce") || scenarioId.includes("logistics")) {
+      targetDataset = "olist_ecommerce";
+    } else if (scenarioId.includes("cve") || scenarioId.includes("security") || scenarioId.includes("vulnerab")) {
+      targetDataset = "cve_vulnerabilities";
+    }
+
+    this.state = {
+      ...this.state,
+      selectedDatasetId: targetDataset,
+      simulatedEvents: [],
+      recentEvents: [],
+      totalSimulatedEvents: 0,
+      anomaliesTriggered: 0,
+    };
+    this.notify();
+  }
+
   public subscribe(listener: DemoListener): () => void {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);

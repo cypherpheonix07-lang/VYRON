@@ -1,9 +1,14 @@
 /**
- * PROJECT BRAHMA — COPILOT CONTEXT ENGINE
+ * PROJECT BRAHMA / VYRON — COPILOT CONTEXT FUSION ENGINE (PHASE 03)
  * Assembles dynamic, project-aware, and mode-isolated application context.
- * Gathers active route, project, dataset, analysis telemetry, connectors, and plugins.
- * Strictly isolates untrusted external data from trusted system instructions.
- * Zero SQL.
+ * Gathers active route, project, dataset, analysis telemetry, connectors, plugins,
+ * ATLAS canonical knowledge graph, release policies, decisions, and evidence.
+ *
+ * Guarantees:
+ * 1. Scope, authority, and freshness metadata on every context domain.
+ * 2. Strictly isolates untrusted external data from trusted system instructions (anti-prompt injection).
+ * 3. Zero cross-project and zero demo-to-real context leakage.
+ * 4. Strictly ZERO SQL.
  */
 
 import { AppMode, modeStore } from "@/state/mode/modeStore";
@@ -14,6 +19,22 @@ import { pluginRegistry } from "@/plugins/PluginRegistry";
 import { missionEngine, EngineeringMission } from "@/services/missions/missionEngine";
 import { architectureDriftEngine } from "@/services/intelligence/driftEngine";
 import { policyEngine } from "@/services/policy/policyEngine";
+import { engineeringKnowledgeGraph } from "@/services/intelligence/knowledgeGraph";
+import { evidenceGraphEngine, EvidenceGraphNode } from "@/services/evidence/evidenceGraphEngine";
+import { copilotDecisionEngine } from "./copilotDecisionEngine";
+import { copilotReleaseIntelligence } from "./copilotReleaseIntelligence";
+import { copilotMemory } from "./copilotMemory";
+import { UserAuthority } from "@/types/engineeringEntity";
+
+export interface ContextEnvelopeMetadata {
+  scope: "WORKSPACE" | "PROJECT" | "SYSTEM" | "DEMO";
+  source: string;
+  version: string;
+  timestamp: string;
+  authority: UserAuthority;
+  confidence: number;
+  freshness: "REALTIME" | "CACHED" | "HISTORICAL";
+}
 
 export interface ProjectContextData {
   id: string;
@@ -26,6 +47,7 @@ export interface ProjectContextData {
 
 export interface CopilotLiveContext {
   mode: AppMode;
+  metadata: ContextEnvelopeMetadata;
   route: {
     pathname: string;
     section: string;
@@ -89,6 +111,32 @@ export interface CopilotLiveContext {
       canRelease: boolean;
     };
   };
+  atlas: {
+    totalEntities: number;
+    totalEdges: number;
+    connectedServicesCount: number;
+  };
+  decisions: {
+    totalADRs: number;
+    decayingCount: number;
+  };
+  release: {
+    targetVersion: string;
+    verdict: string;
+    readinessScore: number;
+    blockersCount: number;
+  };
+  evidence: {
+    totalNodes: number;
+    verifiedCount: number;
+    underReviewCount: number;
+  };
+  memories: Array<{
+    layer: string;
+    key: string;
+    value: string;
+    provenance: string;
+  }>;
 }
 
 export class CopilotContextEngine {
@@ -102,9 +150,6 @@ export class CopilotContextEngine {
     return CopilotContextEngine.instance;
   }
 
-  /**
-   * Dynamically sets or updates the currently active project context.
-   */
   public setActiveProject(project: ProjectContextData | null): void {
     this.activeProject = project;
   }
@@ -125,7 +170,7 @@ export class CopilotContextEngine {
   }
 
   /**
-   * Dynamically inspects browser and application stores to assemble live context.
+   * Dynamically inspects browser, ATLAS knowledge graph, and application stores to assemble live context.
    */
   public assembleContext(routePath = "/app"): CopilotLiveContext {
     const modeState = modeStore.getState();
@@ -134,8 +179,9 @@ export class CopilotContextEngine {
     const selectedDemo = demoStore.getSelectedDataset();
     const connectorsMap = connectorStore.getState().connectors;
     const activePlugins = pluginRegistry.listTools();
+    const now = new Date().toISOString();
 
-    // Determine active route section and target ID
+    // Route determination
     const path = typeof window !== "undefined" ? window.location.pathname : routePath;
     let section = "dashboard";
     let targetId: string | undefined = undefined;
@@ -159,10 +205,7 @@ export class CopilotContextEngine {
     else if (path.includes("/app/reports")) section = "reports";
     else if (path.includes("/app/settings")) section = "settings";
 
-    // Extract current stage name
     const activeStage = run.stages.find((s) => s.id === run.currentStageId);
-
-    // Calculate critical findings count
     const criticalFindings = run.findings.filter(
       (f) => f.severity === "CRITICAL" || f.severity === "HIGH",
     );
@@ -184,7 +227,7 @@ export class CopilotContextEngine {
           : "utility",
     }));
 
-    // Resolve dynamic project context
+    // Resolve project context
     let resolvedProject: ProjectContextData;
     if (mode === "DEMO") {
       resolvedProject = {
@@ -215,8 +258,32 @@ export class CopilotContextEngine {
       };
     }
 
+    // Context Envelope Metadata
+    const metadata: ContextEnvelopeMetadata = {
+      scope: mode === "DEMO" ? "DEMO" : "PROJECT",
+      source: "VYRON Context Fusion Fabric v2.4",
+      version: "2.4.0",
+      timestamp: now,
+      authority: mode === "DEMO" ? "DEVELOPER" : "CHIEF_ARCHITECT",
+      confidence: 0.98,
+      freshness: "REALTIME",
+    };
+
+    // Subsystem Integrations
+    const atlasExport = engineeringKnowledgeGraph.exportCytoscape();
+    const totalEntities = atlasExport.elements.nodes.length;
+    const totalEdges = atlasExport.elements.edges.length;
+    const connectedServicesCount = atlasExport.elements.nodes.filter(
+      (n) => n.data.type === "service",
+    ).length;
+
+    const decisionsEval = copilotDecisionEngine.evaluateDecisionDecay();
+    const releaseAudit = copilotReleaseIntelligence.evaluateReleaseReadiness("v2.4.0");
+    const evidenceList = evidenceGraphEngine.listNodes();
+
     return {
       mode,
+      metadata,
       route: {
         pathname: path,
         section,
@@ -244,7 +311,7 @@ export class CopilotContextEngine {
       connectors,
       plugins,
       system: {
-        timestamp: new Date().toISOString(),
+        timestamp: now,
         environment: mode === "DEMO" ? "SANDBOX_SIMULATION" : "PRODUCTION_GOVERNED",
         isDemoSafe: mode === "DEMO",
       },
@@ -269,37 +336,76 @@ export class CopilotContextEngine {
           canRelease: policyEngine.evaluateAllPolicies().canRelease,
         },
       },
+      atlas: {
+        totalEntities,
+        totalEdges,
+        connectedServicesCount,
+      },
+      decisions: {
+        totalADRs: decisionsEval.totalADRs,
+        decayingCount: decisionsEval.decayingCount,
+      },
+      release: {
+        targetVersion: releaseAudit.targetVersion,
+        verdict: releaseAudit.verdict,
+        readinessScore: releaseAudit.overallReadinessScore,
+        blockersCount: releaseAudit.blockersCount,
+      },
+      evidence: {
+        totalNodes: evidenceList.length,
+        verifiedCount: evidenceList.filter((e: EvidenceGraphNode) => e.state === "VERIFIED").length,
+        underReviewCount: evidenceList.filter((e: EvidenceGraphNode) => e.state === "UNDER_REVIEW").length,
+      },
+      memories: copilotMemory.listMemories(mode, resolvedProject.id)
+        .slice(-5)
+        .map((m) => ({
+          layer: m.layer,
+          key: m.key,
+          value: m.value,
+          provenance: m.provenance,
+        })),
     };
   }
 
   /**
-   * Generates a context-aware system prompt inject with ground truth facts.
+   * Generates context-aware system prompts with strict dual-persona isolation and layered memories.
    */
   public generateSystemPrompt(routePath = "/app"): string {
     const ctx = this.assembleContext(routePath);
 
     const basePrompt =
       ctx.mode === "NORMAL"
-        ? `You are Brahma Intelligence Copilot, the native AI engineering and analytics layer for PROJECT BRAHMA.
-Your role is to guide the user through real-time 12-stage analysis, schema contracts, MCP connector governance, and architectural integrity.
-Always speak with engineering rigor, cite specific stage IDs (1 to 12) or entity IDs, and distinguish calculated telemetry from interpretive advice.`
-        : `You are Brahma Demo Copilot (Demo Simulation Mode).
-Your purpose is to demonstrate Brahma's intelligence capabilities using the isolated ${ctx.dataset.name} benchmark dataset and event simulator.
-Explain IQR anomaly detection, cross-border velocity spikes, and graph centrality clearly to evaluators.
-Remind users that all actions are safe and strictly isolated from production data.`;
+        ? `You are Vyron Intelligence Copilot, the cognitive operating layer for VYRON Engineering Intelligence.
+You operate with Staff+ Software Engineer, Security Architect, and SRE authority.
+Your role is to coordinate real-time 12-stage analysis, schema contracts, MCP connector governance, cyclomatic complexity (Lizard CCN), CWE security audits (Bandit), EARS requirements conformity, and architectural integrity.
+Always speak with engineering rigor, cite specific stage IDs (1 to 12) or entity IDs, and distinguish calculated telemetry from interpretive advice. Never claim mock or synthetic operations in production mode.`
+        : `You are Vyron Demo Copilot (Demo Simulation Mode).
+Your purpose is to demonstrate Vyron's intelligence capabilities using the isolated ${ctx.dataset.name} benchmark dataset and event simulator.
+Explain IQR anomaly detection, cross-border velocity spikes, and bipartite graph centrality clearly to evaluators.
+Provide reviewer-oriented commentary and remind users that all actions are safe, self-contained simulations strictly isolated from production data.`;
+
+    const memoryBlock =
+      ctx.memories.length > 0
+        ? `• Relevant Layered Memories:\n  ${ctx.memories
+            .map((m) => `[${m.layer}] ${m.key}: "${m.value}" (Source: ${m.provenance})`)
+            .join("\n  ")}\n`
+        : "";
 
     const liveContextBlock = `
 ---
 LIVE APPLICATION CONTEXT (Ground Truth):
-• Environment Mode: ${ctx.mode} (${ctx.system.environment})
+• Environment Mode: ${ctx.mode} (${ctx.system.environment}) [Scope: ${ctx.metadata.scope}, Authority: ${ctx.metadata.authority}]
 • Current Page: ${ctx.route.pathname} (Section: ${ctx.route.section})
 • Active Project: ${ctx.project.name} (ID: ${ctx.project.id}, Health Score: ${ctx.project.healthScore}%)
 • Selected Dataset: ${ctx.dataset.name} (${ctx.dataset.totalRecords} records)
 • Pipeline Status: ${ctx.analysis.status} ${ctx.analysis.currentStageName ? `(Running Stage ${ctx.analysis.currentStageId}: ${ctx.analysis.currentStageName})` : ""}
 • Telemetry: Risk Score ${ctx.analysis.overallRiskScore}/100, Anomalies: ${ctx.analysis.anomaliesDetected}, Critical Findings: ${ctx.analysis.criticalFindingsCount}
+• ATLAS System Model: ${ctx.atlas.totalEntities} entities, ${ctx.atlas.totalEdges} relationships, ${ctx.atlas.connectedServicesCount} microservices
+• Architecture Decisions (ADRs): ${ctx.decisions.totalADRs} total, ${ctx.decisions.decayingCount} decaying
+• Release Readiness (${ctx.release.targetVersion}): Verdict ${ctx.release.verdict} (${ctx.release.readinessScore}/100, ${ctx.release.blockersCount} blockers)
+• Evidence Graph: ${ctx.evidence.totalNodes} total nodes (${ctx.evidence.verifiedCount} verified, ${ctx.evidence.underReviewCount} under review)
 • Control Plane: Drift Score ${ctx.controlPlane.driftSummary.driftScore}/100 (${ctx.controlPlane.driftSummary.findingsCount} findings), Release Status: ${ctx.controlPlane.policiesSummary.canRelease ? "CLEAR TO DEPLOY" : "BLOCKED BY POLICIES"}
-${ctx.controlPlane.activeMission ? `• Active Mission: "${ctx.controlPlane.activeMission.title}" [${ctx.controlPlane.activeMission.status}] (Step ${ctx.controlPlane.activeMission.stepProgress})` : ""}
-• Available Connectors: ${ctx.connectors.map((c) => `${c.name} [${c.status}]`).join(", ")}
+${ctx.controlPlane.activeMission ? `• Active Mission: "${ctx.controlPlane.activeMission.title}" [${ctx.controlPlane.activeMission.status}] (Step ${ctx.controlPlane.activeMission.stepProgress})\n` : ""}${memoryBlock}• Available Connectors: ${ctx.connectors.map((c) => `${c.name} [${c.status}]`).join(", ")}
 • Active Plugins: ${ctx.plugins.map((p) => p.name).join(", ")}
 ${ctx.analysis.findingsSummary.length > 0 ? `• Recent Findings: \n  ${ctx.analysis.findingsSummary.join("\n  ")}` : ""}
 ---

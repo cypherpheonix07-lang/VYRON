@@ -12,21 +12,22 @@ import { authService } from "@/services/authService";
 import { getDomains, getPersonas } from "@/services/catalogService";
 import type { WizardPayload, DraftState } from "@/types/wizard";
 import { ProjectWizardShell } from "@/components/wizard/ProjectWizardShell";
+import { ProjectControlPlaneShell } from "@/components/projectControlPlane/ProjectControlPlaneShell";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/app/projects/new")({
   head: () => ({
     meta: [
-      { title: "New Project Generator v2 — PROJECT BRAHMA" },
+      { title: "AI Project Engineering Control Plane — VYRON" },
       {
         name: "description",
         content:
-          "Enterprise 7-step guided software architecture generator with contract validation and dynamic pricing.",
+          "Autonomous AI project engineering control plane with 14 lifecycle stages, STRIDE security, and verified blueprints.",
       },
-      { property: "og:title", content: "New Project Generator v2 — PROJECT BRAHMA" },
+      { property: "og:title", content: "AI Project Engineering Control Plane — VYRON" },
       {
         property: "og:description",
-        content: "Data-driven architecture synthesis and quality gate configuration.",
+        content: "Data-driven architecture synthesis, 5-whys root cause, and quality gate configuration.",
       },
     ],
   }),
@@ -72,6 +73,7 @@ export const Route = createFileRoute("/app/projects/new")({
 function NewProjectPage() {
   const navigate = useNavigate();
   const loaderData = Route.useLoaderData();
+  const [viewMode, setViewMode] = useState<"control_plane" | "wizard">("control_plane");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [lastPayload, setLastPayload] = useState<WizardPayload | null>(null);
@@ -248,12 +250,32 @@ function NewProjectPage() {
         </div>
       )}
 
-      {/* 2.1 Project Wizard Shell */}
-      <ProjectWizardShell
-        initialDraft={loaderData.existingDraft}
-        onGenerateProject={handleGenerate}
-        isGenerating={isGenerating}
-      />
+      {/* Control Plane Mode vs Classic Wizard Mode */}
+      {viewMode === "control_plane" ? (
+        <ProjectControlPlaneShell
+          onSwitchToClassicWizard={() => setViewMode("wizard")}
+        />
+      ) : (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between p-3 rounded-xl border border-cyan-500/30 bg-cyan-500/10">
+            <span className="text-xs text-cyan-300 font-medium">
+              You are viewing the Classic Guided Wizard.
+            </span>
+            <Button
+              size="sm"
+              onClick={() => setViewMode("control_plane")}
+              className="bg-cyan-600 hover:bg-cyan-500 text-white text-xs h-7"
+            >
+              Switch to AI Engineering Control Plane
+            </Button>
+          </div>
+          <ProjectWizardShell
+            initialDraft={loaderData.existingDraft}
+            onGenerateProject={handleGenerate}
+            isGenerating={isGenerating}
+          />
+        </div>
+      )}
     </div>
   );
 }

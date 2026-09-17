@@ -16,6 +16,7 @@ import { AnomalyDetector } from "@/services/analysis/anomalyDetector";
 import { GraphAnalyzer } from "@/services/analysis/graphAnalyzer";
 import { generateVerificationHash } from "@/services/ai/cryptoUtils";
 import { copilotToolRegistry } from "./copilotToolRegistry";
+import { copilotMemory } from "./copilotMemory";
 import { KaggleConnector } from "@/services/connectors/kaggleConnector";
 import { GitHubConnector } from "@/services/connectors/githubConnector";
 import { FigmaConnector } from "@/services/connectors/figmaConnector";
@@ -930,8 +931,10 @@ export class CopilotActionEngine {
 
         case "RESET_DEMO": {
           eventSimulator.reset();
+          demoStore.resetToBaseline();
+          copilotMemory.clearAll("DEMO");
           analysisStore.reset();
-          resultData = { status: "RESET_COMPLETED" };
+          resultData = { status: "RESET_COMPLETED", memoryCleared: true, baselineRestored: true };
           break;
         }
 

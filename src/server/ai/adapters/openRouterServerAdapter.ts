@@ -19,7 +19,11 @@ function computeSha256(data: unknown): string {
   return crypto.createHash("sha256").update(jsonStr).digest("hex");
 }
 
-export class OpenRouterServerAdapter {
+import { IAIProvider, ProviderCapabilities } from "../providers/types";
+
+export class OpenRouterServerAdapter implements IAIProvider {
+  public readonly id: "openrouter" = "openrouter";
+  public readonly name = "OpenRouter Hub";
   private static instance: OpenRouterServerAdapter | null = null;
   private readonly baseUrl = process.env["OPENROUTER_BASE_URL"] || `https://${"openrouter.ai"}/api/v1`;
 
@@ -30,6 +34,27 @@ export class OpenRouterServerAdapter {
       OpenRouterServerAdapter.instance = new OpenRouterServerAdapter();
     }
     return OpenRouterServerAdapter.instance;
+  }
+
+  public getCapabilities(): ProviderCapabilities {
+    return {
+      providerId: "openrouter",
+      name: "OpenRouter Multi-Model Gateway",
+      streaming: true,
+      toolCalling: true,
+      structuredOutput: true,
+      multimodal: true,
+      defaultModel: "anthropic/claude-3.5-sonnet",
+      fallbackProvider: "openai",
+      supportedModels: [
+        "anthropic/claude-3.5-sonnet",
+        "anthropic/claude-3.7-sonnet",
+        "meta-llama/llama-3.3-70b-instruct",
+        "google/gemini-2.0-flash-001",
+        "deepseek/deepseek-r1",
+        "openai/gpt-4o-mini",
+      ],
+    };
   }
 
   private getApiKey(): string | undefined {
@@ -292,6 +317,21 @@ export class OpenRouterServerAdapter {
         recoverable: true,
       },
     };
+  }
+
+  public async generate(request: InferenceRequest): Promise<InferenceResponse> {
+    return this.complete(request);
+  }
+
+  public async generateStructured<T>(
+    request: InferenceRequest,
+    schema: Record<string, unknown>,
+  ): Promise<InferenceResponse<T>> {
+    const enrichedRequest: InferenceRequest = {
+      ...request,
+      structuredOutputSchema: schema,
+    };
+    return (await this.complete(enrichedRequest)) as InferenceResponse<T>;
   }
 }
 

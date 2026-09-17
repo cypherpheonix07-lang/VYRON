@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Play, Pause, Square, Zap, Sliders, Activity, ShieldAlert, Sparkles } from "lucide-react";
+import { Play, Pause, Square, Zap, Sliders, Activity, ShieldAlert, Sparkles, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { demoStore, BenchmarkDataset } from "@/state/demo/demoStore";
 import { eventSimulator } from "@/services/demo/eventSimulator";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
 
 export function SimulatorControls({ className }: { className?: string }) {
   const [demoState, setDemoState] = useState(() => demoStore.getState());
@@ -24,6 +25,12 @@ export function SimulatorControls({ className }: { className?: string }) {
 
   const handleStop = () => {
     eventSimulator.stop();
+  };
+
+  const handleResetBaseline = () => {
+    eventSimulator.stop();
+    demoStore.resetToBaseline();
+    toast.success("Demo environment restored to pristine baseline state.");
   };
 
   const handleSpeedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -132,6 +139,17 @@ export function SimulatorControls({ className }: { className?: string }) {
           >
             <ShieldAlert className="size-3.5 text-rose-400 animate-bounce" />
             <span>Inject Anomaly Surge</span>
+          </Button>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleResetBaseline}
+            className="text-xs h-9 text-muted-foreground hover:text-foreground hover:bg-secondary/60 flex items-center gap-1.5"
+            title="Reset Demo environment to pristine baseline"
+          >
+            <RotateCcw className="size-3.5" />
+            <span>Reset Demo</span>
           </Button>
         </div>
 

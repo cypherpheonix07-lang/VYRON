@@ -84,6 +84,10 @@ export class DecisionEngine {
     return [...this.decisions];
   }
 
+  public getDecisions(): ArchitectureDecisionRecord[] {
+    return this.listDecisions();
+  }
+
   public getDecision(id: string): ArchitectureDecisionRecord | undefined {
     return this.decisions.find((d) => d.id === id);
   }

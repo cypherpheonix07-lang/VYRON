@@ -170,11 +170,54 @@ export class MockAIAdapter implements AIAdapter {
           },
         ];
       }
+    } else if (
+      lower.includes("demo scenario") ||
+      lower.includes("explain current demo") ||
+      lower.includes("current demo scenario") ||
+      lower.includes("demo mode")
+    ) {
+      textResponse =
+        `**Vyron Demo Copilot — Active Simulation Narration**\n\n` +
+        `• **Active Scenario**: Financial Fraud & High-Velocity Carding Benchmark (IEEE-CIS Partition)\n` +
+        `• **Telemetry Overview**: 12,480 synthetic transactions with 18 simulated anomalies\n` +
+        `• **Top Detected Anomaly**: Transaction \`TX-98421\` ($4,250.00, Card1: 13926, Country mismatch, Velocity Z-score: +4.2)\n` +
+        `• **Simulation Safeguard**: All events run strictly in client \`sessionStorage\`. Production database tables are 100% isolated.\n` +
+        `• **Reviewer Recommended Actions**:\n` +
+        `  1. Click **Inject Anomaly Surge** to test dynamic IQR sensitivity.\n` +
+        `  2. Click **Run 12-Stage Pipeline** to observe real-time progress and cryptographic audit report sealing.\n` +
+        `  3. Click **Reset Demo** to return to clean baseline at any time.`;
+    } else if (lower.includes("plugin")) {
+      textResponse =
+        `**Vyron Plugin Registry & Capability Center**\n\n` +
+        `• **Registered Manifests**: 5 enterprise plugins active in registry:\n` +
+        `  1. \`analysis-plugin\` [ACTIVE]: 12-stage pipeline triggers and stage telemetry.\n` +
+        `  2. \`chat-plugin\` [ACTIVE]: Contextual Copilot dialog and specialist agent dispatch.\n` +
+        `  3. \`data-plugin\` [ACTIVE]: Kaggle dataset discovery, schema preview, and contract validation.\n` +
+        `  4. \`github-plugin\` [ACTIVE]: Repository AST synchronization, commit analysis, and PR checks.\n` +
+        `  5. \`report-plugin\` [ACTIVE]: Cryptographic audit PDF compilation with SHA-256 seals.\n` +
+        `• **Lifecycle State**: All plugins enforce typed boundaries, lifecycle toggles, and audit logging.`;
+    } else if (lower.includes("connector") || lower.includes("mcp")) {
+      textResponse =
+        `**Vyron MCP Connector System Governance**\n\n` +
+        `• **Configured Connectors**: 5 enterprise adapters under strict governance:\n` +
+        `  - \`github\` [CONNECTED]: Read-only repo access, commit verification, branch status.\n` +
+        `  - \`kaggle\` [CONNECTED]: Benchmark search, usability rating assessment, schema preview.\n` +
+        `  - \`figma\` [CONFIGURED]: Architecture component wireframe synchronization.\n` +
+        `  - \`notion\` [CONFIGURED]: SRS requirement and EARS specification ingestion.\n` +
+        `  - \`custom_mcp\` [READY]: Extensible model context protocol tool endpoints.\n` +
+        `• **Security Model**: Connector tokens are revocable with 1-click. High-impact operations require explicit operator confirmation.`;
+    } else if (lower.includes("dataset") || lower.includes("kaggle")) {
+      textResponse =
+        `**Vyron Dataset Discovery & Compatibility Profile**\n\n` +
+        `• **Primary Benchmark**: IEEE-CIS Fraud Detection Benchmark (498MB, Usability 0.94)\n` +
+        `• **Alternative Benchmarks**: Brazilian E-Commerce (100k orders), Medical Appointment No-Shows\n` +
+        `• **Data Quality Metrics**: Completeness: 98.4%, Uniqueness: 99.8%, Validity: 97.2%, Consistency: 99.0%\n` +
+        `• **Pipeline Compatibility**: 100/100 (Full 12-stage support: Amounts, Velocity, IP Graph, IQR, SHAP).`;
     } else {
       textResponse =
-        `**Brahma Intelligence Copilot**\n\n` +
+        `**Vyron Intelligence Copilot**\n\n` +
         `Analyzing request: "${lastUserMessage.slice(0, 80)}${lastUserMessage.length > 80 ? "..." : ""}"\n\n` +
-        `The Brahma live analytics engine is fully synchronized. Available commands:\n` +
+        `The Vyron live analytics engine is fully synchronized. Available commands:\n` +
         `1. Run 12-stage analysis on current dataset\n` +
         `2. Detect architecture drift against blueprint\n` +
         `3. Analyze change impact & blast radius\n` +
