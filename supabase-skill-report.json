@@ -1,0 +1,58 @@
+{
+  "timestamp": "2026-09-21T12:09:23.544Z",
+  "total": 7,
+  "passed": 7,
+  "failed": 0,
+  "blocked": 0,
+  "results": [
+    {
+      "id": "SUPA-SKILL-01",
+      "name": "Client SDK Key Exposure & PKCE Flow Configuration",
+      "passed": true,
+      "details": "Client uses public anon/publishable key, zero service_role leaks, flowType=\"pkce\", storageKey=\"brahma-auth-token\"",
+      "isBlocked": false
+    },
+    {
+      "id": "SUPA-SKILL-02",
+      "name": "Zero raw_user_meta_data in RLS & Privilege Self-Escalation Barrier",
+      "passed": true,
+      "details": "Zero user_metadata used in RLS predicates; prevent_role_self_change trigger blocks unauthorized role elevation",
+      "isBlocked": false
+    },
+    {
+      "id": "SUPA-SKILL-03",
+      "name": "RLS TO authenticated Combined with Specific Ownership Predicates (Anti-IDOR)",
+      "passed": true,
+      "details": "All sensitive tables bind TO authenticated with explicit auth.uid() ownership predicates",
+      "isBlocked": false
+    },
+    {
+      "id": "SUPA-SKILL-04",
+      "name": "UPDATE Policies Double-Guarded with Both USING and WITH CHECK",
+      "passed": true,
+      "details": "profiles_update_own and user_integrations specify both USING and WITH CHECK preventing row theft",
+      "isBlocked": false
+    },
+    {
+      "id": "SUPA-SKILL-05",
+      "name": "SECURITY DEFINER Search Path Isolation (SET search_path = public)",
+      "passed": true,
+      "details": "All 10 SECURITY DEFINER functions explicitly set search_path = public",
+      "isBlocked": false
+    },
+    {
+      "id": "SUPA-SKILL-06",
+      "name": "Storage Bucket Avatars Complete Lifecycle Policy Coverage",
+      "passed": true,
+      "details": "Avatars bucket enforces SELECT, INSERT, UPDATE, and DELETE policies supporting safe upsert",
+      "isBlocked": false
+    },
+    {
+      "id": "SUPA-SKILL-07",
+      "name": "Remote Supabase Cloud Blocker Isolation & Mock Fallback",
+      "passed": true,
+      "details": "Remote cloud endpoint isolated; local mock engine (mockEngine.ts / demoEngine.ts) ensures uninterrupted execution",
+      "isBlocked": false
+    }
+  ]
+}

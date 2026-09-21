@@ -1,0 +1,4016 @@
+======================================================================
+SECTION 1 — FORENSIC SWEEP OUTPUT (RAW FORENSIC DATA)
+======================================================================
+
+──────────────────────────────────────────────────────────────────────
+FORENSIC SWEEP 1 — PROJECT SKELETON
+──────────────────────────────────────────────────────────────────────
+
+# Full directory tree — no hiding anything
+Total files: 410
+.env
+.env.example
+.env.local
+.gitignore
+.lovable/project.json
+.prettierignore
+.prettierrc
+.wrangler/deploy/config.json
+AGENTS.md
+AUTH_SESSION_FLOW.md
+COMMIT_MSG.md
+INDUSTRIAL_LEVIATHAN_EVOLUTION_REPORT.md
+MOCK_AUDIT.md
+README.md
+RUN_PROJECT.md
+TECHNICAL_ARCHITECTURE_REPORT.md
+WALKTHROUGH.md
+__pycache__/industrial_load_test.cpython-314.pyc
+autopsy.mjs
+bootstrap-brahma.ps1
+brahma-engine/.pytest_cache/.gitignore
+brahma-engine/.pytest_cache/CACHEDIR.TAG
+brahma-engine/.pytest_cache/README.md
+brahma-engine/.pytest_cache/v/cache/nodeids
+brahma-engine/Dockerfile
+brahma-engine/__pycache__/celery_app.cpython-314.pyc
+brahma-engine/__pycache__/db.cpython-314.pyc
+brahma-engine/__pycache__/main.cpython-314.pyc
+brahma-engine/__pycache__/schemas.cpython-314.pyc
+brahma-engine/__pycache__/task_dispatcher.cpython-314.pyc
+brahma-engine/__pycache__/tasks.cpython-314.pyc
+brahma-engine/ai_maturity/__init__.py
+brahma-engine/ai_maturity/__pycache__/__init__.cpython-314.pyc
+brahma-engine/analyzers/__pycache__/pdf_generator.cpython-314.pyc
+brahma-engine/analyzers/__pycache__/repo_scanner.cpython-314.pyc
+brahma-engine/analyzers/__pycache__/req_extractor.cpython-314.pyc
+brahma-engine/analyzers/pdf_generator.py
+brahma-engine/analyzers/repo_scanner.py
+brahma-engine/analyzers/req_extractor.py
+brahma-engine/celery_app.py
+brahma-engine/data_mesh/__init__.py
+brahma-engine/data_mesh/__pycache__/__init__.cpython-314.pyc
+brahma-engine/db.py
+brahma-engine/governance/__init__.py
+brahma-engine/governance/__pycache__/__init__.cpython-314.pyc
+brahma-engine/integrations/__init__.py
+brahma-engine/integrations/__pycache__/__init__.cpython-314.pyc
+brahma-engine/main.py
+brahma-engine/observability/__init__.py
+brahma-engine/observability/__pycache__/__init__.cpython-314.pyc
+brahma-engine/predictive/__init__.py
+brahma-engine/predictive/__pycache__/__init__.cpython-314.pyc
+brahma-engine/render.yaml
+brahma-engine/requirements.txt
+brahma-engine/schemas.py
+brahma-engine/security/__init__.py
+brahma-engine/security/__pycache__/__init__.cpython-314.pyc
+brahma-engine/task_dispatcher.py
+brahma-engine/tasks.py
+brahma-engine/tests/__pycache__/test_endpoints.cpython-314-pytest-9.1.1.pyc
+brahma-engine/tests/test_endpoints.py
+brahma-engine/verticals/__init__.py
+brahma-engine/verticals/__pycache__/__init__.cpython-314.pyc
+bun.lock
+bunfig.toml
+components.json
+connect_docker_openrouter.ps1
+db-autopsy.mjs
+diagnose-rls.mjs
+docker-compose.industrial.yml
+eslint.config.js
+forensic-sweep.mjs
+forensic_output.txt
+industrial_load_results_exceptions.csv
+industrial_load_results_failures.csv
+industrial_load_results_stats.csv
+industrial_load_results_stats_history.csv
+industrial_load_test.py
+investigate-t6.mjs
+istio.zip
+kind.exe
+load-test-brahma.mjs
+load-test-hardening.ps1
+load_test_async.py
+load_test_hardening.py
+ms-vscode.powershell-2025.4.0.vsix
+package-lock.json
+package.json
+pnpm-lock.yaml
+public/favicon.ico
+public/robots.txt
+run-db-autopsy-full.mjs
+run-forensic-audit.mjs
+run_full_forensic.mjs
+scratch-sweep7.mjs
+seed-audit-logs.mjs
+seed-database.mjs
+seed-industrial-scale.mjs
+src/anti/exorcism.ts
+src/anti/gaslight.ts
+src/anti/jailbreak.ts
+src/anti/oracle.ts
+src/anti/stockholm.ts
+src/apocalypse/arena.ts
+src/apocalypse/bio.ts
+src/apocalypse/chronosphere.ts
+src/apocalypse/defense.ts
+src/apocalypse/dissonance.ts
+src/apocalypse/dominator.ts
+src/apocalypse/dream.ts
+src/apocalypse/extinction.ts
+src/apocalypse/mesh.ts
+src/apocalypse/oblivion.ts
+src/apocalypse/palace.ts
+src/apocalypse/penance.ts
+src/apocalypse/twin.ts
+src/apocalypse/zeroday.ts
+src/client.tsx
+src/components/admin/SchemaDriftDetector.tsx
+src/components/admin/TaskQueueMonitor.tsx
+src/components/apocalypse/ExtinctionClock.tsx
+src/components/apocalypse/QADominator.tsx
+src/components/auth/OAuthButtons.tsx
+src/components/auth/auth-components.tsx
+src/components/brahma/ASTScanTimeline.tsx
+src/components/brahma/CognitiveCommandPalette.tsx
+src/components/brahma/DecaySimulator.tsx
+src/components/brahma/InsightHeatmap.tsx
+src/components/brahma/MasteryTree.tsx
+src/components/brahma/OnboardingChecklist.tsx
+src/components/brahma/ProvenancePopover.tsx
+src/components/brahma/app-shell.tsx
+src/components/brahma/architecture-canvas.tsx
+src/components/brahma/expansion-components.tsx
+src/components/brahma/integrations-hub.tsx
+src/components/brahma/logo.tsx
+src/components/brahma/primitives.tsx
+src/components/brahma/profile-center.tsx
+src/components/brahma/reports-view.tsx
+src/components/brahma/security-sessions.tsx
+src/components/brahma/session-diagnostics.tsx
+src/components/brahma/showcase-components.tsx
+src/components/github/GitHubActivityFeed.tsx
+src/components/github/GitHubDashboard.tsx
+src/components/github/GitHubOverview.tsx
+src/components/github/GitHubRepoDetail.tsx
+src/components/github/GitHubRepoList.tsx
+src/components/inferno/ScalesOfJudgment.tsx
+src/components/preview/PreviewCard.tsx
+src/components/preview/PreviewCodePanel.tsx
+src/components/preview/PreviewComparison.tsx
+src/components/preview/PreviewEmbed.tsx
+src/components/preview/PreviewEngine.tsx
+src/components/preview/PreviewFeatureGrid.tsx
+src/components/preview/PreviewHeader.tsx
+src/components/preview/PreviewInteractionLayer.tsx
+src/components/preview/PreviewResourceFetcher.tsx
+src/components/preview/PreviewSidebar.tsx
+src/components/preview/previewData.ts
+src/components/reports/AIDraftDrawer.tsx
+src/components/reports/ChainOfCustodyCard.tsx
+src/components/reports/DownloadMenu.tsx
+src/components/reports/EvaluationStudio.tsx
+src/components/reports/GenerateReportModal.tsx
+src/components/reports/MetricSourceTooltip.tsx
+src/components/reports/MetricStatusTable.tsx
+src/components/reports/ReportCoverPage.tsx
+src/components/reports/ReportLibraryTable.tsx
+src/components/reports/ReportSectionRenderer.tsx
+src/components/reports/ReportTOC.tsx
+src/components/reports/ReportViewerPage.tsx
+src/components/settings/LLMSpendMonitor.tsx
+src/components/settings/SecretHealthDashboard.tsx
+src/components/singularity/CognitionHUD.tsx
+src/components/ui/ConfirmDialog.tsx
+src/components/ui/DataTable.tsx
+src/components/ui/DemoModeToggle.tsx
+src/components/ui/EmptyState.tsx
+src/components/ui/ErrorBoundary.tsx
+src/components/ui/GateCard.tsx
+src/components/ui/HealthScore.tsx
+src/components/ui/LoadingSpinner.tsx
+src/components/ui/NotificationCenter.tsx
+src/components/ui/StatusBadge.tsx
+src/components/ui/accordion.tsx
+src/components/ui/alert-dialog.tsx
+src/components/ui/alert.tsx
+src/components/ui/aspect-ratio.tsx
+src/components/ui/avatar.tsx
+src/components/ui/badge.tsx
+src/components/ui/breadcrumb.tsx
+src/components/ui/button.tsx
+src/components/ui/calendar.tsx
+src/components/ui/card.tsx
+src/components/ui/carousel.tsx
+src/components/ui/chart.tsx
+src/components/ui/checkbox.tsx
+src/components/ui/collapsible.tsx
+src/components/ui/command.tsx
+src/components/ui/context-menu.tsx
+src/components/ui/dialog.tsx
+src/components/ui/drawer.tsx
+src/components/ui/dropdown-menu.tsx
+src/components/ui/form.tsx
+src/components/ui/hover-card.tsx
+src/components/ui/input-otp.tsx
+src/components/ui/input.tsx
+src/components/ui/label.tsx
+src/components/ui/menubar.tsx
+src/components/ui/navigation-menu.tsx
+src/components/ui/pagination.tsx
+src/components/ui/popover.tsx
+src/components/ui/progress.tsx
+src/components/ui/radio-group.tsx
+src/components/ui/resizable.tsx
+src/components/ui/scroll-area.tsx
+src/components/ui/select.tsx
+src/components/ui/separator.tsx
+src/components/ui/sheet.tsx
+src/components/ui/sidebar.tsx
+src/components/ui/skeleton.tsx
+src/components/ui/slider.tsx
+src/components/ui/sonner.tsx
+src/components/ui/switch.tsx
+src/components/ui/table.tsx
+src/components/ui/tabs.tsx
+src/components/ui/textarea.tsx
+src/components/ui/toggle-group.tsx
+src/components/ui/toggle.tsx
+src/components/ui/tooltip.tsx
+src/components/void/TulpaAvatar.tsx
+src/config/featureFlags.ts
+src/contexts/DemoModeContext.tsx
+src/data/demoSeedData.ts
+src/hooks/use-mobile.tsx
+src/hooks/useAnalysis.ts
+src/hooks/useGate.ts
+src/hooks/useLLM.ts
+src/hooks/useNotifications.ts
+src/hooks/useProjects.ts
+src/inferno/sins.ts
+src/inferno/virtues.ts
+src/kernel/causal.ts
+src/kernel/contradiction.ts
+src/kernel/db.ts
+src/kernel/diff.ts
+src/kernel/dna.ts
+src/kernel/evidence.ts
+src/kernel/memory.ts
+src/kernel/parliament.ts
+src/kernel/sandbox.ts
+src/kernel/semantic.ts
+src/kernel/sync.ts
+src/kernel/transfer.ts
+src/lib/api.ts
+src/lib/auth.ts
+src/lib/client.ts
+src/lib/constants.ts
+src/lib/engineClient.ts
+src/lib/error-capture.ts
+src/lib/error-page.ts
+src/lib/lovable-error-reporting.ts
+src/lib/mock-data.ts
+src/lib/mockEngine.ts
+src/lib/profiles_schema.sql
+src/lib/server.ts
+src/lib/streamClient.ts
+src/lib/supabase.ts
+src/lib/supabaseClient.ts
+src/lib/utils.ts
+src/oblivion/autophagy.ts
+src/oblivion/biome.ts
+src/oblivion/necrosis.ts
+src/oblivion/twin.ts
+src/routeTree.gen.ts
+src/router.tsx
+src/routes/README.md
+src/routes/__root.tsx
+src/routes/app.activity.tsx
+src/routes/app.admin.audit.tsx
+src/routes/app.admin.index.tsx
+src/routes/app.admin.models.tsx
+src/routes/app.admin.queue.tsx
+src/routes/app.admin.schema.tsx
+src/routes/app.admin.studio.tsx
+src/routes/app.admin.templates.tsx
+src/routes/app.admin.tsx
+src/routes/app.admin.usage.tsx
+src/routes/app.admin.users.tsx
+src/routes/app.billing.invoices.tsx
+src/routes/app.billing.plans.tsx
+src/routes/app.billing.tsx
+src/routes/app.billing.usage.tsx
+src/routes/app.exports.tsx
+src/routes/app.github.tsx
+src/routes/app.index.tsx
+src/routes/app.integrations.tsx
+src/routes/app.notifications.tsx
+src/routes/app.preview.tsx
+src/routes/app.profile.tsx
+src/routes/app.projects.$id.analytics.tsx
+src/routes/app.projects.$id.blueprint.tsx
+src/routes/app.projects.$id.code-health.tsx
+src/routes/app.projects.$id.collaborate.tsx
+src/routes/app.projects.$id.index.tsx
+src/routes/app.projects.$id.publish.tsx
+src/routes/app.projects.$id.reports.tsx
+src/routes/app.projects.$id.requirements.tsx
+src/routes/app.projects.$id.risk-business.tsx
+src/routes/app.projects.$id.scans.tsx
+src/routes/app.projects.$id.security.tsx
+src/routes/app.projects.$id.tests.tsx
+src/routes/app.projects.$id.tsx
+src/routes/app.projects.$id.versions.tsx
+src/routes/app.projects.index.tsx
+src/routes/app.projects.new.tsx
+src/routes/app.reports.$id.view.tsx
+src/routes/app.reports.tsx
+src/routes/app.search.tsx
+src/routes/app.settings.tsx
+src/routes/app.studio.$id.analytics.tsx
+src/routes/app.studio.$id.collaborate.tsx
+src/routes/app.studio.$id.data.tsx
+src/routes/app.studio.$id.editor.tsx
+src/routes/app.studio.$id.generate.tsx
+src/routes/app.studio.$id.index.tsx
+src/routes/app.studio.$id.integrations.tsx
+src/routes/app.studio.$id.plan.tsx
+src/routes/app.studio.$id.preview.tsx
+src/routes/app.studio.$id.publish.tsx
+src/routes/app.studio.$id.security.tsx
+src/routes/app.studio.$id.settings.tsx
+src/routes/app.studio.$id.tests.tsx
+src/routes/app.studio.$id.tsx
+src/routes/app.studio.$id.versions.tsx
+src/routes/app.studio.create.tsx
+src/routes/app.studio.import.tsx
+src/routes/app.studio.index.tsx
+src/routes/app.studio.templates.tsx
+src/routes/app.team.$id.tsx
+src/routes/app.team.tsx
+src/routes/app.tsx
+src/routes/auth.callback.tsx
+src/routes/auth.tsx
+src/routes/demo.tsx
+src/routes/developers.tsx
+src/routes/forgot-password.tsx
+src/routes/github.callback.tsx
+src/routes/github.tsx
+src/routes/help.tsx
+src/routes/index.tsx
+src/routes/invite.tsx
+src/routes/login.tsx
+src/routes/onboarding.tsx
+src/routes/preview.tsx
+src/routes/register.tsx
+src/routes/reset-password.tsx
+src/routes/verify-email.tsx
+src/server.ts
+src/services/authService.ts
+src/services/githubService.ts
+src/services/llmGateway.ts
+src/services/reportCompiler.ts
+src/singularity/adversarial.ts
+src/singularity/biometrics.ts
+src/singularity/evolution.ts
+src/singularity/futures.ts
+src/singularity/immune.ts
+src/singularity/liability.ts
+src/singularity/logic.ts
+src/singularity/multimodal.ts
+src/singularity/predictor.ts
+src/singularity/temporal.ts
+src/singularity/zk.ts
+src/start.ts
+src/styles.css
+src/styles/tokens.css
+src/types/report.ts
+src/void/quantum.ts
+src/void/sacrifice.ts
+src/void/sensory.ts
+src/void/thermo.ts
+src/void/tulpa.ts
+start-brahma.ps1
+supabase/.gitignore
+supabase/config.toml
+supabase/functions/embed/index.ts
+supabase/functions/github-exchange/index.ts
+supabase/functions/github-proxy/index.ts
+supabase/functions/github-webhook/index.ts
+supabase/functions/llm-gateway/index.ts
+supabase/functions/log-auth-event/index.ts
+supabase/migrations/0008_llm_gateway.sql
+supabase/migrations/0009_profile_center.sql
+supabase/migrations/20260813010000_identity_observability.sql
+supabase/migrations/20260822020000_github_integration_engine.sql
+supabase/migrations/20260823030000_industrial_leviathan_hardening.sql
+supabase/migrations/20260823040000_industrial_data_mesh.sql
+test-endpoints.js
+test-endpoints.mjs
+test-llm-gateway.mjs
+test-p1-integrity.mjs
+test-realtime.mjs
+test-rpc-sql.mjs
+tsconfig.json
+verify-gates.js
+verify-step1-8.mjs
+verify-system-live.mjs
+verify_industrial_evolution.py
+vite.config.ts
+
+# Package.json — exact installed versions
+{
+  "name": "project-brahma-frontend",
+  "private": true,
+  "sideEffects": false,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "build:dev": "vite build --mode development",
+    "preview": "vite preview",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "typecheck": "tsc --noEmit",
+    "test": "node verify-gates.js",
+    "verify": "node verify-step1-8.mjs",
+    "verify:step1-8": "node verify-step1-8.mjs"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.2",
+    "@radix-ui/react-accordion": "^1.2.12",
+    "@radix-ui/react-alert-dialog": "^1.1.15",
+    "@radix-ui/react-aspect-ratio": "^1.1.8",
+    "@radix-ui/react-avatar": "^1.1.11",
+    "@radix-ui/react-checkbox": "^1.3.3",
+    "@radix-ui/react-collapsible": "^1.1.12",
+    "@radix-ui/react-context-menu": "^2.2.16",
+    "@radix-ui/react-dialog": "^1.1.15",
+    "@radix-ui/react-dropdown-menu": "^2.1.16",
+    "@radix-ui/react-hover-card": "^1.1.15",
+    "@radix-ui/react-label": "^2.1.8",
+    "@radix-ui/react-menubar": "^1.1.16",
+    "@radix-ui/react-navigation-menu": "^1.2.14",
+    "@radix-ui/react-popover": "^1.1.15",
+    "@radix-ui/react-progress": "^1.1.8",
+    "@radix-ui/react-radio-group": "^1.3.8",
+    "@radix-ui/react-scroll-area": "^1.2.10",
+    "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-separator": "^1.1.8",
+    "@radix-ui/react-slider": "^1.3.6",
+    "@radix-ui/react-slot": "^1.2.4",
+    "@radix-ui/react-switch": "^1.2.6",
+    "@radix-ui/react-tabs": "^1.1.13",
+    "@radix-ui/react-toggle": "^1.1.10",
+    "@radix-ui/react-toggle-group": "^1.1.11",
+    "@radix-ui/react-tooltip": "^1.2.8",
+    "@supabase/ssr": "^0.12.4",
+    "@supabase/supabase-js": "^2.112.3",
+    "@tailwindcss/vite": "^4.2.1",
+    "@tanstack/react-query": "^5.101.1",
+    "@tanstack/react-router": "^1.170.18",
+    "@tanstack/react-start": "^1.168.32",
+    "@tanstack/router-plugin": "^1.168.23",
+    "@xyflow/react": "^12.11.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "date-fns": "^4.1.0",
+    "embla-carousel-react": "^8.6.0",
+    "input-otp": "^1.4.2",
+    "lucide-react": "^0.575.0",
+    "react": "^19.2.0",
+    "react-day-picker": "^9.14.0",
+    "react-dom": "^19.2.0",
+    "react-hook-form": "^7.71.2",
+    "react-resizable-panels": "^4.6.5",
+    "recharts": "^2.15.4",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.1",
+    "tw-animate-css": "^1.3.4",
+    "vaul": "^1.1.2",
+    "vite-tsconfig-paths": "^6.0.2",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.32.0",
+    "@lovable.dev/vite-tanstack-config": "^2.10.0",
+    "@types/node": "^22.16.5",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "eslint": "^9.32.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.6",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^15.15.0",
+    "nitro": "3.0.260603-beta",
+    "prettier": "^3.7.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.56.1",
+    "vite": "^8.2.0"
+  }
+}
+
+
+# Lock file integrity — npm ls --depth=0
+project-brahma-frontend@ C:\Users\Phanindra\OneDrive\Desktop\CODING PROJECTS\PROJECT-BRAHMA\brahma-insights-main
++-- @eslint/js@9.39.5
++-- @hookform/resolvers@5.8.0
++-- @lovable.dev/vite-tanstack-config@2.13.1
++-- @radix-ui/react-accordion@1.2.20
++-- @radix-ui/react-alert-dialog@1.1.23
++-- @radix-ui/react-aspect-ratio@1.1.15
++-- @radix-ui/react-avatar@1.2.6
++-- @radix-ui/react-checkbox@1.3.11
++-- @radix-ui/react-collapsible@1.1.20
++-- @radix-ui/react-context-menu@2.3.7
++-- @radix-ui/react-dialog@1.1.23
++-- @radix-ui/react-dropdown-menu@2.1.24
++-- @radix-ui/react-hover-card@1.1.23
++-- @radix-ui/react-label@2.1.15
++-- @radix-ui/react-menubar@1.1.24
++-- @radix-ui/react-navigation-menu@1.2.22
++-- @radix-ui/react-popover@1.1.23
++-- @radix-ui/react-progress@1.1.16
++-- @radix-ui/react-radio-group@1.4.7
++-- @radix-ui/react-scroll-area@1.2.18
++-- @radix-ui/react-select@2.3.7
++-- @radix-ui/react-separator@1.1.15
++-- @radix-ui/react-slider@1.4.7
++-- @radix-ui/react-slot@1.3.3
++-- @radix-ui/react-switch@1.3.7
++-- @radix-ui/react-tabs@1.1.21
++-- @radix-ui/react-toggle-group@1.1.19
++-- @radix-ui/react-toggle@1.1.18
++-- @radix-ui/react-tooltip@1.2.16
++-- @supabase/ssr@0.12.4
++-- @supabase/supabase-js@2.112.3
++-- @tailwindcss/vite@4.3.3
++-- @tanstack/react-query@5.101.4
++-- @tanstack/react-router@1.170.28
++-- @tanstack/react-start@1.168.45
++-- @tanstack/router-plugin@1.168.31
++-- @types/node@22.20.1
++-- @types/react-dom@19.2.4
++-- @types/react@19.2.18
++-- @vitejs/plugin-react@5.2.0
++-- @xyflow/react@12.11.3
++-- class-variance-authority@0.7.1
++-- clsx@2.1.1
++-- cmdk@1.1.1
++-- date-fns@4.4.0
++-- embla-carousel-react@8.6.0
++-- eslint-config-prettier@10.1.8
++-- eslint-plugin-prettier@5.5.6
++-- eslint-plugin-react-hooks@5.2.0
++-- eslint-plugin-react-refresh@0.4.26
++-- eslint@9.39.5
++-- globals@15.15.0
++-- input-otp@1.4.2
++-- lucide-react@0.575.0
++-- nitro@3.0.260603-beta
++-- prettier@3.9.6
++-- react-day-picker@9.14.0
++-- react-dom@19.2.8
++-- react-hook-form@7.85.0
++-- react-resizable-panels@4.12.2
++-- react@19.2.8
++-- recharts@2.15.4
++-- sonner@2.0.8
++-- tailwind-merge@3.6.0
++-- tailwindcss@4.3.3
++-- tw-animate-css@1.4.0
++-- typescript-eslint@8.67.0
++-- typescript@5.9.3
++-- vaul@1.1.2
++-- vite-tsconfig-paths@6.1.1
++-- vite@8.2.1
+`-- zod@3.25.76
+
+
+
+# npm install --dry-run
+
+up to date in 26s
+
+97 packages are looking for funding
+  run `npm fund` for details
+
+
+──────────────────────────────────────────────────────────────────────
+FORENSIC SWEEP 2 — THE SUPABASE CLIENT
+──────────────────────────────────────────────────────────────────────
+
+# ls -la src/lib/supabaseClient.ts
+-rw-r--r-- 1 dev dev 2125 2026-08-24T13:35:38.485Z ./src/lib/supabaseClient.ts
+
+# cat src/lib/supabaseClient.ts
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+
+// Guard against SSR contexts where import.meta.env may be undefined
+// (TanStack Start evaluates this module on the server during hydration)
+const _env =
+  typeof import.meta !== "undefined" && typeof import.meta.env !== "undefined"
+    ? import.meta.env
+    : ({} as Record<string, string>);
+
+const supabaseUrl: string = _env["VITE_SUPABASE_URL"] ?? process.env?.["VITE_SUPABASE_URL"] ?? "";
+const supabaseAnonKey: string =
+  _env["VITE_SUPABASE_ANON_KEY"] ??
+  _env["VITE_SUPABASE_PUBLISHABLE_KEY"] ??
+  process.env?.["VITE_SUPABASE_ANON_KEY"] ??
+  process.env?.["VITE_SUPABASE_PUBLISHABLE_KEY"] ??
+  "";
+
+// HARD VALIDATION — FAIL FAST, FAIL LOUD
+if (!supabaseUrl && typeof window !== "undefined") {
+  throw new Error(
+    "[BRAHMA] VITE_SUPABASE_URL is not set. The app cannot function without it. Check your .env file.",
+  );
+}
+
+if (!supabaseAnonKey && typeof window !== "undefined") {
+  throw new Error(
+    "[BRAHMA] VITE_SUPABASE_ANON_KEY is not set. The app cannot function without it. Check your .env file.",
+  );
+}
+
+// Validate URL format if provided
+if (supabaseUrl && typeof window !== "undefined") {
+  try {
+    new URL(supabaseUrl);
+  } catch {
+    throw new Error(`[BRAHMA] VITE_SUPABASE_URL is malformed: "${supabaseUrl}"`);
+  }
+}
+
+// THE SINGLETON
+let _client: SupabaseClient | null = null;
+
+export function getSupabaseClient(): SupabaseClient {
+  if (_client) return _client;
+
+  _client = createClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: true,
+      storage: typeof window !== "undefined" ? window.localStorage : undefined,
+      storageKey: "brahma-auth-token",
+      flowType: "pkce",
+    },
+    global: {
+      headers: {
+        "x-client-info": "brahma-insights/1.0",
+      },
+    },
+    db: {
+      schema: "public",
+    },
+  });
+
+  return _client;
+}
+
+// Named export for convenience — same singleton every time
+export const supabase = getSupabaseClient();
+
+// Type export for use in components
+export type { SupabaseClient };
+
+
+# grep -rn "createClient" src/ --include="*.ts" --include="*.tsx"
+Total occurrences: 4
+src/lib/client.ts:2: export { getSupabaseClient as createClient } from "./supabaseClient";
+src/lib/server.ts:3: export function createClient(request: Request) {
+src/lib/supabaseClient.ts:1: import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+src/lib/supabaseClient.ts:46: _client = createClient(supabaseUrl, supabaseAnonKey, {
+
+# grep -rn "supabase.co" src/ --include="*.ts" --include="*.tsx"
+Total occurrences: 2
+src/routes/app.studio.$id.settings.tsx:50: val: "postgresql://postgres:••••••••@supabase.co:5432/db",
+src/routes/auth.tsx:66: <p>VITE_SUPABASE_URL=https://your-project-id.supabase.co</p>
+
+# grep -rn "eyJ" src/ --include="*.ts" --include="*.tsx" (JWT check)
+Total occurrences: 0
+
+──────────────────────────────────────────────────────────────────────
+FORENSIC SWEEP 3 — AUTH SERVICE AUTOPSY
+──────────────────────────────────────────────────────────────────────
+
+# ls -la src/services/authService.ts
+-rw-r--r-- 1 dev dev 17496 2026-08-27T12:05:59.629Z ./src/services/authService.ts
+
+# cat src/services/authService.ts
+/**
+ * authService — canonical authentication service
+ *
+ * LAWS:
+ *  - This is the ONLY module that calls supabase.auth.* (besides supabaseClient.ts itself).
+ *  - No method throws. Every method returns AuthResponse<T>.
+ *  - All UI pages must consume this module exclusively.
+ *  - ZERO MOCK LOGIC. All methods make real Supabase authentication calls.
+ */
+
+import { supabase } from "../lib/supabaseClient";
+import type { Session, AuthChangeEvent, User } from "@supabase/supabase-js";
+import type { Role } from "../lib/auth";
+import { logAuthEvent } from "../lib/api";
+
+export { logAuthEvent };
+
+// ─── Constants ──────────────────────────────────────────────────────────────
+
+const getRedirectUrl = (): string => {
+  if (typeof window !== "undefined") {
+    return `${window.location.origin}/auth/callback`;
+  }
+  return (import.meta.env["VITE_APP_URL"] ?? "http://localhost:8080") + "/auth/callback";
+};
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+export type AuthErrorCode =
+  | "invalid_credentials"
+  | "email_not_confirmed"
+  | "email_exists"
+  | "rate_limited"
+  | "invalid_api_key"
+  | "network"
+  | "weak_password"
+  | "provider_error"
+  | "not_implemented"
+  | "unknown";
+
+export interface AuthError {
+  code: AuthErrorCode;
+  message: string;
+  raw?: string | undefined;
+}
+
+export interface AuthResponse<T = undefined> {
+  ok: boolean;
+  data?: T;
+  error?: AuthError;
+}
+
+export interface DemoUser {
+  id: string;
+  email: string;
+  name: string;
+  role: Role;
+  onboarded: boolean;
+  avatarUrl?: string | undefined;
+  isDemo?: boolean | undefined;
+}
+
+export interface DemoSession {
+  user: DemoUser;
+  expires_at: number;
+  access_token?: string | undefined;
+  refresh_token?: string | undefined;
+}
+
+// ─── Error Classifier ────────────────────────────────────────────────────────
+
+const classify = (raw?: string): AuthErrorCode => {
+  const m = (raw ?? "").toLowerCase();
+  if (m.includes("invalid login credentials") || m.includes("invalid credentials"))
+    return "invalid_credentials";
+  if (m.includes("email not confirmed")) return "email_not_confirmed";
+  if (m.includes("already registered") || m.includes("user already registered"))
+    return "email_exists";
+  if (m.includes("rate limit") || m.includes("too many")) return "rate_limited";
+  if (m.includes("api key") || m.includes("anon key") || m.includes("invalid key"))
+    return "invalid_api_key";
+  if (m.includes("failed to fetch") || m.includes("network") || m.includes("fetch"))
+    return "network";
+  if (m.includes("password") && m.includes("weak")) return "weak_password";
+  if (m.includes("provider") || m.includes("oauth")) return "provider_error";
+  return "unknown";
+};
+
+const HUMAN: Record<AuthErrorCode, string> = {
+  invalid_credentials: "Incorrect email or password.",
+  email_not_confirmed: "Email not confirmed. Check your inbox.",
+  email_exists: "Already registered. Sign in instead.",
+  rate_limited: "Too many attempts. Wait 30 seconds and retry.",
+  invalid_api_key: "Supabase key misconfigured — contact support.",
+  network: "Network error. Check your connection.",
+  weak_password: "Password too weak. Use uppercase, numbers, and symbols.",
+  provider_error: "OAuth provider misconfigured — check the Supabase dashboard.",
+  not_implemented: "This feature is not enabled in this build.",
+  unknown: "Unexpected authentication error.",
+};
+
+const fail = <T>(raw?: string): AuthResponse<T> => {
+  const code = classify(raw);
+  return { ok: false, error: { code, message: HUMAN[code], raw } };
+};
+
+// ─── authService ─────────────────────────────────────────────────────────────
+
+export const authService = {
+  // ── Identity & Feature Helpers ──────────────────────────────────────────
+
+  isDemoMode(): boolean {
+    return false;
+  },
+
+  isOAuthProviderEnabled(provider: "google" | "github" | "gitlab"): boolean {
+    if (provider === "google") return import.meta.env["VITE_OAUTH_GOOGLE"] !== "false";
+    if (provider === "github") return import.meta.env["VITE_OAUTH_GITHUB"] !== "false";
+    if (provider === "gitlab") return import.meta.env["VITE_OAUTH_GITLAB"] === "true";
+    return false;
+  },
+
+  // ── 1. signUp ────────────────────────────────────────────────────────────
+
+  async signUp(
+    email: string,
+    password: string,
+    options?: { data?: Record<string, unknown> },
+  ): Promise<AuthResponse<{ user: User | null; session: Session | null }>> {
+    const cleanEmail = email.trim();
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: cleanEmail,
+        password,
+        options: {
+          emailRedirectTo: getRedirectUrl(),
+          data: options?.data ?? {},
+        },
+      });
+      if (error) {
+        logAuthEvent({
+          event: "sign_up",
+          method: "Password",
+          status: "failed",
+          email: cleanEmail,
+        }).catch(() => undefined);
+        return fail(error.message);
+      }
+      logAuthEvent({
+        event: "sign_up",
+        method: "Password",
+        status: "success",
+        email: cleanEmail,
+        user_id: data.user?.id,
+      }).catch(() => undefined);
+      return { ok: true, data: { user: data.user, session: data.session } };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  // ── 2. signIn / signInWithPassword ──────────────────────────────────────
+
+  async signIn(email: string, password: string): Promise<AuthResponse<Session>> {
+    return this.signInWithPassword(email, password);
+  },
+
+  async signInWithPassword(email: string, password: string): Promise<AuthResponse<Session>> {
+    const cleanEmail = email.trim();
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: cleanEmail,
+        password,
+      });
+      if (error) {
+        logAuthEvent({
+          event: "failed_password",
+          method: "Password",
+          status: "failed",
+          email: cleanEmail,
+        }).catch(() => undefined);
+        return fail(error.message);
+      }
+      logAuthEvent({
+        event: "signed_in",
+        method: "Password",
+        status: "success",
+        email: cleanEmail,
+        user_id: data.user?.id,
+      }).catch(() => undefined);
+      return { ok: true, data: data.session as Session };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  // ── 3. signInWithGoogle ─────────────────────────────────────────────────
+
+  async signInWithGoogle(): Promise<AuthResponse> {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: getRedirectUrl(),
+          scopes: "email profile openid",
+          queryParams: {
+            access_type: "offline",
+            prompt: "select_account",
+          },
+        },
+      });
+      if (error) {
+        logAuthEvent({
+          event: "oauth",
+          method: "GOOGLE OAuth",
+          status: "failed",
+          email: "oauth.google@brahma.dev",
+        }).catch(() => undefined);
+        return fail(error.message);
+      }
+      return { ok: true };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  // ── 4. signInWithGitHub ─────────────────────────────────────────────────
+
+  async signInWithGitHub(): Promise<AuthResponse> {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "github",
+        options: {
+          redirectTo: getRedirectUrl(),
+          scopes: "read:user user:email",
+        },
+      });
+      if (error) {
+        logAuthEvent({
+          event: "oauth",
+          method: "GITHUB OAuth",
+          status: "failed",
+          email: "oauth.github@brahma.dev",
+        }).catch(() => undefined);
+        return fail(error.message);
+      }
+      return { ok: true };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  async signInWithOAuth(provider: "google" | "github" | "gitlab"): Promise<AuthResponse> {
+    if (provider === "google") return this.signInWithGoogle();
+    if (provider === "github") return this.signInWithGitHub();
+    return fail(`OAuth provider ${provider} is not configured.`);
+  },
+
+  // ── 5. signOut ──────────────────────────────────────────────────────────
+
+  async signOut(scope: "local" | "others" | "global" = "local"): Promise<AuthResponse> {
+    try {
+      let emailForLog = "unknown@brahma.dev";
+      const { data: sd } = await supabase.auth.getSession();
+      if (sd?.session?.user?.email) emailForLog = sd.session.user.email;
+
+      const { error } = await supabase.auth.signOut({ scope });
+      if (error) return fail(error.message);
+
+      logAuthEvent({
+        event: "sign_out",
+        method: scope === "others" ? "Revoke Other Sessions" : "Session",
+        status: "success",
+        email: emailForLog,
+      }).catch(() => undefined);
+      return { ok: true };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  // ── 6. getSession ────────────────────────────────────────────────────────
+
+  async getSession(): Promise<AuthResponse<Session | null>> {
+    try {
+      const { data, error } = await supabase.auth.getSession();
+      return error ? fail(error.message) : { ok: true, data: data.session };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  // ── 7. getUser ───────────────────────────────────────────────────────────
+
+  async getUser(): Promise<AuthResponse<User | null>> {
+    try {
+      const { data, error } = await supabase.auth.getUser();
+      return error ? fail(error.message) : { ok: true, data: data.user };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  // ── 8. resetPassword / resetPasswordForEmail ─────────────────────────────
+
+  async resetPasswordForEmail(email: string): Promise<AuthResponse> {
+    const cleanEmail = email.trim();
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
+        redirectTo: `${typeof window !== "undefined" ? window.location.origin : ""}/reset-password`,
+      });
+      return error ? fail(error.message) : { ok: true };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  async resetPassword(email: string): Promise<AuthResponse> {
+    return this.resetPasswordForEmail(email);
+  },
+
+  // ── 9. updatePassword ────────────────────────────────────────────────────
+
+  async updatePassword(password: string): Promise<AuthResponse> {
+    if (password.length < 8) {
+      return fail("Password must be at least 8 characters");
+    }
+    try {
+      const { error } = await supabase.auth.updateUser({ password });
+      return error ? fail(error.message) : { ok: true };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  // ── 10. onAuthStateChange ────────────────────────────────────────────────
+
+  onAuthStateChange(callback: (event: AuthChangeEvent, session: Session | null) => void) {
+    return supabase.auth.onAuthStateChange(callback);
+  },
+
+  // ── Additional Helpers ───────────────────────────────────────────────────
+
+  async setSession(tokens: {
+    access_token: string;
+    refresh_token: string;
+  }): Promise<AuthResponse<Session | null>> {
+    try {
+      const { data, error } = await supabase.auth.setSession(tokens);
+      return error ? fail(error.message) : { ok: true, data: data.session };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  async sendMagicLink(email: string): Promise<AuthResponse> {
+    return this.signInWithOtp(email);
+  },
+
+  async signInWithOtp(email: string): Promise<AuthResponse> {
+    const cleanEmail = email.trim();
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: cleanEmail,
+        options: { emailRedirectTo: getRedirectUrl() },
+      });
+      if (error) return fail(error.message);
+      logAuthEvent({
+        event: "magic_link",
+        method: "Magic Link",
+        status: "success",
+        email: cleanEmail,
+      }).catch(() => undefined);
+      return { ok: true };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  async verifyOtp(
+    email: string,
+    token: string,
+    type: "email" | "magiclink" | "signup" | "recovery" | "invite" = "email",
+  ): Promise<AuthResponse<Session>> {
+    try {
+      const otpType =
+        type === "magiclink" ? "magiclink" : type === "recovery" ? "recovery" : "signup";
+      const { data, error } = await supabase.auth.verifyOtp({
+        email: email.trim(),
+        token: token.trim(),
+        type: otpType,
+      });
+      return error ? fail(error.message) : { ok: true, data: data.session as Session };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  async resendOtp(
+    email: string,
+    type: "signup" | "signup_user_confirmation" | "sms" = "signup",
+  ): Promise<AuthResponse> {
+    try {
+      const { error } = await supabase.auth.resend({
+        email: email.trim(),
+        type: type as "signup",
+      });
+      return error ? fail(error.message) : { ok: true };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  async signInWithSSO(domain: string): Promise<AuthResponse> {
+    try {
+      const { error } = await supabase.auth.signInWithSSO({
+        domain: domain.trim(),
+        options: { redirectTo: getRedirectUrl() },
+      });
+      return error ? fail(error.message) : { ok: true };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  async signInWithPasskey(): Promise<AuthResponse> {
+    return fail(
+      "WebAuthn / Passkey sign-in requires domain HTTPS verification and registered WebAuthn credentials.",
+    );
+  },
+
+  async exchangeCodeForSession(code: string): Promise<AuthResponse<Session | null>> {
+    try {
+      const { data, error } = await supabase.auth.exchangeCodeForSession(code);
+      return error ? fail(error.message) : { ok: true, data: data.session };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
+  async bootstrapProfile(user: {
+    id: string;
+    email?: string;
+    user_metadata?: Record<string, unknown>;
+  }): Promise<AuthResponse> {
+    try {
+      const fullName =
+        (user.user_metadata?.["full_name"] as string) ||
+        (user.user_metadata?.["name"] as string) ||
+        "";
+      const avatarUrl =
+        (user.user_metadata?.["avatar_url"] as string) ||
+        (user.user_metadata?.["picture"] as string) ||
+        "";
+      const { data: existing } = await supabase
+        .from("profiles")
+        .select("id, onboarded, full_name, role")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (!existing) {
+        await supabase.from("profiles").insert({
+          id: user.id,
+          display_name: fullName || user.email?.split("@")[0] || "User",
+          full_name: fullName,
+          avatar_url: avatarUrl || undefined,
+          role: "student",
+          onboarded: Boolean(fullName),
+        });
+      } else if (fullName && !existing.full_name) {
+        await supabase
+          .from("profiles")
+          .update({ full_name: fullName, avatar_url: avatarUrl || undefined })
+          .eq("id", user.id);
+      }
+      return { ok: true };
+    } catch (e: unknown) {
+      console.error("[authService] bootstrapProfile error:", e);
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+};
+
+
+# Mock logic & debt pattern hunt across src/
+
+grep -rn "setTimeout" src/ --include="*.ts" --include="*.tsx"
+Matches count: 44
+  src/components/apocalypse/QADominator.tsx:17: setTimeout(() => setCopiedId(null), 2000);
+  src/components/auth/auth-components.tsx:1517: const timer = setTimeout(() => setSeconds(seconds - 1), 1000);
+  src/components/brahma/app-shell.tsx:551: setTimeout(() => {
+  src/components/brahma/ProvenancePopover.tsx:60: setTimeout(() => setCopied(false), 2000);
+  src/components/github/GitHubRepoDetail.tsx:153: setTimeout(() => setCopiedClone(null), 2000);
+  src/components/preview/PreviewCodePanel.tsx:24: setTimeout(() => setCopied(false), 2000);
+  src/components/preview/PreviewEngine.tsx:116: setTimeout(() => {
+  src/components/preview/PreviewInteractionLayer.tsx:90: setTimeout(() => {
+  src/components/preview/PreviewInteractionLayer.tsx:284: setTimeout(() => {
+  src/components/preview/PreviewInteractionLayer.tsx:584: setTimeout(() => setIsGenerating(false), 600);
+  src/components/preview/PreviewResourceFetcher.tsx:24: setTimeout(() => {
+  src/components/reports/AIDraftDrawer.tsx:68: await new Promise((resolve) => setTimeout(resolve, 800));
+  src/components/reports/DownloadMenu.tsx:45: await new Promise((resolve) => setTimeout(resolve, 400));
+  src/components/reports/GenerateReportModal.tsx:57: await new Promise((r) => setTimeout(r, 400));
+  src/components/reports/GenerateReportModal.tsx:62: await new Promise((r) => setTimeout(r, 450));
+  ... and 29 more matches.
+
+grep -rn "mockUser" src/ --include="*.ts" --include="*.tsx"
+Matches count: 2
+  src/routes/app.admin.usage.tsx:51: const mockUsersUsage = [
+  src/routes/app.admin.usage.tsx:101: const [users] = useState(mockUsersUsage);
+
+grep -rn "fakeUser" src/ --include="*.ts" --include="*.tsx"
+Matches count: 0
+
+grep -rn "DEMO_MODE" src/ --include="*.ts" --include="*.tsx"
+Matches count: 6
+  src/config/featureFlags.ts:7: DEMO_MODE: _env["VITE_DEMO_MODE"] === "true",
+  src/lib/api.ts:336: import { DEMO_MODE } from "./constants";
+  src/lib/api.ts:494: if (userId && !DEMO_MODE) {
+  src/lib/api.ts:596: if (userId && !DEMO_MODE) {
+  src/lib/api.ts:644: if (userId && !DEMO_MODE) {
+  src/lib/constants.ts:3: export const DEMO_MODE = FEATURE_FLAGS.DEMO_MODE;
+
+grep -rn "// TODO" src/ --include="*.ts" --include="*.tsx"
+Matches count: 0
+
+grep -rn "// FIXME" src/ --include="*.ts" --include="*.tsx"
+Matches count: 0
+
+grep -rn "placeholder" src/ --include="*.ts" --include="*.tsx"
+Matches count: 103
+  src/components/auth/auth-components.tsx:603: "pr-10 bg-slate-900 border-slate-800 text-white placeholder-slate-600 focus-visible:ring-cyan-500 rounded-lg text-sm",
+  src/components/auth/auth-components.tsx:900: placeholder="XXXX-XXXX"
+  src/components/auth/auth-components.tsx:905: "bg-slate-900 border-slate-800 text-center font-mono font-bold tracking-widest text-white placeholder-slate-600 focus-visible:ring-cyan-500 rounded-lg",
+  src/components/auth/auth-components.tsx:943: placeholder="corp.company.com"
+  src/components/auth/auth-components.tsx:946: className="pl-9 bg-slate-900 border-slate-800 text-white placeholder-slate-600 focus-visible:ring-cyan-500 rounded-lg text-sm"
+  src/components/auth/auth-components.tsx:1241: placeholder="e.g. Brahma Sandbox Project"
+  src/components/auth/auth-components.tsx:1243: "bg-slate-900 border-slate-800 text-white placeholder-slate-600 focus-visible:ring-cyan-500 rounded-lg text-sm",
+  src/components/auth/auth-components.tsx:1317: placeholder={emails.length === 0 ? "dev@company.com, qa@company.com" : ""}
+  src/components/auth/auth-components.tsx:1318: className="flex-1 min-w-[120px] bg-transparent border-none text-xs text-white placeholder-slate-600 focus:outline-none"
+  src/components/auth/auth-components.tsx:1371: placeholder="BRH-XXXX-XXXX"
+  src/components/auth/auth-components.tsx:1375: "bg-slate-900 border-slate-800 text-center font-mono font-bold tracking-wider text-white placeholder-slate-600 focus-visible:ring-cyan-500 rounded-lg text-sm",
+  src/components/brahma/app-shell.tsx:892: <SelectValue placeholder="Select project" />
+  src/components/brahma/app-shell.tsx:921: placeholder="Search projects, requirements, vulnerabilities (Press Enter)..."
+  src/components/brahma/app-shell.tsx:1156: placeholder="Type command or search sections (Use arrows ↕ + Enter)..."
+  src/components/brahma/app-shell.tsx:1157: className="w-full bg-transparent border-0 outline-none text-xs text-foreground placeholder:text-muted-foreground"
+  ... and 88 more matches.
+
+grep -rn "coming soon" src/ --include="*.ts" --include="*.tsx"
+Matches count: 1
+  src/components/brahma/integrations-hub.tsx:82: badge: "Coming Soon",
+
+grep -rn "not implemented" src/ --include="*.ts" --include="*.tsx"
+Matches count: 0
+
+──────────────────────────────────────────────────────────────────────
+FORENSIC SWEEP 4 — AUTH PAGE CONTAMINATION CHECK
+──────────────────────────────────────────────────────────────────────
+
+Auth routes identified: [
+  "src/routes/auth.callback.tsx",
+  "src/routes/auth.tsx",
+  "src/routes/github.callback.tsx",
+  "src/routes/login.tsx",
+  "src/routes/register.tsx",
+  "src/routes/reset-password.tsx",
+  "src/routes/verify-email.tsx"
+]
+
+=== FILE: src/routes/auth.callback.tsx ===
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { Loader2, AlertCircle, RefreshCw, KeyRound, ShieldAlert } from "lucide-react";
+import { useEffect, useState } from "react";
+import { authService, logAuthEvent } from "../services/authService";
+import { supabase } from "../lib/supabase";
+import { Button } from "../components/ui/button";
+import { toast } from "sonner";
+
+export const Route = createFileRoute("/auth/callback")({
+  head: () => ({
+    meta: [{ title: "Verifying Authentication — PROJECT BRAHMA" }],
+  }),
+  component: AuthCallbackPage,
+});
+
+function AuthCallbackPage() {
+  const navigate = useNavigate();
+  const [errorDetails, setErrorDetails] = useState<{
+    code: string;
+    message: string;
+    description?: string;
+  } | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const handleAuthCallback = async () => {
+      try {
+        const searchParams = new URLSearchParams(window.location.search);
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+
+        // 1. Check for explicit error parameters in URL query or hash
+        const errorCode = searchParams.get("error") || hashParams.get("error");
+        const errorDescription =
+          searchParams.get("error_description") ||
+          hashParams.get("error_description") ||
+          searchParams.get("error_code") ||
+          hashParams.get("error_code");
+
+        if (errorCode || errorDescription) {
+          const code = errorCode || "callback_failed";
+          const msg = errorDescription || "An OAuth error was reported by the identity provider.";
+          if (isMounted) {
+            setErrorDetails({
+              code,
+              message: msg,
+              description:
+                code === "access_denied"
+                  ? "Access was denied by the identity provider or user cancelled consent."
+                  : code === "invalid_client"
+                    ? "OAuth misconfigured — invalid_client. Admin: verify provider console credentials."
+                    : msg,
+            });
+          }
+
+          await logAuthEvent({
+            event: "oauth",
+            method: "OAuth Callback",
+            status: "failed",
+            email: "oauth.callback@brahma.dev",
+          });
+          return;
+        }
+
+        // 2. Handle GitHub repository integration code exchange
+        const isGitHubIntegration = searchParams.get("integration") === "github";
+        const ghCode = searchParams.get("code");
+
+        if (isGitHubIntegration && ghCode) {
+          try {
+            const edgeUrl = `${import.meta.env["VITE_SUPABASE_URL"] || ""}/functions/v1/github-exchange`;
+            const sessionResult = await authService.getSession();
+            const session = sessionResult.ok ? sessionResult.data : null;
+
+            if (session?.access_token) {
+              await fetch(edgeUrl, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${session.access_token}`,
+                },
+                body: JSON.stringify({ code: ghCode }),
+              });
+            }
+          } catch (e) {
+            console.warn("Edge function GitHub exchange fallback:", e);
+          }
+
+          const existing = JSON.parse(localStorage.getItem("brahma.user_integrations") || "[]");
+          const updated = [
+            ...existing.filter((i: { provider?: string }) => i.provider !== "github"),
+            {
+              user_id: "current-user",
+              provider: "github",
+              external_id: "8821941",
+              username: "brahma-developer",
+              avatar_url:
+                "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
+              repo_count: 14,
+              scopes: ["repo", "read:user"],
+              connected_at: new Date().toISOString(),
+            },
+          ];
+          localStorage.setItem("brahma.user_integrations", JSON.stringify(updated));
+          navigate({ to: "/app/integrations", replace: true });
+          return;
+        }
+
+        // 3. Handle PKCE Code exchange if 'code' is in URL
+        const authCode = searchParams.get("code");
+        if (authCode) {
+          const result = await authService.exchangeCodeForSession(authCode);
+          if (!result.ok) {
+            if (isMounted) {
+              setErrorDetails({
+                code: "code_exchange_failed",
+                message: result.error?.message ?? "Code exchange failed.",
+                description: "Failed to exchange authorization code for active session token.",
+              });
+            }
+            await logAuthEvent({
+              event: "oauth",
+              method: "PKCE Exchange",
+              status: "failed",
+              email: "oauth.code@brahma.dev",
+            });
+            return;
+          }
+        }
+
+        // 4. Retrieve or wait for established session
+        const sessionResult = await authService.getSession();
+        const session = sessionResult.ok ? sessionResult.data : null;
+        const sessionError = sessionResult.ok ? null : sessionResult.error;
+
+        if (sessionError) {
+          if (isMounted) {
+            setErrorDetails({
+              code: "session_error",
+              message: sessionError.message ?? "Session error.",
+              description: "Could not retrieve established session.",
+            });
+          }
+          return;
+        }
+
+        if (session && session.user) {
+          const userObj = session.user as {
+            app_metadata?: { provider?: string };
+            user_metadata?: {
+              provider?: string;
+              full_name?: string;
+              name?: string;
+              avatar_url?: string;
+            };
+            email?: string;
+          };
+          const provider =
+            userObj.app_metadata?.provider || userObj.user_metadata?.provider || "OAuth";
+
+          // Log auth event
+          await logAuthEvent({
+            event: "oauth",
+            method: `${provider.toUpperCase()} OAuth`,
+            status: "success",
+            email: session.user.email || "oauth.user@brahma.dev",
+          });
+
+          // Bootstrap profile if missing
+          await authService.bootstrapProfile(session.user);
+
+          toast.success(`Signed in with ${provider.charAt(0).toUpperCase() + provider.slice(1)}`);
+
+          // Check for intended redirect URL
+          const storedRedirect =
+            sessionStorage.getItem("brahma_auth_redirect") ||
+            sessionStorage.getItem("auth_redirect");
+          if (storedRedirect) {
+            sessionStorage.removeItem("brahma_auth_redirect");
+            sessionStorage.removeItem("auth_redirect");
+          }
+
+          // Verify onboarding status
+          if (authService.isDemoMode()) {
+            const demoUser = session.user as { onboarded?: boolean; name?: string };
+            if (!demoUser.onboarded || !demoUser.name) {
+              navigate({ to: "/onboarding", replace: true });
+            } else {
+              navigate({ to: (storedRedirect || "/app") as "/app", replace: true });
+            }
+          } else {
+            const { data: profile } = await supabase
+              .from("profiles")
+              .select("onboarded, full_name, display_name")
+              .eq("id", session.user.id)
+              .maybeSingle();
+
+            const isComplete = profile?.onboarded && (profile?.full_name || profile?.display_name);
+            if (!isComplete) {
+              navigate({ to: "/onboarding", replace: true });
+            } else {
+              navigate({ to: (storedRedirect || "/app") as "/app", replace: true });
+            }
+          }
+        } else {
+          // If neither session nor error, wait briefly for auth listener or bounce to login
+          const {
+            data: { subscription },
+          } = authService.onAuthStateChange(async (event, currentSession) => {
+            if (event === "SIGNED_IN" && currentSession?.user) {
+              subscription.unsubscribe();
+              await authService.bootstrapProfile(
+                currentSession.user as { id: string; email?: string },
+              );
+              toast.success("Signed in successfully");
+              navigate({ to: "/app", replace: true });
+            }
+          });
+
+          setTimeout(() => {
+            if (isMounted && !session) {
+              navigate({ to: "/login", replace: true });
+            }
+          }, 3000);
+        }
+      } catch (err) {
+        console.error("Auth callback exception:", err);
+        if (isMounted) {
+          setErrorDetails({
+            code: "unexpected_exception",
+            message: (err as Error).message || "An unexpected error occurred during verification.",
+          });
+        }
+      }
+    };
+
+    handleAuthCallback();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [navigate]);
+
+  return (
+    <div className="relative flex min-h-screen items-center justify-center bg-[var(--surface-base)] px-4 font-sans">
+      <div
+        className="pointer-events-none absolute inset-0 opacity-20"
+        style={{
+          backgroundImage: "radial-gradient(var(--color-primary) 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-[var(--surface-base)] via-[var(--surface-sunken)]/95 to-[var(--surface-overlay)]/40"
+        aria-hidden
+      />
+
+      <div className="relative w-full max-w-md bg-slate-950/60 border border-slate-800/90 rounded-2xl p-8 shadow-2xl text-center space-y-6 backdrop-blur-md">
+        {errorDetails ? (
+          <>
+            <div className="mx-auto grid size-14 place-items-center rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
+              <ShieldAlert className="size-7" />
+            </div>
+            <div className="space-y-2">
+              <span className="inline-block px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-red-500/20 text-red-300 border border-red-500/30 uppercase tracking-wider">
+                {errorDetails.code}
+              </span>
+              <h1 className="text-lg font-bold tracking-tight text-white">
+                OAuth Authentication Failed
+              </h1>
+              <p className="text-xs text-slate-300 leading-relaxed font-medium">
+                {errorDetails.message}
+              </p>
+              {errorDetails.description && errorDetails.description !== errorDetails.message && (
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  {errorDetails.description}
+                </p>
+              )}
+            </div>
+
+            <div className="pt-3 flex flex-col gap-2.5">
+              <Button
+                asChild
+                className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs py-2"
+              >
+                <Link to="/login">
+                  <RefreshCw className="size-3.5 mr-1.5" /> Try Again
+                </Link>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="w-full border-slate-800 bg-slate-900/60 hover:bg-slate-850 text-slate-300 hover:text-white text-xs"
+              >
+                <Link to="/login">
+                  <KeyRound className="size-3.5 mr-1.5 text-slate-400" /> Use Password Instead
+                </Link>
+              </Button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="mx-auto grid size-14 place-items-center rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+              <Loader2 className="size-7 animate-spin text-cyan-400" />
+            </div>
+            <div className="space-y-2">
+              <h1 className="text-lg font-bold tracking-tight text-white">Completing sign-in…</h1>
+              <p className="text-xs text-slate-400">
+                Verifying secure session token and synchronizing user identity profile.
+              </p>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+=== FILE: src/routes/auth.tsx ===
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { AlertCircle, Loader2, ShieldCheck, Lock, Mail, User, ArrowRight } from "lucide-react";
+import { useState, type FormEvent, useEffect } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { useAuthSession } from "@/lib/auth";
+import { authService } from "@/services/authService";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BrahmaLogo } from "@/components/brahma/logo";
+import { cn } from "@/lib/utils";
+
+export const Route = createFileRoute("/auth")({
+  head: () => ({
+    meta: [
+      { title: "Authenticate — STARK / PROJECT BRAHMA" },
+      {
+        name: "description",
+        content: "Sign in or create an account for engineering intelligence workspace access.",
+      },
+    ],
+  }),
+  component: UnifiedAuthPage,
+});
+
+const signInSchema = z.object({
+  email: z.string().trim().min(1, "Email is required").email("Enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+const signUpSchema = z.object({
+  fullName: z.string().trim().min(2, "Full name must be at least 2 characters"),
+  email: z.string().trim().min(1, "Email is required").email("Enter a valid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .regex(/[A-Z]/, "Include at least one uppercase letter")
+    .regex(/[0-9]/, "Include at least one number"),
+  role: z.enum(["student", "faculty", "startup", "admin", "reviewer"]).default("student"),
+});
+
+function SetupErrorCard() {
+  return (
+    <div className="w-full max-w-md rounded-2xl border border-destructive/40 bg-destructive/10 p-6 text-foreground shadow-2xl backdrop-blur">
+      <div className="flex items-center gap-3 border-b border-destructive/20 pb-4">
+        <div className="grid size-10 place-items-center rounded-xl bg-destructive/20 text-destructive">
+          <AlertCircle className="size-5" />
+        </div>
+        <div>
+          <h2 className="text-sm font-bold">Supabase Environment Missing</h2>
+          <p className="text-xs text-muted-foreground">Configuration required to start</p>
+        </div>
+      </div>
+      <div className="space-y-3 pt-4 text-xs text-muted-foreground leading-relaxed">
+        <p>
+          The application cannot establish a secure connection because Supabase environment
+          variables are not defined.
+        </p>
+        <div className="rounded-lg bg-zinc-950/80 p-3 font-mono text-[11px] text-zinc-300 border border-border/60 space-y-1">
+          <p className="text-zinc-500"># 1. Copy sample environment file</p>
+          <p className="text-primary">cp .env.example .env.local</p>
+          <p className="text-zinc-500 pt-1"># 2. Add your Supabase project keys</p>
+          <p>VITE_SUPABASE_URL=https://your-project-id.supabase.co</p>
+          <p>VITE_SUPABASE_ANON_KEY=sb_publishable_your_anon_key</p>
+        </div>
+        <p className="text-[11px] text-zinc-400">
+          Once configured, restart the dev server with{" "}
+          <code className="text-primary font-mono">npm run dev</code>.
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function UnifiedAuthPage() {
+  const navigate = useNavigate();
+  const { isAuthenticated, ready } = useAuthSession();
+
+  const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Sign in form state
+  const [signInEmail, setSignInEmail] = useState("");
+  const [signInPassword, setSignInPassword] = useState("");
+
+  // Sign up form state
+  const [signUpName, setSignUpName] = useState("");
+  const [signUpEmail, setSignUpEmail] = useState("");
+  const [signUpPassword, setSignUpPassword] = useState("");
+  const [signUpRole, setSignUpRole] = useState<"student" | "faculty" | "startup">("student");
+
+  // Magic link state
+  const [magicLinkSent, setMagicLinkSent] = useState(false);
+
+  // Check if Supabase keys exist
+  const hasSupabaseKeys = Boolean(
+    import.meta.env["VITE_SUPABASE_URL"] &&
+    (import.meta.env["VITE_SUPABASE_ANON_KEY"] || import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"]),
+  );
+
+  // Handle OAuth error params in URL on mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+    const errorDescription = params.get("error_description");
+    const errorCode = params.get("error_code");
+
+    if (error || errorDescription) {
+      const errorMessages: Record<string, string> = {
+        access_denied: "Authentication was cancelled. Please try again.",
+        server_error: "Authentication server error. Please try again.",
+        temporarily_unavailable: "Service temporarily unavailable.",
+        "403": "Your email is not authorized. Contact support.",
+      };
+
+      const message =
+        errorMessages[errorCode || error || ""] ||
+        errorDescription ||
+        "Authentication failed. Please try again.";
+
+      toast.error(message);
+      setErrors({ form: message });
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
+
+  // If already authenticated, redirect to workspace
+  useEffect(() => {
+    if (ready && isAuthenticated) {
+      navigate({ to: "/app", replace: true });
+    }
+  }, [ready, isAuthenticated, navigate]);
+
+  const handleSignIn = async (e: FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+
+    const result = signInSchema.safeParse({ email: signInEmail, password: signInPassword });
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        if (issue.path[0]) fieldErrors[issue.path[0].toString()] = issue.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await authService.signInWithPassword(signInEmail, signInPassword);
+      if (!res.ok) {
+        toast.error(res.error?.message || "Invalid credentials.");
+        setErrors({ form: res.error?.message || "Sign in failed" });
+      } else {
+        toast.success("Welcome back! Loading your workspace...");
+        navigate({ to: "/app", replace: true });
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Authentication failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSignUp = async (e: FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+
+    const result = signUpSchema.safeParse({
+      fullName: signUpName,
+      email: signUpEmail,
+      password: signUpPassword,
+      role: signUpRole,
+    });
+
+    if (!result.success) {
+      const fieldErrors: Record<string, string> = {};
+      result.error.issues.forEach((issue) => {
+        if (issue.path[0]) fieldErrors[issue.path[0].toString()] = issue.message;
+      });
+      setErrors(fieldErrors);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await authService.signUp(signUpEmail, signUpPassword, {
+        data: {
+          full_name: signUpName,
+          role: signUpRole,
+        },
+      });
+
+      if (!res.ok) {
+        toast.error(res.error?.message || "Registration failed.");
+        setErrors({ form: res.error?.message || "Registration failed" });
+      } else {
+        if (res.data?.session) {
+          toast.success("Account created! Access granted to engineering workspace.");
+          navigate({ to: "/app", replace: true });
+        } else {
+          toast.success("Registration successful! Check your inbox to confirm your email.");
+          setMagicLinkSent(true);
+        }
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Registration failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOAuth = async (provider: "google" | "github") => {
+    setLoading(true);
+    try {
+      const res = await authService.signInWithOAuth(provider);
+      if (!res.ok) {
+        toast.error(res.error?.message || `Failed to initiate ${provider} OAuth.`);
+      }
+    } catch (err) {
+      toast.error("OAuth initiation error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleMagicLink = async () => {
+    if (!signInEmail || !signInEmail.includes("@")) {
+      setErrors({ email: "Enter a valid email address to receive a magic link" });
+      return;
+    }
+    setLoading(true);
+    try {
+      const res = await authService.sendMagicLink(signInEmail);
+      if (res.ok) {
+        setMagicLinkSent(true);
+        toast.success("Secure sign-in link dispatched to your inbox!");
+      } else {
+        toast.error(res.error?.message || "Failed to send magic link.");
+      }
+    } catch (err) {
+      toast.error("Failed to send magic link");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 py-12 relative overflow-hidden">
+      {/* Deep Space Background Ambient Glow */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-zinc-950 to-background" />
+      <div className="pointer-events-none absolute -top-40 right-1/4 size-96 rounded-full bg-indigo-500/10 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-40 left-1/4 size-96 rounded-full bg-cyan-500/10 blur-3xl" />
+
+      <div className="relative z-10 w-full max-w-md space-y-6">
+        {/* Brand Header */}
+        <div className="flex flex-col items-center text-center space-y-2">
+          <div className="inline-flex items-center gap-2.5 transition-transform hover:scale-105">
+            <BrahmaLogo />
+          </div>
+          <p className="text-xs text-muted-foreground max-w-xs">
+            Engineering Intelligence &amp; Verified Architecture Workspace
+          </p>
+        </div>
+
+        {!hasSupabaseKeys ? (
+          <SetupErrorCard />
+        ) : magicLinkSent ? (
+          <div className="surface rounded-2xl border border-border/80 p-8 shadow-2xl space-y-5 text-center">
+            <div className="mx-auto grid size-12 place-items-center rounded-2xl bg-primary/15 text-primary">
+              <Mail className="size-6" />
+            </div>
+            <div className="space-y-1.5">
+              <h2 className="text-base font-bold text-foreground">Check your inbox</h2>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                We sent a secure verification link to{" "}
+                <span className="font-semibold text-foreground">{signInEmail || signUpEmail}</span>.
+                Click the link to complete authentication.
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full text-xs"
+              onClick={() => setMagicLinkSent(false)}
+            >
+              Back to Sign in
+            </Button>
+          </div>
+        ) : (
+          <div className="surface rounded-2xl border border-border/80 p-6 sm:p-8 shadow-2xl backdrop-blur relative space-y-6">
+            <Tabs
+              value={activeTab}
+              onValueChange={(v) => {
+                setActiveTab(v as "signin" | "signup");
+                setErrors({});
+              }}
+              className="w-full"
+            >
+              <TabsList className="grid w-full grid-cols-2 bg-secondary/50 p-1 rounded-xl">
+                <TabsTrigger
+                  value="signin"
+                  className="rounded-lg text-xs font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
+                >
+                  Sign In
+                </TabsTrigger>
+                <TabsTrigger
+                  value="signup"
+                  className="rounded-lg text-xs font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground transition-all"
+                >
+                  Create Account
+                </TabsTrigger>
+              </TabsList>
+
+              {errors["form"] && (
+                <div
+                  className="mt-4 flex items-center gap-2 rounded-lg bg-destructive/15 p-3 text-xs text-destructive border border-destructive/25"
+                  role="alert"
+                >
+                  <AlertCircle className="size-4 shrink-0" />
+                  <span>{errors["form"]}</span>
+                </div>
+              )}
+
+              {/* SIGN IN TAB */}
+              <TabsContent value="signin" className="mt-5 space-y-4 outline-none">
+                <form onSubmit={handleSignIn} className="space-y-4">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="signin-email" className="text-xs font-medium">
+                      Email address
+                    </Label>
+                    <div className="relative">
+                      <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        id="signin-email"
+                        type="email"
+                        autoComplete="email"
+                        placeholder="operator@brahma.dev"
+                        value={signInEmail}
+                        onChange={(e) => setSignInEmail(e.target.value)}
+                        className="pl-9 text-xs"
+                        disabled={loading}
+                      />
+                    </div>
+                    {errors["email"] && (
+                      <p className="text-[11px] text-destructive flex items-center gap-1 mt-1">
+                        <AlertCircle className="size-3" /> {errors["email"]}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <Label htmlFor="signin-password" className="text-xs font-medium">
+                        Password
+                      </Label>
+                      <Link
+                        to="/forgot-password"
+                        className="text-[11px] text-primary hover:underline"
+                      >
+                        Forgot password?
+                      </Link>
+                    </div>
+                    <div className="relative">
+                      <Lock className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        id="signin-password"
+                        type="password"
+                        autoComplete="current-password"
+                        placeholder="••••••••••••"
+                        value={signInPassword}
+                        onChange={(e) => setSignInPassword(e.target.value)}
+                        className="pl-9 text-xs"
+                        disabled={loading}
+                      />
+                    </div>
+                    {errors["password"] && (
+                      <p className="text-[11px] text-destructive flex items-center gap-1 mt-1">
+                        <AlertCircle className="size-3" /> {errors["password"]}
+                      </p>
+                    )}
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full text-xs font-semibold h-9 shadow-md"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 size-3.5 animate-spin" />
+                        Authenticating...
+                      </>
+                    ) : (
+                      <>
+                        Sign In <ArrowRight className="ml-1.5 size-3.5" />
+                      </>
+                    )}
+                  </Button>
+                </form>
+
+                <div className="relative flex items-center justify-center py-2">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-border/60" />
+                  </div>
+                  <span className="relative bg-card px-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+                    Or continue with
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-8.5 font-medium"
+                    onClick={() => handleOAuth("google")}
+                    disabled={loading}
+                  >
+                    Google
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-8.5 font-medium"
+                    onClick={() => handleOAuth("github")}
+                    disabled={loading}
+                  >
+                    GitHub
+                  </Button>
+                </div>
+
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="w-full text-[11px] text-muted-foreground hover:text-foreground h-7"
+                  onClick={handleMagicLink}
+                  disabled={loading}
+                >
+                  Sign in with Magic Link / OTP &rarr;
+                </Button>
+              </TabsContent>
+
+              {/* SIGN UP TAB */}
+              <TabsContent value="signup" className="mt-5 space-y-4 outline-none">
+                <form onSubmit={handleSignUp} className="space-y-3.5">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="signup-name" className="text-xs font-medium">
+                      Full Name
+                    </Label>
+                    <div className="relative">
+                      <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        id="signup-name"
+                        placeholder="Priya Nair"
+                        value={signUpName}
+                        onChange={(e) => setSignUpName(e.target.value)}
+                        className="pl-9 text-xs"
+                        disabled={loading}
+                      />
+                    </div>
+                    {errors["fullName"] && (
+                      <p className="text-[11px] text-destructive flex items-center gap-1 mt-1">
+                        <AlertCircle className="size-3" /> {errors["fullName"]}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="signup-email" className="text-xs font-medium">
+                      Email address
+                    </Label>
+                    <div className="relative">
+                      <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        id="signup-email"
+                        type="email"
+                        autoComplete="email"
+                        placeholder="priya.nair@brahma.dev"
+                        value={signUpEmail}
+                        onChange={(e) => setSignUpEmail(e.target.value)}
+                        className="pl-9 text-xs"
+                        disabled={loading}
+                      />
+                    </div>
+                    {errors["email"] && (
+                      <p className="text-[11px] text-destructive flex items-center gap-1 mt-1">
+                        <AlertCircle className="size-3" /> {errors["email"]}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="signup-password" className="text-xs font-medium">
+                      Password (8+ chars, 1 uppercase, 1 number)
+                    </Label>
+                    <div className="relative">
+                      <Lock className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                      <Input
+                        id="signup-password"
+                        type="password"
+                        autoComplete="new-password"
+                        placeholder="••••••••••••"
+                        value={signUpPassword}
+                        onChange={(e) => setSignUpPassword(e.target.value)}
+                        className="pl-9 text-xs"
+                        disabled={loading}
+                      />
+                    </div>
+                    {errors["password"] && (
+                      <p className="text-[11px] text-destructive flex items-center gap-1 mt-1">
+                        <AlertCircle className="size-3" /> {errors["password"]}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label className="text-xs font-medium">Account Role</Label>
+                    <div className="grid grid-cols-3 gap-1.5">
+                      {(["student", "faculty", "startup"] as const).map((r) => (
+                        <button
+                          key={r}
+                          type="button"
+                          onClick={() => setSignUpRole(r)}
+                          className={cn(
+                            "rounded-lg border px-2 py-1.5 text-xs font-semibold capitalize transition-all",
+                            signUpRole === r
+                              ? "border-primary bg-primary/15 text-primary"
+                              : "border-border/60 bg-secondary/20 text-muted-foreground hover:bg-secondary/40",
+                          )}
+                        >
+                          {r}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full text-xs font-semibold h-9 shadow-md mt-2"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="mr-2 size-3.5 animate-spin" />
+                        Creating Account...
+                      </>
+                    ) : (
+                      <>
+                        Create Account <ArrowRight className="ml-1.5 size-3.5" />
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
+          </div>
+        )}
+
+        {/* Footer Security Badges */}
+        <div className="flex items-center justify-center gap-4 text-[11px] text-muted-foreground/60 font-mono">
+          <span className="flex items-center gap-1">
+            <ShieldCheck className="size-3 text-emerald-400" />
+            Supabase RLS Protected
+          </span>
+          <span>&bull;</span>
+          <span>Zero Client Secrets</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+=== FILE: src/routes/github.callback.tsx ===
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabaseClient";
+import { authService } from "@/services/authService";
+import { githubService } from "@/services/githubService";
+import { toast } from "sonner";
+
+export const Route = createFileRoute("/github/callback")({
+  head: () => ({
+    meta: [{ title: "Verifying GitHub Connection — PROJECT BRAHMA" }],
+  }),
+  component: GitHubCallbackPage,
+});
+
+function GitHubCallbackPage() {
+  const navigate = useNavigate();
+  const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function handleAuth() {
+      try {
+        const sessionRes = await authService.getSession();
+        if (!sessionRes.ok)
+          throw new Error(sessionRes.error?.message || "Failed to retrieve session");
+        const session = sessionRes.data;
+
+        if (session?.provider_token) {
+          githubService.setToken(session.provider_token);
+
+          // Store token in github_tokens table
+          if (session.user?.id) {
+            await supabase.from("github_tokens").upsert({
+              user_id: session.user.id,
+              access_token: session.provider_token,
+              token_type: "bearer",
+              scopes: "repo,read:user,user:email,read:org",
+              updated_at: new Date().toISOString(),
+            });
+          }
+
+          if (isMounted) {
+            setStatus("success");
+            toast.success("GitHub account connected successfully!");
+            setTimeout(() => {
+              navigate({ to: "/github", replace: true });
+            }, 1200);
+          }
+        } else {
+          // If no provider token, redirect back to /github
+          if (isMounted) {
+            setStatus("success");
+            navigate({ to: "/github", replace: true });
+          }
+        }
+      } catch (err: unknown) {
+        console.error("GitHub auth callback error:", err);
+        if (isMounted) {
+          setStatus("error");
+          setErrorMessage((err as Error).message || "Failed to process GitHub authentication.");
+        }
+      }
+    }
+
+    handleAuth();
+    return () => {
+      isMounted = false;
+    };
+  }, [navigate]);
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <div className="surface p-8 rounded-2xl border border-border/80 max-w-sm w-full text-center space-y-4 shadow-2xl">
+        {status === "loading" && (
+          <>
+            <Loader2 className="size-8 animate-spin mx-auto text-cyan-400" />
+            <div className="space-y-1">
+              <h3 className="text-sm font-bold text-white">Connecting GitHub Account</h3>
+              <p className="text-xs text-muted-foreground">
+                Exchanging OAuth tokens and hydrating repository catalog...
+              </p>
+            </div>
+          </>
+        )}
+
+        {status === "success" && (
+          <>
+            <CheckCircle2 className="size-8 text-emerald-400 mx-auto" />
+            <div className="space-y-1">
+              <h3 className="text-sm font-bold text-white">GitHub Connected</h3>
+              <p className="text-xs text-muted-foreground">
+                Redirecting to your repository mirror...
+              </p>
+            </div>
+          </>
+        )}
+
+        {status === "error" && (
+          <>
+            <AlertCircle className="size-8 text-rose-400 mx-auto" />
+            <div className="space-y-1">
+              <h3 className="text-sm font-bold text-white">Connection Error</h3>
+              <p className="text-xs text-rose-400">{errorMessage}</p>
+            </div>
+            <button
+              onClick={() => navigate({ to: "/github" })}
+              className="text-xs text-cyan-400 hover:underline pt-2"
+            >
+              &larr; Return to GitHub Dashboard
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+=== FILE: src/routes/login.tsx ===
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { AlertCircle, Loader2, Chrome, Github } from "lucide-react";
+import { useState, type FormEvent, useEffect } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { useAuth } from "../lib/auth";
+import { authService } from "../services/authService";
+import { cn } from "../lib/utils";
+import {
+  AuthLayout,
+  AuthMethodTabs,
+  PasswordInput,
+  TwoFactorStep,
+  SsoForm,
+  PasskeyButton,
+  MagicLinkSent,
+  RateLimitBanner,
+  DemoAccessButton,
+} from "../components/auth/auth-components";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+
+export { AuthLayout };
+
+export const Route = createFileRoute("/login")({
+  head: () => ({
+    meta: [
+      { title: "Sign in — PROJECT BRAHMA" },
+      {
+        name: "description",
+        content:
+          "Sign in to PROJECT BRAHMA to review blueprints, code health, security and delivery risk.",
+      },
+      { property: "og:title", content: "Sign in — PROJECT BRAHMA" },
+      { property: "og:description", content: "Access your engineering intelligence workspace." },
+    ],
+  }),
+  component: LoginPage,
+});
+
+const schema = z.object({
+  email: z.string().trim().min(1, "Email is required").email("Enter a valid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+export function FieldError({ message }: { message?: string | undefined }) {
+  if (!message) return null;
+  return (
+    <p className="mt-1 flex items-center gap-1 text-[11px] text-red-400" role="alert">
+      <AlertCircle className="size-3 shrink-0" aria-hidden />
+      <span>{message}</span>
+    </p>
+  );
+}
+
+function LoginPage() {
+  const navigate = useNavigate();
+  const { user, ready, refresh } = useAuth();
+
+  // Form inputs
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [magicEmail, setMagicEmail] = useState("");
+  const [activeMethod, setActiveMethod] = useState("password");
+
+  // States
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState<string | null>(null);
+  const [magicLinkSent, setMagicLinkSent] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+
+  // 2FA Flow states
+  const [showTwoFactor, setShowTwoFactor] = useState(false);
+  const [rateLimitError, setRateLimitError] = useState<string | null>(null);
+  const [loginAttempts, setLoginAttempts] = useState(0);
+
+  // Handle OAuth error params in URL on mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+    const errorDescription = params.get("error_description");
+    const errorCode = params.get("error_code");
+
+    if (error || errorDescription) {
+      const errorMessages: Record<string, string> = {
+        access_denied: "Sign in was cancelled. Please try again.",
+        server_error: "Authentication server error. Please try again.",
+        temporarily_unavailable: "Service temporarily unavailable.",
+        "403": "Your email is not authorized. Contact support.",
+      };
+
+      const message =
+        errorMessages[errorCode || error || ""] ||
+        errorDescription ||
+        "Sign in failed. Please try again.";
+
+      setFormError(message);
+      toast.error(message);
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (ready && user) {
+      if (!user.onboarded) {
+        navigate({ to: "/onboarding", replace: true });
+      } else {
+        navigate({ to: "/app", replace: true });
+      }
+    }
+  }, [ready, user, navigate]);
+
+  // Sync countdown for magic link email
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+    return;
+  }, [countdown]);
+
+  // Password Sign In
+  const handlePasswordSignIn = async (e: FormEvent) => {
+    e.preventDefault();
+    setFormError(null);
+    setErrors({});
+
+    const parsed = schema.safeParse({ email, password });
+    if (!parsed.success) {
+      const next: Record<string, string> = {};
+      for (const issue of parsed.error.issues) {
+        next[String(issue.path[0])] = issue.message;
+      }
+      setErrors(next);
+      return;
+    }
+
+    if (loginAttempts >= 5) {
+      setRateLimitError(
+        "Rate limit exceeded. Your account has been temporarily rate-limited due to multiple invalid password attempts. Please wait 60 seconds before trying again.",
+      );
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const result = await authService.signInWithPassword(email, password);
+
+      if (!result.ok) {
+        setLoginAttempts((prev) => prev + 1);
+        const code = result.error?.code;
+        if (code === "email_not_confirmed") {
+          setFormError("email-not-confirmed");
+        } else {
+          setFormError(result.error?.message ?? "Sign-in failed.");
+        }
+        return;
+      }
+
+      toast.success("Welcome back!");
+      await refresh();
+    } catch (err) {
+      setFormError((err as Error).message || "An unexpected error occurred during sign-in.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Magic Link Sign In
+  const handleMagicLinkSignIn = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!magicEmail.trim() || !magicEmail.includes("@")) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const result = await authService.signInWithOtp(magicEmail);
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "Failed to send magic link.");
+      } else {
+        setMagicLinkSent(true);
+        setCountdown(30);
+        toast.success("Magic link sent!");
+      }
+    } catch (err) {
+      toast.error((err as Error).message || "Failed to send magic link.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // SSO Sign In
+  const handleSSOSignIn = async (domain: string) => {
+    setLoading(true);
+    try {
+      const result = await authService.signInWithSSO(domain);
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "SSO initialization failed.");
+      }
+    } catch (err) {
+      toast.error("SSO initialization failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Passkey Sign In
+  const handlePasskeySignIn = async () => {
+    setLoading(true);
+    try {
+      const result = await authService.signInWithPasskey();
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "Passkey authentication failed.");
+      } else {
+        toast.success("Passkey authentication successful!");
+        await refresh();
+      }
+    } catch (err) {
+      toast.error("Passkey authentication failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // OAuth Sign In
+  const handleOAuthLogin = async (provider: "google" | "github") => {
+    setOauthLoading(provider);
+    setFormError(null);
+    toast.loading(`Redirecting to ${provider === "google" ? "Google" : "GitHub"}...`, {
+      id: "oauth-redirect",
+    });
+    try {
+      const result = await authService.signInWithOAuth(provider);
+      if (!result.ok) {
+        toast.dismiss("oauth-redirect");
+        const msg = result.error?.message ?? "OAuth redirect failed.";
+        setFormError(msg);
+        toast.error(msg);
+      }
+    } catch (err) {
+      toast.dismiss("oauth-redirect");
+      const msg = (err as Error).message || "OAuth redirect failed.";
+      setFormError(msg);
+      toast.error(msg);
+    } finally {
+      setOauthLoading(null);
+    }
+  };
+
+  // Seed local demo user
+  const handleDemoSelect = async (role: "Admin" | "Faculty" | "Student") => {
+    setLoading(true);
+    try {
+      const demoEmail = `${role.toLowerCase()}.demo@brahma.dev`;
+      const result = await authService.signUp(demoEmail, "password123", {
+        data: {
+          full_name:
+            role === "Admin"
+              ? "Priya Nair"
+              : role === "Faculty"
+                ? "Dr. Arjun Mehta"
+                : "Student User",
+          role: role.toLowerCase(),
+        },
+      });
+
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "Failed to seed demo session.");
+      } else {
+        toast.success(`Welcome to DEMO Workspace (${role})`);
+        await refresh();
+        navigate({ to: "/app" });
+      }
+    } catch (err) {
+      toast.error("Failed to seed demo session.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (showTwoFactor) {
+    return (
+      <AuthLayout
+        title="Verify Identity"
+        subtitle="Enter your two-factor security details to access Project Brahma."
+      >
+        <TwoFactorStep
+          onVerify={async (code) => {
+            setLoading(true);
+            try {
+              // Mock/Supabase verification
+              const result = await authService.verifyOtp(email, code, "magiclink");
+              if (!result.ok) {
+                toast.error(result.error?.message ?? "Verification failed.");
+              } else {
+                toast.success("Security verification passed!");
+                await refresh();
+              }
+            } catch (err) {
+              toast.error("Verification failed.");
+            } finally {
+              setLoading(false);
+            }
+          }}
+          onCancel={() => setShowTwoFactor(false)}
+          loading={loading}
+        />
+      </AuthLayout>
+    );
+  }
+
+  return (
+    <AuthLayout title="Sign In" subtitle="Sign in to your Project Brahma workspace.">
+      <div className="space-y-6">
+        {/* Method tabs switcher */}
+        <AuthMethodTabs activeTab={activeMethod} onChange={setActiveMethod} />
+
+        {rateLimitError && <RateLimitBanner errorMsg={rateLimitError} />}
+
+        {formError && (
+          <div className="p-3 border border-red-500/20 bg-red-500/5 text-red-400 text-xs rounded-lg flex items-start gap-2">
+            <AlertCircle className="size-4 shrink-0 mt-0.5" />
+            <div>
+              {formError === "email-not-confirmed" ? (
+                <div className="space-y-1.5">
+                  <p className="font-semibold">Email address not confirmed</p>
+                  <p className="text-slate-400">Please confirm your email address to log in.</p>
+                  <Button
+                    onClick={async () => {
+                      if (!email) return;
+                      await authService.resendOtp(email, "signup").catch(() => undefined);
+                      toast.success("Confirmation code resent!");
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="border-slate-800 text-xs text-cyan-400 hover:text-cyan-300"
+                  >
+                    Resend Code
+                  </Button>
+                </div>
+              ) : (
+                <p>{formError}</p>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Password sign-in form */}
+        {activeMethod === "password" && (
+          <form onSubmit={handlePasswordSignIn} className="space-y-4" id="panel-password">
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-slate-300 font-medium text-xs">
+                Email Address
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="developer@company.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={cn(
+                  "bg-slate-900 border-slate-800 text-white placeholder-slate-600 focus-visible:ring-cyan-500 rounded-lg text-sm",
+                  errors["email"] && "border-red-500 focus-visible:ring-red-500",
+                )}
+                aria-invalid={!!errors["email"]}
+              />
+              <FieldError message={errors["email"]} />
+            </div>
+
+            <PasswordInput
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              error={errors["password"]}
+              placeholder="••••••••••••"
+            />
+
+            <div className="flex justify-between items-center text-xs">
+              <Link
+                to="/forgot-password"
+                className="text-cyan-400/80 hover:text-cyan-400 underline font-semibold select-none"
+              >
+                Forgot password?
+              </Link>
+              {authService.isDemoMode() && (
+                <button
+                  type="button"
+                  onClick={() => setShowTwoFactor(true)}
+                  className="text-slate-500 hover:text-slate-300 underline font-mono text-[10px]"
+                >
+                  Test 2FA Step
+                </button>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg py-2 transition-all duration-200 shadow-[0_0_15px_rgba(34,211,238,0.15)]"
+            >
+              {loading ? (
+                <Loader2 className="size-4 animate-spin mr-2" />
+              ) : (
+                "Sign In to Project Brahma"
+              )}
+            </Button>
+          </form>
+        )}
+
+        {/* Magic Link sign-in form */}
+        {activeMethod === "magic" && (
+          <div id="panel-magic">
+            {magicLinkSent ? (
+              <MagicLinkSent
+                email={magicEmail}
+                countdown={countdown}
+                onResend={async () => {
+                  await authService.signInWithOtp(magicEmail);
+                  setCountdown(30);
+                  toast.success("Magic link resent!");
+                }}
+              />
+            ) : (
+              <form onSubmit={handleMagicLinkSignIn} className="space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="magicEmail" className="text-slate-300 font-medium text-xs">
+                    Email Address
+                  </Label>
+                  <Input
+                    id="magicEmail"
+                    type="email"
+                    placeholder="developer@company.com"
+                    value={magicEmail}
+                    onChange={(e) => setMagicEmail(e.target.value)}
+                    className="bg-slate-900 border-slate-800 text-white placeholder-slate-600 focus-visible:ring-cyan-500 rounded-lg text-sm"
+                    required
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg py-2"
+                >
+                  {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : "Send Magic Link"}
+                </Button>
+              </form>
+            )}
+          </div>
+        )}
+
+        {/* SSO Sign In */}
+        {activeMethod === "sso" && (
+          <div id="panel-sso">
+            <SsoForm onSubmit={handleSSOSignIn} loading={loading} />
+          </div>
+        )}
+
+        {/* Passkey Sign In */}
+        {activeMethod === "passkey" && (
+          <div id="panel-passkey">
+            <PasskeyButton onClick={handlePasskeySignIn} loading={loading} />
+          </div>
+        )}
+
+        {/* Separator */}
+        <div className="relative flex items-center justify-center my-4 select-none">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-slate-900" />
+          </div>
+          <span className="relative px-3 bg-[var(--surface-base)] text-[10px] uppercase font-mono font-bold tracking-widest text-slate-500">
+            Or continue with
+          </span>
+        </div>
+
+        {/* OAuth grid */}
+        {(authService.isOAuthProviderEnabled("google") ||
+          authService.isOAuthProviderEnabled("github")) && (
+          <div className="grid grid-cols-2 gap-3">
+            {authService.isOAuthProviderEnabled("google") && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleOAuthLogin("google")}
+                disabled={oauthLoading !== null}
+                className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2"
+                aria-label="Sign in with Google"
+              >
+                {oauthLoading === "google" ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <>
+                    <Chrome className="size-4 text-red-400" />
+                    <span>Google</span>
+                  </>
+                )}
+              </Button>
+            )}
+            {authService.isOAuthProviderEnabled("github") && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleOAuthLogin("github")}
+                disabled={oauthLoading !== null}
+                className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2"
+                aria-label="Sign in with GitHub"
+              >
+                {oauthLoading === "github" ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <>
+                    <Github className="size-4 text-slate-300" />
+                    <span>GitHub</span>
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
+        )}
+
+        {/* Register redirection */}
+        <div className="text-center text-xs text-slate-400">
+          <span>Don&apos;t have an account? </span>
+          <Link
+            to="/register"
+            className="text-cyan-400/80 hover:text-cyan-400 underline font-semibold select-none"
+          >
+            Create one now
+          </Link>
+        </div>
+
+        {/* Demo trigger */}
+        {authService.isDemoMode() && <DemoAccessButton onSelect={handleDemoSelect} />}
+      </div>
+    </AuthLayout>
+  );
+}
+
+
+=== FILE: src/routes/register.tsx ===
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import {
+  AlertCircle,
+  Loader2,
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  Sparkles,
+  Chrome,
+  Github,
+} from "lucide-react";
+import { useState, type FormEvent, useEffect } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { useAuth } from "../lib/auth";
+import { authService } from "../services/authService";
+import { AuthLayout, FieldError } from "./login";
+import {
+  PasswordInput,
+  StrengthMeter,
+  ChecklistChips,
+  OtpInput,
+  RoleCardGrid,
+  GoalChipSelector,
+  TeamSizeSelector,
+  WorkspaceSlugField,
+  InviteTeammatesField,
+  InviteCodeField,
+  WizardProgressRail,
+  ResendCountdown,
+} from "../components/auth/auth-components";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { type Role } from "../lib/auth";
+
+export const Route = createFileRoute("/register")({
+  head: () => ({
+    meta: [
+      { title: "Create an account — PROJECT BRAHMA" },
+      {
+        name: "description",
+        content: "Create a PROJECT BRAHMA account to turn project ideas into validated blueprints.",
+      },
+      { property: "og:title", content: "Create an account — PROJECT BRAHMA" },
+      {
+        property: "og:description",
+        content: "Start with a validated blueprint instead of an unvalidated backlog.",
+      },
+    ],
+  }),
+  component: RegisterPage,
+});
+
+function RegisterPage() {
+  const navigate = useNavigate();
+  const { user, ready, refresh } = useAuth();
+
+  // Wizard Step
+  const [step, setStep] = useState(1);
+
+  // Step 1: Account
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState(0);
+
+  // Step 2: Role & Context
+  const [selectedRole, setSelectedRole] = useState<Role>("Student");
+  const [organization, setOrganization] = useState("");
+  const [teamSize, setTeamSize] = useState("Solo operator (1)");
+
+  // Step 3: Goals
+  const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
+  const [technicalLevel, setTechnicalLevel] = useState("Beginner");
+  const [targetDeadline, setTargetDeadline] = useState("");
+
+  // Step 4: Workspace
+  const [workspaceName, setWorkspaceName] = useState("");
+  const [teammateEmails, setTeammateEmails] = useState<string[]>([]);
+  const [themePreference, setThemePreference] = useState("dark");
+  const [inviteCode, setInviteCode] = useState("");
+
+  // Step 5: Verify Email
+  const [otpCode, setOtpCode] = useState("");
+  const [verificationError, setVerificationError] = useState("");
+
+  // Errors & States
+  const [stepErrors, setStepErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+  const [oauthLoading, setOauthLoading] = useState<string | null>(null);
+  const [countdown, setCountdown] = useState(0);
+
+  const handleOAuthRegister = async (provider: "google" | "github") => {
+    setOauthLoading(provider);
+    toast.loading(`Redirecting to ${provider === "google" ? "Google" : "GitHub"}...`, {
+      id: "oauth-register-redirect",
+    });
+    try {
+      const result = await authService.signInWithOAuth(provider);
+      if (!result.ok) {
+        toast.dismiss("oauth-register-redirect");
+        toast.error(result.error?.message ?? "OAuth redirect failed.");
+      }
+    } catch (err) {
+      toast.dismiss("oauth-register-redirect");
+      toast.error((err as Error).message || "OAuth redirect failed.");
+    } finally {
+      setOauthLoading(null);
+    }
+  };
+
+  // Handle OAuth error params in URL on mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const params = new URLSearchParams(window.location.search);
+    const error = params.get("error");
+    const errorDescription = params.get("error_description");
+    const errorCode = params.get("error_code");
+
+    if (error || errorDescription) {
+      const errorMessages: Record<string, string> = {
+        access_denied: "Sign up was cancelled. Please try again.",
+        server_error: "Authentication server error. Please try again.",
+        temporarily_unavailable: "Service temporarily unavailable.",
+        "403": "Your email is not authorized. Contact support.",
+      };
+
+      const message =
+        errorMessages[errorCode || error || ""] ||
+        errorDescription ||
+        "Sign up failed. Please try again.";
+
+      toast.error(message);
+      window.history.replaceState({}, "", window.location.pathname);
+    }
+  }, []);
+
+  // Redirect if already authenticated and onboarded
+  useEffect(() => {
+    if (ready && user) {
+      if (user.onboarded) {
+        navigate({ to: "/app", replace: true });
+      } else {
+        navigate({ to: "/onboarding", replace: true });
+      }
+    }
+  }, [ready, user, navigate]);
+
+  // Live password strength calculation
+  useEffect(() => {
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    setPasswordStrength(score);
+  }, [password]);
+
+  // Handle next step validation
+  const validateStep = () => {
+    const errs: Record<string, string> = {};
+
+    if (step === 1) {
+      if (!fullName.trim()) errs["fullName"] = "Full name is required.";
+      if (!email.trim() || !email.includes("@")) errs["email"] = "Enter a valid email address.";
+      if (password.length < 8) errs["password"] = "Password must be at least 8 characters.";
+    } else if (step === 2) {
+      if (!organization.trim())
+        errs["organization"] = "Organization or department name is required.";
+    } else if (step === 4) {
+      if (!workspaceName.trim()) errs["workspaceName"] = "Workspace name is required.";
+    }
+
+    setStepErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleNext = () => {
+    if (validateStep()) {
+      setStep((prev) => prev + 1);
+    }
+  };
+
+  const handleBack = () => {
+    setStep((prev) => Math.max(1, prev - 1));
+  };
+
+  // Step 4 Complete: Trigger registration
+  const handleRegisterSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!validateStep()) return;
+
+    setLoading(true);
+    try {
+      const result = await authService.signUp(email, password, {
+        data: {
+          full_name: fullName,
+          role: selectedRole.toLowerCase(),
+          organization,
+          team_size: teamSize,
+          technical_level: technicalLevel,
+          goals: selectedGoals,
+          target_deadline: targetDeadline,
+          workspace_name: workspaceName,
+          invite_code: inviteCode,
+        },
+      });
+
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "Signup failed.");
+      } else {
+        toast.success("Account created! A confirmation code has been sent.");
+        setStep(5); // Go to verification
+        setCountdown(30);
+      }
+    } catch (err) {
+      toast.error((err as Error).message || "Signup failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Step 5 Complete: Verify Email OTP code
+  const handleVerificationSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setVerificationError("");
+
+    if (otpCode.length !== 6) {
+      setVerificationError("Verification code must be exactly 6 digits.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const result = await authService.verifyOtp(email, otpCode, "signup");
+      if (!result.ok) {
+        setVerificationError(result.error?.message ?? "Verification failed.");
+        toast.error(result.error?.message ?? "Verification failed.");
+      } else {
+        toast.success("Account confirmed successfully!");
+        await refresh();
+        navigate({ to: "/onboarding" });
+      }
+    } catch (err) {
+      setVerificationError("Failed to verify code.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const stepTitles = [
+    "Create Account",
+    "Select Your Role",
+    "Define Your Goals",
+    "Setup Workspace",
+    "Verify Email",
+  ];
+
+  const stepSubtitles = [
+    "Enter your details to register and scaffold your architecture.",
+    "Help us tailor the experience by choosing your workspace role.",
+    "Tell us about your technical stack goals and project milestones.",
+    "Create your repository workspace context and invite teammates.",
+    "Verify your account via the 6-digit confirmation code sent to you.",
+  ];
+
+  return (
+    <AuthLayout title={stepTitles[step - 1] || "Register"} subtitle={stepSubtitles[step - 1] || ""}>
+      <div className="space-y-6">
+        <WizardProgressRail currentStep={step} />
+
+        {/* STEP 1: Account */}
+        {step === 1 && (
+          <div className="space-y-4 animate-fadeIn">
+            <div className="space-y-1.5">
+              <Label htmlFor="fullName" className="text-slate-300 font-medium text-xs">
+                Full Name
+              </Label>
+              <Input
+                id="fullName"
+                type="text"
+                placeholder="e.g. Priya Nair"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className={stepErrors["fullName"] ? "border-red-500" : ""}
+              />
+              <FieldError message={stepErrors["fullName"]} />
+            </div>
+
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-slate-300 font-medium text-xs">
+                Email Address
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="e.g. developer@company.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={stepErrors["email"] ? "border-red-500" : ""}
+              />
+              <FieldError message={stepErrors["email"]} />
+            </div>
+
+            <div className="space-y-2">
+              <PasswordInput
+                id="password"
+                label="Choose Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                error={stepErrors["password"]}
+                placeholder="••••••••••••"
+              />
+              {password && (
+                <div className="space-y-2">
+                  <StrengthMeter score={passwordStrength} />
+                  <ChecklistChips value={password} />
+                </div>
+              )}
+            </div>
+
+            <Button
+              type="button"
+              onClick={handleNext}
+              className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg py-2 mt-2"
+            >
+              Continue <ArrowRight className="size-4 ml-1.5 shrink-0" />
+            </Button>
+
+            {/* OAuth separator and grid */}
+            {(authService.isOAuthProviderEnabled("google") ||
+              authService.isOAuthProviderEnabled("github")) && (
+              <>
+                <div className="relative flex items-center justify-center my-3 select-none">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-slate-900" />
+                  </div>
+                  <span className="relative px-3 bg-[var(--surface-base)] text-[10px] uppercase font-mono font-bold tracking-widest text-slate-500">
+                    Or sign up with
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {authService.isOAuthProviderEnabled("google") && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => handleOAuthRegister("google")}
+                      disabled={oauthLoading !== null}
+                      className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2"
+                      aria-label="Sign up with Google"
+                    >
+                      {oauthLoading === "google" ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : (
+                        <>
+                          <Chrome className="size-4 text-red-400" />
+                          <span>Google</span>
+                        </>
+                      )}
+                    </Button>
+                  )}
+                  {authService.isOAuthProviderEnabled("github") && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => handleOAuthRegister("github")}
+                      disabled={oauthLoading !== null}
+                      className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2"
+                      aria-label="Sign up with GitHub"
+                    >
+                      {oauthLoading === "github" ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : (
+                        <>
+                          <Github className="size-4 text-slate-300" />
+                          <span>GitHub</span>
+                        </>
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {/* STEP 2: Role & Context */}
+        {step === 2 && (
+          <div className="space-y-4 animate-fadeIn">
+            <RoleCardGrid selected={selectedRole} onChange={setSelectedRole} />
+
+            <div className="space-y-1.5 pt-2">
+              <Label htmlFor="organization" className="text-slate-300 font-medium text-xs">
+                School, Cohort, or Organization
+              </Label>
+              <Input
+                id="organization"
+                type="text"
+                placeholder="e.g. MIT, Startup Sandbox, Brahma Corp"
+                value={organization}
+                onChange={(e) => setOrganization(e.target.value)}
+                className={stepErrors["organization"] ? "border-red-500" : ""}
+              />
+              <FieldError message={stepErrors["organization"]} />
+            </div>
+
+            <TeamSizeSelector value={teamSize} onChange={setTeamSize} />
+
+            <div className="flex gap-3 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleBack}
+                className="flex-1 border-slate-800 hover:bg-slate-900 text-xs"
+              >
+                Back
+              </Button>
+              <Button
+                type="button"
+                onClick={handleNext}
+                className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold"
+              >
+                Continue <ArrowRight className="size-4 ml-1.5 shrink-0" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 3: Goals */}
+        {step === 3 && (
+          <div className="space-y-4 animate-fadeIn">
+            <GoalChipSelector selected={selectedGoals} onChange={setSelectedGoals} />
+
+            <div className="space-y-1.5 pt-2">
+              <Label htmlFor="technicalLevel" className="text-slate-300 font-medium text-xs">
+                Technical Proficiency Level
+              </Label>
+              <div className="grid grid-cols-3 gap-2">
+                {["Beginner", "Intermediate", "Advanced"].map((level) => {
+                  const isSel = technicalLevel === level;
+                  return (
+                    <button
+                      key={level}
+                      type="button"
+                      onClick={() => setTechnicalLevel(level)}
+                      className={`py-2 border text-xs font-semibold rounded-lg text-center transition-all ${
+                        isSel
+                          ? "bg-slate-900 border-cyan-500 text-cyan-400"
+                          : "bg-slate-950/20 border-slate-850 text-slate-500 hover:border-slate-800"
+                      }`}
+                    >
+                      {level}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="space-y-1.5 pt-2">
+              <Label htmlFor="deadline" className="text-slate-300 font-medium text-xs">
+                Target Blueprint Milestone Deadline (Optional)
+              </Label>
+              <Input
+                id="deadline"
+                type="date"
+                value={targetDeadline}
+                onChange={(e) => setTargetDeadline(e.target.value)}
+                className="bg-slate-900 border-slate-800 text-white focus-visible:ring-cyan-500"
+              />
+            </div>
+
+            <div className="flex gap-3 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleBack}
+                className="flex-1 border-slate-800 hover:bg-slate-900 text-xs"
+              >
+                Back
+              </Button>
+              <Button
+                type="button"
+                onClick={handleNext}
+                className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold"
+              >
+                Continue <ArrowRight className="size-4 ml-1.5 shrink-0" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* STEP 4: Workspace */}
+        {step === 4 && (
+          <form onSubmit={handleRegisterSubmit} className="space-y-4 animate-fadeIn">
+            <WorkspaceSlugField
+              value={workspaceName}
+              onChange={setWorkspaceName}
+              error={stepErrors["workspaceName"]}
+            />
+
+            <InviteTeammatesField emails={teammateEmails} onChange={setTeammateEmails} />
+
+            <div className="space-y-1.5 pt-1">
+              <Label className="text-slate-300 font-medium text-xs">
+                Interface Theme Preference
+              </Label>
+              <div className="grid grid-cols-2 gap-2">
+                {["dark", "light"].map((theme) => {
+                  const isSel = themePreference === theme;
+                  return (
+                    <button
+                      key={theme}
+                      type="button"
+                      onClick={() => setThemePreference(theme)}
+                      className={`py-2 border text-xs font-semibold rounded-lg text-center transition-all ${
+                        isSel
+                          ? "bg-slate-900 border-cyan-500 text-cyan-400"
+                          : "bg-slate-950/20 border-slate-850 text-slate-500 hover:border-slate-800"
+                      }`}
+                    >
+                      {theme === "dark" ? "Deep Navy (Dark)" : "Clean Slate (Light)"}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <InviteCodeField value={inviteCode} onChange={setInviteCode} />
+
+            <div className="flex gap-3 pt-2">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleBack}
+                className="flex-1 border-slate-800 hover:bg-slate-900 text-xs"
+              >
+                Back
+              </Button>
+              <Button
+                type="submit"
+                disabled={loading}
+                className="flex-1 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold shadow-[0_0_15px_rgba(34,211,238,0.15)]"
+              >
+                {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : "Complete Setup"}
+              </Button>
+            </div>
+          </form>
+        )}
+
+        {/* STEP 5: Verify Email */}
+        {step === 5 && (
+          <form onSubmit={handleVerificationSubmit} className="space-y-6 animate-fadeIn">
+            <div className="text-center space-y-2">
+              <div className="mx-auto size-12 rounded-full bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 animate-pulse">
+                <Sparkles className="size-6" />
+              </div>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                We sent a 6-digit confirmation code to{" "}
+                <strong className="text-slate-200">{email}</strong>. Enter it below to verify and
+                activate your workspace.
+              </p>
+            </div>
+
+            <OtpInput
+              value={otpCode}
+              onChange={(val) => setOtpCode(val)}
+              error={verificationError}
+            />
+
+            <div className="space-y-3 pt-2">
+              <Button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg py-2"
+              >
+                {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : "Confirm and Launch"}
+              </Button>
+
+              <div className="text-center">
+                <ResendCountdown
+                  initialSeconds={countdown}
+                  onTrigger={async () => {
+                    await authService.resendOtp(email, "signup");
+                    setCountdown(30);
+                    toast.success("Confirmation code resent!");
+                  }}
+                />
+              </div>
+            </div>
+          </form>
+        )}
+
+        {/* Back to Login link */}
+        {step < 5 && (
+          <div className="text-center text-xs text-slate-400 pt-2 border-t border-slate-900">
+            <span>Already have a workspace account? </span>
+            <Link
+              to="/login"
+              className="text-cyan-400/80 hover:text-cyan-400 underline font-semibold select-none"
+            >
+              Sign In
+            </Link>
+          </div>
+        )}
+      </div>
+    </AuthLayout>
+  );
+}
+
+
+=== FILE: src/routes/reset-password.tsx ===
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { AlertCircle, ArrowLeft, Loader2, Lock } from "lucide-react";
+import { useState, type FormEvent, useEffect } from "react";
+import { toast } from "sonner";
+
+import { AuthLayout, FieldError } from "./login";
+import { PasswordInput, StrengthMeter, ChecklistChips } from "../components/auth/auth-components";
+import { authService } from "../services/authService";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+
+export const Route = createFileRoute("/reset-password")({
+  head: () => ({
+    meta: [
+      { title: "Reset Password — PROJECT BRAHMA" },
+      {
+        name: "description",
+        content: "Set a new password for your PROJECT BRAHMA workspace account.",
+      },
+    ],
+  }),
+  component: ResetPasswordPage,
+});
+
+function ResetPasswordPage() {
+  const navigate = useNavigate();
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [strengthScore, setStrengthScore] = useState(0);
+
+  // Live password strength calculation
+  useEffect(() => {
+    let score = 0;
+    if (password.length >= 8) score++;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+    setStrengthScore(score);
+  }, [password]);
+
+  const validateForm = (): boolean => {
+    const nextErrors: Record<string, string> = {};
+
+    if (password.length < 8) {
+      nextErrors["password"] = "Password must be at least 8 characters.";
+    }
+    if (password !== confirmPassword) {
+      nextErrors["confirmPassword"] = "Passwords do not match.";
+    }
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setFormError(null);
+
+    if (!validateForm()) return;
+
+    setLoading(true);
+    try {
+      const result = await authService.updatePassword(password);
+
+      if (!result.ok) {
+        setFormError(result.error?.message ?? "Failed to update password.");
+      } else {
+        toast.success("Password updated", {
+          description:
+            "Your password has been successfully reset. Please sign in with your new credentials.",
+        });
+        navigate({ to: "/login" });
+      }
+    } catch (err) {
+      setFormError((err as Error).message || "Failed to update password.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <AuthLayout
+      title="Set new password"
+      subtitle="Enter a secure password for your workspace account."
+      footer={
+        <Link
+          to="/login"
+          className="inline-flex items-center gap-1.5 font-semibold text-cyan-400 hover:underline text-xs"
+        >
+          <ArrowLeft className="size-3.5" aria-hidden /> Back to sign in
+        </Link>
+      }
+    >
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
+        {formError && (
+          <div
+            role="alert"
+            className="flex items-start gap-2 rounded-lg border border-red-500/20 bg-red-500/5 px-3 py-2.5 text-xs text-red-400"
+          >
+            <AlertCircle className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+            <span>{formError}</span>
+          </div>
+        )}
+
+        <div className="space-y-2">
+          <PasswordInput
+            id="password"
+            label="New Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            error={errors["password"]}
+            placeholder="••••••••••••"
+            autoComplete="new-password"
+          />
+          {password && (
+            <div className="space-y-2">
+              <StrengthMeter score={strengthScore} />
+              <ChecklistChips value={password} />
+            </div>
+          )}
+        </div>
+
+        <div className="space-y-1.5">
+          <Label htmlFor="confirmPassword" className="text-slate-300 font-medium text-xs">
+            Confirm Password
+          </Label>
+          <Input
+            id="confirmPassword"
+            type="password"
+            autoComplete="new-password"
+            className="bg-slate-900 border-slate-800 text-white focus-visible:ring-cyan-500 rounded-lg text-sm"
+            value={confirmPassword}
+            aria-invalid={!!errors["confirmPassword"]}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            placeholder="••••••••••••"
+          />
+          <FieldError message={errors["confirmPassword"]} />
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full mt-4 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold"
+          disabled={loading}
+        >
+          {loading ? (
+            <>
+              <Loader2 className="size-4 animate-spin mr-2" /> Saving password…
+            </>
+          ) : (
+            <>
+              <Lock className="size-4 mr-2" /> Save password
+            </>
+          )}
+        </Button>
+      </form>
+    </AuthLayout>
+  );
+}
+
+
+=== FILE: src/routes/verify-email.tsx ===
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
+import { Mail, Loader2, ArrowLeft } from "lucide-react";
+import { useState, type FormEvent, useEffect } from "react";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { AuthLayout } from "../components/auth/auth-components";
+import { authService } from "../services/authService";
+import { useAuth } from "../lib/auth";
+import { OtpInput, ResendCountdown } from "../components/auth/auth-components";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+
+const searchSchema = z.object({
+  email: z.string().optional().catch(""),
+});
+
+export const Route = createFileRoute("/verify-email")({
+  validateSearch: (search) => searchSchema.parse(search),
+  head: () => ({
+    meta: [
+      { title: "Verify Email — PROJECT BRAHMA" },
+      {
+        name: "description",
+        content: "Verify your email address to activate your PROJECT BRAHMA account.",
+      },
+    ],
+  }),
+  component: VerifyEmailPage,
+});
+
+function VerifyEmailPage() {
+  const navigate = useNavigate();
+  const search = Route.useSearch();
+  const { refresh } = useAuth();
+
+  const [email, setEmail] = useState(search.email || "");
+  const [otpCode, setOtpCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [countdown, setCountdown] = useState(0);
+
+  useEffect(() => {
+    if (countdown > 0) {
+      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+      return () => clearTimeout(timer);
+    }
+    return;
+  }, [countdown]);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!email.trim() || !email.includes("@")) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (otpCode.length !== 6) {
+      setError("Verification code must be exactly 6 digits.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const result = await authService.verifyOtp(email.trim(), otpCode, "signup");
+      if (!result.ok) {
+        setError(result.error?.message ?? "Verification failed.");
+        toast.error(result.error?.message ?? "Verification failed.");
+      } else {
+        toast.success("Verification successful!");
+        await refresh();
+        navigate({ to: "/onboarding" });
+      }
+    } catch (err) {
+      setError("An unexpected error occurred during verification.");
+      toast.error("Verification failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    if (!email.trim() || !email.includes("@")) {
+      toast.error("Please enter your email to resend the code.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const result = await authService.resendOtp(email.trim(), "signup");
+      if (!result.ok) {
+        toast.error(result.error?.message ?? "Failed to resend code.");
+      } else {
+        setCountdown(30);
+        toast.success("Verification code resent successfully.");
+      }
+    } catch (err) {
+      toast.error("Failed to resend verification code.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <AuthLayout
+      title="Verify your email"
+      subtitle="Enter the 6-digit verification code to activate your account."
+      footer={
+        <Link
+          to="/login"
+          className="inline-flex items-center gap-1.5 font-semibold text-cyan-400 hover:underline text-xs"
+        >
+          <ArrowLeft className="size-3.5" aria-hidden /> Back to sign in
+        </Link>
+      }
+    >
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {!search.email && (
+          <div className="space-y-1.5">
+            <Label htmlFor="email" className="text-slate-300 font-medium text-xs">
+              Verify Email Address
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="you@company.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="bg-slate-900 border-slate-800 text-white placeholder-slate-600 focus-visible:ring-cyan-500 rounded-lg text-sm"
+              required
+            />
+          </div>
+        )}
+
+        <div className="space-y-1.5">
+          <Label className="text-slate-300 font-medium text-xs">6-Digit Verification Code</Label>
+          <OtpInput value={otpCode} onChange={(val) => setOtpCode(val)} error={error} />
+        </div>
+
+        <div className="space-y-3 pt-2">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-lg py-2"
+          >
+            {loading ? <Loader2 className="size-4 animate-spin mr-2" /> : "Verify and Launch"}
+          </Button>
+
+          <div className="text-center">
+            <ResendCountdown initialSeconds={countdown} onTrigger={handleResend} />
+          </div>
+        </div>
+      </form>
+    </AuthLayout>
+  );
+}
+
+
+# grep -rn "signIn|signUp|signOut|getSession|supabase.auth" in routes/pages
+Total occurrences in src/routes: 41
+src/routes/auth.callback.tsx:72: const sessionResult = await authService.getSession();
+src/routes/auth.callback.tsx:132: const sessionResult = await authService.getSession();
+src/routes/auth.tsx:29: const signInSchema = z.object({
+src/routes/auth.tsx:34: const signUpSchema = z.object({
+src/routes/auth.tsx:87: const [signInEmail, setSignInEmail] = useState("");
+src/routes/auth.tsx:88: const [signInPassword, setSignInPassword] = useState("");
+src/routes/auth.tsx:91: const [signUpName, setSignUpName] = useState("");
+src/routes/auth.tsx:92: const [signUpEmail, setSignUpEmail] = useState("");
+src/routes/auth.tsx:93: const [signUpPassword, setSignUpPassword] = useState("");
+src/routes/auth.tsx:94: const [signUpRole, setSignUpRole] = useState<"student" | "faculty" | "startup">("student");
+src/routes/auth.tsx:143: const result = signInSchema.safeParse({ email: signInEmail, password: signInPassword });
+src/routes/auth.tsx:155: const res = await authService.signInWithPassword(signInEmail, signInPassword);
+src/routes/auth.tsx:174: const result = signUpSchema.safeParse({
+src/routes/auth.tsx:175: fullName: signUpName,
+src/routes/auth.tsx:176: email: signUpEmail,
+src/routes/auth.tsx:177: password: signUpPassword,
+src/routes/auth.tsx:178: role: signUpRole,
+src/routes/auth.tsx:192: const res = await authService.signUp(signUpEmail, signUpPassword, {
+src/routes/auth.tsx:194: full_name: signUpName,
+src/routes/auth.tsx:195: role: signUpRole,
+src/routes/auth.tsx:221: const res = await authService.signInWithOAuth(provider);
+src/routes/auth.tsx:233: if (!signInEmail || !signInEmail.includes("@")) {
+src/routes/auth.tsx:239: const res = await authService.sendMagicLink(signInEmail);
+src/routes/auth.tsx:282: <span className="font-semibold text-foreground">{signInEmail || signUpEmail}</span>.
+src/routes/auth.tsx:344: value={signInEmail}
+src/routes/auth.tsx:376: value={signInPassword}
+src/routes/auth.tsx:463: value={signUpName}
+src/routes/auth.tsx:487: value={signUpEmail}
+src/routes/auth.tsx:511: value={signUpPassword}
+src/routes/auth.tsx:534: signUpRole === r
+src/routes/github.callback.tsx:26: const sessionRes = await authService.getSession();
+src/routes/invite.tsx:52: const result = await authService.getSession();
+src/routes/login.tsx:153: const result = await authService.signInWithPassword(email, password);
+src/routes/login.tsx:185: const result = await authService.signInWithOtp(magicEmail);
+src/routes/login.tsx:204: const result = await authService.signInWithSSO(domain);
+src/routes/login.tsx:219: const result = await authService.signInWithPasskey();
+src/routes/login.tsx:241: const result = await authService.signInWithOAuth(provider);
+src/routes/login.tsx:263: const result = await authService.signUp(demoEmail, "password123", {
+src/routes/login.tsx:426: await authService.signInWithOtp(magicEmail);
+src/routes/register.tsx:101: const result = await authService.signInWithOAuth(provider);
+src/routes/register.tsx:197: const result = await authService.signUp(email, password, {
+
+──────────────────────────────────────────────────────────────────────
+FORENSIC SWEEP 5 — DESIGN SYSTEM VERIFICATION
+──────────────────────────────────────────────────────────────────────
+
+# Tailwind config:
+--- ./vite.config.ts ---
+import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+
+export default defineConfig({
+  tanstackStart: {
+    client: { entry: "client" },
+    server: { entry: "server" },
+  },
+});
+
+
+# Global CSS & HTML Font imports:
+--- ./src/styles.css (first 40 lines) ---
+@import "tailwindcss" source(none);
+@source "../src";
+@import "./styles/tokens.css";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-critical: var(--critical);
+  --color-info: var(--info);
+
+# grep -r "hugeicons|hugeiconspro" package.json
+NONE
+
+# grep -rn "lucide-react|heroicons|react-icons|fa-" src/
+Total non-Hugeicons imports in src/: 143
+src/components/admin/SchemaDriftDetector.tsx:10: } from "lucide-react";
+src/components/admin/TaskQueueMonitor.tsx:11: } from "lucide-react";
+src/components/apocalypse/ExtinctionClock.tsx:3: import { Hourglass, AlertTriangle, ArrowUpRight } from 'lucide-react';
+src/components/apocalypse/QADominator.tsx:3: import { Target, Skull, CheckCircle, Copy } from 'lucide-react';
+src/components/auth/auth-components.tsx:26: } from "lucide-react";
+src/components/brahma/app-shell.tsx:34: } from "lucide-react";
+src/components/brahma/ASTScanTimeline.tsx:11: } from "lucide-react";
+src/components/brahma/CognitiveCommandPalette.tsx:2: import { Search, Terminal, Zap, Shield, Sparkles, X } from 'lucide-react';
+src/components/brahma/DecaySimulator.tsx:3: import { Clock, ShieldAlert, Sparkles, RefreshCw } from 'lucide-react';
+src/components/brahma/expansion-components.tsx:29: } from "lucide-react";
+src/components/brahma/InsightHeatmap.tsx:2: import { Sparkles, Layers, ShieldCheck } from 'lucide-react';
+src/components/brahma/integrations-hub.tsx:17: } from "lucide-react";
+src/components/brahma/logo.tsx:2: import { Hexagon } from "lucide-react";
+src/components/brahma/MasteryTree.tsx:2: import { GitBranch, CheckCircle2, AlertCircle, ArrowRight } from 'lucide-react';
+src/components/brahma/OnboardingChecklist.tsx:2: import { CheckCircle2, Circle, ArrowRight, Sparkles, X, Trophy } from "lucide-react";
+src/components/brahma/primitives.tsx:2: import type { LucideIcon } from "lucide-react";
+src/components/brahma/primitives.tsx:3: import { AlertTriangle, Inbox, RefreshCw, TrendingDown, TrendingUp } from "lucide-react";
+src/components/brahma/profile-center.tsx:31: } from "lucide-react";
+src/components/brahma/ProvenancePopover.tsx:13: } from "lucide-react";
+src/components/brahma/reports-view.tsx:1: import { Download, FileBarChart2, FilePlus2, Loader2 } from "lucide-react";
+... and 123 more.
+
+──────────────────────────────────────────────────────────────────────
+FORENSIC SWEEP 6 — TYPESCRIPT & ESLINT HEALTH CHECK
+──────────────────────────────────────────────────────────────────────
+
+# npx tsc --noEmit
+PASS: 0 TypeScript errors.
+
+# npx eslint src/ (sample of errors/warnings)
+Total ESLint output lines: 4
+npm notice run npx
+npm notice run eslint src/ --format compact
+The compact formatter is no longer part of core ESLint. Install it manually with `npm install -D eslint-formatter-compact`
+
+
+──────────────────────────────────────────────────────────────────────
+FORENSIC SWEEP 7 — SUPABASE DATABASE AUTOPSY
+──────────────────────────────────────────────────────────────────────
+
+Supabase Target URL: https://hbbunfizlwgvripgwzdo.supabase.co
+
+-- 1. Table Inventory via REST Probe
+Table [profiles]: NOT FOUND / ERROR (: TypeError: fetch failed)
+Table [auth_events]: EXISTS | Rows: 5441
+Table [user_integrations]: EXISTS | Rows: 0
+Table [integration_events]: EXISTS | Rows: 80
+Table [projects]: EXISTS | Rows: 208
+Table [requirements]: EXISTS | Rows: null
+Table [blueprint_nodes]: EXISTS | Rows: null
+Table [notifications]: EXISTS | Rows: 3202
+Table [github_tokens]: EXISTS | Rows: null
+Table [audit_logs]: EXISTS | Rows: 11085
+Table [webhook_ingest]: EXISTS | Rows: 0
+Table [llm_configs]: EXISTS | Rows: null
+Table [llm_usage_logs]: EXISTS | Rows: null
+Table [llm_prompt_templates]: EXISTS | Rows: null
+
+-- 2. Profiles Schema & Columns Inspection
+Columns found in public.profiles (15 columns):
+[
+  "id",
+  "display_name",
+  "full_name",
+  "avatar_url",
+  "role",
+  "onboarded",
+  "created_at",
+  "updated_at",
+  "email",
+  "timezone",
+  "goals",
+  "proficiency",
+  "milestone_deadline",
+  "organization",
+  "profile_completeness"
+]
+Sample profiles row:
+{
+  "id": "54e82d34-a0cb-446c-9ae3-7767d6db66ea",
+  "display_name": "TestUser",
+  "full_name": "Test Regular User",
+  "avatar_url": null,
+  "role": "student",
+  "onboarded": true,
+  "created_at": "2026-08-23T07:52:03.345439+00:00",
+  "updated_at": "2026-08-23T07:52:03.345439+00:00",
+  "email": "testuser@brahmatest.com",
+  "timezone": "Asia/Kolkata",
+  "goals": [],
+  "proficiency": "Intermediate",
+  "milestone_deadline": null,
+  "organization": null,
+  "profile_completeness": 0
+}
+
+-- 3. Anonymous Client RLS Probe
+Anon client query on 'profiles': data count = 0, error = none
+Anon client query on 'auth_events': data count = 0, error = none
+Anon client query on 'projects': data count = 0, error = none
+Anon client query on 'user_integrations': data count = 0, error = none
+Anon client query on 'audit_logs': data count = 0, error = none
+
+-- 4. Database RPC Functions & Security Check
+RPC 'is_admin': SUCCESS (true)
+RPC 'get_dashboard_stats': SUCCESS ([{"projects_count":0}])
+RPC 'ensure_profile': ERROR (Could not find the function public.ensure_profile without parameters in the schema cache)
+RPC 'set_user_role': SUCCESS (null)
+
+-- 5. Step 1.8 End-to-End 4-Gate Verification
+Gate 1 (getSession 200 check): PASSED (session = null)
+Gate 2: User created (6170b216-964b-4a57-9659-2ad1eff208c0), waiting 2s for trigger...
+Gate 2 (Auto-profile creation): PASSED (Role: student, Name: Forensic Test User)
+Gate 3 (Self-role-block non-admin escalation): PASSED (Blocked with error: "Unauthorized: Only platform administrators can assign user roles.")
+Gate 4 (Admin bootstrap verification): PASSED (Admin: Priya Nair, Role: admin)
+Test user cleaned up successfully.
+
+======================================================================
+FORENSIC SWEEPS 1-7 COMPLETE
+======================================================================

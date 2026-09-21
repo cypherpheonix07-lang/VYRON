@@ -1,0 +1,158 @@
+export const DEMO_PROJECTS = [
+  {
+    id: "demo-proj-1",
+    name: "FinTech Ledger Gateway",
+    description:
+      "Distributed banking ledger with double-entry idempotency and real-time Kafka event streaming.",
+    health_score: 94,
+    status: "active",
+    created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
+    owner_id: "demo-user-1",
+    owner_name: "Arjun Mehta",
+  },
+  {
+    id: "demo-proj-2",
+    name: "Autonomous Drone Telemetry Hub",
+    description:
+      "Ultra-low-latency gRPC edge router for fleet coordination and flight corridor validation.",
+    health_score: 88,
+    status: "active",
+    created_at: new Date(Date.now() - 86400000 * 12).toISOString(),
+    owner_id: "demo-user-2",
+    owner_name: "Priya Sharma",
+  },
+  {
+    id: "demo-proj-3",
+    name: "Healthcare FHIR Interop Mesh",
+    description:
+      "HIPAA-compliant HL7/FHIR v4 transform engine with cryptographic field-level audit trails.",
+    health_score: 79,
+    status: "review",
+    created_at: new Date(Date.now() - 86400000 * 20).toISOString(),
+    owner_id: "demo-user-1",
+    owner_name: "Arjun Mehta",
+  },
+];
+
+export const DEMO_EVALUATION_METRICS = {
+  precision: 0.962,
+  recall: 0.948,
+  f1_score: 0.955,
+  confusion_matrix: {
+    true_positive: 184,
+    false_positive: 7,
+    true_negative: 212,
+    false_negative: 10,
+  },
+  gate_contributions: [
+    { gate: "Cyclomatic Complexity", fp_contribution: 2.1, pass_rate: 98.4 },
+    { gate: "Security Findings", fp_contribution: 1.2, pass_rate: 99.1 },
+    { gate: "Test Coverage", fp_contribution: 3.4, pass_rate: 94.2 },
+    { gate: "API Documentation", fp_contribution: 0.8, pass_rate: 99.5 },
+    { gate: "Schema RLS", fp_contribution: 0.0, pass_rate: 100.0 },
+    { gate: "Dependency CVEs", fp_contribution: 1.5, pass_rate: 97.8 },
+    { gate: "Traceability", fp_contribution: 1.0, pass_rate: 98.9 },
+  ],
+  accuracy_trend: [
+    { date: "Day 1", accuracy: 92.4, threshold: 80 },
+    { date: "Day 5", accuracy: 93.8, threshold: 80 },
+    { date: "Day 10", accuracy: 95.1, threshold: 80 },
+    { date: "Day 15", accuracy: 94.9, threshold: 80 },
+    { date: "Day 20", accuracy: 96.2, threshold: 80 },
+    { date: "Day 25", accuracy: 97.0, threshold: 80 },
+    { date: "Day 30", accuracy: 97.4, threshold: 80 },
+  ],
+};
+
+export const DEMO_SCAN_HISTORY = [
+  {
+    id: "scan-101",
+    created_at: new Date(Date.now() - 86400000 * 25).toISOString(),
+    complexity_avg: 14.2,
+    security_findings_high: 3,
+    security_findings_med: 6,
+    coverage_pct: 68.0,
+    health_score: 72,
+    status: "passed",
+    commit_sha: "e8f3b21",
+  },
+  {
+    id: "scan-102",
+    created_at: new Date(Date.now() - 86400000 * 18).toISOString(),
+    complexity_avg: 11.5,
+    security_findings_high: 1,
+    security_findings_med: 4,
+    coverage_pct: 74.5,
+    health_score: 81,
+    status: "passed",
+    commit_sha: "9a2f7c0",
+  },
+  {
+    id: "scan-103",
+    created_at: new Date(Date.now() - 86400000 * 10).toISOString(),
+    complexity_avg: 8.9,
+    security_findings_high: 0,
+    security_findings_med: 2,
+    coverage_pct: 82.0,
+    health_score: 89,
+    status: "passed",
+    commit_sha: "4c11de3",
+  },
+  {
+    id: "scan-104",
+    created_at: new Date(Date.now() - 86400000 * 3).toISOString(),
+    complexity_avg: 7.2,
+    security_findings_high: 0,
+    security_findings_med: 1,
+    coverage_pct: 86.4,
+    health_score: 94,
+    status: "passed",
+    commit_sha: "7f55b9a",
+  },
+];
+
+export const DEMO_LLM_USAGE = {
+  today_spend: 0.64,
+  daily_cap: 2.0,
+  cache_hit_rate: 68.5,
+  model_breakdown: [
+    { model: "openai/gpt-4o", spend: 0.38, requests: 24 },
+    { model: "anthropic/claude-3-5-sonnet", spend: 0.22, requests: 18 },
+    { model: "anthropic/claude-3-haiku", spend: 0.04, requests: 35 },
+    { model: "meta-llama/llama-3.1-8b:free", spend: 0.0, requests: 52 },
+  ],
+  daily_trend: Array.from({ length: 30 }).map((_, i) => ({
+    date: `Aug ${i + 1}`,
+    spend: Number((Math.sin(i / 3) * 0.4 + 0.55).toFixed(2)),
+    cap: 2.0,
+  })),
+  recent_requests: [
+    {
+      id: "req-1",
+      timestamp: "2 mins ago",
+      model: "openai/gpt-4o",
+      task: "blueprint_generation",
+      tokens: 1420,
+      cost: 0.0124,
+      cached: false,
+    },
+    {
+      id: "req-2",
+      timestamp: "14 mins ago",
+      model: "anthropic/claude-3-5-sonnet",
+      task: "gate_explanation",
+      tokens: 860,
+      cost: 0.0068,
+      cached: true,
+    },
+    {
+      id: "req-3",
+      timestamp: "42 mins ago",
+      model: "meta-llama/llama-3.1-8b:free",
+      task: "requirement_parse",
+      tokens: 540,
+      cost: 0.0,
+      cached: false,
+    },
+  ],
+};

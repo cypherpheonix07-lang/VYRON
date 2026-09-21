@@ -1,0 +1,79 @@
+version: "3.8"
+
+services:
+  brahma-redis:
+    image: redis:7-alpine
+    container_name: brahma-redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 2s
+      timeout: 2s
+      retries: 15
+      start_period: 2s
+    volumes:
+      - redis_data:/data
+    networks:
+      - brahma-network
+
+  brahma-engine:
+    build:
+      context: ./brahma-engine
+      dockerfile: Dockerfile
+    container_name: brahma-engine
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://brahma-redis:6379/0
+      - CELERY_BROKER_URL=redis://brahma-redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://brahma-redis:6379/0
+      - SUPABASE_URL=${VITE_SUPABASE_URL:-http://host.docker.internal:54321}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+    depends_on:
+      brahma-redis:
+        condition: service_healthy
+    networks:
+      - brahma-network
+
+  brahma-worker:
+    build:
+      context: ./brahma-engine
+      dockerfile: Dockerfile
+    container_name: brahma-worker
+    restart: always
+    command:
+      [
+        "celery",
+        "-A",
+        "celery_app.celery",
+        "worker",
+        "-Q",
+        "default,pdf_queue",
+        "-c",
+        "4",
+        "--max-memory-per-child=200000",
+        "-l",
+        "info",
+      ]
+    environment:
+      - REDIS_URL=redis://brahma-redis:6379/0
+      - CELERY_BROKER_URL=redis://brahma-redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://brahma-redis:6379/0
+      - SUPABASE_URL=${VITE_SUPABASE_URL:-http://host.docker.internal:54321}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+    depends_on:
+      brahma-redis:
+        condition: service_healthy
+    networks:
+      - brahma-network
+
+volumes:
+  redis_data:
+
+networks:
+  brahma-network:
+    driver: bridge

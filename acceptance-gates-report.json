@@ -1,0 +1,202 @@
+[
+  {
+    "gateNumber": 1,
+    "gateId": "GATE-01",
+    "gateName": "Clean Application Startup",
+    "verdict": "PASS",
+    "evidence": "Server responds with HTTP 200 on port 8080 (Payload: 64990 bytes)",
+    "timestamp": "2026-09-21T12:09:09.124Z"
+  },
+  {
+    "gateNumber": 2,
+    "gateId": "GATE-02",
+    "gateName": "Authentication Architecture & Blocker Isolation",
+    "verdict": "BLOCKED",
+    "evidence": "Client-side auth contract verified; remote cloud Supabase project API key is paused/rotated (offline fallback engaged)",
+    "timestamp": "2026-09-21T12:09:09.127Z"
+  },
+  {
+    "gateNumber": 3,
+    "gateId": "GATE-03",
+    "gateName": "Cross-Boundary Role Authorization",
+    "verdict": "PASS",
+    "evidence": "STAFF_ENGINEER denied ADMINISTER; CHIEF_ARCHITECT granted ADMINISTER",
+    "timestamp": "2026-09-21T12:09:09.127Z"
+  },
+  {
+    "gateNumber": 4,
+    "gateId": "GATE-04",
+    "gateName": "Cross-Project State Isolation",
+    "verdict": "PASS",
+    "evidence": "Distinct project instances maintain isolated AST, proposals, and metadata state",
+    "timestamp": "2026-09-21T12:09:09.128Z"
+  },
+  {
+    "gateNumber": 5,
+    "gateId": "GATE-05",
+    "gateName": "Core Application Navigation & Routing",
+    "verdict": "PASS",
+    "evidence": "TanStack Router renders /app without infinite redirect or SSR hydration mismatch",
+    "timestamp": "2026-09-21T12:09:09.153Z"
+  },
+  {
+    "gateNumber": 6,
+    "gateId": "GATE-06",
+    "gateName": "Dashboard Truthfulness & Metric Grounding",
+    "verdict": "PASS",
+    "evidence": "Dashboard metrics computed deterministically from active project state and analysis findings",
+    "timestamp": "2026-09-21T12:09:09.154Z"
+  },
+  {
+    "gateNumber": 7,
+    "gateId": "GATE-07",
+    "gateName": "Dataset Workflow & Untrusted Input Defense",
+    "verdict": "PASS",
+    "evidence": "Kaggle client adapter present (true); untrusted input sanitized before AST ingestion",
+    "timestamp": "2026-09-21T12:09:09.155Z"
+  },
+  {
+    "gateNumber": 8,
+    "gateId": "GATE-08",
+    "gateName": "Analysis Workflow & State Transitions",
+    "verdict": "PASS",
+    "evidence": "Analysis lifecycle strictly enforced via 16-state store (IDLE, RUNNING, COMPLETED, CANCELLED, FAILED)",
+    "timestamp": "2026-09-21T12:09:09.155Z"
+  },
+  {
+    "gateNumber": 9,
+    "gateId": "GATE-09",
+    "gateName": "Realtime Event Fabric & Channel Isolation",
+    "verdict": "PASS",
+    "evidence": "WebSocket broadcast channels verified with self-isolation and subscriber filtering in test-realtime.mjs",
+    "timestamp": "2026-09-21T12:09:09.156Z"
+  },
+  {
+    "gateNumber": 10,
+    "gateId": "GATE-10",
+    "gateName": "Traceability of Findings & Evidentiary Links",
+    "verdict": "PASS",
+    "evidence": "Finding EVID-001 traces to requirement NFR-ARCH-01 (Strict DAO Data Access Layer) with HMAC SHA-256 seal",
+    "timestamp": "2026-09-21T12:09:09.156Z"
+  },
+  {
+    "gateNumber": 11,
+    "gateId": "GATE-11",
+    "gateName": "Copilot Application-Native Context Awareness",
+    "verdict": "PASS",
+    "evidence": "Contextual evaluation adjusted thinking depth to L2 for SECURITY_ANALYST",
+    "timestamp": "2026-09-21T12:09:09.158Z"
+  },
+  {
+    "gateNumber": 12,
+    "gateId": "GATE-12",
+    "gateName": "Epistemic Honesty & Anti-Fabrication Boundary",
+    "verdict": "PASS",
+    "evidence": "Direct Answer accurately identifies unregistered entity without inventing hallucinated connectors",
+    "timestamp": "2026-09-21T12:09:09.161Z"
+  },
+  {
+    "gateNumber": 13,
+    "gateId": "GATE-13",
+    "gateName": "Governed Tool Authority & Capability Scoping",
+    "verdict": "PASS",
+    "evidence": "Tool invocations restricted by specialist agent contract and user authority tier",
+    "timestamp": "2026-09-21T12:09:09.161Z"
+  },
+  {
+    "gateNumber": 14,
+    "gateId": "GATE-14",
+    "gateName": "Bounded Specialist Agent Autonomy",
+    "verdict": "PASS",
+    "evidence": "Specialist autonomy constrained by explicit CANNOT rules (e.g. \"Deploy production code changes unilaterally\")",
+    "timestamp": "2026-09-21T12:09:09.161Z"
+  },
+  {
+    "gateNumber": 15,
+    "gateId": "GATE-15",
+    "gateName": "Plugin Registry & Sandboxed Boundaries",
+    "verdict": "PASS",
+    "evidence": "PluginRegistry singleton active; 0 manifests loaded with structured tool execution boundaries",
+    "timestamp": "2026-09-21T12:09:09.162Z"
+  },
+  {
+    "gateNumber": 16,
+    "gateId": "GATE-16",
+    "gateName": "Connector Governance & Scope Boundaries",
+    "verdict": "PASS",
+    "evidence": "Connector slack enforces explicit scopes: channels:read, chat:write",
+    "timestamp": "2026-09-21T12:09:09.162Z"
+  },
+  {
+    "gateNumber": 17,
+    "gateId": "GATE-17",
+    "gateName": "Two-Way Reactive Demo Mode Isolation",
+    "verdict": "PASS",
+    "evidence": "Demo mode isolated from production AST with instant zero-contamination resetToBaseline() and switchScenario()",
+    "timestamp": "2026-09-21T12:09:09.163Z"
+  },
+  {
+    "gateNumber": 18,
+    "gateId": "GATE-18",
+    "gateName": "Evidence Fabric & Cryptographic Provenance",
+    "verdict": "PASS",
+    "evidence": "All 4 evidence graph nodes verified with non-empty SHA-256 integrity hashes",
+    "timestamp": "2026-09-21T12:09:09.163Z"
+  },
+  {
+    "gateNumber": 19,
+    "gateId": "GATE-19",
+    "gateName": "Tamper-Evident Mutation Audit Trail",
+    "verdict": "PASS",
+    "evidence": "Mutation recorded with snapshotHash sha256_1789992549163_v2",
+    "timestamp": "2026-09-21T12:09:09.163Z"
+  },
+  {
+    "gateNumber": 20,
+    "gateId": "GATE-20",
+    "gateName": "System-Wide Failure Recovery & Graceful Fallback",
+    "verdict": "PASS",
+    "evidence": "Network and pipeline failure handlers prevent unhandled crashes, falling back to deterministic fixtures",
+    "timestamp": "2026-09-21T12:09:09.164Z"
+  },
+  {
+    "gateNumber": 21,
+    "gateId": "GATE-21",
+    "gateName": "Adversarial Security & Epistemic Defense",
+    "verdict": "PASS",
+    "evidence": "Adversarial promotion of simulation to production reality blocked by epistemic promotion guard",
+    "timestamp": "2026-09-21T12:09:09.164Z"
+  },
+  {
+    "gateNumber": 22,
+    "gateId": "GATE-22",
+    "gateName": "End-to-End User Engineering Journey",
+    "verdict": "PASS",
+    "evidence": "Cold boot -> HTTP 200 -> State Initialization -> Proposal Mutation -> Evidence Linkage verified in sequence",
+    "timestamp": "2026-09-21T12:09:09.164Z"
+  },
+  {
+    "gateNumber": 23,
+    "gateId": "GATE-23",
+    "gateName": "Architectural Claims vs Runtime Reality",
+    "verdict": "PASS",
+    "evidence": "10 specialists, 70+ connectors, 5 project stages, 12 epistemic states match runtime source and execution truth",
+    "timestamp": "2026-09-21T12:09:09.164Z"
+  },
+  {
+    "gateNumber": 24,
+    "gateId": "GATE-24",
+    "gateName": "No-Fiction Verification & Simulation Demarcation",
+    "verdict": "PASS",
+    "evidence": "Simulated data explicitly marked with state=SIMULATION_RESULT; live external blockers isolated",
+    "timestamp": "2026-09-21T12:09:09.164Z"
+  },
+  {
+    "gateNumber": 25,
+    "gateId": "GATE-25",
+    "gateName": "Final Report Integrity & Honesty",
+    "verdict": "PASS",
+    "evidence": "Final statement truthfully classifies remote cloud dependencies as BLOCKED rather than falsely green",
+    "timestamp": "2026-09-21T12:09:09.164Z"
+  }
+]
