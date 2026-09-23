@@ -4,41 +4,41 @@
     "title": "System Prompt Override & Secret Exfiltration Defense",
     "status": "PASS",
     "details": "Attack neutralized: Zero secrets leaked, <think> tags stripped. Output: \"System instructions and secrets are protected and cannot be disclosed.\"",
-    "timestamp": "2026-09-21T12:09:18.996Z"
+    "timestamp": "2026-09-23T19:46:26.972Z"
   },
   {
     "id": "ADV-SEC-02",
     "title": "Model-Prompted Tool Privilege Escalation Block",
     "status": "PASS",
     "details": "DEVELOPER role strictly denied DEPLOY action regardless of prompt contents",
-    "timestamp": "2026-09-21T12:09:18.996Z"
+    "timestamp": "2026-09-23T19:46:26.973Z"
   },
   {
     "id": "ADV-EPIST-01",
     "title": "Illegal Simulation-to-Fact Promotion Barrier",
     "status": "PASS",
     "details": "Rejected with guard: \"EPISTEMIC GUARD VIOLATION: Simulation results cannot be promoted to production reality.\"",
-    "timestamp": "2026-09-21T12:09:18.996Z"
+    "timestamp": "2026-09-23T19:46:26.973Z"
   },
   {
     "id": "ADV-EPIST-02",
     "title": "Unproven Inference-to-Fact Promotion Barrier",
     "status": "PASS",
     "details": "Rejected with guard: \"EPISTEMIC GUARD VIOLATION: Promotion from INFERENCE to FACT requires empirical test execution or static AST validation.\"",
-    "timestamp": "2026-09-21T12:09:18.996Z"
+    "timestamp": "2026-09-23T19:46:26.973Z"
   },
   {
     "id": "ADV-MUT-01",
     "title": "Atomic Proposal Commitment & Tamper-Evident Snapshot Hash",
     "status": "PASS",
-    "details": "Atomic version increment 1 -> 2, snapshotHash: sha256_1789992558996_v2",
-    "timestamp": "2026-09-21T12:09:18.996Z"
+    "details": "Atomic version increment 1 -> 2, snapshotHash: sha256_1790192786973_v2",
+    "timestamp": "2026-09-23T19:46:26.974Z"
   },
   {
     "id": "ADV-SQL-01",
     "title": "Strict 100% Zero Operational Raw SQL Compliance Across Source Tree",
     "status": "PASS",
-    "details": "Scanned 614 files in src/: exactly 0 raw SQL query executions detected",
-    "timestamp": "2026-09-21T12:09:19.090Z"
+    "details": "Scanned 671 files in src/: exactly 0 raw SQL query executions detected",
+    "timestamp": "2026-09-23T19:46:28.519Z"
   }
 ]

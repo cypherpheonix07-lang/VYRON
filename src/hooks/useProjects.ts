@@ -5,6 +5,7 @@ import { useDemoMode } from "@/contexts/DemoModeContext";
 import { DEMO_PROJECTS } from "@/data/demoSeedData";
 
 export interface Project {
+  [x: string]: unknown;
   id: string;
   name: string;
   slug?: string;
@@ -29,7 +30,7 @@ export interface Project {
   budget_cap_usd?: number | null;
   milestone?: string | null;
   cadence?: string;
-  draft_state?: any;
+  draft_state?: unknown;
   wizard_step?: number;
 }
 
