@@ -280,7 +280,7 @@ function LoginPage() {
       localStorage.setItem("brahma_demo_mode", "true");
       toast.success(`Welcome to DEMO Workspace (${role})`);
       await refresh();
-      window.location.href = "/app/admin/models";
+      window.location.href = "/app";
     } catch (err) {
       toast.error("Failed to seed demo session.");
     } finally {
@@ -425,7 +425,7 @@ function LoginPage() {
               {loading ? (
                 <Loader2 className="size-4 animate-spin mr-2" />
               ) : (
-                "Sign In to Project Brahma"
+                "Sign In to VYRON Control Plane"
               )}
             </Button>
           </form>
@@ -552,8 +552,8 @@ function LoginPage() {
           </Link>
         </div>
 
-        {/* Demo trigger */}
-        {authService.isDemoMode() && <DemoAccessButton onSelect={handleDemoSelect} />}
+        {/* Local Demo / God Mode Workspace Access */}
+        <DemoAccessButton onSelect={handleDemoSelect} />
       </div>
     </AuthLayout>
   );

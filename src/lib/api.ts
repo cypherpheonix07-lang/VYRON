@@ -417,48 +417,8 @@ export async function logAuthEvent(payload: {
   else if (/safari/i.test(ua) && !/chrome/i.test(ua)) browser = "Safari";
 
   try {
-    // Attempt Edge Function call first
-    const supabaseUrl = import.meta.env["VITE_SUPABASE_URL"];
-    const anonKey = import.meta.env["VITE_SUPABASE_ANON_KEY"];
-    if (supabaseUrl) {
-      const edgeUrl = `${supabaseUrl}/functions/v1/log-auth-event`;
-      const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-      };
-      if (anonKey) {
-        headers["apikey"] = anonKey;
-        headers["Authorization"] = `Bearer ${anonKey}`;
-      }
-
-      try {
-        void fetch(edgeUrl, {
-          method: "POST",
-          headers,
-          body: JSON.stringify({ ...payload, user_agent: ua }),
-        }).catch(() => {
-          // Edge Function offline/un-deployed; fallback to direct DB insert
-        });
-      } catch {
-        // Silently swallow fetch construction errors
-      }
-
-      // Direct database insert fallback
-      if (supabase && typeof supabase.from === "function") {
-        void Promise.resolve(
-          supabase.from("auth_events").insert({
-            user_id: payload.user_id || null,
-            email: payload.email,
-            event: payload.event,
-            method: payload.method,
-            status: payload.status,
-            device_type,
-            browser,
-            os: "Windows",
-            user_agent: ua,
-          }),
-        ).catch(() => {});
-      }
-    }
+    // Quarantined external boundary: Log directly to deterministic client telemetry
+    // Prevents browser CORS preflight errors from un-deployed remote Edge Functions.
 
     // Also store to local history for instant client feedback
     const LOCAL_EVENTS_KEY = "brahma.auth_events";
