@@ -122,7 +122,7 @@ export const authService = {
   isOAuthProviderEnabled(provider: "google" | "github" | "gitlab"): boolean {
     if (provider === "google") return import.meta.env["VITE_OAUTH_GOOGLE"] !== "false";
     if (provider === "github") return import.meta.env["VITE_OAUTH_GITHUB"] !== "false";
-    if (provider === "gitlab") return import.meta.env["VITE_OAUTH_GITLAB"] === "true";
+    if (provider === "gitlab") return import.meta.env["VITE_OAUTH_GITLAB"] !== "false";
     return false;
   },
 
@@ -345,9 +345,42 @@ export const authService = {
     }
   },
 
+  // ── 4b. signInWithGitLab ─────────────────────────────────────────────────
+
+  async signInWithGitLab(): Promise<AuthResponse> {
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "gitlab",
+        options: {
+          redirectTo: getRedirectUrl(),
+          scopes: "read_user openid profile email",
+          skipBrowserRedirect: true,
+        },
+      });
+      if (error) {
+        logAuthEvent({
+          event: "oauth",
+          method: "GITLAB OAuth",
+          status: "failed",
+          email: "oauth.gitlab@brahma.dev",
+        }).catch(() => undefined);
+        return fail(error.message);
+      }
+      if (data?.url) {
+        if (typeof window !== "undefined") {
+          window.location.assign(data.url);
+        }
+      }
+      return { ok: true };
+    } catch (e: unknown) {
+      return fail(e instanceof Error ? e.message : String(e));
+    }
+  },
+
   async signInWithOAuth(provider: "google" | "github" | "gitlab"): Promise<AuthResponse> {
     if (provider === "google") return this.signInWithGoogle();
     if (provider === "github") return this.signInWithGitHub();
+    if (provider === "gitlab") return this.signInWithGitLab();
     return fail(`OAuth provider ${provider} is not configured.`);
   },
 

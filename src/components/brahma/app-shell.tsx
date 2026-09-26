@@ -132,28 +132,26 @@ export interface NavDomain {
   adminOnly?: boolean;
 }
 
-// 11 Core Engineering Domains
+// 10 Core Engineering Domains (HOME / DISCOVER / INTELLIGENCE / ENGINEERING / ANALYSIS / RELEASE / SIMULATION / AI / INTEGRATIONS / GOVERNANCE)
 export const NAV_DOMAINS: NavDomain[] = [
+  {
+    id: "home",
+    label: "HOME",
+    icon: LayoutDashboard,
+    items: [
+      { to: "/app", label: "Command Center", icon: LayoutDashboard, exact: true },
+      { to: "/app/activity", label: "Activity Stream", icon: Activity, exact: true },
+      { to: "/app/notifications", label: "System Alerts", icon: Bell, exact: true },
+    ],
+  },
   {
     id: "discover",
     label: "DISCOVER",
     icon: Compass,
     items: [
-      { to: "/app", label: "Command Center", icon: LayoutDashboard, exact: true },
-      { to: "/app/search", label: "Global Search", icon: Search, exact: false },
-      { to: "/app/activity", label: "Activity Feed", icon: Activity, exact: true },
-      { to: "/app/workpulse", label: "WorkPulse", icon: CheckSquare, exact: true },
-      { to: "/app/notifications", label: "Notifications", icon: Bell, exact: true },
-    ],
-  },
-  {
-    id: "engineering",
-    label: "ENGINEERING",
-    icon: FolderKanban,
-    items: [
-      { to: "/app/projects", label: "All Projects", icon: FolderKanban, exact: true },
-      { to: "/app/projects/new", label: "New Project", icon: PlusCircle, exact: true },
-      { to: "/app/studio/templates", label: "Project Templates", icon: Layers, exact: false },
+      { to: "/discover", label: "Project Reality Map", icon: Sparkles, exact: false },
+      { to: "/app/search", label: "Global Discovery Search", icon: Search, exact: false },
+      { to: "/app/github", label: "Repository Discovery", icon: Github, exact: false },
     ],
   },
   {
@@ -161,10 +159,19 @@ export const NAV_DOMAINS: NavDomain[] = [
     label: "INTELLIGENCE",
     icon: Brain,
     items: [
-      { to: "/discover", label: "ATLAS Knowledge Graph", icon: Sparkles, exact: false },
       { to: "/app/drift", label: "Architecture Drift", icon: Compass, exact: false },
-      { to: "/app/impact", label: "Change Impact", icon: GitPullRequest, exact: false },
+      { to: "/app/impact", label: "Causal Change Impact", icon: GitPullRequest, exact: false },
       { to: "/app/missions", label: "Decisions & Missions", icon: Target, exact: false },
+    ],
+  },
+  {
+    id: "engineering",
+    label: "ENGINEERING",
+    icon: FolderKanban,
+    items: [
+      { to: "/app/projects", label: "Project Workspaces", icon: FolderKanban, exact: true },
+      { to: "/app/projects/new", label: "New Project Blueprint", icon: PlusCircle, exact: true },
+      { to: "/app/studio/templates", label: "Project Templates", icon: Layers, exact: false },
     ],
   },
   {
@@ -172,9 +179,9 @@ export const NAV_DOMAINS: NavDomain[] = [
     label: "ANALYSIS",
     icon: Activity,
     items: [
-      { to: "/app/analysis", label: "Live 12-Stage Analysis", icon: Activity, exact: false },
+      { to: "/app/analysis", label: "12-Stage Forensics", icon: Activity, exact: false },
       { to: "/app/reports", label: "Reports & Findings", icon: FileBarChart2, exact: true },
-      { to: "/app/preview", label: "AI Showcase", icon: Eye, exact: true },
+      { to: "/app/preview", label: "Engineering Theater", icon: Eye, exact: true },
     ],
   },
   {
@@ -182,24 +189,26 @@ export const NAV_DOMAINS: NavDomain[] = [
     label: "RELEASE",
     icon: ShieldCheck,
     items: [
-      { to: "/app/missions", label: "Release Gates", icon: ShieldCheck, exact: false },
-      { to: "/app/exports", label: "Export Center", icon: Download, exact: true },
+      { to: "/app/missions", label: "Release Gates & Twin", icon: ShieldCheck, exact: false },
+      { to: "/app/exports", label: "Artifact & Export Center", icon: Download, exact: true },
     ],
   },
   {
     id: "simulation",
     label: "SIMULATION",
     icon: FlaskConical,
-    items: [{ to: "/app/simulation", label: "Simulation Lab", icon: FlaskConical, exact: false }],
+    items: [
+      { to: "/app/simulation", label: "Simulation Twin Lab", icon: FlaskConical, exact: false },
+    ],
   },
   {
     id: "ai",
     label: "AI",
     icon: Bot,
     items: [
-      { to: "/app/chat", label: "Copilot Studio", icon: Bot, exact: false },
-      { to: "/app/studio", label: "AI Studio", icon: Sparkles, exact: false },
-      { to: "/app/admin/models", label: "Model Governance", icon: Brain, exact: false },
+      { to: "/app/chat", label: "Copilot Intelligence Studio", icon: Bot, exact: false },
+      { to: "/app/studio", label: "Autonomous AI Studio", icon: Sparkles, exact: false },
+      { to: "/app/admin/models", label: "AI Model Governance", icon: Brain, exact: false },
     ],
   },
   {
@@ -207,11 +216,11 @@ export const NAV_DOMAINS: NavDomain[] = [
     label: "INTEGRATIONS",
     icon: Cable,
     items: [
-      { to: "/app/datasets", label: "Kaggle Datasets", icon: Database, exact: false },
+      { to: "/app/github", label: "GitHub Mirror & App", icon: Github, exact: false },
       { to: "/app/connectors", label: "MCP Connectors", icon: Cable, exact: false },
       { to: "/app/plugins", label: "Plugin Center", icon: Puzzle, exact: false },
-      { to: "/app/github", label: "GitHub Mirror", icon: Github, exact: false },
-      { to: "/app/integrations", label: "Integrations Hub", icon: Cable, exact: true },
+      { to: "/app/datasets", label: "Kaggle & Data Sources", icon: Database, exact: false },
+      { to: "/app/integrations", label: "Ecosystem Control Plane", icon: Cable, exact: true },
     ],
   },
   {
@@ -219,29 +228,11 @@ export const NAV_DOMAINS: NavDomain[] = [
     label: "GOVERNANCE",
     icon: ShieldAlert,
     items: [
-      { to: "/app/admin/audit", label: "Audit Trail", icon: ShieldAlert, exact: false },
-      { to: "/app/team", label: "Team & Access Control", icon: Users, exact: true },
-    ],
-  },
-  {
-    id: "platform",
-    label: "PLATFORM",
-    icon: Settings,
-    items: [
-      { to: "/app/settings", label: "Settings & Health", icon: Settings, exact: true },
-      { to: "/app/admin/usage", label: "Usage & Telemetry", icon: BarChart3, exact: false },
-    ],
-  },
-  {
-    id: "admin",
-    label: "ADMIN",
-    icon: ShieldCheck,
-    adminOnly: true,
-    items: [
+      { to: "/app/admin/audit", label: "Audit & Evidence Ledger", icon: ShieldAlert, exact: false },
+      { to: "/app/team", label: "Team & Policy Access", icon: Users, exact: true },
+      { to: "/app/settings", label: "Platform Health & Settings", icon: Settings, exact: true },
+      { to: "/app/admin/usage", label: "SLO & Telemetry", icon: BarChart3, exact: false },
       { to: "/app/admin", label: "Admin Console", icon: ShieldCheck, exact: true },
-      { to: "/app/admin/users", label: "User Directory", icon: Users, exact: false },
-      { to: "/app/admin/queue", label: "Task Queue", icon: Server, exact: false },
-      { to: "/app/admin/schema", label: "Schema Inspector", icon: Database, exact: false },
     ],
   },
 ];
@@ -328,17 +319,16 @@ function NavList({
       // ignore
     }
     return {
+      home: true,
       discover: true,
-      engineering: true,
       intelligence: true,
+      engineering: true,
       analysis: true,
       release: false,
       simulation: false,
       ai: false,
       integrations: false,
       governance: false,
-      platform: false,
-      admin: false,
     };
   });
 
@@ -571,13 +561,6 @@ function SidebarBody({
       <div className="flex-1 overflow-y-auto space-y-4">
         <NavList collapsed={collapsed} onNavigate={onNavigate} />
       </div>
-
-      {/* Workspace Pulse Sidebar Widget (Refined, data-driven, interactive) */}
-      {!collapsed ? (
-        <div className="mx-3">
-          <WorkspacePulse variant="sidebar" onNavigate={onNavigate} />
-        </div>
-      ) : null}
     </div>
   );
 }

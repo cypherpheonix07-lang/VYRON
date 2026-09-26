@@ -3,7 +3,7 @@ import { Hexagon } from "lucide-react";
 
 export function BrahmaLogo({
   compact,
-  to = "/showcase",
+  to = "/app",
 }: {
   compact?: boolean | undefined;
   to?: string | undefined;

@@ -1,5 +1,5 @@
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
-import { AlertCircle, Loader2, Chrome, Github } from "lucide-react";
+import { AlertCircle, Loader2, Chrome, Github, Gitlab } from "lucide-react";
 import { useState, type FormEvent, useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -229,10 +229,11 @@ function LoginPage() {
   };
 
   // OAuth Sign In
-  const handleOAuthLogin = async (provider: "google" | "github") => {
+  const handleOAuthLogin = async (provider: "google" | "github" | "gitlab") => {
     setOauthLoading(provider);
     setFormError(null);
-    toast.loading(`Redirecting to ${provider === "google" ? "Google" : "GitHub"}...`, {
+    const providerLabel = provider === "google" ? "Google" : provider === "github" ? "GitHub" : "GitLab";
+    toast.loading(`Redirecting to ${providerLabel}...`, {
       id: "oauth-redirect",
     });
     try {
@@ -498,8 +499,9 @@ function LoginPage() {
 
         {/* OAuth grid */}
         {(authService.isOAuthProviderEnabled("google") ||
-          authService.isOAuthProviderEnabled("github")) && (
-          <div className="grid grid-cols-2 gap-3">
+          authService.isOAuthProviderEnabled("github") ||
+          authService.isOAuthProviderEnabled("gitlab")) && (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             {authService.isOAuthProviderEnabled("google") && (
               <Button
                 type="button"
@@ -534,6 +536,25 @@ function LoginPage() {
                   <>
                     <Github className="size-4 text-slate-300" />
                     <span>GitHub</span>
+                  </>
+                )}
+              </Button>
+            )}
+            {authService.isOAuthProviderEnabled("gitlab") && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleOAuthLogin("gitlab")}
+                disabled={oauthLoading !== null}
+                className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2"
+                aria-label="Sign in with GitLab"
+              >
+                {oauthLoading === "gitlab" ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <>
+                    <Gitlab className="size-4 text-orange-400" />
+                    <span>GitLab</span>
                   </>
                 )}
               </Button>

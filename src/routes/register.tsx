@@ -8,6 +8,7 @@ import {
   Sparkles,
   Chrome,
   Github,
+  Gitlab,
 } from "lucide-react";
 import { useState, type FormEvent, useEffect } from "react";
 import { toast } from "sonner";
@@ -163,9 +164,10 @@ function RegisterPage() {
     inviteCode,
   ]);
 
-  const handleOAuthRegister = async (provider: "google" | "github") => {
+  const handleOAuthRegister = async (provider: "google" | "github" | "gitlab") => {
     setOauthLoading(provider);
-    toast.loading(`Redirecting to ${provider === "google" ? "Google" : "GitHub"}...`, {
+    const providerLabel = provider === "google" ? "Google" : provider === "github" ? "GitHub" : "GitLab";
+    toast.loading(`Redirecting to ${providerLabel}...`, {
       id: "oauth-register-redirect",
     });
     try {
@@ -403,7 +405,8 @@ function RegisterPage() {
 
             {/* OAuth separator and grid */}
             {(authService.isOAuthProviderEnabled("google") ||
-              authService.isOAuthProviderEnabled("github")) && (
+              authService.isOAuthProviderEnabled("github") ||
+              authService.isOAuthProviderEnabled("gitlab")) && (
               <>
                 <div className="relative flex items-center justify-center my-3 select-none">
                   <div className="absolute inset-0 flex items-center">
@@ -414,7 +417,7 @@ function RegisterPage() {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   {authService.isOAuthProviderEnabled("google") && (
                     <Button
                       type="button"
@@ -449,6 +452,25 @@ function RegisterPage() {
                         <>
                           <Github className="size-4 text-slate-300" />
                           <span>GitHub</span>
+                        </>
+                      )}
+                    </Button>
+                  )}
+                  {authService.isOAuthProviderEnabled("gitlab") && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => handleOAuthRegister("gitlab")}
+                      disabled={oauthLoading !== null}
+                      className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white text-xs font-semibold py-2 px-3 rounded-lg flex items-center justify-center gap-2"
+                      aria-label="Sign up with GitLab"
+                    >
+                      {oauthLoading === "gitlab" ? (
+                        <Loader2 className="size-4 animate-spin" />
+                      ) : (
+                        <>
+                          <Gitlab className="size-4 text-orange-400" />
+                          <span>GitLab</span>
                         </>
                       )}
                     </Button>
