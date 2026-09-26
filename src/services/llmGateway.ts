@@ -280,7 +280,7 @@ function getLocalDeterministicArtifact(task: LLMTask, payload: unknown): Record<
   }
 
   return {
-    response: "PROJECT BRAHMA intelligence kernel online. Verified telemetry active.",
+    response: "VYRON intelligence kernel online. Verified telemetry active.",
     context: typeof payload === "string" ? payload.substring(0, 100) : "Operational",
   };
 }

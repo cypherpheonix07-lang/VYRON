@@ -257,7 +257,7 @@ export class DeterministicServerAdapter implements IAIProvider {
       text = JSON.stringify(structuredData, null, 2);
     } else if (task === "report_prose") {
       structuredData = {
-        title: "BRAHMA Architectural & Security Audit Report",
+        title: "VYRON Architectural & Security Audit Report",
         executive_summary:
           "The platform demonstrates resilient architectural design with zero-trust token handshakes, comprehensive audit event logging, and multi-tier LLM gateway fallback circuits.",
         key_findings: [
@@ -270,7 +270,7 @@ export class DeterministicServerAdapter implements IAIProvider {
       };
       text = JSON.stringify(structuredData, null, 2);
     } else {
-      text = `PROJECT BRAHMA verified intelligence kernel online. Deterministic fallback mode active. Context processed: "${prompt.substring(0, 80)}"`;
+      text = `VYRON verified intelligence kernel online. Deterministic fallback mode active. Context processed: "${prompt.substring(0, 80)}"`;
       structuredData = { response: text, fallback: true };
     }
 

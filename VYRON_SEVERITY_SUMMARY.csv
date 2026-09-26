@@ -1,0 +1,5 @@
+severity,total_detected,closed_and_verified,externally_blocked,open_triaged_low_risk,closure_rate_percent
+ULTRA_HIGH,3,3,0,0,100%
+HIGH,9,7,2,0,100% (of unblocked)
+MEDIUM,3,3,0,0,100%
+LOW,3,0,0,3,0%

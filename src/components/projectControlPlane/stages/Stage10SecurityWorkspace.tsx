@@ -36,12 +36,22 @@ export const Stage10SecurityWorkspace: React.FC = () => {
             </div>
             <div className="flex items-center gap-3">
               {sec.securityPostureScore > 0 && (
-                <Badge
-                  variant="outline"
-                  className="border-rose-500/40 text-rose-400 font-mono text-xs"
-                >
-                  Posture Score: {sec.securityPostureScore}%
-                </Badge>
+                <div className="flex items-center gap-1.5">
+                  <Badge
+                    variant="outline"
+                    className="border-rose-500/40 text-rose-400 font-mono text-xs"
+                    title="Formula Citation: P20 KPI Intelligence Engine (FORMULA-SEC-POSTURE-01)"
+                  >
+                    Posture Score: {sec.securityPostureScore}%
+                  </Badge>
+                  <Badge
+                    variant="secondary"
+                    className="font-mono text-[9px] bg-background/60 border border-border/40 text-muted-foreground"
+                    title="Deterministic Lineage ID owned by P20"
+                  >
+                    P20: FORMULA-SEC-POSTURE-01
+                  </Badge>
+                </div>
               )}
               <Button
                 size="sm"

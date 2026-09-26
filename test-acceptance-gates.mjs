@@ -57,9 +57,9 @@ async function httpGet(urlPath) {
       res.on("end", () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
     });
     req.on("error", (err) => resolve({ error: err.message }));
-    req.setTimeout(5000, () => {
+    req.setTimeout(15000, () => {
       req.destroy();
-      resolve({ error: "Timeout after 5000ms" });
+      resolve({ error: "Timeout after 15000ms" });
     });
   });
 }

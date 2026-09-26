@@ -22,7 +22,8 @@ function computeSha256(data: unknown): string {
 import { IAIProvider, ProviderCapabilities } from "../providers/types";
 
 export class OpenRouterServerAdapter implements IAIProvider {
-  public readonly id = "openrouter" as const;
+  // eslint-disable-next-line @typescript-eslint/prefer-as-const
+  public readonly id: "openrouter" = "openrouter";
   public readonly name = "OpenRouter Hub";
   private static instance: OpenRouterServerAdapter | null = null;
   private readonly baseUrl =

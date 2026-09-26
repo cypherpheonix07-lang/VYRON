@@ -14,6 +14,8 @@ export default tseslint.config(
       ".chrome-demo-profile",
       "brahma-engine",
       "supabase/functions",
+      ".agents",
+      "**/supabase/functions",
       "routeTree.gen.ts",
       "*.mjs",
       "*.js",

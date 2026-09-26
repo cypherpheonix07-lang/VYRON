@@ -12,7 +12,7 @@ function renderFallbackErrorHtml(): string {
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>PROJECT BRAHMA — Loading Error</title>
+    <title>VYRON — Loading Error</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
       body { font: 15px/1.5 system-ui, sans-serif; background: oklch(0.19 0.032 264); color: oklch(0.94 0.012 264); display: grid; place-items: center; min-height: 100vh; margin: 0; padding: 1.5rem; }

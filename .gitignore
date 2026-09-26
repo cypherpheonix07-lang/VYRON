@@ -51,3 +51,4 @@ venv/
 *.zip
 *.vsix
 istio-*/
+.agents/VYRON-main/

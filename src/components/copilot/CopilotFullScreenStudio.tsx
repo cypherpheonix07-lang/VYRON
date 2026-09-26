@@ -329,6 +329,28 @@ export function CopilotFullScreenStudio() {
     }
   };
 
+  // Dynamic suggested actions based on active project state and system model
+  const dynamicSuggestedActions = [
+    {
+      id: "act-drift",
+      label: "Audit Architecture Drift",
+      actionType: "DETECT_ARCHITECTURE_DRIFT",
+      description: "Compare declared architecture blueprint against live AST realities",
+    },
+    {
+      id: "act-impact",
+      label: "Analyze Change Blast Radius",
+      actionType: "ANALYZE_CHANGE_IMPACT",
+      description: "Inspect direct and transitive dependencies affected by changes",
+    },
+    {
+      id: "act-mission",
+      label: "Launch Pre-Release Mission",
+      actionType: "START_ENGINEERING_MISSION",
+      description: "Coordinate bounded specialist agents to verify release readiness",
+    },
+  ];
+
   const handleExecuteSuggestedAction = async (action: {
     id: string;
     label: string;
@@ -746,8 +768,18 @@ export function CopilotFullScreenStudio() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Mode-Specific Suggested Prompts */}
+          {/* Mode-Specific Suggested Prompts & Dynamic Actions */}
           <div className="p-2 border-t border-border/30 bg-background/50 flex flex-wrap gap-1.5">
+            {dynamicSuggestedActions.map((action) => (
+              <button
+                key={action.id}
+                onClick={() => handleExecuteSuggestedAction(action)}
+                className="px-2.5 py-1 rounded-full text-[11px] bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition-colors font-medium flex items-center gap-1 cursor-pointer"
+              >
+                <Zap className="size-3 text-primary animate-pulse" />
+                <span>{action.label}</span>
+              </button>
+            ))}
             {getSuggestedPrompts().map((prompt, idx) => (
               <button
                 key={idx}

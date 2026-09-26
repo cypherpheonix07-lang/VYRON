@@ -22,7 +22,8 @@ function computeSha256(data: unknown): string {
 import { IAIProvider, ProviderCapabilities } from "../providers/types";
 
 export class OpenAiServerAdapter implements IAIProvider {
-  public readonly id = "openai" as const;
+  // eslint-disable-next-line @typescript-eslint/prefer-as-const
+  public readonly id: "openai" = "openai";
   public readonly name = "OpenAI Production Gateway";
   private static instance: OpenAiServerAdapter | null = null;
   private readonly baseUrl = "https://api.openai.com/v1";

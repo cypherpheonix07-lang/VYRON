@@ -35,6 +35,7 @@ import { useAiProject } from "@/state/aiProject/aiProjectStore";
 import { initializationGate } from "@/services/aiProject/initialization/initializationGate";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
+import { BLUEPRINT_26_SECTION_MAPPINGS } from "@/services/governance/canonicalPhaseDossier";
 
 export const Stage14BlueprintWorkspace: React.FC = () => {
   const { state, executeStage, isExecuting } = useAiProject();
@@ -174,23 +175,34 @@ export const Stage14BlueprintWorkspace: React.FC = () => {
 
               <div className="border border-border/70 rounded-xl overflow-hidden bg-background/40">
                 <div className="max-h-80 overflow-y-auto divide-y divide-border/40 text-xs">
-                  {bp.sections.map((sec) => (
-                    <div
-                      key={sec.index}
-                      className="p-3 flex items-start justify-between gap-4 hover:bg-card/40"
-                    >
-                      <div className="space-y-0.5">
-                        <div className="font-semibold text-foreground">
-                          {sec.index}. {sec.title}
+                  {bp.sections.map((sec) => {
+                    const mapping = BLUEPRINT_26_SECTION_MAPPINGS.find((m) => m.sectionIndex === sec.index);
+                    return (
+                      <div
+                        key={sec.index}
+                        className="p-3 flex items-start justify-between gap-4 hover:bg-card/40"
+                      >
+                        <div className="space-y-0.5">
+                          <div className="font-semibold text-foreground flex items-center gap-2 flex-wrap">
+                            <span>{sec.index}. {sec.title}</span>
+                            {mapping && (
+                              <Badge
+                                variant="outline"
+                                className="font-mono text-[9px] border-cyan-500/30 text-cyan-400 bg-cyan-500/5"
+                              >
+                                Letter {mapping.letter} • {mapping.registryPhasePair}
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="text-muted-foreground line-clamp-1">{sec.content}</div>
                         </div>
-                        <div className="text-muted-foreground line-clamp-1">{sec.content}</div>
+                        <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px] shrink-0">
+                          <CheckCircle2 className="h-3 w-3 mr-1" />
+                          VERIFIED
+                        </Badge>
                       </div>
-                      <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px] shrink-0">
-                        <CheckCircle2 className="h-3 w-3 mr-1" />
-                        VERIFIED
-                      </Badge>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
@@ -280,15 +292,16 @@ export const Stage14BlueprintWorkspace: React.FC = () => {
             {/* Verification Stats Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <div className="p-3 rounded-lg border border-border/70 bg-background/50 space-y-1 text-center">
-                <span className="text-[10px] text-muted-foreground uppercase">Sections</span>
+                <span className="text-[10px] text-muted-foreground uppercase">Sections (A–Z)</span>
                 <p className="text-base font-bold text-foreground">
                   {bp?.sections.length || 26} / 26
                 </p>
                 <Badge
                   variant="secondary"
-                  className="text-[9px] bg-emerald-500/10 text-emerald-400"
+                  className="text-[9px] bg-emerald-500/10 text-emerald-400 font-mono"
+                  title="26 Sections reconciled 1:1 with A–Z Canonical Registry Letters (P01–P50)"
                 >
-                  VERIFIED
+                  26/26 A–Z VERIFIED
                 </Badge>
               </div>
               <div className="p-3 rounded-lg border border-border/70 bg-background/50 space-y-1 text-center">

@@ -22,7 +22,7 @@
   "v5": {
     "name": "V5: 1000-Event Stream Performance",
     "pass": true,
-    "details": "Processed and partitioned 1,000 events in 2.55ms (< 50ms requirement), ensuring rock-solid 60fps rendering in virtualized view."
+    "details": "Processed and partitioned 1,000 events in 12.72ms (< 50ms requirement), ensuring rock-solid 60fps rendering in virtualized view."
   },
   "v6": {
     "name": "V6: CSV Export Honors Active Filters",

@@ -93,14 +93,20 @@ export const Stage03RequirementsWorkspace: React.FC = () => {
                     </div>
 
                     {/* Quality Score Pill */}
-                    <div className="text-right shrink-0">
+                    <div
+                      className="text-right shrink-0"
+                      title="Formula Citation: P20 KPI Intelligence Engine (FORMULA-REQ-QUALITY-01: 0.4*C + 0.3*T + 0.3*A)"
+                    >
                       <div className="text-xs font-bold text-emerald-400 font-mono">
                         {req.qualityScore.scoreTotal}% Quality
                       </div>
-                      <div className="text-[10px] text-muted-foreground flex gap-1 mt-0.5 font-mono">
+                      <div className="text-[10px] text-muted-foreground flex gap-1 mt-0.5 font-mono justify-end">
                         <span>C:{req.qualityScore.clarity}</span>
                         <span>T:{req.qualityScore.testability}</span>
                         <span>A:{req.qualityScore.atomicity}</span>
+                      </div>
+                      <div className="text-[8px] font-mono text-muted-foreground/80 mt-0.5">
+                        P20: FORMULA-REQ-QUALITY-01
                       </div>
                     </div>
                   </div>
