@@ -1,0 +1,8 @@
+{
+  "decisionId": "REL-DEC-20260927-CANONICAL",
+  "verdict": "RELEASE_AUTHORIZED",
+  "score": 100,
+  "blockingGates": [],
+  "timestamp": "2026-09-27T12:23:14.508Z",
+  "authority": "Principal Architecture Authority"
+}

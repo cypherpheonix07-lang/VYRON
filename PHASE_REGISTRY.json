@@ -1,0 +1,2006 @@
+{
+  "version": "2.5.0-nuclear-canonical",
+  "totalPhases": 250,
+  "phases": [
+    {
+      "id": "P001",
+      "title": "Forensic reconstruction — repository",
+      "domain": "Forensic reconstruction",
+      "subDomain": "repository",
+      "index": 1,
+      "sectionCount": 104
+    },
+    {
+      "id": "P002",
+      "title": "Forensic reconstruction — runtime",
+      "domain": "Forensic reconstruction",
+      "subDomain": "runtime",
+      "index": 2,
+      "sectionCount": 104
+    },
+    {
+      "id": "P003",
+      "title": "Forensic reconstruction — dependencies",
+      "domain": "Forensic reconstruction",
+      "subDomain": "dependencies",
+      "index": 3,
+      "sectionCount": 104
+    },
+    {
+      "id": "P004",
+      "title": "Forensic reconstruction — data ownership",
+      "domain": "Forensic reconstruction",
+      "subDomain": "data ownership",
+      "index": 4,
+      "sectionCount": 104
+    },
+    {
+      "id": "P005",
+      "title": "Forensic reconstruction — request traces",
+      "domain": "Forensic reconstruction",
+      "subDomain": "request traces",
+      "index": 5,
+      "sectionCount": 104
+    },
+    {
+      "id": "P006",
+      "title": "Forensic reconstruction — pattern mapping",
+      "domain": "Forensic reconstruction",
+      "subDomain": "pattern mapping",
+      "index": 6,
+      "sectionCount": 104
+    },
+    {
+      "id": "P007",
+      "title": "Forensic reconstruction — architecture decisions",
+      "domain": "Forensic reconstruction",
+      "subDomain": "architecture decisions",
+      "index": 7,
+      "sectionCount": 104
+    },
+    {
+      "id": "P008",
+      "title": "Forensic reconstruction — failure domains",
+      "domain": "Forensic reconstruction",
+      "subDomain": "failure domains",
+      "index": 8,
+      "sectionCount": 104
+    },
+    {
+      "id": "P009",
+      "title": "Forensic reconstruction — bottlenecks",
+      "domain": "Forensic reconstruction",
+      "subDomain": "bottlenecks",
+      "index": 9,
+      "sectionCount": 104
+    },
+    {
+      "id": "P010",
+      "title": "Forensic reconstruction — security boundaries",
+      "domain": "Forensic reconstruction",
+      "subDomain": "security boundaries",
+      "index": 10,
+      "sectionCount": 104
+    },
+    {
+      "id": "P011",
+      "title": "API Gateway — edge contract",
+      "domain": "API Gateway",
+      "subDomain": "edge contract",
+      "index": 11,
+      "sectionCount": 104
+    },
+    {
+      "id": "P012",
+      "title": "API Gateway — routing",
+      "domain": "API Gateway",
+      "subDomain": "routing",
+      "index": 12,
+      "sectionCount": 104
+    },
+    {
+      "id": "P013",
+      "title": "API Gateway — auth",
+      "domain": "API Gateway",
+      "subDomain": "auth",
+      "index": 13,
+      "sectionCount": 104
+    },
+    {
+      "id": "P014",
+      "title": "API Gateway — policy",
+      "domain": "API Gateway",
+      "subDomain": "policy",
+      "index": 14,
+      "sectionCount": 104
+    },
+    {
+      "id": "P015",
+      "title": "API Gateway — rate limiting",
+      "domain": "API Gateway",
+      "subDomain": "rate limiting",
+      "index": 15,
+      "sectionCount": 104
+    },
+    {
+      "id": "P016",
+      "title": "API Gateway — normalization",
+      "domain": "API Gateway",
+      "subDomain": "normalization",
+      "index": 16,
+      "sectionCount": 104
+    },
+    {
+      "id": "P017",
+      "title": "API Gateway — response policy",
+      "domain": "API Gateway",
+      "subDomain": "response policy",
+      "index": 17,
+      "sectionCount": 104
+    },
+    {
+      "id": "P018",
+      "title": "API Gateway — caching",
+      "domain": "API Gateway",
+      "subDomain": "caching",
+      "index": 18,
+      "sectionCount": 104
+    },
+    {
+      "id": "P019",
+      "title": "API Gateway — observability",
+      "domain": "API Gateway",
+      "subDomain": "observability",
+      "index": 19,
+      "sectionCount": 104
+    },
+    {
+      "id": "P020",
+      "title": "API Gateway — failure isolation",
+      "domain": "API Gateway",
+      "subDomain": "failure isolation",
+      "index": 20,
+      "sectionCount": 104
+    },
+    {
+      "id": "P021",
+      "title": "Backend for Frontend — web BFF",
+      "domain": "Backend for Frontend",
+      "subDomain": "web BFF",
+      "index": 21,
+      "sectionCount": 104
+    },
+    {
+      "id": "P022",
+      "title": "Backend for Frontend — mobile BFF",
+      "domain": "Backend for Frontend",
+      "subDomain": "mobile BFF",
+      "index": 22,
+      "sectionCount": 104
+    },
+    {
+      "id": "P023",
+      "title": "Backend for Frontend — partner BFF",
+      "domain": "Backend for Frontend",
+      "subDomain": "partner BFF",
+      "index": 23,
+      "sectionCount": 104
+    },
+    {
+      "id": "P024",
+      "title": "Backend for Frontend — aggregation",
+      "domain": "Backend for Frontend",
+      "subDomain": "aggregation",
+      "index": 24,
+      "sectionCount": 104
+    },
+    {
+      "id": "P025",
+      "title": "Backend for Frontend — DTO governance",
+      "domain": "Backend for Frontend",
+      "subDomain": "DTO governance",
+      "index": 25,
+      "sectionCount": 104
+    },
+    {
+      "id": "P026",
+      "title": "Backend for Frontend — capability negotiation",
+      "domain": "Backend for Frontend",
+      "subDomain": "capability negotiation",
+      "index": 26,
+      "sectionCount": 104
+    },
+    {
+      "id": "P027",
+      "title": "Backend for Frontend — BFF cache",
+      "domain": "Backend for Frontend",
+      "subDomain": "BFF cache",
+      "index": 27,
+      "sectionCount": 104
+    },
+    {
+      "id": "P028",
+      "title": "Backend for Frontend — BFF resilience",
+      "domain": "Backend for Frontend",
+      "subDomain": "BFF resilience",
+      "index": 28,
+      "sectionCount": 104
+    },
+    {
+      "id": "P029",
+      "title": "Backend for Frontend — client versioning",
+      "domain": "Backend for Frontend",
+      "subDomain": "client versioning",
+      "index": 29,
+      "sectionCount": 104
+    },
+    {
+      "id": "P030",
+      "title": "Backend for Frontend — BFF telemetry",
+      "domain": "Backend for Frontend",
+      "subDomain": "BFF telemetry",
+      "index": 30,
+      "sectionCount": 104
+    },
+    {
+      "id": "P031",
+      "title": "Hexagonal core — domain core",
+      "domain": "Hexagonal core",
+      "subDomain": "domain core",
+      "index": 31,
+      "sectionCount": 104
+    },
+    {
+      "id": "P032",
+      "title": "Hexagonal core — use cases",
+      "domain": "Hexagonal core",
+      "subDomain": "use cases",
+      "index": 32,
+      "sectionCount": 104
+    },
+    {
+      "id": "P033",
+      "title": "Hexagonal core — input ports",
+      "domain": "Hexagonal core",
+      "subDomain": "input ports",
+      "index": 33,
+      "sectionCount": 104
+    },
+    {
+      "id": "P034",
+      "title": "Hexagonal core — output ports",
+      "domain": "Hexagonal core",
+      "subDomain": "output ports",
+      "index": 34,
+      "sectionCount": 104
+    },
+    {
+      "id": "P035",
+      "title": "Hexagonal core — adapter registry",
+      "domain": "Hexagonal core",
+      "subDomain": "adapter registry",
+      "index": 35,
+      "sectionCount": 104
+    },
+    {
+      "id": "P036",
+      "title": "Hexagonal core — persistence adapter",
+      "domain": "Hexagonal core",
+      "subDomain": "persistence adapter",
+      "index": 36,
+      "sectionCount": 104
+    },
+    {
+      "id": "P037",
+      "title": "Hexagonal core — event adapter",
+      "domain": "Hexagonal core",
+      "subDomain": "event adapter",
+      "index": 37,
+      "sectionCount": 104
+    },
+    {
+      "id": "P038",
+      "title": "Hexagonal core — provider adapters",
+      "domain": "Hexagonal core",
+      "subDomain": "provider adapters",
+      "index": 38,
+      "sectionCount": 104
+    },
+    {
+      "id": "P039",
+      "title": "Hexagonal core — simulation adapters",
+      "domain": "Hexagonal core",
+      "subDomain": "simulation adapters",
+      "index": 39,
+      "sectionCount": 104
+    },
+    {
+      "id": "P040",
+      "title": "Hexagonal core — replacement tests",
+      "domain": "Hexagonal core",
+      "subDomain": "replacement tests",
+      "index": 40,
+      "sectionCount": 104
+    },
+    {
+      "id": "P041",
+      "title": "Bulkhead isolation — connection pools",
+      "domain": "Bulkhead isolation",
+      "subDomain": "connection pools",
+      "index": 41,
+      "sectionCount": 104
+    },
+    {
+      "id": "P042",
+      "title": "Bulkhead isolation — worker pools",
+      "domain": "Bulkhead isolation",
+      "subDomain": "worker pools",
+      "index": 42,
+      "sectionCount": 104
+    },
+    {
+      "id": "P043",
+      "title": "Bulkhead isolation — AI pools",
+      "domain": "Bulkhead isolation",
+      "subDomain": "AI pools",
+      "index": 43,
+      "sectionCount": 104
+    },
+    {
+      "id": "P044",
+      "title": "Bulkhead isolation — realtime pools",
+      "domain": "Bulkhead isolation",
+      "subDomain": "realtime pools",
+      "index": 44,
+      "sectionCount": 104
+    },
+    {
+      "id": "P045",
+      "title": "Bulkhead isolation — provider pools",
+      "domain": "Bulkhead isolation",
+      "subDomain": "provider pools",
+      "index": 45,
+      "sectionCount": 104
+    },
+    {
+      "id": "P046",
+      "title": "Bulkhead isolation — queue partitions",
+      "domain": "Bulkhead isolation",
+      "subDomain": "queue partitions",
+      "index": 46,
+      "sectionCount": 104
+    },
+    {
+      "id": "P047",
+      "title": "Bulkhead isolation — tenant quotas",
+      "domain": "Bulkhead isolation",
+      "subDomain": "tenant quotas",
+      "index": 47,
+      "sectionCount": 104
+    },
+    {
+      "id": "P048",
+      "title": "Bulkhead isolation — concurrency",
+      "domain": "Bulkhead isolation",
+      "subDomain": "concurrency",
+      "index": 48,
+      "sectionCount": 104
+    },
+    {
+      "id": "P049",
+      "title": "Bulkhead isolation — memory isolation",
+      "domain": "Bulkhead isolation",
+      "subDomain": "memory isolation",
+      "index": 49,
+      "sectionCount": 104
+    },
+    {
+      "id": "P050",
+      "title": "Bulkhead isolation — containment",
+      "domain": "Bulkhead isolation",
+      "subDomain": "containment",
+      "index": 50,
+      "sectionCount": 104
+    },
+    {
+      "id": "P051",
+      "title": "Outbox reliability — atomic write",
+      "domain": "Outbox reliability",
+      "subDomain": "atomic write",
+      "index": 51,
+      "sectionCount": 104
+    },
+    {
+      "id": "P052",
+      "title": "Outbox reliability — outbox schema",
+      "domain": "Outbox reliability",
+      "subDomain": "outbox schema",
+      "index": 52,
+      "sectionCount": 104
+    },
+    {
+      "id": "P053",
+      "title": "Outbox reliability — relay",
+      "domain": "Outbox reliability",
+      "subDomain": "relay",
+      "index": 53,
+      "sectionCount": 104
+    },
+    {
+      "id": "P054",
+      "title": "Outbox reliability — dedupe",
+      "domain": "Outbox reliability",
+      "subDomain": "dedupe",
+      "index": 54,
+      "sectionCount": 104
+    },
+    {
+      "id": "P055",
+      "title": "Outbox reliability — idempotency",
+      "domain": "Outbox reliability",
+      "subDomain": "idempotency",
+      "index": 55,
+      "sectionCount": 104
+    },
+    {
+      "id": "P056",
+      "title": "Outbox reliability — delivery states",
+      "domain": "Outbox reliability",
+      "subDomain": "delivery states",
+      "index": 56,
+      "sectionCount": 104
+    },
+    {
+      "id": "P057",
+      "title": "Outbox reliability — replay",
+      "domain": "Outbox reliability",
+      "subDomain": "replay",
+      "index": 57,
+      "sectionCount": 104
+    },
+    {
+      "id": "P058",
+      "title": "Outbox reliability — DLQ",
+      "domain": "Outbox reliability",
+      "subDomain": "DLQ",
+      "index": 58,
+      "sectionCount": 104
+    },
+    {
+      "id": "P059",
+      "title": "Outbox reliability — ordering",
+      "domain": "Outbox reliability",
+      "subDomain": "ordering",
+      "index": 59,
+      "sectionCount": 104
+    },
+    {
+      "id": "P060",
+      "title": "Outbox reliability — reconciliation",
+      "domain": "Outbox reliability",
+      "subDomain": "reconciliation",
+      "index": 60,
+      "sectionCount": 104
+    },
+    {
+      "id": "P061",
+      "title": "Data plane — schema authority",
+      "domain": "Data plane",
+      "subDomain": "schema authority",
+      "index": 61,
+      "sectionCount": 104
+    },
+    {
+      "id": "P062",
+      "title": "Data plane — migrations",
+      "domain": "Data plane",
+      "subDomain": "migrations",
+      "index": 62,
+      "sectionCount": 104
+    },
+    {
+      "id": "P063",
+      "title": "Data plane — indexes",
+      "domain": "Data plane",
+      "subDomain": "indexes",
+      "index": 63,
+      "sectionCount": 104
+    },
+    {
+      "id": "P064",
+      "title": "Data plane — transactions",
+      "domain": "Data plane",
+      "subDomain": "transactions",
+      "index": 64,
+      "sectionCount": 104
+    },
+    {
+      "id": "P065",
+      "title": "Data plane — consistency",
+      "domain": "Data plane",
+      "subDomain": "consistency",
+      "index": 65,
+      "sectionCount": 104
+    },
+    {
+      "id": "P066",
+      "title": "Data plane — partitioning",
+      "domain": "Data plane",
+      "subDomain": "partitioning",
+      "index": 66,
+      "sectionCount": 104
+    },
+    {
+      "id": "P067",
+      "title": "Data plane — archival",
+      "domain": "Data plane",
+      "subDomain": "archival",
+      "index": 67,
+      "sectionCount": 104
+    },
+    {
+      "id": "P068",
+      "title": "Data plane — retention",
+      "domain": "Data plane",
+      "subDomain": "retention",
+      "index": 68,
+      "sectionCount": 104
+    },
+    {
+      "id": "P069",
+      "title": "Data plane — lineage",
+      "domain": "Data plane",
+      "subDomain": "lineage",
+      "index": 69,
+      "sectionCount": 104
+    },
+    {
+      "id": "P070",
+      "title": "Data plane — repair",
+      "domain": "Data plane",
+      "subDomain": "repair",
+      "index": 70,
+      "sectionCount": 104
+    },
+    {
+      "id": "P071",
+      "title": "Identity and tenancy — identity graph",
+      "domain": "Identity and tenancy",
+      "subDomain": "identity graph",
+      "index": 71,
+      "sectionCount": 104
+    },
+    {
+      "id": "P072",
+      "title": "Identity and tenancy — sessions",
+      "domain": "Identity and tenancy",
+      "subDomain": "sessions",
+      "index": 72,
+      "sectionCount": 104
+    },
+    {
+      "id": "P073",
+      "title": "Identity and tenancy — OAuth",
+      "domain": "Identity and tenancy",
+      "subDomain": "OAuth",
+      "index": 73,
+      "sectionCount": 104
+    },
+    {
+      "id": "P074",
+      "title": "Identity and tenancy — linking",
+      "domain": "Identity and tenancy",
+      "subDomain": "linking",
+      "index": 74,
+      "sectionCount": 104
+    },
+    {
+      "id": "P075",
+      "title": "Identity and tenancy — RLS",
+      "domain": "Identity and tenancy",
+      "subDomain": "RLS",
+      "index": 75,
+      "sectionCount": 104
+    },
+    {
+      "id": "P076",
+      "title": "Identity and tenancy — tenant context",
+      "domain": "Identity and tenancy",
+      "subDomain": "tenant context",
+      "index": 76,
+      "sectionCount": 104
+    },
+    {
+      "id": "P077",
+      "title": "Identity and tenancy — service identity",
+      "domain": "Identity and tenancy",
+      "subDomain": "service identity",
+      "index": 77,
+      "sectionCount": 104
+    },
+    {
+      "id": "P078",
+      "title": "Identity and tenancy — secrets",
+      "domain": "Identity and tenancy",
+      "subDomain": "secrets",
+      "index": 78,
+      "sectionCount": 104
+    },
+    {
+      "id": "P079",
+      "title": "Identity and tenancy — consent",
+      "domain": "Identity and tenancy",
+      "subDomain": "consent",
+      "index": 79,
+      "sectionCount": 104
+    },
+    {
+      "id": "P080",
+      "title": "Identity and tenancy — revocation",
+      "domain": "Identity and tenancy",
+      "subDomain": "revocation",
+      "index": 80,
+      "sectionCount": 104
+    },
+    {
+      "id": "P081",
+      "title": "Frontend contracts — routes",
+      "domain": "Frontend contracts",
+      "subDomain": "routes",
+      "index": 81,
+      "sectionCount": 104
+    },
+    {
+      "id": "P082",
+      "title": "Frontend contracts — forms",
+      "domain": "Frontend contracts",
+      "subDomain": "forms",
+      "index": 82,
+      "sectionCount": 104
+    },
+    {
+      "id": "P083",
+      "title": "Frontend contracts — hydration",
+      "domain": "Frontend contracts",
+      "subDomain": "hydration",
+      "index": 83,
+      "sectionCount": 104
+    },
+    {
+      "id": "P084",
+      "title": "Frontend contracts — error envelopes",
+      "domain": "Frontend contracts",
+      "subDomain": "error envelopes",
+      "index": 84,
+      "sectionCount": 104
+    },
+    {
+      "id": "P085",
+      "title": "Frontend contracts — optimistic updates",
+      "domain": "Frontend contracts",
+      "subDomain": "optimistic updates",
+      "index": 85,
+      "sectionCount": 104
+    },
+    {
+      "id": "P086",
+      "title": "Frontend contracts — realtime sync",
+      "domain": "Frontend contracts",
+      "subDomain": "realtime sync",
+      "index": 86,
+      "sectionCount": 104
+    },
+    {
+      "id": "P087",
+      "title": "Frontend contracts — BFF payloads",
+      "domain": "Frontend contracts",
+      "subDomain": "BFF payloads",
+      "index": 87,
+      "sectionCount": 104
+    },
+    {
+      "id": "P088",
+      "title": "Frontend contracts — accessibility",
+      "domain": "Frontend contracts",
+      "subDomain": "accessibility",
+      "index": 88,
+      "sectionCount": 104
+    },
+    {
+      "id": "P089",
+      "title": "Frontend contracts — client observability",
+      "domain": "Frontend contracts",
+      "subDomain": "client observability",
+      "index": 89,
+      "sectionCount": 104
+    },
+    {
+      "id": "P090",
+      "title": "Frontend contracts — contract drift",
+      "domain": "Frontend contracts",
+      "subDomain": "contract drift",
+      "index": 90,
+      "sectionCount": 104
+    },
+    {
+      "id": "P091",
+      "title": "Cloud and environments — environment model",
+      "domain": "Cloud and environments",
+      "subDomain": "environment model",
+      "index": 91,
+      "sectionCount": 104
+    },
+    {
+      "id": "P092",
+      "title": "Cloud and environments — secrets",
+      "domain": "Cloud and environments",
+      "subDomain": "secrets",
+      "index": 92,
+      "sectionCount": 104
+    },
+    {
+      "id": "P093",
+      "title": "Cloud and environments — network",
+      "domain": "Cloud and environments",
+      "subDomain": "network",
+      "index": 93,
+      "sectionCount": 104
+    },
+    {
+      "id": "P094",
+      "title": "Cloud and environments — service discovery",
+      "domain": "Cloud and environments",
+      "subDomain": "service discovery",
+      "index": 94,
+      "sectionCount": 104
+    },
+    {
+      "id": "P095",
+      "title": "Cloud and environments — runtime config",
+      "domain": "Cloud and environments",
+      "subDomain": "runtime config",
+      "index": 95,
+      "sectionCount": 104
+    },
+    {
+      "id": "P096",
+      "title": "Cloud and environments — infra contracts",
+      "domain": "Cloud and environments",
+      "subDomain": "infra contracts",
+      "index": 96,
+      "sectionCount": 104
+    },
+    {
+      "id": "P097",
+      "title": "Cloud and environments — deploy targets",
+      "domain": "Cloud and environments",
+      "subDomain": "deploy targets",
+      "index": 97,
+      "sectionCount": 104
+    },
+    {
+      "id": "P098",
+      "title": "Cloud and environments — drift",
+      "domain": "Cloud and environments",
+      "subDomain": "drift",
+      "index": 98,
+      "sectionCount": 104
+    },
+    {
+      "id": "P099",
+      "title": "Cloud and environments — capacity",
+      "domain": "Cloud and environments",
+      "subDomain": "capacity",
+      "index": 99,
+      "sectionCount": 104
+    },
+    {
+      "id": "P100",
+      "title": "Cloud and environments — cost",
+      "domain": "Cloud and environments",
+      "subDomain": "cost",
+      "index": 100,
+      "sectionCount": 104
+    },
+    {
+      "id": "P101",
+      "title": "CI/CD — source gates",
+      "domain": "CI/CD",
+      "subDomain": "source gates",
+      "index": 101,
+      "sectionCount": 104
+    },
+    {
+      "id": "P102",
+      "title": "CI/CD — build graph",
+      "domain": "CI/CD",
+      "subDomain": "build graph",
+      "index": 102,
+      "sectionCount": 104
+    },
+    {
+      "id": "P103",
+      "title": "CI/CD — test graph",
+      "domain": "CI/CD",
+      "subDomain": "test graph",
+      "index": 103,
+      "sectionCount": 104
+    },
+    {
+      "id": "P104",
+      "title": "CI/CD — artifact immutability",
+      "domain": "CI/CD",
+      "subDomain": "artifact immutability",
+      "index": 104,
+      "sectionCount": 104
+    },
+    {
+      "id": "P105",
+      "title": "CI/CD — SBOM",
+      "domain": "CI/CD",
+      "subDomain": "SBOM",
+      "index": 105,
+      "sectionCount": 104
+    },
+    {
+      "id": "P106",
+      "title": "CI/CD — provenance",
+      "domain": "CI/CD",
+      "subDomain": "provenance",
+      "index": 106,
+      "sectionCount": 104
+    },
+    {
+      "id": "P107",
+      "title": "CI/CD — admission",
+      "domain": "CI/CD",
+      "subDomain": "admission",
+      "index": 107,
+      "sectionCount": 104
+    },
+    {
+      "id": "P108",
+      "title": "CI/CD — canary",
+      "domain": "CI/CD",
+      "subDomain": "canary",
+      "index": 108,
+      "sectionCount": 104
+    },
+    {
+      "id": "P109",
+      "title": "CI/CD — rollback",
+      "domain": "CI/CD",
+      "subDomain": "rollback",
+      "index": 109,
+      "sectionCount": 104
+    },
+    {
+      "id": "P110",
+      "title": "CI/CD — pipeline telemetry",
+      "domain": "CI/CD",
+      "subDomain": "pipeline telemetry",
+      "index": 110,
+      "sectionCount": 104
+    },
+    {
+      "id": "P111",
+      "title": "Security guardrails — threat model",
+      "domain": "Security guardrails",
+      "subDomain": "threat model",
+      "index": 111,
+      "sectionCount": 104
+    },
+    {
+      "id": "P112",
+      "title": "Security guardrails — policy-as-code",
+      "domain": "Security guardrails",
+      "subDomain": "policy-as-code",
+      "index": 112,
+      "sectionCount": 104
+    },
+    {
+      "id": "P113",
+      "title": "Security guardrails — input validation",
+      "domain": "Security guardrails",
+      "subDomain": "input validation",
+      "index": 113,
+      "sectionCount": 104
+    },
+    {
+      "id": "P114",
+      "title": "Security guardrails — output validation",
+      "domain": "Security guardrails",
+      "subDomain": "output validation",
+      "index": 114,
+      "sectionCount": 104
+    },
+    {
+      "id": "P115",
+      "title": "Security guardrails — AuthZ",
+      "domain": "Security guardrails",
+      "subDomain": "AuthZ",
+      "index": 115,
+      "sectionCount": 104
+    },
+    {
+      "id": "P116",
+      "title": "Security guardrails — secret protection",
+      "domain": "Security guardrails",
+      "subDomain": "secret protection",
+      "index": 116,
+      "sectionCount": 104
+    },
+    {
+      "id": "P117",
+      "title": "Security guardrails — supply chain",
+      "domain": "Security guardrails",
+      "subDomain": "supply chain",
+      "index": 117,
+      "sectionCount": 104
+    },
+    {
+      "id": "P118",
+      "title": "Security guardrails — runtime guardrails",
+      "domain": "Security guardrails",
+      "subDomain": "runtime guardrails",
+      "index": 118,
+      "sectionCount": 104
+    },
+    {
+      "id": "P119",
+      "title": "Security guardrails — AI guards",
+      "domain": "Security guardrails",
+      "subDomain": "AI guards",
+      "index": 119,
+      "sectionCount": 104
+    },
+    {
+      "id": "P120",
+      "title": "Security guardrails — security regression",
+      "domain": "Security guardrails",
+      "subDomain": "security regression",
+      "index": 120,
+      "sectionCount": 104
+    },
+    {
+      "id": "P121",
+      "title": "Rate limiting — edge",
+      "domain": "Rate limiting",
+      "subDomain": "edge",
+      "index": 121,
+      "sectionCount": 104
+    },
+    {
+      "id": "P122",
+      "title": "Rate limiting — user budget",
+      "domain": "Rate limiting",
+      "subDomain": "user budget",
+      "index": 122,
+      "sectionCount": 104
+    },
+    {
+      "id": "P123",
+      "title": "Rate limiting — tenant budget",
+      "domain": "Rate limiting",
+      "subDomain": "tenant budget",
+      "index": 123,
+      "sectionCount": 104
+    },
+    {
+      "id": "P124",
+      "title": "Rate limiting — provider budget",
+      "domain": "Rate limiting",
+      "subDomain": "provider budget",
+      "index": 124,
+      "sectionCount": 104
+    },
+    {
+      "id": "P125",
+      "title": "Rate limiting — AI tokens",
+      "domain": "Rate limiting",
+      "subDomain": "AI tokens",
+      "index": 125,
+      "sectionCount": 104
+    },
+    {
+      "id": "P126",
+      "title": "Rate limiting — burst control",
+      "domain": "Rate limiting",
+      "subDomain": "burst control",
+      "index": 126,
+      "sectionCount": 104
+    },
+    {
+      "id": "P127",
+      "title": "Rate limiting — fairness",
+      "domain": "Rate limiting",
+      "subDomain": "fairness",
+      "index": 127,
+      "sectionCount": 104
+    },
+    {
+      "id": "P128",
+      "title": "Rate limiting — quota exhaustion",
+      "domain": "Rate limiting",
+      "subDomain": "quota exhaustion",
+      "index": 128,
+      "sectionCount": 104
+    },
+    {
+      "id": "P129",
+      "title": "Rate limiting — adaptive limits",
+      "domain": "Rate limiting",
+      "subDomain": "adaptive limits",
+      "index": 129,
+      "sectionCount": 104
+    },
+    {
+      "id": "P130",
+      "title": "Rate limiting — abuse response",
+      "domain": "Rate limiting",
+      "subDomain": "abuse response",
+      "index": 130,
+      "sectionCount": 104
+    },
+    {
+      "id": "P131",
+      "title": "Caching CDN — keys",
+      "domain": "Caching CDN",
+      "subDomain": "keys",
+      "index": 131,
+      "sectionCount": 104
+    },
+    {
+      "id": "P132",
+      "title": "Caching CDN — TTL",
+      "domain": "Caching CDN",
+      "subDomain": "TTL",
+      "index": 132,
+      "sectionCount": 104
+    },
+    {
+      "id": "P133",
+      "title": "Caching CDN — freshness",
+      "domain": "Caching CDN",
+      "subDomain": "freshness",
+      "index": 133,
+      "sectionCount": 104
+    },
+    {
+      "id": "P134",
+      "title": "Caching CDN — invalidation",
+      "domain": "Caching CDN",
+      "subDomain": "invalidation",
+      "index": 134,
+      "sectionCount": 104
+    },
+    {
+      "id": "P135",
+      "title": "Caching CDN — coalescing",
+      "domain": "Caching CDN",
+      "subDomain": "coalescing",
+      "index": 135,
+      "sectionCount": 104
+    },
+    {
+      "id": "P136",
+      "title": "Caching CDN — CDN",
+      "domain": "Caching CDN",
+      "subDomain": "CDN",
+      "index": 136,
+      "sectionCount": 104
+    },
+    {
+      "id": "P137",
+      "title": "Caching CDN — private cache",
+      "domain": "Caching CDN",
+      "subDomain": "private cache",
+      "index": 137,
+      "sectionCount": 104
+    },
+    {
+      "id": "P138",
+      "title": "Caching CDN — stale revalidate",
+      "domain": "Caching CDN",
+      "subDomain": "stale revalidate",
+      "index": 138,
+      "sectionCount": 104
+    },
+    {
+      "id": "P139",
+      "title": "Caching CDN — purge",
+      "domain": "Caching CDN",
+      "subDomain": "purge",
+      "index": 139,
+      "sectionCount": 104
+    },
+    {
+      "id": "P140",
+      "title": "Caching CDN — cache telemetry",
+      "domain": "Caching CDN",
+      "subDomain": "cache telemetry",
+      "index": 140,
+      "sectionCount": 104
+    },
+    {
+      "id": "P141",
+      "title": "Errors and logs — taxonomy",
+      "domain": "Errors and logs",
+      "subDomain": "taxonomy",
+      "index": 141,
+      "sectionCount": 104
+    },
+    {
+      "id": "P142",
+      "title": "Errors and logs — structured logs",
+      "domain": "Errors and logs",
+      "subDomain": "structured logs",
+      "index": 142,
+      "sectionCount": 104
+    },
+    {
+      "id": "P143",
+      "title": "Errors and logs — correlation IDs",
+      "domain": "Errors and logs",
+      "subDomain": "correlation IDs",
+      "index": 143,
+      "sectionCount": 104
+    },
+    {
+      "id": "P144",
+      "title": "Errors and logs — stack traces",
+      "domain": "Errors and logs",
+      "subDomain": "stack traces",
+      "index": 144,
+      "sectionCount": 104
+    },
+    {
+      "id": "P145",
+      "title": "Errors and logs — PII redaction",
+      "domain": "Errors and logs",
+      "subDomain": "PII redaction",
+      "index": 145,
+      "sectionCount": 104
+    },
+    {
+      "id": "P146",
+      "title": "Errors and logs — routing",
+      "domain": "Errors and logs",
+      "subDomain": "routing",
+      "index": 146,
+      "sectionCount": 104
+    },
+    {
+      "id": "P147",
+      "title": "Errors and logs — grouping",
+      "domain": "Errors and logs",
+      "subDomain": "grouping",
+      "index": 147,
+      "sectionCount": 104
+    },
+    {
+      "id": "P148",
+      "title": "Errors and logs — root-cause hints",
+      "domain": "Errors and logs",
+      "subDomain": "root-cause hints",
+      "index": 148,
+      "sectionCount": 104
+    },
+    {
+      "id": "P149",
+      "title": "Errors and logs — incident linkage",
+      "domain": "Errors and logs",
+      "subDomain": "incident linkage",
+      "index": 149,
+      "sectionCount": 104
+    },
+    {
+      "id": "P150",
+      "title": "Errors and logs — diagnostic replay",
+      "domain": "Errors and logs",
+      "subDomain": "diagnostic replay",
+      "index": 150,
+      "sectionCount": 104
+    },
+    {
+      "id": "P151",
+      "title": "Monitoring alerts — golden signals",
+      "domain": "Monitoring alerts",
+      "subDomain": "golden signals",
+      "index": 151,
+      "sectionCount": 104
+    },
+    {
+      "id": "P152",
+      "title": "Monitoring alerts — SLOs",
+      "domain": "Monitoring alerts",
+      "subDomain": "SLOs",
+      "index": 152,
+      "sectionCount": 104
+    },
+    {
+      "id": "P153",
+      "title": "Monitoring alerts — SLIs",
+      "domain": "Monitoring alerts",
+      "subDomain": "SLIs",
+      "index": 153,
+      "sectionCount": 104
+    },
+    {
+      "id": "P154",
+      "title": "Monitoring alerts — alert rules",
+      "domain": "Monitoring alerts",
+      "subDomain": "alert rules",
+      "index": 154,
+      "sectionCount": 104
+    },
+    {
+      "id": "P155",
+      "title": "Monitoring alerts — anomaly detection",
+      "domain": "Monitoring alerts",
+      "subDomain": "anomaly detection",
+      "index": 155,
+      "sectionCount": 104
+    },
+    {
+      "id": "P156",
+      "title": "Monitoring alerts — capacity",
+      "domain": "Monitoring alerts",
+      "subDomain": "capacity",
+      "index": 156,
+      "sectionCount": 104
+    },
+    {
+      "id": "P157",
+      "title": "Monitoring alerts — dependency health",
+      "domain": "Monitoring alerts",
+      "subDomain": "dependency health",
+      "index": 157,
+      "sectionCount": 104
+    },
+    {
+      "id": "P158",
+      "title": "Monitoring alerts — freshness",
+      "domain": "Monitoring alerts",
+      "subDomain": "freshness",
+      "index": 158,
+      "sectionCount": 104
+    },
+    {
+      "id": "P159",
+      "title": "Monitoring alerts — synthetic checks",
+      "domain": "Monitoring alerts",
+      "subDomain": "synthetic checks",
+      "index": 159,
+      "sectionCount": 104
+    },
+    {
+      "id": "P160",
+      "title": "Monitoring alerts — escalation",
+      "domain": "Monitoring alerts",
+      "subDomain": "escalation",
+      "index": 160,
+      "sectionCount": 104
+    },
+    {
+      "id": "P161",
+      "title": "Testing — unit",
+      "domain": "Testing",
+      "subDomain": "unit",
+      "index": 161,
+      "sectionCount": 104
+    },
+    {
+      "id": "P162",
+      "title": "Testing — integration",
+      "domain": "Testing",
+      "subDomain": "integration",
+      "index": 162,
+      "sectionCount": 104
+    },
+    {
+      "id": "P163",
+      "title": "Testing — contract",
+      "domain": "Testing",
+      "subDomain": "contract",
+      "index": 163,
+      "sectionCount": 104
+    },
+    {
+      "id": "P164",
+      "title": "Testing — E2E",
+      "domain": "Testing",
+      "subDomain": "E2E",
+      "index": 164,
+      "sectionCount": 104
+    },
+    {
+      "id": "P165",
+      "title": "Testing — property",
+      "domain": "Testing",
+      "subDomain": "property",
+      "index": 165,
+      "sectionCount": 104
+    },
+    {
+      "id": "P166",
+      "title": "Testing — mutation",
+      "domain": "Testing",
+      "subDomain": "mutation",
+      "index": 166,
+      "sectionCount": 104
+    },
+    {
+      "id": "P167",
+      "title": "Testing — chaos",
+      "domain": "Testing",
+      "subDomain": "chaos",
+      "index": 167,
+      "sectionCount": 104
+    },
+    {
+      "id": "P168",
+      "title": "Testing — security",
+      "domain": "Testing",
+      "subDomain": "security",
+      "index": 168,
+      "sectionCount": 104
+    },
+    {
+      "id": "P169",
+      "title": "Testing — performance",
+      "domain": "Testing",
+      "subDomain": "performance",
+      "index": 169,
+      "sectionCount": 104
+    },
+    {
+      "id": "P170",
+      "title": "Testing — production verification",
+      "domain": "Testing",
+      "subDomain": "production verification",
+      "index": 170,
+      "sectionCount": 104
+    },
+    {
+      "id": "P171",
+      "title": "Scaling — horizontal",
+      "domain": "Scaling",
+      "subDomain": "horizontal",
+      "index": 171,
+      "sectionCount": 104
+    },
+    {
+      "id": "P172",
+      "title": "Scaling — vertical",
+      "domain": "Scaling",
+      "subDomain": "vertical",
+      "index": 172,
+      "sectionCount": 104
+    },
+    {
+      "id": "P173",
+      "title": "Scaling — load shedding",
+      "domain": "Scaling",
+      "subDomain": "load shedding",
+      "index": 173,
+      "sectionCount": 104
+    },
+    {
+      "id": "P174",
+      "title": "Scaling — backpressure",
+      "domain": "Scaling",
+      "subDomain": "backpressure",
+      "index": 174,
+      "sectionCount": 104
+    },
+    {
+      "id": "P175",
+      "title": "Scaling — queue scaling",
+      "domain": "Scaling",
+      "subDomain": "queue scaling",
+      "index": 175,
+      "sectionCount": 104
+    },
+    {
+      "id": "P176",
+      "title": "Scaling — DB scaling",
+      "domain": "Scaling",
+      "subDomain": "DB scaling",
+      "index": 176,
+      "sectionCount": 104
+    },
+    {
+      "id": "P177",
+      "title": "Scaling — realtime scaling",
+      "domain": "Scaling",
+      "subDomain": "realtime scaling",
+      "index": 177,
+      "sectionCount": 104
+    },
+    {
+      "id": "P178",
+      "title": "Scaling — AI scaling",
+      "domain": "Scaling",
+      "subDomain": "AI scaling",
+      "index": 178,
+      "sectionCount": 104
+    },
+    {
+      "id": "P179",
+      "title": "Scaling — cost-performance",
+      "domain": "Scaling",
+      "subDomain": "cost-performance",
+      "index": 179,
+      "sectionCount": 104
+    },
+    {
+      "id": "P180",
+      "title": "Scaling — capacity forecasting",
+      "domain": "Scaling",
+      "subDomain": "capacity forecasting",
+      "index": 180,
+      "sectionCount": 104
+    },
+    {
+      "id": "P181",
+      "title": "Realtime convergence — WebSockets",
+      "domain": "Realtime convergence",
+      "subDomain": "WebSockets",
+      "index": 181,
+      "sectionCount": 104
+    },
+    {
+      "id": "P182",
+      "title": "Realtime convergence — subscriptions",
+      "domain": "Realtime convergence",
+      "subDomain": "subscriptions",
+      "index": 182,
+      "sectionCount": 104
+    },
+    {
+      "id": "P183",
+      "title": "Realtime convergence — ordering",
+      "domain": "Realtime convergence",
+      "subDomain": "ordering",
+      "index": 183,
+      "sectionCount": 104
+    },
+    {
+      "id": "P184",
+      "title": "Realtime convergence — presence",
+      "domain": "Realtime convergence",
+      "subDomain": "presence",
+      "index": 184,
+      "sectionCount": 104
+    },
+    {
+      "id": "P185",
+      "title": "Realtime convergence — replay",
+      "domain": "Realtime convergence",
+      "subDomain": "replay",
+      "index": 185,
+      "sectionCount": 104
+    },
+    {
+      "id": "P186",
+      "title": "Realtime convergence — gap detection",
+      "domain": "Realtime convergence",
+      "subDomain": "gap detection",
+      "index": 186,
+      "sectionCount": 104
+    },
+    {
+      "id": "P187",
+      "title": "Realtime convergence — freshness",
+      "domain": "Realtime convergence",
+      "subDomain": "freshness",
+      "index": 187,
+      "sectionCount": 104
+    },
+    {
+      "id": "P188",
+      "title": "Realtime convergence — realtime auth",
+      "domain": "Realtime convergence",
+      "subDomain": "realtime auth",
+      "index": 188,
+      "sectionCount": 104
+    },
+    {
+      "id": "P189",
+      "title": "Realtime convergence — fanout",
+      "domain": "Realtime convergence",
+      "subDomain": "fanout",
+      "index": 189,
+      "sectionCount": 104
+    },
+    {
+      "id": "P190",
+      "title": "Realtime convergence — UI convergence",
+      "domain": "Realtime convergence",
+      "subDomain": "UI convergence",
+      "index": 190,
+      "sectionCount": 104
+    },
+    {
+      "id": "P191",
+      "title": "Durable workflows — state",
+      "domain": "Durable workflows",
+      "subDomain": "state",
+      "index": 191,
+      "sectionCount": 104
+    },
+    {
+      "id": "P192",
+      "title": "Durable workflows — retries",
+      "domain": "Durable workflows",
+      "subDomain": "retries",
+      "index": 192,
+      "sectionCount": 104
+    },
+    {
+      "id": "P193",
+      "title": "Durable workflows — timers",
+      "domain": "Durable workflows",
+      "subDomain": "timers",
+      "index": 193,
+      "sectionCount": 104
+    },
+    {
+      "id": "P194",
+      "title": "Durable workflows — compensation",
+      "domain": "Durable workflows",
+      "subDomain": "compensation",
+      "index": 194,
+      "sectionCount": 104
+    },
+    {
+      "id": "P195",
+      "title": "Durable workflows — sagas",
+      "domain": "Durable workflows",
+      "subDomain": "sagas",
+      "index": 195,
+      "sectionCount": 104
+    },
+    {
+      "id": "P196",
+      "title": "Durable workflows — approval",
+      "domain": "Durable workflows",
+      "subDomain": "approval",
+      "index": 196,
+      "sectionCount": 104
+    },
+    {
+      "id": "P197",
+      "title": "Durable workflows — pause/resume",
+      "domain": "Durable workflows",
+      "subDomain": "pause/resume",
+      "index": 197,
+      "sectionCount": 104
+    },
+    {
+      "id": "P198",
+      "title": "Durable workflows — recovery",
+      "domain": "Durable workflows",
+      "subDomain": "recovery",
+      "index": 198,
+      "sectionCount": 104
+    },
+    {
+      "id": "P199",
+      "title": "Durable workflows — replay",
+      "domain": "Durable workflows",
+      "subDomain": "replay",
+      "index": 199,
+      "sectionCount": 104
+    },
+    {
+      "id": "P200",
+      "title": "Durable workflows — workflow evidence",
+      "domain": "Durable workflows",
+      "subDomain": "workflow evidence",
+      "index": 200,
+      "sectionCount": 104
+    },
+    {
+      "id": "P201",
+      "title": "Integration fabric — connector contract",
+      "domain": "Integration fabric",
+      "subDomain": "connector contract",
+      "index": 201,
+      "sectionCount": 104
+    },
+    {
+      "id": "P202",
+      "title": "Integration fabric — OAuth",
+      "domain": "Integration fabric",
+      "subDomain": "OAuth",
+      "index": 202,
+      "sectionCount": 104
+    },
+    {
+      "id": "P203",
+      "title": "Integration fabric — webhooks",
+      "domain": "Integration fabric",
+      "subDomain": "webhooks",
+      "index": 203,
+      "sectionCount": 104
+    },
+    {
+      "id": "P204",
+      "title": "Integration fabric — polling",
+      "domain": "Integration fabric",
+      "subDomain": "polling",
+      "index": 204,
+      "sectionCount": 104
+    },
+    {
+      "id": "P205",
+      "title": "Integration fabric — reconciliation",
+      "domain": "Integration fabric",
+      "subDomain": "reconciliation",
+      "index": 205,
+      "sectionCount": 104
+    },
+    {
+      "id": "P206",
+      "title": "Integration fabric — capability negotiation",
+      "domain": "Integration fabric",
+      "subDomain": "capability negotiation",
+      "index": 206,
+      "sectionCount": 104
+    },
+    {
+      "id": "P207",
+      "title": "Integration fabric — provider health",
+      "domain": "Integration fabric",
+      "subDomain": "provider health",
+      "index": 207,
+      "sectionCount": 104
+    },
+    {
+      "id": "P208",
+      "title": "Integration fabric — quotas",
+      "domain": "Integration fabric",
+      "subDomain": "quotas",
+      "index": 208,
+      "sectionCount": 104
+    },
+    {
+      "id": "P209",
+      "title": "Integration fabric — identity correlation",
+      "domain": "Integration fabric",
+      "subDomain": "identity correlation",
+      "index": 209,
+      "sectionCount": 104
+    },
+    {
+      "id": "P210",
+      "title": "Integration fabric — offboarding",
+      "domain": "Integration fabric",
+      "subDomain": "offboarding",
+      "index": 210,
+      "sectionCount": 104
+    },
+    {
+      "id": "P211",
+      "title": "AI Copilot Sentinel — context compiler",
+      "domain": "AI Copilot Sentinel",
+      "subDomain": "context compiler",
+      "index": 211,
+      "sectionCount": 104
+    },
+    {
+      "id": "P212",
+      "title": "AI Copilot Sentinel — tools",
+      "domain": "AI Copilot Sentinel",
+      "subDomain": "tools",
+      "index": 212,
+      "sectionCount": 104
+    },
+    {
+      "id": "P213",
+      "title": "AI Copilot Sentinel — agent runtime",
+      "domain": "AI Copilot Sentinel",
+      "subDomain": "agent runtime",
+      "index": 213,
+      "sectionCount": 104
+    },
+    {
+      "id": "P214",
+      "title": "AI Copilot Sentinel — sentinel",
+      "domain": "AI Copilot Sentinel",
+      "subDomain": "sentinel",
+      "index": 214,
+      "sectionCount": 104
+    },
+    {
+      "id": "P215",
+      "title": "AI Copilot Sentinel — tracing",
+      "domain": "AI Copilot Sentinel",
+      "subDomain": "tracing",
+      "index": 215,
+      "sectionCount": 104
+    },
+    {
+      "id": "P216",
+      "title": "AI Copilot Sentinel — guardrails",
+      "domain": "AI Copilot Sentinel",
+      "subDomain": "guardrails",
+      "index": 216,
+      "sectionCount": 104
+    },
+    {
+      "id": "P217",
+      "title": "AI Copilot Sentinel — human review",
+      "domain": "AI Copilot Sentinel",
+      "subDomain": "human review",
+      "index": 217,
+      "sectionCount": 104
+    },
+    {
+      "id": "P218",
+      "title": "AI Copilot Sentinel — memory",
+      "domain": "AI Copilot Sentinel",
+      "subDomain": "memory",
+      "index": 218,
+      "sectionCount": 104
+    },
+    {
+      "id": "P219",
+      "title": "AI Copilot Sentinel — evaluation",
+      "domain": "AI Copilot Sentinel",
+      "subDomain": "evaluation",
+      "index": 219,
+      "sectionCount": 104
+    },
+    {
+      "id": "P220",
+      "title": "AI Copilot Sentinel — action verification",
+      "domain": "AI Copilot Sentinel",
+      "subDomain": "action verification",
+      "index": 220,
+      "sectionCount": 104
+    },
+    {
+      "id": "P221",
+      "title": "Evidence plane — schema",
+      "domain": "Evidence plane",
+      "subDomain": "schema",
+      "index": 221,
+      "sectionCount": 104
+    },
+    {
+      "id": "P222",
+      "title": "Evidence plane — content addressing",
+      "domain": "Evidence plane",
+      "subDomain": "content addressing",
+      "index": 222,
+      "sectionCount": 104
+    },
+    {
+      "id": "P223",
+      "title": "Evidence plane — claim mapping",
+      "domain": "Evidence plane",
+      "subDomain": "claim mapping",
+      "index": 223,
+      "sectionCount": 104
+    },
+    {
+      "id": "P224",
+      "title": "Evidence plane — hashing",
+      "domain": "Evidence plane",
+      "subDomain": "hashing",
+      "index": 224,
+      "sectionCount": 104
+    },
+    {
+      "id": "P225",
+      "title": "Evidence plane — freshness",
+      "domain": "Evidence plane",
+      "subDomain": "freshness",
+      "index": 225,
+      "sectionCount": 104
+    },
+    {
+      "id": "P226",
+      "title": "Evidence plane — authority",
+      "domain": "Evidence plane",
+      "subDomain": "authority",
+      "index": 226,
+      "sectionCount": 104
+    },
+    {
+      "id": "P227",
+      "title": "Evidence plane — audit",
+      "domain": "Evidence plane",
+      "subDomain": "audit",
+      "index": 227,
+      "sectionCount": 104
+    },
+    {
+      "id": "P228",
+      "title": "Evidence plane — evidence graph",
+      "domain": "Evidence plane",
+      "subDomain": "evidence graph",
+      "index": 228,
+      "sectionCount": 104
+    },
+    {
+      "id": "P229",
+      "title": "Evidence plane — reproducibility",
+      "domain": "Evidence plane",
+      "subDomain": "reproducibility",
+      "index": 229,
+      "sectionCount": 104
+    },
+    {
+      "id": "P230",
+      "title": "Evidence plane — passport",
+      "domain": "Evidence plane",
+      "subDomain": "passport",
+      "index": 230,
+      "sectionCount": 104
+    },
+    {
+      "id": "P231",
+      "title": "Interactive Blueprint — graph model",
+      "domain": "Interactive Blueprint",
+      "subDomain": "graph model",
+      "index": 231,
+      "sectionCount": 104
+    },
+    {
+      "id": "P232",
+      "title": "Interactive Blueprint — node identity",
+      "domain": "Interactive Blueprint",
+      "subDomain": "node identity",
+      "index": 232,
+      "sectionCount": 104
+    },
+    {
+      "id": "P233",
+      "title": "Interactive Blueprint — edge semantics",
+      "domain": "Interactive Blueprint",
+      "subDomain": "edge semantics",
+      "index": 233,
+      "sectionCount": 104
+    },
+    {
+      "id": "P234",
+      "title": "Interactive Blueprint — graph revision",
+      "domain": "Interactive Blueprint",
+      "subDomain": "graph revision",
+      "index": 234,
+      "sectionCount": 104
+    },
+    {
+      "id": "P235",
+      "title": "Interactive Blueprint — semantic zoom",
+      "domain": "Interactive Blueprint",
+      "subDomain": "semantic zoom",
+      "index": 235,
+      "sectionCount": 104
+    },
+    {
+      "id": "P236",
+      "title": "Interactive Blueprint — causal path",
+      "domain": "Interactive Blueprint",
+      "subDomain": "causal path",
+      "index": 236,
+      "sectionCount": 104
+    },
+    {
+      "id": "P237",
+      "title": "Interactive Blueprint — impact analysis",
+      "domain": "Interactive Blueprint",
+      "subDomain": "impact analysis",
+      "index": 237,
+      "sectionCount": 104
+    },
+    {
+      "id": "P238",
+      "title": "Interactive Blueprint — graph diff",
+      "domain": "Interactive Blueprint",
+      "subDomain": "graph diff",
+      "index": 238,
+      "sectionCount": 104
+    },
+    {
+      "id": "P239",
+      "title": "Interactive Blueprint — time travel",
+      "domain": "Interactive Blueprint",
+      "subDomain": "time travel",
+      "index": 239,
+      "sectionCount": 104
+    },
+    {
+      "id": "P240",
+      "title": "Interactive Blueprint — graph evidence",
+      "domain": "Interactive Blueprint",
+      "subDomain": "graph evidence",
+      "index": 240,
+      "sectionCount": 104
+    },
+    {
+      "id": "P241",
+      "title": "Release Gate plane — gate registry",
+      "domain": "Release Gate plane",
+      "subDomain": "gate registry",
+      "index": 241,
+      "sectionCount": 104
+    },
+    {
+      "id": "P242",
+      "title": "Release Gate plane — gate dependencies",
+      "domain": "Release Gate plane",
+      "subDomain": "gate dependencies",
+      "index": 242,
+      "sectionCount": 104
+    },
+    {
+      "id": "P243",
+      "title": "Release Gate plane — evidence gates",
+      "domain": "Release Gate plane",
+      "subDomain": "evidence gates",
+      "index": 243,
+      "sectionCount": 104
+    },
+    {
+      "id": "P244",
+      "title": "Release Gate plane — security gates",
+      "domain": "Release Gate plane",
+      "subDomain": "security gates",
+      "index": 244,
+      "sectionCount": 104
+    },
+    {
+      "id": "P245",
+      "title": "Release Gate plane — test gates",
+      "domain": "Release Gate plane",
+      "subDomain": "test gates",
+      "index": 245,
+      "sectionCount": 104
+    },
+    {
+      "id": "P246",
+      "title": "Release Gate plane — policy gates",
+      "domain": "Release Gate plane",
+      "subDomain": "policy gates",
+      "index": 246,
+      "sectionCount": 104
+    },
+    {
+      "id": "P247",
+      "title": "Release Gate plane — approval gates",
+      "domain": "Release Gate plane",
+      "subDomain": "approval gates",
+      "index": 247,
+      "sectionCount": 104
+    },
+    {
+      "id": "P248",
+      "title": "Release Gate plane — canary gates",
+      "domain": "Release Gate plane",
+      "subDomain": "canary gates",
+      "index": 248,
+      "sectionCount": 104
+    },
+    {
+      "id": "P249",
+      "title": "Release Gate plane — rollback gates",
+      "domain": "Release Gate plane",
+      "subDomain": "rollback gates",
+      "index": 249,
+      "sectionCount": 104
+    },
+    {
+      "id": "P250",
+      "title": "Release Gate plane — release proof",
+      "domain": "Release Gate plane",
+      "subDomain": "release proof",
+      "index": 250,
+      "sectionCount": 104
+    }
+  ]
+}

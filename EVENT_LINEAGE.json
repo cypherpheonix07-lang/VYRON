@@ -1,0 +1,35 @@
+{
+  "title": "Transactional Outbox Event Lineage",
+  "eventTypes": [
+    {
+      "type": "PROJECT_CREATED",
+      "producer": "ProjectDomainService",
+      "consumers": [
+        "OutboxRelay",
+        "SearchIndexer",
+        "AuditLogger"
+      ]
+    },
+    {
+      "type": "PROJECT_DEPLOYED",
+      "producer": "CanaryIngressRouter",
+      "consumers": [
+        "TelemetrySentinel",
+        "NotificationHub"
+      ]
+    },
+    {
+      "type": "GATE_EVALUATED",
+      "producer": "ReleaseGateEngine",
+      "consumers": [
+        "BlueprintGraphEngine",
+        "ComplianceLedger"
+      ]
+    }
+  ],
+  "guarantees": {
+    "atomicWrite": "Guaranteed via atomic business state + outbox event commit",
+    "deduplication": "Enforced via unique idempotency keys",
+    "replaySafety": "Enforced via dead-letter queue and idempotent consumer handlers"
+  }
+}

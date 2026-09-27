@@ -1,0 +1,68 @@
+{
+  "graphName": "VYRON Architectural Contract Graph",
+  "patterns": [
+    {
+      "id": "PAT-01",
+      "name": "API Gateway",
+      "boundary": "Edge Ingress",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "PAT-02",
+      "name": "Backend for Frontend",
+      "boundary": "Presentation Composition",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "PAT-03",
+      "name": "Bulkhead Isolation",
+      "boundary": "Resource Pool Capacity",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "PAT-04",
+      "name": "Transactional Outbox",
+      "boundary": "Atomic Event Relay",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "PAT-05",
+      "name": "Hexagonal Core",
+      "boundary": "Ports & Adapters Inversion",
+      "status": "VERIFIED"
+    },
+    {
+      "id": "PAT-06",
+      "name": "15-Layer Lifecycle Stack",
+      "boundary": "Real-SaaS Delivery",
+      "status": "VERIFIED"
+    }
+  ],
+  "edges": [
+    {
+      "from": "PAT-01",
+      "to": "PAT-02",
+      "type": "EDGE_ROUTING"
+    },
+    {
+      "from": "PAT-02",
+      "to": "PAT-05",
+      "type": "PORT_INVOCATION"
+    },
+    {
+      "from": "PAT-05",
+      "to": "PAT-04",
+      "type": "ATOMIC_TRANSACTION"
+    },
+    {
+      "from": "PAT-04",
+      "to": "PAT-03",
+      "type": "WORKER_POOL_DISPATCH"
+    },
+    {
+      "from": "PAT-03",
+      "to": "PAT-06",
+      "type": "LIFECYCLE_ASSURANCE"
+    }
+  ]
+}

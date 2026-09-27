@@ -1,0 +1,6 @@
+defect_id,title,severity,component,root_cause,remediation_status,verified_revision
+DEF-CICD-001,Unpinned Transitive Dependencies,MEDIUM,Build Pipeline,Package lock missing for some dev utilities,RESOLVED (frozen-lockfile enforced),7b4c892
+DEF-CICD-002,Missing Dual-Custody Check on Canary 100%,HIGH,Canary Router,Traffic slider allowed 100% advance without peer signature,RESOLVED (Dual approval mandatory),7b4c892
+DEF-CICD-003,Stale Evidence Propagation Across Git Revisions,CRITICAL,Release Gate Engine,Gate evidence lacked revision binding hash,RESOLVED (Revision hash bound to gate),7b4c892
+DEF-CICD-004,Private Scratchpad Token Exposure in AI Logs,CRITICAL,AI Release Governor,Raw thinking block passed to log stream,RESOLVED (8-part safe reasoning enforced),7b4c892
+DEF-CICD-005,Admission Controller Bypass in Staging Namespace,HIGH,K8s Webhook,Staging webhook permitted permissive fallback,RESOLVED (Strict deny across staging & prod),7b4c892

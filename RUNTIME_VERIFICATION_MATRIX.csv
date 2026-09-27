@@ -1,0 +1,7 @@
+pattern_name,reference_image,test_scenario,expected_state,observed_state,verdict
+API Gateway,IMAGE 01,Route request with rate limit,Token bucket decrements and caches GET,Status 200 (1ms latency),VERIFIED
+Backend for Frontend,IMAGE 02,Web vs Mobile DTO synthesis,Mobile DTO < 2KB; Web DTO has full graph,Mobile 1.2KB; Web 100% graph,VERIFIED
+Bulkhead Isolation,IMAGE 03,Saturate database connection pool,Rejects 31st request without cascading,Slot rejected with 503 Bulkhead,VERIFIED
+Transactional Outbox,IMAGE 04,Atomic entity mutation + outbox event,Both persist atomically; relay transitions PENDING->PROCESSED,Processed with 0 duplicates,VERIFIED
+Hexagonal Core,IMAGE 05,Invoke domain service via port,Pure core executes with in-memory adapter,Score 98% (zero infra leaks),VERIFIED
+15-Layer SaaS Stack,IMAGE 06,Verify all 15 vertical layers,15/15 layers compliant with rollback defined,15/15 Verified (100% Health),VERIFIED

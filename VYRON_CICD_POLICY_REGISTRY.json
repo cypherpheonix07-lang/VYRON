@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "registry": "VYRON Policy-as-Code (OPA Rego) Registry",
+  "version": "2.5.0-canonical-rego",
+  "engine": "OpenPolicyAgent/0.68.0",
+  "policies": [
+    {
+      "policyId": "POL-IDENTITY-01",
+      "name": "OIDC Ephemeral Workload Identity",
+      "package": "vyron.auth.oidc",
+      "rules": [
+        "default allow = false",
+        "allow { input.token.isOidcShortLived == true; input.token.exp <= 3600; input.token.iss == \"https://token.actions.githubusercontent.com\" }"
+      ],
+      "enforcement": "STRICT_DENY",
+      "auditLevel": "WORM_COMPLIANT"
+    },
+    {
+      "policyId": "POL-SEC-SECRETS",
+      "name": "Zero Secrets in AST Tree",
+      "package": "vyron.security.secrets",
+      "rules": [
+        "default allow = false",
+        "allow { count(input.scanner.findings) == 0; count(input.raw_sql_strings) == 0 }"
+      ],
+      "enforcement": "STRICT_DENY",
+      "auditLevel": "WORM_COMPLIANT"
+    },
+    {
+      "policyId": "POL-BRANCH-PROT",
+      "name": "Linear History and Branch Protection",
+      "package": "vyron.git.governance",
+      "rules": [
+        "default allow = false",
+        "allow { input.pr.approvals >= 2; input.pr.hasForcePush == false; input.pr.linearHistoryPreserved == true }"
+      ],
+      "enforcement": "STRICT_DENY",
+      "auditLevel": "WORM_COMPLIANT"
+    },
+    {
+      "policyId": "POL-SLSA-03",
+      "name": "SLSA Build Level 3 Attestation Verification",
+      "package": "vyron.supplychain.slsa",
+      "rules": [
+        "default allow = false",
+        "allow { input.artifact.slsaLevel == \"SLSA_BUILD_L3\"; input.artifact.isSigned == true; input.artifact.cosignVerified == true }"
+      ],
+      "enforcement": "STRICT_DENY",
+      "auditLevel": "WORM_COMPLIANT"
+    },
+    {
+      "policyId": "POL-GATE-CONVERGENCE",
+      "name": "Blueprint Graph Release Gate Parity",
+      "package": "vyron.release.blueprint",
+      "rules": [
+        "default allow = false",
+        "allow { count(input.blueprint.blockingGates) == 0; input.blueprint.readinessScore >= 90 }"
+      ],
+      "enforcement": "STRICT_DENY",
+      "auditLevel": "WORM_COMPLIANT"
+    },
+    {
+      "policyId": "POL-ADMISSION-OPA",
+      "name": "Production Admission Gate",
+      "package": "vyron.admission.k8s",
+      "rules": [
+        "default allow = false",
+        "allow { input.container.runsAsRoot == false; input.image.cosignSignatureValid == true; input.image.registry == \"ghcr.io/cypherpheonix07-lang/vyron\" }"
+      ],
+      "enforcement": "STRICT_DENY",
+      "auditLevel": "WORM_COMPLIANT"
+    },
+    {
+      "policyId": "POL-RUNTIME-SLO",
+      "name": "Production Telemetry SLO Thresholds",
+      "package": "vyron.runtime.slo",
+      "rules": [
+        "default allow = true",
+        "deny[msg] { input.metrics.p99LatencyMs > 300; msg := \"P99 latency breached SLO threshold (>300ms)\" }",
+        "deny[msg] { input.metrics.errorRate > 0.001; msg := \"Error rate breached budget (>0.1%)\" }"
+      ],
+      "enforcement": "CIRCUIT_BREAKER_ROLLBACK",
+      "auditLevel": "HIGH_PRIORITY_PAGER"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "title": "VYRON Cache & Evidence Invalidation DAG",
+  "rules": [
+    {
+      "trigger": "BLUEPRINT_GRAPH_MUTATION",
+      "invalidates": [
+        "GATEWAY_CACHE_BLUEPRINT",
+        "BFF_WEB_CACHE",
+        "RELEASE_GATE_READINESS"
+      ]
+    },
+    {
+      "trigger": "SOURCE_COMMIT_PUSH",
+      "invalidates": [
+        "PRE_BUILD_EVIDENCE",
+        "SLSA_PROVENANCE_HASH",
+        "CANARY_ADMISSION_TOKEN"
+      ]
+    },
+    {
+      "trigger": "TENANT_QUOTA_RECONFIGURATION",
+      "invalidates": [
+        "GATEWAY_RATE_BUCKET",
+        "BULKHEAD_TENANT_SHARE"
+      ]
+    }
+  ]
+}

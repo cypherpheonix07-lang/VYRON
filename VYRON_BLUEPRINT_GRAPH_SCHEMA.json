@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VyronBlueprintGraphSchema",
+  "description": "Canonical Schema for the VYRON Living Causal Multi-Layer Engineering Blueprint Graph",
+  "type": "object",
+  "required": ["version", "semanticLayers", "edgeTypes", "nodeSchema", "edgeSchema", "revisionSchema"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "const": "2.5.0-godmode-ultima"
+    },
+    "semanticLayers": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": [
+        "SYSTEM", "PRODUCT", "PROJECT", "DOMAIN", "CAPABILITY", "REQUIREMENT",
+        "COMPONENT", "SERVICE", "DATA", "INTEGRATION", "AGENT_TOOL", "TEST",
+        "SECURITY_CONTROL", "RELEASE", "DEPLOYMENT", "ENVIRONMENT", "RUNTIME",
+        "INCIDENT", "EVIDENCE"
+      ]
+    },
+    "edgeTypes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": [
+        "DEPENDS_ON", "OWNS", "CAUSES", "IMPLEMENTS", "RUNS_ON", "PROVES", "GOVERNS", "IMPACTS"
+      ]
+    },
+    "nodeSchema": {
+      "type": "object",
+      "required": [
+        "id", "label", "layer", "kind", "scope", "owner", "revision",
+        "state", "freshness", "authority", "healthScore", "blastRadius",
+        "position", "evidenceIds", "boundGateIds", "invalidationRules", "updatedAt"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^NODE-[A-Z0-9_-]+$" },
+        "label": { "type": "string", "minLength": 1 },
+        "layer": { "type": "string" },
+        "kind": { "type": "string" },
+        "scope": { "type": "string" },
+        "owner": { "type": "string" },
+        "revision": { "type": "integer", "minimum": 1 },
+        "state": {
+          "type": "string",
+          "enum": ["DRAFT", "ACTIVE", "DEPRECATED", "DECOMMISSIONED", "FAILED", "STALE", "BLOCKED", "VERIFIED"]
+        },
+        "freshness": {
+          "type": "string",
+          "enum": ["LIVE", "FRESH", "DELAYED", "STALE", "UNKNOWN", "FALLBACK", "SIMULATION"]
+        },
+        "authority": {
+          "type": "string",
+          "enum": ["TIER_1_CANONICAL", "TIER_2_GOVERNED", "TIER_3_OPERATIONAL", "TIER_4_DERIVED"]
+        },
+        "healthScore": { "type": "number", "minimum": 0, "maximum": 100 },
+        "blastRadius": { "type": "number", "minimum": 0, "maximum": 100 },
+        "position": {
+          "type": "object",
+          "required": ["x", "y"],
+          "properties": {
+            "x": { "type": "number" },
+            "y": { "type": "number" }
+          }
+        },
+        "evidenceIds": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "boundGateIds": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "invalidationRules": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "metadata": { "type": "object" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "edgeSchema": {
+      "type": "object",
+      "required": ["id", "source", "target", "type", "isCausal", "isCriticalPath"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^EDGE-[A-Z0-9_-]+$" },
+        "source": { "type": "string" },
+        "target": { "type": "string" },
+        "type": { "type": "string" },
+        "label": { "type": "string" },
+        "weight": { "type": "number" },
+        "isCausal": { "type": "boolean" },
+        "isCriticalPath": { "type": "boolean" },
+        "metadata": { "type": "object" }
+      }
+    },
+    "revisionSchema": {
+      "type": "object",
+      "required": ["revision", "timestamp", "nodes", "edges", "stateSignature", "changeDescription", "author"],
+      "properties": {
+        "revision": { "type": "integer" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "stateSignature": { "type": "string", "pattern": "^sha256_[a-f0-9]{64}$" },
+        "changeDescription": { "type": "string" },
+        "author": { "type": "string" }
+      }
+    }
+  }
+}

@@ -90,11 +90,11 @@ export interface BlueprintGraphEdge {
   source: string;
   target: string;
   type: BlueprintEdgeType;
-  label?: string;
-  weight?: number;
+  label?: string | undefined;
+  weight?: number | undefined;
   isCausal: boolean;
   isCriticalPath: boolean;
-  metadata?: Record<string, unknown>;
+  metadata?: Record<string, unknown> | undefined;
 }
 
 export interface GraphRevisionSnapshot {
@@ -810,6 +810,8 @@ export class BlueprintGraphEngine {
       const baseNode = baseNodesMap.get(id);
       if (baseNode) {
         const changes: string[] = [];
+        if (baseNode.label !== targetNode.label) changes.push(`label: ${baseNode.label} -> ${targetNode.label}`);
+        if (baseNode.revision !== targetNode.revision) changes.push(`revision: ${baseNode.revision} -> ${targetNode.revision}`);
         if (baseNode.state !== targetNode.state) changes.push(`state: ${baseNode.state} -> ${targetNode.state}`);
         if (baseNode.healthScore !== targetNode.healthScore) changes.push(`healthScore: ${baseNode.healthScore} -> ${targetNode.healthScore}`);
         if (baseNode.freshness !== targetNode.freshness) changes.push(`freshness: ${baseNode.freshness} -> ${targetNode.freshness}`);

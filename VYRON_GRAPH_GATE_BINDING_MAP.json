@@ -1,0 +1,111 @@
+{
+  "mapVersion": "2.5.0-godmode-ultima",
+  "description": "Bi-directional mapping between Blueprint Graph Nodes and Release Gates",
+  "bindings": [
+    {
+      "nodeId": "NODE-SYS-01",
+      "nodeLabel": "VYRON Intelligence Control Plane",
+      "boundGates": ["GATE-SCOPE-01", "GATE-ARCH-01"],
+      "invalidationTriggers": ["ON_ROOT_CONFIG_CHANGE", "ON_SECURITY_BREACH"],
+      "requiredEvidence": ["EVID-ARCH-001", "EVID-SYS-001"]
+    },
+    {
+      "nodeId": "NODE-DOM-AUTH",
+      "nodeLabel": "Identity & Multi-Tenant Domain",
+      "boundGates": ["GATE-SEC-01", "GATE-PRIVACY-01"],
+      "invalidationTriggers": ["ON_AUTH_POLICY_CHANGE"],
+      "requiredEvidence": ["EVID-AUTH-001", "EVID-RLS-001"]
+    },
+    {
+      "nodeId": "NODE-DOM-COPILOT",
+      "nodeLabel": "Contextual Copilot Domain",
+      "boundGates": ["GATE-AI-EVAL-01", "GATE-CODE-01"],
+      "invalidationTriggers": ["ON_PROMPT_INJECTION_DETECTED", "ON_MODEL_DRIFT"],
+      "requiredEvidence": ["EVID-COPILOT-001", "EVID-REASON-001"]
+    },
+    {
+      "nodeId": "NODE-REQ-ZEROSQL",
+      "nodeLabel": "Strict Zero Raw SQL Contract",
+      "boundGates": ["GATE-SEC-02", "GATE-DATA-MIG-01"],
+      "invalidationTriggers": ["ON_AST_SQL_DETECTION"],
+      "requiredEvidence": ["EVID-ZEROSQL-001"]
+    },
+    {
+      "nodeId": "NODE-REQ-CONTEXTMESH",
+      "nodeLabel": "16-Domain Context Mesh Protocol",
+      "boundGates": ["GATE-AI-EVAL-02"],
+      "invalidationTriggers": ["ON_CONTEXT_LEAKAGE"],
+      "requiredEvidence": ["EVID-MESH-001"]
+    },
+    {
+      "nodeId": "NODE-SRV-SYSFLOW",
+      "nodeLabel": "System Flow Engine",
+      "boundGates": ["GATE-SEC-02", "GATE-INTEG-01"],
+      "invalidationTriggers": ["ON_CODE_DIFF"],
+      "requiredEvidence": ["EVID-SYSFLOW-001"]
+    },
+    {
+      "nodeId": "NODE-SRV-COPILOT-DISPATCH",
+      "nodeLabel": "Copilot Central Dispatcher",
+      "boundGates": ["GATE-AI-EVAL-01"],
+      "invalidationTriggers": ["ON_DISPATCH_TIMEOUT"],
+      "requiredEvidence": ["EVID-DISPATCH-001"]
+    },
+    {
+      "nodeId": "NODE-DATA-POSTGRES",
+      "nodeLabel": "PostgreSQL Cloud Data Layer",
+      "boundGates": ["GATE-SEC-01", "GATE-DATA-MIG-01"],
+      "invalidationTriggers": ["ON_SCHEMA_MIGRATION"],
+      "requiredEvidence": ["EVID-DB-001", "EVID-SCHEMA-001"]
+    },
+    {
+      "nodeId": "NODE-INT-SUPABASE",
+      "nodeLabel": "Supabase Realtime & Auth Gateway",
+      "boundGates": ["GATE-INTEG-01"],
+      "invalidationTriggers": ["ON_GATEWAY_DISCONNECT"],
+      "requiredEvidence": ["EVID-SUPA-001"]
+    },
+    {
+      "nodeId": "NODE-AGENT-AST",
+      "nodeLabel": "AST Architecture Drift Scanner Tool",
+      "boundGates": ["GATE-ARCH-01"],
+      "invalidationTriggers": ["ON_AST_DRIFT_THRESHOLD_EXCEEDED"],
+      "requiredEvidence": ["EVID-AST-001"]
+    },
+    {
+      "nodeId": "NODE-SEC-RLS",
+      "nodeLabel": "Multi-Tenant RLS Policy Perimeter",
+      "boundGates": ["GATE-SEC-01"],
+      "invalidationTriggers": ["ON_POLICY_DROP_OR_RELAX"],
+      "requiredEvidence": ["EVID-RLS-001", "EVID-T6-PASS"]
+    },
+    {
+      "nodeId": "NODE-TEST-GATES",
+      "nodeLabel": "Automated Verification Gates T1-T12",
+      "boundGates": ["GATE-TEST-01"],
+      "invalidationTriggers": ["ON_TEST_REGRESSION"],
+      "requiredEvidence": ["EVID-T1-T12-ALL-PASS"]
+    },
+    {
+      "nodeId": "NODE-REL-V250",
+      "nodeLabel": "Production Release Train v2.5.0",
+      "boundGates": ["GATE-TEST-01", "GATE-ROLLBACK-01"],
+      "invalidationTriggers": ["ON_BLOCKING_GATE_FAILURE"],
+      "requiredEvidence": ["EVID-REL-PROOF-001"]
+    },
+    {
+      "nodeId": "NODE-RUNTIME-PROD",
+      "nodeLabel": "Live Runtime Telemetry & Sentry",
+      "boundGates": ["GATE-RUNTIME-01"],
+      "invalidationTriggers": ["ON_P99_SPIKE", "ON_ERROR_SPIKE"],
+      "requiredEvidence": ["EVID-RUNTIME-001"]
+    },
+    {
+      "nodeId": "NODE-EVID-LEDGER",
+      "nodeLabel": "Immutable Cryptographic Evidence Ledger",
+      "boundGates": ["GATE-APPROV-01"],
+      "invalidationTriggers": ["ON_HASH_MISMATCH"],
+      "requiredEvidence": ["EVID-CRYPTO-ROOT"]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "title": "VYRON Blast Radius & Failure Domain Map",
+  "domains": [
+    {
+      "domain": "DATABASE_CONNECTION_POOL",
+      "maxBlastRadius": "Database queries queued; cached read routes survive",
+      "containment": "Bulkhead 30 connection cap"
+    },
+    {
+      "domain": "AI_LLM_PROVIDER_OUTAGE",
+      "maxBlastRadius": "AI suggestions degraded; core editing & publishing fully available",
+      "containment": "Bulkhead 10 concurrent slot cap + fallback"
+    },
+    {
+      "domain": "WEBSOCKET_REALTIME_DISCONNECT",
+      "maxBlastRadius": "Live presence pauses; state reconciles via HTTP polling",
+      "containment": "Replay & gap detection engine"
+    },
+    {
+      "domain": "EXTERNAL_GITHUB_API_THROTTLING",
+      "maxBlastRadius": "Sync queue paused; zero impact on active tenant projects",
+      "containment": "Token bucket rate budget"
+    }
+  ]
+}

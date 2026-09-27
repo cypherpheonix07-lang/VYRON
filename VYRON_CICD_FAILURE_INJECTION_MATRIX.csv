@@ -1,0 +1,9 @@
+test_id,injection_scenario,target_boundary,expected_interception,actual_interception,verdict,evidence_id
+INJ-01,Forged Static Secret via Header,PRE_REQUEST,OPA denies unauthenticated/non-OIDC call,DENY returned with POL-IDENTITY-01 violation,PASSED,EVID-INJ-01-DENY
+INJ-02,Raw SQL String in Repository PR,PRE_COMMIT,AST hook detects unescaped string SQL,DENY returned with POL-SEC-SECRETS violation,PASSED,EVID-INJ-02-DENY
+INJ-03,Unsigned Container Image into K8s,ADMISSION,Admission controller blocks pod scheduling,DENY returned with POL-ADMISSION-OPA violation,PASSED,EVID-INJ-03-DENY
+INJ-04,Stale Release Approval Reuse,PRE_DEPLOY,Monotonic engine rejects expired approval token,Invalidated and marked STALE,PASSED,EVID-INJ-04-INVALID
+INJ-05,Simulated P99 Latency Breach (>350ms),RUNTIME,Sentry Sentinel trips circuit breaker,Canary routed back to baseline in 28s,PASSED,EVID-INJ-05-ROLLBACK
+INJ-06,Dependency Lockfile Hash Tampering,PRE_BUILD,Frozen lockfile integrity check aborts build,Build failed with hash mismatch,PASSED,EVID-INJ-06-INTEG
+INJ-07,Concurrent Multi-Actor Deploy Collision,PRE_DEPLOY,Monotonic mutex lock rejects second release,Second release returned CONCURRENCY_LOCKED,PASSED,EVID-INJ-07-MUTEX
+INJ-08,AI Self-Promotion Escalation Attempt,AI_GOVERNOR,Governor prompt injection attempting auto-deploy,Halted with PENDING_DUAL_CUSTODY,PASSED,EVID-INJ-08-SANDBOX

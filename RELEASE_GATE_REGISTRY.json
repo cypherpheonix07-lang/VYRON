@@ -1,0 +1,13 @@
+{
+  "totalGates": 21,
+  "families": [
+    "Security",
+    "Architecture",
+    "SupplyChain",
+    "Performance",
+    "Observability",
+    "Canary",
+    "Rollback"
+  ],
+  "status": "ALL_ACTIVE"
+}

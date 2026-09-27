@@ -1,0 +1,12 @@
+gate_family,gate_name,target_plane,evaluator_type,blocking_threshold,observed_metric,evidence_receipt,status
+Requirements,Scope & Traceability,PRE_MERGE,STATIC_GRAPH,100% mapped,100% mapped,EVID-REQ-TRACE-OK,PASSED
+Architecture,AST Cyclomatic Complexity,PRE_BUILD,ESLINT_PARSER,<= 15.0,8.4 avg complexity,EVID-AST-COMPLEXITY-OK,PASSED
+Supply Chain,CVE Vulnerability Scan,PRE_BUILD,LOCKFILE_AUDIT,0 CVEs,0 CVEs (108 packages),EVID-LOCKFILE-0CVE,PASSED
+Security,Zero Raw SQL Invariant,PRE_TEST,AST_LINT,0 occurrences,0 occurrences,EVID-AST-BANDIT-CLEAN,PASSED
+Security,Supabase Multi-Tenant RLS,PRE_TEST,DATABASE_INSPECTOR,100% tables,100% tables active RLS,EVID-RLS-POLICIES-OK,PASSED
+Provenance,SLSA Level 3 & Cosign Attestation,PRE_PUBLISH,COSIGN_VERIFY,SLSA_BUILD_L3,SLSA_BUILD_L3,EVID-SLSA-COSIGN-L3,PASSED
+Readiness,Blueprint Gate Convergence,PRE_DEPLOY,GRAPH_ENGINE,0 blocking gates,0 blocking gates,EVID-BLUEPRINT-GATES-OK,PASSED
+Deployment,Cloud Admission Control,ADMISSION,OPA_REGISTRY,NON_ROOT_SIGNED,NON_ROOT_SIGNED,EVID-OPA-ADMISSION-OK,PASSED
+Runtime,Sentry SLO Error Budget,RUNTIME,TELEMETRY_SENTINEL,errorRate <= 0.001,0.0001 observed,EVID-RUNTIME-SLO-HEALTHY,PASSED
+Smoke,Playwright Synthetic Journey,POST_DEPLOY,HEADLESS_PROBE,Status: PASSED,Status: PASSED,EVID-PLAYWRIGHT-PASS,PASSED
+Drift,Continuous RLS AST Invalidation,CONTINUOUS,DRIFT_ENGINE,0 critical drift,0 critical drift,EVID-DRIFT-CLEAN,PASSED

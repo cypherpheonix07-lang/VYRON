@@ -1,0 +1,22 @@
+Test_ID,Campaign,Component,Scenario_Description,Input_Conditions,Expected_Result,Harness,Status
+TEST-GG-01,C01,blueprintGraphEngine.ts,Baseline Topology Reality,Graph initialization on engine start,15 nodes and 14 edges across 19 layers loaded,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-02,C01,blueprintReleaseDossier,250 Phases x 104 Sections Schema,Dossier registry instance scan,Exactly 250 phases and 26000 canonical instances loaded,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-03,C02,releaseGateEngine.ts,21 Gate Families Decomposed Evaluation,Evaluate all registered gates,Readiness score >= 90% and verdict RELEASE_APPROVED,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-04,C03,blueprintGraphEngine.ts,Graph Revision Snapshot & Signature,Snapshot inspection on rev 1,HMAC SHA-256 state signature formatted as sha256_...,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-05,C04,releaseGateEngine.ts,Gate Persistence & Evidence Binding,Inspect GATE-SEC-01,Required evidence IDs and authority role present,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-06,C05,blueprintGraphEngine.ts,Bi-Directional Graph-Gate Binding,getGatesForNode('NODE-SRV-SYSFLOW'),Returns 2 bound gates (GATE-SEC-02 and GATE-INTEG-01),test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-07,C06,blueprintGraphEngine.ts,Node Upsert & Revision Advance,Insert NODE-TEST-NEW,Revision advances monotonically and snapshot captured,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-08,C07,blueprintGateConvergence.ts,Dependency Invalidation on Node Failure,Mutate NODE-DATA-POSTGRES health to 20%,Dependent gates fail and release verdict flips to RELEASE_BLOCKED,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-09,C08,releaseGateEngine.ts,Evidence Freshness & Stale Gate Downgrade,Update GATE-ARCH-01 to STALE,Verdict flags REVIEW_REQUIRED and gate is listed in staleGateIds,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-10,C09,releaseGateEngine.ts,Release Twin Dry-Run Simulation,Rehearse release deployment for v2.5.0,Simulated gates pass rollback rehearsal passes and hash generated,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-11,C10,blueprintGraphEngine.ts,Counterfactual Impact Simulation,Simulate failure on NODE-SRV-SYSFLOW,7 descendants impacted and recommendation HIGH_RISK_BLOCKED,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-12,C11,releaseGateEngine.ts,Zero Raw SQL Gate Severity,Inspect GATE-SEC-02 definition,Severity is BLOCKING requiring AST scanner evidence,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-13,C12,releaseGateEngine.ts,Causal Blocker Explanation,explainWhyBlocked('GATE-ARCH-01'),Returns direct cause bound nodes and remediation plan,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-14,C13,blueprintGraphEngine.ts,Concurrent Edits & Monotonic Revisions,Execute sequential node updates,Each mutation increments revision without collision,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-15,C14,blueprintGraphEngine.ts,Graph Diff Across Revisions,computeDiff(1, currentRevision),Accurately detects added and modified nodes across snapshots,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-16,C15,releaseGateEngine.ts,Deterministic Rollback Plan,generateRollbackPlan('v2.5.0'),Generates 4-step reversible rollback plan with RTO <= 60s,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-17,C16,blueprintGraphEngine.ts,Cycle Detection & DAG Validation,detectCycles() across active topology,Returns 0 cycles confirming valid DAG structure,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-18,C17,blueprintGraphEngine.ts,Canvas 2D Coordinates Parity,Inspect all node position objects,All nodes carry numerical x and y coordinates for ReactFlow,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-19,C18,releaseGateEngine.ts,Gate Accessibility Metadata,Inspect all gate definitions,All gates declare accessible name description and severity,test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-20,C19,releaseGateEngine.ts,Readiness Performance Benchmark,Execute 50 full readiness evaluations,All 50 evaluations complete in < 100ms (< 1ms per eval),test-blueprint-release-godmode-ultima.mjs,PASS
+TEST-GG-21,C20,blueprintGraphEngine.ts,Time Travel Snapshot Reproduction,timeTravelToRevision(1),Restores exact baseline topology with 15 nodes,test-blueprint-release-godmode-ultima.mjs,PASS

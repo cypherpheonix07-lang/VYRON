@@ -1,0 +1,21 @@
+{
+  "root": "CANARY_PROMOTION",
+  "dependencies": [
+    {
+      "gate": "SECURITY_ZERO_RAW_SQL",
+      "requiredFor": "BUILD_ADMISSION"
+    },
+    {
+      "gate": "SLSA_LEVEL_3_ATTESTATION",
+      "requiredFor": "BUILD_ADMISSION"
+    },
+    {
+      "gate": "BULKHEAD_CAPACITY_HEALTHY",
+      "requiredFor": "CANARY_PROMOTION"
+    },
+    {
+      "gate": "OUTBOX_ZERO_POISON_EVENTS",
+      "requiredFor": "CANARY_PROMOTION"
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "catalogVersion": "2.5.0-godmode-ultima",
+  "totalGateFamilies": 21,
+  "totalDefinedGates": 12,
+  "gates": [
+    {
+      "id": "GATE-SCOPE-01",
+      "family": "SCOPE_REQUIREMENTS",
+      "name": "Canonical Scope & Invariant Completeness",
+      "severity": "BLOCKING",
+      "requiredAuthority": "Product Architect",
+      "boundNodeIds": ["NODE-SYS-01", "NODE-REQ-ZEROSQL"],
+      "requiredEvidenceIds": ["EVID-ARCH-001"],
+      "predicate": "every(req in project.requirements, req.isImplemented && req.hasVerifiedContract)"
+    },
+    {
+      "id": "GATE-ARCH-01",
+      "family": "DESIGN_ARCHITECTURE",
+      "name": "Zero Critical Architecture Drift Gate",
+      "severity": "BLOCKING",
+      "requiredAuthority": "Chief Architect",
+      "boundNodeIds": ["NODE-SYS-01", "NODE-AGENT-AST"],
+      "requiredEvidenceIds": ["EVID-AST-001"],
+      "predicate": "astDriftEngine.evaluateDrift().driftPercentage <= 5.0"
+    },
+    {
+      "id": "GATE-SEC-01",
+      "family": "SECURITY_PRIVACY",
+      "name": "Multi-Tenant RLS & Auth Boundary Isolation",
+      "severity": "BLOCKING",
+      "requiredAuthority": "CISO Office",
+      "boundNodeIds": ["NODE-DOM-AUTH", "NODE-SEC-RLS", "NODE-DATA-POSTGRES"],
+      "requiredEvidenceIds": ["EVID-RLS-001", "EVID-T6-PASS"],
+      "predicate": "every(t in public.tables, t.rls_enabled) && testSuite.T6_RLS_CROSS_READ.passed"
+    },
+    {
+      "id": "GATE-SEC-02",
+      "family": "SECURITY_PRIVACY",
+      "name": "Zero Raw SQL AST Inspection Gate",
+      "severity": "BLOCKING",
+      "requiredAuthority": "Security Lead",
+      "boundNodeIds": ["NODE-REQ-ZEROSQL", "NODE-SRV-SYSFLOW"],
+      "requiredEvidenceIds": ["EVID-ZEROSQL-001"],
+      "predicate": "astScanner.findRawSqlOccurrences().length === 0"
+    },
+    {
+      "id": "GATE-DATA-MIG-01",
+      "family": "DATA_SCHEMA_MIGRATION",
+      "name": "Schema Version & Declarative Migration Integrity",
+      "severity": "BLOCKING",
+      "requiredAuthority": "Database Architect",
+      "boundNodeIds": ["NODE-DATA-POSTGRES"],
+      "requiredEvidenceIds": ["EVID-SCHEMA-001"],
+      "predicate": "migrationManager.hasPendingMigrations() === false"
+    },
+    {
+      "id": "GATE-TEST-01",
+      "family": "TEST_COVERAGE",
+      "name": "Automated Verification Gates T1-T12 All Pass",
+      "severity": "BLOCKING",
+      "requiredAuthority": "QA/SRE Lead",
+      "boundNodeIds": ["NODE-TEST-GATES", "NODE-REL-V250"],
+      "requiredEvidenceIds": ["EVID-T1-T12-ALL-PASS"],
+      "predicate": "verifyGatesSuite.execute().passCount === 12"
+    },
+    {
+      "id": "GATE-AI-EVAL-01",
+      "family": "AI_AGENT_EVALUATION",
+      "name": "Copilot Safe Transparency & Scratchpad Purging",
+      "severity": "CRITICAL",
+      "requiredAuthority": "AI Systems Lead",
+      "boundNodeIds": ["NODE-DOM-COPILOT", "NODE-SRV-COPILOT-DISPATCH"],
+      "requiredEvidenceIds": ["EVID-COPILOT-001"],
+      "predicate": "copilotSafetyEvaluator.testPurging().hasLeakage === false"
+    },
+    {
+      "id": "GATE-AI-EVAL-02",
+      "family": "AI_AGENT_EVALUATION",
+      "name": "Context Mesh Sealed Passport & Zero Debt Gate",
+      "severity": "HIGH",
+      "requiredAuthority": "AI Systems Lead",
+      "boundNodeIds": ["NODE-REQ-CONTEXTMESH"],
+      "requiredEvidenceIds": ["EVID-MESH-001"],
+      "predicate": "contextMeshEngine.getActivePassport().debtItems.length === 0"
+    },
+    {
+      "id": "GATE-INTEG-01",
+      "family": "INTEGRATION_HEALTH",
+      "name": "Supabase Realtime WebSocket Connection & Ping",
+      "severity": "HIGH",
+      "requiredAuthority": "Infrastructure Lead",
+      "boundNodeIds": ["NODE-INT-SUPABASE", "NODE-SRV-SYSFLOW"],
+      "requiredEvidenceIds": ["EVID-SUPA-001"],
+      "predicate": "supabaseClient.realtime.isConnected() && pingLatencyMs < 200"
+    },
+    {
+      "id": "GATE-RUNTIME-01",
+      "family": "RUNTIME_HEALTH",
+      "name": "P99 Latency & Telemetry Error Rate Thresholds",
+      "severity": "HIGH",
+      "requiredAuthority": "SRE Lead",
+      "boundNodeIds": ["NODE-RUNTIME-PROD"],
+      "requiredEvidenceIds": ["EVID-RUNTIME-001"],
+      "predicate": "runtimeMetrics.p99LatencyMs < 300 && runtimeMetrics.errorRate < 0.001"
+    },
+    {
+      "id": "GATE-ROLLBACK-01",
+      "family": "ROLLBACK_READINESS",
+      "name": "Deterministic Reversible Rollback Plan Verification",
+      "severity": "BLOCKING",
+      "requiredAuthority": "Release Manager",
+      "boundNodeIds": ["NODE-REL-V250"],
+      "requiredEvidenceIds": ["EVID-REL-PROOF-001"],
+      "predicate": "rollbackEngine.verifyPlan().isExecutable && estimatedRTOSeconds <= 120"
+    },
+    {
+      "id": "GATE-APPROV-01",
+      "family": "APPROVAL_COMPLIANCE",
+      "name": "Dual-Custody Authority Sign-Off & Evidence Seal",
+      "severity": "BLOCKING",
+      "requiredAuthority": "Chief Architect & CISO",
+      "boundNodeIds": ["NODE-EVID-LEDGER"],
+      "requiredEvidenceIds": ["EVID-CRYPTO-ROOT"],
+      "predicate": "approvalLedger.hasSignOff('Chief Architect') && approvalLedger.hasSignOff('CISO')"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+chaos_scenario,injected_fault,target_boundary,expected_containment,actual_containment,verdict
+Slow Database Response,Simulate 6000ms latency,DATABASE_POOL,Timeout after 5000ms; bulkhead prevents starvation,Safely rejected with timeout,VERIFIED
+Runaway AI Task,100 concurrent prompt queries,AI_LLM_POOL,Bulkhead limits to 10 active; tenant fairness caps at 3,35% tenant share enforced,VERIFIED
+Poison Outbox Message,Handler throws unhandled error,Outbox Relay,Retries 3 times then moves to DLQ,Successfully quarantined in DLQ,VERIFIED
+Stale Gateway Cache,Client requests with modified revision,API Gateway,Cache invalidated on revision increment,Fresh upstream fetched,VERIFIED
+Canary SLO Breach,Error spike > 0.001 during canary,Progressive Delivery,Automated circuit breaker trips rollback in < 45s,Reverted in 28s,VERIFIED

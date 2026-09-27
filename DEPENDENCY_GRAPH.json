@@ -1,0 +1,45 @@
+{
+  "title": "VYRON Subsystem Dependency Closure",
+  "nodes": [
+    {
+      "id": "api-gateway",
+      "tier": "EDGE"
+    },
+    {
+      "id": "bff-web",
+      "tier": "PRESENTATION"
+    },
+    {
+      "id": "bff-mobile",
+      "tier": "PRESENTATION"
+    },
+    {
+      "id": "bff-partner",
+      "tier": "PRESENTATION"
+    },
+    {
+      "id": "hexagonal-core",
+      "tier": "DOMAIN"
+    },
+    {
+      "id": "transactional-outbox",
+      "tier": "INTEGRATION"
+    },
+    {
+      "id": "bulkhead-pools",
+      "tier": "RESOURCE_ISOLATION"
+    },
+    {
+      "id": "supabase-db",
+      "tier": "DATA"
+    },
+    {
+      "id": "sentry-sentinel",
+      "tier": "OBSERVABILITY"
+    }
+  ],
+  "invariants": [
+    "Domain core has ZERO outgoing dependencies to infrastructure",
+    "BFF presentation layer has ZERO direct database access (must route through core ports)"
+  ]
+}

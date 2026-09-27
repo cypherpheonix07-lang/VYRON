@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "VYRON Canonical CI/CD Pipeline Trust Graph",
+  "version": "2.5.0-canonical",
+  "revision": 1,
+  "nodes": [
+    {
+      "id": "NODE-01-SOURCE",
+      "type": "SOURCE_CONTROL",
+      "label": "Source Control (Git)",
+      "plane": "PRE_COMMIT",
+      "inputs": ["developer_worktree"],
+      "outputs": ["git_commit_sha"],
+      "invariants": ["no_force_push", "zero_secrets_in_ast", "lovable_linear_history"],
+      "evidenceId": "EVID-GIT-7B4C892"
+    },
+    {
+      "id": "NODE-02-POLICY",
+      "type": "POLICY_EVALUATION",
+      "label": "Policy-as-Code (OPA Rego)",
+      "plane": "PRE_REQUEST",
+      "inputs": ["git_commit_sha", "oidc_token"],
+      "outputs": ["policy_decision_token"],
+      "invariants": ["11_planes_evaluated", "strict_monotonicity"],
+      "evidenceId": "EVID-OPA-V2-5-0"
+    },
+    {
+      "id": "NODE-03-BUILD",
+      "type": "HERMETIC_BUILD",
+      "label": "Hermetic Build Engine (Bun/Vite)",
+      "plane": "PRE_BUILD",
+      "inputs": ["git_commit_sha", "package-lock.json"],
+      "outputs": ["artifact_digest_sha256"],
+      "invariants": ["frozen_lockfile", "deterministic_output"],
+      "evidenceId": "EVID-BUILD-REPRODUCIBLE"
+    },
+    {
+      "id": "NODE-04-TEST",
+      "type": "VERIFICATION_MATRIX",
+      "label": "Hermetic Test Matrix",
+      "plane": "PRE_TEST",
+      "inputs": ["artifact_digest_sha256"],
+      "outputs": ["test_junit_report"],
+      "invariants": ["zero_network_egress", "100_percent_suites_passed"],
+      "evidenceId": "EVID-TEST-21-CAMPAIGNS"
+    },
+    {
+      "id": "NODE-05-SECURITY",
+      "type": "SECURITY_SCANNER",
+      "label": "Static AST & RLS Analysis",
+      "plane": "PRE_TEST",
+      "inputs": ["git_commit_sha"],
+      "outputs": ["sarif_vulnerability_report"],
+      "invariants": ["zero_raw_sql", "rls_isolation_enforced"],
+      "evidenceId": "EVID-AST-BANDIT-CLEAN"
+    },
+    {
+      "id": "NODE-06-PROVENANCE",
+      "type": "ATTESTATION_AUTHORITY",
+      "label": "SLSA L3 & Cosign Attestation",
+      "plane": "PRE_PUBLISH",
+      "inputs": ["artifact_digest_sha256", "rekor_bundle"],
+      "outputs": ["slsa_provenance_predicate"],
+      "invariants": ["sigstore_cosign_signed", "slsa_build_l3"],
+      "evidenceId": "EVID-SLSA-COSIGN-L3"
+    },
+    {
+      "id": "NODE-07-PREDEPLOY",
+      "type": "RELEASE_GATE_CONVERGENCE",
+      "label": "Blueprint Graph Release Gates",
+      "plane": "PRE_DEPLOY",
+      "inputs": ["blueprint_graph_revision", "gate_readiness_report"],
+      "outputs": ["release_authorization_token"],
+      "invariants": ["zero_blocking_gates", "readiness_score_ge_90"],
+      "evidenceId": "EVID-BLUEPRINT-GATES-OK"
+    },
+    {
+      "id": "NODE-08-CANARY",
+      "type": "PROGRESSIVE_DEPLOYMENT",
+      "label": "Canary Ingress Traffic Router",
+      "plane": "POST_DEPLOY",
+      "inputs": ["release_authorization_token"],
+      "outputs": ["canary_ingress_route"],
+      "invariants": ["initial_10_percent_traffic", "dual_custody_signoff"],
+      "evidenceId": "EVID-CANARY-10PCT"
+    },
+    {
+      "id": "NODE-09-RUNTIME",
+      "type": "TELEMETRY_SENTINEL",
+      "label": "Telemetry & Error Sentinel",
+      "plane": "RUNTIME",
+      "inputs": ["sentry_stream", "datadog_metrics"],
+      "outputs": ["system_health_verdict"],
+      "invariants": ["p99_latency_le_300ms", "error_rate_le_0_001"],
+      "evidenceId": "EVID-RUNTIME-SLO-HEALTHY"
+    }
+  ],
+  "edges": [
+    { "from": "NODE-01-SOURCE", "to": "NODE-02-POLICY", "type": "AUTHORIZATION", "cardinality": "1:1" },
+    { "from": "NODE-02-POLICY", "to": "NODE-03-BUILD", "type": "GOVERNANCE", "cardinality": "1:1" },
+    { "from": "NODE-03-BUILD", "to": "NODE-04-TEST", "type": "VERIFICATION", "cardinality": "1:1" },
+    { "from": "NODE-03-BUILD", "to": "NODE-05-SECURITY", "type": "VERIFICATION", "cardinality": "1:1" },
+    { "from": "NODE-04-TEST", "to": "NODE-06-PROVENANCE", "type": "EVIDENCE", "cardinality": "1:1" },
+    { "from": "NODE-05-SECURITY", "to": "NODE-06-PROVENANCE", "type": "EVIDENCE", "cardinality": "1:1" },
+    { "from": "NODE-06-PROVENANCE", "to": "NODE-07-PREDEPLOY", "type": "ADMISSION", "cardinality": "1:1" },
+    { "from": "NODE-07-PREDEPLOY", "to": "NODE-08-CANARY", "type": "PROMOTION", "cardinality": "1:1" },
+    { "from": "NODE-08-CANARY", "to": "NODE-09-RUNTIME", "type": "MONITORING", "cardinality": "1:1" },
+    { "from": "NODE-09-RUNTIME", "to": "NODE-08-CANARY", "type": "ROLLBACK_CIRCUIT_BREAKER", "cardinality": "1:1" }
+  ]
+}

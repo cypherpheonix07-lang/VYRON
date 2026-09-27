@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "vULTIMA-Ω",
+  "rules": {
+    "minimumInstances": 26000,
+    "requiredKeys": [
+      "purpose",
+      "currentReality",
+      "codeLocation",
+      "owner",
+      "sourceOfTruth",
+      "inputs",
+      "outputs",
+      "syncAsync",
+      "authPolicy",
+      "timeoutMs",
+      "evidenceId",
+      "canonicalVerdict"
+    ],
+    "mirrorVerificationRule": "Every AA-AZ and aa-az mirror verifies parity against primary without creating secondary authority"
+  },
+  "compiledStats": {
+    "totalPhases": 250,
+    "sectionsPerPhase": 104,
+    "totalInstances": 26000,
+    "parityConfirmed": true
+  }
+}

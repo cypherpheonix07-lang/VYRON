@@ -1,0 +1,6 @@
+environment,cluster_target,admission_mode,ingress_fqdn,approval_policy,slsa_requirement,rollback_rto_sec,error_budget_pct
+DEVELOPMENT,local-sandbox,PERMISSIVE,localhost:5173,SINGLE_DEVELOPER,SLSA_BUILD_L1,15,5.0
+TESTING,ci-runner-isolated,HERMETIC_STRICT,test-mesh.internal,AUTOMATED_TEST_RUNNER,SLSA_BUILD_L2,30,1.0
+STAGING,k8s-staging-cluster,OPA_ADMISSION,staging.vyron.dev,PEER_ARCHITECT,SLSA_BUILD_L3,45,0.5
+CANARY,edge-canary-slice,OPA_MUTATING,canary.vyron.dev,DUAL_CUSTODY_ARCHITECT,SLSA_BUILD_L3,45,0.1
+PRODUCTION,k8s-prod-multi-region,STRICT_COSIGN_OPA,app.brahma.enterprise,DUAL_CUSTODY_EXECUTIVE,SLSA_BUILD_L3,45,0.01

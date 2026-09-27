@@ -32,12 +32,14 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { GateCard, type GateResultData } from "@/components/ui/GateCard";
 import { useGate } from "@/hooks/useGate";
+import { CicdControlPlaneView } from "@/components/cicd/CicdControlPlaneView";
 
 export function PublishWizardView({ projectId }: { projectId?: string } = {}) {
   const params = useParams({ strict: false });
   const id = projectId || (params as { id?: string })?.id || "proj-brahma";
   const { gateReport, isRunning, runGateCheck } = useGate();
 
+  const [viewMode, setViewMode] = useState<"standard" | "godmode">("godmode");
   const [environment, setEnvironment] = useState<"development" | "staging" | "production">(
     "staging",
   );
@@ -235,9 +237,39 @@ export function PublishWizardView({ projectId }: { projectId?: string } = {}) {
         }
       />
 
-      {/* Release Readiness Hero Banner */}
-      <Card
-        className={`border rounded-[var(--radius-md)] ${
+      {/* View Mode Switcher */}
+      <div className="flex items-center justify-between p-2 rounded-[var(--radius-sm)] bg-[var(--surface-raised)] border border-[var(--border-default)]">
+        <div className="flex items-center gap-2">
+          <Button
+            size="sm"
+            variant={viewMode === "godmode" ? "default" : "outline"}
+            onClick={() => setViewMode("godmode")}
+            className="font-mono text-xs gap-1.5"
+          >
+            <ShieldCheck className="size-3.5" />
+            GOD MODE CI/CD Control Plane (11 Planes)
+          </Button>
+          <Button
+            size="sm"
+            variant={viewMode === "standard" ? "default" : "outline"}
+            onClick={() => setViewMode("standard")}
+            className="font-mono text-xs"
+          >
+            Classic 7-Gate Matrix
+          </Button>
+        </div>
+        <Badge variant="outline" className="font-mono text-[10px] text-[var(--color-primary)]">
+          {viewMode === "godmode" ? "ACTIVE: 250×104 CI/CD DOSSIER" : "ACTIVE: 7 CANONICAL GATES"}
+        </Badge>
+      </div>
+
+      {viewMode === "godmode" ? (
+        <CicdControlPlaneView projectId={id} />
+      ) : (
+        <>
+          {/* Release Readiness Hero Banner */}
+          <Card
+            className={`border rounded-[var(--radius-md)] ${
           allPassed
             ? "border-[var(--color-success)]/40 bg-[var(--color-success)]/5"
             : "border-[var(--color-danger)]/40 bg-[var(--color-danger)]/5"
@@ -549,6 +581,8 @@ export function PublishWizardView({ projectId }: { projectId?: string } = {}) {
             </div>
           </div>
         </div>
+      )}
+      </>
       )}
     </div>
   );

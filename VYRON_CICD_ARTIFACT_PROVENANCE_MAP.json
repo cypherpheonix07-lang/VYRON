@@ -1,0 +1,60 @@
+{
+  "$schema": "https://slsa.dev/provenance/v1.0",
+  "_type": "https://in-toto.io/Statement/v1",
+  "subject": [
+    {
+      "name": "ghcr.io/cypherpheonix07-lang/vyron-core",
+      "digest": {
+        "sha256": "b4c892e104f981249b6d8123ef98124a91c3d4a5b6c7d8e9f0123456789abcde"
+      }
+    }
+  ],
+  "predicateType": "https://slsa.dev/provenance/v1.0",
+  "predicate": {
+    "buildDefinition": {
+      "buildType": "https://github.com/cypherpheonix07-lang/VYRON/.github/workflows/release.yml@refs/heads/main",
+      "externalParameters": {
+        "workflow": ".github/workflows/release.yml",
+        "repository": "https://github.com/cypherpheonix07-lang/VYRON",
+        "ref": "refs/heads/main"
+      },
+      "internalParameters": {
+        "runner": "https://github.com/actions/runner-linux-x64",
+        "architecture": "x86_64",
+        "os": "ubuntu-24.04-isolated"
+      },
+      "resolvedDependencies": [
+        {
+          "uri": "git+https://github.com/cypherpheonix07-lang/VYRON.git",
+          "digest": { "gitCommit": "7b4c892e104f981" }
+        },
+        {
+          "uri": "pkg:npm/package-lock.json",
+          "digest": { "sha256": "09f381716ab4e829dc721098ef38192a716ab4e829dc721098ef38192a716ab4" }
+        }
+      ]
+    },
+    "runDetails": {
+      "builder": {
+        "id": "https://github.com/actions/runner-linux-x64"
+      },
+      "metadata": {
+        "invocationId": "https://github.com/cypherpheonix07-lang/VYRON/actions/runs/180293148",
+        "startedOn": "2026-09-27T11:40:00Z",
+        "finishedOn": "2026-09-27T11:42:15Z"
+      },
+      "byproducts": [
+        {
+          "name": "cyclonedx-sbom.json",
+          "digest": { "sha256": "09f381716ab4e829dc721098ef38192a716ab4e829dc721098ef38192a716ab4" },
+          "packageCount": 108
+        },
+        {
+          "name": "cosign.sig",
+          "signature": "sig_cosign_hmac_sha256_provenance_verified_v2_5_0",
+          "rekorLogId": "c8901fb29124019a"
+        }
+      ]
+    }
+  }
+}

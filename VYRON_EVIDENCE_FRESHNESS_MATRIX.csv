@@ -1,0 +1,18 @@
+Evidence_ID,Evidence_Name,Authority_Tier,Max_TTL_Hours,Freshness_Threshold_Minutes,Invalidation_Trigger,Revalidation_Action,Storage_Tier
+EVID-ARCH-001,Architecture Boundary Verification,TIER_1_CANONICAL,24,60,Code commit on main or AST boundary diff,Run AST static drift scanner,PostgreSQL + S3
+EVID-SYS-001,Root System Config Cryptographic Hash,TIER_1_CANONICAL,48,120,Root package.json or vite.config change,Recompute HMAC SHA-256 seal,PostgreSQL
+EVID-AUTH-001,GoTrue Auth Boundary Assertion,TIER_1_CANONICAL,12,30,Auth configuration or schema change,Run Auth integration test suite,PostgreSQL
+EVID-RLS-001,Multi-Tenant RLS Policy Verification,TIER_1_CANONICAL,12,30,ALTER TABLE or DROP POLICY execution,Execute T6 RLS cross-read probe,PostgreSQL
+EVID-ZEROSQL-001,Zero Raw SQL AST Static Scan,TIER_1_CANONICAL,24,60,Any TypeScript / SQL file commit,Run AST regex & AST parser scan,PostgreSQL
+EVID-COPILOT-001,Copilot Safe Transparency Receipt,TIER_2_GOVERNED,24,120,Model configuration or prompt change,Run safe reasoning scrubber test,PostgreSQL
+EVID-MESH-001,Context Mesh 16-Domain Sealed Passport,TIER_1_CANONICAL,6,15,Context domain schema mutation,Recompute passport signature,Redis + In-Memory
+EVID-SYSFLOW-001,System Flow Engine Unit Test Suite,TIER_2_GOVERNED,24,60,systemFlowEngine.ts modification,Run vitest system flow test suite,PostgreSQL
+EVID-DISPATCH-001,Copilot Central Dispatcher Benchmark,TIER_2_GOVERNED,24,120,copilotDispatcher.ts modification,Execute dispatcher benchmark,PostgreSQL
+EVID-DB-001,PostgreSQL Data Layer Health Check,TIER_1_CANONICAL,1,5,Connection drop or pool exhaustion,Execute DB ping & health RPC,Live Telemetry
+EVID-SCHEMA-001,Declarative Database Schema Checksum,TIER_1_CANONICAL,24,60,Migration applied or DDL execution,Recompute schema SHA-256 hash,PostgreSQL
+EVID-SUPA-001,Supabase Realtime WebSocket Ping Receipt,TIER_2_GOVERNED,2,10,WebSocket disconnect or heartbeat drop,Send WebSocket ping probe,Live Telemetry
+EVID-AST-001,AST Architecture Drift Scanner Seal,TIER_1_CANONICAL,12,30,Commit on src/services or components,Run architectureDriftEngine,PostgreSQL
+EVID-T1-T12-ALL-PASS,Automated Verification Gates T1-T12 Suite,TIER_1_CANONICAL,12,30,Any backend RPC or policy alteration,Run node verify-gates.js,PostgreSQL + Artifact
+EVID-REL-PROOF-001,Release Train v2.5.0 Dry-Run Rehearsal,TIER_1_CANONICAL,24,120,Release branch update or commit,Execute Release Twin rehearsal,PostgreSQL + Artifact
+EVID-RUNTIME-001,Production Sentry / Telemetry Stream,TIER_3_OPERATIONAL,1,5,P99 latency > 300ms or error > 0.1%,Stream live 5m metric window,Sentry + In-Memory
+EVID-CRYPTO-ROOT,Dual-Custody Authority HMAC Root Seal,TIER_1_CANONICAL,48,240,Any blocking gate status change,Dual-custody digital signature,PostgreSQL + Hardware

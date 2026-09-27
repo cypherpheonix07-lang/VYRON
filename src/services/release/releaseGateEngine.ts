@@ -83,9 +83,9 @@ export interface ReleaseGateDefinition {
   freshness: GateFreshnessState;
   score: number; // 0 to 100
   lastEvaluatedAt: string;
-  failureReason?: string;
-  remediation?: string;
-  activeWaiver?: ReleaseGateWaiver;
+  failureReason?: string | undefined;
+  remediation?: string | undefined;
+  activeWaiver?: ReleaseGateWaiver | undefined;
   predicateExpression: string;
 }
 

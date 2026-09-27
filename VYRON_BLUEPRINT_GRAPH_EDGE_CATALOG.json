@@ -1,0 +1,78 @@
+{
+  "catalogVersion": "2.5.0-godmode-ultima",
+  "totalEdgeTypes": 8,
+  "edgeCatalog": [
+    {
+      "type": "DEPENDS_ON",
+      "description": "Functional, architectural or data dependency where target is required for source execution.",
+      "directionalSemantics": "Target (Upstream Dependency) -> Source (Dependent Service)",
+      "isCausal": true,
+      "invalidationBehavior": "If target degrades (health < 50% or FAILED), source is automatically marked BLOCKED.",
+      "cyclePolicy": "FORBIDDEN (Acyclic DAG required)",
+      "example": "NODE-SRV-SYSFLOW DEPENDS_ON NODE-DATA-POSTGRES"
+    },
+    {
+      "type": "OWNS",
+      "description": "Hierarchical organizational, tenant, or structural ownership containment.",
+      "directionalSemantics": "Source (Owner/Parent) -> Target (Owned Entity)",
+      "isCausal": true,
+      "invalidationBehavior": "Deprecation or decommissioning of source cascades downward to all owned entities.",
+      "cyclePolicy": "FORBIDDEN (Tree hierarchy only)",
+      "example": "NODE-SYS-01 OWNS NODE-DOM-AUTH"
+    },
+    {
+      "type": "CAUSES",
+      "description": "Direct causal link between an event, incident, or mutation and its resulting system state.",
+      "directionalSemantics": "Source (Root Anomaly / Mutation) -> Target (Observed Failure)",
+      "isCausal": true,
+      "invalidationBehavior": "Traces root cause during forensic investigation and illuminates failure paths.",
+      "cyclePolicy": "FORBIDDEN",
+      "example": "NODE-INCIDENT-001 CAUSES NODE-SRV-SYSFLOW"
+    },
+    {
+      "type": "IMPLEMENTS",
+      "description": "Traceability link demonstrating a service or component fulfills a declared requirement.",
+      "directionalSemantics": "Source (Requirement / Contract) -> Target (Implementing Code)",
+      "isCausal": true,
+      "invalidationBehavior": "Modifications to target code trigger automated contract re-verification.",
+      "cyclePolicy": "FORBIDDEN",
+      "example": "NODE-REQ-CONTEXTMESH IMPLEMENTS NODE-SRV-COPILOT-DISPATCH"
+    },
+    {
+      "type": "RUNS_ON",
+      "description": "Hosting, runtime platform or physical/cloud infrastructure binding.",
+      "directionalSemantics": "Source (Application/Service) -> Target (Infrastructure Gateway)",
+      "isCausal": true,
+      "invalidationBehavior": "Target gateway disconnect or latency spike cascades to source service latency.",
+      "cyclePolicy": "FORBIDDEN",
+      "example": "NODE-SRV-SYSFLOW RUNS_ON NODE-INT-SUPABASE"
+    },
+    {
+      "type": "PROVES",
+      "description": "Cryptographic or empirical validation link where a test receipt or proof validates an invariant.",
+      "directionalSemantics": "Source (Test Harness / Receipt) -> Target (Release / Invariant Claim)",
+      "isCausal": true,
+      "invalidationBehavior": "Test regression or evidence expiration (>24h) immediately sets target state to STALE.",
+      "cyclePolicy": "FORBIDDEN",
+      "example": "NODE-TEST-GATES PROVES NODE-REL-V250"
+    },
+    {
+      "type": "GOVERNS",
+      "description": "Policy, compliance, or security constraint enforcement.",
+      "directionalSemantics": "Source (Governance Rule / Policy) -> Target (Governed Domain / Data)",
+      "isCausal": true,
+      "invalidationBehavior": "Policy violation halts downstream CI/CD deployment gates.",
+      "cyclePolicy": "FORBIDDEN",
+      "example": "NODE-DATA-POSTGRES GOVERNS NODE-SEC-RLS"
+    },
+    {
+      "type": "IMPACTS",
+      "description": "Transitive blast radius or side-effect propagation path.",
+      "directionalSemantics": "Source (Mutating Entity) -> Target (Impacted Service / Environment)",
+      "isCausal": true,
+      "invalidationBehavior": "Used in counterfactual simulations to project blast radius score prior to merge.",
+      "cyclePolicy": "ALLOWED (Used for dynamic simulation graphs)",
+      "example": "NODE-REL-V250 IMPACTS NODE-RUNTIME-PROD"
+    }
+  ]
+}

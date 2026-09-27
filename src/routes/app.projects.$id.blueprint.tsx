@@ -12,6 +12,7 @@ import {
   MobileArchitectureFallback,
   NodeDetailsPanel,
 } from "@/components/brahma/architecture-canvas";
+import { BlueprintReleaseConvergenceView } from "@/components/blueprint/BlueprintReleaseConvergenceView";
 import { SectionCard } from "@/components/brahma/primitives";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -197,8 +198,11 @@ function BlueprintTab() {
         </div>
       )}
 
+      {/* Unified Blueprint Graph x Release Gate Convergence Surface */}
+      <BlueprintReleaseConvergenceView projectId={id} />
+
       <SectionCard
-        title="System architecture"
+        title="Legacy architecture canvas"
         description="Zoom, pan and select a component to inspect its responsibilities."
       >
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px]">

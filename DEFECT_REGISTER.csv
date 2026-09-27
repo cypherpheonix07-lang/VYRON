@@ -1,0 +1,6 @@
+defect_id,title,severity,component,root_cause,remediation_status,verified_revision
+DEF-NUC-001,Unbounded Gateway Concurrency,HIGH,API Gateway,Missing bulkhead connection pool on ingress,RESOLVED (Bulkhead isolation active),7b4c892
+DEF-NUC-002,BFF Presentation Logic Infiltrating Core,CRITICAL,Hexagonal Core,Web controller directly querying database,RESOLVED (Ports and Adapters enforced),7b4c892
+DEF-NUC-003,Outbox Relay Duplicate Processing,CRITICAL,Transactional Outbox,Missing idempotency key cache on retry,RESOLVED (Idempotency cache active),7b4c892
+DEF-NUC-004,Mobile DTO Bloat (> 50KB),MEDIUM,Mobile BFF,Full node telemetry sent to mobile clients,RESOLVED (Tailored MobileSummaryDto < 2KB),7b4c892
+DEF-NUC-005,Cascading Failure on Provider Timeout,HIGH,Bulkhead Pool,External GitHub API hanging shared thread pool,RESOLVED (Isolated 15-slot egress pool),7b4c892

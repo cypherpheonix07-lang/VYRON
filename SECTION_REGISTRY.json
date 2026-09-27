@@ -1,0 +1,734 @@
+{
+  "version": "2.5.0-nuclear-canonical",
+  "totalSectionsPerPhase": 104,
+  "sections": [
+    {
+      "code": "A",
+      "name": "Forensic reconstruction — repository [A]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "B",
+      "name": "Forensic reconstruction — repository [B]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "C",
+      "name": "Forensic reconstruction — repository [C]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "D",
+      "name": "Forensic reconstruction — repository [D]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "E",
+      "name": "Forensic reconstruction — repository [E]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "F",
+      "name": "Forensic reconstruction — repository [F]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "G",
+      "name": "Forensic reconstruction — repository [G]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "H",
+      "name": "Forensic reconstruction — repository [H]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "I",
+      "name": "Forensic reconstruction — repository [I]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "J",
+      "name": "Forensic reconstruction — repository [J]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "K",
+      "name": "Forensic reconstruction — repository [K]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "L",
+      "name": "Forensic reconstruction — repository [L]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "M",
+      "name": "Forensic reconstruction — repository [M]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "N",
+      "name": "Forensic reconstruction — repository [N]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "O",
+      "name": "Forensic reconstruction — repository [O]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "P",
+      "name": "Forensic reconstruction — repository [P]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "Q",
+      "name": "Forensic reconstruction — repository [Q]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "R",
+      "name": "Forensic reconstruction — repository [R]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "S",
+      "name": "Forensic reconstruction — repository [S]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "T",
+      "name": "Forensic reconstruction — repository [T]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "U",
+      "name": "Forensic reconstruction — repository [U]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "V",
+      "name": "Forensic reconstruction — repository [V]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "W",
+      "name": "Forensic reconstruction — repository [W]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "X",
+      "name": "Forensic reconstruction — repository [X]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "Y",
+      "name": "Forensic reconstruction — repository [Y]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "Z",
+      "name": "Forensic reconstruction — repository [Z]",
+      "role": "Primary Control Contract",
+      "isMirror": false,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "a",
+      "name": "Forensic reconstruction — repository [a]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "b",
+      "name": "Forensic reconstruction — repository [b]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "c",
+      "name": "Forensic reconstruction — repository [c]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "d",
+      "name": "Forensic reconstruction — repository [d]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "e",
+      "name": "Forensic reconstruction — repository [e]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "f",
+      "name": "Forensic reconstruction — repository [f]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "g",
+      "name": "Forensic reconstruction — repository [g]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "h",
+      "name": "Forensic reconstruction — repository [h]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "i",
+      "name": "Forensic reconstruction — repository [i]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "j",
+      "name": "Forensic reconstruction — repository [j]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "k",
+      "name": "Forensic reconstruction — repository [k]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "l",
+      "name": "Forensic reconstruction — repository [l]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "m",
+      "name": "Forensic reconstruction — repository [m]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "n",
+      "name": "Forensic reconstruction — repository [n]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "o",
+      "name": "Forensic reconstruction — repository [o]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "p",
+      "name": "Forensic reconstruction — repository [p]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "q",
+      "name": "Forensic reconstruction — repository [q]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "r",
+      "name": "Forensic reconstruction — repository [r]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "s",
+      "name": "Forensic reconstruction — repository [s]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "t",
+      "name": "Forensic reconstruction — repository [t]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "u",
+      "name": "Forensic reconstruction — repository [u]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "v",
+      "name": "Forensic reconstruction — repository [v]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "w",
+      "name": "Forensic reconstruction — repository [w]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "x",
+      "name": "Forensic reconstruction — repository [x]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "y",
+      "name": "Forensic reconstruction — repository [y]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "z",
+      "name": "Forensic reconstruction — repository [z]",
+      "role": "Operational Contract",
+      "isMirror": false,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "AA",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AA]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AB",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AB]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AC",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AC]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AD",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AD]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AE",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AE]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AF",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AF]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AG",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AG]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AH",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AH]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AI",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AI]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AJ",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AJ]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AK",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AK]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AL",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AL]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AM",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AM]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AN",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AN]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AO",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AO]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AP",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AP]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AQ",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AQ]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AR",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AR]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AS",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AS]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AT",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AT]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AU",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AU]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AV",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AV]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AW",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AW]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AX",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AX]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AY",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AY]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "AZ",
+      "name": "Mirror Parity: Forensic reconstruction — repository [AZ]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "SYNC"
+    },
+    {
+      "code": "aa",
+      "name": "Mirror Parity: Forensic reconstruction — repository [aa]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ab",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ab]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ac",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ac]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ad",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ad]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ae",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ae]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "af",
+      "name": "Mirror Parity: Forensic reconstruction — repository [af]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ag",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ag]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ah",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ah]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ai",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ai]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "aj",
+      "name": "Mirror Parity: Forensic reconstruction — repository [aj]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ak",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ak]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "al",
+      "name": "Mirror Parity: Forensic reconstruction — repository [al]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "am",
+      "name": "Mirror Parity: Forensic reconstruction — repository [am]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "an",
+      "name": "Mirror Parity: Forensic reconstruction — repository [an]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ao",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ao]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ap",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ap]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "aq",
+      "name": "Mirror Parity: Forensic reconstruction — repository [aq]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ar",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ar]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "as",
+      "name": "Mirror Parity: Forensic reconstruction — repository [as]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "at",
+      "name": "Mirror Parity: Forensic reconstruction — repository [at]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "au",
+      "name": "Mirror Parity: Forensic reconstruction — repository [au]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "av",
+      "name": "Mirror Parity: Forensic reconstruction — repository [av]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "aw",
+      "name": "Mirror Parity: Forensic reconstruction — repository [aw]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ax",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ax]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "ay",
+      "name": "Mirror Parity: Forensic reconstruction — repository [ay]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    },
+    {
+      "code": "az",
+      "name": "Mirror Parity: Forensic reconstruction — repository [az]",
+      "role": "Mirror Audit Check",
+      "isMirror": true,
+      "syncAsync": "ASYNC"
+    }
+  ]
+}
