@@ -151,7 +151,7 @@ export class TransactionalOutboxEngine {
       correlationId: `corr-${Date.now()}`,
       idempotencyKey,
     });
-    const outboxEvent = this.outboxStore.get(res.eventId) || {
+    const outboxEvent: OutboxEvent<T> = (this.outboxStore.get(res.eventId) as unknown as OutboxEvent<T>) || {
       eventId: res.eventId,
       aggregateType,
       aggregateId: entityId,
