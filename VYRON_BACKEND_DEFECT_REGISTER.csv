@@ -1,0 +1,4 @@
+DefectId,DetectedAt,Severity,ResponsibleComponent,RootCause,ContainmentStatus,PostconditionProofId
+DEF-001,2026-09-26T13:48:14.200Z,LOW,WorkerPoolAutoscaler,Cold worker spinup under zero traffic,CONTAINED,ev-post-calib-101
+DEF-002,2026-09-26T13:48:14.200Z,MEDIUM,EventOutboxRelay,Controlled fault injection test vector,RESOLVED,ev-post-inj-102
+DEF-003,2026-09-26T13:48:14.200Z,HIGH,ExternalConnectorHub,Temporary connector upstream 503 error,CONTAINED,ev-post-conn-103

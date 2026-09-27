@@ -1,0 +1,13 @@
+StageId,StageName,Preconditions,EvidenceRequirement,IsConsequential,BlockingCriteria,RecoveryProtocol,DefaultReadinessScore
+S01,REQUIREMENTS,Stakeholder alignment; ICP codified,TIER_1_AUTHORITATIVE,false,Ambiguous scope,Re-interview stakeholder,100
+S02,ARCHITECTURE,Requirements complete; AST baseline declared,TIER_1_AUTHORITATIVE,false,Circular module dependencies,Refactor interface DAG,96
+S03,DATA_CONTRACTS,Architecture blueprint frozen; Schemas declared,TIER_1_AUTHORITATIVE,false,Unmapped schema fields,Regenerate schema types,94
+S04,IMPLEMENTATION,Data contracts validated; Interfaces compiled,TIER_1_AUTHORITATIVE,true,Syntax errors; Contract mismatch,Revert unverified changes,92
+S05,TESTING,Implementation AST syntax clean; Test harness built,TIER_1_AUTHORITATIVE,false,Failing assertions,Isolate root cause in Debug,95
+S06,SECURITY_AUDIT,Testing pass rate 100%; Scan initiated,TIER_1_AUTHORITATIVE,false,Bandit CVE > 0; RLS leak,Harden policies and re-scan,98
+S07,RELEASE,Zero High/Severe CVEs; Drift < 5.0%,TIER_1_AUTHORITATIVE,true,Architecture drift >= 5.0%,Remediate unmapped imports,88
+S08,DEPLOYMENT,Release gate signed; Operator approval granted,TIER_1_AUTHORITATIVE,true,Missing dual-custody signature,Pause mission checkpoint,45
+S09,OBSERVABILITY,Deployment complete; Health monitors alive,TIER_1_AUTHORITATIVE,false,Telemetry drop,Reconnect WebSocket stream,90
+S10,INCIDENT_TRIAGE,Telemetry anomaly detected; Triage triggered,TIER_1_AUTHORITATIVE,false,Unidentified root cause,Invoke Anomaly Investigator,85
+S11,GOVERNANCE,Audit ledger synchronized; Compliance verified,TIER_1_AUTHORITATIVE,true,Tenant boundary violation,Quarantine tenant namespace,95
+S12,EVOLUTION,Full lifecycle verified; Retrospective recorded,TIER_1_AUTHORITATIVE,false,Unresolved regressions,Archive to Time Machine,100

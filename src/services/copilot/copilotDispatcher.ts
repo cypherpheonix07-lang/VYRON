@@ -53,6 +53,14 @@ import { copilotCommandCenter } from "./copilotCommandCenter";
 import { copilotAgentOrchestrator, SpecialistAgentType } from "./copilotAgentOrchestrator";
 import { openRouterDynamicRegistry } from "@/services/ai/openRouterDynamicRegistry";
 import { aiRouter } from "@/services/ai/aiRouter";
+import { questionUnderstanding } from "./questionUnderstanding";
+import { contextMesh } from "./contextMesh";
+import { historyRetrieval } from "./historyRetrieval";
+import { resourceFlightRecorder } from "./resourceProvenance";
+import { multimodalIntelligence } from "./multimodalIntelligence";
+import { safeReasoningEngine } from "./safeReasoningEngine";
+import { stageGateEngine } from "./stageGateEngine";
+import { conversationTimeMachine } from "./conversationTimeMachine";
 import { toast } from "sonner";
 
 export interface DispatchOptions {
@@ -117,10 +125,29 @@ export class CopilotDispatcher {
       return;
     }
 
-    // 2. Classify intent through Intent Gateway
+    // 2. Classify intent through Intent Gateway & Question Understanding Engine (16 types)
     const intent: CopilotIntent = copilotIntentGateway.classifyIntent(text, {
       mode: currentMode,
       currentRoute: typeof window !== "undefined" ? window.location.pathname : "/app",
+    });
+
+    const intentCapsule = questionUnderstanding.analyzeAndBuildCapsule(text, {
+      activeProject: session.context?.selectedEntityId || "proj_atlas_001",
+    });
+
+    // 2.1 Memory Court & 8-Dimensional History Retrieval
+    const { admittedItems: admittedOldChats, autoReferences } = historyRetrieval.evaluateAndAdmit(
+      text,
+      "proj_atlas_001",
+      intentCapsule.lifecycleStage
+    );
+
+    // 2.2 Assemble Multi-Domain Context Mesh & Seal Context Passport
+    const contextPassport = contextMesh.assembleMesh(text, intentCapsule, {
+      mode: currentMode,
+      activeProjectId: "proj_atlas_001",
+      activeStage: intentCapsule.lifecycleStage,
+      selectedOldChats: admittedOldChats,
     });
 
     // 3. Evaluate Deterministic Thinking Policy (Levels 0–5)
@@ -134,7 +161,7 @@ export class CopilotDispatcher {
       mode: currentMode,
     });
 
-    // 4. Record USER message in store immediately with Intent & Thinking Metadata
+    // 4. Record USER message in store immediately with Intent, Passport & Auto-Reference Metadata
     copilotStore.addMessage(currentMode, {
       sender: "USER",
       text,
@@ -142,6 +169,9 @@ export class CopilotDispatcher {
         ...options.metadata,
         intent: intent.type,
         intentConfidence: intent.confidence,
+        intentCapsule,
+        contextPassport,
+        autoReferences,
         thinkingDepth: thinkingPolicy.effectiveDepth,
         thinkingMode: thinkingPolicy.thinkingMode,
         responseDetail: thinkingPolicy.responseDetail,
@@ -331,6 +361,29 @@ export class CopilotDispatcher {
       // Synthesize dynamic suggested action cards based on prompt domain
       const dynamicActions = this.synthesizeSuggestedActions(text, currentMode);
 
+      // Build Resource Trail from Flight Recorder
+      const resourceTrail = resourceFlightRecorder.buildResourceTrail([
+        "res_openai_agents_sdk",
+        "res_supabase_rls_spec",
+        "res_ast_drift_blueprint",
+      ]);
+
+      // Stage Gate Transition evaluation
+      const stageGate = stageGateEngine.evaluateTransition(
+        intentCapsule.lifecycleStage,
+        intentCapsule.lifecycleStage,
+        contextPassport
+      );
+
+      // Synthesize Safe Dynamic Answer & End-of-Chat Proof Card
+      const dynamicAnswer = safeReasoningEngine.composeDynamicAnswer({
+        rawCompletionText: response.text + deliberationSummary,
+        intentCapsule,
+        contextPassport,
+        resourceTrail,
+        specialistName: boundary.name,
+      });
+
       // Synthesize EXACT ANSWER Payload (Direct Answer -> Summary -> Evidence -> Detailed -> Next)
       const exactAnswer = copilotExactAnswerEngine.synthesizeExactAnswer({
         rawQuestion: text,
@@ -344,6 +397,29 @@ export class CopilotDispatcher {
         thinkingDepth: thinkingPolicy.effectiveDepth,
         suggestedActions: dynamicActions,
         executionVerificationHash: response.verificationHash,
+      });
+
+      const turnId = `turn_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+
+      // Persist immutable turn record to Conversation Time Machine
+      conversationTimeMachine.recordTurn({
+        turnId,
+        sessionId: `session_${currentMode.toLowerCase()}`,
+        timestamp: new Date().toISOString(),
+        projectId: contextPassport.project.id,
+        userQuery: text,
+        assistantAnswer: dynamicAnswer.firstBlock + "\n\n" + dynamicAnswer.detailedBody,
+        intentCapsule,
+        contextPassport,
+        resourceTrail,
+        toolsExecuted: dynamicAnswer.safeReasoning.actionsAndTools,
+        pictures: multimodalIntelligence.listPictures(),
+        numericalArtifacts: multimodalIntelligence.listNumericalArtifacts(),
+        lifecycleStage: intentCapsule.lifecycleStage,
+        decisions: dynamicAnswer.safeReasoning.decisions,
+        changes: dynamicAnswer.proofCard.changes,
+        proofCard: dynamicAnswer.proofCard,
+        verificationHash: dynamicAnswer.verificationHash,
       });
 
       copilotStore.addMessage(currentMode, {
@@ -363,6 +439,13 @@ export class CopilotDispatcher {
           activeSpecialistAgent: boundary.name,
           activeSkills: session.activeSkills,
           activeConnectors: session.activeConnectors,
+          intentCapsule,
+          contextPassport,
+          autoReferences,
+          proofCard: dynamicAnswer.proofCard,
+          resourceTrail,
+          safeReasoning: dynamicAnswer.safeReasoning,
+          stageGate,
         },
       });
 

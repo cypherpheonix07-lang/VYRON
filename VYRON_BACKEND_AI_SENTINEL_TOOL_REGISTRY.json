@@ -1,0 +1,231 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-09-26T13:48:14.200Z",
+  "totalGovernedTools": 32,
+  "tools": [
+    {
+      "toolId": "inspect_backend_topology",
+      "category": "TOPOLOGY",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_api_contract",
+      "category": "TOPOLOGY",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_runtime_health",
+      "category": "OBSERVABILITY",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_supabase_logs",
+      "category": "OBSERVABILITY",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_supabase_auth_events",
+      "category": "OBSERVABILITY",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_supabase_realtime_events",
+      "category": "OBSERVABILITY",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_database_schema",
+      "category": "DATABASE",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_database_statistics",
+      "category": "DATABASE",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_rls_and_policy_metadata",
+      "category": "GOVERNANCE",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_query_failures",
+      "category": "DATABASE",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_event_stream",
+      "category": "MESSAGING",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_queue_depth",
+      "category": "MESSAGING",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_workflow_state",
+      "category": "MESSAGING",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "inspect_external_connector_state",
+      "category": "OBSERVABILITY",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "correlate_trace",
+      "category": "CORRELATION",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "reconstruct_causal_chain",
+      "category": "CORRELATION",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "compare_previous_revision",
+      "category": "CORRELATION",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "compare_expected_vs_observed_state",
+      "category": "CORRELATION",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "run_safe_health_probe",
+      "category": "OBSERVABILITY",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "run_read_only_integrity_check",
+      "category": "DATABASE",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "replay_in_sandbox",
+      "category": "REMEDIATION",
+      "riskLevel": "LOW",
+      "mutation": true,
+      "approval": false
+    },
+    {
+      "toolId": "run_regression_suite",
+      "category": "GOVERNANCE",
+      "riskLevel": "LOW",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "generate_root_cause_report",
+      "category": "CORRELATION",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "propose_remediation",
+      "category": "REMEDIATION",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "create_patch_candidate",
+      "category": "REMEDIATION",
+      "riskLevel": "MEDIUM",
+      "mutation": true,
+      "approval": true
+    },
+    {
+      "toolId": "run_patch_verification",
+      "category": "GOVERNANCE",
+      "riskLevel": "LOW",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "request_human_approval",
+      "category": "GOVERNANCE",
+      "riskLevel": "LOW",
+      "mutation": true,
+      "approval": false
+    },
+    {
+      "toolId": "execute_authorized_repair",
+      "category": "REMEDIATION",
+      "riskLevel": "CRITICAL",
+      "mutation": true,
+      "approval": true
+    },
+    {
+      "toolId": "verify_postcondition",
+      "category": "GOVERNANCE",
+      "riskLevel": "READ_ONLY",
+      "mutation": false,
+      "approval": false
+    },
+    {
+      "toolId": "publish_incident_report",
+      "category": "GOVERNANCE",
+      "riskLevel": "LOW",
+      "mutation": true,
+      "approval": false
+    },
+    {
+      "toolId": "invalidate_stale_evidence",
+      "category": "GOVERNANCE",
+      "riskLevel": "MEDIUM",
+      "mutation": true,
+      "approval": false
+    },
+    {
+      "toolId": "recompute_affected_state",
+      "category": "DATABASE",
+      "riskLevel": "MEDIUM",
+      "mutation": true,
+      "approval": false
+    }
+  ]
+}

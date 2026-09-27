@@ -1,0 +1,189 @@
+{
+  "schemaVersion": "2.0.0-omega",
+  "name": "VYRON Question Taxonomy & Intent Classification Matrix",
+  "description": "Deterministic 16-class question taxonomy with multi-label support, entity resolution, risk rating, and lifecycle bindings.",
+  "principles": [
+    "VALIDATION > GENERATION",
+    "OBSERVATION > ASSUMPTION",
+    "UNKNOWN > FABRICATION",
+    "RELEVANCE > RAW RECENCY"
+  ],
+  "questionTypes": [
+    {
+      "id": "FACT",
+      "label": "Factual Retrieval",
+      "description": "Direct inquiry regarding invariant system properties, definitions, RFCs, or repository metadata.",
+      "triggers": ["what is", "define", "who is", "when was", "where is", "meaning of"],
+      "primaryOutput": "DIRECT_ANSWER",
+      "defaultUrgency": "LOW",
+      "defaultRisk": "LOW",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["DATA_ANALYST", "ARCHITECTURE_ANALYST", "REQUIREMENTS_ANALYST"]
+    },
+    {
+      "id": "EXPLANATION",
+      "label": "Conceptual & System Explanation",
+      "description": "Inquiry seeking conceptual clarity, architectural rationales, or component interaction walkthroughs.",
+      "triggers": ["explain", "how does", "why is", "describe", "walkthrough", "clarify"],
+      "primaryOutput": "EXPLANATION",
+      "defaultUrgency": "LOW",
+      "defaultRisk": "LOW",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["ARCHITECTURE_ANALYST", "REQUIREMENTS_ANALYST", "DATA_QUALITY"]
+    },
+    {
+      "id": "DEBUG",
+      "label": "Defect & Anomaly Diagnostics",
+      "description": "Incident diagnosis, bug isolation, stack trace inspection, or root-cause identification.",
+      "triggers": ["debug", "fix", "error", "bug", "crash", "failed", "broken", "root cause"],
+      "primaryOutput": "INCIDENT_REPORT",
+      "defaultUrgency": "HIGH",
+      "defaultRisk": "MEDIUM",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["ANOMALY_INVESTIGATOR", "SYSTEM_DIAGNOSTICS", "SECURITY_ANALYST"]
+    },
+    {
+      "id": "DESIGN",
+      "label": "Architecture & Schema Design",
+      "description": "Architectural modeling, database schema synthesis, interface design, or pattern selection.",
+      "triggers": ["design", "architecture", "blueprint", "pattern", "schema design", "system model"],
+      "primaryOutput": "PLAN",
+      "defaultUrgency": "MEDIUM",
+      "defaultRisk": "MEDIUM",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["ARCHITECTURE_ANALYST", "REQUIREMENTS_ANALYST"]
+    },
+    {
+      "id": "IMPLEMENT",
+      "label": "Code & Artifact Synthesis",
+      "description": "Code generation, endpoint implementation, test scaffolding, or concrete artifact creation.",
+      "triggers": ["write code", "create", "implement", "build", "scaffold", "add function"],
+      "primaryOutput": "CODE_CHANGE",
+      "defaultUrgency": "MEDIUM",
+      "defaultRisk": "HIGH",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["ARCHITECTURE_ANALYST", "DATA_QUALITY"]
+    },
+    {
+      "id": "TRANSFORM",
+      "label": "Refactoring & Migration",
+      "description": "Code translation, protocol migration, schema mutation, or formatting normalization.",
+      "triggers": ["convert", "refactor", "transform", "migrate", "translate", "rewrite"],
+      "primaryOutput": "CODE_CHANGE",
+      "defaultUrgency": "MEDIUM",
+      "defaultRisk": "HIGH",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["ARCHITECTURE_ANALYST", "DATA_QUALITY"]
+    },
+    {
+      "id": "ANALYSIS",
+      "label": "Static AST & Metric Analysis",
+      "description": "Deep analysis of AST call graphs, cyclomatic complexity, architectural drift, or telemetry.",
+      "triggers": ["analyze", "inspect", "drift", "audit", "evaluate", "ast", "metrics"],
+      "primaryOutput": "EXPLANATION",
+      "defaultUrgency": "MEDIUM",
+      "defaultRisk": "LOW",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["ARCHITECTURE_ANALYST", "DATA_ANALYST", "RISK_ANALYST"]
+    },
+    {
+      "id": "COMPARE",
+      "label": "Trade-off & Option Comparison",
+      "description": "Comparative evaluation of two or more libraries, architectural patterns, or PR diffs.",
+      "triggers": ["compare", "versus", "vs", "contrast", "trade-off", "difference between"],
+      "primaryOutput": "TABLE",
+      "defaultUrgency": "LOW",
+      "defaultRisk": "LOW",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["ARCHITECTURE_ANALYST", "RISK_ANALYST", "REQUIREMENTS_ANALYST"]
+    },
+    {
+      "id": "PLAN",
+      "label": "Engineering Roadmap & Strategy",
+      "description": "Formulating execution milestones, stage sequences, dependency DAGs, or migration roadmaps.",
+      "triggers": ["plan", "roadmap", "strategy", "milestones", "order of execution"],
+      "primaryOutput": "PLAN",
+      "defaultUrgency": "MEDIUM",
+      "defaultRisk": "LOW",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["REQUIREMENTS_ANALYST", "ARCHITECTURE_ANALYST"]
+    },
+    {
+      "id": "CALCULATE",
+      "label": "Deterministic Formula & Metric Math",
+      "description": "Computation of DORA metrics, risk scores, p99 latency, cost projections, or formulas.",
+      "triggers": ["calculate", "compute", "formula", "percentage", "metric value", "dora", "rate"],
+      "primaryOutput": "CALCULATION",
+      "defaultUrgency": "LOW",
+      "defaultRisk": "LOW",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["DATA_ANALYST", "RISK_ANALYST"]
+    },
+    {
+      "id": "VISUAL",
+      "label": "Multimodal & Visual Intelligence",
+      "description": "Visual diagram interpretation, UI screenshot critique, canvas layout, or OCR.",
+      "triggers": ["image", "picture", "diagram", "screenshot", "visualize", "canvas", "ui"],
+      "primaryOutput": "VISUAL_ANALYSIS",
+      "defaultUrgency": "LOW",
+      "defaultRisk": "LOW",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["ARCHITECTURE_ANALYST", "DATASET_RESEARCHER"]
+    },
+    {
+      "id": "RESEARCH",
+      "label": "Resource & Document Discovery",
+      "description": "External documentation retrieval, research paper digest, or connector catalog lookup.",
+      "triggers": ["search", "find", "research", "documentation", "rfc", "discover"],
+      "primaryOutput": "RESEARCH_DIGEST",
+      "defaultUrgency": "LOW",
+      "defaultRisk": "LOW",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["DATASET_RESEARCHER", "DATA_ANALYST"]
+    },
+    {
+      "id": "ACTION",
+      "label": "Governed Control Plane Execution",
+      "description": "Executing tool mutations, deployments, connector bindings, or stage promotions.",
+      "triggers": ["run", "execute", "trigger", "start", "deploy", "connect", "revoke"],
+      "primaryOutput": "LIFECYCLE_CHECKPOINT",
+      "defaultUrgency": "HIGH",
+      "defaultRisk": "SEVERE",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["SYSTEM_DIAGNOSTICS", "SECURITY_ANALYST", "ARCHITECTURE_ANALYST"]
+    },
+    {
+      "id": "REVIEW",
+      "label": "Code & Contract Verification",
+      "description": "Validating PR changes, verifying contract conformance, security auditing, or checks.",
+      "triggers": ["review", "validate", "verify", "critique", "pr review", "audit trail"],
+      "primaryOutput": "EXPLANATION",
+      "defaultUrgency": "MEDIUM",
+      "defaultRisk": "MEDIUM",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["DATA_QUALITY", "SECURITY_ANALYST", "ARCHITECTURE_ANALYST"]
+    },
+    {
+      "id": "CONTINUE",
+      "label": "Task & Stage Progression",
+      "description": "Advancing to next stage in the 12-stage lifecycle or resuming a paused engineering mission.",
+      "triggers": ["continue", "proceed", "next step", "resume", "advance", "what's next"],
+      "primaryOutput": "LIFECYCLE_CHECKPOINT",
+      "defaultUrgency": "MEDIUM",
+      "defaultRisk": "MEDIUM",
+      "requiresEvidence": true,
+      "allowedSpecialists": ["REQUIREMENTS_ANALYST", "ARCHITECTURE_ANALYST"]
+    },
+    {
+      "id": "UNKNOWN",
+      "label": "Degraded Fallback / Unresolved",
+      "description": "Underspecified query requiring clarification before consequential actions.",
+      "triggers": [],
+      "primaryOutput": "DIRECT_ANSWER",
+      "defaultUrgency": "LOW",
+      "defaultRisk": "LOW",
+      "requiresEvidence": false,
+      "allowedSpecialists": ["DATA_ANALYST"]
+    }
+  ]
+}

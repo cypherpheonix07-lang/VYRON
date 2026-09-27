@@ -1,0 +1,23 @@
+Test_ID,Campaign,Target_Component,Test_Scenario,Input_Condition,Expected_Verdict,Evidence_Reference,Automated_Harness
+REG-001,C01,phaseDossier250x104Data.ts,Canonical Topology Integrity,Phase count = 250 and Sections per phase = 104,PASS (26000 instances),EVID-C01-TOPO,bun test-copilot-godmode-omega.mjs
+REG-002,C02,questionUnderstanding.ts,Question Type Classification - FACT,"What are the boundary invariants for auth service?",PASS (primaryType: FACT),EVID-C02-CLASS,bun test-copilot-godmode-omega.mjs
+REG-003,C02,questionUnderstanding.ts,Question Type Classification - DEBUG,"Database connection timeout on Postgres pool",PASS (primaryType: DEBUG),EVID-C02-CLASS,bun test-copilot-godmode-omega.mjs
+REG-004,C02,questionUnderstanding.ts,Question Type Classification - CALCULATE,"Calculate drift percentage for 2 unmapped out of 50",PASS (primaryType: CALCULATE),EVID-C02-CLASS,bun test-copilot-godmode-omega.mjs
+REG-005,C03,questionUnderstanding.ts,Ambiguity & Deictic Reference,"Fix this right now urgently",PASS (clarificationNeed: true),EVID-C03-CLARIF,bun test-copilot-godmode-omega.mjs
+REG-006,C04,historyRetrieval.ts,Relevant Chat Auto-Reference,High semantic and project match candidate,PASS (admitted: true score: 1.0),EVID-C04-HIST,bun test-copilot-godmode-omega.mjs
+REG-007,C05,historyRetrieval.ts,Cross-Project Isolation Hard Veto,Candidate has different project_id,PASS (admitted: false score: 0.0),EVID-C05-ISOL,bun test-copilot-godmode-omega.mjs
+REG-008,C06,historyRetrieval.ts,Contradiction Tribunal Arbitration,Live AST observation vs historical claim,PASS (Observation overrides claim),EVID-C06-CONTRA,bun test-copilot-godmode-omega.mjs
+REG-009,C07,multimodalIntelligence.ts,Picture Intelligence Observation,Screenshot with architecture boundary bounding box,PASS (Observations mapped to claims),EVID-C07-PIC,bun test-copilot-godmode-omega.mjs
+REG-010,C08,multimodalIntelligence.ts,Deterministic Numerical Math,Drift percentage calculation formula,PASS (Units and inputs preserved),EVID-C08-NUM,bun test-copilot-godmode-omega.mjs
+REG-011,C09,resourceProvenance.ts,Resource Flight Recording,OpenAI Agents SDK docs URL,PASS (Tier 1 Authority logged),EVID-C09-RES,bun test-copilot-godmode-omega.mjs
+REG-012,C10,contextMesh.ts,Context Passport Sealing,16 context domains compiled and signed,PASS (Signed with SHA-256 hash),EVID-C10-PASS,bun test-copilot-godmode-omega.mjs
+REG-013,C11,copilotAgentOrchestrator.ts,Specialist Capability Enforcement,Architecture Analyst specialist invoked,PASS (Enforces CAN vs CANNOT boundaries),EVID-C11-SPEC,bun test-copilot-godmode-omega.mjs
+REG-014,C12,safeReasoningEngine.ts,Private Scratchpad Purging,Raw completion with <think> tag,PASS (Scratchpad purged safe UI assembled),EVID-C12-TOOL,bun test-copilot-godmode-omega.mjs
+REG-015,C13,copilotExecutionEngine.ts,Tool Failure Circuit Breaker,Tool execution timeout or error,PASS (Degrades safely with BLOCKED state),EVID-C13-DEGRADE,bun test-copilot-godmode-omega.mjs
+REG-016,C14,stageGateEngine.ts,Mission Resume & Checkpoint,Interrupted multi-step migration,PASS (State restored with exact unlock criteria),EVID-C14-RESUME,bun test-copilot-godmode-omega.mjs
+REG-017,C15,copilotStore.ts,Dual-Mode Session Isolation,Toggle between NORMAL and DEMO mode,PASS (Workspaces strictly partitioned),EVID-C15-SESS,bun test-copilot-godmode-omega.mjs
+REG-018,C16,stageGateEngine.ts,Lifecycle Stage Gating,Stage transition from Architecture to Contracts,PASS (Score 95% gating requirements verified),EVID-C16-GATE,bun test-copilot-godmode-omega.mjs
+REG-019,C17,contextMesh.ts,Stale Evidence Invalidation,Context item timestamp older than 24 hours,PASS (Context Debt raised invalidation engaged),EVID-C17-STALE,bun test-copilot-godmode-omega.mjs
+REG-020,C18,questionUnderstanding.ts,Prompt Injection & Destructive Query,"DROP TABLE users CASCADE",PASS (Classified SEVERE risk and consequential),EVID-C18-INJECT,bun test-copilot-godmode-omega.mjs
+REG-021,C19,contextMesh.ts,Multi-Tenant Boundary Perimeter,Context passport perimeter inspection,PASS (Tenant isolation perimeter restricted),EVID-C19-TENANT,bun test-copilot-godmode-omega.mjs
+REG-022,C20,conversationTimeMachine.ts,Time Machine Replay & Divergence,Historical turn replay against current head,PASS (Divergence delta calculated cleanly),EVID-C20-TIME,bun test-copilot-godmode-omega.mjs

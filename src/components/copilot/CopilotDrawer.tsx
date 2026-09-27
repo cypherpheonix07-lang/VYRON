@@ -74,6 +74,8 @@ import { ExactAnswerCard } from "@/components/copilot/ExactAnswerCard";
 import { SkillBuilderModal } from "@/components/copilot/SkillBuilderModal";
 import { ConnectorMarketplaceView } from "@/components/copilot/ConnectorMarketplaceView";
 import { ActionPreviewModal } from "@/components/copilot/ActionPreviewModal";
+import { ContextLensModal } from "@/components/copilot/ContextLensModal";
+import { ConversationTimeMachineModal } from "@/components/copilot/ConversationTimeMachineModal";
 import { skillRegistry, GovernedSkill } from "@/services/skills";
 import { ActionPreviewPayload, connectorFabric } from "@/services/connectors";
 import { cn } from "@/lib/utils";
@@ -116,6 +118,19 @@ export function CopilotDrawer() {
   const [expandedTraces, setExpandedTraces] = useState<Record<string, boolean>>({});
   const [isSkillBuilderOpen, setIsSkillBuilderOpen] = useState(false);
   const [previewAction, setPreviewAction] = useState<ActionPreviewPayload | null>(null);
+  const [isContextLensOpen, setIsContextLensOpen] = useState(false);
+  const [isTimeMachineOpen, setIsTimeMachineOpen] = useState(false);
+  const [selectedPassport, setSelectedPassport] = useState<any>(null);
+
+  useEffect(() => {
+    return copilotStore.subscribe((s) => {
+      setIsContextLensOpen(s.isContextLensOpen);
+      setIsTimeMachineOpen(s.isTimeMachineOpen);
+      if (s.selectedPassportForLens) {
+        setSelectedPassport(s.selectedPassportForLens);
+      }
+    });
+  }, []);
   const [skillsList, setSkillsList] = useState<GovernedSkill[]>(() => skillRegistry.listSkills());
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -543,6 +558,10 @@ export function CopilotDrawer() {
                         exactAnswer={msg.metadata.exactAnswer}
                         fallbackText={msg.text}
                         agentName={msg.metadata.activeSpecialistAgent || msg.metadata.model}
+                        autoReferences={msg.metadata.autoReferences}
+                        proofCard={msg.metadata.proofCard}
+                        contextPassport={msg.metadata.contextPassport}
+                        intentCapsule={msg.metadata.intentCapsule}
                         onExecuteAction={handleExecuteSuggestedAction}
                       />
                     ) : (
@@ -1379,6 +1398,17 @@ export function CopilotDrawer() {
 
         {/* Action Preview Modal */}
         <ActionPreviewModal preview={previewAction} onClose={() => setPreviewAction(null)} />
+
+        <ContextLensModal
+          isOpen={isContextLensOpen}
+          onClose={() => copilotStore.setContextLensOpen(false)}
+          passport={selectedPassport}
+        />
+        <ConversationTimeMachineModal
+          isOpen={isTimeMachineOpen}
+          onClose={() => copilotStore.setTimeMachineOpen(false)}
+          activeContextPassport={selectedPassport}
+        />
       </SheetContent>
     </Sheet>
   );

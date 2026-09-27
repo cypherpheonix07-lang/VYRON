@@ -1,0 +1,157 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-09-26T13:48:14.200Z",
+  "system": "VYRON Engineering Intelligence Control Plane",
+  "nodes": [
+    {
+      "id": "edge-gateway",
+      "label": "Edge API Gateway",
+      "type": "GATEWAY",
+      "authority": "Edge Router",
+      "slo": "99.99%",
+      "status": "HEALTHY"
+    },
+    {
+      "id": "auth-service",
+      "label": "Supabase Auth (GoTrue)",
+      "type": "AUTH",
+      "authority": "JWT Token Authority",
+      "tokenExpiry": "3600s",
+      "status": "HEALTHY"
+    },
+    {
+      "id": "policy-gate",
+      "label": "Policy & Tenant Context Gate",
+      "type": "POLICY",
+      "authority": "RLS & OPA Policy",
+      "rule": "DENY_BY_DEFAULT",
+      "status": "HEALTHY"
+    },
+    {
+      "id": "domain-service",
+      "label": "Engineering Domain Core",
+      "type": "SERVICE",
+      "authority": "VYRON Engine",
+      "transactionModel": "UNIT_OF_WORK",
+      "status": "HEALTHY"
+    },
+    {
+      "id": "postgres-db",
+      "label": "PostgreSQL 15 Database",
+      "type": "DATABASE",
+      "authority": "Database Master",
+      "isolation": "READ_COMMITTED",
+      "status": "HEALTHY"
+    },
+    {
+      "id": "outbox-relay",
+      "label": "Transactional Outbox Relay",
+      "type": "OUTBOX",
+      "authority": "Outbox Engine",
+      "pattern": "DEBEZIUM_CDC",
+      "status": "HEALTHY"
+    },
+    {
+      "id": "event-broker",
+      "label": "Event Bus & CloudEvents",
+      "type": "BROKER",
+      "authority": "Event Fabric",
+      "idempotency": "HMAC_SHA256",
+      "status": "HEALTHY"
+    },
+    {
+      "id": "async-workers",
+      "label": "Durable Async Workers",
+      "type": "WORKER",
+      "authority": "Worker Runtime",
+      "sagaSupported": true,
+      "status": "HEALTHY"
+    },
+    {
+      "id": "ext-connectors",
+      "label": "External Connectors",
+      "type": "CONNECTOR",
+      "authority": "GitHub/GitLab/Vibe",
+      "count": 5,
+      "status": "HEALTHY"
+    },
+    {
+      "id": "realtime-ws",
+      "label": "Realtime WebSocket Hub",
+      "type": "REALTIME",
+      "authority": "Supabase Realtime",
+      "protocol": "WEBSOCKET_BROADCAST",
+      "status": "HEALTHY"
+    }
+  ],
+  "edges": [
+    {
+      "from": "edge-gateway",
+      "to": "auth-service",
+      "protocol": "HTTP",
+      "isAsync": false,
+      "latencyMs": 4.8
+    },
+    {
+      "from": "edge-gateway",
+      "to": "policy-gate",
+      "protocol": "HTTP",
+      "isAsync": false,
+      "latencyMs": 1.2
+    },
+    {
+      "from": "policy-gate",
+      "to": "domain-service",
+      "protocol": "HTTP",
+      "isAsync": false,
+      "latencyMs": 6.4
+    },
+    {
+      "from": "domain-service",
+      "to": "postgres-db",
+      "protocol": "POSTGRES_REST",
+      "isAsync": false,
+      "latencyMs": 3.8
+    },
+    {
+      "from": "postgres-db",
+      "to": "outbox-relay",
+      "protocol": "OUTBOX_CDC",
+      "isAsync": true,
+      "latencyMs": 1.9
+    },
+    {
+      "from": "outbox-relay",
+      "to": "event-broker",
+      "protocol": "EVENT_BUS",
+      "isAsync": true,
+      "latencyMs": 2.4
+    },
+    {
+      "from": "event-broker",
+      "to": "async-workers",
+      "protocol": "EVENT_BUS",
+      "isAsync": true,
+      "latencyMs": 5.1
+    },
+    {
+      "from": "async-workers",
+      "to": "ext-connectors",
+      "protocol": "HTTP",
+      "isAsync": false,
+      "latencyMs": 42
+    },
+    {
+      "from": "domain-service",
+      "to": "realtime-ws",
+      "protocol": "WEBSOCKET",
+      "isAsync": true,
+      "latencyMs": 1.1
+    }
+  ],
+  "evidenceLineage": {
+    "rootHash": "sha256-vyron-flow-graph-2026-09-26",
+    "verifiedEdges": 9,
+    "epistemicStatus": "OBSERVED_FACT"
+  }
+}

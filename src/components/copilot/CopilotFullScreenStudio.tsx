@@ -89,6 +89,9 @@ import { ExactAnswerCard } from "./ExactAnswerCard";
 import { SkillBuilderModal } from "./SkillBuilderModal";
 import { ConnectorMarketplaceView } from "./ConnectorMarketplaceView";
 import { ActionPreviewModal } from "./ActionPreviewModal";
+import { ContextLensModal } from "./ContextLensModal";
+import { ConversationTimeMachineModal } from "./ConversationTimeMachineModal";
+import { Radar } from "lucide-react";
 import { ActionPreviewPayload } from "@/services/connectors/connectorFabric";
 import { skillRegistry, GovernedSkill } from "@/services/skills";
 import { Button } from "@/components/ui/button";
@@ -129,6 +132,19 @@ export function CopilotFullScreenStudio() {
   >("plan");
   const [isSkillBuilderOpen, setIsSkillBuilderOpen] = useState(false);
   const [previewAction, setPreviewAction] = useState<ActionPreviewPayload | null>(null);
+  const [isContextLensOpen, setIsContextLensOpen] = useState(false);
+  const [isTimeMachineOpen, setIsTimeMachineOpen] = useState(false);
+  const [selectedPassport, setSelectedPassport] = useState<any>(null);
+
+  useEffect(() => {
+    return copilotStore.subscribe((s) => {
+      setIsContextLensOpen(s.isContextLensOpen);
+      setIsTimeMachineOpen(s.isTimeMachineOpen);
+      if (s.selectedPassportForLens) {
+        setSelectedPassport(s.selectedPassportForLens);
+      }
+    });
+  }, []);
 
   const [liveContext, setLiveContext] = useState<CopilotLiveContext | null>(null);
   const [activePlan, setActivePlan] = useState<DynamicExecutionPlan | null>(
@@ -550,6 +566,26 @@ export function CopilotFullScreenStudio() {
             <Button
               size="sm"
               variant="outline"
+              onClick={() => copilotStore.setContextLensOpen(true)}
+              className="h-8 text-xs font-mono gap-1.5 border-primary/40 bg-primary/5 hover:bg-primary/10 text-primary font-bold"
+            >
+              <Radar className="size-3.5" />
+              <span>Context Lens</span>
+            </Button>
+
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => copilotStore.setTimeMachineOpen(true)}
+              className="h-8 text-xs font-mono gap-1.5 border-sky-500/40 bg-sky-500/5 hover:bg-sky-500/10 text-sky-400 font-bold"
+            >
+              <History className="size-3.5" />
+              <span>Time Machine</span>
+            </Button>
+
+            <Button
+              size="sm"
+              variant="outline"
               onClick={handleRunDeliberation}
               className="h-8 text-xs font-mono gap-1.5 border-primary/30 bg-primary/5 hover:bg-primary/10 text-primary font-bold"
             >
@@ -678,6 +714,10 @@ export function CopilotFullScreenStudio() {
                       exactAnswer={msg.metadata.exactAnswer}
                       fallbackText={msg.text}
                       agentName={msg.metadata.activeSpecialistAgent}
+                      autoReferences={msg.metadata.autoReferences}
+                      proofCard={msg.metadata.proofCard}
+                      contextPassport={msg.metadata.contextPassport}
+                      intentCapsule={msg.metadata.intentCapsule}
                       onExecuteAction={handleExecuteSuggestedAction}
                     />
                   ) : (
@@ -1637,6 +1677,16 @@ export function CopilotFullScreenStudio() {
 
       <SkillBuilderModal isOpen={isSkillBuilderOpen} onClose={() => setIsSkillBuilderOpen(false)} />
       <ActionPreviewModal preview={previewAction} onClose={() => setPreviewAction(null)} />
+      <ContextLensModal
+        isOpen={isContextLensOpen}
+        onClose={() => copilotStore.setContextLensOpen(false)}
+        passport={selectedPassport}
+      />
+      <ConversationTimeMachineModal
+        isOpen={isTimeMachineOpen}
+        onClose={() => copilotStore.setTimeMachineOpen(false)}
+        activeContextPassport={selectedPassport}
+      />
     </div>
   );
 }

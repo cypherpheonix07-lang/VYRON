@@ -23,6 +23,7 @@ import {
   Download,
   Sparkles,
   Command,
+  Workflow,
   Keyboard,
   X,
   ShieldAlert,
@@ -82,7 +83,6 @@ import { authService } from "@/services/authService";
 import { notifications as mockNotifications, projects as mockProjects } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import { useProjects } from "@/hooks/useProjects";
-import { WorkspacePulse } from "./WorkspacePulse";
 import { copilotRealtimeListener } from "@/services/copilot/copilotRealtimeListener";
 
 const labelMap: Record<string, string> = {
@@ -233,6 +233,34 @@ export const NAV_DOMAINS: NavDomain[] = [
       { to: "/app/settings", label: "Platform Health & Settings", icon: Settings, exact: true },
       { to: "/app/admin/usage", label: "SLO & Telemetry", icon: BarChart3, exact: false },
       { to: "/app/admin", label: "Admin Console", icon: ShieldCheck, exact: true },
+    ],
+  },
+  {
+    id: "platform",
+    label: "PLATFORM",
+    icon: Server,
+    adminOnly: true,
+    items: [
+      { to: "/app/settings", label: "Platform Health & Settings", icon: Settings, exact: true },
+      { to: "/app/admin/usage", label: "SLO & Telemetry", icon: BarChart3, exact: false },
+    ],
+  },
+  {
+    id: "admin",
+    label: "ADMIN",
+    icon: ShieldCheck,
+    adminOnly: true,
+    items: [
+      { to: "/app/admin", label: "Admin Console", icon: ShieldCheck, exact: true },
+      { to: "/app/admin/audit", label: "Audit & Evidence Ledger", icon: ShieldAlert, exact: false },
+    ],
+  },
+  {
+    id: "system-flow",
+    label: "SYSTEM FLOW",
+    icon: Workflow,
+    items: [
+      { to: "/app/system-flow", label: "Live System Flow & Sentinel", icon: Workflow, exact: true },
     ],
   },
 ];
@@ -1226,7 +1254,10 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   if (!ready) {
     return (
-      <div className="relative flex min-h-screen items-center justify-center bg-background px-4">
+      <div
+        className="relative flex min-h-screen items-center justify-center bg-background px-4"
+        suppressHydrationWarning
+      >
         <div
           className="pointer-events-none absolute inset-0 opacity-20"
           style={{ background: "var(--gradient-hero)" }}
@@ -1236,11 +1267,14 @@ export function AppShell({ children }: { children: ReactNode }) {
           className="pointer-events-none absolute inset-0 grid-backdrop opacity-15"
           aria-hidden
         />
-        <div className="surface rounded-2xl p-8 max-w-sm w-full text-center space-y-4 shadow-2xl border border-border/80">
-          <Loader2 className="size-8 animate-spin mx-auto text-primary animate-spin" />
+        <div
+          className="surface rounded-2xl p-8 max-w-sm w-full text-center space-y-4 shadow-2xl border border-border/80"
+          suppressHydrationWarning
+        >
+          <Loader2 className="size-8 animate-spin mx-auto text-primary" />
           <div className="space-y-1">
-            <h3 className="text-sm font-semibold text-white">Loading workspace</h3>
-            <p className="text-xs text-muted-foreground">
+            <h3 className="text-sm font-semibold text-white" suppressHydrationWarning>Loading workspace</h3>
+            <p className="text-xs text-muted-foreground" suppressHydrationWarning>
               Synchronizing credentials and loading active node...
             </p>
           </div>

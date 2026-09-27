@@ -176,7 +176,7 @@ export const Stage14BlueprintWorkspace: React.FC = () => {
               <div className="border border-border/70 rounded-xl overflow-hidden bg-background/40">
                 <div className="max-h-80 overflow-y-auto divide-y divide-border/40 text-xs">
                   {bp.sections.map((sec) => {
-                    const mapping = BLUEPRINT_26_SECTION_MAPPINGS.find((m) => m.sectionIndex === sec.index);
+                    const mapping = BLUEPRINT_26_SECTION_MAPPINGS.find((m) => m.sectionNumber === sec.index);
                     return (
                       <div
                         key={sec.index}
@@ -190,7 +190,7 @@ export const Stage14BlueprintWorkspace: React.FC = () => {
                                 variant="outline"
                                 className="font-mono text-[9px] border-cyan-500/30 text-cyan-400 bg-cyan-500/5"
                               >
-                                Letter {mapping.letter} • {mapping.registryPhasePair}
+                                Letter {mapping.sectionLetter} • {mapping.associatedPhases.join(", ")}
                               </Badge>
                             )}
                           </div>

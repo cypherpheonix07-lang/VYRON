@@ -158,6 +158,14 @@ export interface CopilotMessage {
         activeSpecialistAgent?: string | undefined;
         activeSkills?: string[] | undefined;
         activeConnectors?: string[] | undefined;
+        intentCapsule?: import("@/services/copilot/questionUnderstanding").IntentCapsule | undefined;
+        contextPassport?: import("@/services/copilot/contextMesh").ContextPassport | undefined;
+        autoReferences?: import("@/services/copilot/historyRetrieval").AutoReferenceExplanation[] | undefined;
+        proofCard?: import("@/services/copilot/safeReasoningEngine").EndOfChatProofCard | undefined;
+        resourceTrail?: import("@/services/copilot/resourceProvenance").ResourceTrailItem[] | undefined;
+        safeReasoning?: import("@/services/copilot/safeReasoningEngine").SafeReasoningTransparency | undefined;
+        stageGate?: import("@/services/copilot/stageGateEngine").StageGateTransition | undefined;
+        checkpoint?: import("@/services/copilot/stageGateEngine").ResumableMissionCheckpoint | undefined;
       }
     | undefined;
 }
@@ -190,6 +198,9 @@ export interface CopilotState {
   viewMode: CopilotViewMode;
   activeTab: CopilotTab;
   studioMode: StudioExperienceMode;
+  isContextLensOpen: boolean;
+  isTimeMachineOpen: boolean;
+  selectedPassportForLens?: import("@/services/copilot/contextMesh").ContextPassport | null;
   normalSession: CopilotModeSession;
   demoSession: CopilotModeSession;
 }
@@ -285,6 +296,9 @@ class CopilotStore {
       viewMode: "DRAWER",
       activeTab: "chat",
       studioMode: "CHAT",
+      isContextLensOpen: false,
+      isTimeMachineOpen: false,
+      selectedPassportForLens: null,
       normalSession: createInitialSession("NORMAL"),
       demoSession: createInitialSession("DEMO"),
     };
@@ -315,6 +329,19 @@ class CopilotStore {
 
   public toggleDrawer() {
     this.setDrawerOpen(!this.state.isDrawerOpen);
+  }
+
+  public setContextLensOpen(isOpen: boolean, passport?: import("@/services/copilot/contextMesh").ContextPassport | null) {
+    this.state.isContextLensOpen = isOpen;
+    if (passport !== undefined) {
+      this.state.selectedPassportForLens = passport;
+    }
+    this.emit();
+  }
+
+  public setTimeMachineOpen(isOpen: boolean) {
+    this.state.isTimeMachineOpen = isOpen;
+    this.emit();
   }
 
   public setViewMode(mode: CopilotViewMode) {

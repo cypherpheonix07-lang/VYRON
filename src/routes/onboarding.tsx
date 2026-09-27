@@ -27,6 +27,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useAuth, type Role } from "@/lib/auth";
 import { supabase } from "@/lib/supabaseClient";
+import { experienceProfileService, type PersonaType } from "@/services/persona/experienceProfileService";
 
 export const Route = createFileRoute("/onboarding")({
   head: () => ({
@@ -89,6 +90,11 @@ function OnboardingPage() {
 
   // Form states
   const [selectedRole, setSelectedRole] = useState<Role>("Student");
+  const [personaType, setPersonaType] = useState<PersonaType>("STUDENT");
+  const [institution, setInstitution] = useState("");
+  const [programOrTrack, setProgramOrTrack] = useState("");
+  const [industryOrDomain, setIndustryOrDomain] = useState("");
+  const [customObjective, setCustomObjective] = useState("");
   const [selectedGoals, setSelectedGoals] = useState<string[]>(["Learn Software Architecture"]);
   const [customGoals, setCustomGoals] = useState<string[]>([]);
   const [customGoalInput, setCustomGoalInput] = useState("");
@@ -154,6 +160,19 @@ function OnboardingPage() {
     try {
       const milestoneDate = calculateTargetDate();
 
+      const experienceProfile = experienceProfileService.createDefaultProfile(
+        personaType,
+        selectedRole,
+        {
+          institution,
+          degreeProgram: programOrTrack,
+          industry: industryOrDomain,
+          primaryObjective: customObjective,
+          teachingArea: programOrTrack,
+        }
+      );
+      experienceProfileService.saveLocalProfile(experienceProfile);
+
       if (user.isDemo) {
         const demoUser = {
           ...user,
@@ -167,6 +186,7 @@ function OnboardingPage() {
             goals: selectedGoals,
             proficiency,
             milestone_deadline: milestoneDate,
+            experience_profile: experienceProfile,
           }),
         );
         window.dispatchEvent(new Event("storage"));
@@ -189,7 +209,7 @@ function OnboardingPage() {
       }
 
       toast.success("Workspace personalized successfully!", {
-        description: `Templates, density, and countdown configured for ${selectedRole} persona.`,
+        description: `Experience profile configured for ${personaType} (${selectedRole}).`,
       });
       navigate({ to: "/app" });
     } catch (err) {
@@ -244,33 +264,145 @@ function OnboardingPage() {
           ))}
         </div>
 
-        {/* STEP 1: ROLE SELECTION */}
+        {/* STEP 1: ROLE & PERSONA SELECTION */}
         {step === 0 && (
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {(["Student", "Faculty", "Startup", "Admin", "Reviewer"] as Role[]).map((r) => (
-                <div
-                  key={r}
-                  onClick={() => setSelectedRole(r)}
-                  className={`cursor-pointer rounded-xl border p-4 transition-all ${
-                    selectedRole === r
-                      ? "border-primary bg-primary/10 ring-1 ring-primary"
-                      : "border-border/80 bg-zinc-950/40 hover:border-primary/40"
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold text-sm text-foreground">{r}</span>
-                    {selectedRole === r && <Check className="size-4 text-primary" />}
+          <div className="space-y-5">
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-foreground">1. Choose Primary Persona Context</label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {[
+                  { id: "STUDENT", label: "Student", desc: "Course & Capstone" },
+                  { id: "TEACHER", label: "Teacher / Educator", desc: "Curriculum & Rubrics" },
+                  { id: "WORKING_PROFESSIONAL", label: "Working Pro", desc: "Production & Scale" },
+                  { id: "OTHER", label: "Other / Specialist", desc: "Exploration" },
+                ].map((p) => (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => {
+                      setPersonaType(p.id as PersonaType);
+                      if (p.id === "STUDENT") setSelectedRole("Student");
+                      else if (p.id === "TEACHER") setSelectedRole("Faculty");
+                      else if (p.id === "WORKING_PROFESSIONAL") setSelectedRole("Startup");
+                      else setSelectedRole("Student");
+                    }}
+                    className={`rounded-lg border p-2.5 text-left transition-all ${
+                      personaType === p.id
+                        ? "border-cyan-500 bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/50"
+                        : "border-border/60 bg-zinc-950/40 hover:border-border text-muted-foreground"
+                    }`}
+                  >
+                    <div className="font-semibold text-xs text-foreground">{p.label}</div>
+                    <div className="text-[10px] text-muted-foreground">{p.desc}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Persona-specific contextual input */}
+            <div className="p-3.5 rounded-xl border border-cyan-500/20 bg-cyan-950/10 space-y-3">
+              <div className="text-xs font-semibold text-cyan-300">
+                Persona Context Details (Tailors Guidance & Templates)
+              </div>
+              {personaType === "STUDENT" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div className="space-y-1">
+                    <label className="text-muted-foreground">Degree / Program</label>
+                    <Input
+                      placeholder="e.g. B.Tech Computer Science"
+                      value={programOrTrack}
+                      onChange={(e) => setProgramOrTrack(e.target.value)}
+                      className="h-8 text-xs bg-zinc-950/50"
+                    />
                   </div>
-                  <p className="text-[11px] text-muted-foreground mt-1">
-                    {r === "Student" && "Academic blueprints, code health & semester defense."}
-                    {r === "Faculty" && "Rubric reviews, plagiarism analysis & student grading."}
-                    {r === "Startup" && "Fast MVP synthesis, tech stack selection & KPI mapping."}
-                    {r === "Admin" && "Full workspace governance, token caps & audit trails."}
-                    {r === "Reviewer" && "Architecture audit pins, sign-offs & release gates."}
-                  </p>
+                  <div className="space-y-1">
+                    <label className="text-muted-foreground">College / University</label>
+                    <Input
+                      placeholder="e.g. Institute of Technology"
+                      value={institution}
+                      onChange={(e) => setInstitution(e.target.value)}
+                      className="h-8 text-xs bg-zinc-950/50"
+                    />
+                  </div>
                 </div>
-              ))}
+              )}
+              {personaType === "TEACHER" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div className="space-y-1">
+                    <label className="text-muted-foreground">Institution / Organization</label>
+                    <Input
+                      placeholder="e.g. University Computing Dept"
+                      value={institution}
+                      onChange={(e) => setInstitution(e.target.value)}
+                      className="h-8 text-xs bg-zinc-950/50"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-muted-foreground">Teaching Area / Subject</label>
+                    <Input
+                      placeholder="e.g. Distributed Systems Architecture"
+                      value={programOrTrack}
+                      onChange={(e) => setProgramOrTrack(e.target.value)}
+                      className="h-8 text-xs bg-zinc-950/50"
+                    />
+                  </div>
+                </div>
+              )}
+              {personaType === "WORKING_PROFESSIONAL" && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                  <div className="space-y-1">
+                    <label className="text-muted-foreground">Role / Position</label>
+                    <Input
+                      placeholder="e.g. Staff Backend Architect"
+                      value={programOrTrack}
+                      onChange={(e) => setProgramOrTrack(e.target.value)}
+                      className="h-8 text-xs bg-zinc-950/50"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-muted-foreground">Industry / Domain</label>
+                    <Input
+                      placeholder="e.g. FinTech / SaaS Infrastructure"
+                      value={industryOrDomain}
+                      onChange={(e) => setIndustryOrDomain(e.target.value)}
+                      className="h-8 text-xs bg-zinc-950/50"
+                    />
+                  </div>
+                </div>
+              )}
+              {personaType === "OTHER" && (
+                <div className="space-y-1 text-xs">
+                  <label className="text-muted-foreground">Primary Engineering Objective</label>
+                  <Input
+                    placeholder="e.g. Researching AI-assisted code evolution"
+                    value={customObjective}
+                    onChange={(e) => setCustomObjective(e.target.value)}
+                    className="h-8 text-xs bg-zinc-950/50"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-foreground">2. Select Role Preset</label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                {(["Student", "Faculty", "Startup", "Admin", "Reviewer"] as Role[]).map((r) => (
+                  <div
+                    key={r}
+                    onClick={() => setSelectedRole(r)}
+                    className={`cursor-pointer rounded-lg border p-2.5 transition-all ${
+                      selectedRole === r
+                        ? "border-primary bg-primary/10 ring-1 ring-primary"
+                        : "border-border/80 bg-zinc-950/40 hover:border-primary/40"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-semibold text-xs text-foreground">{r}</span>
+                      {selectedRole === r && <Check className="size-3.5 text-primary" />}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         )}

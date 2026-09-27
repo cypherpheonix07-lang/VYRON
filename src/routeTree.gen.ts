@@ -48,6 +48,7 @@ import { Route as AppReportsRouteImport } from './routes/app.reports'
 import { Route as AppSearchRouteImport } from './routes/app.search'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppSimulationRouteImport } from './routes/app.simulation'
+import { Route as AppSystemFlowRouteImport } from './routes/app.system-flow'
 import { Route as AppTeamRouteImport } from './routes/app.team'
 import { Route as AppWorkpulseRouteImport } from './routes/app.workpulse'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
@@ -302,6 +303,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
 const AppSimulationRoute = AppSimulationRouteImport.update({
   id: '/simulation',
   path: '/simulation',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSystemFlowRoute = AppSystemFlowRouteImport.update({
+  id: '/system-flow',
+  path: '/system-flow',
   getParentRoute: () => AppRoute,
 } as any)
 const AppTeamRoute = AppTeamRouteImport.update({
@@ -648,6 +654,7 @@ export interface FileRoutesByFullPath {
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/simulation': typeof AppSimulationRoute
+  '/app/system-flow': typeof AppSystemFlowRoute
   '/app/team': typeof AppTeamRouteWithChildren
   '/app/workpulse': typeof AppWorkpulseRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -747,6 +754,7 @@ export interface FileRoutesByTo {
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/simulation': typeof AppSimulationRoute
+  '/app/system-flow': typeof AppSystemFlowRoute
   '/app/team': typeof AppTeamRouteWithChildren
   '/app/workpulse': typeof AppWorkpulseRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -847,6 +855,7 @@ export interface FileRoutesById {
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/simulation': typeof AppSimulationRoute
+  '/app/system-flow': typeof AppSystemFlowRoute
   '/app/team': typeof AppTeamRouteWithChildren
   '/app/workpulse': typeof AppWorkpulseRoute
   '/auth/callback': typeof AuthCallbackRoute
@@ -950,6 +959,7 @@ export interface FileRouteTypes {
     | '/app/search'
     | '/app/settings'
     | '/app/simulation'
+    | '/app/system-flow'
     | '/app/team'
     | '/app/workpulse'
     | '/auth/callback'
@@ -1049,6 +1059,7 @@ export interface FileRouteTypes {
     | '/app/search'
     | '/app/settings'
     | '/app/simulation'
+    | '/app/system-flow'
     | '/app/team'
     | '/app/workpulse'
     | '/auth/callback'
@@ -1148,6 +1159,7 @@ export interface FileRouteTypes {
     | '/app/search'
     | '/app/settings'
     | '/app/simulation'
+    | '/app/system-flow'
     | '/app/team'
     | '/app/workpulse'
     | '/auth/callback'
@@ -1504,6 +1516,13 @@ declare module '@tanstack/react-router' {
       path: '/simulation'
       fullPath: '/app/simulation'
       preLoaderRoute: typeof AppSimulationRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/system-flow': {
+      id: '/app/system-flow'
+      path: '/system-flow'
+      fullPath: '/app/system-flow'
+      preLoaderRoute: typeof AppSystemFlowRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/team': {
@@ -2102,6 +2121,7 @@ interface AppRouteChildren {
   AppSearchRoute: typeof AppSearchRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppSimulationRoute: typeof AppSimulationRoute
+  AppSystemFlowRoute: typeof AppSystemFlowRoute
   AppTeamRoute: typeof AppTeamRouteWithChildren
   AppWorkpulseRoute: typeof AppWorkpulseRoute
   AppIndexRoute: typeof AppIndexRoute
@@ -2138,6 +2158,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSearchRoute: AppSearchRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppSimulationRoute: AppSimulationRoute,
+  AppSystemFlowRoute: AppSystemFlowRoute,
   AppTeamRoute: AppTeamRouteWithChildren,
   AppWorkpulseRoute: AppWorkpulseRoute,
   AppIndexRoute: AppIndexRoute,

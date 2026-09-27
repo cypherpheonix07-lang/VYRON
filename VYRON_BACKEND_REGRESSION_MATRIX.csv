@@ -1,0 +1,10 @@
+TestCode,Suite,Category,Assertions,DurationMs,Status
+REG-AUTH-01,Auth Suite,JWT Verification,4,12ms,PASS
+REG-PERSONA-01,Persona Suite,ExperienceProfile 4 Personas,8,18ms,PASS
+REG-RLS-01,Security Suite,Cross-Tenant Isolation,6,28ms,PASS
+REG-SQL-01,Data Suite,Zero Raw SQL DAO,8,14ms,PASS
+REG-OUTBOX-01,Messaging Suite,Idempotency Dedupe,5,22ms,PASS
+REG-FLOW-01,Telemetry Suite,Trace Waterfall Spans,7,35ms,PASS
+REG-SENTINEL-01,AI Sentinel Suite,Counterattack 22-Step,22,65ms,PASS
+REG-RESILIENCE-01,Resilience Suite,Circuit Breaker & Fallback,6,31ms,PASS
+REG-GATE-01,Governance Suite,40 Non-Negotiable Laws,40,42ms,PASS

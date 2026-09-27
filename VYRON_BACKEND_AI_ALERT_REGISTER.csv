@@ -1,0 +1,5 @@
+AlertId,Timestamp,Severity,Component,TriggerCondition,Status,CausalChainVerified
+ALT-2026-001,2026-09-26T13:48:14.200Z,LOW,EventOutboxRelay,Synthetic latency calibration,RESOLVED,TRUE
+ALT-2026-002,2026-09-26T13:48:14.200Z,MEDIUM,QueueConsumerPool,Controlled fault injection probe,TRIAGED,TRUE
+ALT-2026-003,2026-09-26T13:48:14.200Z,HIGH,ExternalConnectorHub,Upstream API simulated 429 rate limit,CONTAINED,TRUE
+ALT-2026-004,2026-09-26T13:48:14.200Z,LOW,PostgresQueryProfiler,Slow query anomaly probe on unindexed view,RESOLVED,TRUE

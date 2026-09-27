@@ -29,9 +29,13 @@ import {
   Cpu,
   Eye,
   Lock,
+  History,
+  Radar,
 } from "lucide-react";
-import { ExactAnswerPayload, CopilotAction } from "@/state/copilot/copilotStore";
+import { ExactAnswerPayload, CopilotAction, copilotStore } from "@/state/copilot/copilotStore";
 import { EvidenceProvenancePanel } from "./EvidenceProvenancePanel";
+import { AutoReferenceCard } from "./AutoReferenceCard";
+import { ProofCard } from "./ProofCard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -40,6 +44,10 @@ interface ExactAnswerCardProps {
   exactAnswer?: ExactAnswerPayload | undefined;
   fallbackText: string;
   agentName?: string | undefined;
+  autoReferences?: import("@/services/copilot/historyRetrieval").AutoReferenceExplanation[] | undefined;
+  proofCard?: import("@/services/copilot/safeReasoningEngine").EndOfChatProofCard | undefined;
+  contextPassport?: import("@/services/copilot/contextMesh").ContextPassport | undefined;
+  intentCapsule?: import("@/services/copilot/questionUnderstanding").IntentCapsule | undefined;
   onExecuteAction?: ((action: CopilotAction) => void) | undefined;
   className?: string | undefined;
 }
@@ -48,6 +56,10 @@ export function ExactAnswerCard({
   exactAnswer,
   fallbackText,
   agentName,
+  autoReferences,
+  proofCard,
+  contextPassport,
+  intentCapsule,
   onExecuteAction,
   className,
 }: ExactAnswerCardProps) {
@@ -76,23 +88,47 @@ export function ExactAnswerCard({
 
   return (
     <div className={cn("space-y-3 font-sans text-xs", className)}>
+      {/* 0. AUTO-REFERENCE CARD (Referenced from previous chat) */}
+      {autoReferences && autoReferences.length > 0 && (
+        <AutoReferenceCard autoReferences={autoReferences} />
+      )}
+
       {/* 1. DIRECT ANSWER */}
       <div className="p-3.5 rounded-xl bg-background/80 border border-primary/30 shadow-sm relative overflow-hidden">
         <div className="absolute top-0 left-0 bottom-0 w-1 bg-primary" />
-        <div className="flex items-center justify-between gap-2 mb-1.5">
+        <div className="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
           <div className="flex items-center gap-1.5 text-[10px] font-mono text-primary font-bold uppercase tracking-wider">
             <Sparkles className="size-3" />
             <span>Direct Answer</span>
             {agentName && <span className="text-muted-foreground font-normal">• {agentName}</span>}
           </div>
-          {reasoningSummary && (
-            <Badge
-              variant="outline"
-              className="text-[9px] font-mono border-emerald-500/30 text-emerald-400 bg-emerald-500/5"
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => copilotStore.setContextLensOpen(true, contextPassport)}
+              className="text-[10px] font-mono text-muted-foreground hover:text-primary flex items-center gap-1 transition-colors px-1.5 py-0.5 rounded bg-secondary/50 border border-border/40"
+              title="Inspect active Context Mesh & Intent Radar"
             >
-              {Math.round(reasoningSummary.confidence * 100)}% Confidence
-            </Badge>
-          )}
+              <Radar className="size-2.5 text-primary" />
+              <span>Context Lens</span>
+            </button>
+            <button
+              onClick={() => copilotStore.setTimeMachineOpen(true)}
+              className="text-[10px] font-mono text-muted-foreground hover:text-sky-400 flex items-center gap-1 transition-colors px-1.5 py-0.5 rounded bg-secondary/50 border border-border/40"
+              title="Open Conversation Time Machine & 9 History Lenses"
+            >
+              <History className="size-2.5 text-sky-400" />
+              <span>Time Machine</span>
+            </button>
+            {reasoningSummary && (
+              <Badge
+                variant="outline"
+                className="text-[9px] font-mono border-emerald-500/30 text-emerald-400 bg-emerald-500/5"
+              >
+                {Math.round(reasoningSummary.confidence * 100)}% Confidence
+              </Badge>
+            )}
+          </div>
         </div>
         <p className="text-foreground text-xs leading-relaxed font-medium">{directAnswer}</p>
       </div>
@@ -283,6 +319,11 @@ export function ExactAnswerCard({
             </button>
           ))}
         </div>
+      )}
+
+      {/* 8. END-OF-CHAT PROOF CARD & RESPONSE CLOSURE */}
+      {proofCard && (
+        <ProofCard proofCard={proofCard} />
       )}
     </div>
   );

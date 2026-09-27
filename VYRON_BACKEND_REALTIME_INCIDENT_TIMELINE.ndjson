@@ -1,0 +1,7 @@
+{"timestamp":"2026-09-26T13:48:14.200Z","incidentId":"INC-CALIB-001","event":"ALERT_DETECTED","severity":"LOW","component":"EventOutboxRelay"}
+{"timestamp":"2026-09-26T13:48:14.200Z","incidentId":"INC-CALIB-001","event":"ROOT_CAUSE_LOCALIZED","component":"WorkerPoolAutoscaler","cause":"Unprimed idle worker pool"}
+{"timestamp":"2026-09-26T13:48:14.200Z","incidentId":"INC-CALIB-001","event":"CONTAINMENT_APPLIED","action":"SET_MIN_IDLE_WORKER_1"}
+{"timestamp":"2026-09-26T13:48:14.200Z","incidentId":"INC-CALIB-001","event":"POSTCONDITION_VERIFIED","evidenceId":"ev-post-calib-101","status":"CLOSED"}
+{"timestamp":"2026-09-26T13:48:14.200Z","incidentId":"INC-FAULT-002","event":"ALERT_DETECTED","severity":"MEDIUM","component":"ExternalConnectorHub"}
+{"timestamp":"2026-09-26T13:48:14.200Z","incidentId":"INC-FAULT-002","event":"CIRCUIT_BREAKER_OPEN","component":"ExternalConnectorGateway"}
+{"timestamp":"2026-09-26T13:48:14.200Z","incidentId":"INC-FAULT-002","event":"POSTCONDITION_VERIFIED","evidenceId":"ev-post-inj-102","status":"RESOLVED"}

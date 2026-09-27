@@ -17,14 +17,14 @@ export interface FlightRecordFrame {
   actorId: string;
   actorType: "HUMAN_USER" | "AUTONOMOUS_AGENT" | "SRE_AUTOMATION" | "POLICY_GATE";
   context: {
-    projectId?: string;
-    branch?: string;
-    phaseId?: string;
-    environment?: string;
+    projectId?: string | undefined;
+    branch?: string | undefined;
+    phaseId?: string | undefined;
+    environment?: string | undefined;
   };
   payload: Record<string, unknown>;
   evidenceToken: string;
-  parentFrameId?: string;
+  parentFrameId?: string | undefined;
 }
 
 class EngineeringFlightRecorderEngine {
