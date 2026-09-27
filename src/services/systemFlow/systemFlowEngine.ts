@@ -131,6 +131,10 @@ class SystemFlowEngine {
     return this.traces.slice(0, limit);
   }
 
+  public getRecentTimeline(limit: number = 25): SystemFlowTrace[] {
+    return this.getTraces(limit);
+  }
+
   public getTraceById(traceId: string): SystemFlowTrace | undefined {
     return this.traces.find((t) => t.traceId === traceId);
   }

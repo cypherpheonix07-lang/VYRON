@@ -44,7 +44,7 @@ export interface MobileSummaryDto {
   readinessScore: number;
   blockingGatesCount: number;
   quickActionAvailable: boolean;
-  pushAlertNotice?: string;
+  pushAlertNotice?: string | undefined;
   payloadSizeKb: number;
   generatedAt: string;
 }
@@ -132,10 +132,9 @@ export class BffCompositionEngine {
       readinessScore: readiness.overallScore,
       blockingGatesCount: blockingCount,
       quickActionAvailable: verdict === "READY",
-      pushAlertNotice:
-        blockingCount > 0
-          ? `${blockingCount} gates blocking production promotion`
-          : undefined,
+      ...(blockingCount > 0
+        ? { pushAlertNotice: `${blockingCount} gates blocking production promotion` }
+        : {}),
       payloadSizeKb: 1.2,
       generatedAt: new Date().toISOString(),
     };

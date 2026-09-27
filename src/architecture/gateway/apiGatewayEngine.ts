@@ -70,6 +70,33 @@ export class ApiGatewayEngine {
     return ApiGatewayEngine.instance;
   }
 
+  public buildRequestContext(options: { headers?: Record<string, string | undefined> } = {}): GatewayRequestContext {
+    const headers = options.headers || {};
+    const userId = headers["x-user-id"] || "anonymous_user";
+    const role = (headers["x-user-role"] as GatewayRequestContext["role"]) || (userId === "anonymous_user" ? "READONLY" : "DEVELOPER");
+    const tenantId = headers["x-tenant-id"] || "tenant-default";
+
+    return {
+      requestId: `REQ-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      correlationId: headers["x-correlation-id"] || `CORR-${Date.now()}`,
+      clientType: "web",
+      tenantId,
+      userId,
+      role,
+      ipAddress: "127.0.0.1",
+      timestamp: new Date().toISOString(),
+    };
+  }
+
+  public async routeRequest<T>(
+    context: GatewayRequestContext,
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH",
+    path: string,
+    body?: unknown
+  ): Promise<GatewayResponse<T>> {
+    return this.handleRequest<T>(method, path, context, body);
+  }
+
   private registerStandardRoutes(): void {
     this.routes = [
       {

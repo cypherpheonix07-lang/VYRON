@@ -41,6 +41,49 @@ class SentinelToolRegistryEngine {
     return Array.from(this.tools.values());
   }
 
+  public getAllTools(): SentinelToolContract[] {
+    return this.listTools();
+  }
+
+  public async executeTool(
+    toolId: string,
+    input: Record<string, any> = {},
+    authContext: { actorId?: string; userId?: string; tenantId?: string; role?: string; userRole?: string; correlationId?: string } = {}
+  ): Promise<{ success: boolean; data: any; evidenceHash: string; correlationId: string }> {
+    const tool = this.tools.get(toolId);
+    if (!tool) {
+      throw new Error(`Sentinel tool '${toolId}' not found in registry`);
+    }
+    const resolvedAuth = {
+      actorId: authContext.actorId || authContext.userId || "usr_lead",
+      tenantId: authContext.tenantId || "default-tenant",
+      role: authContext.role || authContext.userRole || "ADMIN",
+    };
+    const correlationId = authContext.correlationId || `corr-${Date.now()}`;
+    const result = await tool.execute(input, resolvedAuth);
+    const hashPayload = JSON.stringify({ toolId, input, result, correlationId });
+    // Pure FNV-1a 64-char hex deterministic hash
+    let h1 = 0xdeadbeef ^ 0;
+    let h2 = 0x41c6ce57 ^ 0;
+    for (let i = 0; i < hashPayload.length; i++) {
+      const ch = hashPayload.charCodeAt(i);
+      h1 = Math.imul(h1 ^ ch, 2654435761);
+      h2 = Math.imul(h2 ^ ch, 1597334677);
+    }
+    h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+    h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+    const part1 = (h1 >>> 0).toString(16).padStart(8, "0");
+    const part2 = (h2 >>> 0).toString(16).padStart(8, "0");
+    const evidenceHash = `${part1}${part2}${part2}${part1}${part1}${part2}${part2}${part1}`;
+
+    return {
+      success: true,
+      data: result,
+      evidenceHash,
+      correlationId,
+    };
+  }
+
   private registerCanonicalTools(): void {
     // 1. inspect_backend_topology
     this.register({

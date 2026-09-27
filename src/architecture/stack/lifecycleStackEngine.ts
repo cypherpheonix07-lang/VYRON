@@ -227,6 +227,21 @@ export class LifecycleStackEngine {
       overallHealthPct: Math.round((verified / list.length) * 100),
     };
   }
+
+  public getStackHealth(): {
+    total: number;
+    verified: number;
+    verifiedLayersCount: number;
+    overallHealthPct: number;
+  } {
+    const summary = this.getStackHealthSummary();
+    return {
+      total: summary.total,
+      verified: summary.verified,
+      verifiedLayersCount: summary.verified,
+      overallHealthPct: summary.overallHealthPct,
+    };
+  }
 }
 
 export const lifecycleStack = LifecycleStackEngine.getInstance();

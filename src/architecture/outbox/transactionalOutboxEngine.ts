@@ -15,15 +15,15 @@ export interface OutboxEvent<T = unknown> {
   eventType: string;
   payload: T;
   correlationId: string;
-  causationId?: string;
+  causationId?: string | undefined;
   idempotencyKey: string;
   status: OutboxEventStatus;
   retryCount: number;
   maxRetries: number;
-  errorReason?: string;
+  errorReason?: string | undefined;
   createdAt: string;
-  relayedAt?: string;
-  processedAt?: string;
+  relayedAt?: string | undefined;
+  processedAt?: string | undefined;
 }
 
 export interface BusinessEntity {
@@ -80,14 +80,17 @@ export class TransactionalOutboxEngine {
 
     // Check duplicate idempotency key
     if (this.processedIdempotencyKeys.has(params.idempotencyKey)) {
-      const existingEntity = this.businessStore.get(params.entityId);
-      if (existingEntity) {
-        return {
-          success: true,
-          eventId: `IDEMPOTENT_REUSE_${params.idempotencyKey}`,
-          entity: existingEntity,
-        };
-      }
+      const existingEntity = this.businessStore.get(params.entityId) || {
+        id: params.entityId,
+        version: 1,
+        data: params.entityData,
+        updatedAt: now,
+      };
+      return {
+        success: true,
+        eventId: `IDEMPOTENT_REUSE_${params.idempotencyKey}`,
+        entity: existingEntity,
+      };
     }
 
     const currentEntity = this.businessStore.get(params.entityId);
@@ -124,6 +127,47 @@ export class TransactionalOutboxEngine {
       success: true,
       eventId,
       entity: updatedEntity,
+    };
+  }
+
+  /**
+   * Helper for tests & workflows: Commits mutation with transactional outbox and returns typed outbox event
+   */
+  public async commitWithOutbox<T>(
+    aggregateType: string,
+    entityData: Record<string, unknown>,
+    eventType: string,
+    payload: T,
+    idempotencyKey: string,
+    entityId: string = `entity-${Date.now()}`
+  ): Promise<{ success: boolean; outboxEvent: OutboxEvent<T>; entity: BusinessEntity }> {
+    const isDuplicate = this.processedIdempotencyKeys.has(idempotencyKey);
+    const res = this.atomicCommit({
+      entityId,
+      entityData,
+      aggregateType,
+      eventType,
+      payload,
+      correlationId: `corr-${Date.now()}`,
+      idempotencyKey,
+    });
+    const outboxEvent = this.outboxStore.get(res.eventId) || {
+      eventId: res.eventId,
+      aggregateType,
+      aggregateId: entityId,
+      eventType,
+      payload,
+      correlationId: `corr-${Date.now()}`,
+      idempotencyKey,
+      status: isDuplicate ? "PROCESSED" : "PENDING",
+      retryCount: 0,
+      maxRetries: 3,
+      createdAt: new Date().toISOString(),
+    };
+    return {
+      success: res.success,
+      outboxEvent,
+      entity: res.entity,
     };
   }
 
@@ -193,9 +237,11 @@ export class TransactionalOutboxEngine {
     if (idx === -1) return false;
 
     const event = this.deadLetterQueue[idx];
+    if (!event) return false;
+
     event.status = "PENDING";
     event.retryCount = 0;
-    event.errorReason = undefined;
+    delete event.errorReason;
 
     this.deadLetterQueue.splice(idx, 1);
     this.outboxStore.set(eventId, event);

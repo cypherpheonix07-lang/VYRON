@@ -121,6 +121,37 @@ export class ContextMeshEngine {
     options: {
       mode?: AppMode;
       activeProjectId?: string;
+      projectId?: string;
+      activeProjectName?: string;
+      projectName?: string;
+      activeBranch?: string;
+      activeStage?: EngineeringLifecycleStage;
+      selectedOldChats?: ContextMeshItem[];
+      customArtifacts?: ContextMeshItem[];
+    } = {}
+  ): ContextPassport {
+    const normalizedOptions = {
+      ...options,
+      activeProjectId: options.activeProjectId || options.projectId,
+      activeProjectName: options.activeProjectName || options.projectName,
+    };
+    return this.doAssembleMesh(rawQuery, intentCapsule, normalizedOptions);
+  }
+
+  public assemblePassport(
+    rawQuery: string,
+    intentCapsule: IntentCapsule,
+    options: any = {}
+  ): ContextPassport {
+    return this.assembleMesh(rawQuery, intentCapsule, options);
+  }
+
+  private doAssembleMesh(
+    rawQuery: string,
+    intentCapsule: IntentCapsule,
+    options: {
+      mode?: AppMode;
+      activeProjectId?: string;
       activeProjectName?: string;
       activeBranch?: string;
       activeStage?: EngineeringLifecycleStage;
