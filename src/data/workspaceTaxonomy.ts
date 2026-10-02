@@ -92,7 +92,7 @@ const RAW_WORKSPACE_TAXONOMY: Omit<WorkspaceIconDefinition, "id" | "suggestedTec
       "Cross-platform mobile applications, offline-first client engines, and native device hardware integrations.",
     icon: Smartphone,
     category: "Application Systems",
-    suggestedTechnologies: ["React Native", "Flutter", "Swift", "Kotlin", "Capacitor"],
+    suggestedTechnologies: ["React Native", "Swift", "Kotlin", "Capacitor"],
     suggestedWorkflows: ["Mobile CI/CD", "Crash Telemetry Analysis", "Offline Storage Sync"],
   },
   {
