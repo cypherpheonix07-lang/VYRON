@@ -313,7 +313,7 @@ export const ArchitectureControlPlaneView: React.FC<ArchitectureControlPlaneView
                         <Badge variant="outline" className="text-[10px] font-bold bg-[var(--color-primary)]/10 text-[var(--color-primary)]">
                           {r.method}
                         </Badge>
-                        <span className="font-bold text-[var(--text-primary)]">{r.pathPattern.toString().replace(/[\/\^]/g, "")}</span>
+                        <span className="font-bold text-[var(--text-primary)]">{r.pathPattern.toString().replace(/[/^]/g, "")}</span>
                       </div>
                       <div className="text-[10px] text-[var(--text-muted)]">
                         Upstream: {r.upstreamService} • Role Required: {r.requiredRole || "PUBLIC"}

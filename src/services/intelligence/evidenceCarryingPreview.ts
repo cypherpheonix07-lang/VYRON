@@ -14,6 +14,8 @@
  * 10. EVIDENCE — Cryptographic proof tokens and tamper-evident audit trail
  */
 
+import { stringToHex } from "../ecosystem/isomorphicCrypto";
+
 export type PreviewLayerId =
   | "EXPERIENCE"
   | "ARCHITECTURE"
@@ -184,7 +186,7 @@ class EvidenceCarryingPreviewEngine {
           evidenceIds: [`ev-ledger-${Date.now()}`],
           payload: {
             totalTokens: 1300,
-            merkleRoot: `0x${Buffer.from(now).toString("hex").slice(0, 40)}`,
+            merkleRoot: `0x${stringToHex(now).slice(0, 40)}`,
             verificationState: "UNBREAKABLE",
           },
         },

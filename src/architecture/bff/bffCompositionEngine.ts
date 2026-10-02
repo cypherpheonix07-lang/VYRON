@@ -6,8 +6,8 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { releaseGateEngine } from "@/services/release/releaseGateEngine";
-import { blueprintGraphEngine } from "@/services/blueprint/blueprintGraphEngine";
+import { releaseGateEngine } from "../../services/release/releaseGateEngine.ts";
+import { blueprintGraphEngine } from "../../services/blueprint/blueprintGraphEngine.ts";
 
 export type ClientProfile = "WEB_DESKTOP" | "MOBILE_APP" | "PARTNER_INTEGRATION";
 

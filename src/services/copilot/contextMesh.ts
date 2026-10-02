@@ -101,6 +101,18 @@ export interface ContextPassport {
   passportSignature: string;
 }
 
+export interface ContextMeshAssembleOptions {
+  mode?: AppMode | undefined;
+  activeProjectId?: string | undefined;
+  projectId?: string | undefined;
+  activeProjectName?: string | undefined;
+  projectName?: string | undefined;
+  activeBranch?: string | undefined;
+  activeStage?: EngineeringLifecycleStage | undefined;
+  selectedOldChats?: ContextMeshItem[] | undefined;
+  customArtifacts?: ContextMeshItem[] | undefined;
+}
+
 export class ContextMeshEngine {
   private static instance: ContextMeshEngine | null = null;
   private passportArchive: Map<string, ContextPassport> = new Map();
@@ -118,19 +130,9 @@ export class ContextMeshEngine {
   public assembleMesh(
     rawQuery: string,
     intentCapsule: IntentCapsule,
-    options: {
-      mode?: AppMode;
-      activeProjectId?: string;
-      projectId?: string;
-      activeProjectName?: string;
-      projectName?: string;
-      activeBranch?: string;
-      activeStage?: EngineeringLifecycleStage;
-      selectedOldChats?: ContextMeshItem[];
-      customArtifacts?: ContextMeshItem[];
-    } = {}
+    options: ContextMeshAssembleOptions = {}
   ): ContextPassport {
-    const normalizedOptions = {
+    const normalizedOptions: ContextMeshAssembleOptions = {
       ...options,
       activeProjectId: options.activeProjectId || options.projectId,
       activeProjectName: options.activeProjectName || options.projectName,
@@ -149,15 +151,7 @@ export class ContextMeshEngine {
   private doAssembleMesh(
     rawQuery: string,
     intentCapsule: IntentCapsule,
-    options: {
-      mode?: AppMode;
-      activeProjectId?: string;
-      activeProjectName?: string;
-      activeBranch?: string;
-      activeStage?: EngineeringLifecycleStage;
-      selectedOldChats?: ContextMeshItem[];
-      customArtifacts?: ContextMeshItem[];
-    } = {}
+    options: ContextMeshAssembleOptions = {}
   ): ContextPassport {
     const currentMode = options.mode || modeStore.getState().mode;
     const session =

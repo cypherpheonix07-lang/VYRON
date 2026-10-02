@@ -331,7 +331,7 @@ export function ConversationTimeMachineModal({
                 </div>
               ) : (
                 <div className="text-center py-12 text-muted-foreground text-xs font-mono">
-                  Select a turn from the timeline to inspect its cognitive passport.
+                  Choose a turn from the timeline to inspect its cognitive passport.
                 </div>
               )}
             </ScrollArea>

@@ -3,6 +3,7 @@
  */
 
 import { runningStateResolver, type CanonicalRunningStatus } from "./runningStateResolver";
+import { stringToHex } from "../ecosystem/isomorphicCrypto";
 
 export interface ProviderBinding {
   providerId: "github" | "gitlab" | "lovable" | "v0" | "bolt" | "replit" | "cursor" | "vercel" | "cloudflare" | "supabase";
@@ -96,7 +97,7 @@ class ProjectStatePassportEngine {
         },
       ],
       activeDeploymentRevision: lastCommitSha,
-      evidenceChainDigest: `sha256:${Buffer.from(`${projectId}-${Date.now()}`).toString("hex").slice(0, 32)}`,
+      evidenceChainDigest: `sha256:${stringToHex(`${projectId}-${Date.now()}`).slice(0, 32)}`,
       securityAttestation: {
         passedChecks: 48,
         totalChecks: 50,

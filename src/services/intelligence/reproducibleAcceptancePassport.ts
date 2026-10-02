@@ -2,6 +2,8 @@
  * Reproducible Acceptance Passport — Cryptographic Proof & Release Milestone Attestation Engine
  */
 
+import { stringToHex } from "../ecosystem/isomorphicCrypto";
+
 export interface GateAttestation {
   gateId: string;
   gateName: string;
@@ -39,7 +41,7 @@ class ReproducibleAcceptancePassportEngine {
       buildCommitSha: commitSha,
       overallPassed: true,
       gatesAttested: gates,
-      cryptographicSignature: `0x${Buffer.from(`${projectId}-${commitSha}-acceptance-2026`).toString("hex").slice(0, 64)}`,
+      cryptographicSignature: `0x${stringToHex(`${projectId}-${commitSha}-acceptance-2026`).slice(0, 64)}`,
       attestedBy: "VYRON Independent Acceptance Authority",
       issuedAt: new Date().toISOString(),
     };

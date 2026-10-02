@@ -141,7 +141,7 @@ async function runVerification() {
     userAProjectId = projsA[0].id;
   } else {
     // Create project for User A
-    const { data: newProj } = await serviceClient
+    const { data: newProj, error: newProjErr } = await userAClient
       .from("projects")
       .insert({
         owner_id: userAId,
@@ -152,6 +152,10 @@ async function runVerification() {
       })
       .select()
       .single();
+    if (newProjErr || !newProj) {
+      console.error("Failed to create project for User A:", newProjErr);
+      process.exit(1);
+    }
     userAProjectId = newProj.id;
   }
 

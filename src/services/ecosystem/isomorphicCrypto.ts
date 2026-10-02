@@ -139,6 +139,10 @@ function bytesToHex(bytes: Uint8Array): string {
   return hex;
 }
 
+export function stringToHex(input: string): string {
+  return bytesToHex(encodeUtf8(input));
+}
+
 export function sha256Hex(input: string): string {
   return bytesToHex(sha256Bytes(encodeUtf8(input)));
 }

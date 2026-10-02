@@ -298,7 +298,7 @@ export class HistoryRetrievalEngine {
         this.pinnedTurnIds.add(turnId);
         this.forbiddenTurnIds.delete(turnId);
         break;
-      case "REMEMBER":
+      case "REMEMBER": {
         const cand = this.candidatePool.find((c) => c.turnId === turnId);
         if (cand) {
           this.durableMemoryStore.set(`durable_${turnId}`, {
@@ -309,6 +309,7 @@ export class HistoryRetrievalEngine {
           });
         }
         break;
+      }
       case "FORGET":
         this.forbiddenTurnIds.add(turnId);
         this.durableMemoryStore.delete(`durable_${turnId}`);
