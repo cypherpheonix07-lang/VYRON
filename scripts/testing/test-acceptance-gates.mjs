@@ -7,18 +7,18 @@
 import fs from "fs";
 import http from "http";
 
-import { CopilotThinkingEngine } from "./src/services/copilot/copilotThinkingEngine.ts";
-import { CopilotExactAnswerEngine } from "./src/services/copilot/copilotExactAnswerEngine.ts";
-import { copilotEpistemicEngine } from "./src/services/copilot/copilotEpistemicEngine.ts";
-import { copilotAgentOrchestrator } from "./src/services/copilot/copilotAgentOrchestrator.ts";
-import { skillRegistry } from "./src/services/skills/skillRegistry.ts";
-import { AUTHORITATIVE_CONNECTOR_CATALOG } from "./src/services/connectors/connectorCatalog.ts";
-import { connectorFabric } from "./src/services/connectors/connectorFabric.ts";
-import { mutationEngine } from "./src/services/aiProject/controlPlane/mutationEngine.ts";
-import { createInitialProjectState } from "./src/state/aiProject/aiProjectStore.ts";
-import { EvidenceGraphEngine } from "./src/services/evidence/evidenceGraphEngine.ts";
-import { GovernanceAuthorizationEngine } from "./src/services/governance/governanceAuthorizationEngine.ts";
-import { PluginRegistry } from "./src/plugins/PluginRegistry.ts";
+import { CopilotThinkingEngine } from "../../src/services/copilot/copilotThinkingEngine.ts";
+import { CopilotExactAnswerEngine } from "../../src/services/copilot/copilotExactAnswerEngine.ts";
+import { copilotEpistemicEngine } from "../../src/services/copilot/copilotEpistemicEngine.ts";
+import { copilotAgentOrchestrator } from "../../src/services/copilot/copilotAgentOrchestrator.ts";
+import { skillRegistry } from "../../src/services/skills/skillRegistry.ts";
+import { AUTHORITATIVE_CONNECTOR_CATALOG } from "../../src/services/connectors/connectorCatalog.ts";
+import { connectorFabric } from "../../src/services/connectors/connectorFabric.ts";
+import { mutationEngine } from "../../src/services/aiProject/controlPlane/mutationEngine.ts";
+import { createInitialProjectState } from "../../src/state/aiProject/aiProjectStore.ts";
+import { EvidenceGraphEngine } from "../../src/services/evidence/evidenceGraphEngine.ts";
+import { GovernanceAuthorizationEngine } from "../../src/services/governance/governanceAuthorizationEngine.ts";
+import { PluginRegistry } from "../../src/plugins/PluginRegistry.ts";
 
 const GREEN = "\x1b[32m";
 const RED = "\x1b[31m";

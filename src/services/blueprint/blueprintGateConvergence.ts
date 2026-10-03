@@ -8,18 +8,15 @@
  * Strictly ZERO Raw SQL.
  */
 
-import {
-  blueprintGraphEngine,
-  BlueprintGraphNode,
-  BlueprintGraphEdge,
-} from "@/services/blueprint/blueprintGraphEngine";
-import {
-  releaseGateEngine,
+import { blueprintGraphEngine } from "./blueprintGraphEngine.ts";
+import type { BlueprintGraphNode } from "./blueprintGraphEngine.ts";
+import { releaseGateEngine } from "../release/releaseGateEngine.ts";
+import type {
   ReleaseGateDefinition,
   DecomposedReleaseScore,
   CausalBlockerExplanation,
-} from "@/services/release/releaseGateEngine";
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
+} from "../release/releaseGateEngine.ts";
+import { generateVerificationHash } from "../ai/cryptoUtils.ts";
 
 export interface ConvergenceCycleResult {
   cycleId: string;

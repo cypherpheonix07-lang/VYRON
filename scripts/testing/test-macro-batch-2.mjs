@@ -5,16 +5,16 @@
  * Policy-as-Code Engine, Tenant Isolation, OTel Fabric, and WorkPulse Operational Engine.
  */
 
-import { EpistemicTruthEngine } from "./src/services/intelligence/epistemicTruthEngine.ts";
-import { ProvenancePipelineEngine } from "./src/services/intelligence/provenancePipeline.ts";
-import { AstSemanticGraphEngine } from "./src/services/intelligence/astSemanticGraph.ts";
-import { ArchitectureDriftGovernor } from "./src/services/intelligence/architectureDriftGovernor.ts";
-import { RequirementsTraceabilityEngine } from "./src/services/intelligence/requirementsTraceability.ts";
-import { ThreatModelingEngine } from "./src/services/intelligence/threatModelingEngine.ts";
-import { PolicyAsCodeEngine } from "./src/services/intelligence/policyAsCodeEngine.ts";
-import { TenantIsolationEngine } from "./src/services/intelligence/tenantIsolationEngine.ts";
-import { OtelFabricEngine } from "./src/services/intelligence/otelFabricEngine.ts";
-import { WorkpulseOperationalEngine } from "./src/services/intelligence/workpulseOperationalEngine.ts";
+import { EpistemicTruthEngine } from "../../src/services/intelligence/epistemicTruthEngine.ts";
+import { ProvenancePipelineEngine } from "../../src/services/intelligence/provenancePipeline.ts";
+import { AstSemanticGraphEngine } from "../../src/services/intelligence/astSemanticGraph.ts";
+import { ArchitectureDriftGovernor } from "../../src/services/intelligence/architectureDriftGovernor.ts";
+import { RequirementsTraceabilityEngine } from "../../src/services/intelligence/requirementsTraceability.ts";
+import { ThreatModelingEngine } from "../../src/services/intelligence/threatModelingEngine.ts";
+import { PolicyAsCodeEngine } from "../../src/services/intelligence/policyAsCodeEngine.ts";
+import { TenantIsolationEngine } from "../../src/services/intelligence/tenantIsolationEngine.ts";
+import { OtelFabricEngine } from "../../src/services/intelligence/otelFabricEngine.ts";
+import { WorkpulseOperationalEngine } from "../../src/services/intelligence/workpulseOperationalEngine.ts";
 
 console.log("================================================================================");
 console.log("  VYRON GOD MODE vNEXT — MACRO-BATCH 2 VERIFICATION (P11 - P20)");

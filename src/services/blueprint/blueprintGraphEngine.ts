@@ -6,7 +6,7 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
+import { generateVerificationHash } from "../ai/cryptoUtils.ts";
 
 export type BlueprintSemanticLayer =
   | "SYSTEM"

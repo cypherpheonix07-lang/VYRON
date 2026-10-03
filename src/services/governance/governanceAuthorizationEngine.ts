@@ -6,8 +6,8 @@
  * Strictly ZERO SQL.
  */
 
-import { GovernanceActionLevel, UserAuthority } from "@/types/engineeringEntity";
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
+import type { GovernanceActionLevel, UserAuthority } from "../../types/engineeringEntity.ts";
+import { generateVerificationHash } from "../ai/cryptoUtils.ts";
 
 export interface GovernedExceptionRequest {
   id: string;

@@ -13,6 +13,7 @@ export default tseslint.config(
       ".vinxi",
       ".chrome-demo-profile",
       "brahma-engine",
+      "vyron-engine",
       "supabase/functions",
       ".agents",
       "**/supabase/functions",

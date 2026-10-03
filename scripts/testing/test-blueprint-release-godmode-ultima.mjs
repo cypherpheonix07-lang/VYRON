@@ -5,15 +5,15 @@
  * Tests all 20 live campaigns and validates invariants.
  */
 
-import { blueprintGraphEngine } from "./src/services/blueprint/blueprintGraphEngine.ts";
-import { releaseGateEngine } from "./src/services/release/releaseGateEngine.ts";
-import { blueprintGateConvergence } from "./src/services/blueprint/blueprintGateConvergence.ts";
+import { blueprintGraphEngine } from "../../src/services/blueprint/blueprintGraphEngine.ts";
+import { releaseGateEngine } from "../../src/services/release/releaseGateEngine.ts";
+import { blueprintGateConvergence } from "../../src/services/blueprint/blueprintGateConvergence.ts";
 import {
   blueprintReleaseDossier,
   TOTAL_BLUEPRINT_PHASES,
   TOTAL_SECTIONS_PER_PHASE,
   TOTAL_CANONICAL_INSTANCES,
-} from "./src/services/governance/blueprintReleaseDossier250x104Data.ts";
+} from "../../src/services/governance/blueprintReleaseDossier250x104Data.ts";
 
 console.log("===============================================================================");
 console.log("VYRON — BLUEPRINT GRAPH × RELEASE GATE CONVERGENCE 20-CAMPAIGN BENCHMARK");

@@ -6,8 +6,8 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
-import { blueprintGraphEngine } from "@/services/blueprint/blueprintGraphEngine";
+import { generateVerificationHash } from "../ai/cryptoUtils.ts";
+import { blueprintGraphEngine } from "../blueprint/blueprintGraphEngine.ts";
 
 export type ReleaseGateFamily =
   | "SCOPE_REQUIREMENTS"

@@ -8,18 +8,22 @@
 
 import { execSync } from "node:child_process";
 import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { join, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const projectRoot = join(__dirname, "../..");
 
 console.log("================================================================================");
 console.log("       VYRON — GOD MODE vNEXT: 50-PHASE MASTER CONVERGENCE AUDIT");
 console.log("================================================================================\n");
 
 const batches = [
-  { name: "Macro-Batch 1 (Phases P01 - P10)", script: "test-macro-batch-1.mjs" },
-  { name: "Macro-Batch 2 (Phases P11 - P20)", script: "test-macro-batch-2.mjs" },
-  { name: "Macro-Batch 3 (Phases P21 - P30)", script: "test-macro-batch-3.mjs" },
-  { name: "Macro-Batch 4 (Phases P31 - P40)", script: "test-macro-batch-4.mjs" },
-  { name: "Macro-Batch 5 (Phases P41 - P50)", script: "test-macro-batch-5.mjs" }
+  { name: "Macro-Batch 1 (Phases P01 - P10)", script: join(__dirname, "test-macro-batch-1.mjs") },
+  { name: "Macro-Batch 2 (Phases P11 - P20)", script: join(__dirname, "test-macro-batch-2.mjs") },
+  { name: "Macro-Batch 3 (Phases P21 - P30)", script: join(__dirname, "test-macro-batch-3.mjs") },
+  { name: "Macro-Batch 4 (Phases P31 - P40)", script: join(__dirname, "test-macro-batch-4.mjs") },
+  { name: "Macro-Batch 5 (Phases P41 - P50)", script: join(__dirname, "test-macro-batch-5.mjs") }
 ];
 
 let totalPassed = 0;
@@ -28,7 +32,7 @@ let totalFailed = 0;
 for (const batch of batches) {
   console.log(`\n>>> Executing ${batch.name}...`);
   try {
-    const output = execSync(`bun ${batch.script}`, { encoding: "utf-8" });
+    const output = execSync(`bun "${batch.script}"`, { encoding: "utf-8", cwd: projectRoot });
     console.log(output);
     totalPassed++;
   } catch (err) {
@@ -58,7 +62,7 @@ function scanDirForRawSql(dir, violations = []) {
   return violations;
 }
 
-const sqlViolations = scanDirForRawSql("src");
+const sqlViolations = scanDirForRawSql(join(projectRoot, "src"));
 if (sqlViolations.length === 0) {
   console.log("[PASS] Strict Zero Operational Raw SQL verified across all src/ source files (0 violations).");
 } else {

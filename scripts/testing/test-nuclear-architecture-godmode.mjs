@@ -12,13 +12,13 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { apiGateway } from "./src/architecture/gateway/apiGatewayEngine.ts";
-import { bffComposition } from "./src/architecture/bff/bffCompositionEngine.ts";
-import { bulkheadIsolation } from "./src/architecture/bulkhead/bulkheadIsolationEngine.ts";
-import { transactionalOutbox } from "./src/architecture/outbox/transactionalOutboxEngine.ts";
-import { hexagonalProjectService } from "./src/architecture/hexagonal/hexagonalCoreEngine.ts";
-import { lifecycleStack } from "./src/architecture/stack/lifecycleStackEngine.ts";
-import { nuclearDossier } from "./src/architecture/dossier/nuclearDossier250x104Data.ts";
+import { apiGateway } from "../../src/architecture/gateway/apiGatewayEngine.ts";
+import { bffComposition } from "../../src/architecture/bff/bffCompositionEngine.ts";
+import { bulkheadIsolation } from "../../src/architecture/bulkhead/bulkheadIsolationEngine.ts";
+import { transactionalOutbox } from "../../src/architecture/outbox/transactionalOutboxEngine.ts";
+import { hexagonalProjectService } from "../../src/architecture/hexagonal/hexagonalCoreEngine.ts";
+import { lifecycleStack } from "../../src/architecture/stack/lifecycleStackEngine.ts";
+import { nuclearDossier } from "../../src/architecture/dossier/nuclearDossier250x104Data.ts";
 
 async function runNuclearArchitectureTests() {
   console.log("===============================================================================");

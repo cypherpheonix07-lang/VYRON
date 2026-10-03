@@ -59,11 +59,19 @@ export interface EvidenceStorePort {
 // --- DOMAIN APPLICATION USE CASE SERVICE (CORE) ---
 
 export class ProjectDomainService implements ProjectUseCasePort, ReleaseGateUseCasePort {
+  private readonly projectRepo: ProjectRepositoryPort;
+  private readonly eventPublisher: EventPublisherPort;
+  private readonly evidenceStore: EvidenceStorePort;
+
   constructor(
-    private readonly projectRepo: ProjectRepositoryPort,
-    private readonly eventPublisher: EventPublisherPort,
-    private readonly evidenceStore: EvidenceStorePort
-  ) {}
+    projectRepo: ProjectRepositoryPort,
+    eventPublisher: EventPublisherPort,
+    evidenceStore: EvidenceStorePort
+  ) {
+    this.projectRepo = projectRepo;
+    this.eventPublisher = eventPublisher;
+    this.evidenceStore = evidenceStore;
+  }
 
   public async getProject(id: string): Promise<DomainProject | null> {
     return this.projectRepo.findById(id);

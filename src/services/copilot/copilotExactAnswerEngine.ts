@@ -17,15 +17,16 @@
  * Strictly ZERO SQL.
  */
 
-import {
+import type {
   ExactAnswerPayload,
   UserSafeReasoningSummary,
   EvidenceBadgeItem,
   ResponseDetailLevel,
   CopilotAction,
-} from "@/state/copilot/copilotStore";
-import { copilotEpistemicEngine, EpistemicKnowledgeState } from "./copilotEpistemicEngine";
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
+} from "../../state/copilot/copilotStore.ts";
+import { copilotEpistemicEngine } from "./copilotEpistemicEngine.ts";
+import type { EpistemicKnowledgeState } from "./copilotEpistemicEngine.ts";
+import { generateVerificationHash } from "../ai/cryptoUtils.ts";
 
 export interface AnswerSynthesisInput {
   rawQuestion: string;

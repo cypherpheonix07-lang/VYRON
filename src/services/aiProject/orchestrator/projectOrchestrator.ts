@@ -6,12 +6,12 @@
  * Strictly ZERO Raw SQL.
  */
 
-import {
+import type {
   ProjectEngineeringState,
   ProjectLifecycleStage,
   AiProposal,
   MutationSensitivityLevel,
-} from "@/types/aiProjectControlPlane";
+} from "../../../types/aiProjectControlPlane.ts";
 import {
   DiscoveryAgent,
   ProblemAnalystAgent,
@@ -28,12 +28,12 @@ import {
   TestEngineerAgent,
   RedTeamAgent,
   BlueprintCompilerAgent,
-} from "../agents";
-import { policyEngine } from "../controlPlane/policyEngine";
-import { changeImpactEngine } from "../controlPlane/changeImpactEngine";
-import { projectDiffEngine } from "../controlPlane/projectDiffEngine";
-import { mutationEngine } from "../controlPlane/mutationEngine";
-import { workflowStateMachine } from "../controlPlane/workflowStateMachine";
+} from "../agents/index.ts";
+import { policyEngine } from "../controlPlane/policyEngine.ts";
+import { changeImpactEngine } from "../controlPlane/changeImpactEngine.ts";
+import { projectDiffEngine } from "../controlPlane/projectDiffEngine.ts";
+import { mutationEngine } from "../controlPlane/mutationEngine.ts";
+import { workflowStateMachine } from "../controlPlane/workflowStateMachine.ts";
 
 export interface PipelineExecutionResult {
   success: boolean;

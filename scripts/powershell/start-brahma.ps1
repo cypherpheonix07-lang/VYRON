@@ -6,14 +6,20 @@ $ErrorActionPreference = "Continue"
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 if (-not $scriptDir) { $scriptDir = (Get-Location).Path }
 
-if (Test-Path "$scriptDir\brahma-engine\main.py") {
+if (Test-Path "$scriptDir\vyron-engine\main.py") {
+    $backendDir = "$scriptDir\vyron-engine"
+    $frontendDir = $scriptDir
+} elseif (Test-Path "$scriptDir\..\vyron-engine\main.py") {
+    $backendDir = (Resolve-Path "$scriptDir\..\vyron-engine").Path
+    $frontendDir = (Resolve-Path "$scriptDir\..").Path
+} elseif (Test-Path "$scriptDir\brahma-engine\main.py") {
     $backendDir = "$scriptDir\brahma-engine"
     $frontendDir = if (Test-Path "$scriptDir\brahma-insights-main\package.json") { "$scriptDir\brahma-insights-main" } else { $scriptDir }
 } elseif (Test-Path "$scriptDir\..\brahma-engine\main.py") {
     $backendDir = (Resolve-Path "$scriptDir\..\brahma-engine").Path
-    $frontendDir = $scriptDir
+    $frontendDir = (Resolve-Path "$scriptDir\..").Path
 } else {
-    $backendDir = "$scriptDir\brahma-engine"
+    $backendDir = "$scriptDir\vyron-engine"
     $frontendDir = $scriptDir
 }
 

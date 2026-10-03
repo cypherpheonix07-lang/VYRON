@@ -28,6 +28,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../..");
 
 console.log(
   "\n==========================================================================================",
@@ -59,7 +60,7 @@ function assert(phase, title, condition, passEvidence, failEvidence) {
 // -------------------------------------------------------------------------------------------------
 try {
   const storeFile = fs.readFileSync(
-    path.join(__dirname, "src/state/copilot/copilotStore.ts"),
+    path.join(projectRoot, "src/state/copilot/copilotStore.ts"),
     "utf-8",
   );
   const hasThinkingState =
@@ -98,7 +99,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const engineFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotThinkingEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotThinkingEngine.ts"),
     "utf-8",
   );
   const hasLevels0to5 = [
@@ -130,7 +131,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const answerFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotExactAnswerEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotExactAnswerEngine.ts"),
     "utf-8",
   );
   const hasOrdering = [
@@ -163,7 +164,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const ccFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotCommandCenter.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotCommandCenter.ts"),
     "utf-8",
   );
   const handlesConnectors = ccFile.includes("connect ") && ccFile.includes("CONNECTOR");
@@ -187,7 +188,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const agentFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotAgentOrchestrator.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotAgentOrchestrator.ts"),
     "utf-8",
   );
   const specialists = [
@@ -223,7 +224,7 @@ try {
 // V06: Governed Skill Runtime & Contracts (14 Test Classes & Rollback)
 // -------------------------------------------------------------------------------------------------
 try {
-  const typesFile = fs.readFileSync(path.join(__dirname, "src/services/skills/types.ts"), "utf-8");
+  const typesFile = fs.readFileSync(path.join(projectRoot, "src/services/skills/types.ts"), "utf-8");
   const testClasses = [
     "HAPPY_PATH",
     "EDGE_CASE",
@@ -269,7 +270,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const sandboxFile = fs.readFileSync(
-    path.join(__dirname, "src/services/skills/skillSandbox.ts"),
+    path.join(projectRoot, "src/services/skills/skillSandbox.ts"),
     "utf-8",
   );
   const hasExecuteTestSuite = sandboxFile.includes("executeTestSuite");
@@ -292,7 +293,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const regFile = fs.readFileSync(
-    path.join(__dirname, "src/services/skills/skillRegistry.ts"),
+    path.join(projectRoot, "src/services/skills/skillRegistry.ts"),
     "utf-8",
   );
   const builtInSkills = [
@@ -322,7 +323,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const factoryFile = fs.readFileSync(
-    path.join(__dirname, "src/services/skills/skillFactory.ts"),
+    path.join(projectRoot, "src/services/skills/skillFactory.ts"),
     "utf-8",
   );
   const stages = [
@@ -355,7 +356,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const ingestionFile = fs.readFileSync(
-    path.join(__dirname, "src/services/skills/internetSkillIngestion.ts"),
+    path.join(projectRoot, "src/services/skills/internetSkillIngestion.ts"),
     "utf-8",
   );
   const hasSearch = ingestionFile.includes("searchApprovedSkillIndex");
@@ -382,7 +383,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const catalogFile = fs.readFileSync(
-    path.join(__dirname, "src/services/connectors/connectorCatalog.ts"),
+    path.join(projectRoot, "src/services/connectors/connectorCatalog.ts"),
     "utf-8",
   );
   const catalogListMatch = catalogFile.match(/id:\s*"([^"]+)"/g);
@@ -430,7 +431,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const fabricFile = fs.readFileSync(
-    path.join(__dirname, "src/services/connectors/connectorFabric.ts"),
+    path.join(projectRoot, "src/services/connectors/connectorFabric.ts"),
     "utf-8",
   );
   const hasConnect =
@@ -457,7 +458,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const brokerFile = fs.readFileSync(
-    path.join(__dirname, "src/services/connectors/connectorToolBroker.ts"),
+    path.join(projectRoot, "src/services/connectors/connectorToolBroker.ts"),
     "utf-8",
   );
   const hasSync = brokerFile.includes("syncConnectedToolsToRegistry");
@@ -480,7 +481,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const mktFile = fs.readFileSync(
-    path.join(__dirname, "src/services/connectors/connectorMarketplace.ts"),
+    path.join(projectRoot, "src/services/connectors/connectorMarketplace.ts"),
     "utf-8",
   );
   const hasSearch = mktFile.includes("search(") && mktFile.includes("query");
@@ -506,22 +507,22 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const hasEvidencePopover = fs.existsSync(
-    path.join(__dirname, "src/components/copilot/EvidenceProvenancePanel.tsx"),
+    path.join(projectRoot, "src/components/copilot/EvidenceProvenancePanel.tsx"),
   );
   const hasExactCard = fs.existsSync(
-    path.join(__dirname, "src/components/copilot/ExactAnswerCard.tsx"),
+    path.join(projectRoot, "src/components/copilot/ExactAnswerCard.tsx"),
   );
   const hasThinkingBar = fs.existsSync(
-    path.join(__dirname, "src/components/copilot/ThinkingControlsBar.tsx"),
+    path.join(projectRoot, "src/components/copilot/ThinkingControlsBar.tsx"),
   );
   const hasSkillModal = fs.existsSync(
-    path.join(__dirname, "src/components/copilot/SkillBuilderModal.tsx"),
+    path.join(projectRoot, "src/components/copilot/SkillBuilderModal.tsx"),
   );
   const hasConnectorView = fs.existsSync(
-    path.join(__dirname, "src/components/copilot/ConnectorMarketplaceView.tsx"),
+    path.join(projectRoot, "src/components/copilot/ConnectorMarketplaceView.tsx"),
   );
   const hasPreviewModal = fs.existsSync(
-    path.join(__dirname, "src/components/copilot/ActionPreviewModal.tsx"),
+    path.join(projectRoot, "src/components/copilot/ActionPreviewModal.tsx"),
   );
 
   const allComponentsExist =
@@ -548,11 +549,11 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const drawerContent = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotDrawer.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotDrawer.tsx"),
     "utf-8",
   );
   const studioContent = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotFullScreenStudio.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotFullScreenStudio.tsx"),
     "utf-8",
   );
 
@@ -614,7 +615,7 @@ try {
   ];
 
   function scanDir(dir) {
-    const fullDir = path.join(__dirname, dir);
+    const fullDir = path.join(projectRoot, dir);
     if (!fs.existsSync(fullDir)) return;
     const files = fs.readdirSync(fullDir);
     for (const f of files) {

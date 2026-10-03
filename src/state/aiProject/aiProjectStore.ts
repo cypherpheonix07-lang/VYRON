@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect } from "react";
-import {
+import type {
   ProjectEngineeringState,
   ProjectLifecycleStage,
   CopilotMode,
@@ -18,9 +18,9 @@ import {
   AiModelCandidate,
   ComponentFailureScenario,
   TestCaseItem,
-} from "@/types/aiProjectControlPlane";
-import { projectOrchestrator } from "@/services/aiProject/orchestrator/projectOrchestrator";
-import { mutationEngine } from "@/services/aiProject/controlPlane/mutationEngine";
+} from "../../types/aiProjectControlPlane.ts";
+import { projectOrchestrator } from "../../services/aiProject/orchestrator/projectOrchestrator.ts";
+import { mutationEngine } from "../../services/aiProject/controlPlane/mutationEngine.ts";
 import { toast } from "sonner";
 
 const DRAFT_STORAGE_KEY = "vyron_ai_project_control_plane_draft_v2";

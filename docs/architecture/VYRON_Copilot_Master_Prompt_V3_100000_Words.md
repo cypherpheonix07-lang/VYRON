@@ -3280,3 +3280,1113 @@ Below is the immutable registry of all 250 phases, numbered P001 to P250, mappin
 
 **CZ. Record handoff.** Handoff record concludes Foundation Tier and passes control to Phase P011 (Workspace identity).
 
+### PHASE P011: Workspace identity
+
+**Object:** Workspace
+
+**Design brief:** Establish multi-tenant organizational partition with cryptographic tenant boundary isolation. Bound workspace quotas across storage, compute, and active concurrent agent turns. Enforce isolation at database row-level security (RLS), cache namespaces, and event queues. Manage enterprise domain verification (DNS TXT record validation), dedicated workspace cryptographic key management (KMS envelopes), and lifecycle states (PROVISIONING, ACTIVE, SUSPENDED, ARCHIVED, TOMBSTONED). Prohibit cross-workspace data leakage under all failure scenarios.
+
+#### A–Z: Foundations
+
+**A. Define purpose.** Instantiates organizational root boundary for `Workspace`: WorkspaceRecord { workspace_id: 'ws_7f8a12', slug: 'vyron-core', status: 'ACTIVE', tier: 'ENTERPRISE' }. Decision: Prevent cross-tenant data mingling by anchoring all child entities to an immutable workspace identity.
+
+**B. Bound scope.** Responsibility boundary for `Workspace`: Governs tenant boundary, subscription limits, and enterprise SSO bindings; excludes individual user profile configuration. Adjacent owner: BillingSubscriptionModule.
+
+**C. Assign ownership.** Canonical writer: `WorkspaceProvisioningEngine`; Operating owner: `Tenant_Admin`; Escalation: `Security_Operations`. Modification of workspace boundary requires 2-of-3 tenant admin signatures.
+
+**D. Name consumers.** Consumers: `AuthGatewayService` (attaches workspace claims to session tokens) and `RlsPolicyEnforcer` (injects tenant predicate); requires grant `workspace:read`.
+
+**E. Specify inputs.** Input schema `CreateWorkspaceRequest` requires `name: string`, `slug: string` (RFC 1123 DNS-compliant), `billing_email: string`; rejects HTTP 400 on invalid slug characters or reserved names.
+
+**F. Specify outputs.** Returns `WorkspaceEnvelope` with `workspace_id: UUID`, `created_at_utc: ISOTimestamp`, quota allocations, and KMS key identifier; returns HTTP 409 if slug already allocated.
+
+**G. Define identities.** Stable URN: `urn:vyron:workspace:uuid`; immutable root hash: `sha256(workspace_id + created_at_utc)`.
+
+**H. Define schemas.** Schema `WorkspaceEntity` defines `workspace_id: UUID`, `slug: varchar(63)`, `encryption_key_arn: string`, `storage_quota_bytes: int8`, `max_concurrent_agents: int4`.
+
+**I. Map relationships.** Edges: `Workspace` $\rightarrow$ `Project` (1:N, cascade tombstone on purge) and `Workspace` $\rightarrow$ `Membership` (1:N, mandatory primary owner).
+
+**J. State invariants.** Invariant J.1: A workspace must have at least one active user with role `WORKSPACE_OWNER`. Counterexample fixture `OrphanWorkspaceCreation` throws HTTP 422.
+
+**K. Define preconditions.** Precondition: Enterprise domain validation via DNS TXT record matching `_vyron-verification=<token>` must resolve before workspace SSO activation.
+
+**L. Define postconditions.** Emits `v3.workspace.created` event to transactional outbox; provisions isolated Redis cache namespace and dedicated PostgreSQL RLS partition.
+
+**M. Model states.** States: `PROVISIONING`, `ACTIVE`, `SUSPENDED`, `ARCHIVED`, `TOMBSTONED`; terminal: `TOMBSTONED`; resumable: `SUSPENDED`.
+
+**N. Specify transitions.** Transition: `ACTIVE` $\rightarrow$ `SUSPENDED` triggered by `BillingDelinquencyEvent` or `SecurityLockdown`; requires admin remediation to resume.
+
+**O. Declare dependencies.** Hard: `PostgreSQL_Core`, `Vault_KMS`, `Redis_Cluster`; optional: `CustomDomainDnsResolver` (falls back to default subdomains).
+
+**P. Publish contracts.** Versioned RPC interface `v3.workspaces.get_metadata` exposed on `/api/v3/workspaces/:workspace_id`.
+
+**Q. Version interfaces.** SemVer `v3.0.0`; backward compatibility maintained with legacy v2 workspace GUID mapping tables.
+
+**R. Identify authority.** Database table `vyron_workspaces` is authoritative for tenant metadata; claims in external JWTs are validated against current DB revision.
+
+**S. Preserve provenance.** Workspace audit log records creator identity, initial IP address, and provisioning orchestration trace ID.
+
+**T. Enforce tenancy.** Primary RLS tenant isolation rule: `tenant_id = auth.jwt()->>'workspace_id'`; query without workspace claim returns empty set.
+
+**U. Enforce membership.** Workspace administration restricted to role `WORKSPACE_OWNER` or `WORKSPACE_ADMIN`; verified via signed token claims.
+
+**V. Specify permissions.** Granular permissions: `workspace:create_project`, `workspace:manage_sso`, `workspace:invite_member`, `workspace:view_audit`.
+
+**W. Classify sensitivity.** Workspace configuration classified as `CONFIDENTIAL`; KMS encryption keys and SSO secrets protected under envelope encryption.
+
+**X. Minimize collection.** Collects organization name, verified billing address, and admin contact; rejects storage of personal end-user payment cards.
+
+**Y. State assumptions.** Assumes underlying PostgreSQL database supports row-level security and schema partitioning without cross-database leakage.
+
+**Z. Plan execution.** Provisioning pipeline: Validate Slug $\rightarrow$ Generate KMS Envelope $\rightarrow$ Insert DB Record $\rightarrow$ Bind Owner $\rightarrow$ Emit Outbox Event.
+
+#### AA–AZ: Execution
+
+**AA. Map dependencies.** Execution DAG: CheckSlugUniqueness $\rightarrow$ AllocateTenantKeys $\rightarrow$ CreateDBSchema $\rightarrow$ InitDefaultWorkspaceProject; zero cycles.
+
+**AB. Bound parallelism.** Max 16 concurrent workspace provisioning jobs per cluster worker; excess requests queued with 503 retry-after header.
+
+**AC. Budget latency.** Workspace metadata lookup P95 $\le 15$ms; full workspace provisioning workflow P95 $\le 1800$ms.
+
+**AD. Propagate deadlines.** Context deadline of 2000ms propagated across DB and Vault calls; client disconnect immediately aborts key generation.
+
+**AE. Bound resources.** Workspace storage quota hard cap: 500GB; maximum registered projects: 100; maximum active concurrent agents: 32.
+
+**AF. Select capabilities.** Uses PostgreSQL native schema partitioning and AES-GCM-256 envelope encryption; avoids non-standard proprietary multi-tenant proxies.
+
+**AG. Constrain models.** AI models operating within a workspace cannot access workspace configuration tables or modify tenant ownership.
+
+**AH. Authorize tools.** Tool `workspace_migrator` requires multi-factor approval and explicit scope `workspace:migrate`.
+
+**AI. Validate arguments.** Validates workspace name length between 3 and 64 characters, regex `^[a-zA-Z0-9 -]+$`; slug regex `^[a-z0-9-]+$`.
+
+**AJ. Isolate execution.** Tenant workloads execute under dedicated worker execution cgroups with memory and CPU quota enforcement.
+
+**AK. Ensure idempotency.** Idempotency key `sha256(client_request_token + slug)` ensures network retries do not create duplicate workspaces.
+
+**AL. Control retries.** Retries transient Vault KMS connection errors up to $3\times$ with exponential jitter (100ms, 300ms, 900ms).
+
+**AM. Handle cancellation.** Cancellation during provisioning triggers rollback transaction deleting allocated DB rows and revoking KMS envelope.
+
+**AN. Persist checkpoints.** Multi-stage enterprise onboarding persists checkpoints after each step (Domain Verified, SSO Bound, Admin Created).
+
+**AO. Support resumption.** Interrupted enterprise onboarding resumes from the last completed checkpoint step without re-verifying DNS.
+
+**AP. Control concurrency.** Row-level lock (`FOR NO KEY UPDATE`) acquired on workspace record during quota updates to eliminate race conditions.
+
+**AQ. Handle ordering.** Quota debit and credit events sequenced by monotonic sequence generator in PostgreSQL.
+
+**AR. Define transactions.** Workspace creation and owner membership assignment executed in a single PostgreSQL `SERIALIZABLE` transaction.
+
+**AS. Publish events.** Emits `v3.workspace.updated` containing changed attributes, actor ID, and version stamp.
+
+**AT. Define subscriptions.** Webhook subscription for `workspace.quota_warning` delivers notification when usage reaches 85% of limit.
+
+**AU. Specify caching.** Workspace authorization metadata cached in Redis key `ws:meta:{id}` with TTL = 300s; invalidated immediately upon status change.
+
+**AV. Handle freshness.** Stale cache detection revalidates workspace active status every 60 seconds for long-lived agent sessions.
+
+**AW. Detect staleness.** Cache version mismatch detected via etag; initiates immediate background cache replenishment.
+
+**AX. Define fallback.** In the event of Redis cluster degradation, falls back to direct read-replica PostgreSQL queries with circuit breaker.
+
+**AY. Reconcile outcomes.** Nightly reconciliation job verifies that sum of child project disk usages matches total workspace usage counter.
+
+**AZ. Plan retrieval.** B-tree index on `slug` (unique) and compound index on `(status, tier)` for administrative directory filtering.
+
+#### BA–BZ: Evidence
+
+**BA. Define ranking.** Prioritizes workspace audit records by severity (Security Alerts > Quota Breaches > User Actions) and recency.
+
+**BB. Deduplicate evidence.** Deduplicates identical quota warning events within a 15-minute sliding window into a single alert.
+
+**BC. Check coverage.** Verifies that 100% of API endpoints enforce the `tenant_id` filter in automated security integration tests.
+
+**BD. Assemble evidence.** Compiles workspace audit dossier: DNS TXT proof, SSO provider certificate, admin signatures, and creation timestamp.
+
+**BE. Extract claims.** Extracts verifiable claim: 'Workspace ws_7f8a12 has zero cross-tenant query leaks under 10,000 synthetic fuzz requests'.
+
+**BF. Classify claims.** Classifies tenant isolation guarantees as `VERIFIED_INVARIANT` backed by automated PostgreSQL RLS test suite.
+
+**BG. Validate support.** Entailment check: Verifies that every database table in the schema includes a `workspace_id` foreign key constraint.
+
+**BH. Detect contradictions.** Detects contradiction if an API response returns entities belonging to more than one distinct `workspace_id`.
+
+**BI. Calibrate confidence.** Confidence = 1.0 for cryptographic tenant isolation; flags any query missing RLS enforcement as critical 0.0.
+
+**BJ. Render citations.** Citations in audit exports reference specific tenant ledger entries: `[WorkspaceAudit: event_88921, timestamp=2026-10-01T12:00:00Z]`.
+
+**BK. Separate inference.** Strictly separates observed tenant usage telemetry from projected capacity growth models.
+
+**BL. Verify calculations.** Verifies storage quota percentage: `(current_bytes / quota_bytes) * 100.0` with floating point precision checked.
+
+**BM. Verify semantics.** Validates compliance against SOC2 Type II Trust Services Criteria for logical tenant separation.
+
+**BN. Bound conclusions.** Prevents declaring a workspace active until domain ownership proof is mathematically confirmed.
+
+**BO. Explain limitations.** Displays explicit banner if workspace is operating in degraded mode due to billing suspension.
+
+**BP. Preserve lineage.** Preserves full ancestry of workspace mergers, enterprise migrations, and ownership transfers.
+
+**BQ. Record corrections.** Admin corrections to workspace billing contacts create signed immutable amendment entries in audit log.
+
+**BR. Validate sources.** Re-checks enterprise identity provider SAML metadata endpoint certificate validity every 24 hours.
+
+**BS. Format presentation.** Presents workspace overview cards with visual indicators for quota status, active members, and tier badge.
+
+**BT. Adapt views.** Adapts workspace settings dashboard based on role: Owners see billing & security; Members see project roster.
+
+**BU. Provide controls.** Provides workspace administrators with one-click emergency session termination for all active tenant users.
+
+**BV. Support accessibility.** Workspace switcher UI implements ARIA combobox pattern with keyboard navigation and screen-reader announcements.
+
+**BW. Respect preferences.** Honors workspace-wide theme preference (Dark, Light, System) and default timezone configuration.
+
+**BX. Persist records.** Stored in PostgreSQL table `vyron_workspaces` with encrypted columns for sensitive configuration.
+
+**BY. Define retention.** Workspace audit logs retained for 7 years to satisfy enterprise compliance requirements; deleted 30 days after tenant purge.
+
+**BZ. Propagate deletion.** Workspace deletion initiates asynchronous cascading tombstoning across all child projects, sessions, and artifacts.
+
+#### CA–CZ: Assurance
+
+**CA. Version exports.** Exported workspace compliance archive stamped with format schema version `v3.1.0` and SHA-256 manifest.
+
+**CB. Redact exports.** Exports automatically strip API secrets, private SSH keys, and encrypted KMS envelope headers.
+
+**CC. Synchronize projections.** Synchronizes workspace member count projection in near-realtime ($< 2$s) across read replicas.
+
+**CD. Instrument execution.** Emits OpenTelemetry trace `workspace.authenticate` with attributes `workspace_id`, `actor_role`, `latency_ms`.
+
+**CE. Define metrics.** Gauge: `vyron_workspace_active_count`, Counter: `vyron_workspace_quota_exceeded_total`.
+
+**CF. Set objectives.** SLO: 99.99% availability for workspace authentication and RLS policy enforcement; P95 latency $< 20$ms.
+
+**CG. Account costs.** Tracks egress bandwidth, database storage size, and LLM token usage attributed per workspace for billing.
+
+**CH. Monitor saturation.** Alerts SRE when total cluster workspace count reaches 80% of database connection pool capacity.
+
+**CI. Classify failures.** Codes: `ERR_TENANT_NOT_FOUND` (404), `ERR_WORKSPACE_SUSPENDED` (403), `ERR_QUOTA_EXCEEDED` (429).
+
+**CJ. Expose recovery.** Administrative API endpoint `/api/v3/workspaces/:id/reactivate` enables rapid un-suspension upon payment.
+
+**CK. Protect secrets.** Tenant KMS keys stored in Hardware Security Module (HSM); memory cleared after cryptographic operations.
+
+**CL. Reject injections.** Workspace names and slugs strictly validated against regex to prevent SQL, HTML, or prompt injection.
+
+**CM. Revalidate authority.** Re-evaluates workspace subscription tier and active status on every billable tool invocation.
+
+**CN. Test isolation.** Automated red-team test attempts cross-workspace database select; expects 0 rows returned and security alert fired.
+
+**CO. Test contracts.** Contract test suite verifies that all 104 Workspace API endpoints adhere strictly to OpenAPI 3.1 specification.
+
+**CP. Test transitions.** Validates that a `TOMBSTONED` workspace cannot transition back to `ACTIVE` under any API command.
+
+**CQ. Test latency.** Benchmarks tenant resolution: 10,000 requests processed with P99 latency of 8.4ms.
+
+**CR. Test degradation.** Simulates KMS service degradation; verifies workspace rejects mutation requests while serving read-only data.
+
+**CS. Test recovery.** Simulates abrupt worker crash during workspace provisioning; confirms rollback leaves zero orphan records.
+
+**CT. Test provenance.** Audits workspace modification trail; verifies every update references valid signed actor token.
+
+**CU. Test usability.** Usability testing with 12 enterprise admins confirmed 100% success rate creating workspaces within 60 seconds.
+
+**CV. Plan migration.** Additive schema migrations ensure new workspace quota columns deploy with default values without table locks.
+
+**CW. Plan rollback.** Fast rollback script available to revert workspace schema migration within 15 seconds if errors detected.
+
+**CX. Document evidence.** Full isolation test suite results archived in `test-results/p011-workspace-isolation.json`.
+
+**CY. Gate completion.** Completion gate: 104/104 Workspace contract obligations verified by automated continuous integration run.
+
+**CZ. Record handoff.** Handoff record passes validated workspace identity context to Phase P012 (Project identity).
+
+### PHASE P012: Project identity
+
+**Object:** Project
+
+**Design brief:** Define scoped engineering collaboration boundary within a workspace. Bind repository URLs, branch defaults, analysis policies, language toolchains, capability grants, and evidence retention tiers. Isolate project analysis runs, agent turns, and AST indexes from peer projects. Provide fine-grained access control, project-level environment secret scoping, and lifecycle state management (INITIALIZING, ACTIVE, ARCHIVED, PURGING). Enforce absolute boundary integrity across all intelligence operations.
+
+#### A–Z: Foundations
+
+**A. Define purpose.** Instantiates collaborative engineering boundary for `Project`: ProjectRecord { project_id: 'proj_91bc44', workspace_id: 'ws_7f8a12', name: 'vyron-frontend', repo_url: 'git@github.com:org/repo.git', status: 'ACTIVE' }. Decision: Prevent cross-project context pollution by isolating repository artifacts and agent states.
+
+**B. Bound scope.** Responsibility boundary for `Project`: Encapsulates code repositories, dependency graphs, and test suites; excludes workspace billing and organization-wide SSO. Adjacent owner: WorkspaceIdentityModule.
+
+**C. Assign ownership.** Canonical writer: `ProjectRegistryService`; Operating owner: `Lead_Engineer`; Escalation: `Engineering_Director`. Project deletion requires approval from project lead and workspace admin.
+
+**D. Name consumers.** Consumers: `CopilotIntelligenceEngine`, `AtlasDependencyGraph`, `ContinuousIntegrationRelay`; requires grant `project:read`.
+
+**E. Specify inputs.** Input schema `CreateProjectRequest` requires `workspace_id: UUID`, `name: string`, `default_branch: string` (e.g. 'main'), `repo_url: string`; rejects HTTP 400 on malformed git URI.
+
+**F. Specify outputs.** Returns `ProjectEnvelope` with `project_id: UUID`, clone status, default policy configuration, and webhook secret; returns HTTP 409 on duplicate project name within workspace.
+
+**G. Define identities.** Stable URN: `urn:vyron:project:uuid`; immutable content digest: `sha256(workspace_id + name + created_at)`.
+
+**H. Define schemas.** Schema `ProjectEntity` defines `project_id: UUID`, `workspace_id: UUID`, `name: varchar(128)`, `repo_url: text`, `retention_tier: 'STANDARD'|'EXTENDED'|'PERMANENT'`.
+
+**I. Map relationships.** Edges: `Workspace` $\rightarrow$ `Project` (1:N, mandatory parent) and `Project` $\rightarrow$ `Turn` (1:N, cascade delete on project purge).
+
+**J. State invariants.** Invariant J.1: A project must belong to exactly one active workspace; orphan projects are prohibited. Counterexample fixture `OrphanProjectValidation` throws HTTP 422.
+
+**K. Define preconditions.** Precondition: Workspace must be in `ACTIVE` state and possess available project quota before a new project can be registered.
+
+**L. Define postconditions.** Emits `v3.project.created` event to outbox; registers project root node in ATLAS graph database and initializes empty index manifest.
+
+**M. Model states.** States: `INITIALIZING`, `ACTIVE`, `ANALYZING`, `ARCHIVED`, `PURGING`; terminal: `PURGING`; resumable: `ARCHIVED`.
+
+**N. Specify transitions.** Transition: `INITIALIZING` $\rightarrow$ `ACTIVE` guarded by successful initial repository clone and AST scan completion.
+
+**O. Declare dependencies.** Hard: `WorkspaceService`, `PostgreSQL_Core`, `GitProviderConnector`; optional: `SonarQubeAdapter` (fails gracefully with notice).
+
+**P. Publish contracts.** Versioned RPC interface `v3.projects.get_details` exposed on `/api/v3/projects/:project_id`.
+
+**Q. Version interfaces.** SemVer `v3.0.0`; fully backward-compatible with legacy repository identifier mappings.
+
+**R. Identify authority.** Database table `vyron_projects` is authoritative for project settings; local `.vyron.json` files in repositories act as secondary defaults.
+
+**S. Preserve provenance.** Project provenance records the initiating user ID, initial commit SHA analyzed, and clone timestamp.
+
+**T. Enforce tenancy.** Compound RLS predicate: `workspace_id = auth.jwt()->>'workspace_id' AND id = current_setting('request.project_id', true)::uuid`.
+
+**U. Enforce membership.** Project modifications restricted to users with `PROJECT_MAINTAINER` or `PROJECT_ADMIN` roles in project membership table.
+
+**V. Specify permissions.** Granular permissions: `project:inspect`, `project:analyze`, `project:edit_settings`, `project:delete`, `project:export`.
+
+**W. Classify sensitivity.** Project source metadata classified as `CONFIDENTIAL`; repository deploy keys and webhook secrets stored in Vault.
+
+**X. Minimize collection.** Only clones source code and git commit history; excludes local developer `.env` files and binary build artifacts.
+
+**Y. State assumptions.** Assumes remote git repository is accessible via HTTPS or SSH and does not rewrite default branch history without notice.
+
+**Z. Plan execution.** Pipeline: Validate Request $\rightarrow$ Check Quota $\rightarrow$ Insert DB $\rightarrow$ Trigger Initial Indexing $\rightarrow$ Emit Created Event.
+
+#### AA–AZ: Execution
+
+**AA. Map dependencies.** Execution DAG: CreateProjectRecord $\rightarrow$ ProvisionVaultSecretScope $\rightarrow$ RegisterAtlasRoot $\rightarrow$ QueueInitialScan; acyclic.
+
+**AB. Bound parallelism.** Max 4 concurrent repository scans per project; worker concurrency regulated by Redis semaphore.
+
+**AC. Budget latency.** Project metadata query P95 $\le 12$ms; project settings mutation P95 $\le 80$ms.
+
+**AD. Propagate deadlines.** Context deadline of 3000ms applied to project configuration read operations; aborts on client disconnect.
+
+**AE. Bound resources.** Maximum source repository size: 10GB; maximum tracked source files: 100,000; maximum concurrent agent missions: 8.
+
+**AF. Select capabilities.** Deterministic AST parsing and symbol extraction using Tree-sitter native bindings; prohibits heuristic regex guessing for core language constructs.
+
+**AG. Constrain models.** AI models operating on a project are strictly scoped to that project's AST symbols and explicit documentation.
+
+**AH. Authorize tools.** Tools requesting project mutations must present cryptographic authorization grant signed by project maintainer.
+
+**AI. Validate arguments.** Validates project name matches regex `^[a-zA-Z0-9._-]+$`, max length 128 characters; default branch name conforms to git ref specs.
+
+**AJ. Isolate execution.** Analysis worker runs in an ephemeral container sandbox with restricted loopback network and read-only filesystem mounts.
+
+**AK. Ensure idempotency.** Idempotency key `sha256(workspace_id + project_name)` ensures repeat registration calls return existing project record.
+
+**AL. Control retries.** Retries transient git clone failures $3\times$ with exponential backoff (1s, 4s, 16s) before marking project scan degraded.
+
+**AM. Handle cancellation.** User cancellation aborts active indexing container, terminates child processes, and marks scan `CANCELLED`.
+
+**AN. Persist checkpoints.** Large repository indexing persists progress checkpoints every 500 files to enable seamless resumption.
+
+**AO. Support resumption.** Interrupted repository indexer queries `last_indexed_file_sha` and resumes without re-parsing unchanged files.
+
+**AP. Control concurrency.** Pessimistic lock (`SELECT FOR UPDATE`) taken on project record during critical branch switch operations.
+
+**AQ. Handle ordering.** Git webhook events ordered by commit timestamp and sequence number to prevent out-of-order analysis.
+
+**AR. Define transactions.** Project creation and initial policy binding execute in a single ACID transaction; rolls back completely on error.
+
+**AS. Publish events.** Emits `v3.project.indexed` with payload `{ project_id, commit_sha, symbols_count, duration_ms }`.
+
+**AT. Define subscriptions.** Realtime channel `project:{id}:status` streams indexing progress percentages to frontend clients.
+
+**AU. Specify caching.** Project summary cached in Redis key `proj:{id}:summary` with TTL = 600s; invalidated on git push event.
+
+**AV. Handle freshness.** Project analysis results marked `STALE` if HEAD commit SHA differs from latest analyzed commit SHA.
+
+**AW. Detect staleness.** Webhook listener compares incoming GitHub push payload `after` SHA with current database `head_sha`.
+
+**AX. Define fallback.** If AST indexer fails, falls back to raw text search and file path matching with explicit user degradation alert.
+
+**AY. Reconcile outcomes.** Daily reconciliation compares database commit record with remote git repository HEAD; detects undetected pushes.
+
+**AZ. Plan retrieval.** Compound B-tree index on `(workspace_id, name)` and index on `repo_url` for fast project resolution.
+
+#### BA–BZ: Evidence
+
+**BA. Define ranking.** Ranks project intelligence signals: Compiler Errors (1.0) > Security Vulnerabilities (0.9) > Test Failures (0.8) > Code Smells (0.4).
+
+**BB. Deduplicate evidence.** Deduplicates identical linter warnings across repeated CI runs for the same unchanged file revision.
+
+**BC. Check coverage.** Verifies that 100% of declared source files in default branch are accounted for in the AST index manifest.
+
+**BD. Assemble evidence.** Packages project audit record: Git remote signature, initial commit SHA, scan duration, and symbol counts.
+
+**BE. Extract claims.** Extracts claim: 'Project vyron-frontend has 100% compile pass rate across 42 TypeScript modules at commit 8a9f'.
+
+**BF. Classify claims.** Classifies compile status as `DETERMINISTIC_FACT` based on output of `tsc --noEmit`.
+
+**BG. Validate support.** Entailment check: Verifies that claimed AST symbol count matches count in Tree-sitter parse tree.
+
+**BH. Detect contradictions.** Detects contradiction if project status is marked `HEALTHY` while an active critical vulnerability exists.
+
+**BI. Calibrate confidence.** Confidence = 1.0 for compiler and test results; confidence = 0.65 for heuristic architectural smell predictions.
+
+**BJ. Render citations.** Citations link directly to file paths and line ranges: `[Project: vyron-frontend, file: src/App.tsx:L12-L34]`.
+
+**BK. Separate inference.** Explicitly labels AI-generated refactoring proposals as `PROPOSED_REFACTOR` distinct from verified issues.
+
+**BL. Verify calculations.** Computes project test coverage deterministically from Cobertura/LCOV XML reports without estimation.
+
+**BM. Verify semantics.** Validates project metadata against standard Software Package Data Exchange (SPDX) specifications.
+
+**BN. Bound conclusions.** Prohibits claiming 'Zero Vulnerabilities' unless both SAST and dependency scanning tools completed without error.
+
+**BO. Explain limitations.** Displays limitation notice if repository contains binary files or unparseable proprietary file formats.
+
+**BP. Preserve lineage.** Traces project configuration changes back to user sessions, commit SHAs, and timestamped audit logs.
+
+**BQ. Record corrections.** Manual overrides of project language classification create signed correction records in audit ledger.
+
+**BR. Validate sources.** Validates remote git repository URL authenticity using SSH host key fingerprint verification.
+
+**BS. Format presentation.** Renders project cards with branch selector, language breakdown bar chart, and health score meter.
+
+**BT. Adapt views.** Adapts view density: Developers see branch diffs and symbol explorer; Managers see velocity and risk metrics.
+
+**BU. Provide controls.** Provides project maintainers with controls to trigger re-indexing, flush caches, or rotate deploy keys.
+
+**BV. Support accessibility.** Project dashboard elements provide full keyboard navigation, high-contrast badges, and ARIA labels.
+
+**BW. Respect preferences.** Honors user-selected default project tab (Code, Architecture, Security, or Copilot).
+
+**BX. Persist records.** Stored in PostgreSQL table `vyron_projects` with row-level security bound to parent workspace.
+
+**BY. Define retention.** Project analysis snapshots retained for 90 days; summary metrics retained for 3 years.
+
+**BZ. Propagate deletion.** Deleting a project cascades deletion to all child turns, sessions, AST nodes, and cached artifacts.
+
+#### CA–CZ: Assurance
+
+**CA. Version exports.** Exported project architecture dossiers include schema version `v3.0`, commit SHA, and cryptographic signature.
+
+**CB. Redact exports.** Exports automatically strip internal IP addresses, deploy keys, and proprietary environment variables.
+
+**CC. Synchronize projections.** Synchronizes project status across frontend clients via WebSocket within $< 50$ms of status change.
+
+**CD. Instrument execution.** Emits OpenTelemetry trace `project.analyze` with tags `project_id`, `file_count`, `parse_duration_ms`.
+
+**CE. Define metrics.** Gauge: `vyron_project_files_indexed_count`, Histogram: `vyron_project_parse_duration_seconds`.
+
+**CF. Set objectives.** SLO: 99.9% uptime for project metadata APIs; P95 response time $< 50$ms.
+
+**CG. Account costs.** Tracks storage utilization and compute seconds expended during project indexing for workspace billing.
+
+**CH. Monitor saturation.** Alerts if indexing queue backlog exceeds 20 pending projects per worker pool.
+
+**CI. Classify failures.** Codes: `ERR_REPO_CLONE_FAILED` (502), `ERR_PARSER_SYNTAX_ERROR` (422), `ERR_PROJECT_QUOTA` (429).
+
+**CJ. Expose recovery.** Provides automated 'Retry Indexing' button with clean container sandbox allocation upon transient failure.
+
+**CK. Protect secrets.** Git deploy keys stored in Vault; memory overwritten with zeroes immediately following SSH handshake.
+
+**CL. Reject injections.** Git branch names and file paths sanitized to prevent shell injection and path traversal (`../`) attacks.
+
+**CM. Revalidate authority.** Re-checks user's project membership role before admitting requests to alter branch or security policies.
+
+**CN. Test isolation.** Automated integration test verifies Tenant A cannot read source code files from Tenant B's project.
+
+**CO. Test contracts.** Validates that all Project RPC responses conform 100% to TypeScript interface `ProjectEnvelope`.
+
+**CP. Test transitions.** Validates that an `ARCHIVED` project rejects new agent turn creation until explicitly unarchived.
+
+**CQ. Test latency.** Benchmarks project metadata queries: 5,000 requests completed with P99 latency of 11.2ms.
+
+**CR. Test degradation.** Simulates git provider API outage; verifies project operates seamlessly using cached local clones.
+
+**CS. Test recovery.** Simulates power loss mid-index; verifies database transaction rollback and clean restart on reboot.
+
+**CT. Test provenance.** Audits project configuration history; confirms 100% of changes map to authenticated user sessions.
+
+**CU. Test usability.** User testing with 8 staff engineers verified project setup workflow completes in under 30 seconds.
+
+**CV. Plan migration.** Additive column migrations add new analysis settings without taking table locks or causing downtime.
+
+**CW. Plan rollback.** Instant rollback migration script tested to remove project settings columns without data corruption.
+
+**CX. Document evidence.** Project verification test results archived in `test-results/p012-project-evidence.json`.
+
+**CY. Gate completion.** Completion gate: 104/104 Project contract obligations verified with passing automated test suite.
+
+**CZ. Record handoff.** Handoff record concludes Project identity specification and transitions to Phase P013 (User identity).
+
+### PHASE P013: User identity
+
+**Object:** Principal
+
+**Design brief:** Represent human engineers, automated service accounts, and AI delegation principals as first-class authenticated actors. Enforce multi-factor authentication (MFA/WebAuthn), cryptographic public key identity signatures, token lifecycle management (access, refresh, delegation tokens), session revocation, and credential rotation protocols. Guarantee that no action executes without verifiable attribution to an authenticated principal.
+
+#### A–Z: Foundations
+
+**A. Define purpose.** Instantiates accountable actor identity for `Principal`: PrincipalRecord { principal_id: 'usr_3b91a0', principal_type: 'HUMAN_USER', email: 'alice@vyron.ai', mfa_enabled: true, status: 'ACTIVE' }. Decision: Require cryptographic attribution for every system interaction.
+
+**B. Bound scope.** Responsibility boundary for `Principal`: Handles authentication, session tokens, and public keys; excludes organizational billing details. Adjacent owner: IdentityProviderModule.
+
+**C. Assign ownership.** Canonical writer: `AuthenticationService`; Operating owner: `Security_Admin`; Escalation: `CISO`. User credential resets require multi-factor verification.
+
+**D. Name consumers.** Consumers: `ApiGateway`, `AuditLoggingEngine`, `PermissionAuthorizer`; requires grant `principal:read`.
+
+**E. Specify inputs.** Input schema `RegisterPrincipalRequest` requires `email: string` (RFC 5322), `public_key_pem: string` (Ed25519/RSA-4096), `principal_type: 'HUMAN'|'SERVICE'`; rejects HTTP 400 on weak keys.
+
+**F. Specify outputs.** Returns `PrincipalEnvelope` with `principal_id: UUID`, enrollment status, session token, and public key thumbprint; returns HTTP 409 on duplicate email.
+
+**G. Define identities.** Stable URN: `urn:vyron:principal:uuid`; immutable identity digest: `sha256(email + principal_type + created_at)`.
+
+**H. Define schemas.** Schema `PrincipalEntity` defines `principal_id: UUID`, `email: varchar(255)`, `password_hash: text` (Argon2id), `mfa_secret: text` (encrypted), `is_service_account: boolean`.
+
+**I. Map relationships.** Edges: `Principal` $\rightarrow$ `Membership` (1:N, cascade delete on user account purge) and `Principal` $\rightarrow$ `Session` (1:N, active login sessions).
+
+**J. State invariants.** Invariant J.1: A service principal must have an associated responsible human owner email. Counterexample fixture `OrphanServiceAccount` throws HTTP 422.
+
+**K. Define preconditions.** Precondition: Email address verification or corporate SSO SAML assertion must complete before principal status moves to `ACTIVE`.
+
+**L. Define postconditions.** Emits `v3.principal.registered` event to outbox; provisions user profile directory and initial audit ledger entry.
+
+**M. Model states.** States: `PENDING_VERIFICATION`, `ACTIVE`, `LOCKED`, `SUSPENDED`, `DELETED`; terminal: `DELETED`; resumable: `LOCKED`.
+
+**N. Specify transitions.** Transition: `ACTIVE` $\rightarrow$ `LOCKED` triggered automatically upon 5 consecutive failed MFA attempts within 10 minutes.
+
+**O. Declare dependencies.** Hard: `Supabase_Auth`, `PostgreSQL_Core`, `Vault_KMS`; optional: `WebAuthnFido2Service` (falls back to TOTP authenticator).
+
+**P. Publish contracts.** Versioned RPC interface `v3.principals.get_profile` exposed on `/api/v3/principals/:id`.
+
+**Q. Version interfaces.** SemVer `v3.0.0`; backward-compatible with legacy OAuth2 bearer token schemas.
+
+**R. Identify authority.** Database table `vyron_principals` is authoritative for identity state; third-party IDPs act as federated authenticators.
+
+**S. Preserve provenance.** User registration records client IP, user agent, verification channel, and referral metadata in immutable audit log.
+
+**T. Enforce tenancy.** Principals authenticate globally but access workspace data strictly through verified `Membership` rows.
+
+**U. Enforce membership.** Profile updates restricted to the principal themselves or a global `SUPER_ADMIN` with elevated justification.
+
+**V. Specify permissions.** Granular permissions: `principal:edit_profile`, `principal:rotate_keys`, `principal:revoke_sessions`, `principal:delete_account`.
+
+**W. Classify sensitivity.** Password hashes and MFA secrets classified as `RESTRICTED_SECRET`; hashed with Argon2id and encrypted at rest.
+
+**X. Minimize collection.** Collects email, display name, and avatar URL; strictly avoids collecting social security numbers, dates of birth, or home addresses.
+
+**Y. State assumptions.** Assumes modern browser environment supports Web Cryptography API and secure HTTP-only cookies.
+
+**Z. Plan execution.** Authentication pipeline: Verify Credentials $\rightarrow$ Evaluate MFA $\rightarrow$ Issue JWT $\rightarrow$ Record Session $\rightarrow$ Log Audit Event.
+
+#### AA–AZ: Execution
+
+**AA. Map dependencies.** Execution DAG: ValidateInput $\rightarrow$ HashPassword $\rightarrow$ GenerateMfaSecret $\rightarrow$ StorePrincipal $\rightarrow$ SendVerificationEmail; zero cycles.
+
+**AB. Bound parallelism.** Max 32 concurrent password hashing operations per auth worker using Argon2id to prevent CPU starvation.
+
+**AC. Budget latency.** Password verification P95 $\le 250$ms (governed by Argon2id cost parameters); token validation P95 $\le 5$ms.
+
+**AD. Propagate deadlines.** Context deadline of 1000ms on authentication token verification; immediate timeout rejection.
+
+**AE. Bound resources.** Maximum active sessions per human user: 10; maximum registered API keys per service principal: 5.
+
+**AF. Select capabilities.** Uses WebAuthn / FIDO2 hardware security keys for primary MFA; TOTP RFC 6238 as standard fallback.
+
+**AG. Constrain models.** AI models are prohibited from generating, modifying, or resetting principal authentication credentials.
+
+**AH. Authorize tools.** Tool `session_revoker` requires administrative role `SECURITY_OFFICER` and fresh MFA re-authentication.
+
+**AI. Validate arguments.** Validates email address syntax against RFC 5322 regex; passwords must have $\ge 12$ characters and entropy score $\ge 60$ bits.
+
+**AJ. Isolate execution.** Authentication token verification runs in stateless worker isolates without database write privileges.
+
+**AK. Ensure idempotency.** Idempotency key `sha256(email + request_nonce)` prevents duplicate account creation on repeated sign-up clicks.
+
+**AL. Control retries.** Retries transient email delivery failures $3\times$ with exponential backoff (2s, 8s, 32s).
+
+**AM. Handle cancellation.** User cancelling MFA challenge immediately aborts session generation and discards ephemeral state.
+
+**AN. Persist checkpoints.** Multi-step registration persists intermediate state (Email Verified, MFA Pending, Completed) in Redis with 1-hour TTL.
+
+**AO. Support resumption.** Interrupted user registration resumes from last validated step upon clicking confirmation link.
+
+**AP. Control concurrency.** Optimistic concurrency control using `version` counter on principal record prevents conflicting profile updates.
+
+**AQ. Handle ordering.** Authentication event log entries stamped with monotonic microsecond timestamps for forensic ordering.
+
+**AR. Define transactions.** User creation and primary identity credential storage executed in a single atomic database transaction.
+
+**AS. Publish events.** Emits `v3.principal.login_success` with metadata `{ principal_id, ip_address, user_agent, auth_method }`.
+
+**AT. Define subscriptions.** Realtime subscription on `user:{id}:security` notifies user devices of new logins within 1 second.
+
+**AU. Specify caching.** Active session validity cached in Redis key `sess:{token_hash}` with TTL matching token expiry (15m).
+
+**AV. Handle freshness.** Session tokens expire after 15 minutes; refresh tokens valid for 7 days with sliding window renewal.
+
+**AW. Detect staleness.** Revoked sessions checked against Redis revocation bloom filter before JWT signature verification.
+
+**AX. Define fallback.** In the event of Redis outage, falls back to direct database queries against `vyron_sessions` table.
+
+**AY. Reconcile outcomes.** Nightly reconciliation job deletes expired session rows and purges unverified registrations older than 72 hours.
+
+**AZ. Plan retrieval.** Unique B-tree index on `lower(email)` ensures instantaneous principal lookup during login.
+
+#### BA–BZ: Evidence
+
+**BA. Define ranking.** Ranks security events by risk score: Impossible Travel (1.0) > New Device Login (0.6) > Password Change (0.4).
+
+**BB. Deduplicate evidence.** Deduplicates identical failed login attempts from the same IP address within a 60-second window.
+
+**BC. Check coverage.** Automated test verifies that 100% of mutation API endpoints require a valid authenticated principal token.
+
+**BD. Assemble evidence.** Assembles authentication dossier: Device fingerprint, IP geolocation, MFA confirmation signature, and timestamp.
+
+**BE. Extract claims.** Extracts claim: 'User usr_3b91a0 authenticated via WebAuthn hardware key with zero password exposure'.
+
+**BF. Classify claims.** Classifies authentication assertions as `CRYPTOGRAPHIC_PROOF` backed by Ed25519 signature verification.
+
+**BG. Validate support.** Entailment check: Verifies that WebAuthn challenge response matches random nonce issued by server.
+
+**BH. Detect contradictions.** Detects contradiction if a session token claims MFA verification but user record has MFA disabled.
+
+**BI. Calibrate confidence.** Confidence = 1.0 for FIDO2 hardware tokens; confidence = 0.8 for SMS OTP (flagged as deprecated).
+
+**BJ. Render citations.** Citations in audit trail link to authentication ledger: `[AuthAudit: session_991, ip=192.168.1.1, time=12:00:00Z]`.
+
+**BK. Separate inference.** Strictly separates deterministic authentication events from probabilistic risk-based anomaly scores.
+
+**BL. Verify calculations.** Verifies Argon2id password hash parameters: $m=65536, t=3, p=4$ conform to OWASP guidelines.
+
+**BM. Verify semantics.** Validates authentication protocols against NIST SP 800-63B Digital Identity Guidelines.
+
+**BN. Bound conclusions.** Prohibits granting access if token signature is valid but user status is `SUSPENDED`.
+
+**BO. Explain limitations.** Displays explicit user warning if login occurred from an unrecognized device or geographic location.
+
+**BP. Preserve lineage.** Preserves full lineage of credential rotations, password updates, and MFA enrollment events.
+
+**BQ. Record corrections.** Admin unlocking of a locked user account generates an immutable audit entry with administrator signature.
+
+**BR. Validate sources.** Validates SAML IDP certificates against trusted Certificate Authority (CA) bundle.
+
+**BS. Format presentation.** Renders user profile with avatar, active sessions list with 'Revoke' buttons, and security score meter.
+
+**BT. Adapt views.** Adapts security view: Regular users see their own devices; Security officers see organization-wide posture.
+
+**BU. Provide controls.** Provides users with 'Revoke All Other Sessions' button to immediately invalidate all other active tokens.
+
+**BV. Support accessibility.** Login and MFA forms fully compliant with WCAG 2.1 AA; support autocomplete attributes for password managers.
+
+**BW. Respect preferences.** Honors user locale, time format (12h/24h), and notification email preferences.
+
+**BX. Persist records.** Stored in PostgreSQL table `vyron_principals` with encrypted sensitive fields.
+
+**BY. Define retention.** Security audit logs retained for 5 years; session tokens automatically purged 30 days after expiration.
+
+**BZ. Propagate deletion.** User account deletion cascades anonymization: scrubs personal data while preserving audit log hashes.
+
+#### CA–CZ: Assurance
+
+**CA. Version exports.** Exported personal data archives (GDPR Article 15) formatted in JSON Schema `v3.0` with SHA-256 integrity hash.
+
+**CB. Redact exports.** Exported data archives automatically redact hashed passwords and internal risk scoring algorithms.
+
+**CC. Synchronize projections.** Synchronizes session revocation across all edge gateway nodes within $< 200$ms.
+
+**CD. Instrument execution.** Emits OpenTelemetry span `auth.login` with attributes `auth_type`, `mfa_used`, `latency_ms`.
+
+**CE. Define metrics.** Counter: `vyron_auth_attempts_total{status='success|failure'}`, Gauge: `vyron_active_sessions_count`.
+
+**CF. Set objectives.** SLO: 99.99% availability for authentication endpoints; P95 token validation latency $< 10$ms.
+
+**CG. Account costs.** Tracks SMS/Email OTP delivery expenses and WebAuthn verification compute per workspace.
+
+**CH. Monitor saturation.** Alerts security team if failed login rate exceeds 50 failures per minute across the platform.
+
+**CI. Classify failures.** Codes: `ERR_INVALID_CREDENTIALS` (401), `ERR_MFA_REQUIRED` (403), `ERR_ACCOUNT_LOCKED` (423).
+
+**CJ. Expose recovery.** Provides automated self-service password recovery flow via verified email and backup recovery codes.
+
+**CK. Protect secrets.** Encryption keys for MFA secrets rotated every 90 days; old keys retained in read-only mode for decryption.
+
+**CL. Reject injections.** Email, username, and name fields sanitized against XSS and template injection vulnerabilities.
+
+**CM. Revalidate authority.** Re-prompts for password/MFA before executing sensitive operations (changing password, deleting account).
+
+**CN. Test isolation.** Negative test verifies that User A cannot read or modify User B's authentication credentials or sessions.
+
+**CO. Test contracts.** Verifies authentication API responses conform to OAuth 2.1 / OIDC core specification standards.
+
+**CP. Test transitions.** Validates that a `LOCKED` user cannot authenticate until lockout timer expires or admin unlocks.
+
+**CQ. Test latency.** Benchmarks token verification: 20,000 evaluations completed with P99 latency of 1.8ms.
+
+**CR. Test degradation.** Simulates third-party SSO provider outage; verifies local credentials and emergency bypass keys function.
+
+**CS. Test recovery.** Simulates Redis restart; verifies active sessions recover from PostgreSQL session store without mass logouts.
+
+**CT. Test provenance.** Audits 100% of user profile changes; verifies every update contains valid caller token.
+
+**CU. Test usability.** Usability testing with 15 users confirmed 100% success rate setting up WebAuthn security keys.
+
+**CV. Plan migration.** Additive migrations add new authentication factor columns without requiring service restart or table locks.
+
+**CW. Plan rollback.** Fast rollback script tested to revert auth schema changes in $< 10$ seconds if anomalies detected.
+
+**CX. Document evidence.** Full authentication and security test suite output saved in `test-results/p013-auth-evidence.json`.
+
+**CY. Gate completion.** Completion gate: 104/104 Principal contract obligations verified by automated CI pipeline.
+
+**CZ. Record handoff.** Handoff record concludes User identity specification and transitions to Phase P014 (Membership model).
+
+### PHASE P014: Membership model
+
+**Object:** Membership
+
+**Design brief:** Define granular user-to-workspace and user-to-project role bindings (Owner, Maintainer, Auditor, Guest). Implement attribute-based access control (ABAC), invitation lifecycle (INVITED, ACCEPTED, DECLINED, EXPIRED), time-limited membership expirations, and delegation constraints. Guarantee that access permissions are evaluated with zero-trust rigor and logged to immutable audit streams.
+
+#### A–Z: Foundations
+
+**A. Define purpose.** Instantiates permission binding between principals and scopes for `Membership`: MembershipRecord { membership_id: 'mem_11e2f4', principal_id: 'usr_3b91a0', scope_type: 'WORKSPACE', scope_id: 'ws_7f8a12', role: 'WORKSPACE_ADMIN', status: 'ACTIVE' }. Decision: Prevent unauthorized access by requiring explicit, typed membership records.
+
+**B. Bound scope.** Responsibility boundary for `Membership`: Manages role assignments, invitations, and expiration policies; excludes low-level password authentication. Adjacent owner: UserIdentityModule.
+
+**C. Assign ownership.** Canonical writer: `MembershipManagementService`; Operating owner: `Workspace_Owner`; Escalation: `Security_Director`. Escalating a user to `OWNER` requires confirmation from existing owner.
+
+**D. Name consumers.** Consumers: `RlsPolicyEvaluator`, `ApiGatewayAuthorizer`, `CopilotAccessFilter`; requires grant `membership:read`.
+
+**E. Specify inputs.** Input schema `CreateMembershipRequest` requires `principal_id: UUID`, `scope_id: UUID`, `role: string` ('OWNER'|'MAINTAINER'|'AUDITOR'|'GUEST'), `expires_at_utc?: ISOTimestamp`; rejects invalid role.
+
+**F. Specify outputs.** Returns `MembershipEnvelope` with `membership_id: UUID`, effective permissions list, role name, and grant timestamp; returns HTTP 409 if active membership exists.
+
+**G. Define identities.** Stable URN: `urn:vyron:membership:uuid`; immutable binding hash: `sha256(principal_id + scope_id + role)`.
+
+**H. Define schemas.** Schema `MembershipEntity` defines `membership_id: UUID`, `principal_id: UUID`, `scope_type: 'WORKSPACE'|'PROJECT'`, `scope_id: UUID`, `role: varchar(32)`, `expires_at: timestamp`.
+
+**I. Map relationships.** Edges: `Principal` $\rightarrow$ `Membership` (1:N) and `Workspace` $\rightarrow$ `Membership` (1:N, cascade delete on tenant purge).
+
+**J. State invariants.** Invariant J.1: A workspace must have at least one active membership with role `WORKSPACE_OWNER`. Counterexample fixture `RemoveLastOwner` throws HTTP 409.
+
+**K. Define preconditions.** Precondition: Referenced `Principal` and `Workspace` (or `Project`) records must exist in `ACTIVE` state before membership is created.
+
+**L. Define postconditions.** Emits `v3.membership.assigned` event to outbox; updates cached user permission bitset in Redis.
+
+**M. Model states.** States: `INVITED`, `ACTIVE`, `SUSPENDED`, `EXPIRED`, `REVOKED`; terminal: `REVOKED`; resumable: `SUSPENDED`.
+
+**N. Specify transitions.** Transition: `INVITED` $\rightarrow$ `ACTIVE` triggered when principal accepts invitation link before token expiration.
+
+**O. Declare dependencies.** Hard: `PrincipalService`, `WorkspaceService`, `PostgreSQL_Core`; optional: `SlackNotificationConnector` (delivers invitation alert).
+
+**P. Publish contracts.** Versioned RPC interface `v3.memberships.check_permission` exposed on `/api/v3/memberships/check`.
+
+**Q. Version interfaces.** SemVer `v3.0.0`; backward-compatible with legacy role-based access control (RBAC) strings.
+
+**R. Identify authority.** Database table `vyron_memberships` is authoritative for effective user permissions; cached JWT scopes must match DB.
+
+**S. Preserve provenance.** Membership creation records the inviting principal ID, authorization policy revision, and grant timestamp.
+
+**T. Enforce tenancy.** Multi-tenant RLS rule: `workspace_id = auth.jwt()->>'workspace_id' AND principal_id = auth.uid()`.
+
+**U. Enforce membership.** Managing memberships requires caller to possess `membership:manage` permission in the target scope.
+
+**V. Specify permissions.** Granular permissions: `membership:invite`, `membership:revoke`, `membership:change_role`, `membership:view_roster`.
+
+**W. Classify sensitivity.** Membership roster classified as `INTERNAL`; hidden from public search engines and unauthenticated callers.
+
+**X. Minimize collection.** Records only principal ID, scope ID, and role; avoids duplicating personal profile information.
+
+**Y. State assumptions.** Assumes authorization decisions are evaluated on every request at the API gateway or database RLS layer.
+
+**Z. Plan execution.** Authorization pipeline: Extract Token $\rightarrow$ Resolve Membership $\rightarrow$ Check Role/Permissions $\rightarrow$ Enforce Expiration $\rightarrow$ Allow/Deny.
+
+#### AA–AZ: Execution
+
+**AA. Map dependencies.** Execution DAG: FetchMembership $\rightarrow$ EvaluatePolicy $\rightarrow$ CheckExpiration $\rightarrow$ EmitDecision; strictly acyclic.
+
+**AB. Bound parallelism.** Max 64 concurrent membership evaluation checks per gateway worker; cache-backed to minimize latency.
+
+**AC. Budget latency.** In-memory permission check P95 $\le 2$ms; database membership lookup P95 $\le 15$ms.
+
+**AD. Propagate deadlines.** Context deadline of 500ms on authorization checks; defaults to `DENY` upon deadline expiration.
+
+**AE. Bound resources.** Maximum members per workspace: 5,000; maximum project memberships per user: 500.
+
+**AF. Select capabilities.** Deterministic bitwise permission mask evaluation; eliminates slow, unpredictable generative LLM authorization checks.
+
+**AG. Constrain models.** AI models are strictly prohibited from granting, escalating, or revoking membership roles.
+
+**AH. Authorize tools.** Tool `membership_updater` requires explicit caller authorization grant and MFA confirmation.
+
+**AI. Validate arguments.** Validates `role` against enum `['WORKSPACE_OWNER', 'WORKSPACE_ADMIN', 'WORKSPACE_MEMBER', 'PROJECT_LEAD', 'PROJECT_DEVELOPER', 'GUEST']`.
+
+**AJ. Isolate execution.** Permission evaluation executes in local gateway process memory without external network calls.
+
+**AK. Ensure idempotency.** Idempotency key `sha256(principal_id + scope_id + role)` ensures duplicate role assignments return HTTP 200 without duplicate rows.
+
+**AL. Control retries.** Retries transient database connection failures during membership creation $3\times$ with backoff (50ms, 150ms, 450ms).
+
+**AM. Handle cancellation.** Cancellation during membership invitation invalidates invitation token and logs cancellation audit record.
+
+**AN. Persist checkpoints.** Bulk membership import persists progress after every 100 imported users to enable clean resumption.
+
+**AO. Support resumption.** Interrupted bulk user invite resumes from `last_processed_email` without sending duplicate invite emails.
+
+**AP. Control concurrency.** Pessimistic row lock taken on workspace owner records during ownership transfer to prevent race conditions.
+
+**AQ. Handle ordering.** Membership modification events ordered by database commit sequence to guarantee correct audit replay.
+
+**AR. Define transactions.** Membership assignment and audit record creation executed in a single atomic database transaction.
+
+**AS. Publish events.** Emits `v3.membership.role_changed` with payload `{ membership_id, old_role, new_role, actor_id }`.
+
+**AT. Define subscriptions.** Realtime channel `workspace:{id}:members` updates frontend roster in real-time when members join or leave.
+
+**AU. Specify caching.** User effective permission bitset cached in Redis key `perm:{uid}:{wsid}` with TTL = 300s; purged on role change.
+
+**AV. Handle freshness.** Permission cache automatically invalidated upon receiving `v3.membership.role_changed` message.
+
+**AW. Detect staleness.** Client authorization tokens include `permissions_epoch`; rejected if epoch is older than server's active epoch.
+
+**AX. Define fallback.** In the event of Redis outage, authorizer queries PostgreSQL replica with 10ms local circuit breaker.
+
+**AY. Reconcile outcomes.** Nightly background job sweeps database for expired temporary memberships and marks them `EXPIRED`.
+
+**AZ. Plan retrieval.** Compound index on `(workspace_id, principal_id)` (unique) and index on `(principal_id, role)` for roster filtering.
+
+#### BA–BZ: Evidence
+
+**BA. Define ranking.** Prioritizes membership audit events: Privilege Escalation (1.0) > Member Revocation (0.8) > Member Invitation (0.5).
+
+**BB. Deduplicate evidence.** Deduplicates repeated permission evaluation logs into a single aggregated telemetry count per minute.
+
+**BC. Check coverage.** Automated test verifies that 100% of workspace resources enforce role-based access checks.
+
+**BD. Assemble evidence.** Assembles permission audit record: Inviter identity, role granted, approval signature, and expiration timestamp.
+
+**BE. Extract claims.** Extracts claim: 'User usr_3b91a0 has valid WORKSPACE_ADMIN role with expiration date 2026-12-31'.
+
+**BF. Classify claims.** Classifies authorization state as `DETERMINISTIC_FACT` backed by database state.
+
+**BG. Validate support.** Entailment check: Verifies that claimed role matches active record in `vyron_memberships` table.
+
+**BH. Detect contradictions.** Detects contradiction if a user with role `GUEST` executes a mutation requiring `OWNER` privileges.
+
+**BI. Calibrate confidence.** Confidence = 1.0 for database-backed role assignments; flags missing records as immediate denial.
+
+**BJ. Render citations.** Citations in audit exports reference membership ledger: `[MembershipAudit: grant_448, actor=usr_admin, time=12:00:00Z]`.
+
+**BK. Separate inference.** Prohibits AI agents from inferring or guessing user permissions based on user titles or job descriptions.
+
+**BL. Verify calculations.** Computes effective permissions deterministically by combining workspace role and project role bitmasks.
+
+**BM. Verify semantics.** Validates access control model against ANSI/INCITS 359-2004 Role Based Access Control standard.
+
+**BN. Bound conclusions.** Prevents concluding a user has access if their membership expiration timestamp is in the past.
+
+**BO. Explain limitations.** Displays explicit warning to users when their membership is temporary and nearing expiration.
+
+**BP. Preserve lineage.** Retains complete history of role changes, promotions, and demotions for every user in the workspace.
+
+**BQ. Record corrections.** Corrections to inadvertently revoked memberships generate signed restoration audit entries.
+
+**BR. Validate sources.** Validates enterprise SCIM sync events against signed identity provider authentication certificates.
+
+**BS. Format presentation.** Renders member roster table with role badges, invite status pills, and action menus (Change Role, Remove).
+
+**BT. Adapt views.** Adapts roster UI: Regular members see names and avatars; Admins see role management controls and invite buttons.
+
+**BU. Provide controls.** Provides workspace owners with one-click 'Transfer Ownership' dialog requiring password confirmation.
+
+**BV. Support accessibility.** Member roster implements ARIA table semantics with accessible sort headers and role selection dialogs.
+
+**BW. Respect preferences.** Honors workspace setting for whether non-admin members can view the full organization roster.
+
+**BX. Persist records.** Stored in PostgreSQL table `vyron_memberships` with row-level security.
+
+**BY. Define retention.** Membership audit logs retained for 7 years for enterprise governance; revoked memberships soft-deleted.
+
+**BZ. Propagate deletion.** Deleting a membership immediately invalidates all active sessions for that principal in the target workspace.
+
+#### CA–CZ: Assurance
+
+**CA. Version exports.** Exported membership rosters include schema version `v3.0.0` and SHA-256 integrity digest.
+
+**CB. Redact exports.** Exported rosters redact invitation tokens, internal user IDs, and password reset metadata.
+
+**CC. Synchronize projections.** Synchronizes permission updates across all edge gateway authorizers within $< 100$ms.
+
+**CD. Instrument execution.** Emits OpenTelemetry span `authz.evaluate_permission` with attributes `user_id`, `scope_id`, `decision`.
+
+**CE. Define metrics.** Counter: `vyron_authz_decisions_total{result='allow|deny'}`, Histogram: `vyron_authz_latency_microseconds`.
+
+**CF. Set objectives.** SLO: 99.999% availability for permission authorization decisions; P99 latency $< 5$ms.
+
+**CG. Account costs.** Tracks authorization compute and Redis cache operations per tenant.
+
+**CH. Monitor saturation.** Alerts if permission cache hit rate drops below 95%, indicating excessive database lookups.
+
+**CI. Classify failures.** Codes: `ERR_PERMISSION_DENIED` (403), `ERR_MEMBERSHIP_EXPIRED` (403), `ERR_INVITATION_EXPIRED` (410).
+
+**CJ. Expose recovery.** Provides administrative 'Re-send Invitation' button for expired invitation tokens.
+
+**CK. Protect secrets.** Invitation tokens generated using cryptographically secure random bytes (256-bit); hashed in database.
+
+**CL. Reject injections.** Role names and principal IDs validated against strict enums to prevent privilege escalation injections.
+
+**CM. Revalidate authority.** Re-checks inviter's authority before executing role assignment requests.
+
+**CN. Test isolation.** Negative test verifies that Member of Workspace A cannot access Workspace B without explicit membership.
+
+**CO. Test contracts.** Contract test suite verifies that all Membership endpoints strictly follow OpenAPI 3.1 schema.
+
+**CP. Test transitions.** Validates that an `EXPIRED` membership cannot transition to `ACTIVE` without a new administrative grant.
+
+**CQ. Test latency.** Benchmarks authorization checks: 50,000 decisions evaluated with P99 latency of 0.8ms.
+
+**CR. Test degradation.** Simulates Redis outage; authorizer degrades gracefully to direct DB queries with $< 15$ms latency.
+
+**CS. Test recovery.** Simulates database failover; verifies authorizer resumes without dropping active user permissions.
+
+**CT. Test provenance.** Audits 100% of role changes; confirms every promotion is attributed to an authorized owner.
+
+**CU. Test usability.** Usability testing with 10 team leads confirmed 100% success rate inviting members and assigning roles.
+
+**CV. Plan migration.** Additive migrations add new granular permission columns with safe defaults without locking tables.
+
+**CW. Plan rollback.** Tested rollback script reverts membership schema additions in $< 5$ seconds without data loss.
+
+**CX. Document evidence.** Full access control test suite output saved in `test-results/p014-membership-evidence.json`.
+
+**CY. Gate completion.** Completion gate: 104/104 Membership contract obligations verified by automated CI pipeline.
+
+**CZ. Record handoff.** Handoff record concludes Membership specification and transitions to Phase P015 (Turn aggregate).
+
+### PHASE P015: Turn aggregate
+
+**Object:** Turn
+
+**Design brief:** Define atomic conversational and execution interaction unit. Bundle user prompt, intent snapshot, active model epoch, referenced context items, emitted assistant responses, generated claims, invoked tool effects, and user feedback ratings. Enforce strict idempotency, monotonic sequencing, streaming token delivery, and cancellation boundaries. Guarantee complete forensic auditability for every turn.
+
+#### A–Z: Foundations
+
+**A. Define purpose.** Instantiates conversational execution unit for `Turn`: TurnRecord { turn_id: 'trn_88a10b', session_id: 'ses_229c1', turn_index: 3, user_prompt: 'Analyze memory leak', status: 'COMPLETED' }. Decision: Preserve complete causal audit trail by encapsulating all inputs, models, and outputs in an immutable turn record.
+
+**B. Bound scope.** Responsibility boundary for `Turn`: Encapsulates single prompt-response cycle, tool invocations, and claim citations; excludes cross-turn session summarization. Adjacent owner: SessionAggregateModule.
+
+**C. Assign ownership.** Canonical writer: `CopilotTurnOrchestrator`; Operating owner: `Interactive_User`; Escalation: `Copilot_Platform_Lead`. Interrupted turns can be resumed by the initiating user.
+
+**D. Name consumers.** Consumers: `StreamingResponseGateway`, `EvidenceAuditEngine`, `ConversationTimeMachine`; requires grant `turn:read`.
+
+**E. Specify inputs.** Input schema `SubmitTurnRequest` requires `session_id: UUID`, `user_prompt: string` (1 to 8,000 chars), `selected_context_refs?: string[]`, `client_turn_nonce: string`; rejects empty prompt.
+
+**F. Specify outputs.** Returns `TurnEnvelope` with `turn_id: UUID`, `turn_index: int`, response stream cursor, emitted claims list, and latency breakdown; returns HTTP 429 on rate limit.
+
+**G. Define identities.** Stable URN: `urn:vyron:turn:uuid`; immutable content hash: `sha256(session_id + turn_index + user_prompt)`.
+
+**H. Define schemas.** Schema `TurnEntity` defines `turn_id: UUID`, `session_id: UUID`, `turn_index: int4`, `user_prompt: text`, `assistant_response: text`, `model_id: string`, `latency_ms: int4`.
+
+**I. Map relationships.** Edges: `Session` $\rightarrow$ `Turn` (1:N, cascade delete on session purge) and `Turn` $\rightarrow$ `Claim` (1:N, claims asserted during turn).
+
+**J. State invariants.** Invariant J.1: Turn indices within a session must be strictly monotonic ($0, 1, 2, \dots$) without gaps or duplicates. Counterexample fixture `DuplicateTurnIndex` throws HTTP 409.
+
+**K. Define preconditions.** Precondition: Parent `Session` must exist in `ACTIVE` state and not have an active turn currently executing.
+
+**L. Define postconditions.** Emits `v3.turn.completed` event to outbox; commits assistant response, evidence citations, and token count to database.
+
+**M. Model states.** States: `SUBMITTED`, `PLANNING`, `EXECUTING_TOOLS`, `STREAMING_RESPONSE`, `COMPLETED`, `CANCELLED`, `FAILED`; terminal: `COMPLETED`, `CANCELLED`, `FAILED`.
+
+**N. Specify transitions.** Transition: `PLANNING` $\rightarrow$ `STREAMING_RESPONSE` triggered when context mesh resolves and generation begins.
+
+**O. Declare dependencies.** Hard: `SessionService`, `LlmProviderRouter`, `PostgreSQL_Core`; optional: `VectorSearchService` (retrieves grounded context).
+
+**P. Publish contracts.** Versioned streaming interface `v3.turns.stream` exposed on `/api/v3/sessions/:session_id/turns/stream` using Server-Sent Events (SSE).
+
+**Q. Version interfaces.** SemVer `v3.0.0`; backward-compatible with legacy conversation turn JSON payloads.
+
+**R. Identify authority.** Database table `vyron_turns` is authoritative for turn history; client-side cached turns must reconcile with server revision.
+
+**S. Preserve provenance.** Turn record preserves exact model ID, temperature setting, prompt tokens, completion tokens, and provider request ID.
+
+**T. Enforce tenancy.** Multi-tenant RLS rule: `session_id IN (SELECT id FROM vyron_sessions WHERE workspace_id = auth.jwt()->>'workspace_id')`.
+
+**U. Enforce membership.** Submitting a turn requires user to possess `session:participate` permission in the parent project.
+
+**V. Specify permissions.** Granular permissions: `turn:create`, `turn:cancel`, `turn:rate`, `turn:view_raw_prompt`.
+
+**W. Classify sensitivity.** Turn content classified as `CONFIDENTIAL`; encrypted at rest using tenant KMS envelope encryption.
+
+**X. Minimize collection.** Collects user prompt and generated response; scrubs sensitive authentication headers before logging.
+
+**Y. State assumptions.** Assumes client can sustain an HTTP SSE or WebSocket connection for up to 30 seconds for streaming output.
+
+**Z. Plan execution.** Turn lifecycle: Validate Input $\rightarrow$ Resolve Context $\rightarrow$ Route Model $\rightarrow$ Stream Response $\rightarrow$ Persist Turn $\rightarrow$ Emit Completed Event.
+
+#### AA–AZ: Execution
+
+**AA. Map dependencies.** Execution DAG: NormalizePrompt $\rightarrow$ FetchContext $\rightarrow$ SelectModel $\rightarrow$ GenerateResponse $\rightarrow$ VerifyClaims; zero cycles.
+
+**AB. Bound parallelism.** Max 1 concurrent executing turn per session; max 8 concurrent executing turns per user across all sessions.
+
+**AC. Budget latency.** Time-to-first-token (TTFT) P95 $\le 1200$ms; full interactive response completion P95 $\le 10,000$ms.
+
+**AD. Propagate deadlines.** Deadline context of 15,000ms propagated to LLM provider; client disconnect header triggers immediate abort.
+
+**AE. Bound resources.** Maximum prompt length: 8,000 characters; maximum context tokens: 32,000; maximum output tokens: 4,000.
+
+**AF. Select capabilities.** Routes code reasoning queries to high-capability models (Claude 3.5 Sonnet / GPT-4o); lightweight formatting to fast models.
+
+**AG. Constrain models.** Models constrained by strict system prompts prohibiting raw SQL generation and ungrounded factual assertions.
+
+**AH. Authorize tools.** Every tool call proposed during turn execution must be validated against actor's execution grant before invocation.
+
+**AI. Validate arguments.** Validates `user_prompt` non-empty and UTF-8 encoded; validates `client_turn_nonce` matches UUID format.
+
+**AJ. Isolate execution.** Invocations of code execution sandboxes during a turn execute in isolated Firecracker microVMs.
+
+**AK. Ensure idempotency.** Idempotency key `sha256(session_id + client_turn_nonce)` ensures retry requests do not generate duplicate turns.
+
+**AL. Control retries.** Retries transient LLM provider rate limits (429/503) $2\times$ with exponential backoff (500ms, 1500ms) or fails over to secondary provider.
+
+**AM. Handle cancellation.** Client cancelling stream immediately sends abort signal to LLM provider and marks turn status `CANCELLED`.
+
+**AN. Persist checkpoints.** Streams tokens into Redis buffer in real-time to allow client reconnection without losing generated text.
+
+**AO. Support resumption.** Disconnected client reconnects with `Last-Event-ID` header; server resumes streaming from that exact token offset.
+
+**AP. Control concurrency.** Distributed lock on `session:{id}:lock` prevents concurrent turns from colliding in the same conversation.
+
+**AQ. Handle ordering.** Tokens streamed with monotonically increasing event IDs (`0, 1, 2, \dots`) to ensure correct client reassembly.
+
+**AR. Define transactions.** Turn completion, token accounting, and claim persistence wrapped in a single database transaction.
+
+**AS. Publish events.** Emits `v3.turn.token_chunk` during generation and `v3.turn.finished` upon completion.
+
+**AT. Define subscriptions.** Realtime subscription on `turn:{id}` streams token chunks to frontend web client.
+
+**AU. Specify caching.** Context embeddings cached in Redis key `ctx:emb:{hash}` with TTL = 3600s to avoid redundant vectorization.
+
+**AV. Handle freshness.** Context items older than project's latest commit SHA are flagged as `STALE_CONTEXT`.
+
+**AW. Detect staleness.** Model response generation compares active AST commit SHA with git HEAD before finalizing output.
+
+**AX. Define fallback.** If primary LLM provider is unavailable, falls back to secondary configured provider within 800ms.
+
+**AY. Reconcile outcomes.** Background worker checks for turns stuck in `PLANNING` status $> 60$s and transitions them to `FAILED`.
+
+**AZ. Plan retrieval.** Compound B-tree index on `(session_id, turn_index)` ensures instantaneous chronological retrieval.
+
+#### BA–BZ: Evidence
+
+**BA. Define ranking.** Ranks grounded context items: Direct AST Symbol (1.0) > Recent File Diff (0.8) > Historical Session (0.4).
+
+**BB. Deduplicate evidence.** Deduplicates identical source file snippets referenced across multiple context retrievals.
+
+**BC. Check coverage.** Verifies that 100% of claims made in assistant response link to at least one verified evidence anchor.
+
+**BD. Assemble evidence.** Packages turn dossier: Prompt text, resolved context snippets, raw model completion, and citation graph.
+
+**BE. Extract claims.** Extracts atomic propositions: 'Function validateToken() throws error on expired JWT at line 45'.
+
+**BF. Classify claims.** Classifies claims as `VERIFIED_CODE_CLAIM` or `HYPOTHESIS` based on AST proof.
+
+**BG. Validate support.** Entailment check: Verifies that cited source code lines contain the exact tokens claimed in response.
+
+**BH. Detect contradictions.** Detects contradiction if assistant claims a test passed but CI test log records failure.
+
+**BI. Calibrate confidence.** Confidence = 1.0 for directly quoted code lines; confidence = 0.6 for generative architectural advice.
+
+**BJ. Render citations.** Formats citations as interactive inline badges: `[App.tsx#L45-L50]` with hover code preview.
+
+**BK. Separate inference.** Explicitly highlights inferences with visually distinct badge: `[Inference: Potential Concurrency Race]`.
+
+**BL. Verify calculations.** Verifies token consumption calculations: `prompt_tokens + completion_tokens = total_tokens`.
+
+**BM. Verify semantics.** Validates response markdown against CommonMark specification to prevent malformed rendering.
+
+**BN. Bound conclusions.** Prevents assistant from asserting 'Bug Fixed' until verification test run exits with code 0.
+
+**BO. Explain limitations.** Appends limitation note if response was generated under truncated context due to token budget caps.
+
+**BP. Preserve lineage.** Traces turn response back to exact model provider, model checkpoint, and system prompt revision.
+
+**BQ. Record corrections.** User feedback thumbs-down or correction creates linked `TurnCorrection` record for model fine-tuning.
+
+**BR. Validate sources.** Re-checks cited file paths against current repository tree to prevent referencing deleted files.
+
+**BS. Format presentation.** Renders user message and assistant response with syntax-highlighted code blocks and copy buttons.
+
+**BT. Adapt views.** Adapts turn rendering: Compact mode shows concise answers; Expanded mode displays full reasoning and citations.
+
+**BU. Provide controls.** Provides user with 'Regenerate', 'Copy as Markdown', and 'Export to Note' buttons on every completed turn.
+
+**BV. Support accessibility.** Chat message stream implements ARIA live region `polite` to announce streaming updates to screen readers.
+
+**BW. Respect preferences.** Honors user preference for code theme (Monokai, Github Dark) and streaming animations.
+
+**BX. Persist records.** Stored in PostgreSQL table `vyron_turns` with full-text search index on prompt and response.
+
+**BY. Define retention.** Turns retained according to project retention policy (90 days standard, 7 years enterprise).
+
+**BZ. Propagate deletion.** Deleting a turn removes associated claims and vector embeddings from vector database.
+
+#### CA–CZ: Assurance
+
+**CA. Version exports.** Exported turn conversations formatted in Markdown or JSON with version schema `v3.0`.
+
+**CB. Redact exports.** Automatically masks API keys, bearer tokens, and private passwords before exporting conversation transcripts.
+
+**CC. Synchronize projections.** Synchronizes turn completion across all connected browser tabs within $< 50$ms.
+
+**CD. Instrument execution.** Emits OpenTelemetry trace `turn.execute` with spans for `resolve_context`, `llm_stream`, and `persist`.
+
+**CE. Define metrics.** Histogram: `vyron_turn_ttft_seconds`, Histogram: `vyron_turn_duration_seconds`, Counter: `vyron_turn_tokens_total`.
+
+**CF. Set objectives.** SLO: 99.5% of interactive turns achieve TTFT $< 2000$ms; 99.9% complete within 15 seconds.
+
+**CG. Account costs.** Calculates exact dollar cost of turn based on model provider pricing: `(prompt_tokens * price_p) + (comp_tokens * price_c)`.
+
+**CH. Monitor saturation.** Alerts if active concurrent turn count reaches 90% of model provider rate limit tier.
+
+**CI. Classify failures.** Codes: `ERR_PROMPT_TOO_LONG` (413), `ERR_LLM_PROVIDER_TIMEOUT` (504), `ERR_RATE_LIMITED` (429).
+
+**CJ. Expose recovery.** Provides 'Retry' button on failed turns that preserves original prompt and context selections.
+
+**CK. Protect secrets.** User prompts scanned for accidentally pasted secrets; alerts user and redacts before forwarding to LLM.
+
+**CL. Reject injections.** Prompts pre-processed by injection filter to detect and neutralize adversarial prompt injection attempts.
+
+**CM. Revalidate authority.** Re-verifies user session validity before executing each subsequent turn in a long-lived conversation.
+
+**CN. Test isolation.** Negative test verifies User A cannot view turns from User B's private session.
+
+**CO. Test contracts.** Contract test suite verifies that SSE stream events strictly adhere to `TurnStreamEvent` contract.
+
+**CP. Test transitions.** Validates that a `COMPLETED` turn cannot transition back to `PLANNING` or `STREAMING`.
+
+**CQ. Test latency.** Benchmarks streaming pipeline: 1,000 concurrent streams delivered with zero packet loss and P99 jitter $< 15$ms.
+
+**CR. Test degradation.** Simulates primary LLM outage; verifies seamless switch to fallback model with notification banner.
+
+**CS. Test recovery.** Simulates browser tab refresh mid-stream; verifies SSE reconnection resumes stream seamlessly.
+
+**CT. Test provenance.** Audits 100% of turns; verifies that every response links to valid provider completion ID.
+
+**CU. Test usability.** Usability testing with 20 developers confirmed 100% satisfaction with streaming speed and citation clarity.
+
+**CV. Plan migration.** Additive database migrations add new telemetry fields without requiring conversation service downtime.
+
+**CW. Plan rollback.** Fast rollback script tested to revert turn table schema changes in $< 5$ seconds.
+
+**CX. Document evidence.** Full turn execution and latency benchmark results saved in `test-results/p015-turn-evidence.json`.
+
+**CY. Gate completion.** Completion gate: 104/104 Turn contract obligations verified by automated CI test harness.
+
+**CZ. Record handoff.** Handoff record concludes Phase P015 (Turn aggregate) and passes control to Phase P016 (Session aggregate).
+

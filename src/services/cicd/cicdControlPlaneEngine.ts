@@ -7,9 +7,10 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
-import { blueprintGraphEngine } from "@/services/blueprint/blueprintGraphEngine";
-import { releaseGateEngine, ReleaseGateDefinition } from "@/services/release/releaseGateEngine";
+import { generateVerificationHash } from "../ai/cryptoUtils.ts";
+import { blueprintGraphEngine } from "../blueprint/blueprintGraphEngine.ts";
+import { releaseGateEngine } from "../release/releaseGateEngine.ts";
+import type { ReleaseGateDefinition } from "../release/releaseGateEngine.ts";
 
 export type GuardrailPlane =
   | "PRE_REQUEST"

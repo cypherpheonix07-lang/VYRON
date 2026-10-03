@@ -1,1 +1,1 @@
-export * from "./specializedAgents";
+export * from "./specializedAgents.ts";

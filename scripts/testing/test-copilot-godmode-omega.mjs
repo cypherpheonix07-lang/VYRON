@@ -9,18 +9,18 @@
  * Strictly ZERO SQL.
  */
 
-import { questionUnderstanding } from "./src/services/copilot/questionUnderstanding.ts";
-import { contextMesh } from "./src/services/copilot/contextMesh.ts";
-import { historyRetrieval } from "./src/services/copilot/historyRetrieval.ts";
-import { resourceFlightRecorder } from "./src/services/copilot/resourceProvenance.ts";
-import { multimodalIntelligence } from "./src/services/copilot/multimodalIntelligence.ts";
-import { safeReasoningEngine } from "./src/services/copilot/safeReasoningEngine.ts";
-import { stageGateEngine } from "./src/services/copilot/stageGateEngine.ts";
-import { conversationTimeMachine } from "./src/services/copilot/conversationTimeMachine.ts";
-import { copilotAgentOrchestrator } from "./src/services/copilot/copilotAgentOrchestrator.ts";
-import { copilotDispatcher } from "./src/services/copilot/copilotDispatcher.ts";
-import { copilotStore } from "./src/state/copilot/copilotStore.ts";
-import { listPhases104, verifyPhase104Invariants } from "./src/services/governance/phaseDossier250x104Data.ts";
+import { questionUnderstanding } from "../../src/services/copilot/questionUnderstanding.ts";
+import { contextMesh } from "../../src/services/copilot/contextMesh.ts";
+import { historyRetrieval } from "../../src/services/copilot/historyRetrieval.ts";
+import { resourceFlightRecorder } from "../../src/services/copilot/resourceProvenance.ts";
+import { multimodalIntelligence } from "../../src/services/copilot/multimodalIntelligence.ts";
+import { safeReasoningEngine } from "../../src/services/copilot/safeReasoningEngine.ts";
+import { stageGateEngine } from "../../src/services/copilot/stageGateEngine.ts";
+import { conversationTimeMachine } from "../../src/services/copilot/conversationTimeMachine.ts";
+import { copilotAgentOrchestrator } from "../../src/services/copilot/copilotAgentOrchestrator.ts";
+import { copilotDispatcher } from "../../src/services/copilot/copilotDispatcher.ts";
+import { copilotStore } from "../../src/state/copilot/copilotStore.ts";
+import { listPhases104, verifyPhase104Invariants } from "../../src/services/governance/phaseDossier250x104Data.ts";
 
 async function runOmegaVerification() {
   console.log("===============================================================================");

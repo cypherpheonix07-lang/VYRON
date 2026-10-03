@@ -15,14 +15,14 @@
  * Strictly ZERO SQL.
  */
 
-import { AppMode } from "@/state/mode/modeStore";
-import {
+import type { AppMode } from "../../state/mode/modeStore.ts";
+import type {
   ThinkingState,
   ThinkingDepthLevel,
   ResponseDetailLevel,
   EvidenceMode,
-} from "@/state/copilot/copilotStore";
-import { SpecialistAgentType } from "./copilotAgentOrchestrator";
+} from "../../state/copilot/copilotStore.ts";
+import type { SpecialistAgentType } from "./copilotAgentOrchestrator.ts";
 
 export interface ThinkingPolicy {
   thinkingMode: ThinkingState;

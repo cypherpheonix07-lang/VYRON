@@ -19,10 +19,10 @@
  * - Strictly ZERO SQL.
  */
 
-import { AppMode } from "@/state/mode/modeStore";
-import { aiRouter } from "@/services/ai/aiRouter";
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
-import { UserAuthority } from "@/types/engineeringEntity";
+import type { AppMode } from "../../state/mode/modeStore.ts";
+import { aiRouter } from "../ai/aiRouter.ts";
+import { generateVerificationHash } from "../ai/cryptoUtils.ts";
+import type { UserAuthority } from "../../types/engineeringEntity.ts";
 
 export type SpecialistAgentType =
   | "DATA_ANALYST"

@@ -7,10 +7,10 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { cicdControlPlane } from "./src/services/cicd/cicdControlPlaneEngine.ts";
-import { cicdDossier250x104Data } from "./src/services/governance/cicdDossier250x104Data.ts";
-import { releaseGateEngine } from "./src/services/release/releaseGateEngine.ts";
-import { blueprintGraphEngine } from "./src/services/blueprint/blueprintGraphEngine.ts";
+import { cicdControlPlane } from "../../src/services/cicd/cicdControlPlaneEngine.ts";
+import { cicdDossier250x104Data } from "../../src/services/governance/cicdDossier250x104Data.ts";
+import { releaseGateEngine } from "../../src/services/release/releaseGateEngine.ts";
+import { blueprintGraphEngine } from "../../src/services/blueprint/blueprintGraphEngine.ts";
 
 async function runCicdCampaignVerification() {
   console.log("===============================================================================");

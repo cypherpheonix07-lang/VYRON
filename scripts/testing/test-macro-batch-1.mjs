@@ -5,17 +5,17 @@
  * Canonical Domain Model, Source of Truth Architecture, and Evidence Fabric.
  */
 
-import { SYSTEM_TRUTH_MANIFEST } from "./src/config/truthManifest.ts";
-import { AuditReconciliationEngine } from "./src/services/intelligence/auditReconciliation.ts";
-import { BlockerClosureEngine } from "./src/services/intelligence/blockerClosureEngine.ts";
-import { ProductionReadinessGapEngine } from "./src/services/intelligence/productionReadinessGap.ts";
-import { ProductThesisContract } from "./src/services/intelligence/productContract.ts";
-import { UserWorkflowIntelligenceEngine } from "./src/services/intelligence/userWorkflowIntelligence.ts";
-import { CompetitiveCapabilityEngine } from "./src/services/intelligence/competitiveCapabilityMap.ts";
-import { ProductBoundaryContract } from "./src/services/intelligence/productBoundaryContract.ts";
-import { CanonicalDomainModelEngine } from "./src/services/intelligence/canonicalDomainModel.ts";
-import { SourceOfTruthArchitecture } from "./src/services/intelligence/sourceOfTruthArchitecture.ts";
-import { EvidenceFabricEngine } from "./src/services/intelligence/evidenceFabric.ts";
+import { SYSTEM_TRUTH_MANIFEST } from "../../src/config/truthManifest.ts";
+import { AuditReconciliationEngine } from "../../src/services/intelligence/auditReconciliation.ts";
+import { BlockerClosureEngine } from "../../src/services/intelligence/blockerClosureEngine.ts";
+import { ProductionReadinessGapEngine } from "../../src/services/intelligence/productionReadinessGap.ts";
+import { ProductThesisContract } from "../../src/services/intelligence/productContract.ts";
+import { UserWorkflowIntelligenceEngine } from "../../src/services/intelligence/userWorkflowIntelligence.ts";
+import { CompetitiveCapabilityEngine } from "../../src/services/intelligence/competitiveCapabilityMap.ts";
+import { ProductBoundaryContract } from "../../src/services/intelligence/productBoundaryContract.ts";
+import { CanonicalDomainModelEngine } from "../../src/services/intelligence/canonicalDomainModel.ts";
+import { SourceOfTruthArchitecture } from "../../src/services/intelligence/sourceOfTruthArchitecture.ts";
+import { EvidenceFabricEngine } from "../../src/services/intelligence/evidenceFabric.ts";
 
 console.log("================================================================================");
 console.log("  VYRON GOD MODE vNEXT — MACRO-BATCH 1 VERIFICATION (P01 - P10)");

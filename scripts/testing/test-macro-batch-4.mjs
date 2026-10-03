@@ -5,16 +5,16 @@
  * Release Readiness Gates, Fault Injection, Agent Benchmarks, and FinOps Governance.
  */
 
-import { MissionControlOrchestrator } from "./src/services/intelligence/missionControlOrchestrator.ts";
-import { RealtimeEventFabric } from "./src/services/intelligence/realtimeEventFabric.ts";
-import { DualModeIsolationEngine } from "./src/services/intelligence/dualModeIsolationEngine.ts";
-import { DigitalTwinEngine } from "./src/services/intelligence/digitalTwinEngine.ts";
-import { PredictiveRecommendationEngine } from "./src/services/intelligence/predictiveRecommendationEngine.ts";
-import { AdrLifecycleEngine } from "./src/services/intelligence/adrLifecycleEngine.ts";
-import { ReleaseCertificationEngine } from "./src/services/intelligence/releaseCertificationEngine.ts";
-import { FaultInjectionEngine } from "./src/services/intelligence/faultInjectionEngine.ts";
-import { AgentBenchmarkEngine } from "./src/services/intelligence/agentBenchmarkEngine.ts";
-import { FinopsGovernanceEngine } from "./src/services/intelligence/finopsGovernanceEngine.ts";
+import { MissionControlOrchestrator } from "../../src/services/intelligence/missionControlOrchestrator.ts";
+import { RealtimeEventFabric } from "../../src/services/intelligence/realtimeEventFabric.ts";
+import { DualModeIsolationEngine } from "../../src/services/intelligence/dualModeIsolationEngine.ts";
+import { DigitalTwinEngine } from "../../src/services/intelligence/digitalTwinEngine.ts";
+import { PredictiveRecommendationEngine } from "../../src/services/intelligence/predictiveRecommendationEngine.ts";
+import { AdrLifecycleEngine } from "../../src/services/intelligence/adrLifecycleEngine.ts";
+import { ReleaseCertificationEngine } from "../../src/services/intelligence/releaseCertificationEngine.ts";
+import { FaultInjectionEngine } from "../../src/services/intelligence/faultInjectionEngine.ts";
+import { AgentBenchmarkEngine } from "../../src/services/intelligence/agentBenchmarkEngine.ts";
+import { FinopsGovernanceEngine } from "../../src/services/intelligence/finopsGovernanceEngine.ts";
 
 console.log("================================================================================");
 console.log("  VYRON GOD MODE vNEXT — MACRO-BATCH 4 VERIFICATION (P31 - P40)");

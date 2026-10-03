@@ -9,16 +9,16 @@
  * 6. Natural Language Command Center & Action Engine
  */
 
-import { CopilotThinkingEngine } from "./src/services/copilot/copilotThinkingEngine.ts";
-import { CopilotExactAnswerEngine } from "./src/services/copilot/copilotExactAnswerEngine.ts";
-import { copilotAgentOrchestrator } from "./src/services/copilot/copilotAgentOrchestrator.ts";
-import { skillRegistry } from "./src/services/skills/skillRegistry.ts";
-import { skillFactory } from "./src/services/skills/skillFactory.ts";
-import { AUTHORITATIVE_CONNECTOR_CATALOG } from "./src/services/connectors/connectorCatalog.ts";
-import { connectorFabric } from "./src/services/connectors/connectorFabric.ts";
-import { connectorMarketplace } from "./src/services/connectors/connectorMarketplace.ts";
-import { copilotCommandCenter } from "./src/services/copilot/copilotCommandCenter.ts";
-import { copilotActionEngine } from "./src/services/copilot/copilotActionEngine.ts";
+import { CopilotThinkingEngine } from "../../src/services/copilot/copilotThinkingEngine.ts";
+import { CopilotExactAnswerEngine } from "../../src/services/copilot/copilotExactAnswerEngine.ts";
+import { copilotAgentOrchestrator } from "../../src/services/copilot/copilotAgentOrchestrator.ts";
+import { skillRegistry } from "../../src/services/skills/skillRegistry.ts";
+import { skillFactory } from "../../src/services/skills/skillFactory.ts";
+import { AUTHORITATIVE_CONNECTOR_CATALOG } from "../../src/services/connectors/connectorCatalog.ts";
+import { connectorFabric } from "../../src/services/connectors/connectorFabric.ts";
+import { connectorMarketplace } from "../../src/services/connectors/connectorMarketplace.ts";
+import { copilotCommandCenter } from "../../src/services/copilot/copilotCommandCenter.ts";
+import { copilotActionEngine } from "../../src/services/copilot/copilotActionEngine.ts";
 
 async function runGodModeVerification() {
   console.log("===============================================================================");

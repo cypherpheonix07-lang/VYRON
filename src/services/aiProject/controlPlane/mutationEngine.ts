@@ -5,8 +5,8 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { ProjectEngineeringState, AiProposal, AiMutation } from "@/types/aiProjectControlPlane";
-import { projectMemory } from "../context/projectMemory";
+import type { ProjectEngineeringState, AiProposal, AiMutation } from "../../../types/aiProjectControlPlane.ts";
+import { projectMemory } from "../context/projectMemory.ts";
 
 export interface MutationCommitResult {
   success: boolean;
