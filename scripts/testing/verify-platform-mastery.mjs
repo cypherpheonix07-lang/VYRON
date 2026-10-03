@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../..");
 
 console.log("\n=======================================================");
 console.log("   PROJECT BRAHMA — PLATFORM MASTERY GATES (M1–M10)    ");
@@ -32,13 +33,13 @@ function assert(gate, title, condition, evidence) {
 
 // ─── GATE M1: Full-Screen Copilot Studio Route & Viewports ───────────────────
 try {
-  const routeContent = fs.readFileSync(path.join(__dirname, "src/routes/app.chat.tsx"), "utf-8");
+  const routeContent = fs.readFileSync(path.join(projectRoot, "src/routes/app.chat.tsx"), "utf-8");
   const studioContent = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotFullScreenStudio.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotFullScreenStudio.tsx"),
     "utf-8",
   );
   const storeContent = fs.readFileSync(
-    path.join(__dirname, "src/state/copilot/copilotStore.ts"),
+    path.join(projectRoot, "src/state/copilot/copilotStore.ts"),
     "utf-8",
   );
 
@@ -65,11 +66,11 @@ try {
 // ─── GATE M2: 7 Specialist Agent UI & Task Delegation ────────────────────────
 try {
   const drawerContent = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotDrawer.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotDrawer.tsx"),
     "utf-8",
   );
   const orchestratorContent = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotAgentOrchestrator.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotAgentOrchestrator.ts"),
     "utf-8",
   );
 
@@ -101,11 +102,11 @@ try {
 // ─── GATE M3: Layered 7-Tier Memory Controls ─────────────────────────────────
 try {
   const drawerContent = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotDrawer.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotDrawer.tsx"),
     "utf-8",
   );
   const memoryContent = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotMemory.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotMemory.ts"),
     "utf-8",
   );
 
@@ -134,15 +135,15 @@ try {
 // ─── GATE M4: Proactive Intelligence Engine & Dynamic Banner ──────────────────
 try {
   const bannerContent = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/ProactiveInsightsBanner.tsx"),
+    path.join(projectRoot, "src/components/copilot/ProactiveInsightsBanner.tsx"),
     "utf-8",
   );
   const dashboardContent = fs.readFileSync(
-    path.join(__dirname, "src/routes/app.index.tsx"),
+    path.join(projectRoot, "src/routes/app.index.tsx"),
     "utf-8",
   );
   const analysisViewContent = fs.readFileSync(
-    path.join(__dirname, "src/components/analysis/AnalysisDashboardView.tsx"),
+    path.join(projectRoot, "src/components/analysis/AnalysisDashboardView.tsx"),
     "utf-8",
   );
 
@@ -164,11 +165,11 @@ try {
 // ─── GATE M5: 13-Category Typed Tool Registry ─────────────────────────────────
 try {
   const registryContent = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotToolRegistry.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotToolRegistry.ts"),
     "utf-8",
   );
   const actionEngineContent = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotActionEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotActionEngine.ts"),
     "utf-8",
   );
 
@@ -211,27 +212,27 @@ try {
 // ─── GATE M6: 5 Real Connector Adapters with Health & Token Revocation ────────
 try {
   const barrelContent = fs.readFileSync(
-    path.join(__dirname, "src/services/connectors/index.ts"),
+    path.join(projectRoot, "src/services/connectors/index.ts"),
     "utf-8",
   );
   const kgContent = fs.readFileSync(
-    path.join(__dirname, "src/services/connectors/kaggleConnector.ts"),
+    path.join(projectRoot, "src/services/connectors/kaggleConnector.ts"),
     "utf-8",
   );
   const ghContent = fs.readFileSync(
-    path.join(__dirname, "src/services/connectors/githubConnector.ts"),
+    path.join(projectRoot, "src/services/connectors/githubConnector.ts"),
     "utf-8",
   );
   const figmaContent = fs.readFileSync(
-    path.join(__dirname, "src/services/connectors/figmaConnector.ts"),
+    path.join(projectRoot, "src/services/connectors/figmaConnector.ts"),
     "utf-8",
   );
   const notionContent = fs.readFileSync(
-    path.join(__dirname, "src/services/connectors/notionConnector.ts"),
+    path.join(projectRoot, "src/services/connectors/notionConnector.ts"),
     "utf-8",
   );
   const mcpContent = fs.readFileSync(
-    path.join(__dirname, "src/services/connectors/customMcpConnector.ts"),
+    path.join(projectRoot, "src/services/connectors/customMcpConnector.ts"),
     "utf-8",
   );
 
@@ -267,11 +268,11 @@ try {
 // ─── GATE M7: Observable Analysis Execution (Cancel, Rerun, History) ───────────
 try {
   const viewContent = fs.readFileSync(
-    path.join(__dirname, "src/components/analysis/AnalysisDashboardView.tsx"),
+    path.join(projectRoot, "src/components/analysis/AnalysisDashboardView.tsx"),
     "utf-8",
   );
   const storeContent = fs.readFileSync(
-    path.join(__dirname, "src/state/analysis/analysisStore.ts"),
+    path.join(projectRoot, "src/state/analysis/analysisStore.ts"),
     "utf-8",
   );
 
@@ -295,7 +296,7 @@ try {
 // ─── GATE M8: Real-Time Event Bus Coverage Across 12 Stages ───────────────────
 try {
   const listenerContent = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotRealtimeListener.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotRealtimeListener.ts"),
     "utf-8",
   );
 
@@ -320,11 +321,11 @@ try {
 // ─── GATE M9: Dynamic Dashboard & AppShell Hydration ──────────────────────────
 try {
   const dashboardContent = fs.readFileSync(
-    path.join(__dirname, "src/routes/app.index.tsx"),
+    path.join(projectRoot, "src/routes/app.index.tsx"),
     "utf-8",
   );
   const shellContent = fs.readFileSync(
-    path.join(__dirname, "src/components/brahma/app-shell.tsx"),
+    path.join(projectRoot, "src/components/brahma/app-shell.tsx"),
     "utf-8",
   );
 
@@ -350,7 +351,7 @@ try {
 // ─── GATE M10: Project-Aware Context Engine ───────────────────────────────────
 try {
   const contextContent = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotContextEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotContextEngine.ts"),
     "utf-8",
   );
 

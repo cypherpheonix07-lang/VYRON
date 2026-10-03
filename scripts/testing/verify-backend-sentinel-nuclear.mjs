@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../..");
 
 let totalPassed = 0;
 let totalFailed = 0;
@@ -38,7 +39,7 @@ async function runCampaigns() {
   // CAMPAIGN A: HEALTHY BASELINE
   // ---------------------------------------------------------------------------------------
   try {
-    const sysFlowFile = path.join(__dirname, "src/services/systemFlow/systemFlowEngine.ts");
+    const sysFlowFile = path.join(projectRoot, "src/services/systemFlow/systemFlowEngine.ts");
     const sysFlowContent = fs.readFileSync(sysFlowFile, "utf-8");
 
     const hasGlobalMetrics = sysFlowContent.includes("getGlobalMetrics") && sysFlowContent.includes("sloAttainment");
@@ -59,9 +60,9 @@ async function runCampaigns() {
   // CAMPAIGN B: AUTHENTICATION & PERSONA PROPAGATION
   // ---------------------------------------------------------------------------------------
   try {
-    const personaFile = path.join(__dirname, "src/services/persona/experienceProfileService.ts");
+    const personaFile = path.join(projectRoot, "src/services/persona/experienceProfileService.ts");
     const personaContent = fs.readFileSync(personaFile, "utf-8");
-    const onboardingFile = path.join(__dirname, "src/routes/onboarding.tsx");
+    const onboardingFile = path.join(projectRoot, "src/routes/onboarding.tsx");
     const onboardingContent = fs.readFileSync(onboardingFile, "utf-8");
 
     const hasAll4Personas =
@@ -114,7 +115,7 @@ async function runCampaigns() {
     ];
 
     for (const file of filesToAudit) {
-      const fullPath = path.join(__dirname, file);
+      const fullPath = path.join(projectRoot, file);
       if (fs.existsSync(fullPath)) {
         const content = fs.readFileSync(fullPath, "utf-8");
         for (const pat of rawSqlPatterns) {
@@ -146,7 +147,7 @@ async function runCampaigns() {
   // CAMPAIGN D: EVENT CONVERGENCE & OUTBOX IDEMPOTENCY
   // ---------------------------------------------------------------------------------------
   try {
-    const sysFlowFile = path.join(__dirname, "src/services/systemFlow/systemFlowEngine.ts");
+    const sysFlowFile = path.join(projectRoot, "src/services/systemFlow/systemFlowEngine.ts");
     const sysFlowContent = fs.readFileSync(sysFlowFile, "utf-8");
 
     const hasOutboxNode = sysFlowContent.includes("Transactional Outbox") && sysFlowContent.includes("OUTBOX_CDC");
@@ -167,7 +168,7 @@ async function runCampaigns() {
   // CAMPAIGN E: FAILURE INJECTION & CIRCUIT BREAKERS
   // ---------------------------------------------------------------------------------------
   try {
-    const sentinelFile = path.join(__dirname, "src/services/sentinel/openAiBackendSentinel.ts");
+    const sentinelFile = path.join(projectRoot, "src/services/sentinel/openAiBackendSentinel.ts");
     const sentinelContent = fs.readFileSync(sentinelFile, "utf-8");
 
     const hasFaultInjection =
@@ -189,7 +190,7 @@ async function runCampaigns() {
   // CAMPAIGN F: SECURITY & CROSS-TENANT DEFENSE
   // ---------------------------------------------------------------------------------------
   try {
-    const toolsFile = path.join(__dirname, "src/services/sentinel/sentinelToolRegistry.ts");
+    const toolsFile = path.join(projectRoot, "src/services/sentinel/sentinelToolRegistry.ts");
     const toolsContent = fs.readFileSync(toolsFile, "utf-8");
 
     const hasRlsTool = toolsContent.includes("inspect_rls_and_policy_metadata");
@@ -210,9 +211,9 @@ async function runCampaigns() {
   // CAMPAIGN G: AI SENTINEL DETECTION & ROOT CAUSE ANALYSIS
   // ---------------------------------------------------------------------------------------
   try {
-    const sentinelFile = path.join(__dirname, "src/services/sentinel/openAiBackendSentinel.ts");
+    const sentinelFile = path.join(projectRoot, "src/services/sentinel/openAiBackendSentinel.ts");
     const sentinelContent = fs.readFileSync(sentinelFile, "utf-8");
-    const incidentFile = path.join(__dirname, "src/services/sentinel/sentinelIncidentStore.ts");
+    const incidentFile = path.join(projectRoot, "src/services/sentinel/sentinelIncidentStore.ts");
     const incidentContent = fs.readFileSync(incidentFile, "utf-8");
 
     const has22Steps =
@@ -241,7 +242,7 @@ async function runCampaigns() {
   // CAMPAIGN H: RECOVERY & DURABLE WORKER REPLAY
   // ---------------------------------------------------------------------------------------
   try {
-    const toolsFile = path.join(__dirname, "src/services/sentinel/sentinelToolRegistry.ts");
+    const toolsFile = path.join(projectRoot, "src/services/sentinel/sentinelToolRegistry.ts");
     const toolsContent = fs.readFileSync(toolsFile, "utf-8");
 
     const hasReplayTool = toolsContent.includes("replay_in_sandbox");
@@ -262,11 +263,11 @@ async function runCampaigns() {
   // CAMPAIGN I: REALTIME & SYSTEM FLOW CONVERGENCE
   // ---------------------------------------------------------------------------------------
   try {
-    const uiFile = path.join(__dirname, "src/components/systemFlow/SystemFlowControlPlane.tsx");
+    const uiFile = path.join(projectRoot, "src/components/systemFlow/SystemFlowControlPlane.tsx");
     const uiContent = fs.readFileSync(uiFile, "utf-8");
-    const routeFile = path.join(__dirname, "src/routes/app.system-flow.tsx");
+    const routeFile = path.join(projectRoot, "src/routes/app.system-flow.tsx");
     const routeContent = fs.readFileSync(routeFile, "utf-8");
-    const shellFile = path.join(__dirname, "src/components/brahma/app-shell.tsx");
+    const shellFile = path.join(projectRoot, "src/components/brahma/app-shell.tsx");
     const shellContent = fs.readFileSync(shellFile, "utf-8");
 
     const hasUiComponent =

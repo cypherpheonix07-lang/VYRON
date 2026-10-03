@@ -501,9 +501,10 @@ assert(
 );
 
 // -----------------------------------------------------------------------------
-// R12: GA Convergence & Backward Compatibility
-// -----------------------------------------------------------------------------
-const wizardV2Test = fs.readFileSync(path.join(ROOT, "verify-wizard-v2.mjs"), "utf8");
+const wizardV2Path = fs.existsSync(path.join(ROOT, "scripts", "testing", "verify-wizard-v2.mjs"))
+  ? path.join(ROOT, "scripts", "testing", "verify-wizard-v2.mjs")
+  : path.join(ROOT, "verify-wizard-v2.mjs");
+const wizardV2Test = fs.readFileSync(wizardV2Path, "utf8");
 const wizardShell = fs.readFileSync(
   path.join(ROOT, "src", "components", "wizard", "ProjectWizardShell.tsx"),
   "utf8",

@@ -374,8 +374,7 @@ export class CopilotContextEngine {
         underReviewCount: evidenceList.filter((e: EvidenceGraphNode) => e.state === "UNDER_REVIEW")
           .length,
       },
-      memories: copilotMemory
-        .listMemories(mode, resolvedProject.id)
+      memories: copilotMemory.listMemories(mode, resolvedProject.id)
         .slice(-5)
         .map((m) => ({
           layer: m.layer,

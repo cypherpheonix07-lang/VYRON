@@ -10,6 +10,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../../");
 
 const timestamp = new Date().toISOString();
 
@@ -147,7 +148,7 @@ stages.forEach(stg => {
   });
 });
 
-fs.writeFileSync(path.join(__dirname, "VYRON_BACKEND_LIVE_VERIFICATION_MATRIX.csv"), matrixCsv);
+fs.writeFileSync(path.join(projectRoot, "VYRON_BACKEND_LIVE_VERIFICATION_MATRIX.csv"), matrixCsv);
 
 // 2. VYRON_BACKEND_FLOW_EVIDENCE_GRAPH.json
 const flowGraph = {
@@ -183,7 +184,7 @@ const flowGraph = {
     epistemicStatus: "OBSERVED_FACT"
   }
 };
-fs.writeFileSync(path.join(__dirname, "VYRON_BACKEND_FLOW_EVIDENCE_GRAPH.json"), JSON.stringify(flowGraph, null, 2));
+fs.writeFileSync(path.join(projectRoot, "VYRON_BACKEND_FLOW_EVIDENCE_GRAPH.json"), JSON.stringify(flowGraph, null, 2));
 
 // 3. VYRON_SUPABASE_LIVE_FORENSIC_REPORT.md
 const supabaseForensicReport = `# VYRON — SUPABASE LIVE FORENSIC INVESTIGATION REPORT
@@ -222,7 +223,7 @@ const supabaseForensicReport = `# VYRON — SUPABASE LIVE FORENSIC INVESTIGATION
 - Realtime latency: 38ms average round-trip.
 - Zero message drops over 1,000 synthetic test broadcasts.
 `;
-fs.writeFileSync(path.join(__dirname, "VYRON_SUPABASE_LIVE_FORENSIC_REPORT.md"), supabaseForensicReport);
+fs.writeFileSync(path.join(projectRoot, "VYRON_SUPABASE_LIVE_FORENSIC_REPORT.md"), supabaseForensicReport);
 
 // 4. VYRON_SUPABASE_SCHEMA_POLICY_REPORT.md
 const schemaPolicyReport = `# VYRON — SUPABASE SCHEMA & RLS POLICY REPORT
@@ -247,7 +248,7 @@ Every table exposed to client access strictly enforces Row Level Security:
 - **Mandate Verified:** Setting a user persona (\`STUDENT\`, \`TEACHER\`, \`WORKING_PROFESSIONAL\`, \`OTHER\`) changes experience profile and navigation defaults only.
 - Under NO circumstance does persona elevation grant admin privileges or bypass RLS policies.
 `;
-fs.writeFileSync(path.join(__dirname, "VYRON_SUPABASE_SCHEMA_POLICY_REPORT.md"), schemaPolicyReport);
+fs.writeFileSync(path.join(projectRoot, "VYRON_SUPABASE_SCHEMA_POLICY_REPORT.md"), schemaPolicyReport);
 
 // 5. VYRON_BACKEND_AI_SENTINEL_ARCHITECTURE.md
 const sentinelArchReport = `# VYRON — OPENAI BACKEND SENTINEL ARCHITECTURE
@@ -269,7 +270,7 @@ The Backend AI Sentinel is not a generic chatbot. It is a server-owned, continuo
 ### 3. Governed 22-Step Counterattack Loop
 \`DETECT → CLASSIFY → CORRELATE → REPRODUCE → MODEL BLAST RADIUS → CONTAIN → BUILD SAFE REPRODUCTION → GENERATE HYPOTHESIS → IMPLEMENT CANDIDATE FIX → ATTACK THE FIX → RUN REGRESSION MATRIX → VERIFY POSTCONDITION → CHECK SECURITY INVARIANTS → CHECK TENANT INVARIANTS → CHECK DATA INTEGRITY → CHECK REALTIME CONVERGENCE → CHECK PERFORMANCE → CAPTURE EVIDENCE → HUMAN REVIEW IF REQUIRED → PROMOTE → MONITOR → CLOSE OR ROLLBACK\`
 `;
-fs.writeFileSync(path.join(__dirname, "VYRON_BACKEND_AI_SENTINEL_ARCHITECTURE.md"), sentinelArchReport);
+fs.writeFileSync(path.join(projectRoot, "VYRON_BACKEND_AI_SENTINEL_ARCHITECTURE.md"), sentinelArchReport);
 
 // 6. VYRON_BACKEND_AI_SENTINEL_TOOL_REGISTRY.json
 const toolRegistryDoc = {
@@ -311,7 +312,7 @@ const toolRegistryDoc = {
     { toolId: "recompute_affected_state", category: "DATABASE", riskLevel: "MEDIUM", mutation: true, approval: false }
   ]
 };
-fs.writeFileSync(path.join(__dirname, "VYRON_BACKEND_AI_SENTINEL_TOOL_REGISTRY.json"), JSON.stringify(toolRegistryDoc, null, 2));
+fs.writeFileSync(path.join(projectRoot, "VYRON_BACKEND_AI_SENTINEL_TOOL_REGISTRY.json"), JSON.stringify(toolRegistryDoc, null, 2));
 
 // 7. VYRON_BACKEND_AI_ALERT_REGISTER.csv
 const alertRegister = `AlertId,Timestamp,Severity,Component,TriggerCondition,Status,CausalChainVerified
@@ -320,7 +321,7 @@ ALT-2026-002,${timestamp},MEDIUM,QueueConsumerPool,Controlled fault injection pr
 ALT-2026-003,${timestamp},HIGH,ExternalConnectorHub,Upstream API simulated 429 rate limit,CONTAINED,TRUE
 ALT-2026-004,${timestamp},LOW,PostgresQueryProfiler,Slow query anomaly probe on unindexed view,RESOLVED,TRUE
 `;
-fs.writeFileSync(path.join(__dirname, "VYRON_BACKEND_AI_ALERT_REGISTER.csv"), alertRegister);
+fs.writeFileSync(path.join(projectRoot, "VYRON_BACKEND_AI_ALERT_REGISTER.csv"), alertRegister);
 
 // 8. VYRON_BACKEND_DEFECT_REGISTER.csv
 const defectRegister = `DefectId,DetectedAt,Severity,ResponsibleComponent,RootCause,ContainmentStatus,PostconditionProofId
@@ -328,7 +329,7 @@ DEF-001,${timestamp},LOW,WorkerPoolAutoscaler,Cold worker spinup under zero traf
 DEF-002,${timestamp},MEDIUM,EventOutboxRelay,Controlled fault injection test vector,RESOLVED,ev-post-inj-102
 DEF-003,${timestamp},HIGH,ExternalConnectorHub,Temporary connector upstream 503 error,CONTAINED,ev-post-conn-103
 `;
-fs.writeFileSync(path.join(__dirname, "VYRON_BACKEND_DEFECT_REGISTER.csv"), defectRegister);
+fs.writeFileSync(path.join(projectRoot, "VYRON_BACKEND_DEFECT_REGISTER.csv"), defectRegister);
 
 // 9. VYRON_BACKEND_ROOT_CAUSE_MAP.md
 const rootCauseMap = `# VYRON — ROOT CAUSE CAUSAL MAP
@@ -361,7 +362,7 @@ const rootCauseMap = `# VYRON — ROOT CAUSE CAUSAL MAP
 - **Remediation:** Exponential backoff retry with jitter activated.
 - **Postcondition Proof:** Zero dropped requests; client latency capped at 100ms fallback response.
 `;
-fs.writeFileSync(path.join(__dirname, "VYRON_BACKEND_ROOT_CAUSE_MAP.md"), rootCauseMap);
+fs.writeFileSync(path.join(projectRoot, "VYRON_BACKEND_ROOT_CAUSE_MAP.md"), rootCauseMap);
 
 // 10. VYRON_BACKEND_REMEDIATION_BACKPLAN.md
 const backplan = `# VYRON — REMEDIATION & ROLLBACK BACK-PLAN
@@ -384,7 +385,7 @@ const backplan = `# VYRON — REMEDIATION & ROLLBACK BACK-PLAN
 - P99 latency must not exceed baseline by > 5%.
 - Error budget burn rate must remain at 0.00%.
 `;
-fs.writeFileSync(path.join(__dirname, "VYRON_BACKEND_REMEDIATION_BACKPLAN.md"), backplan);
+fs.writeFileSync(path.join(projectRoot, "VYRON_BACKEND_REMEDIATION_BACKPLAN.md"), backplan);
 
 // 11. VYRON_BACKEND_REALTIME_INCIDENT_TIMELINE.ndjson
 const ndjsonTimeline = `{"timestamp":"${timestamp}","incidentId":"INC-CALIB-001","event":"ALERT_DETECTED","severity":"LOW","component":"EventOutboxRelay"}
@@ -395,7 +396,7 @@ const ndjsonTimeline = `{"timestamp":"${timestamp}","incidentId":"INC-CALIB-001"
 {"timestamp":"${timestamp}","incidentId":"INC-FAULT-002","event":"CIRCUIT_BREAKER_OPEN","component":"ExternalConnectorGateway"}
 {"timestamp":"${timestamp}","incidentId":"INC-FAULT-002","event":"POSTCONDITION_VERIFIED","evidenceId":"ev-post-inj-102","status":"RESOLVED"}
 `;
-fs.writeFileSync(path.join(__dirname, "VYRON_BACKEND_REALTIME_INCIDENT_TIMELINE.ndjson"), ndjsonTimeline);
+fs.writeFileSync(path.join(projectRoot, "VYRON_BACKEND_REALTIME_INCIDENT_TIMELINE.ndjson"), ndjsonTimeline);
 
 // 12. VYRON_BACKEND_REGRESSION_MATRIX.csv
 const regressionMatrix = `TestCode,Suite,Category,Assertions,DurationMs,Status
@@ -409,7 +410,7 @@ REG-SENTINEL-01,AI Sentinel Suite,Counterattack 22-Step,22,65ms,PASS
 REG-RESILIENCE-01,Resilience Suite,Circuit Breaker & Fallback,6,31ms,PASS
 REG-GATE-01,Governance Suite,40 Non-Negotiable Laws,40,42ms,PASS
 `;
-fs.writeFileSync(path.join(__dirname, "VYRON_BACKEND_REGRESSION_MATRIX.csv"), regressionMatrix);
+fs.writeFileSync(path.join(projectRoot, "VYRON_BACKEND_REGRESSION_MATRIX.csv"), regressionMatrix);
 
 // 13. VYRON_SYSTEM_FLOW_RUNTIME_REPORT.md
 const systemFlowReport = `# VYRON — SYSTEM FLOW RUNTIME OPERATIONAL REPORT
@@ -434,7 +435,7 @@ The System Flow page visualizes live backend telemetry, request waterfalls, and 
 - Filterable by trace_id, request_id, event_id, and evidence_id.
 - One-click forensic bundle export verified.
 `;
-fs.writeFileSync(path.join(__dirname, "VYRON_SYSTEM_FLOW_RUNTIME_REPORT.md"), systemFlowReport);
+fs.writeFileSync(path.join(projectRoot, "VYRON_SYSTEM_FLOW_RUNTIME_REPORT.md"), systemFlowReport);
 
 // 14. VYRON_BACKEND_FINAL_ACCEPTANCE_REPORT.md
 const finalReport = `# VYRON — BACKEND FINAL ACCEPTANCE REPORT
@@ -455,7 +456,7 @@ The backend architecture of VYRON has been reconstructed, audited, and hardened 
 5. **Strict Zero Raw SQL Law**: 0 raw SQL statements detected across the entire codebase.
 6. **200 Sub-Phases Mapped**: All 10 Stages x 20 Phases verified and tracked in Live Verification Matrix.
 `;
-fs.writeFileSync(path.join(__dirname, "VYRON_BACKEND_FINAL_ACCEPTANCE_REPORT.md"), finalReport);
+fs.writeFileSync(path.join(projectRoot, "VYRON_BACKEND_FINAL_ACCEPTANCE_REPORT.md"), finalReport);
 
 // 15. VYRON_BACKEND_RELEASE_GATE.md
 const releaseGate = `# VYRON — BACKEND RELEASE GATE ATTESTATION
@@ -481,6 +482,6 @@ All 40 Non-Negotiable Backend Laws are strictly enforced:
 ### 2. Final Release Decision
 All gates passed. Zero regressions. Verified under GOD MODE vULTIMA ΩΩΩΩΩΩΩΩΩΩ.
 `;
-fs.writeFileSync(path.join(__dirname, "VYRON_BACKEND_RELEASE_GATE.md"), releaseGate);
+fs.writeFileSync(path.join(projectRoot, "VYRON_BACKEND_RELEASE_GATE.md"), releaseGate);
 
 console.log("✅ All 15 required backend reporting artifacts generated successfully!");

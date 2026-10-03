@@ -22,6 +22,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../..");
 
 console.log("\n===================================================================");
 console.log("  BRAHMA SECOND-GENERATION CONTROL PLANE — VERIFICATION SUITE      ");
@@ -47,7 +48,7 @@ function assert(gate, title, condition, evidence) {
 // ---------------------------------------------------------------------------------
 try {
   const kgFile = fs.readFileSync(
-    path.join(__dirname, "src/services/intelligence/knowledgeGraph.ts"),
+    path.join(projectRoot, "src/services/intelligence/knowledgeGraph.ts"),
     "utf-8",
   );
   const hasNodesAndEdges =
@@ -75,14 +76,14 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const driftEngineFile = fs.readFileSync(
-    path.join(__dirname, "src/services/intelligence/driftEngine.ts"),
+    path.join(projectRoot, "src/services/intelligence/driftEngine.ts"),
     "utf-8",
   );
   const driftViewFile = fs.readFileSync(
-    path.join(__dirname, "src/components/intelligence/ArchitectureDriftView.tsx"),
+    path.join(projectRoot, "src/components/intelligence/ArchitectureDriftView.tsx"),
     "utf-8",
   );
-  const driftRouteFile = fs.readFileSync(path.join(__dirname, "src/routes/app.drift.tsx"), "utf-8");
+  const driftRouteFile = fs.readFileSync(path.join(projectRoot, "src/routes/app.drift.tsx"), "utf-8");
 
   const hasDriftTypes =
     driftEngineFile.includes("MISSING_COMPONENT") &&
@@ -110,15 +111,15 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const impactEngineFile = fs.readFileSync(
-    path.join(__dirname, "src/services/intelligence/impactEngine.ts"),
+    path.join(projectRoot, "src/services/intelligence/impactEngine.ts"),
     "utf-8",
   );
   const impactViewFile = fs.readFileSync(
-    path.join(__dirname, "src/components/intelligence/ChangeImpactView.tsx"),
+    path.join(projectRoot, "src/components/intelligence/ChangeImpactView.tsx"),
     "utf-8",
   );
   const impactRouteFile = fs.readFileSync(
-    path.join(__dirname, "src/routes/app.impact.tsx"),
+    path.join(projectRoot, "src/routes/app.impact.tsx"),
     "utf-8",
   );
 
@@ -148,15 +149,15 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const missionEngineFile = fs.readFileSync(
-    path.join(__dirname, "src/services/missions/missionEngine.ts"),
+    path.join(projectRoot, "src/services/missions/missionEngine.ts"),
     "utf-8",
   );
   const missionViewFile = fs.readFileSync(
-    path.join(__dirname, "src/components/missions/MissionCenterView.tsx"),
+    path.join(projectRoot, "src/components/missions/MissionCenterView.tsx"),
     "utf-8",
   );
   const missionRouteFile = fs.readFileSync(
-    path.join(__dirname, "src/routes/app.missions.tsx"),
+    path.join(projectRoot, "src/routes/app.missions.tsx"),
     "utf-8",
   );
 
@@ -186,7 +187,7 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const invEngineFile = fs.readFileSync(
-    path.join(__dirname, "src/services/investigations/investigationEngine.ts"),
+    path.join(projectRoot, "src/services/investigations/investigationEngine.ts"),
     "utf-8",
   );
   const hasEvidence =
@@ -212,7 +213,7 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const decEngineFile = fs.readFileSync(
-    path.join(__dirname, "src/services/intelligence/decisionEngine.ts"),
+    path.join(projectRoot, "src/services/intelligence/decisionEngine.ts"),
     "utf-8",
   );
   const hasADR =
@@ -238,7 +239,7 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const timeEngineFile = fs.readFileSync(
-    path.join(__dirname, "src/services/intelligence/timeMachineEngine.ts"),
+    path.join(projectRoot, "src/services/intelligence/timeMachineEngine.ts"),
     "utf-8",
   );
   const hasSnapshots =
@@ -263,15 +264,15 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const simEngineFile = fs.readFileSync(
-    path.join(__dirname, "src/services/demo/simulationLab.ts"),
+    path.join(projectRoot, "src/services/demo/simulationLab.ts"),
     "utf-8",
   );
   const simViewFile = fs.readFileSync(
-    path.join(__dirname, "src/components/demo/SimulationLabView.tsx"),
+    path.join(projectRoot, "src/components/demo/SimulationLabView.tsx"),
     "utf-8",
   );
   const simRouteFile = fs.readFileSync(
-    path.join(__dirname, "src/routes/app.simulation.tsx"),
+    path.join(projectRoot, "src/routes/app.simulation.tsx"),
     "utf-8",
   );
 
@@ -310,7 +311,7 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const policyEngineFile = fs.readFileSync(
-    path.join(__dirname, "src/services/policy/policyEngine.ts"),
+    path.join(projectRoot, "src/services/policy/policyEngine.ts"),
     "utf-8",
   );
   const hasSeverities =
@@ -335,19 +336,19 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const actionEngineFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotActionEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotActionEngine.ts"),
     "utf-8",
   );
   const contextEngineFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotContextEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotContextEngine.ts"),
     "utf-8",
   );
   const appShellFile = fs.readFileSync(
-    path.join(__dirname, "src/components/brahma/app-shell.tsx"),
+    path.join(projectRoot, "src/components/brahma/app-shell.tsx"),
     "utf-8",
   );
   const studioFile = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotFullScreenStudio.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotFullScreenStudio.tsx"),
     "utf-8",
   );
 

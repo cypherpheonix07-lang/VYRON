@@ -20,6 +20,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../..");
 
 console.log("\n===================================================================");
 console.log("  PROJECT BRAHMA — ADVERSARIAL VERIFICATION SUITE (A1–A10)        ");
@@ -44,7 +45,7 @@ function assert(gate, title, condition, evidence) {
 // GATE A1: Auth State Persistence & Recovery
 // ---------------------------------------------------------------------------------
 try {
-  const registerFile = fs.readFileSync(path.join(__dirname, "src/routes/register.tsx"), "utf-8");
+  const registerFile = fs.readFileSync(path.join(projectRoot, "src/routes/register.tsx"), "utf-8");
   const hasDraftKey = registerFile.includes("brahma.signup_draft");
   const hasMountRestore =
     registerFile.includes("sessionStorage.getItem(SIGNUP_DRAFT_KEY)") &&
@@ -66,7 +67,7 @@ try {
 // GATE A2: Non-Trapping Auth UI
 // ---------------------------------------------------------------------------------
 try {
-  const registerFile = fs.readFileSync(path.join(__dirname, "src/routes/register.tsx"), "utf-8");
+  const registerFile = fs.readFileSync(path.join(projectRoot, "src/routes/register.tsx"), "utf-8");
   const hasChangeEmail =
     registerFile.includes("Change Email Address") && registerFile.includes("setStep(1)");
   const hasPersistentSignIn =
@@ -89,7 +90,7 @@ try {
 // GATE A3: Open-Redirect Defense
 // ---------------------------------------------------------------------------------
 try {
-  const loginFile = fs.readFileSync(path.join(__dirname, "src/routes/login.tsx"), "utf-8");
+  const loginFile = fs.readFileSync(path.join(projectRoot, "src/routes/login.tsx"), "utf-8");
   const hasSanitization =
     loginFile.includes('startsWith("/")') && loginFile.includes('!rawTarget.startsWith("//")');
 
@@ -107,7 +108,7 @@ try {
 // GATE A4: Unconfirmed Email Recovery
 // ---------------------------------------------------------------------------------
 try {
-  const loginFile = fs.readFileSync(path.join(__dirname, "src/routes/login.tsx"), "utf-8");
+  const loginFile = fs.readFileSync(path.join(projectRoot, "src/routes/login.tsx"), "utf-8");
   const hasVerifyButton =
     loginFile.includes("Enter Code") &&
     loginFile.includes('to: "/verify-email"') &&
@@ -127,10 +128,10 @@ try {
 // GATE A5: Zero Route File Leakage (Clean Code-Splitting)
 // ---------------------------------------------------------------------------------
 try {
-  const loginFile = fs.readFileSync(path.join(__dirname, "src/routes/login.tsx"), "utf-8");
-  const inviteFile = fs.readFileSync(path.join(__dirname, "src/routes/invite.tsx"), "utf-8");
-  const resetFile = fs.readFileSync(path.join(__dirname, "src/routes/reset-password.tsx"), "utf-8");
-  const onboardFile = fs.readFileSync(path.join(__dirname, "src/routes/onboarding.tsx"), "utf-8");
+  const loginFile = fs.readFileSync(path.join(projectRoot, "src/routes/login.tsx"), "utf-8");
+  const inviteFile = fs.readFileSync(path.join(projectRoot, "src/routes/invite.tsx"), "utf-8");
+  const resetFile = fs.readFileSync(path.join(projectRoot, "src/routes/reset-password.tsx"), "utf-8");
+  const onboardFile = fs.readFileSync(path.join(projectRoot, "src/routes/onboarding.tsx"), "utf-8");
 
   const noLoginExportAuthLayout = !loginFile.includes("export { AuthLayout }");
   const noLoginExportFieldError = !loginFile.includes("export function FieldError");
@@ -162,7 +163,7 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const mockAdapterFile = fs.readFileSync(
-    path.join(__dirname, "src/services/ai/adapters/mockAdapter.ts"),
+    path.join(projectRoot, "src/services/ai/adapters/mockAdapter.ts"),
     "utf-8",
   );
   const hasDriftIntent =
@@ -204,11 +205,11 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const studioFile = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotFullScreenStudio.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotFullScreenStudio.tsx"),
     "utf-8",
   );
   const drawerFile = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotDrawer.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotDrawer.tsx"),
     "utf-8",
   );
 
@@ -237,10 +238,10 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const appShellFile = fs.readFileSync(
-    path.join(__dirname, "src/components/brahma/app-shell.tsx"),
+    path.join(projectRoot, "src/components/brahma/app-shell.tsx"),
     "utf-8",
   );
-  const searchFile = fs.readFileSync(path.join(__dirname, "src/routes/app.search.tsx"), "utf-8");
+  const searchFile = fs.readFileSync(path.join(projectRoot, "src/routes/app.search.tsx"), "utf-8");
 
   const shellHasMissions =
     appShellFile.includes("Go to Engineering Missions") &&
@@ -270,7 +271,7 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const diagFile = fs.readFileSync(
-    path.join(__dirname, "src/components/brahma/session-diagnostics.tsx"),
+    path.join(projectRoot, "src/components/brahma/session-diagnostics.tsx"),
     "utf-8",
   );
   const hasProbes =
@@ -312,7 +313,7 @@ try {
   let violatingFile = "";
 
   for (const rel of filesToCheck) {
-    const content = fs.readFileSync(path.join(__dirname, rel), "utf-8");
+    const content = fs.readFileSync(path.join(projectRoot, rel), "utf-8");
     // Look for suspicious SQL commands
     if (
       /\b(SELECT\s+\*\s+FROM|INSERT\s+INTO|UPDATE\s+\w+\s+SET|DELETE\s+FROM|CREATE\s+TABLE|ALTER\s+TABLE)\b/i.test(

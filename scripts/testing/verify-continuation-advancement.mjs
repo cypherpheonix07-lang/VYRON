@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../..");
 
 const results = [];
 function record(testId, description, passed, detail = "") {
@@ -23,7 +24,7 @@ console.log("=".repeat(70));
 // [C1] Brand & Context Coherence
 try {
   const contextEngine = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotContextEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotContextEngine.ts"),
     "utf-8",
   );
   const hasVyronNormal = contextEngine.includes("Vyron Intelligence Copilot");
@@ -39,7 +40,7 @@ try {
   ];
   let routesAllVyron = true;
   for (const r of routesToCheck) {
-    const content = fs.readFileSync(path.join(__dirname, r), "utf-8");
+    const content = fs.readFileSync(path.join(projectRoot, r), "utf-8");
     if (!content.includes("VYRON") || content.includes("Brahma")) {
       routesAllVyron = false;
       break;
@@ -59,11 +60,11 @@ try {
 // [C2] Kaggle Dataset Discovery Quality Breakdown & Compatibility Matrix
 try {
   const kaggleConn = fs.readFileSync(
-    path.join(__dirname, "src/services/connectors/kaggleConnector.ts"),
+    path.join(projectRoot, "src/services/connectors/kaggleConnector.ts"),
     "utf-8",
   );
   const kagglePanel = fs.readFileSync(
-    path.join(__dirname, "src/components/datasets/KaggleDatasetPanel.tsx"),
+    path.join(projectRoot, "src/components/datasets/KaggleDatasetPanel.tsx"),
     "utf-8",
   );
 
@@ -103,7 +104,7 @@ try {
 // [C3] Schema-Aware 12-Stage Pipeline Partition Ingestion
 try {
   const orch = fs.readFileSync(
-    path.join(__dirname, "src/services/orchestrator/analysisOrchestrator.ts"),
+    path.join(projectRoot, "src/services/orchestrator/analysisOrchestrator.ts"),
     "utf-8",
   );
   const hasSynthesizer = orch.includes("synthesizePartitionForDataset");
@@ -134,11 +135,11 @@ try {
 // [C4] Global Real-Time Event Synchronization in AppShell & FullScreen Studio
 try {
   const shell = fs.readFileSync(
-    path.join(__dirname, "src/components/brahma/app-shell.tsx"),
+    path.join(projectRoot, "src/components/brahma/app-shell.tsx"),
     "utf-8",
   );
   const studio = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotFullScreenStudio.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotFullScreenStudio.tsx"),
     "utf-8",
   );
 
@@ -157,13 +158,13 @@ try {
 
 // [C5] Deterministic Demo Mode Scenario Switching & Pristine Reset
 try {
-  const demoStore = fs.readFileSync(path.join(__dirname, "src/state/demo/demoStore.ts"), "utf-8");
+  const demoStore = fs.readFileSync(path.join(projectRoot, "src/state/demo/demoStore.ts"), "utf-8");
   const simControls = fs.readFileSync(
-    path.join(__dirname, "src/components/demo/SimulatorControls.tsx"),
+    path.join(projectRoot, "src/components/demo/SimulatorControls.tsx"),
     "utf-8",
   );
   const actionEngine = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotActionEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotActionEngine.ts"),
     "utf-8",
   );
 
@@ -187,7 +188,7 @@ try {
 // [C6] Dual-Mode Copilot Isolation (Normal vs Demo System Directives)
 try {
   const contextEngine = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotContextEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotContextEngine.ts"),
     "utf-8",
   );
   const hasBranchingDirective =
@@ -240,7 +241,7 @@ try {
   let offender = null;
 
   for (const relPath of filesToScan) {
-    const fullPath = path.join(__dirname, relPath);
+    const fullPath = path.join(projectRoot, relPath);
     if (!fs.existsSync(fullPath)) continue;
     const content = fs.readFileSync(fullPath, "utf-8");
     for (const pat of forbiddenPatterns) {
@@ -271,7 +272,7 @@ const passed = results.filter((r) => r.passed).length;
 console.log(`SUMMARY: ${passed}/${total} Continuation Advancement Gates Passed`);
 console.log("=".repeat(70));
 
-const reportPath = path.join(__dirname, "continuation_advancement_report.json");
+const reportPath = path.join(projectRoot, "continuation_advancement_report.json");
 fs.writeFileSync(
   reportPath,
   JSON.stringify({ timestamp: new Date().toISOString(), total, passed, results }, null, 2),

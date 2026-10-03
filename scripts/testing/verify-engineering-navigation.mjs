@@ -17,6 +17,7 @@ import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../..");
 
 let passedTests = 0;
 let failedTests = 0;
@@ -44,7 +45,7 @@ console.log("===================================================================
 // GATE N1: 24-Category Semantic Workspace Icon Taxonomy
 // ---------------------------------------------------------------------------------
 try {
-  const taxFile = path.join(__dirname, "src/data/workspaceTaxonomy.ts");
+  const taxFile = path.join(projectRoot, "src/data/workspaceTaxonomy.ts");
   const taxExists = fs.existsSync(taxFile);
   const taxContent = fs.readFileSync(taxFile, "utf-8");
 
@@ -73,7 +74,7 @@ try {
 // GATE N2: Project Identity Wizard Taxonomy Integration
 // ---------------------------------------------------------------------------------
 try {
-  const wizardFile = path.join(__dirname, "src/components/wizard/Step1Identity.tsx");
+  const wizardFile = path.join(projectRoot, "src/components/wizard/Step1Identity.tsx");
   const wizardContent = fs.readFileSync(wizardFile, "utf-8");
 
   const importsTaxonomy =
@@ -98,7 +99,7 @@ try {
 // GATE N3: 11 Collapsible Engineering Domains Navigation
 // ---------------------------------------------------------------------------------
 try {
-  const shellFile = path.join(__dirname, "src/components/brahma/app-shell.tsx");
+  const shellFile = path.join(projectRoot, "src/components/brahma/app-shell.tsx");
   const shellContent = fs.readFileSync(shellFile, "utf-8");
 
   const requiredDomains = [
@@ -138,7 +139,7 @@ try {
 // GATE N4: Contextual Navigation Modes (Global, Project, Simulation, Demo)
 // ---------------------------------------------------------------------------------
 try {
-  const shellFile = path.join(__dirname, "src/components/brahma/app-shell.tsx");
+  const shellFile = path.join(projectRoot, "src/components/brahma/app-shell.tsx");
   const shellContent = fs.readFileSync(shellFile, "utf-8");
 
   const hasModes =
@@ -165,7 +166,7 @@ try {
 // GATE N5: Engineering Pulse 9 Real Telemetry Metrics & Live Signals
 // ---------------------------------------------------------------------------------
 try {
-  const pulseFile = path.join(__dirname, "src/components/brahma/WorkspacePulse.tsx");
+  const pulseFile = path.join(projectRoot, "src/components/brahma/WorkspacePulse.tsx");
   const pulseContent = fs.readFileSync(pulseFile, "utf-8");
 
   const requiredMetrics = [
@@ -205,7 +206,7 @@ try {
 // GATE N6: Engineering Command Center 11 Operational Sections
 // ---------------------------------------------------------------------------------
 try {
-  const indexFile = path.join(__dirname, "src/routes/app.index.tsx");
+  const indexFile = path.join(projectRoot, "src/routes/app.index.tsx");
   const indexContent = fs.readFileSync(indexFile, "utf-8");
 
   const hasSystemHealth =
@@ -249,7 +250,7 @@ try {
 // GATE N7: ATLAS Knowledge Graph 14 Relationship Types & Multi-Format Exports
 // ---------------------------------------------------------------------------------
 try {
-  const kgFile = path.join(__dirname, "src/services/intelligence/knowledgeGraph.ts");
+  const kgFile = path.join(projectRoot, "src/services/intelligence/knowledgeGraph.ts");
   const kgContent = fs.readFileSync(kgFile, "utf-8");
 
   const relationshipTypes = [
@@ -317,7 +318,7 @@ try {
 
   let sqlViolations = 0;
   for (const rel of targetFiles) {
-    const filePath = path.join(__dirname, rel);
+    const filePath = path.join(projectRoot, rel);
     if (!fs.existsSync(filePath)) continue;
     const content = fs.readFileSync(filePath, "utf-8");
     for (const pattern of forbiddenSql) {

@@ -19,6 +19,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../..");
 
 console.log("\n=======================================================");
 console.log("  BRAHMA CONTINUATION MISSION — VERIFICATION SUITE    ");
@@ -42,7 +43,7 @@ function assert(gate, title, condition, evidence) {
 // G1: Context Engine & Security Sanitization
 try {
   const file = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotContextEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotContextEngine.ts"),
     "utf-8",
   );
   const hasSanitization = file.includes("sanitizeUntrustedData") && file.includes("<system>");
@@ -61,7 +62,7 @@ try {
 // G2: Layered Memory Architecture
 try {
   const file = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotMemory.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotMemory.ts"),
     "utf-8",
   );
   const hasLayers =
@@ -85,7 +86,7 @@ try {
 // G3: Unified Tool Registry
 try {
   const file = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotToolRegistry.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotToolRegistry.ts"),
     "utf-8",
   );
   const hasCategories = file.includes("ToolCategory") && file.includes("ToolRiskLevel");
@@ -104,7 +105,7 @@ try {
 // G4: Action Engine with Backend Confirmation & Approval Gates
 try {
   const file = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotActionEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotActionEngine.ts"),
     "utf-8",
   );
   const hasApprovals =
@@ -128,7 +129,7 @@ try {
 // G5: Specialist Agent Orchestrator
 try {
   const file = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotAgentOrchestrator.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotAgentOrchestrator.ts"),
     "utf-8",
   );
   const hasAgents =
@@ -152,9 +153,9 @@ try {
 
 // G6: Claude-Inspired Plugin Center & Manifests
 try {
-  const manifestFile = fs.readFileSync(path.join(__dirname, "src/plugins/index.ts"), "utf-8");
+  const manifestFile = fs.readFileSync(path.join(projectRoot, "src/plugins/index.ts"), "utf-8");
   const viewFile = fs.readFileSync(
-    path.join(__dirname, "src/components/plugins/PluginCenterView.tsx"),
+    path.join(projectRoot, "src/components/plugins/PluginCenterView.tsx"),
     "utf-8",
   );
   const hasManifests =
@@ -178,11 +179,11 @@ try {
 // G7: Real-Time Event Bus Pipeline Synchronization
 try {
   const listenerFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotRealtimeListener.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotRealtimeListener.ts"),
     "utf-8",
   );
   const orchestratorFile = fs.readFileSync(
-    path.join(__dirname, "src/services/orchestrator/analysisOrchestrator.ts"),
+    path.join(projectRoot, "src/services/orchestrator/analysisOrchestrator.ts"),
     "utf-8",
   );
   const hasEvents =
@@ -204,7 +205,7 @@ try {
 // G8: Proactive Copilot Intelligence Engine
 try {
   const file = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotProactiveEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotProactiveEngine.ts"),
     "utf-8",
   );
   const hasEvaluations =
@@ -224,11 +225,11 @@ try {
 // G9: Global Demo Mode Transformation & Deterministic Reset
 try {
   const bannerFile = fs.readFileSync(
-    path.join(__dirname, "src/components/demo/DemoBanner.tsx"),
+    path.join(projectRoot, "src/components/demo/DemoBanner.tsx"),
     "utf-8",
   );
   const demoStoreFile = fs.readFileSync(
-    path.join(__dirname, "src/state/demo/demoStore.ts"),
+    path.join(projectRoot, "src/state/demo/demoStore.ts"),
     "utf-8",
   );
   const hasBannerControls =
@@ -248,12 +249,12 @@ try {
 
 // G10: Route Architecture & Duplicate Chatbot Consolidation
 try {
-  const appFile = fs.readFileSync(path.join(__dirname, "src/routes/app.tsx"), "utf-8");
+  const appFile = fs.readFileSync(path.join(projectRoot, "src/routes/app.tsx"), "utf-8");
   const shellFile = fs.readFileSync(
-    path.join(__dirname, "src/components/brahma/app-shell.tsx"),
+    path.join(projectRoot, "src/components/brahma/app-shell.tsx"),
     "utf-8",
   );
-  const pluginRouteExists = fs.existsSync(path.join(__dirname, "src/routes/app.plugins.tsx"));
+  const pluginRouteExists = fs.existsSync(path.join(projectRoot, "src/routes/app.plugins.tsx"));
   const noDuplicateChatBot = !appFile.includes("<BrahmaChatBot");
   const hasPluginNav = shellFile.includes("/app/plugins");
   assert(

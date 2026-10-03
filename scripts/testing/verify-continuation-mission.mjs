@@ -17,6 +17,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../..");
 
 console.log("\n=======================================================================");
 console.log("   PROJECT BRAHMA / VYRON — CONTINUATION MISSION VERIFICATION (CM1–CM8)   ");
@@ -39,7 +40,7 @@ function assert(gate, title, condition, evidence) {
 
 // CM1: Central Copilot Dispatcher Architecture
 try {
-  const filePath = path.join(__dirname, "src/services/copilot/copilotDispatcher.ts");
+  const filePath = path.join(projectRoot, "src/services/copilot/copilotDispatcher.ts");
   const exists = fs.existsSync(filePath);
   const content = exists ? fs.readFileSync(filePath, "utf-8") : "";
   const hasDispatch = content.includes("public async dispatch(");
@@ -60,7 +61,7 @@ try {
 
 // CM2: Direct Dispatch Binding in useCopilot (Zero Dropped Prompts)
 try {
-  const file = fs.readFileSync(path.join(__dirname, "src/state/copilot/useCopilot.ts"), "utf-8");
+  const file = fs.readFileSync(path.join(projectRoot, "src/state/copilot/useCopilot.ts"), "utf-8");
   const importsDispatcher = file.includes("copilotDispatcher");
   const routesSendMessage = file.includes("copilotDispatcher.dispatch(text");
   const hasSubmitPrompt = file.includes("submitPrompt");
@@ -78,7 +79,7 @@ try {
 // CM3: Layered Memory Context Injection in copilotContextEngine
 try {
   const file = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotContextEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotContextEngine.ts"),
     "utf-8",
   );
   const importsMemory = file.includes("copilotMemory");
@@ -99,7 +100,7 @@ try {
 
 // CM4: Two-Way Reactive Demo Mode Synchronization
 try {
-  const file = fs.readFileSync(path.join(__dirname, "src/contexts/DemoModeContext.tsx"), "utf-8");
+  const file = fs.readFileSync(path.join(projectRoot, "src/contexts/DemoModeContext.tsx"), "utf-8");
   const subscribesToModeStore = file.includes("modeStore.subscribe");
   const handlesExternalChanges =
     file.includes('shouldBeDemo = state.mode === "DEMO"') || file.includes("shouldBeDemo");
@@ -119,7 +120,7 @@ try {
 // CM5: Sharp Dual-Persona System Directives
 try {
   const file = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotContextEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotContextEngine.ts"),
     "utf-8",
   );
   const hasNormalDirective =
@@ -144,7 +145,7 @@ try {
 // CM6: Comprehensive Multi-Domain Natural Language Intent Coverage
 try {
   const file = fs.readFileSync(
-    path.join(__dirname, "src/services/ai/adapters/mockAdapter.ts"),
+    path.join(projectRoot, "src/services/ai/adapters/mockAdapter.ts"),
     "utf-8",
   );
   const hasDemoScenario =
@@ -169,11 +170,11 @@ try {
 // CM7: Viewport Deduplication across CopilotDrawer & CopilotFullScreenStudio
 try {
   const drawerFile = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotDrawer.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotDrawer.tsx"),
     "utf-8",
   );
   const studioFile = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotFullScreenStudio.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotFullScreenStudio.tsx"),
     "utf-8",
   );
 
@@ -217,7 +218,7 @@ try {
   ];
 
   for (const relPath of targetFiles) {
-    const fullPath = path.join(__dirname, relPath);
+    const fullPath = path.join(projectRoot, relPath);
     if (!fs.existsSync(fullPath)) continue;
     const content = fs.readFileSync(fullPath, "utf-8");
     for (const pattern of sqlPatterns) {

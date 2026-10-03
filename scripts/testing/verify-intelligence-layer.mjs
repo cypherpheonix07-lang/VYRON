@@ -9,6 +9,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../..");
 
 console.log("\n=======================================================");
 console.log("  BRAHMA INTELLIGENCE LAYER — AUTOMATED GATES (V1-V10) ");
@@ -38,8 +39,8 @@ try {
     "src/plugins/report-plugin.ts",
     "src/plugins/github-plugin.ts",
   ];
-  const allExist = pluginFiles.every((f) => fs.existsSync(path.join(__dirname, f)));
-  const indexContent = fs.readFileSync(path.join(__dirname, "src/plugins/index.ts"), "utf-8");
+  const allExist = pluginFiles.every((f) => fs.existsSync(path.join(projectRoot, f)));
+  const indexContent = fs.readFileSync(path.join(projectRoot, "src/plugins/index.ts"), "utf-8");
   const registers5 =
     indexContent.includes("analysisPluginTool") &&
     indexContent.includes("chatPluginTool") &&
@@ -60,16 +61,16 @@ try {
 // ─── GATE V2: Demo Chat Intent Matching ──────────────────────────────────────
 try {
   const analysisIntents = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "src/lib/chat-intents/analysis-intents.json"), "utf-8"),
+    fs.readFileSync(path.join(projectRoot, "src/lib/chat-intents/analysis-intents.json"), "utf-8"),
   );
   const archIntents = JSON.parse(
     fs.readFileSync(
-      path.join(__dirname, "src/lib/chat-intents/architecture-intents.json"),
+      path.join(projectRoot, "src/lib/chat-intents/architecture-intents.json"),
       "utf-8",
     ),
   );
   const genIntents = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "src/lib/chat-intents/general-intents.json"), "utf-8"),
+    fs.readFileSync(path.join(projectRoot, "src/lib/chat-intents/general-intents.json"), "utf-8"),
   );
 
   const totalPatterns = [...analysisIntents, ...archIntents, ...genIntents].reduce(
@@ -93,7 +94,7 @@ try {
   let validCount = 0;
 
   for (const domain of fixtureDomains) {
-    const filePath = path.join(__dirname, `src/lib/demo-fixtures/${domain}-sample.json`);
+    const filePath = path.join(projectRoot, `src/lib/demo-fixtures/${domain}-sample.json`);
     if (fs.existsSync(filePath)) {
       const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
       if (data.requirements && data.blueprintNodes && data.codeFindings && data.vulnerabilities) {
@@ -114,7 +115,7 @@ try {
 
 // ─── GATE V4: Demo Stage Runner Execution ────────────────────────────────────
 try {
-  const runnerFile = path.join(__dirname, "src/components/analysis/DemoStageRunner.ts");
+  const runnerFile = path.join(projectRoot, "src/components/analysis/DemoStageRunner.ts");
   const content = fs.readFileSync(runnerFile, "utf-8");
   const hasStages =
     content.includes("Cloning") &&
@@ -136,11 +137,11 @@ try {
 // ─── GATE V5: Streaming & Provenance Anchor Rendering ────────────────────────
 try {
   const streamingText = fs.readFileSync(
-    path.join(__dirname, "src/components/chatbot/StreamingText.tsx"),
+    path.join(projectRoot, "src/components/chatbot/StreamingText.tsx"),
     "utf-8",
   );
   const citationAnchor = fs.readFileSync(
-    path.join(__dirname, "src/components/chatbot/CitationAnchor.tsx"),
+    path.join(projectRoot, "src/components/chatbot/CitationAnchor.tsx"),
     "utf-8",
   );
 
@@ -162,11 +163,11 @@ try {
 // ─── GATE V6: Zero Supabase Writes in Demo Mode ──────────────────────────────
 try {
   const demoCtx = fs.readFileSync(
-    path.join(__dirname, "src/contexts/DemoModeContext.tsx"),
+    path.join(projectRoot, "src/contexts/DemoModeContext.tsx"),
     "utf-8",
   );
   const guardContent = fs.readFileSync(
-    path.join(__dirname, "src/components/demo/ReadOnlyGuard.tsx"),
+    path.join(projectRoot, "src/components/demo/ReadOnlyGuard.tsx"),
     "utf-8",
   );
 
@@ -187,7 +188,7 @@ try {
 // ─── GATE V7: Kaggle Proxy Rate Limiting & Credentials ───────────────────────
 try {
   const edgeProxy = fs.readFileSync(
-    path.join(__dirname, "supabase/functions/kaggle-proxy/index.ts"),
+    path.join(projectRoot, "supabase/functions/kaggle-proxy/index.ts"),
     "utf-8",
   );
   const hasRateLimit = edgeProxy.includes("rateLimitMap") && edgeProxy.includes("429");
@@ -205,7 +206,7 @@ try {
 
 // ─── GATE V8: ReadOnlyGuard Interception ─────────────────────────────────────
 try {
-  const guardFile = path.join(__dirname, "src/components/demo/ReadOnlyGuard.tsx");
+  const guardFile = path.join(projectRoot, "src/components/demo/ReadOnlyGuard.tsx");
   const guardCode = fs.readFileSync(guardFile, "utf-8");
   const blocksPointer = guardCode.includes("pointer-events-none") && guardCode.includes("isDemo");
 
@@ -222,11 +223,11 @@ try {
 // ─── GATE V9: Keyboard Accessibility & Shortcuts ─────────────────────────────
 try {
   const chatbot = fs.readFileSync(
-    path.join(__dirname, "src/components/chatbot/BrahmaChatBot.tsx"),
+    path.join(projectRoot, "src/components/chatbot/BrahmaChatBot.tsx"),
     "utf-8",
   );
   const chatInput = fs.readFileSync(
-    path.join(__dirname, "src/components/chat/ChatInput.tsx"),
+    path.join(projectRoot, "src/components/chat/ChatInput.tsx"),
     "utf-8",
   );
 
@@ -258,7 +259,7 @@ try {
     "src/data/demo/demoBlueprint.ts",
   ];
 
-  const allPresent = requiredFiles.every((f) => fs.existsSync(path.join(__dirname, f)));
+  const allPresent = requiredFiles.every((f) => fs.existsSync(path.join(projectRoot, f)));
 
   assertGate(
     "V10",

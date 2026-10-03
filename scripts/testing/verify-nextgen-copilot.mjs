@@ -35,6 +35,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../..");
 
 console.log("\n=======================================================================");
 console.log("   VYRON COPILOT NEXT-GEN ARCHITECTURE — 20-PHASE VERIFICATION SUITE   ");
@@ -60,7 +61,7 @@ function assert(phase, title, condition, evidence) {
 // -------------------------------------------------------------------------------------------------
 try {
   const dispatcherFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotDispatcher.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotDispatcher.ts"),
     "utf-8",
   );
   const hasSingleEntry =
@@ -83,7 +84,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const intentFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotIntentGateway.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotIntentGateway.ts"),
     "utf-8",
   );
   const intents = [
@@ -115,7 +116,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const contextFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotContextEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotContextEngine.ts"),
     "utf-8",
   );
   const hasFusion =
@@ -140,7 +141,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const epistemicFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotEpistemicEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotEpistemicEngine.ts"),
     "utf-8",
   );
   const states = [
@@ -175,11 +176,11 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const contextFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotContextEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotContextEngine.ts"),
     "utf-8",
   );
   const reasoningFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotReasoningGraph.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotReasoningGraph.ts"),
     "utf-8",
   );
   const hasAtlasContext = contextFile.includes("engineeringKnowledgeGraph.exportCytoscape()");
@@ -200,7 +201,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const memFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotMemory.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotMemory.ts"),
     "utf-8",
   );
   const hasLayers =
@@ -228,11 +229,11 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const missionFile = fs.readFileSync(
-    path.join(__dirname, "src/services/missions/missionEngine.ts"),
+    path.join(projectRoot, "src/services/missions/missionEngine.ts"),
     "utf-8",
   );
   const invFile = fs.readFileSync(
-    path.join(__dirname, "src/services/investigations/investigationEngine.ts"),
+    path.join(projectRoot, "src/services/investigations/investigationEngine.ts"),
     "utf-8",
   );
   const has10States =
@@ -262,7 +263,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const rFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotReasoningGraph.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotReasoningGraph.ts"),
     "utf-8",
   );
   const hasTraceTopology =
@@ -287,11 +288,11 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const plannerFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotPlanner.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotPlanner.ts"),
     "utf-8",
   );
   const agentFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotAgentOrchestrator.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotAgentOrchestrator.ts"),
     "utf-8",
   );
   const hasSpecialists = [
@@ -324,7 +325,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const toolFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotToolRegistry.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotToolRegistry.ts"),
     "utf-8",
   );
   const capabilities = [
@@ -366,7 +367,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const evidFile = fs.readFileSync(
-    path.join(__dirname, "src/services/evidence/evidenceGraphEngine.ts"),
+    path.join(projectRoot, "src/services/evidence/evidenceGraphEngine.ts"),
     "utf-8",
   );
   const hasGraph = evidFile.includes("EvidenceGraphNode") && evidFile.includes("listEvidenceNodes");
@@ -387,7 +388,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const adrFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotDecisionEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotDecisionEngine.ts"),
     "utf-8",
   );
   const hasDecay =
@@ -408,11 +409,11 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const impactFile = fs.readFileSync(
-    path.join(__dirname, "src/services/intelligence/impactEngine.ts"),
+    path.join(projectRoot, "src/services/intelligence/impactEngine.ts"),
     "utf-8",
   );
   const driftFile = fs.readFileSync(
-    path.join(__dirname, "src/services/intelligence/driftEngine.ts"),
+    path.join(projectRoot, "src/services/intelligence/driftEngine.ts"),
     "utf-8",
   );
   const hasImpact =
@@ -435,7 +436,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const relFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotReleaseIntelligence.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotReleaseIntelligence.ts"),
     "utf-8",
   );
   const hasQuestions = [
@@ -463,9 +464,9 @@ try {
 // P15: Digital Twin Simulation & Dual-Mode Sandbox Isolation
 // -------------------------------------------------------------------------------------------------
 try {
-  const demoFile = fs.readFileSync(path.join(__dirname, "src/state/demo/demoStore.ts"), "utf-8");
+  const demoFile = fs.readFileSync(path.join(projectRoot, "src/state/demo/demoStore.ts"), "utf-8");
   const simLabFile = fs.readFileSync(
-    path.join(__dirname, "src/services/demo/simulationLab.ts"),
+    path.join(projectRoot, "src/services/demo/simulationLab.ts"),
     "utf-8",
   );
   const hasIsolation = demoFile.includes("resetSimulation") && demoFile.includes("resetToBaseline");
@@ -486,7 +487,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const proFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotProactiveEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotProactiveEngine.ts"),
     "utf-8",
   );
   const hasCorrelation =
@@ -508,7 +509,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const actFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotActionEngine.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotActionEngine.ts"),
     "utf-8",
   );
   const hasPipeline =
@@ -534,7 +535,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const orFile = fs.readFileSync(
-    path.join(__dirname, "src/services/ai/openRouterDynamicRegistry.ts"),
+    path.join(projectRoot, "src/services/ai/openRouterDynamicRegistry.ts"),
     "utf-8",
   );
   const families = [
@@ -566,7 +567,7 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const streamFile = fs.readFileSync(
-    path.join(__dirname, "src/services/copilot/copilotRealtimeListener.ts"),
+    path.join(projectRoot, "src/services/copilot/copilotRealtimeListener.ts"),
     "utf-8",
   );
   const types = [
@@ -599,11 +600,11 @@ try {
 // -------------------------------------------------------------------------------------------------
 try {
   const studioFile = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotFullScreenStudio.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotFullScreenStudio.tsx"),
     "utf-8",
   );
   const drawerFile = fs.readFileSync(
-    path.join(__dirname, "src/components/copilot/CopilotDrawer.tsx"),
+    path.join(projectRoot, "src/components/copilot/CopilotDrawer.tsx"),
     "utf-8",
   );
   const modes = [

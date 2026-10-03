@@ -9,6 +9,7 @@ import crypto from "crypto";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../../");
 
 console.log("====================================================");
 console.log("BRAHMA LLM GATEWAY: G1–G8 VERIFICATION SUITE");
@@ -100,9 +101,9 @@ function cosineSimilarity(vecA, vecB) {
 // ─── GATE 1: Happy Path & SHA-256 Check ──────────────────────────────────────
 async function testG1() {
   try {
-    const sdkSource = fs.readFileSync(path.join(__dirname, "src/services/llmGateway.ts"), "utf8");
+    const sdkSource = fs.readFileSync(path.join(projectRoot, "src/services/llmGateway.ts"), "utf8");
     const edgeSource = fs.readFileSync(
-      path.join(__dirname, "supabase/functions/llm-gateway/index.ts"),
+      path.join(projectRoot, "supabase/functions/llm-gateway/index.ts"),
       "utf8",
     );
 
@@ -146,10 +147,10 @@ async function testG1() {
 async function testG2() {
   try {
     const edgeSource = fs.readFileSync(
-      path.join(__dirname, "supabase/functions/llm-gateway/index.ts"),
+      path.join(projectRoot, "supabase/functions/llm-gateway/index.ts"),
       "utf8",
     );
-    const sdkSource = fs.readFileSync(path.join(__dirname, "src/services/llmGateway.ts"), "utf8");
+    const sdkSource = fs.readFileSync(path.join(projectRoot, "src/services/llmGateway.ts"), "utf8");
 
     const hasEdgeFallbackChain =
       edgeSource.includes("generateTemplateArtifact") &&
@@ -180,11 +181,11 @@ async function testG2() {
 async function testG3() {
   try {
     const migration = fs.readFileSync(
-      path.join(__dirname, "supabase/migrations/0008_llm_gateway.sql"),
+      path.join(projectRoot, "supabase/migrations/0008_llm_gateway.sql"),
       "utf8",
     );
     const edgeSource = fs.readFileSync(
-      path.join(__dirname, "supabase/functions/llm-gateway/index.ts"),
+      path.join(projectRoot, "supabase/functions/llm-gateway/index.ts"),
       "utf8",
     );
 
@@ -213,11 +214,11 @@ async function testG3() {
 async function testG4() {
   try {
     const migration = fs.readFileSync(
-      path.join(__dirname, "supabase/migrations/0008_llm_gateway.sql"),
+      path.join(projectRoot, "supabase/migrations/0008_llm_gateway.sql"),
       "utf8",
     );
     const edgeSource = fs.readFileSync(
-      path.join(__dirname, "supabase/functions/llm-gateway/index.ts"),
+      path.join(projectRoot, "supabase/functions/llm-gateway/index.ts"),
       "utf8",
     );
 
@@ -258,7 +259,7 @@ async function testG5() {
     const sim13 = cosineSimilarity(vec1, vec3);
 
     const reqTabSource = fs.readFileSync(
-      path.join(__dirname, "src/routes/app.projects.$id.requirements.tsx"),
+      path.join(projectRoot, "src/routes/app.projects.$id.requirements.tsx"),
       "utf8",
     );
     const hasDedupLogic =
@@ -303,7 +304,7 @@ async function testG6() {
       cleanStr.includes("supersecretpassword");
 
     const edgeSource = fs.readFileSync(
-      path.join(__dirname, "supabase/functions/llm-gateway/index.ts"),
+      path.join(projectRoot, "supabase/functions/llm-gateway/index.ts"),
       "utf8",
     );
     const hasBudgetCap = edgeSource.includes("dailyCapUsd") && edgeSource.includes("BRA-429");
@@ -340,7 +341,7 @@ async function testG7() {
       return results;
     }
 
-    const files = walk(path.join(__dirname, "src"));
+    const files = walk(path.join(projectRoot, "src"));
     const exposedSecrets = [];
 
     files.forEach((file) => {
@@ -382,13 +383,13 @@ async function testG7() {
 async function testG8() {
   try {
     const popoverExists = fs.existsSync(
-      path.join(__dirname, "src/components/brahma/ProvenancePopover.tsx"),
+      path.join(projectRoot, "src/components/brahma/ProvenancePopover.tsx"),
     );
     const reqTabUpdated = fs
-      .readFileSync(path.join(__dirname, "src/routes/app.projects.$id.requirements.tsx"), "utf8")
+      .readFileSync(path.join(projectRoot, "src/routes/app.projects.$id.requirements.tsx"), "utf8")
       .includes("ProvenancePopover");
     const blueprintUpdated = fs
-      .readFileSync(path.join(__dirname, "src/routes/app.projects.$id.blueprint.tsx"), "utf8")
+      .readFileSync(path.join(projectRoot, "src/routes/app.projects.$id.blueprint.tsx"), "utf8")
       .includes("ProvenancePopover");
 
     if (popoverExists && reqTabUpdated && blueprintUpdated) {

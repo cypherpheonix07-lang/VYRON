@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const projectRoot = path.resolve(__dirname, "../..");
 
 const results = [];
 function record(testId, description, passed, detail = "") {
@@ -24,7 +25,7 @@ console.log("=".repeat(75));
 // GATE S1: Shared Dashboard Context Store & Provider
 // ---------------------------------------------------------------------------------
 try {
-  const storePath = path.join(__dirname, "src/state/commandCenter/commandCenterStore.ts");
+  const storePath = path.join(projectRoot, "src/state/commandCenter/commandCenterStore.ts");
   const storeContent = fs.readFileSync(storePath, "utf-8");
 
   const hasOrg = storeContent.includes("organization");
@@ -64,7 +65,7 @@ try {
 // GATE S2: Universal Detail Drawer Implementation
 // ---------------------------------------------------------------------------------
 try {
-  const drawerPath = path.join(__dirname, "src/components/dashboard/UniversalDetailDrawer.tsx");
+  const drawerPath = path.join(projectRoot, "src/components/dashboard/UniversalDetailDrawer.tsx");
   const drawerContent = fs.readFileSync(drawerPath, "utf-8");
 
   const hasSheet = drawerContent.includes("Sheet") && drawerContent.includes("SheetContent");
@@ -98,7 +99,7 @@ try {
 // GATE S3: Temporal Engineering Health Explorer (Phase 04)
 // ---------------------------------------------------------------------------------
 try {
-  const explorerPath = path.join(__dirname, "src/components/dashboard/TemporalHealthExplorer.tsx");
+  const explorerPath = path.join(projectRoot, "src/components/dashboard/TemporalHealthExplorer.tsx");
   const content = fs.readFileSync(explorerPath, "utf-8");
 
   const hasAreaChart = content.includes("AreaChart") && content.includes("Area");
@@ -124,7 +125,7 @@ try {
 // GATE S4: Interactive Risk Universe (Phase 05)
 // ---------------------------------------------------------------------------------
 try {
-  const riskPath = path.join(__dirname, "src/components/dashboard/RiskUniverse.tsx");
+  const riskPath = path.join(projectRoot, "src/components/dashboard/RiskUniverse.tsx");
   const content = fs.readFileSync(riskPath, "utf-8");
 
   const hasPie = content.includes("PieChart") && content.includes("Pie");
@@ -156,7 +157,7 @@ try {
 // GATE S5: Engineering Readiness System (Phase 06)
 // ---------------------------------------------------------------------------------
 try {
-  const readyPath = path.join(__dirname, "src/components/dashboard/EngineeringReadinessSystem.tsx");
+  const readyPath = path.join(projectRoot, "src/components/dashboard/EngineeringReadinessSystem.tsx");
   const content = fs.readFileSync(readyPath, "utf-8");
 
   const requiredStages = [
@@ -189,7 +190,7 @@ try {
 // GATE S6: Live Engineering Signal Field (Phase 07)
 // ---------------------------------------------------------------------------------
 try {
-  const signalPath = path.join(__dirname, "src/components/dashboard/LiveSignalRadarField.tsx");
+  const signalPath = path.join(projectRoot, "src/components/dashboard/LiveSignalRadarField.tsx");
   const content = fs.readFileSync(signalPath, "utf-8");
 
   const hasCategories =
@@ -218,7 +219,7 @@ try {
 // GATE S7: Release Control Surface (Phase 08)
 // ---------------------------------------------------------------------------------
 try {
-  const releasePath = path.join(__dirname, "src/components/dashboard/ReleaseControlSurface.tsx");
+  const releasePath = path.join(projectRoot, "src/components/dashboard/ReleaseControlSurface.tsx");
   const content = fs.readFileSync(releasePath, "utf-8");
 
   const hasCandidate = content.includes("v2.4.0");
@@ -241,7 +242,7 @@ try {
 // GATE S8: Living Architecture Canvas (Phase 09)
 // ---------------------------------------------------------------------------------
 try {
-  const canvasPath = path.join(__dirname, "src/components/dashboard/LivingArchitectureCanvas.tsx");
+  const canvasPath = path.join(projectRoot, "src/components/dashboard/LivingArchitectureCanvas.tsx");
   const content = fs.readFileSync(canvasPath, "utf-8");
 
   const hasServices =
@@ -273,7 +274,7 @@ try {
 // GATE S9: Drift Investigation Surface (Phase 10)
 // ---------------------------------------------------------------------------------
 try {
-  const driftPath = path.join(__dirname, "src/components/dashboard/DriftInvestigationSurface.tsx");
+  const driftPath = path.join(projectRoot, "src/components/dashboard/DriftInvestigationSurface.tsx");
   const content = fs.readFileSync(driftPath, "utf-8");
 
   const has5States =
@@ -304,7 +305,7 @@ try {
 // ---------------------------------------------------------------------------------
 try {
   const cockpitPath = path.join(
-    __dirname,
+    projectRoot,
     "src/components/dashboard/RuntimeIntelligenceCockpit.tsx",
   );
   const content = fs.readFileSync(cockpitPath, "utf-8");
@@ -332,7 +333,7 @@ try {
 // GATE S11: Trust & Compliance Control Surface (Phase 12)
 // ---------------------------------------------------------------------------------
 try {
-  const trustPath = path.join(__dirname, "src/components/dashboard/TrustComplianceSurface.tsx");
+  const trustPath = path.join(projectRoot, "src/components/dashboard/TrustComplianceSurface.tsx");
   const content = fs.readFileSync(trustPath, "utf-8");
 
   const hasCWE89 = content.includes("CWE-89");
@@ -354,7 +355,7 @@ try {
 // GATE S12: ATLAS System Explorer (Phase 13)
 // ---------------------------------------------------------------------------------
 try {
-  const atlasPath = path.join(__dirname, "src/components/dashboard/AtlasSystemExplorer.tsx");
+  const atlasPath = path.join(projectRoot, "src/components/dashboard/AtlasSystemExplorer.tsx");
   const content = fs.readFileSync(atlasPath, "utf-8");
 
   const hasModes =
@@ -386,7 +387,7 @@ try {
 // GATE S13: Contextual Copilot Partner (Phase 14)
 // ---------------------------------------------------------------------------------
 try {
-  const copilotPath = path.join(__dirname, "src/components/dashboard/CopilotPartnerCard.tsx");
+  const copilotPath = path.join(projectRoot, "src/components/dashboard/CopilotPartnerCard.tsx");
   const content = fs.readFileSync(copilotPath, "utf-8");
 
   const hasContextEnvelope =
@@ -409,7 +410,7 @@ try {
 // GATE S14: Cryptographic Evidence Explorer (Phase 15)
 // ---------------------------------------------------------------------------------
 try {
-  const evidencePath = path.join(__dirname, "src/components/dashboard/EvidenceExplorer.tsx");
+  const evidencePath = path.join(projectRoot, "src/components/dashboard/EvidenceExplorer.tsx");
   const content = fs.readFileSync(evidencePath, "utf-8");
 
   const hasLedger = content.includes("EVIDENCE_LEDGER") && content.includes("EVID-DRIFT-V24");
@@ -432,7 +433,7 @@ try {
 // GATE S15: Time Machine Historical Comparator (Phase 18)
 // ---------------------------------------------------------------------------------
 try {
-  const timePath = path.join(__dirname, "src/components/dashboard/TimeMachineComparator.tsx");
+  const timePath = path.join(projectRoot, "src/components/dashboard/TimeMachineComparator.tsx");
   const content = fs.readFileSync(timePath, "utf-8");
 
   const hasEngine = content.includes("timeMachineEngine.compareSnapshots");
@@ -456,7 +457,7 @@ try {
 // GATE S16: Global Command Context Bar (Phase 02)
 // ---------------------------------------------------------------------------------
 try {
-  const barPath = path.join(__dirname, "src/components/dashboard/GlobalCommandContextBar.tsx");
+  const barPath = path.join(projectRoot, "src/components/dashboard/GlobalCommandContextBar.tsx");
   const content = fs.readFileSync(barPath, "utf-8");
 
   const hasProjects =
@@ -486,7 +487,7 @@ try {
 // GATE S17: Cross-Surface Intelligence Linking in Dashboard (Phase 16)
 // ---------------------------------------------------------------------------------
 try {
-  const indexPath = path.join(__dirname, "src/routes/app.index.tsx");
+  const indexPath = path.join(projectRoot, "src/routes/app.index.tsx");
   const content = fs.readFileSync(indexPath, "utf-8");
 
   const mountsDrawer = content.includes("<UniversalDetailDrawer");
@@ -577,7 +578,7 @@ try {
 
   let rawSqlCount = 0;
   for (const rel of filesToCheck) {
-    const fullPath = path.join(__dirname, rel);
+    const fullPath = path.join(projectRoot, rel);
     if (!fs.existsSync(fullPath)) continue;
     const content = fs.readFileSync(fullPath, "utf-8");
 

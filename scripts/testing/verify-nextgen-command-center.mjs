@@ -28,6 +28,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(__dirname, "../..");
 
 let passed = 0;
 let failed = 0;
@@ -50,7 +51,7 @@ console.log("===================================================================
 // GATE NG1: Universal Engineering Object Contract
 // -------------------------------------------------------------------
 console.log("Gate NG1: Universal Engineering Object Contract");
-const entityContractPath = path.join(__dirname, "src", "types", "engineeringEntity.ts");
+const entityContractPath = path.join(projectRoot, "src", "types", "engineeringEntity.ts");
 assert(fs.existsSync(entityContractPath), "engineeringEntity.ts exists");
 const entityContractContent = fs.readFileSync(entityContractPath, "utf8");
 
@@ -100,7 +101,7 @@ assert(
 // GATE NG2: Multi-Hop Investigation Breadcrumb Trail
 // -------------------------------------------------------------------
 console.log("\nGate NG2: Multi-Hop Investigation Breadcrumb Trail in Store");
-const storePath = path.join(__dirname, "src", "state", "commandCenter", "commandCenterStore.ts");
+const storePath = path.join(projectRoot, "src", "state", "commandCenter", "commandCenterStore.ts");
 const storeContent = fs.readFileSync(storePath, "utf8");
 assert(
   storeContent.includes("export interface InvestigationBreadcrumb"),
@@ -128,7 +129,7 @@ assert(
 // -------------------------------------------------------------------
 console.log("\nGate NG3: Health Causality Engine");
 const causalityPath = path.join(
-  __dirname,
+  projectRoot,
   "src",
   "services",
   "intelligence",
@@ -155,7 +156,7 @@ assert(
 // -------------------------------------------------------------------
 console.log("\nGate NG4: Multi-Dimensional Anomaly Clustering");
 const anomalyPath = path.join(
-  __dirname,
+  projectRoot,
   "src",
   "services",
   "intelligence",
@@ -182,7 +183,7 @@ assert(anomalyContent.includes("hypothesisStatus:"), "AnomalyCluster contains hy
 // GATE NG5: Architecture Decision Decay Engine & ADR Lineage
 // -------------------------------------------------------------------
 console.log("\nGate NG5: Architecture Decision Decay Engine");
-const decayPath = path.join(__dirname, "src", "services", "intelligence", "decisionDecayEngine.ts");
+const decayPath = path.join(projectRoot, "src", "services", "intelligence", "decisionDecayEngine.ts");
 assert(fs.existsSync(decayPath), "decisionDecayEngine.ts exists");
 const decayContent = fs.readFileSync(decayPath, "utf8");
 assert(
@@ -200,7 +201,7 @@ assert(
 // GATE NG6: Evidence Graph & Claim-to-Release Lineage
 // -------------------------------------------------------------------
 console.log("\nGate NG6: Evidence Graph & Claim-to-Release Lineage");
-const evidencePath = path.join(__dirname, "src", "services", "evidence", "evidenceGraphEngine.ts");
+const evidencePath = path.join(projectRoot, "src", "services", "evidence", "evidenceGraphEngine.ts");
 assert(fs.existsSync(evidencePath), "evidenceGraphEngine.ts exists");
 const evidenceContent = fs.readFileSync(evidencePath, "utf8");
 assert(
@@ -216,7 +217,7 @@ assert(evidenceContent.includes("verifyEvidence("), "Implements verifyEvidence m
 // -------------------------------------------------------------------
 console.log("\nGate NG7: Governance Authorization Matrix & Fitness Functions");
 const governancePath = path.join(
-  __dirname,
+  projectRoot,
   "src",
   "services",
   "governance",
@@ -244,7 +245,7 @@ assert(
 // GATE NG8: Knowledge Graph JUSTIFIED_BY Relationship
 // -------------------------------------------------------------------
 console.log("\nGate NG8: Knowledge Graph JUSTIFIED_BY Relationship");
-const kgPath = path.join(__dirname, "src", "services", "intelligence", "knowledgeGraph.ts");
+const kgPath = path.join(projectRoot, "src", "services", "intelligence", "knowledgeGraph.ts");
 const kgContent = fs.readFileSync(kgPath, "utf8");
 assert(kgContent.includes('"JUSTIFIED_BY"'), "EdgeType includes JUSTIFIED_BY relationship");
 assert(kgContent.includes("provenance?: string"), "GraphEdge includes provenance");
@@ -275,7 +276,7 @@ for (const p of newEnginePaths) {
 // GATE NG10: Gate C1 Zero Capital 'B' Brahma in app.index.tsx
 // -------------------------------------------------------------------
 console.log("\nGate NG10: Gate C1 Zero Capital 'B' Brahma in app.index.tsx");
-const appIndexPath = path.join(__dirname, "src", "routes", "app.index.tsx");
+const appIndexPath = path.join(projectRoot, "src", "routes", "app.index.tsx");
 const appIndexContent = fs.readFileSync(appIndexPath, "utf8");
 assert(
   !appIndexContent.includes("Brahma"),
@@ -287,7 +288,7 @@ assert(
 // -------------------------------------------------------------------
 console.log("\nGate NG11: Temporal Health Explorer Causality Integration");
 const temporalPath = path.join(
-  __dirname,
+  projectRoot,
   "src",
   "components",
   "dashboard",
@@ -312,7 +313,7 @@ assert(
 // -------------------------------------------------------------------
 console.log("\nGate NG12: Live Signal Radar Field Anomaly Cluster Integration");
 const radarPath = path.join(
-  __dirname,
+  projectRoot,
   "src",
   "components",
   "dashboard",
@@ -337,7 +338,7 @@ assert(
 // -------------------------------------------------------------------
 console.log("\nGate NG13: Release Control Surface 4 Formal Decision States");
 const releasePath = path.join(
-  __dirname,
+  projectRoot,
   "src",
   "components",
   "dashboard",
@@ -359,7 +360,7 @@ assert(
 // -------------------------------------------------------------------
 console.log("\nGate NG14: Evidence Explorer 6 Lifecycle States");
 const evidenceExpPath = path.join(
-  __dirname,
+  projectRoot,
   "src",
   "components",
   "dashboard",
@@ -377,7 +378,7 @@ assert(
 // -------------------------------------------------------------------
 console.log("\nGate NG15: Copilot Partner 5 AI Epistemic States");
 const copilotPath = path.join(
-  __dirname,
+  projectRoot,
   "src",
   "components",
   "dashboard",
@@ -406,7 +407,7 @@ assert(
 // -------------------------------------------------------------------
 console.log("\nGate NG16: Universal Detail Drawer 10 Intelligence Tabs");
 const drawerPath = path.join(
-  __dirname,
+  projectRoot,
   "src",
   "components",
   "dashboard",
