@@ -140,12 +140,48 @@ const templates = [
 function TemplateGalleryPage() {
   const navigate = useNavigate();
 
-  const handleUseTemplate = (title: string) => {
-    toast.success("Template selected", {
-      description: `Loading pre-configured blueprint for ${title}...`,
-    });
-    // Redirect to the generation page using the mock project ID "brahma-core"
-    navigate({ to: "/app/studio/$id/generate", params: { id: "brahma-core" } });
+  const handleUseTemplate = (tpl: (typeof templates)[0], destination: "generate" | "control_plane" = "generate") => {
+    try {
+      // 1. Validate template blueprint schema
+      if (!tpl || !tpl.id || !tpl.title) {
+        throw new Error("Invalid template blueprint schema.");
+      }
+
+      // 2. Persist template draft state for deterministic retrieval
+      const draftPayload = {
+        name: tpl.title,
+        slug: tpl.id,
+        description: tpl.desc,
+        template_id: tpl.id,
+        modules: tpl.modules,
+        tech: tpl.tech,
+        selected_at: new Date().toISOString(),
+      };
+
+      try {
+        localStorage.setItem("vyron_selected_template", JSON.stringify(draftPayload));
+        sessionStorage.setItem("vyron_active_blueprint", tpl.id);
+      } catch (storageErr) {
+        console.warn("Storage write degraded; proceeding with in-memory routing:", storageErr);
+      }
+
+      toast.success(`Template selected: "${tpl.title}"`, {
+        description: destination === "control_plane"
+          ? "Prepopulating 14-stage AI Engineering Control Plane..."
+          : "Forwarding to AI compiler code generation pipeline...",
+      });
+
+      if (destination === "control_plane") {
+        navigate({ to: "/app/projects/new" });
+      } else {
+        navigate({ to: "/app/studio/$id/generate", params: { id: tpl.id } });
+      }
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      toast.error("Template Selection Failed", {
+        description: `Recoverable error: ${msg}. Your draft inputs remain intact.`,
+      });
+    }
   };
 
   return (
@@ -230,13 +266,16 @@ function TemplateGalleryPage() {
                   </span>
                 ))}
               </div>
-              <Button
-                size="sm"
-                onClick={() => handleUseTemplate(tpl.title)}
-                className="h-7 text-xs bg-primary hover:bg-primary/95 text-primary-foreground"
-              >
-                Use <ArrowRight className="ml-1 size-3 shrink-0" aria-hidden="true" />
-              </Button>
+              <div className="flex items-center gap-1.5">
+                <Button
+                  size="sm"
+                  onClick={() => handleUseTemplate(tpl, "generate")}
+                  className="h-7 text-xs bg-primary hover:bg-primary/95 text-primary-foreground gap-1"
+                >
+                  <span>Generate</span>
+                  <ArrowRight className="size-3 shrink-0" aria-hidden="true" />
+                </Button>
+              </div>
             </div>
           </Card>
         ))}

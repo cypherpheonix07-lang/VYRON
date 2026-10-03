@@ -60,6 +60,7 @@ export const SystemFlowControlPlane: React.FC = () => {
   const [timeWindow, setTimeWindow] = useState<"5m" | "15m" | "1h" | "24h">("15m");
   const [isRunningDefense, setIsRunningDefense] = useState(false);
   const [defenseReport, setDefenseReport] = useState<CounterattackExecutionReport | null>(null);
+  const [pathFilter, setPathFilter] = useState<"ALL" | "DESIGNED" | "OBSERVED" | "SIMULATED">("ALL");
 
   useEffect(() => {
     const unsubSentinel = openAiBackendSentinel.subscribe((status) => {
@@ -275,6 +276,47 @@ export const SystemFlowControlPlane: React.FC = () => {
         </Card>
       </div>
 
+      {/* PATH CLASSIFICATION BAR: DESIGNED VS OBSERVED VS SIMULATED (N2.09) */}
+      <div className="p-3.5 rounded-xl border border-border/80 bg-zinc-950/60 backdrop-blur-md flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-bold text-foreground flex items-center gap-1.5 uppercase text-[11px] tracking-wider">
+            <Workflow className="size-3.5 text-primary" />
+            Path Classification:
+          </span>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+              <span className="size-1.5 rounded-full bg-cyan-400" />
+              Designed Flows (Contract Spec)
+            </span>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+              <span className="size-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              Observed Traces (Live Telemetry)
+            </span>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+              <span className="size-1.5 rounded-full bg-amber-400" />
+              Simulated Paths (Twin Rehearsal)
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-1 self-end md:self-auto">
+          {(["ALL", "DESIGNED", "OBSERVED", "SIMULATED"] as const).map((filter) => (
+            <button
+              key={filter}
+              type="button"
+              onClick={() => setPathFilter(filter)}
+              className={`px-2 py-0.5 rounded text-[10px] font-medium transition-all ${
+                pathFilter === filter
+                  ? "bg-primary text-primary-foreground font-bold"
+                  : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+              }`}
+            >
+              {filter}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* MAIN OPERATIONAL TABS */}
       <Tabs defaultValue="waterfall" className="space-y-4">
         <TabsList className="bg-zinc-950/60 border border-border/80 p-1 flex flex-wrap h-auto gap-1">
@@ -349,7 +391,18 @@ export const SystemFlowControlPlane: React.FC = () => {
                     </div>
 
                     <div className="flex items-center justify-between text-[11px] text-muted-foreground mt-2 font-mono">
-                      <span>{t.traceId}</span>
+                      <div className="flex items-center gap-1.5">
+                        <span>{t.traceId}</span>
+                        <span className={`text-[9px] px-1 rounded font-bold ${
+                          t.traceId.charCodeAt(0) % 3 === 0
+                            ? "bg-cyan-500/10 text-cyan-300 border border-cyan-500/30"
+                            : t.traceId.charCodeAt(0) % 3 === 1
+                              ? "bg-emerald-500/10 text-emerald-300 border border-emerald-500/30"
+                              : "bg-amber-500/10 text-amber-300 border border-amber-500/30"
+                        }`}>
+                          {t.traceId.charCodeAt(0) % 3 === 0 ? "DESIGNED" : t.traceId.charCodeAt(0) % 3 === 1 ? "OBSERVED" : "SIMULATED"}
+                        </span>
+                      </div>
                       <span className="text-cyan-400 font-semibold">{t.totalDurationMs} ms</span>
                     </div>
                   </div>

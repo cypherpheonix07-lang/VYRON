@@ -39,6 +39,9 @@ export function AnalysisDashboardView() {
   const [runHistory, setRunHistory] = useState<AnalysisRunSummary[]>(() =>
     analysisStore.getHistory(),
   );
+  const [activeSection, setActiveSection] = useState<
+    "ALL" | "OVERVIEW" | "FORENSICS" | "FINDINGS" | "ACTIONS"
+  >("ALL");
 
   const selectedBenchmark = demoStore.getSelectedDataset();
 
@@ -247,15 +250,193 @@ export function AnalysisDashboardView() {
       {/* Embedded Contextual Copilot Intelligence */}
       <InlineCopilotAssistant pageContext="analysis" />
 
-      {/* Main Analysis Body: Timeline + Findings Panel */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        <div className="lg:col-span-7 space-y-4">
-          <AnalysisTimeline stages={run.stages} currentStageId={run.currentStageId} />
+      {/* 4 Separate Analysis Sections Navigation (N2.02) */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-2 rounded-xl bg-card/60 border border-border/60 backdrop-blur-md">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+          <button
+            type="button"
+            onClick={() => setActiveSection("ALL")}
+            className={cn(
+              "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0",
+              activeSection === "ALL"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-white/5",
+            )}
+          >
+            All Sections
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveSection("OVERVIEW")}
+            className={cn(
+              "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5",
+              activeSection === "OVERVIEW"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-white/5",
+            )}
+          >
+            <Database className="size-3.5" />
+            <span>1. Overview & Scope</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveSection("FORENSICS")}
+            className={cn(
+              "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5",
+              activeSection === "FORENSICS"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-white/5",
+            )}
+          >
+            <Layers className="size-3.5" />
+            <span>2. Evidence & Forensics</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveSection("FINDINGS")}
+            className={cn(
+              "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5",
+              activeSection === "FINDINGS"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-white/5",
+            )}
+          >
+            <AlertTriangle className="size-3.5" />
+            <span>3. Findings & Impact</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveSection("ACTIONS")}
+            className={cn(
+              "px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5",
+              activeSection === "ACTIONS"
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-white/5",
+            )}
+          >
+            <ShieldCheck className="size-3.5" />
+            <span>4. Actions & Validation</span>
+          </button>
         </div>
-        <div className="lg:col-span-5 space-y-4">
-          <LiveFindingsPanel findings={run.findings} />
+
+        <div className="flex items-center gap-2 self-end sm:self-auto text-[11px] font-mono text-muted-foreground">
+          <span>Active Pipeline:</span>
+          <Badge variant="outline" className="border-cyan-500/40 text-cyan-400 bg-cyan-500/10 text-[10px]">
+            12-Stage Forensics
+          </Badge>
         </div>
       </div>
+
+      {/* Section 1: Overview & Scope */}
+      {(activeSection === "OVERVIEW" || activeSection === "ALL") && (
+        <div className="space-y-3">
+          {activeSection !== "ALL" && (
+            <div className="p-4 rounded-xl border border-border/40 bg-card/40 space-y-2">
+              <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                <Database className="size-4 text-cyan-400" />
+                <span>Section 1: Overview & Scope (Stages S01–S03)</span>
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                Establishes analysis ingestion boundary, schema constraints, and data partition integrity.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
+                <div className="p-3 rounded-lg border border-border/30 bg-background/50">
+                  <span className="text-muted-foreground block text-[10px]">Target Dataset</span>
+                  <span className="font-semibold text-foreground">{run.targetDatasetName}</span>
+                </div>
+                <div className="p-3 rounded-lg border border-border/30 bg-background/50">
+                  <span className="text-muted-foreground block text-[10px]">Records Ingested</span>
+                  <span className="font-semibold text-foreground font-mono">{run.telemetry.recordsProcessed.toLocaleString()}</span>
+                </div>
+                <div className="p-3 rounded-lg border border-border/30 bg-background/50">
+                  <span className="text-muted-foreground block text-[10px]">Scope Compliance</span>
+                  <span className="font-semibold text-emerald-400 font-mono">100% Boundary Verified</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Section 2: Evidence & Forensics (Stages S04-S07) */}
+      {(activeSection === "FORENSICS" || activeSection === "ALL") && (
+        <div className="space-y-3">
+          {activeSection === "FORENSICS" && (
+            <div className="p-4 rounded-xl border border-border/40 bg-card/40 space-y-2">
+              <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+                <Layers className="size-4 text-primary" />
+                <span>Section 2: Evidence & Forensics (Stages S04–S07)</span>
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                Statistical IQR anomaly calculations, dependency graph centrality, and deep AST evidence correlation.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Section 3: Findings & Impact (Stages S08-S10) */}
+      {(activeSection === "FINDINGS") && (
+        <div className="space-y-3">
+          <div className="p-4 rounded-xl border border-border/40 bg-card/40 space-y-2">
+            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+              <AlertTriangle className="size-4 text-amber-400" />
+              <span>Section 3: Findings & Impact (Stages S08–S10)</span>
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              Vulnerability correlation, blast radius calculation, and SHAP explainability attribution.
+            </p>
+          </div>
+          <LiveFindingsPanel findings={run.findings} />
+        </div>
+      )}
+
+      {/* Section 4: Actions & Validation (Stages S11-S12) */}
+      {(activeSection === "ACTIONS") && (
+        <div className="space-y-4">
+          <div className="p-4 rounded-xl border border-border/40 bg-card/40 space-y-2">
+            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+              <ShieldCheck className="size-4 text-emerald-400" />
+              <span>Section 4: Actions & Validation (Stages S11–S12)</span>
+            </h3>
+            <p className="text-xs text-muted-foreground">
+              Automated remediation synthesis, release-gate sensitivity evaluation, and cryptographic Merkle/SHA-256 sealing.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 text-xs">
+              <div className="p-3 rounded-lg border border-border/30 bg-background/50 space-y-1">
+                <span className="text-[10px] text-muted-foreground block">Cryptographic Seal</span>
+                <span className="font-mono text-xs text-emerald-400 break-all font-bold">
+                  {run.verificationHash || "Pending completion"}
+                </span>
+              </div>
+              <div className="p-3 rounded-lg border border-border/30 bg-background/50 space-y-1">
+                <span className="text-[10px] text-muted-foreground block">Release Gate Decision</span>
+                <span className="font-semibold text-foreground">
+                  {run.telemetry.overallRiskScore > 70 ? (
+                    <span className="text-rose-400 font-bold">BLOCKED (Risk &gt; 70)</span>
+                  ) : run.telemetry.overallRiskScore > 40 ? (
+                    <span className="text-amber-400 font-bold">WARNING (Review Required)</span>
+                  ) : (
+                    <span className="text-emerald-400 font-bold">PASS (Sensitivity Compliant)</span>
+                  )}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Main Analysis Body: Timeline + Findings Panel (Used in ALL, FORENSICS, or Combined view) */}
+      {(activeSection === "ALL" || activeSection === "FORENSICS") && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div className="lg:col-span-7 space-y-4">
+            <AnalysisTimeline stages={run.stages} currentStageId={run.currentStageId} />
+          </div>
+          <div className="lg:col-span-5 space-y-4">
+            <LiveFindingsPanel findings={run.findings} />
+          </div>
+        </div>
+      )}
 
       {/* Pipeline Configuration Modal */}
       <RunAnalysisModal open={modalOpen} onOpenChange={setModalOpen} />

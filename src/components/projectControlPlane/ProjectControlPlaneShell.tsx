@@ -229,10 +229,10 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3.5">
       {/* 1. Persistent Control Plane Header */}
-      <div className="p-5 rounded-2xl border border-border/80 bg-card/80 backdrop-blur-xl shadow-2xl space-y-4">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-3.5 md:p-4 rounded-xl border border-border/80 bg-card/80 backdrop-blur-xl shadow-lg space-y-2.5">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div className="space-y-1">
             <div className="flex items-center gap-2.5">
               <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
@@ -296,55 +296,55 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
         </div>
 
         {/* Live Gauges Bar */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-3 pt-2 border-t border-border/40 text-xs">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-2 pt-1.5 border-t border-border/40 text-xs">
           <div>
-            <div className="flex justify-between text-muted-foreground text-[11px] mb-1">
+            <div className="flex justify-between text-muted-foreground text-[10px] mb-0.5">
               <span>Completeness</span>
               <span className="font-bold text-foreground">{state.understanding.completeness}%</span>
             </div>
-            <Progress value={state.understanding.completeness} className="h-1.5 bg-background/50" />
+            <Progress value={state.understanding.completeness} className="h-1 bg-background/50" />
           </div>
 
           <div>
-            <div className="flex justify-between text-muted-foreground text-[11px] mb-1">
+            <div className="flex justify-between text-muted-foreground text-[10px] mb-0.5">
               <span>Confidence</span>
               <span className="font-bold text-foreground">{state.understanding.confidence}%</span>
             </div>
-            <Progress value={state.understanding.confidence} className="h-1.5 bg-background/50" />
+            <Progress value={state.understanding.confidence} className="h-1 bg-background/50" />
           </div>
 
           <div>
-            <div className="flex justify-between text-muted-foreground text-[11px] mb-1">
+            <div className="flex justify-between text-muted-foreground text-[10px] mb-0.5">
               <span>Readiness</span>
               <span className="font-bold text-emerald-400">{state.understanding.readiness}%</span>
             </div>
-            <Progress value={state.understanding.readiness} className="h-1.5 bg-background/50" />
+            <Progress value={state.understanding.readiness} className="h-1 bg-background/50" />
           </div>
 
-          <div className="flex items-center gap-2 pl-2">
-            <span className="font-bold text-emerald-400 font-mono text-sm">
+          <div className="flex items-center gap-1.5 pl-1">
+            <span className="font-bold text-emerald-400 font-mono text-xs">
               {state.understanding.knownCount}
             </span>
-            <span className="text-[11px] text-muted-foreground">Knowns</span>
+            <span className="text-[10px] text-muted-foreground">Knowns</span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-amber-400 font-mono text-sm">
+          <div className="flex items-center gap-1.5">
+            <span className="font-bold text-amber-400 font-mono text-xs">
               {state.understanding.assumptionsCount}
             </span>
-            <span className="text-[11px] text-muted-foreground">Assumptions</span>
+            <span className="text-[10px] text-muted-foreground">Assumptions</span>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-rose-400 font-mono text-sm">
+          <div className="flex items-center gap-1.5">
+            <span className="font-bold text-rose-400 font-mono text-xs">
               {state.understanding.conflictsCount}
             </span>
-            <span className="text-[11px] text-muted-foreground">Conflicts</span>
+            <span className="text-[10px] text-muted-foreground">Conflicts</span>
           </div>
         </div>
 
         {/* AI Provider Controls & Health Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-3 border-t border-border/40 text-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-border/40 text-xs">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider flex items-center gap-1.5">
               <Cpu className="h-3.5 w-3.5 text-cyan-400" />
@@ -357,7 +357,7 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
                   e.target.value as "auto" | "openrouter" | "openai" | "deterministic",
                 )
               }
-              className="bg-background/80 border border-border/80 rounded-lg px-2.5 py-1 text-xs text-foreground font-medium cursor-pointer hover:border-border transition-colors"
+              className="bg-background/80 border border-border/80 rounded-lg px-2 py-0.5 text-xs text-foreground font-medium cursor-pointer hover:border-border transition-colors"
             >
               <option value="auto">Auto Router (Task-Taxonomy Dynamic)</option>
               <option value="openrouter">OpenRouter Hub (Claude 3.5 Sonnet / Multi-Model)</option>
@@ -366,7 +366,7 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
             </select>
             <Badge
               variant="outline"
-              className="text-[10px] font-mono border-emerald-500/40 text-emerald-400 bg-emerald-500/10 flex items-center gap-1"
+              className="text-[10px] font-mono border-emerald-500/40 text-emerald-400 bg-emerald-500/10 flex items-center gap-1 py-0"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Connected (12ms)
@@ -391,7 +391,7 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
         </div>
 
         {/* Quick Baseline Templates */}
-        <div className="flex items-center gap-2 pt-2 border-t border-border/30 text-[11px]">
+        <div className="flex items-center gap-2 pt-1.5 border-t border-border/30 text-[11px]">
           <span className="text-muted-foreground font-medium shrink-0">Quick Baseline:</span>
           <div className="flex items-center gap-1.5 flex-wrap">
             <button
@@ -428,8 +428,8 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
 
       {/* Execution status toast-like banner */}
       {isExecuting && (
-        <div className="p-3 rounded-xl border border-cyan-500/40 bg-cyan-500/10 text-xs text-cyan-300 flex items-center gap-2.5 animate-pulse">
-          <RefreshCw className="h-4 w-4 animate-spin shrink-0" />
+        <div className="p-2.5 rounded-xl border border-cyan-500/40 bg-cyan-500/10 text-xs text-cyan-300 flex items-center gap-2 animate-pulse">
+          <RefreshCw className="h-3.5 w-3.5 animate-spin shrink-0" />
           <span className="font-medium">
             {executionStatus || "Executing specialized engineering agent..."}
           </span>
@@ -437,14 +437,14 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
       )}
 
       {/* 2. Main Workspace Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-start">
         {/* Left Sidebar: 14 Stage Navigation */}
-        <div className="lg:col-span-3 space-y-2 p-3 rounded-2xl border border-border/80 bg-card/60 backdrop-blur-md">
-          <div className="px-2 py-1.5 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
+        <div className="lg:col-span-3 space-y-1.5 p-2.5 rounded-xl border border-border/80 bg-card/60 backdrop-blur-md">
+          <div className="px-2 py-1 text-[11px] font-bold text-muted-foreground uppercase tracking-wider">
             Engineering Lifecycle Stages
           </div>
 
-          <nav className="space-y-1">
+          <nav className="space-y-0.5">
             {STAGES_CONFIG.map((stage) => {
               const Icon = stage.icon;
               const isActive = state.activeStage === stage.id;
@@ -453,17 +453,17 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
                   key={stage.id}
                   type="button"
                   onClick={() => setActiveStage(stage.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium transition-all ${
+                  className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
                     isActive
                       ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 shadow-sm"
                       : "text-muted-foreground hover:text-foreground hover:bg-card/80 border border-transparent"
                   }`}
                 >
-                  <div className="flex items-center gap-2.5">
+                  <div className="flex items-center gap-2">
                     <Icon
-                      className={`h-4 w-4 ${isActive ? "text-cyan-400" : "text-muted-foreground"}`}
+                      className={`h-3.5 w-3.5 ${isActive ? "text-cyan-400" : "text-muted-foreground"}`}
                     />
-                    <span>{stage.label}</span>
+                    <span className="truncate">{stage.label}</span>
                   </div>
                   {getStageStatusBadge(stage.id)}
                 </button>
@@ -473,12 +473,12 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
         </div>
 
         {/* Center: Stage Workspace Canvas */}
-        <div className="lg:col-span-6 space-y-6">{renderActiveStageComponent()}</div>
+        <div className="lg:col-span-6 space-y-4">{renderActiveStageComponent()}</div>
 
         {/* Right Sidebar: Contextual AI Copilot & Understanding Dock */}
-        <div className="lg:col-span-3 space-y-4">
+        <div className="lg:col-span-3 space-y-3">
           {/* AI Copilot Card */}
-          <div className="p-4 rounded-2xl border border-border/80 bg-card/70 backdrop-blur-md space-y-4 shadow-xl">
+          <div className="p-3 rounded-xl border border-border/80 bg-card/70 backdrop-blur-md space-y-3 shadow-lg">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Brain className="h-4 w-4 text-purple-400" />

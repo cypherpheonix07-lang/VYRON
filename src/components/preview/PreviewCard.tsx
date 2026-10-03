@@ -21,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { ToolLaunchBinding } from "@/components/connectors/ToolLaunchBinding";
 
 interface PreviewCardProps {
   tool: AIToolItem;
@@ -91,6 +92,21 @@ export function PreviewCard({
           >
             Inspect Focus
           </Button>
+
+          <ToolLaunchBinding
+            tool={{
+              id: tool.id,
+              name: tool.name,
+              category: tool.category,
+              description: tool.tagline,
+              officialUrl: tool.officialUrl,
+              supportedInterfaces: tool.hasApi ? ["REST API", "MCP Gateway"] : ["Web UI"],
+              workloadFit: "Rapid Prototyping & AI Orchestration",
+              limitations: tool.isOpenSource ? "Self-hosted infrastructure required" : "Requires vendor subscription token",
+              authProviderId: tool.id.includes("github") ? "github" : "api_key",
+            }}
+            variant="card_action"
+          />
 
           <Button
             variant="ghost"
@@ -185,6 +201,21 @@ export function PreviewCard({
               <ExternalLink className="size-3" />
             </a>
           </Button>
+
+          <ToolLaunchBinding
+            tool={{
+              id: tool.id,
+              name: tool.name,
+              category: tool.category,
+              description: tool.tagline,
+              officialUrl: tool.officialUrl,
+              supportedInterfaces: tool.hasApi ? ["REST API", "MCP Gateway"] : ["Web UI"],
+              workloadFit: "Rapid Prototyping & AI Orchestration",
+              limitations: tool.isOpenSource ? "Self-hosted infrastructure required" : "Requires vendor subscription token",
+              authProviderId: tool.id.includes("github") ? "github" : "api_key",
+            }}
+            variant="card_action"
+          />
         </div>
       </div>
 

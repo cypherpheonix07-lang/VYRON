@@ -219,7 +219,7 @@ function NewProjectPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-3 sm:px-4 py-3 md:py-4">
       {/* 4.4 Generation Failure Inline Error Card */}
       {generationError && (
         <div

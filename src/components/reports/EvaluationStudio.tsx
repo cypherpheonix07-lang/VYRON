@@ -138,19 +138,30 @@ export function EvaluationStudio() {
         </div>
       </div>
 
-      {/* Sensitivity Threshold Slider */}
-      <div className="surface p-5 rounded-xl border border-border/80 space-y-3">
-        <div className="flex items-center justify-between">
+      {/* Sensitivity Threshold Slider & Validation Studio (N2.04) */}
+      <div className="surface p-5 rounded-xl border border-border/80 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <Sliders className="size-4 text-primary" />
-            <h3 className="text-xs font-semibold text-foreground">
-              Release Gate Sensitivity Threshold
-            </h3>
+            <div>
+              <h3 className="text-xs font-semibold text-foreground">
+                Release Gate Sensitivity Threshold & Governance Semantics
+              </h3>
+              <p className="text-[11px] text-muted-foreground">
+                Authority: Security Lead & SRE Gatekeeper • Governs pre-flight CD pipeline deployment boundaries
+              </p>
+            </div>
           </div>
-          <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20">
-            {threshold}% Threshold
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono text-muted-foreground uppercase">
+              Current Strictness:
+            </span>
+            <span className="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-0.5 rounded border border-primary/20">
+              {threshold}% Threshold
+            </span>
+          </div>
         </div>
+
         <input
           type="range"
           min="60"
@@ -163,6 +174,92 @@ export function EvaluationStudio() {
           <span>60% (Permissive / High Recall)</span>
           <span>80% (Recommended Baseline)</span>
           <span>100% (Zero-Tolerance / High Precision)</span>
+        </div>
+
+        {/* 4 Outcome Decision States & Evidence Explanations */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-2.5 pt-2 border-t border-border/40 text-xs">
+          <div className="p-2.5 rounded-lg border border-emerald-500/30 bg-emerald-500/5 space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-emerald-400 font-mono text-[11px]">1. PASS</span>
+              <span className="text-[9px] px-1 rounded bg-emerald-500/20 text-emerald-300">Score &ge; {threshold}%</span>
+            </div>
+            <p className="text-[10px] text-muted-foreground">
+              Evidence: Zero Critical/High CVEs, verified AST contracts, 100% passing tests.
+            </p>
+          </div>
+
+          <div className="p-2.5 rounded-lg border border-amber-500/30 bg-amber-500/5 space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-amber-400 font-mono text-[11px]">2. FAIL</span>
+              <span className="text-[9px] px-1 rounded bg-amber-500/20 text-amber-300">Score &lt; {threshold}%</span>
+            </div>
+            <p className="text-[10px] text-muted-foreground">
+              Evidence: Unresolved regressions, static analysis style violations.
+            </p>
+          </div>
+
+          <div className="p-2.5 rounded-lg border border-rose-500/30 bg-rose-500/5 space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-rose-400 font-mono text-[11px]">3. BLOCKED</span>
+              <span className="text-[9px] px-1 rounded bg-rose-500/20 text-rose-300">Non-Negotiable</span>
+            </div>
+            <p className="text-[10px] text-muted-foreground">
+              Evidence: Unauthenticated billing intent, active RCE CVE, secret leakage.
+            </p>
+          </div>
+
+          <div className="p-2.5 rounded-lg border border-purple-500/30 bg-purple-500/5 space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="font-bold text-purple-400 font-mono text-[11px]">4. EXCEPTION</span>
+              <span className="text-[9px] px-1 rounded bg-purple-500/20 text-purple-300">Owner Signed</span>
+            </div>
+            <p className="text-[10px] text-muted-foreground">
+              Evidence: Cryptographically attested tenant bypass with 24h expiration.
+            </p>
+          </div>
+        </div>
+
+        {/* Validation Against Representative Cases */}
+        <div className="p-3 rounded-lg border border-border/40 bg-background/50 space-y-2">
+          <div className="flex items-center justify-between text-[11px] font-semibold text-foreground">
+            <span>Threshold Calibration Against Representative Benchmark Cases:</span>
+            <span className="font-mono text-[10px] text-muted-foreground">Evaluated at {threshold}%</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px]">
+            <div className="p-2 rounded bg-card/60 border border-border/30 flex items-center justify-between">
+              <div>
+                <div className="font-medium text-foreground">Case A: Clean Release</div>
+                <div className="text-[10px] text-muted-foreground">AST intact, 0 CVEs (94% score)</div>
+              </div>
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+                PASS
+              </span>
+            </div>
+
+            <div className="p-2 rounded bg-card/60 border border-border/30 flex items-center justify-between">
+              <div>
+                <div className="font-medium text-foreground">Case B: Marginal Drift</div>
+                <div className="text-[10px] text-muted-foreground">Minor deps out-of-date (78% score)</div>
+              </div>
+              <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold font-mono border ${
+                threshold <= 78
+                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
+                  : "bg-amber-500/10 text-amber-400 border-amber-500/30"
+              }`}>
+                {threshold <= 78 ? "PASS" : "FAIL"}
+              </span>
+            </div>
+
+            <div className="p-2 rounded bg-card/60 border border-border/30 flex items-center justify-between">
+              <div>
+                <div className="font-medium text-foreground">Case C: Secret Leak</div>
+                <div className="text-[10px] text-muted-foreground">Hardcoded token detected</div>
+              </div>
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold font-mono bg-rose-500/10 text-rose-400 border border-rose-500/30">
+                BLOCKED
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 

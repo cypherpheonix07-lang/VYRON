@@ -48,7 +48,6 @@ import {
   CountdownCard,
 } from "@/components/brahma/primitives";
 import { cn } from "@/lib/utils";
-import { WorkspacePulse } from "@/components/brahma/WorkspacePulse";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -500,9 +499,6 @@ function Dashboard() {
             </SectionCard>
 
             <SectionCard title="Recent activity" description="Analysis runs, exports and alerts.">
-              <div className="mb-4">
-                <WorkspacePulse variant="card" />
-              </div>
               <ul className="space-y-4">
                 {activityFeed.map((a) => {
                   const Icon = activityIcon[a.kind];
