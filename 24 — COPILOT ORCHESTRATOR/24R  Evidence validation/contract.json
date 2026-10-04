@@ -1,0 +1,14 @@
+{
+  "stageId": "24R",
+  "stageName": "24R  Evidence validation",
+  "category": "COPILOT_PIPELINE",
+  "description": "Validates raw execution output against physical schemas and invariants",
+  "runner": "verify-platform-mastery.mjs",
+  "latencyTargetMs": 100,
+  "invariants": [
+    "Zero-Fiction Grounded Execution",
+    "Telemetry Provenance Preservation",
+    "Tenant Isolation Assertion"
+  ],
+  "telemetryEvent": "copilot.stage.24r.completed"
+}

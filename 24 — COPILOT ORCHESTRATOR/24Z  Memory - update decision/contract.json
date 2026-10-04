@@ -1,0 +1,14 @@
+{
+  "stageId": "24Z",
+  "stageName": "24Z  Memory - update decision",
+  "category": "COPILOT_PIPELINE",
+  "description": "Decides whether to persist insights, learnings, or state updates to memory",
+  "runner": "scratch-test-columns.mjs",
+  "latencyTargetMs": 100,
+  "invariants": [
+    "Zero-Fiction Grounded Execution",
+    "Telemetry Provenance Preservation",
+    "Tenant Isolation Assertion"
+  ],
+  "telemetryEvent": "copilot.stage.24z.completed"
+}

@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-wizard-v2.mjs";
+import "./05 — FRONTEND PLATFORM/verify-wizard-v2.mjs";

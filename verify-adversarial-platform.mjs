@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-adversarial-platform.mjs";
+import "./34 — SECURITY PLATFORM/verify-adversarial-platform.mjs";

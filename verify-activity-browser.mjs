@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-activity-browser.mjs";
+import "./43 — OBSERVABILITY/verify-activity-browser.mjs";

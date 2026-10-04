@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-github-connector.mjs";
+import "./21 — GITHUB & DEV PLATFORM CONNECTORS/verify-github-connector.mjs";

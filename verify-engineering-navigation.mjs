@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-engineering-navigation.mjs";
+import "./04 — EXPERIENCE - UI ARCHITECTURE/verify-engineering-navigation.mjs";

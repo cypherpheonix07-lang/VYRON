@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-step1-8.mjs";
+import "./05 — FRONTEND PLATFORM/verify-step1-8.mjs";

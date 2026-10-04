@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-ecosystem-control-plane.mjs";
+import "./20 — INTEGRATION PLATFORM/verify-ecosystem-control-plane.mjs";

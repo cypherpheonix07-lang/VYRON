@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-intelligence-layer.mjs";
+import "./71 — ENGINEERING INTELLIGENCE/verify-intelligence-layer.mjs";

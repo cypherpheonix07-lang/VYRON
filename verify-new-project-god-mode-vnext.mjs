@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-new-project-god-mode-vnext.mjs";
+import "./25 — AGENT RUNTIME/verify-new-project-god-mode-vnext.mjs";

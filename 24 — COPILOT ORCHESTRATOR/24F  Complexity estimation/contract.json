@@ -1,0 +1,14 @@
+{
+  "stageId": "24F",
+  "stageName": "24F  Complexity estimation",
+  "category": "COPILOT_PIPELINE",
+  "description": "Calculates cognitive complexity score, token budget, and estimated execution latency",
+  "runner": "test-macro-batch-2.mjs",
+  "latencyTargetMs": 100,
+  "invariants": [
+    "Zero-Fiction Grounded Execution",
+    "Telemetry Provenance Preservation",
+    "Tenant Isolation Assertion"
+  ],
+  "telemetryEvent": "copilot.stage.24f.completed"
+}

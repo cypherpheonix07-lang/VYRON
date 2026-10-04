@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-platform-evolution.mjs";
+import "./50 — AUTOMATED REMEDIATION/verify-platform-evolution.mjs";

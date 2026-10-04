@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-activity-workpulse.mjs";
+import "./43 — OBSERVABILITY/verify-activity-workpulse.mjs";

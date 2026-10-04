@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-gate-status.mjs";
+import "./47 — ALERTING/verify-gate-status.mjs";

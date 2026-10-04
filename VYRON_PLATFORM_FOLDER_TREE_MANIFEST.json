@@ -1,0 +1,1303 @@
+{
+  "platform": "VYRON Cognitive Engineering Intelligence",
+  "version": "5.0.0",
+  "topology": "90 Enterprise SaaS Layers + 26 Copilot Orchestration Stages",
+  "generatedAt": "2026-10-04T12:00:50.415Z",
+  "layers": [
+    {
+      "id": "01",
+      "name": "01 — PRODUCT & REQUIREMENTS LAYER",
+      "category": "PRODUCT",
+      "description": "Product requirements scoping, acceptance contracts, discovery taxonomy, and problem framing",
+      "sources": [
+        "src/services/intelligence/productContract.ts",
+        "src/services/intelligence/requirementsTraceability.ts"
+      ],
+      "scripts": [
+        "check-tables.mjs",
+        "scratch-check-projects.mjs"
+      ]
+    },
+    {
+      "id": "02",
+      "name": "02 — SYSTEM DESIGN LAYER",
+      "category": "SYSTEM_DESIGN",
+      "description": "System design specifications, canonical 50x26/50x52 topologies, and component interaction models",
+      "sources": [
+        "src/architecture/systemTopology.ts"
+      ],
+      "scripts": [
+        "generate-canonical-dossier-50x26.mjs",
+        "generate-canonical-dossier-50x52.mjs"
+      ]
+    },
+    {
+      "id": "03",
+      "name": "03 — ENTERPRISE ARCHITECTURE",
+      "category": "ARCHITECTURE",
+      "description": "Enterprise architectural invariants, 250-phase cognitive dossier generators, and systemic boundary control",
+      "sources": [
+        "src/services/intelligence/sourceOfTruthArchitecture.ts"
+      ],
+      "scripts": [
+        "verify-canonical-phase-dossier.mjs",
+        "verify-canonical-dossier-50x26.mjs",
+        "generate-canonical-dossier-250x104.mjs",
+        "test-nuclear-architecture-godmode.mjs"
+      ]
+    },
+    {
+      "id": "04",
+      "name": "04 — EXPERIENCE - UI ARCHITECTURE",
+      "category": "EXPERIENCE",
+      "description": "Layout hierarchy, navigation command surfaces, breadcrumbs, and non-visual state machines",
+      "sources": [
+        "src/components/layout/AppLayout.tsx",
+        "src/components/layout/Sidebar.tsx"
+      ],
+      "scripts": [
+        "verify-engineering-navigation.mjs",
+        "verify-browser.mjs",
+        "scratch-probe-ui.mjs"
+      ]
+    },
+    {
+      "id": "05",
+      "name": "05 — FRONTEND PLATFORM",
+      "category": "FRONTEND",
+      "description": "Vite/TanStack Start client platform, website generation wizard, and reactive UI component trees",
+      "sources": [
+        "src/routes/",
+        "src/components/",
+        "src/types/websiteStudio.ts"
+      ],
+      "scripts": [
+        "verify-step1-8.mjs",
+        "verify-wizard-v2.mjs",
+        "verify-website-generation.mjs",
+        "scratch-probe-newproject.mjs"
+      ]
+    },
+    {
+      "id": "06",
+      "name": "06 — API GATEWAY",
+      "category": "GATEWAY",
+      "description": "Edge routing, CORS middleware, request normalization, and API endpoint parameter validation",
+      "sources": [
+        "supabase/functions/",
+        "src/lib/apiClient.ts"
+      ],
+      "scripts": [
+        "scratch-test-endpoints.mjs",
+        "test-endpoints.mjs"
+      ]
+    },
+    {
+      "id": "07",
+      "name": "07 — BACKEND SERVICE MESH",
+      "category": "BACKEND",
+      "description": "Backend microservice mesh, Sentinel health monitors, and process supervision",
+      "sources": [
+        "src/services/sentinel/openAiBackendSentinel.ts",
+        "vyron-engine/"
+      ],
+      "scripts": [
+        "verify-backend-sentinel-nuclear.mjs",
+        "generate-backend-artifacts.mjs"
+      ]
+    },
+    {
+      "id": "08",
+      "name": "08 — DOMAIN SERVICES",
+      "category": "DOMAIN",
+      "description": "Domain entity CRUD controllers, state mutation services, and project lifecycle handlers",
+      "sources": [
+        "src/services/orchestrator/analysisOrchestrator.ts",
+        "src/state/aiProject/aiProjectStore.ts"
+      ],
+      "scripts": [
+        "test-crud.mjs",
+        "test-task-crud.mjs"
+      ]
+    },
+    {
+      "id": "09",
+      "name": "09 — WORKFLOW ORCHESTRATION",
+      "category": "WORKFLOW",
+      "description": "Long-running mission DAGs, durable continuation engines, and transactional checkpointing",
+      "sources": [
+        "src/services/missions/missionEngine.ts",
+        "src/services/intelligence/autonomousMissionContinuity.ts"
+      ],
+      "scripts": [
+        "verify-continuation-mission.mjs",
+        "verify-continuation-advancement.mjs"
+      ]
+    },
+    {
+      "id": "10",
+      "name": "10 — EVENT-DRIVEN ARCHITECTURE",
+      "category": "EVENTS",
+      "description": "Supabase Realtime event fabric, Postgres CDC replication, and pub/sub message brokers",
+      "sources": [
+        "src/services/intelligence/realtimeEventFabric.ts",
+        "src/services/orchestrator/eventBus.ts"
+      ],
+      "scripts": [
+        "test-realtime.mjs"
+      ]
+    },
+    {
+      "id": "11",
+      "name": "11 — MESSAGE & QUEUE INFRASTRUCTURE",
+      "category": "MESSAGING",
+      "description": "Asynchronous task queues, batch pipelines, and exponential backoff retry dispatchers",
+      "sources": [
+        "vyron-engine/task_dispatcher.py",
+        "vyron-engine/tasks.py"
+      ],
+      "scripts": [
+        "test-macro-batch-1.mjs"
+      ]
+    },
+    {
+      "id": "12",
+      "name": "12 — DATABASE PLATFORM",
+      "category": "DATABASE",
+      "description": "Supabase PostgreSQL connection pooling, schema migrations, and forensic db autopsies",
+      "sources": [
+        "supabase/migrations/",
+        "src/lib/supabaseClient.ts"
+      ],
+      "scripts": [
+        "scratch-test-db.mjs",
+        "test-insert.mjs",
+        "db-autopsy.mjs",
+        "run-db-autopsy-full.mjs"
+      ]
+    },
+    {
+      "id": "13",
+      "name": "13 — VECTOR & KNOWLEDGE STORAGE",
+      "category": "VECTOR",
+      "description": "pgvector embeddings, cosine similarity search indices, and industrial-scale knowledge embeddings",
+      "sources": [
+        "supabase/functions/embed/index.ts"
+      ],
+      "scripts": [
+        "seed-industrial-scale.mjs"
+      ]
+    },
+    {
+      "id": "14",
+      "name": "14 — OBJECT & FILE STORAGE",
+      "category": "STORAGE",
+      "description": "Object bucket security policies, multipart asset uploads, and forensic attachment storage",
+      "sources": [
+        "supabase/functions/website-export/index.ts"
+      ],
+      "scripts": [
+        "scratch-test-assets.mjs"
+      ]
+    },
+    {
+      "id": "15",
+      "name": "15 — SEARCH ENGINE",
+      "category": "SEARCH",
+      "description": "Full-text search, AST indexers, and AI-driven entity discovery taxonomy",
+      "sources": [
+        "src/services/semanticSearch.ts"
+      ],
+      "scripts": [
+        "seed-ai-discovery.mjs"
+      ]
+    },
+    {
+      "id": "16",
+      "name": "16 — IDENTITY",
+      "category": "SECURITY",
+      "description": "User profiles, tenant membership resolution, and identity correlation models",
+      "sources": [
+        "src/contexts/AuthContext.tsx",
+        "src/types/activity.ts"
+      ],
+      "scripts": [
+        "scratch-probe-auth.mjs"
+      ]
+    },
+    {
+      "id": "17",
+      "name": "17 — AUTHENTICATION",
+      "category": "SECURITY",
+      "description": "Supabase GoTrue JWT authentication, PKCE OAuth token exchange, and session lifecycles",
+      "sources": [
+        "supabase/functions/log-auth-event/index.ts",
+        "src/lib/auth.ts"
+      ],
+      "scripts": [
+        "test-supabase-skill-verification.mjs",
+        "verify-system-live.mjs"
+      ]
+    },
+    {
+      "id": "18",
+      "name": "18 — AUTHORIZATION - RBAC - ABAC",
+      "category": "SECURITY",
+      "description": "Row-Level Security (RLS) policies, role-based access control, and cross-read leakage defense",
+      "sources": [
+        "supabase/migrations/20260823030000_industrial_leviathan_hardening.sql"
+      ],
+      "scripts": [
+        "diagnose-rls.mjs",
+        "test-rls-gh.mjs",
+        "test-rls-project-repos.mjs"
+      ]
+    },
+    {
+      "id": "19",
+      "name": "19 — MULTI-TENANCY",
+      "category": "SECURITY",
+      "description": "Tenant isolation boundary enforcement, org scoping, and cross-project leak prevention",
+      "sources": [
+        "src/services/intelligence/tenantIsolationEngine.ts"
+      ],
+      "scripts": [
+        "investigate-t6.mjs"
+      ]
+    },
+    {
+      "id": "20",
+      "name": "20 — INTEGRATION PLATFORM",
+      "category": "INTEGRATIONS",
+      "description": "Third-party integration control planes, credential vaults, and ecosystem synchronization",
+      "sources": [
+        "src/services/intelligence/ecosystemControlPlane.ts"
+      ],
+      "scripts": [
+        "verify-ecosystem-control-plane.mjs"
+      ]
+    },
+    {
+      "id": "21",
+      "name": "21 — GITHUB & DEV PLATFORM CONNECTORS",
+      "category": "CONNECTORS",
+      "description": "GitHub App OAuth, multi-account repo linking, branch sync, and webhook handlers",
+      "sources": [
+        "supabase/functions/github-webhook/index.ts",
+        "src/state/connectors/connectorStore.ts"
+      ],
+      "scripts": [
+        "verify-github-connector.mjs",
+        "verify-github-browser.mjs",
+        "scratch-check-github-tables.mjs",
+        "test-gh-rpcs.mjs",
+        "test-gh-tables-crud.mjs"
+      ]
+    },
+    {
+      "id": "22",
+      "name": "22 — AI GATEWAY",
+      "category": "AI_CORE",
+      "description": "Dual-provider AI gateway, streaming token dispatch, and model failover",
+      "sources": [
+        "supabase/functions/llm-gateway/index.ts",
+        "src/services/llmGateway.ts"
+      ],
+      "scripts": [
+        "verify-ai-platform.mjs",
+        "test-llm-gateway.mjs"
+      ]
+    },
+    {
+      "id": "23",
+      "name": "23 — MODEL ROUTER",
+      "category": "AI_CORE",
+      "description": "Gemini 3.5 Flash vs 2.5 Pro vs OpenAI model routing, latency budgets, and cost governance",
+      "sources": [
+        "src/services/intelligence/providerCapabilityNegotiator.ts"
+      ],
+      "scripts": [
+        "verify-ai-dual-provider-control-plane.mjs"
+      ]
+    },
+    {
+      "id": "24",
+      "name": "24 — COPILOT ORCHESTRATOR",
+      "category": "COPILOT",
+      "description": "Autonomous Copilot cognitive pipeline across 26 discrete stages (24A to 24Z)",
+      "sources": [
+        "src/state/copilot/copilotStore.ts",
+        "src/state/copilot/useCopilot.ts"
+      ],
+      "scripts": []
+    },
+    {
+      "id": "25",
+      "name": "25 — AGENT RUNTIME",
+      "category": "AGENTS",
+      "description": "Sandboxed specialist agent runtime, autonomous execution loops, and state passports",
+      "sources": [
+        "src/services/intelligence/specialistAgentRuntime.ts",
+        "src/services/intelligence/proofCarryingAgentAction.ts"
+      ],
+      "scripts": [
+        "verify-new-project-god-mode-vnext.mjs"
+      ]
+    },
+    {
+      "id": "26",
+      "name": "26 — CONTEXT ENGINE",
+      "category": "CONTEXT",
+      "description": "Dynamic context assembly, workspace hydration, and AST schema context distillation",
+      "sources": [
+        "src/services/intelligence/userWorkflowIntelligence.ts"
+      ],
+      "scripts": [
+        "scratch-check-schema.mjs"
+      ]
+    },
+    {
+      "id": "27",
+      "name": "27 — MEMORY ENGINE",
+      "category": "MEMORY",
+      "description": "Short-term session memory, long-term semantic memory, and episodic recall indexing",
+      "sources": [
+        "src/services/intelligence/timeMachineEngine.ts"
+      ],
+      "scripts": [
+        "test-columns-deep.mjs"
+      ]
+    },
+    {
+      "id": "28",
+      "name": "28 — RAG & KNOWLEDGE ENGINE",
+      "category": "RAG",
+      "description": "Retrieval-Augmented Generation pipeline, chunking, reranking, and document ground truth",
+      "sources": [
+        "src/services/intelligence/sourceOfTruthArchitecture.ts"
+      ],
+      "scripts": [
+        "seed-database.mjs"
+      ]
+    },
+    {
+      "id": "29",
+      "name": "29 — TOOL EXECUTION ENGINE",
+      "category": "TOOLS",
+      "description": "Safe tool dispatch sandbox, parameter validation, and execution audit passports",
+      "sources": [
+        "src/services/intelligence/toolBrokerEngine.ts",
+        "src/services/skills/skillSandbox.ts"
+      ],
+      "scripts": [
+        "scratch-probe-tables.mjs"
+      ]
+    },
+    {
+      "id": "30",
+      "name": "30 — REASONING & PLANNING LAYER",
+      "category": "REASONING",
+      "description": "Multi-step cognitive planning, chain-of-thought verification, and tree-of-thought search",
+      "sources": [
+        "src/services/missions/missionEngine.ts"
+      ],
+      "scripts": [
+        "generate-nuclear-dossier-250x104.mjs"
+      ]
+    },
+    {
+      "id": "31",
+      "name": "31 — AI SAFETY & GUARDRAILS",
+      "category": "AI_SAFETY",
+      "description": "Adversarial prompt injection defense, red-teaming validators, and safety guardrails",
+      "sources": [
+        "src/services/intelligence/threatModelingEngine.ts"
+      ],
+      "scripts": [
+        "test-cicd-guardrail-godmode.mjs"
+      ]
+    },
+    {
+      "id": "32",
+      "name": "32 — MODEL & PROMPT EVALUATION",
+      "category": "EVALUATION",
+      "description": "Adversarial benchmark evaluation, automated scoring, and drift detection engines",
+      "sources": [
+        "src/services/intelligence/evalValidationEngine.ts"
+      ],
+      "scripts": [
+        "qa-adversarial-deep-engine.mjs"
+      ]
+    },
+    {
+      "id": "33",
+      "name": "33 — HUMAN-IN-THE-LOOP CONTROL",
+      "category": "HITL",
+      "description": "Interactive command center, approval checkpoints, and operator override gates",
+      "sources": [
+        "src/state/commandCenter/commandCenterStore.ts"
+      ],
+      "scripts": [
+        "verify-interactive-command-center.mjs",
+        "verify-nextgen-command-center.mjs"
+      ]
+    },
+    {
+      "id": "34",
+      "name": "34 — SECURITY PLATFORM",
+      "category": "SECURITY",
+      "description": "Platform threat modeling, penetration verification, and automated vulnerability scanning",
+      "sources": [
+        "src/singularity/adversarial.ts"
+      ],
+      "scripts": [
+        "verify-adversarial-platform.mjs",
+        "test-adversarial-security.mjs"
+      ]
+    },
+    {
+      "id": "35",
+      "name": "35 — SECRETS & KEY MANAGEMENT",
+      "category": "SECURITY",
+      "description": "Cryptographic key derivation, envelope encryption, and secret rotation management",
+      "sources": [
+        "src/services/intelligence/signatureSystems.ts"
+      ],
+      "scripts": [
+        "test-crypto.mjs"
+      ]
+    },
+    {
+      "id": "36",
+      "name": "36 — ZERO-TRUST ACCESS",
+      "category": "SECURITY",
+      "description": "Zero-trust network architecture, mutual verification, and ephemeral session privileges",
+      "sources": [
+        "src/services/intelligence/tenantIsolationEngine.ts"
+      ],
+      "scripts": [
+        "verify-adversarial-platform.mjs"
+      ]
+    },
+    {
+      "id": "37",
+      "name": "37 — AUDIT & FORENSICS",
+      "category": "AUDIT",
+      "description": "Immutable audit logging, tamper-proof forensic sweeps, and provenance tracking",
+      "sources": [
+        "src/routes/app.admin.audit.tsx",
+        "src/services/intelligence/provenancePipeline.ts"
+      ],
+      "scripts": [
+        "forensic-sweep.mjs",
+        "run-forensic-audit.mjs",
+        "run_full_forensic.mjs",
+        "seed-audit-logs.mjs"
+      ]
+    },
+    {
+      "id": "38",
+      "name": "38 — RATE LIMITING",
+      "category": "GOVERNANCE",
+      "description": "Sliding-window token-bucket rate limiting, IP throttling, and abuse containment",
+      "sources": [
+        "src/services/intelligence/operationalControlPlane.ts"
+      ],
+      "scripts": [
+        "test-godmode-vnext-master.mjs"
+      ]
+    },
+    {
+      "id": "39",
+      "name": "39 — API QUOTAS",
+      "category": "GOVERNANCE",
+      "description": "Tiered API quota enforcement, consumption metering, and soft/hard limits",
+      "sources": [
+        "src/services/intelligence/operationalControlPlane.ts"
+      ],
+      "scripts": [
+        "test-godmode-vnext-scratch-testing.mjs"
+      ]
+    },
+    {
+      "id": "40",
+      "name": "40 — COST & TOKEN GOVERNANCE",
+      "category": "FINOPS",
+      "description": "AI token cost accounting, real-time budget burn tracking, and optimization policies",
+      "sources": [
+        "src/services/intelligence/finOpsCostEngine.ts"
+      ],
+      "scripts": [
+        "test-godmode-40steps.mjs"
+      ]
+    },
+    {
+      "id": "41",
+      "name": "41 — CACHE PLATFORM",
+      "category": "PERFORMANCE",
+      "description": "Multi-tier LRU memory caching, Redis cache protocols, and stale-while-revalidate invalidation",
+      "sources": [
+        "src/lib/cache.ts"
+      ],
+      "scripts": [
+        "scratch-sweep7.mjs"
+      ]
+    },
+    {
+      "id": "42",
+      "name": "42 — CDN & EDGE",
+      "category": "INFRASTRUCTURE",
+      "description": "Edge asset distribution, browser rendering cache headers, and global POP routing",
+      "sources": [
+        "vite.config.ts"
+      ],
+      "scripts": [
+        "launch-sample-browser.mjs"
+      ]
+    },
+    {
+      "id": "43",
+      "name": "43 — OBSERVABILITY",
+      "category": "OBSERVABILITY",
+      "description": "Unified activity dashboards, WorkPulse telemetry feeds, and real-time observability telemetry",
+      "sources": [
+        "src/services/intelligence/workpulseOperationalEngine.ts",
+        "src/services/intelligence/workpulseFederationEngine.ts"
+      ],
+      "scripts": [
+        "verify-activity-browser.mjs",
+        "verify-activity-workpulse.mjs"
+      ]
+    },
+    {
+      "id": "44",
+      "name": "44 — LOGGING",
+      "category": "OBSERVABILITY",
+      "description": "Structured JSON logging, log streaming pipelines, and forensic log autopsies",
+      "sources": [
+        "src/lib/logger.ts"
+      ],
+      "scripts": [
+        "autopsy.mjs"
+      ]
+    },
+    {
+      "id": "45",
+      "name": "45 — TRACING",
+      "category": "OBSERVABILITY",
+      "description": "OpenTelemetry distributed tracing, span propagation, and P1 integrity assertion",
+      "sources": [
+        "src/services/intelligence/provenancePipeline.ts"
+      ],
+      "scripts": [
+        "test-p1-integrity.mjs"
+      ]
+    },
+    {
+      "id": "46",
+      "name": "46 — METRICS",
+      "category": "OBSERVABILITY",
+      "description": "Telemetry drift reporting, latency percentiles (P95/P99), and throughput monitors",
+      "sources": [
+        "src/services/intelligence/driftDetector.ts"
+      ],
+      "scripts": [
+        "verify-drift-report.mjs"
+      ]
+    },
+    {
+      "id": "47",
+      "name": "47 — ALERTING",
+      "category": "OBSERVABILITY",
+      "description": "Gate status alerting, anomaly detection, and webhook notification triggers",
+      "sources": [
+        "src/services/intelligence/driftDetector.ts"
+      ],
+      "scripts": [
+        "verify-gate-status.mjs"
+      ]
+    },
+    {
+      "id": "48",
+      "name": "48 — INCIDENT MANAGEMENT",
+      "category": "OPERATIONS",
+      "description": "Automated defect forensics, incident severity classification, and postmortem records",
+      "sources": [
+        "src/services/sentinel/sentinelIncidentStore.ts"
+      ],
+      "scripts": [
+        "build-defect-forensics.mjs"
+      ]
+    },
+    {
+      "id": "49",
+      "name": "49 — ERROR INTELLIGENCE",
+      "category": "OPERATIONS",
+      "description": "Intelligent root cause clustering, error fingerprinting, and stack trace parsing",
+      "sources": [
+        "src/services/intelligence/autopsyEngine.ts"
+      ],
+      "scripts": [
+        "autopsy.mjs"
+      ]
+    },
+    {
+      "id": "50",
+      "name": "50 — AUTOMATED REMEDIATION",
+      "category": "OPERATIONS",
+      "description": "Self-healing platform actions, automated rollback triggers, and drift correction",
+      "sources": [
+        "src/services/intelligence/remediationEngine.ts"
+      ],
+      "scripts": [
+        "verify-platform-evolution.mjs"
+      ]
+    },
+    {
+      "id": "51",
+      "name": "51 — TESTING PLATFORM",
+      "category": "QUALITY",
+      "description": "Enterprise acceptance test harnesses, automated gate verification, and certification passports",
+      "sources": [
+        "src/services/intelligence/reproducibleAcceptancePassport.ts"
+      ],
+      "scripts": [
+        "test-acceptance-gates.mjs",
+        "generate-final-acceptance-report.mjs"
+      ]
+    },
+    {
+      "id": "52",
+      "name": "52 — LOAD & STRESS TESTING",
+      "category": "QUALITY",
+      "description": "High-concurrency load testing (Brahma engine), bottleneck profiling, and saturation thresholds",
+      "sources": [
+        "src/services/intelligence/loadTestEngine.ts"
+      ],
+      "scripts": [
+        "load-test-brahma.mjs"
+      ]
+    },
+    {
+      "id": "53",
+      "name": "53 — SECURITY TESTING",
+      "category": "QUALITY",
+      "description": "Automated adversarial security audits, injection fuzzing, and compliance scanners",
+      "sources": [
+        "src/services/intelligence/threatModelingEngine.ts"
+      ],
+      "scripts": [
+        "test-adversarial-security.mjs"
+      ]
+    },
+    {
+      "id": "54",
+      "name": "54 — CHAOS ENGINEERING",
+      "category": "RESILIENCE",
+      "description": "Failure injection experiments, network latency simulation, and fault tolerance validation",
+      "sources": [
+        "src/services/intelligence/chaosEngine.ts"
+      ],
+      "scripts": [
+        "qa-adversarial-deep-engine.mjs"
+      ]
+    },
+    {
+      "id": "55",
+      "name": "55 — CI",
+      "category": "DEVOPS",
+      "description": "Continuous integration pipelines, automated typecheck/lint/build guardrails, and gate enforcement",
+      "sources": [
+        "scripts/testing/verify-gates.js"
+      ],
+      "scripts": [
+        "test-cicd-guardrail-godmode.mjs"
+      ]
+    },
+    {
+      "id": "56",
+      "name": "56 — CD",
+      "category": "DEVOPS",
+      "description": "Continuous deployment pipelines, artifact promotion, and environment synchronization",
+      "sources": [
+        "package.json"
+      ],
+      "scripts": [
+        "generate-cicd-dossier-250x104.mjs"
+      ]
+    },
+    {
+      "id": "57",
+      "name": "57 — RELEASE MANAGEMENT",
+      "category": "DEVOPS",
+      "description": "Release certification dossiers, canary rollouts, and semantic version tagging",
+      "sources": [
+        "src/services/intelligence/releaseCertificationEngine.ts"
+      ],
+      "scripts": [
+        "generate-blueprint-release-dossier-250x104.mjs",
+        "test-blueprint-release-godmode-ultima.mjs"
+      ]
+    },
+    {
+      "id": "58",
+      "name": "58 — FEATURE FLAGS",
+      "category": "PLATFORM",
+      "description": "Dynamic feature toggling, percentage-based rollouts, and user cohort targeting",
+      "sources": [
+        "src/services/intelligence/featureFlagEngine.ts"
+      ],
+      "scripts": [
+        "test-acceptance-gates.mjs"
+      ]
+    },
+    {
+      "id": "59",
+      "name": "59 — ENVIRONMENT MANAGEMENT",
+      "category": "PLATFORM",
+      "description": "Staging/Production environment configuration parity and live runtime verification",
+      "sources": [
+        "src/config/environment.ts"
+      ],
+      "scripts": [
+        "verify-system-live.mjs"
+      ]
+    },
+    {
+      "id": "60",
+      "name": "60 — INFRASTRUCTURE AS CODE",
+      "category": "INFRASTRUCTURE",
+      "description": "Declarative infrastructure definitions, schema manifests, and topology artifacts",
+      "sources": [
+        "supabase/config.toml"
+      ],
+      "scripts": [
+        "generate-nuclear-architecture-artifacts.mjs"
+      ]
+    },
+    {
+      "id": "61",
+      "name": "61 — CLOUD PLATFORM",
+      "category": "INFRASTRUCTURE",
+      "description": "Cloud infrastructure connectivity, database pool configuration, and multi-cloud bindings",
+      "sources": [
+        "src/lib/supabaseClient.ts"
+      ],
+      "scripts": [
+        "test-insert.mjs",
+        "verify-system-live.mjs"
+      ]
+    },
+    {
+      "id": "62",
+      "name": "62 — CONTAINER PLATFORM",
+      "category": "INFRASTRUCTURE",
+      "description": "Containerized execution runtimes, Docker images, and process isolation sandboxes",
+      "sources": [
+        "vyron-engine/Dockerfile"
+      ],
+      "scripts": [
+        "verify-system-live.mjs"
+      ]
+    },
+    {
+      "id": "63",
+      "name": "63 — NETWORKING",
+      "category": "INFRASTRUCTURE",
+      "description": "VPC peering, private endpoints, ingress/egress firewalls, and DNS resolution",
+      "sources": [
+        "src/lib/networkClient.ts"
+      ],
+      "scripts": [
+        "test-endpoints.mjs"
+      ]
+    },
+    {
+      "id": "64",
+      "name": "64 — AUTOSCALING",
+      "category": "INFRASTRUCTURE",
+      "description": "Dynamic autoscaling controllers, queue-depth scaling, and compute resource allocation",
+      "sources": [
+        "src/services/intelligence/scalingEngine.ts"
+      ],
+      "scripts": [
+        "load-test-brahma.mjs"
+      ]
+    },
+    {
+      "id": "65",
+      "name": "65 — HIGH AVAILABILITY",
+      "category": "RESILIENCE",
+      "description": "Active-active redundancy, connection failover, and zero-downtime rolling updates",
+      "sources": [
+        "src/services/intelligence/haEngine.ts"
+      ],
+      "scripts": [
+        "verify-system-live.mjs"
+      ]
+    },
+    {
+      "id": "66",
+      "name": "66 — DISASTER RECOVERY",
+      "category": "RESILIENCE",
+      "description": "Disaster recovery failover plans, automated recovery runbooks, and snapshot restoration",
+      "sources": [
+        "src/services/intelligence/drEngine.ts"
+      ],
+      "scripts": [
+        "run-db-autopsy-full.mjs"
+      ]
+    },
+    {
+      "id": "67",
+      "name": "67 — BACKUPS",
+      "category": "DATA_OPS",
+      "description": "Automated database backups, point-in-time recovery verification, and storage retention",
+      "sources": [
+        "supabase/migrations/"
+      ],
+      "scripts": [
+        "scratch-test-db.mjs"
+      ]
+    },
+    {
+      "id": "68",
+      "name": "68 — MULTI-REGION ARCHITECTURE",
+      "category": "INFRASTRUCTURE",
+      "description": "Geo-distributed data replication, multi-region routing, and latency-optimized endpoints",
+      "sources": [
+        "src/services/intelligence/multiRegionEngine.ts"
+      ],
+      "scripts": [
+        "test-realtime.mjs"
+      ]
+    },
+    {
+      "id": "69",
+      "name": "69 — DATA PIPELINES",
+      "category": "DATA_OPS",
+      "description": "ETL/ELT data pipelines, industrial ingestion workers, and telemetry transformation streams",
+      "sources": [
+        "src/services/intelligence/dataPipelineEngine.ts"
+      ],
+      "scripts": [
+        "seed-industrial-scale.mjs"
+      ]
+    },
+    {
+      "id": "70",
+      "name": "70 — ANALYTICS",
+      "category": "INTELLIGENCE",
+      "description": "Product usage analytics, telemetry aggregation, and behavioral engagement tracking",
+      "sources": [
+        "src/services/intelligence/analyticsEngine.ts"
+      ],
+      "scripts": [
+        "verify-drift-report.mjs"
+      ]
+    },
+    {
+      "id": "71",
+      "name": "71 — ENGINEERING INTELLIGENCE",
+      "category": "INTELLIGENCE",
+      "description": "Automated codebase analysis, architectural debt detection, and cognitive telemetry metrics",
+      "sources": [
+        "src/services/intelligence/engineeringIntelligence.ts"
+      ],
+      "scripts": [
+        "verify-intelligence-layer.mjs"
+      ]
+    },
+    {
+      "id": "72",
+      "name": "72 — RECOMMENDATION ENGINE",
+      "category": "INTELLIGENCE",
+      "description": "Context-aware code recommendations, next-action prediction, and mastery prompts",
+      "sources": [
+        "src/services/intelligence/predictiveRecommendationEngine.ts"
+      ],
+      "scripts": [
+        "verify-platform-mastery.mjs"
+      ]
+    },
+    {
+      "id": "73",
+      "name": "73 — SIMULATION ENGINE",
+      "category": "INTELLIGENCE",
+      "description": "Agent execution simulations, scenario forecasting, and macro batch stress simulations",
+      "sources": [
+        "src/services/intelligence/simulationEngine.ts"
+      ],
+      "scripts": [
+        "test-macro-batch-1.mjs"
+      ]
+    },
+    {
+      "id": "74",
+      "name": "74 — GOVERNANCE ENGINE",
+      "category": "GOVERNANCE",
+      "description": "Systemic policy enforcement, architectural governance dossiers, and gate authority",
+      "sources": [
+        "src/services/intelligence/governanceEngine.ts"
+      ],
+      "scripts": [
+        "verify-canonical-phase-dossier.mjs",
+        "update-dossier-script.mjs"
+      ]
+    },
+    {
+      "id": "75",
+      "name": "75 — POLICY ENGINE",
+      "category": "GOVERNANCE",
+      "description": "Declarative authorization policies, rule-based execution constraints, and RPC assertions",
+      "sources": [
+        "src/services/policy/policyEngine.ts"
+      ],
+      "scripts": [
+        "test-rpc-sql.mjs"
+      ]
+    },
+    {
+      "id": "76",
+      "name": "76 — COMPLIANCE",
+      "category": "COMPLIANCE",
+      "description": "SOC2/GDPR compliance verification, regulatory audit controls, and acceptance gate enforcement",
+      "sources": [
+        "src/services/intelligence/complianceEngine.ts"
+      ],
+      "scripts": [
+        "test-acceptance-gates.mjs"
+      ]
+    },
+    {
+      "id": "77",
+      "name": "77 — DATA GOVERNANCE",
+      "category": "GOVERNANCE",
+      "description": "Data schema governance, classification catalogs, and column-level access controls",
+      "sources": [
+        "src/services/intelligence/dataGovernanceEngine.ts"
+      ],
+      "scripts": [
+        "scratch-check-schema.mjs"
+      ]
+    },
+    {
+      "id": "78",
+      "name": "78 — PRIVACY",
+      "category": "COMPLIANCE",
+      "description": "PII redaction pipelines, data retention policies, and cross-tenant confidentiality guarantees",
+      "sources": [
+        "src/services/intelligence/privacyEngine.ts"
+      ],
+      "scripts": [
+        "scratch-probe-auth.mjs",
+        "diagnose-rls.mjs"
+      ]
+    },
+    {
+      "id": "79",
+      "name": "79 — BILLING",
+      "category": "COMMERCE",
+      "description": "Subscription billing integration, invoice reconciliation, and payment gateway coordination",
+      "sources": [
+        "src/services/intelligence/billingEngine.ts"
+      ],
+      "scripts": [
+        "test-macro-batch-2.mjs"
+      ]
+    },
+    {
+      "id": "80",
+      "name": "80 — METERING",
+      "category": "COMMERCE",
+      "description": "Fine-grained resource consumption metering, execution event billing, and metric aggregation",
+      "sources": [
+        "src/services/intelligence/meteringEngine.ts"
+      ],
+      "scripts": [
+        "test-macro-batch-3.mjs"
+      ]
+    },
+    {
+      "id": "81",
+      "name": "81 — SUBSCRIPTIONS",
+      "category": "COMMERCE",
+      "description": "Tenant subscription tiers, plan entitlement enforcement, and upgrade/downgrade lifecycles",
+      "sources": [
+        "src/services/intelligence/subscriptionEngine.ts"
+      ],
+      "scripts": [
+        "test-macro-batch-4.mjs"
+      ]
+    },
+    {
+      "id": "82",
+      "name": "82 — NOTIFICATIONS",
+      "category": "COMMUNICATION",
+      "description": "In-app notification feeds, toast event notifications, and urgent email/webhook alerts",
+      "sources": [
+        "src/routes/app.notifications.tsx"
+      ],
+      "scripts": [
+        "verify-gate-status.mjs"
+      ]
+    },
+    {
+      "id": "83",
+      "name": "83 — WEBHOOKS",
+      "category": "COMMUNICATION",
+      "description": "Inbound and outbound webhook dispatchers, signature verification, and delivery retries",
+      "sources": [
+        "supabase/functions/github-webhook/index.ts"
+      ],
+      "scripts": [
+        "test-endpoints.mjs"
+      ]
+    },
+    {
+      "id": "84",
+      "name": "84 — ADMIN PLATFORM",
+      "category": "ADMIN",
+      "description": "Platform administrative consoles, global tenant inspection, and forensic audit viewers",
+      "sources": [
+        "src/routes/app.admin.tsx",
+        "src/routes/app.admin.audit.tsx"
+      ],
+      "scripts": [
+        "seed-audit-logs.mjs"
+      ]
+    },
+    {
+      "id": "85",
+      "name": "85 — DEVELOPER PLATFORM",
+      "category": "DEVELOPER",
+      "description": "Developer SDKs, public API documentation, API key management, and website generation tools",
+      "sources": [
+        "src/types/websiteStudio.ts"
+      ],
+      "scripts": [
+        "scratch-check-website-tables.mjs"
+      ]
+    },
+    {
+      "id": "86",
+      "name": "86 — SUPPORT OPERATIONS",
+      "category": "OPERATIONS",
+      "description": "Customer support diagnostics, diagnostic autopsy tools, and tenant session playback",
+      "sources": [
+        "src/services/intelligence/supportOpsEngine.ts"
+      ],
+      "scripts": [
+        "autopsy.mjs"
+      ]
+    },
+    {
+      "id": "87",
+      "name": "87 — SRE",
+      "category": "OPERATIONS",
+      "description": "Site reliability engineering runbooks, SLO/SLA tracking, and defect forensics engines",
+      "sources": [
+        "src/services/intelligence/sreAutomationEngine.ts"
+      ],
+      "scripts": [
+        "build-defect-forensics.mjs"
+      ]
+    },
+    {
+      "id": "88",
+      "name": "88 — FINOPS",
+      "category": "FINOPS",
+      "description": "Cloud and AI infrastructure financial engineering, unit economics tracking, and cost optimization",
+      "sources": [
+        "src/services/intelligence/finOpsCostEngine.ts"
+      ],
+      "scripts": [
+        "test-godmode-40steps.mjs"
+      ]
+    },
+    {
+      "id": "89",
+      "name": "89 — CAPACITY PLANNING",
+      "category": "OPERATIONS",
+      "description": "Infrastructure capacity modeling, compute headroom forecasting, and saturation stress testing",
+      "sources": [
+        "src/services/intelligence/capacityEngine.ts"
+      ],
+      "scripts": [
+        "load-test-brahma.mjs"
+      ]
+    },
+    {
+      "id": "90",
+      "name": "90 — BUSINESS CONTINUITY",
+      "category": "RESILIENCE",
+      "description": "Business continuity orchestration, nuclear architecture godmode failover, and systemic resilience",
+      "sources": [
+        "src/services/intelligence/continuityEngine.ts"
+      ],
+      "scripts": [
+        "test-nuclear-architecture-godmode.mjs"
+      ]
+    }
+  ],
+  "copilotStages": [
+    {
+      "code": "24A",
+      "name": "24A  Request ingestion",
+      "runner": "verify-copilot-advancement.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24B",
+      "name": "24B  Identity resolution",
+      "runner": "verify-nextgen-copilot.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24C",
+      "name": "24C  Session resolution",
+      "runner": "test-copilot-godmode.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24D",
+      "name": "24D  Intent classification",
+      "runner": "test-copilot-godmode-omega.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24E",
+      "name": "24E  Query decomposition",
+      "runner": "verify-copilot-intelligence-fabric.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24F",
+      "name": "24F  Complexity estimation",
+      "runner": "test-macro-batch-2.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24G",
+      "name": "24G  Context discovery",
+      "runner": "scratch-check-active-tables.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24H",
+      "name": "24H  Memory retrieval",
+      "runner": "update-dossier-script.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24I",
+      "name": "24I  Permission validation",
+      "runner": "test-rpc-sql.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24J",
+      "name": "24J  Knowledge retrieval",
+      "runner": "test-macro-batch-3.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24K",
+      "name": "24K  Source ranking",
+      "runner": "scratch-find-tables.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24L",
+      "name": "24L  Tool selection",
+      "runner": "verify-ai-project-control-plane.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24M",
+      "name": "24M  Model selection",
+      "runner": "test-macro-batch-4.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24N",
+      "name": "24N  Planning",
+      "runner": "compile_v3_batch1.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24O",
+      "name": "24O  Parallel execution",
+      "runner": "test-from-scratch-harness.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24P",
+      "name": "24P  Agent delegation",
+      "runner": "test-macro-batch-5.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24Q",
+      "name": "24Q  Tool execution",
+      "runner": "scratch-test-sql-api.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24R",
+      "name": "24R  Evidence validation",
+      "runner": "verify-platform-mastery.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24S",
+      "name": "24S  Hallucination detection",
+      "runner": "qa-adversarial-master.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24T",
+      "name": "24T  Response synthesis",
+      "runner": "build-v3-master-prompt.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24U",
+      "name": "24U  Citation generation",
+      "runner": "inspect-columns.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24V",
+      "name": "24V  Safety validation",
+      "runner": "test-crypto.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24W",
+      "name": "24W  Latency optimization",
+      "runner": "inspect-gh-cols.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24X",
+      "name": "24X  Output streaming",
+      "runner": "inspect-gh-schema.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24Y",
+      "name": "24Y  Telemetry capture",
+      "runner": "verify-intelligence-layer.mjs",
+      "hasRunner": true
+    },
+    {
+      "code": "24Z",
+      "name": "24Z  Memory - update decision",
+      "runner": "scratch-test-columns.mjs",
+      "hasRunner": true
+    }
+  ],
+  "totalLayers": 90,
+  "totalCopilotStages": 26
+}

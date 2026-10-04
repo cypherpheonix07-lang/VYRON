@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-browser.mjs";
+import "./04 — EXPERIENCE - UI ARCHITECTURE/verify-browser.mjs";

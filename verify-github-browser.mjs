@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-github-browser.mjs";
+import "./21 — GITHUB & DEV PLATFORM CONNECTORS/verify-github-browser.mjs";

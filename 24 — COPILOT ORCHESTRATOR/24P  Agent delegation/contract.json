@@ -1,0 +1,14 @@
+{
+  "stageId": "24P",
+  "stageName": "24P  Agent delegation",
+  "category": "COPILOT_PIPELINE",
+  "description": "Delegates specialized tasks to domain agents with isolated sandboxes",
+  "runner": "test-macro-batch-5.mjs",
+  "latencyTargetMs": 100,
+  "invariants": [
+    "Zero-Fiction Grounded Execution",
+    "Telemetry Provenance Preservation",
+    "Tenant Isolation Assertion"
+  ],
+  "telemetryEvent": "copilot.stage.24p.completed"
+}

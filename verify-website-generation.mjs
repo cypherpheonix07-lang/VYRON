@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-website-generation.mjs";
+import "./05 — FRONTEND PLATFORM/verify-website-generation.mjs";

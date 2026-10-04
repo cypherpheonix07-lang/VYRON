@@ -1,0 +1,14 @@
+{
+  "stageId": "24S",
+  "stageName": "24S  Hallucination detection",
+  "category": "COPILOT_PIPELINE",
+  "description": "Enforces Zero-Fiction Architecture Law, checking for fabricated endpoints or tokens",
+  "runner": "qa-adversarial-master.mjs",
+  "latencyTargetMs": 100,
+  "invariants": [
+    "Zero-Fiction Grounded Execution",
+    "Telemetry Provenance Preservation",
+    "Tenant Isolation Assertion"
+  ],
+  "telemetryEvent": "copilot.stage.24s.completed"
+}

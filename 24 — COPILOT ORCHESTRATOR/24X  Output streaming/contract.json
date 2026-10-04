@@ -1,0 +1,14 @@
+{
+  "stageId": "24X",
+  "stageName": "24X  Output streaming",
+  "category": "COPILOT_PIPELINE",
+  "description": "Streams response tokens to client with SSE and delta event framing",
+  "runner": "inspect-gh-schema.mjs",
+  "latencyTargetMs": 100,
+  "invariants": [
+    "Zero-Fiction Grounded Execution",
+    "Telemetry Provenance Preservation",
+    "Tenant Isolation Assertion"
+  ],
+  "telemetryEvent": "copilot.stage.24x.completed"
+}

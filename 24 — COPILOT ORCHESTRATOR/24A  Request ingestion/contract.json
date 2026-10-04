@@ -1,0 +1,14 @@
+{
+  "stageId": "24A",
+  "stageName": "24A  Request ingestion",
+  "category": "COPILOT_PIPELINE",
+  "description": "Normalizes incoming Copilot requests, verifying schema, client timestamp, and headers",
+  "runner": "verify-copilot-advancement.mjs",
+  "latencyTargetMs": 100,
+  "invariants": [
+    "Zero-Fiction Grounded Execution",
+    "Telemetry Provenance Preservation",
+    "Tenant Isolation Assertion"
+  ],
+  "telemetryEvent": "copilot.stage.24a.completed"
+}

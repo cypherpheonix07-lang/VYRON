@@ -1,0 +1,14 @@
+{
+  "stageId": "24J",
+  "stageName": "24J  Knowledge retrieval",
+  "category": "COPILOT_PIPELINE",
+  "description": "Queries RAG vector storage and architectural documentation for ground truth",
+  "runner": "test-macro-batch-3.mjs",
+  "latencyTargetMs": 100,
+  "invariants": [
+    "Zero-Fiction Grounded Execution",
+    "Telemetry Provenance Preservation",
+    "Tenant Isolation Assertion"
+  ],
+  "telemetryEvent": "copilot.stage.24j.completed"
+}

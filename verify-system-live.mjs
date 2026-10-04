@@ -1,1 +1,1 @@
-import "./scripts/testing/verify-system-live.mjs";
+import "./17 — AUTHENTICATION/verify-system-live.mjs";
