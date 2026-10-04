@@ -3,6 +3,14 @@
   "version": "5.0.0",
   "topology": "90 Enterprise SaaS Layers + 26 Copilot Orchestration Stages",
   "generatedAt": "2026-10-04T12:00:50.415Z",
+  "outsideFoldersRelocated": {
+    "architecture": "03 — ENTERPRISE ARCHITECTURE/architecture",
+    "docs": "01 — PRODUCT & REQUIREMENTS LAYER/docs",
+    "data": "37 — AUDIT & FORENSICS/data",
+    "vyron-engine": "07 — BACKEND SERVICE MESH/vyron-engine",
+    "supabase": "12 — DATABASE PLATFORM/supabase",
+    "scripts": "51 — TESTING PLATFORM/scripts"
+  },
   "layers": [
     {
       "id": "01",

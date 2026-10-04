@@ -11,9 +11,9 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/testing/verify-gates.js",
-    "verify": "node scripts/testing/verify-step1-8.mjs",
-    "verify:step1-8": "node scripts/testing/verify-step1-8.mjs"
+    "test": "node \"51 — TESTING PLATFORM/scripts/testing/verify-gates.js\"",
+    "verify": "node \"05 — FRONTEND PLATFORM/verify-step1-8.mjs\"",
+    "verify:step1-8": "node \"05 — FRONTEND PLATFORM/verify-step1-8.mjs\""
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
