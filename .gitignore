@@ -25,6 +25,8 @@ dist-ssr
 # Wrangler / Cloudflare
 .wrangler/
 .chrome-demo-profile/
+.review/
+
 
 # Editor directories and files
 .vscode/*
