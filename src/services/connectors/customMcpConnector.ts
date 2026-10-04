@@ -51,28 +51,54 @@ export class CustomMcpConnector {
     }
 
     const endpointUrl = conn.endpointUrl || "http://127.0.0.1:8000/mcp";
-    await new Promise((r) => setTimeout(r, 45));
-    const latencyMs = Date.now() - startTime;
     const now = new Date().toISOString();
 
-    connectorStore.recordAudit({
-      connectorId: this.CONNECTOR_ID,
-      toolName: "custom_mcp_test_connection",
-      impact: "SAFE",
-      status: "SUCCESS",
-      durationMs: latencyMs,
-      verificationHash: generateVerificationHash(`mcp_ping:${endpointUrl}:${now}`),
-    });
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 1200);
+      await fetch(endpointUrl, { method: "HEAD", signal: controller.signal, mode: "no-cors" });
+      clearTimeout(timeoutId);
+      const latencyMs = Date.now() - startTime;
 
-    return {
-      healthy: true,
-      latencyMs,
-      status: "CONNECTED",
-      endpointUrl,
-      protocolVersion: "2024-11-05",
-      serverCapabilities: ["tools", "resources", "prompts", "sampling"],
-      testedAt: now,
-    };
+      connectorStore.recordAudit({
+        connectorId: this.CONNECTOR_ID,
+        toolName: "custom_mcp_test_connection",
+        impact: "SAFE",
+        status: "SUCCESS",
+        durationMs: latencyMs,
+        verificationHash: generateVerificationHash(`mcp_ping:${endpointUrl}:${now}`),
+      });
+
+      return {
+        healthy: true,
+        latencyMs,
+        status: "CONNECTED",
+        endpointUrl,
+        protocolVersion: "2024-11-05",
+        serverCapabilities: ["tools", "resources", "prompts", "sampling"],
+        testedAt: now,
+      };
+    } catch {
+      const latencyMs = Date.now() - startTime;
+      connectorStore.recordAudit({
+        connectorId: this.CONNECTOR_ID,
+        toolName: "custom_mcp_test_connection",
+        impact: "SAFE",
+        status: "FAILED",
+        durationMs: latencyMs,
+        verificationHash: generateVerificationHash(`mcp_ping:${endpointUrl}:${now}:failed`),
+      });
+
+      return {
+        healthy: false,
+        latencyMs,
+        status: "ERROR",
+        endpointUrl,
+        protocolVersion: "unknown",
+        serverCapabilities: [],
+        testedAt: now,
+      };
+    }
   }
 
   public static async executeQuery(

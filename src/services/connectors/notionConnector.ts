@@ -49,9 +49,31 @@ export class NotionConnector {
       throw new Error(`Notion connector is currently disabled.`);
     }
 
-    await new Promise((r) => setTimeout(r, 85));
     const latencyMs = Date.now() - startTime;
     const now = new Date().toISOString();
+    const hasKey =
+      typeof import.meta !== "undefined" &&
+      Boolean(import.meta.env?.VITE_NOTION_API_KEY);
+
+    if (!hasKey) {
+      connectorStore.recordAudit({
+        connectorId: this.CONNECTOR_ID,
+        toolName: "notion_test_connection",
+        impact: "SAFE",
+        status: "BLOCKED",
+        durationMs: latencyMs,
+        verificationHash: generateVerificationHash(`notion_ping:${now}:${latencyMs}:missing_key`),
+      });
+
+      return {
+        healthy: false,
+        latencyMs,
+        status: "DISCONNECTED",
+        testedAt: now,
+        workspaceName: "None (VITE_NOTION_API_KEY missing)",
+        pageCount: 0,
+      };
+    }
 
     connectorStore.recordAudit({
       connectorId: this.CONNECTOR_ID,

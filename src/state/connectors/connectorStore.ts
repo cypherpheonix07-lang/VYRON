@@ -66,6 +66,9 @@ export interface ConnectorStoreState {
 
 type ConnectorListener = (state: ConnectorStoreState) => void;
 
+const STORAGE_KEY_CONNECTORS = "vyron_connectors_registry_v1";
+const STORAGE_KEY_AUDIT = "vyron_connector_audit_logs_v1";
+
 const INITIAL_CONNECTORS: Record<string, ConnectorDefinition> = {
   kaggle: {
     id: "kaggle",
@@ -74,7 +77,7 @@ const INITIAL_CONNECTORS: Record<string, ConnectorDefinition> = {
     category: "DATASET",
     protocol: "mcp",
     description:
-      "Governed dataset discovery, schema inspection, and partition streaming for Kaggle benchmarks.",
+      "Governed dataset discovery, schema inspection, and partition streaming for Kaggle benchmarks (Active in Curated Benchmark Mode).",
     icon: "database",
     status: "CONNECTED",
     isEnabled: true,
@@ -125,14 +128,15 @@ const INITIAL_CONNECTORS: Record<string, ConnectorDefinition> = {
     category: "VCS",
     protocol: "rest",
     description:
-      "Repository structural discovery, git blame metadata, and commit frequency analysis.",
+      "Repository structural discovery, git blame metadata, and commit frequency forensics.",
     icon: "github",
-    status: "CONNECTED",
-    isEnabled: true,
-    authStatus: "AUTHORIZED",
+    status: "DISCONNECTED",
+    isEnabled: false,
+    authStatus: "UNAUTHORIZED",
+    errorMessage: "No linked GitHub account. Connect via GitHub OAuth.",
     capabilities: ["data_access", "file_retrieval", "search"],
     sensitivity: "HIGH",
-    lastInvokedAt: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+    lastInvokedAt: null,
     tools: [
       {
         id: "github_scan_security",
@@ -166,12 +170,13 @@ const INITIAL_CONNECTORS: Record<string, ConnectorDefinition> = {
     protocol: "rest",
     description: "Design system tokens, wireframe node exports, and UI component schema alignment.",
     icon: "palette",
-    status: "CONNECTED",
-    isEnabled: true,
-    authStatus: "AUTHORIZED",
+    status: "DISCONNECTED",
+    isEnabled: false,
+    authStatus: "UNAUTHORIZED",
+    errorMessage: "Figma access token not configured in environment (VITE_FIGMA_ACCESS_TOKEN).",
     capabilities: ["data_access", "prompts"],
     sensitivity: "LOW",
-    lastInvokedAt: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+    lastInvokedAt: null,
     tools: [
       {
         id: "figma_export_tokens",
@@ -195,12 +200,13 @@ const INITIAL_CONNECTORS: Record<string, ConnectorDefinition> = {
     description:
       "PRD documentation retrieval, architecture decision records (ADRs), and sprint logs.",
     icon: "file-text",
-    status: "CONNECTED",
-    isEnabled: true,
-    authStatus: "AUTHORIZED",
+    status: "DISCONNECTED",
+    isEnabled: false,
+    authStatus: "UNAUTHORIZED",
+    errorMessage: "Notion API key not configured in environment (VITE_NOTION_API_KEY).",
     capabilities: ["data_access", "search"],
     sensitivity: "LOW",
-    lastInvokedAt: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+    lastInvokedAt: null,
     tools: [
       {
         id: "notion_fetch_spec",
@@ -223,13 +229,14 @@ const INITIAL_CONNECTORS: Record<string, ConnectorDefinition> = {
     protocol: "mcp",
     description: "Custom internal Model Context Protocol microservice server.",
     icon: "plug",
-    status: "CONNECTED",
-    isEnabled: true,
-    authStatus: "AUTHORIZED",
+    status: "DISCONNECTED",
+    isEnabled: false,
+    authStatus: "UNAUTHORIZED",
+    errorMessage: "Custom MCP service unprobed at http://127.0.0.1:8000/mcp.",
     capabilities: ["data_access", "actions", "search", "prompts"],
     sensitivity: "HIGH",
     endpointUrl: "http://127.0.0.1:8000/mcp",
-    lastInvokedAt: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
+    lastInvokedAt: null,
     tools: [
       {
         id: "mcp_execute_query",
@@ -262,35 +269,90 @@ class ConnectorStore {
   private listeners: Set<ConnectorListener> = new Set();
 
   constructor() {
+    let initialConnectors = { ...INITIAL_CONNECTORS };
+    let initialAudit: ConnectorAuditLog[] = [
+      {
+        id: "log-1",
+        timestamp: new Date(Date.now() - 1000 * 60 * 4).toISOString(),
+        connectorId: "kaggle",
+        toolName: "kaggle_inspect_schema",
+        userId: "priya.nair@brahma.dev",
+        status: "SUCCESS",
+        impact: "SAFE",
+        safeMetadata: { dataset: "clementbingham/ieee-fraud-detection", records: 12480 },
+        durationMs: 45,
+        verificationHash: "sha256_mock_audit_hash_001",
+      },
+    ];
+
+    if (typeof window !== "undefined") {
+      try {
+        const storedConnectors = localStorage.getItem(STORAGE_KEY_CONNECTORS);
+        if (storedConnectors) {
+          const parsed = JSON.parse(storedConnectors) as Record<string, ConnectorDefinition>;
+          // Merge stored definitions with initial definitions to ensure schema freshness
+          initialConnectors = {
+            ...INITIAL_CONNECTORS,
+            ...parsed,
+          };
+        }
+        const storedAudit = localStorage.getItem(STORAGE_KEY_AUDIT);
+        if (storedAudit) {
+          initialAudit = JSON.parse(storedAudit) as ConnectorAuditLog[];
+        }
+      } catch {
+        // Fallback to initial
+      }
+    }
+
     this.state = {
-      connectors: INITIAL_CONNECTORS,
-      auditLogs: [
-        {
-          id: "log-1",
-          timestamp: new Date(Date.now() - 1000 * 60 * 4).toISOString(),
-          connectorId: "github",
-          toolName: "github_scan_security",
-          userId: "priya.nair@brahma.dev",
-          status: "SUCCESS",
-          impact: "SAFE",
-          safeMetadata: { repo: "brahma-core", filesScanned: 142 },
-          durationMs: 240,
-          verificationHash: "sha256_mock_audit_hash_001",
-        },
-        {
-          id: "log-2",
-          timestamp: new Date(Date.now() - 1000 * 60 * 14).toISOString(),
-          connectorId: "kaggle",
-          toolName: "kaggle_inspect_schema",
-          userId: "priya.nair@brahma.dev",
-          status: "SUCCESS",
-          impact: "SAFE",
-          safeMetadata: { dataset: "clementbingham/ieee-fraud-detection", records: 12480 },
-          durationMs: 180,
-          verificationHash: "sha256_mock_audit_hash_002",
-        },
-      ],
+      connectors: initialConnectors,
+      auditLogs: initialAudit,
     };
+
+    // Asynchronous check for existing connected GitHub accounts
+    if (typeof window !== "undefined") {
+      this.probeInitialGitHubState();
+    }
+  }
+
+  private async probeInitialGitHubState() {
+    try {
+      const { fetchConnectedAccounts } = await import("@/lib/github/api");
+      const accounts = await fetchConnectedAccounts();
+      if (accounts && accounts.length > 0) {
+        const gh = this.state.connectors["github"];
+        if (gh && gh.status !== "CONNECTED") {
+          this.state = {
+            ...this.state,
+            connectors: {
+              ...this.state.connectors,
+              github: {
+                ...gh,
+                status: "CONNECTED",
+                isEnabled: true,
+                authStatus: "AUTHORIZED",
+                errorMessage: null,
+              },
+            },
+          };
+          this.saveToStorage();
+          this.notify();
+        }
+      }
+    } catch {
+      // Ignore background probe failure
+    }
+  }
+
+  private saveToStorage() {
+    if (typeof window === "undefined") return;
+    try {
+      localStorage.setItem(STORAGE_KEY_CONNECTORS, JSON.stringify(this.state.connectors));
+      localStorage.setItem(STORAGE_KEY_AUDIT, JSON.stringify(this.state.auditLogs));
+    } catch {
+      // Storage unavailable or quota exceeded
+    }
   }
 
   public getState(): ConnectorStoreState {
@@ -320,10 +382,11 @@ class ConnectorStore {
         [connectorId]: {
           ...conn,
           isEnabled: enabled,
-          status: enabled ? "CONNECTED" : "DISCONNECTED",
+          status: enabled ? (conn.authStatus === "AUTHORIZED" ? "CONNECTED" : "DISCONNECTED") : "DISCONNECTED",
         },
       },
     };
+    this.saveToStorage();
     this.notify();
   }
 
@@ -347,6 +410,7 @@ class ConnectorStore {
         },
       },
     };
+    this.saveToStorage();
     this.notify();
   }
 
@@ -375,6 +439,7 @@ class ConnectorStore {
       ...this.state,
       auditLogs: [fullLog, ...this.state.auditLogs].slice(0, 100),
     };
+    this.saveToStorage();
     this.notify();
   }
 
@@ -410,11 +475,35 @@ class ConnectorStore {
         [connectorId]: {
           ...conn,
           status,
-          errorMessage: errorMessage ?? null,
+          errorMessage: errorMessage !== undefined ? errorMessage : conn.errorMessage,
           lastInvokedAt: new Date().toISOString(),
         },
       },
     };
+    this.saveToStorage();
+    this.notify();
+  }
+
+  public setConnectorAuth(
+    connectorId: string,
+    authStatus: ConnectorDefinition["authStatus"],
+    isEnabled: boolean,
+  ) {
+    const conn = this.state.connectors[connectorId];
+    if (!conn) return;
+    this.state = {
+      ...this.state,
+      connectors: {
+        ...this.state.connectors,
+        [connectorId]: {
+          ...conn,
+          authStatus,
+          isEnabled,
+          status: isEnabled && authStatus === "AUTHORIZED" ? "CONNECTED" : "DISCONNECTED",
+        },
+      },
+    };
+    this.saveToStorage();
     this.notify();
   }
 
@@ -426,27 +515,185 @@ class ConnectorStore {
       return { success: false, latencyMs: 0, message: `Connector '${connectorId}' not found.` };
     }
     const startTime = Date.now();
-    await new Promise((r) => setTimeout(r, 180));
+
+    if (connectorId === "github") {
+      try {
+        const { fetchConnectedAccounts } = await import("@/lib/github/api");
+        const accounts = await fetchConnectedAccounts();
+        const latencyMs = Date.now() - startTime;
+        if (accounts && accounts.length > 0) {
+          this.updateStatus(connectorId, "CONNECTED", null);
+          this.setConnectorAuth(connectorId, "AUTHORIZED", true);
+          this.recordAudit({
+            connectorId,
+            toolName: "github_probe",
+            status: "SUCCESS",
+            impact: "SAFE",
+            durationMs: latencyMs,
+          });
+          return {
+            success: true,
+            latencyMs,
+            message: `GitHub connected (${accounts.length} linked account(s): ${accounts.map((a) => a.login).join(", ")}).`,
+          };
+        } else {
+          this.updateStatus(connectorId, "DISCONNECTED", "No connected GitHub accounts found.");
+          this.setConnectorAuth(connectorId, "UNAUTHORIZED", false);
+          this.recordAudit({
+            connectorId,
+            toolName: "github_probe",
+            status: "BLOCKED",
+            impact: "SAFE",
+            durationMs: latencyMs,
+          });
+          return {
+            success: false,
+            latencyMs,
+            message: "No connected GitHub accounts found. Please link an account via GitHub OAuth.",
+          };
+        }
+      } catch (err) {
+        const latencyMs = Date.now() - startTime;
+        const msg = `GitHub connection probe failed: ${(err as Error).message}`;
+        this.updateStatus(connectorId, "ERROR", msg);
+        return { success: false, latencyMs, message: msg };
+      }
+    }
+
+    if (connectorId === "kaggle") {
+      try {
+        const { kaggleClient } = await import("@/services/kaggleClient");
+        const results = await kaggleClient.search("fraud");
+        const latencyMs = Date.now() - startTime;
+        this.updateStatus(connectorId, "CONNECTED", null);
+        this.setConnectorAuth(connectorId, "AUTHORIZED", true);
+        this.recordAudit({
+          connectorId,
+          toolName: "kaggle_probe",
+          status: "SUCCESS",
+          impact: "SAFE",
+          durationMs: latencyMs,
+        });
+        return {
+          success: true,
+          latencyMs,
+          message: `Kaggle open data benchmark service verified (${results.length} curated benchmarks available in governed mode).`,
+        };
+      } catch (err) {
+        const latencyMs = Date.now() - startTime;
+        const msg = `Kaggle probe failed: ${(err as Error).message}`;
+        this.updateStatus(connectorId, "ERROR", msg);
+        return { success: false, latencyMs, message: msg };
+      }
+    }
+
+    if (connectorId === "figma") {
+      const latencyMs = Date.now() - startTime;
+      const hasToken =
+        typeof import.meta !== "undefined" &&
+        Boolean(import.meta.env?.VITE_FIGMA_ACCESS_TOKEN);
+
+      if (hasToken) {
+        this.updateStatus(connectorId, "CONNECTED", null);
+        this.setConnectorAuth(connectorId, "AUTHORIZED", true);
+        this.recordAudit({
+          connectorId,
+          toolName: "figma_probe",
+          status: "SUCCESS",
+          impact: "SAFE",
+          durationMs: latencyMs,
+        });
+        return { success: true, latencyMs, message: "Figma design token connector authorized via environment token." };
+      } else {
+        const msg = "Figma access token not configured in environment (set VITE_FIGMA_ACCESS_TOKEN).";
+        this.updateStatus(connectorId, "DISCONNECTED", msg);
+        this.setConnectorAuth(connectorId, "UNAUTHORIZED", false);
+        this.recordAudit({
+          connectorId,
+          toolName: "figma_probe",
+          status: "BLOCKED",
+          impact: "SAFE",
+          durationMs: latencyMs,
+        });
+        return { success: false, latencyMs, message: msg };
+      }
+    }
+
+    if (connectorId === "notion") {
+      const latencyMs = Date.now() - startTime;
+      const hasKey =
+        typeof import.meta !== "undefined" &&
+        Boolean(import.meta.env?.VITE_NOTION_API_KEY);
+
+      if (hasKey) {
+        this.updateStatus(connectorId, "CONNECTED", null);
+        this.setConnectorAuth(connectorId, "AUTHORIZED", true);
+        this.recordAudit({
+          connectorId,
+          toolName: "notion_probe",
+          status: "SUCCESS",
+          impact: "SAFE",
+          durationMs: latencyMs,
+        });
+        return { success: true, latencyMs, message: "Notion knowledge workspace authorized via environment API key." };
+      } else {
+        const msg = "Notion API key not configured in environment (set VITE_NOTION_API_KEY).";
+        this.updateStatus(connectorId, "DISCONNECTED", msg);
+        this.setConnectorAuth(connectorId, "UNAUTHORIZED", false);
+        this.recordAudit({
+          connectorId,
+          toolName: "notion_probe",
+          status: "BLOCKED",
+          impact: "SAFE",
+          durationMs: latencyMs,
+        });
+        return { success: false, latencyMs, message: msg };
+      }
+    }
+
+    if (connectorId === "custom_mcp") {
+      const targetUrl = conn.endpointUrl || "http://127.0.0.1:8000/mcp";
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 1500);
+        await fetch(targetUrl, { method: "HEAD", signal: controller.signal, mode: "no-cors" });
+        clearTimeout(timeoutId);
+        const latencyMs = Date.now() - startTime;
+        this.updateStatus(connectorId, "CONNECTED", null);
+        this.setConnectorAuth(connectorId, "AUTHORIZED", true);
+        this.recordAudit({
+          connectorId,
+          toolName: "mcp_probe",
+          status: "SUCCESS",
+          impact: "SAFE",
+          durationMs: latencyMs,
+        });
+        return { success: true, latencyMs, message: `Custom MCP endpoint reachable at ${targetUrl}.` };
+      } catch (err) {
+        const latencyMs = Date.now() - startTime;
+        const msg = `Custom MCP endpoint probe failed at ${targetUrl}: Service unreachable or offline.`;
+        this.updateStatus(connectorId, "ERROR", msg);
+        this.setConnectorAuth(connectorId, "UNAUTHORIZED", false);
+        this.recordAudit({
+          connectorId,
+          toolName: "mcp_probe",
+          status: "FAILED",
+          impact: "SAFE",
+          durationMs: latencyMs,
+        });
+        return { success: false, latencyMs, message: msg };
+      }
+    }
+
+    // Default fallback
     const latencyMs = Date.now() - startTime;
-    this.updateStatus(connectorId, "CONNECTED");
-    this.recordAudit({
-      connectorId,
-      toolName: "ping_probe",
-      status: "SUCCESS",
-      impact: "SAFE",
-      durationMs: latencyMs,
-    });
-    return {
-      success: true,
-      latencyMs,
-      message: `Successfully probed ${conn.name}. Response status: 200 OK (${latencyMs}ms).`,
-    };
+    return { success: false, latencyMs, message: `Unknown connector probe target '${connectorId}'.` };
   }
 
   public async reconnect(connectorId: string): Promise<void> {
     const conn = this.state.connectors[connectorId];
     if (!conn) return;
-    this.updateStatus(connectorId, "CONNECTED");
+    await this.testConnection(connectorId);
     this.recordAudit({
       connectorId,
       toolName: "reconnect",
@@ -467,6 +714,7 @@ class ConnectorStore {
           isEnabled: false,
           status: "DISCONNECTED",
           authStatus: "EXPIRED",
+          errorMessage: "Credentials revoked by operator.",
         },
       },
     };
@@ -476,6 +724,7 @@ class ConnectorStore {
       status: "BLOCKED",
       impact: "HIGH_IMPACT",
     });
+    this.saveToStorage();
     this.notify();
   }
 

@@ -66,10 +66,30 @@ export class GitHubConnector {
       throw new Error(`GitHub connector is currently disabled.`);
     }
 
-    // Measure latency
-    await new Promise((r) => setTimeout(r, 65));
+    const { fetchConnectedAccounts } = await import("../../lib/github/api");
+    const accounts = await fetchConnectedAccounts();
     const latencyMs = Date.now() - startTime;
     const now = new Date().toISOString();
+
+    if (!accounts || accounts.length === 0) {
+      connectorStore.recordAudit({
+        connectorId: this.CONNECTOR_ID,
+        toolName: "github_test_connection",
+        impact: "SAFE",
+        status: "BLOCKED",
+        durationMs: latencyMs,
+        verificationHash: generateVerificationHash(`github_ping:${now}:${latencyMs}:unauthorized`),
+      });
+
+      return {
+        healthy: false,
+        latencyMs,
+        status: "DISCONNECTED",
+        testedAt: now,
+        authenticatedUser: "None (No connected GitHub accounts)",
+        activeRepositoriesCount: 0,
+      };
+    }
 
     connectorStore.recordAudit({
       connectorId: this.CONNECTOR_ID,
@@ -85,8 +105,8 @@ export class GitHubConnector {
       latencyMs,
       status: "CONNECTED",
       testedAt: now,
-      authenticatedUser: "brahma-enterprise-bot",
-      activeRepositoriesCount: 3,
+      authenticatedUser: accounts[0]?.login || "unknown",
+      activeRepositoriesCount: accounts.length,
     };
   }
 

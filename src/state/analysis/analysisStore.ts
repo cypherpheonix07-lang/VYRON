@@ -138,6 +138,9 @@ export interface AnalysisRunSummary {
   verificationHash?: string | undefined;
 }
 
+const RUN_STORAGE_KEY = "vyron_active_analysis_run";
+const HISTORY_STORAGE_KEY = "vyron_analysis_history";
+
 type AnalysisListener = (run: AnalysisRun) => void;
 
 class AnalysisStore {
@@ -176,7 +179,7 @@ class AnalysisStore {
   private timer: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
-    this.run = {
+    const defaultRun: AnalysisRun = {
       id: "run_initial",
       targetDatasetId: "ieee_fraud_benchmark",
       targetDatasetName: "IEEE-CIS Credit Card Fraud Benchmark",
@@ -198,6 +201,29 @@ class AnalysisStore {
       findings: [],
       logs: [],
     };
+
+    if (typeof window !== "undefined") {
+      try {
+        const storedHistory = localStorage.getItem(HISTORY_STORAGE_KEY);
+        if (storedHistory) {
+          const parsed = JSON.parse(storedHistory);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            this.history = parsed;
+          }
+        }
+        const storedRun = localStorage.getItem(RUN_STORAGE_KEY);
+        if (storedRun) {
+          const parsedRun = JSON.parse(storedRun);
+          if (parsedRun && parsedRun.id && parsedRun.stages) {
+            this.run = parsedRun;
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to hydrate analysis state from localStorage:", e);
+      }
+    }
+    this.run = defaultRun;
   }
 
   public getRun(): AnalysisRun {
@@ -215,7 +241,18 @@ class AnalysisStore {
   }
 
   private emit() {
+    this.persist();
     this.listeners.forEach((listener) => listener(this.run));
+  }
+
+  private persist() {
+    if (typeof window === "undefined") return;
+    try {
+      localStorage.setItem(RUN_STORAGE_KEY, JSON.stringify(this.run));
+      localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(this.history));
+    } catch {
+      // Storage unavailable or quota limit
+    }
   }
 
   public initRun(datasetId: string, datasetName: string, mode: AppMode): string {
@@ -276,13 +313,25 @@ class AnalysisStore {
         findingsCount: this.run.findings.length,
         verificationHash: this.run.telemetry.verificationHash || undefined,
       });
-      if (this.history.length > 20) this.history.pop();
+      if (this.history.length > 50) this.history.pop();
     }
     this.emit();
   }
 
   public getHistory(): AnalysisRunSummary[] {
     return [...this.history];
+  }
+
+  public clearHistory(): void {
+    this.history = [];
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem(HISTORY_STORAGE_KEY);
+      } catch {
+        // Ignored
+      }
+    }
+    this.emit();
   }
 
   public updateStage(
@@ -351,6 +400,13 @@ class AnalysisStore {
       findings: [],
       logs: [],
     };
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem(RUN_STORAGE_KEY);
+      } catch {
+        // Ignored
+      }
+    }
     this.emit();
   }
 }

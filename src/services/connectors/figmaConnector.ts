@@ -52,9 +52,30 @@ export class FigmaConnector {
       throw new Error(`Figma connector is currently disabled.`);
     }
 
-    await new Promise((r) => setTimeout(r, 75));
     const latencyMs = Date.now() - startTime;
     const now = new Date().toISOString();
+    const hasToken =
+      typeof import.meta !== "undefined" &&
+      Boolean(import.meta.env?.VITE_FIGMA_ACCESS_TOKEN);
+
+    if (!hasToken) {
+      connectorStore.recordAudit({
+        connectorId: this.CONNECTOR_ID,
+        toolName: "figma_test_connection",
+        impact: "SAFE",
+        status: "BLOCKED",
+        durationMs: latencyMs,
+        verificationHash: generateVerificationHash(`figma_ping:${now}:${latencyMs}:missing_token`),
+      });
+
+      return {
+        healthy: false,
+        latencyMs,
+        status: "DISCONNECTED",
+        testedAt: now,
+        connectedTeam: "None (VITE_FIGMA_ACCESS_TOKEN missing)",
+      };
+    }
 
     connectorStore.recordAudit({
       connectorId: this.CONNECTOR_ID,

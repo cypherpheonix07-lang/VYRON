@@ -48,12 +48,15 @@ export interface MemoryEntry {
   provenance: string; // E.g., "Stage 5 IQR Detector", "User Instruction", "Kaggle Connector"
 }
 
+const MEMORY_STORAGE_KEY = "vyron_copilot_memory_v1";
+
 export class CopilotMemory {
   private static instance: CopilotMemory | null = null;
   private entries: Map<string, MemoryEntry> = new Map();
 
   private constructor() {
     this.seedDefaultPreferences();
+    this.hydrateFromStorage();
   }
 
   public static getInstance(): CopilotMemory {
@@ -61,6 +64,36 @@ export class CopilotMemory {
       CopilotMemory.instance = new CopilotMemory();
     }
     return CopilotMemory.instance;
+  }
+
+  private hydrateFromStorage(): void {
+    if (typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem(MEMORY_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          for (const item of parsed) {
+            if (item && item.key && item.layer && item.mode) {
+              const compositeKey = `${item.mode}:${item.layer}:${item.projectId || "global"}:${item.key}`;
+              this.entries.set(compositeKey, item);
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to hydrate Copilot memory from storage:", e);
+    }
+  }
+
+  private persist(): void {
+    if (typeof window === "undefined") return;
+    try {
+      const allEntries = Array.from(this.entries.values()).slice(-200);
+      localStorage.setItem(MEMORY_STORAGE_KEY, JSON.stringify(allEntries));
+    } catch {
+      // Quota limit or private window
+    }
   }
 
   private seedDefaultPreferences(): void {
@@ -127,6 +160,7 @@ export class CopilotMemory {
     // Deterministic composite key
     const compositeKey = `${entry.mode}:${entry.layer}:${entry.projectId || "global"}:${entry.key}`;
     this.entries.set(compositeKey, fullEntry);
+    this.persist();
     return fullEntry;
   }
 
@@ -187,6 +221,7 @@ export class CopilotMemory {
         }
       }
     }
+    this.persist();
   }
 
   public clearAll(mode?: AppMode): void {
@@ -203,6 +238,7 @@ export class CopilotMemory {
         this.seedDefaultPreferences();
       }
     }
+    this.persist();
   }
 }
 

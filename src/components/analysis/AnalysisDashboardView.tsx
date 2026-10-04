@@ -444,45 +444,75 @@ export function AnalysisDashboardView() {
       {/* Historical Runs Dialog */}
       <Dialog open={historyOpen} onOpenChange={setHistoryOpen}>
         <DialogContent className="max-w-2xl bg-zinc-950 border-border">
-          <DialogHeader>
+          <DialogHeader className="flex flex-row items-center justify-between pb-2 border-b border-border/40">
             <DialogTitle className="text-base font-bold flex items-center gap-2">
               <History className="size-4 text-primary" />
               <span>Analysis Execution Run History</span>
+              <Badge variant="outline" className="text-[10px] font-mono">
+                {runHistory.length} Runs Persisted
+              </Badge>
             </DialogTitle>
+            {runHistory.length > 0 && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-xs text-muted-foreground hover:text-destructive h-7 px-2"
+                onClick={() => {
+                  analysisStore.clearHistory();
+                  setRunHistory([]);
+                  toast.success("Analysis run history cleared.");
+                }}
+              >
+                Clear History
+              </Button>
+            )}
           </DialogHeader>
 
           <div className="space-y-3 max-h-[420px] overflow-y-auto pr-1 text-xs">
-            {runHistory.map((h) => (
-              <div
-                key={h.id}
-                className="p-3.5 rounded-xl border border-border/40 bg-secondary/30 space-y-1.5"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-foreground">{h.targetDatasetName}</span>
-                    <Badge variant="outline" className="text-[9px] font-mono">
-                      {h.status}
-                    </Badge>
-                  </div>
-                  <span className="text-[10px] font-mono text-muted-foreground">
-                    {new Date(h.startedAt).toLocaleTimeString()}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-3 gap-2 text-[11px] text-muted-foreground font-mono">
-                  <div>Records: {h.recordsProcessed.toLocaleString()}</div>
-                  <div>Risk Score: {h.overallRiskScore}/100</div>
-                  <div>Findings: {h.findingsCount}</div>
-                </div>
-
-                {h.verificationHash && (
-                  <div className="pt-1 border-t border-border/20 text-[9px] font-mono text-muted-foreground flex items-center gap-1">
-                    <Shield className="size-2.5 text-emerald-400" />
-                    <span>Seal: {h.verificationHash}</span>
-                  </div>
-                )}
+            {runHistory.length === 0 ? (
+              <div className="p-8 text-center text-muted-foreground border border-dashed border-border/40 rounded-xl space-y-2">
+                <History className="size-8 mx-auto text-muted-foreground/40" />
+                <p className="font-medium text-foreground">No analysis runs recorded</p>
+                <p className="text-xs text-muted-foreground">
+                  Execute the 12-stage analysis pipeline to record tamper-evident execution runs.
+                </p>
               </div>
-            ))}
+            ) : (
+              runHistory.map((h) => (
+                <div
+                  key={h.id}
+                  className="p-3.5 rounded-xl border border-border/40 bg-secondary/30 space-y-1.5 hover:border-primary/30 transition-colors"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-foreground">{h.targetDatasetName}</span>
+                      <Badge variant="outline" className="text-[9px] font-mono">
+                        {h.status}
+                      </Badge>
+                      <Badge variant="secondary" className="text-[9px] font-mono">
+                        {h.mode}
+                      </Badge>
+                    </div>
+                    <span className="text-[10px] font-mono text-muted-foreground">
+                      {new Date(h.startedAt).toLocaleTimeString()}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2 text-[11px] text-muted-foreground font-mono">
+                    <div>Records: {h.recordsProcessed.toLocaleString()}</div>
+                    <div>Risk Score: {h.overallRiskScore}/100</div>
+                    <div>Findings: {h.findingsCount}</div>
+                  </div>
+
+                  {h.verificationHash && (
+                    <div className="pt-1 border-t border-border/20 text-[9px] font-mono text-muted-foreground flex items-center gap-1">
+                      <Shield className="size-2.5 text-emerald-400" />
+                      <span className="truncate">Seal: {h.verificationHash}</span>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         </DialogContent>
       </Dialog>

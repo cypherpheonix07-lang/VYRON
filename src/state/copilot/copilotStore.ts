@@ -286,11 +286,41 @@ function createInitialSession(mode: AppMode): CopilotModeSession {
   };
 }
 
+const COPILOT_STORAGE_KEY = "vyron_copilot_sessions_v1";
+
 class CopilotStore {
   private state: CopilotState;
   private listeners: Set<CopilotListener> = new Set();
 
   constructor() {
+    const normalInitial = createInitialSession("NORMAL");
+    const demoInitial = createInitialSession("DEMO");
+
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(COPILOT_STORAGE_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed) {
+            if (Array.isArray(parsed.normalMessages) && parsed.normalMessages.length > 0) {
+              normalInitial.messages = parsed.normalMessages;
+            }
+            if (Array.isArray(parsed.demoMessages) && parsed.demoMessages.length > 0) {
+              demoInitial.messages = parsed.demoMessages;
+            }
+            if (parsed.normalModel) normalInitial.activeModel = parsed.normalModel;
+            if (parsed.demoModel) demoInitial.activeModel = parsed.demoModel;
+            if (parsed.thinkingMode) normalInitial.thinkingMode = parsed.thinkingMode;
+            if (typeof parsed.thinkingDepth === "number") {
+              normalInitial.thinkingDepth = parsed.thinkingDepth;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to hydrate Copilot sessions from storage:", e);
+      }
+    }
+
     this.state = {
       isDrawerOpen: false,
       viewMode: "DRAWER",
@@ -299,8 +329,8 @@ class CopilotStore {
       isContextLensOpen: false,
       isTimeMachineOpen: false,
       selectedPassportForLens: null,
-      normalSession: createInitialSession("NORMAL"),
-      demoSession: createInitialSession("DEMO"),
+      normalSession: normalInitial,
+      demoSession: demoInitial,
     };
   }
 
@@ -319,7 +349,25 @@ class CopilotStore {
   }
 
   private emit() {
+    this.persist();
     this.listeners.forEach((listener) => listener(this.state));
+  }
+
+  private persist() {
+    if (typeof window === "undefined") return;
+    try {
+      const payload = {
+        normalMessages: this.state.normalSession.messages.slice(-50),
+        demoMessages: this.state.demoSession.messages.slice(-50),
+        normalModel: this.state.normalSession.activeModel,
+        demoModel: this.state.demoSession.activeModel,
+        thinkingMode: this.state.normalSession.thinkingMode,
+        thinkingDepth: this.state.normalSession.thinkingDepth,
+      };
+      localStorage.setItem(COPILOT_STORAGE_KEY, JSON.stringify(payload));
+    } catch {
+      // Storage unavailable or quota limit
+    }
   }
 
   public setDrawerOpen(isOpen: boolean) {

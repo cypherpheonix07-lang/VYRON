@@ -81,6 +81,8 @@ export interface ActionInvocation {
   verificationHash?: string;
 }
 
+const ACTION_STORAGE_KEY = "vyron_copilot_actions_v1";
+
 export class CopilotActionEngine {
   private static instance: CopilotActionEngine | null = null;
   private actionHistory: ActionInvocation[] = [];
@@ -89,6 +91,7 @@ export class CopilotActionEngine {
 
   private constructor() {
     this.registerBuiltinTools();
+    this.hydrateFromStorage();
   }
 
   public static getInstance(): CopilotActionEngine {
@@ -96,6 +99,30 @@ export class CopilotActionEngine {
       CopilotActionEngine.instance = new CopilotActionEngine();
     }
     return CopilotActionEngine.instance;
+  }
+
+  private hydrateFromStorage(): void {
+    if (typeof window === "undefined") return;
+    try {
+      const stored = localStorage.getItem(ACTION_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          this.actionHistory = parsed;
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to hydrate Copilot actions from storage:", e);
+    }
+  }
+
+  private persist(): void {
+    if (typeof window === "undefined") return;
+    try {
+      localStorage.setItem(ACTION_STORAGE_KEY, JSON.stringify(this.actionHistory.slice(0, 50)));
+    } catch {
+      // Storage unavailable or quota limit
+    }
   }
 
   public subscribe(listener: (actions: ActionInvocation[]) => void): () => void {
@@ -110,6 +137,7 @@ export class CopilotActionEngine {
   }
 
   private notify() {
+    this.persist();
     this.listeners.forEach((l) => l(this.actionHistory));
   }
 
