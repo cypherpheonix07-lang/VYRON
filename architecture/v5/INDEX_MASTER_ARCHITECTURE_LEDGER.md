@@ -36,3 +36,4 @@ This index maps the 25 functional groups and 250 architectural phases comprising
 - **Total Phases:** 250 Phases (P001 to P250)
 - **Total Requirement Obligations:** 26000 Requirements
 - **Omnibus Master File:** [VYRON_V5_COMPLETE_ARCHITECTURE_SPECIFICATION_ALL_250_PHASES.md](../../VYRON_V5_COMPLETE_ARCHITECTURE_SPECIFICATION_ALL_250_PHASES.md)
+- **Cognitive 25-Domain Architecture Ledger:** [VYRON_V5_COMPLETE_COGNITIVE_ARCHITECTURE_250_PHASES.md](./VYRON_V5_COMPLETE_COGNITIVE_ARCHITECTURE_250_PHASES.md)
