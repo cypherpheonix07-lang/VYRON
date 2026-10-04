@@ -21,6 +21,7 @@ export const Route = createFileRoute("/app/admin")({
 
 const subNavs = [
   { to: "/app/admin/studio", label: "Overview", exact: true },
+  { to: "/app/admin/workbench", label: "Live Test Workbench", exact: true },
   { to: "/app/admin/users", label: "Users", exact: true },
   { to: "/app/admin/queue", label: "Queue Monitor", exact: true },
   { to: "/app/admin/schema", label: "Schema Health", exact: true },

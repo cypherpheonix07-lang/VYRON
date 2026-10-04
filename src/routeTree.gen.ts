@@ -63,6 +63,7 @@ import { Route as AppAdminStudioRouteImport } from './routes/app.admin.studio'
 import { Route as AppAdminTemplatesRouteImport } from './routes/app.admin.templates'
 import { Route as AppAdminUsageRouteImport } from './routes/app.admin.usage'
 import { Route as AppAdminUsersRouteImport } from './routes/app.admin.users'
+import { Route as AppAdminWorkbenchRouteImport } from './routes/app.admin.workbench'
 import { Route as AppBillingInvoicesRouteImport } from './routes/app.billing.invoices'
 import { Route as AppBillingPlansRouteImport } from './routes/app.billing.plans'
 import { Route as AppBillingUsageRouteImport } from './routes/app.billing.usage'
@@ -380,6 +381,11 @@ const AppAdminUsersRoute = AppAdminUsersRouteImport.update({
   path: '/users',
   getParentRoute: () => AppAdminRoute,
 } as any)
+const AppAdminWorkbenchRoute = AppAdminWorkbenchRouteImport.update({
+  id: '/workbench',
+  path: '/workbench',
+  getParentRoute: () => AppAdminRoute,
+} as any)
 const AppBillingInvoicesRoute = AppBillingInvoicesRouteImport.update({
   id: '/invoices',
   path: '/invoices',
@@ -669,6 +675,7 @@ export interface FileRoutesByFullPath {
   '/app/admin/templates': typeof AppAdminTemplatesRoute
   '/app/admin/usage': typeof AppAdminUsageRoute
   '/app/admin/users': typeof AppAdminUsersRoute
+  '/app/admin/workbench': typeof AppAdminWorkbenchRoute
   '/app/billing/invoices': typeof AppBillingInvoicesRoute
   '/app/billing/plans': typeof AppBillingPlansRoute
   '/app/billing/usage': typeof AppBillingUsageRoute
@@ -769,6 +776,7 @@ export interface FileRoutesByTo {
   '/app/admin/templates': typeof AppAdminTemplatesRoute
   '/app/admin/usage': typeof AppAdminUsageRoute
   '/app/admin/users': typeof AppAdminUsersRoute
+  '/app/admin/workbench': typeof AppAdminWorkbenchRoute
   '/app/billing/invoices': typeof AppBillingInvoicesRoute
   '/app/billing/plans': typeof AppBillingPlansRoute
   '/app/billing/usage': typeof AppBillingUsageRoute
@@ -870,6 +878,7 @@ export interface FileRoutesById {
   '/app/admin/templates': typeof AppAdminTemplatesRoute
   '/app/admin/usage': typeof AppAdminUsageRoute
   '/app/admin/users': typeof AppAdminUsersRoute
+  '/app/admin/workbench': typeof AppAdminWorkbenchRoute
   '/app/billing/invoices': typeof AppBillingInvoicesRoute
   '/app/billing/plans': typeof AppBillingPlansRoute
   '/app/billing/usage': typeof AppBillingUsageRoute
@@ -974,6 +983,7 @@ export interface FileRouteTypes {
     | '/app/admin/templates'
     | '/app/admin/usage'
     | '/app/admin/users'
+    | '/app/admin/workbench'
     | '/app/billing/invoices'
     | '/app/billing/plans'
     | '/app/billing/usage'
@@ -1074,6 +1084,7 @@ export interface FileRouteTypes {
     | '/app/admin/templates'
     | '/app/admin/usage'
     | '/app/admin/users'
+    | '/app/admin/workbench'
     | '/app/billing/invoices'
     | '/app/billing/plans'
     | '/app/billing/usage'
@@ -1174,6 +1185,7 @@ export interface FileRouteTypes {
     | '/app/admin/templates'
     | '/app/admin/usage'
     | '/app/admin/users'
+    | '/app/admin/workbench'
     | '/app/billing/invoices'
     | '/app/billing/plans'
     | '/app/billing/usage'
@@ -1623,6 +1635,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminUsersRouteImport
       parentRoute: typeof AppAdminRoute
     }
+    '/app/admin/workbench': {
+      id: '/app/admin/workbench'
+      path: '/workbench'
+      fullPath: '/app/admin/workbench'
+      preLoaderRoute: typeof AppAdminWorkbenchRouteImport
+      parentRoute: typeof AppAdminRoute
+    }
     '/app/billing/invoices': {
       id: '/app/billing/invoices'
       path: '/invoices'
@@ -1957,6 +1976,7 @@ interface AppAdminRouteChildren {
   AppAdminTemplatesRoute: typeof AppAdminTemplatesRoute
   AppAdminUsageRoute: typeof AppAdminUsageRoute
   AppAdminUsersRoute: typeof AppAdminUsersRoute
+  AppAdminWorkbenchRoute: typeof AppAdminWorkbenchRoute
   AppAdminIndexRoute: typeof AppAdminIndexRoute
 }
 
@@ -1969,6 +1989,7 @@ const AppAdminRouteChildren: AppAdminRouteChildren = {
   AppAdminTemplatesRoute: AppAdminTemplatesRoute,
   AppAdminUsageRoute: AppAdminUsageRoute,
   AppAdminUsersRoute: AppAdminUsersRoute,
+  AppAdminWorkbenchRoute: AppAdminWorkbenchRoute,
   AppAdminIndexRoute: AppAdminIndexRoute,
 }
 

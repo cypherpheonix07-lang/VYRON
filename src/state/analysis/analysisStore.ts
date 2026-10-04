@@ -230,6 +230,10 @@ class AnalysisStore {
     return this.run;
   }
 
+  public getActiveRun(): AnalysisRun {
+    return this.run;
+  }
+
   public getState(): AnalysisRun {
     return this.run;
   }
