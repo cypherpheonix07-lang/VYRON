@@ -174,7 +174,11 @@
       "category": "DATABASE",
       "description": "Supabase PostgreSQL connection pooling, schema migrations, and forensic db autopsies",
       "sources": [
-        "supabase/migrations/",
+        "12 — DATABASE PLATFORM/schema/",
+        "12 — DATABASE PLATFORM/client.ts",
+        "12 — DATABASE PLATFORM/cuid2.ts",
+        "12 — DATABASE PLATFORM/seed.ts",
+        "12 — DATABASE PLATFORM/migrations/",
         "src/lib/supabaseClient.ts"
       ],
       "scripts": [
@@ -190,6 +194,10 @@
       "category": "VECTOR",
       "description": "pgvector embeddings, cosine similarity search indices, and industrial-scale knowledge embeddings",
       "sources": [
+        "13 — VECTOR & KNOWLEDGE STORAGE/embeddings/embed.ts",
+        "13 — VECTOR & KNOWLEDGE STORAGE/stores/pgvector.store.ts",
+        "13 — VECTOR & KNOWLEDGE STORAGE/retrieval/rerank.ts",
+        "13 — VECTOR & KNOWLEDGE STORAGE/chunking/text-splitter.ts",
         "supabase/functions/embed/index.ts"
       ],
       "scripts": [
@@ -334,10 +342,17 @@
       "category": "COPILOT",
       "description": "Autonomous Copilot cognitive pipeline across 26 discrete stages (24A to 24Z)",
       "sources": [
+        "24 — COPILOT ORCHESTRATOR/src/pipeline/pipeline.ts",
+        "24 — COPILOT ORCHESTRATOR/src/pipeline/state.ts",
+        "24 — COPILOT ORCHESTRATOR/src/pipeline/stages/",
+        "24 — COPILOT ORCHESTRATOR/src/streaming/sse.service.ts",
+        "24 — COPILOT ORCHESTRATOR/src/server.ts",
         "src/state/copilot/copilotStore.ts",
         "src/state/copilot/useCopilot.ts"
       ],
-      "scripts": []
+      "scripts": [
+        "51 — TESTING PLATFORM/scripts/testing/verify-master-prompt-p1-p5.mjs"
+      ]
     },
     {
       "id": "25",
