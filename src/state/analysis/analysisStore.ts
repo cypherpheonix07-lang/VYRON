@@ -81,6 +81,7 @@ export interface AnalysisRun {
   stages: AnalysisStageState[];
   currentStageId: StageId | null;
   telemetry: AnalysisTelemetry;
+  verificationHash?: string | null;
   findings: Finding[];
   logs: Array<{
     timestamp: string;

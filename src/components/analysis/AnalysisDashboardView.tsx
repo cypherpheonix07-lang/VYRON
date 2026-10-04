@@ -406,7 +406,7 @@ export function AnalysisDashboardView() {
               <div className="p-3 rounded-lg border border-border/30 bg-background/50 space-y-1">
                 <span className="text-[10px] text-muted-foreground block">Cryptographic Seal</span>
                 <span className="font-mono text-xs text-emerald-400 break-all font-bold">
-                  {run.verificationHash || "Pending completion"}
+                  {run.telemetry.verificationHash || "Pending completion"}
                 </span>
               </div>
               <div className="p-3 rounded-lg border border-border/30 bg-background/50 space-y-1">

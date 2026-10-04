@@ -15,7 +15,7 @@ import {
   CheckCircle2,
   Info,
 } from "lucide-react";
-import { useState } from "react";
+import React, { useState, Fragment } from "react";
 import { toast } from "sonner";
 
 import { PageHeader, SectionCard } from "@/components/brahma/primitives";
@@ -277,7 +277,7 @@ function AdminAuditPage() {
             {filtered.map((log) => {
               const isExpanded = expandedId === log.id;
               return (
-                <React.Fragment key={log.id}>
+                <Fragment key={log.id}>
                   <TableRow
                     className="cursor-pointer hover:bg-secondary/20 text-xs"
                     onClick={() => setExpandedId(isExpanded ? null : log.id)}
@@ -367,7 +367,7 @@ function AdminAuditPage() {
                       </TableCell>
                     </TableRow>
                   )}
-                </React.Fragment>
+                </Fragment>
               );
             })}
           </TableBody>
