@@ -12,7 +12,7 @@
  * 7. Epistemic Demarcation Law on Recommendation Impact Summary
  */
 
-import { canonicalPhaseDossier, CANONICAL_LOOPHOLES, UI_TO_PHASE_BINDINGS, BLUEPRINT_26_SECTION_MAPPINGS, LIFECYCLE_STAGE_RECONCILIATION, DETERMINISTIC_FORMULAS } from "./src/services/governance/canonicalPhaseDossier.ts";
+import { canonicalPhaseDossier, CANONICAL_LOOPHOLES, UI_TO_PHASE_BINDINGS, BLUEPRINT_26_SECTION_MAPPINGS, LIFECYCLE_STAGE_RECONCILIATION, DETERMINISTIC_FORMULAS } from "../../src/services/governance/canonicalPhaseDossier.ts";
 
 const GREEN = "\x1b[32m";
 const RED = "\x1b[31m";
