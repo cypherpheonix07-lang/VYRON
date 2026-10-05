@@ -1,0 +1,4 @@
+WorkloadStage,Concurrency,TotalRequests,SuccessCount,ErrorCount,ThroughputRps,P50Ms,P95Ms,P99Ms,RecoveryTimeMs
+"Single-User Baseline","1","20","20","0","3.1","319.77","500.84","500.84","0"
+"Moderate Ramp","2","40","41","0","5","338.35","397.24","1444.47","0"
+"Peak Envelope Ramp","5","100","104","0","10.2","487.26","531","555.67","12"

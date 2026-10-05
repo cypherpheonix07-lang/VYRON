@@ -1,0 +1,21 @@
+{
+  "runId": "run_2026-10-05T16-13-19-088Z_master_audit",
+  "timestamp": "2026-10-05T16:13:19.092Z",
+  "application": "VYRON / PROJECT BRAHMA",
+  "revision": "8d76272358fd4e70a198e5fb8a42ced10a912abe",
+  "nodeVersion": "v24.19.0",
+  "platform": "win32",
+  "targetUrl": "http://localhost:5173",
+  "ports": {
+    "frontend": 5173,
+    "nitroSSR": 3000
+  },
+  "supabase": {
+    "url": "https://hbbunfizlwgvripgwzdo.supabase.co",
+    "authMode": "GoTrue JWT / Session",
+    "zeroRawSqlMandate": "STRICTLY_ENFORCED"
+  },
+  "deferredFeatures": [
+    "Admin Page Design"
+  ]
+}
