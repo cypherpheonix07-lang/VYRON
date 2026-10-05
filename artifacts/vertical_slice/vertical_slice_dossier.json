@@ -1,0 +1,57 @@
+{
+  "payload": {
+    "schemaVersion": "vyron.release_dossier.v1",
+    "runId": "slice_1791231506472",
+    "timestamp": "2026-10-05T20:18:26.530Z",
+    "service": {
+      "serviceId": "svc-payments-01",
+      "name": "PaymentProcessingService",
+      "version": "1.0.0",
+      "declaredAllowedDependencies": [
+        "@/services/billing/billingAdapter",
+        "@/services/auth/tokenValidator",
+        "@/types/payments"
+      ],
+      "strictlyForbiddenDependencies": [
+        "@/db/rawConnectionPool",
+        "@/kernel/rawSocket",
+        "pg",
+        "mysql"
+      ],
+      "baselineHealthScore": 95
+    },
+    "driftFindings": [
+      {
+        "id": "DRIFT_1791231506529_01",
+        "type": "BOUNDARY_VIOLATION",
+        "severity": "HIGH",
+        "cweId": "CWE-285",
+        "entityId": "svc-payments-01",
+        "expected": "Must access database strictly through approved adapters (@/services/billing/billingAdapter)",
+        "observed": "Direct import of forbidden database module \"@/db/rawConnectionPool\"",
+        "evidenceSnippet": "import { rawConnection } from \"@/db/rawConnectionPool\";",
+        "healthImpact": -15
+      }
+    ],
+    "systemHealthScore": 80,
+    "reviewRecord": {
+      "userRole": "Faculty",
+      "email": "dr.sarah.connor@faculty.brahma.edu",
+      "decision": "REJECTED_REMEDIATION_REQUIRED",
+      "comments": "Architecture violation: PaymentProcessor directly imports raw connection pool. Route all queries through BillingAdapter to preserve tenant isolation.",
+      "rubricScores": {
+        "architecturalModularity": 45,
+        "securityCompliance": 50,
+        "codeStyle": 90
+      },
+      "timestamp": "2026-10-05T20:18:26.530Z"
+    }
+  },
+  "seal": {
+    "algorithm": "SHA-256",
+    "digest": "ebd2e5779cb9737a4906a675c1b1b66c91b9d32e218a4ec06a685c6096e60a11",
+    "sealedAt": "2026-10-05T20:18:26.534Z",
+    "verifierRole": "Faculty",
+    "verifierEmail": "dr.sarah.connor@faculty.brahma.edu"
+  }
+}
