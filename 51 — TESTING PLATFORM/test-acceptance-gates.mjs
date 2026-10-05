@@ -7,18 +7,18 @@
 import fs from "fs";
 import http from "http";
 
-import { CopilotThinkingEngine } from "../../src/services/copilot/copilotThinkingEngine.ts";
-import { CopilotExactAnswerEngine } from "../../src/services/copilot/copilotExactAnswerEngine.ts";
-import { copilotEpistemicEngine } from "../../src/services/copilot/copilotEpistemicEngine.ts";
-import { copilotAgentOrchestrator } from "../../src/services/copilot/copilotAgentOrchestrator.ts";
-import { skillRegistry } from "../../src/services/skills/skillRegistry.ts";
-import { AUTHORITATIVE_CONNECTOR_CATALOG } from "../../src/services/connectors/connectorCatalog.ts";
-import { connectorFabric } from "../../src/services/connectors/connectorFabric.ts";
-import { mutationEngine } from "../../src/services/aiProject/controlPlane/mutationEngine.ts";
-import { createInitialProjectState } from "../../src/state/aiProject/aiProjectStore.ts";
-import { EvidenceGraphEngine } from "../../src/services/evidence/evidenceGraphEngine.ts";
-import { GovernanceAuthorizationEngine } from "../../src/services/governance/governanceAuthorizationEngine.ts";
-import { PluginRegistry } from "../../src/plugins/PluginRegistry.ts";
+import { CopilotThinkingEngine } from "../src/services/copilot/copilotThinkingEngine.ts";
+import { CopilotExactAnswerEngine } from "../src/services/copilot/copilotExactAnswerEngine.ts";
+import { copilotEpistemicEngine } from "../src/services/copilot/copilotEpistemicEngine.ts";
+import { copilotAgentOrchestrator } from "../src/services/copilot/copilotAgentOrchestrator.ts";
+import { skillRegistry } from "../src/services/skills/skillRegistry.ts";
+import { AUTHORITATIVE_CONNECTOR_CATALOG } from "../src/services/connectors/connectorCatalog.ts";
+import { connectorFabric } from "../src/services/connectors/connectorFabric.ts";
+import { mutationEngine } from "../src/services/aiProject/controlPlane/mutationEngine.ts";
+import { createInitialProjectState } from "../src/state/aiProject/aiProjectStore.ts";
+import { EvidenceGraphEngine } from "../src/services/evidence/evidenceGraphEngine.ts";
+import { GovernanceAuthorizationEngine } from "../src/services/governance/governanceAuthorizationEngine.ts";
+import { PluginRegistry } from "../src/plugins/PluginRegistry.ts";
 
 const GREEN = "\x1b[32m";
 const RED = "\x1b[31m";
@@ -50,8 +50,9 @@ function recordGate(gateNumber, gateName, verdict, evidence) {
 }
 
 async function httpGet(urlPath) {
+  const port = process.env.TEST_PORT || process.env.PORT || 5173;
   return new Promise((resolve) => {
-    const req = http.get(`http://localhost:8080${urlPath}`, (res) => {
+    const req = http.get(`http://localhost:${port}${urlPath}`, (res) => {
       let data = "";
       res.on("data", (chunk) => (data += chunk));
       res.on("end", () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
@@ -138,7 +139,10 @@ async function runAcceptanceGates() {
     "Analysis lifecycle strictly enforced via 16-state store (IDLE, RUNNING, COMPLETED, CANCELLED, FAILED)");
 
   // Gate 09 — Realtime workflow is real or clearly classified
-  const realtimeCode = fs.readFileSync("./test-realtime.mjs", "utf-8");
+  const realtimePath = fs.existsSync("./test-realtime.mjs")
+    ? "./test-realtime.mjs"
+    : "./51 — TESTING PLATFORM/scripts/testing/test-realtime.mjs";
+  const realtimeCode = fs.readFileSync(realtimePath, "utf-8");
   if (realtimeCode.includes("broadcast") && realtimeCode.includes("channel")) {
     recordGate(9, "Realtime Event Fabric & Channel Isolation", "PASS",
       "WebSocket broadcast channels verified with self-isolation and subscriber filtering in test-realtime.mjs");

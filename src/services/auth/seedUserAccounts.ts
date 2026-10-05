@@ -28,7 +28,9 @@ export interface SeedUserAccount {
   experienceProfile: ExperienceProfile;
 }
 
-export const SEED_USER_ACCOUNTS: Record<string, SeedUserAccount> = {
+export type SeedRoleKey = "student" | "teacher" | "professional" | "admin";
+
+export const SEED_USER_ACCOUNTS: Record<SeedRoleKey, SeedUserAccount> = {
   student: {
     id: "usr_student_001",
     name: "Alex Chen",
@@ -151,24 +153,30 @@ export class SeedAccountManager {
     return Object.values(SEED_USER_ACCOUNTS);
   }
 
-  public getAccount(key: "student" | "teacher" | "professional" | "admin"): SeedUserAccount {
-    return SEED_USER_ACCOUNTS[key];
+  public getAccount(key: SeedRoleKey): SeedUserAccount {
+    const acc = SEED_USER_ACCOUNTS[key];
+    if (!acc) {
+      const fallback = SEED_USER_ACCOUNTS.admin;
+      if (!fallback) throw new Error(`Seed account not found for role: ${key}`);
+      return fallback;
+    }
+    return acc;
   }
 
   public getActiveAccount(): SeedUserAccount {
-    return SEED_USER_ACCOUNTS[this.activeAccountKey];
+    return this.getAccount(this.activeAccountKey);
   }
 
   /**
    * Switch active runtime persona and synchronize ExperienceProfileService
    */
-  public switchPersona(key: "student" | "teacher" | "professional" | "admin"): SeedUserAccount {
+  public switchPersona(key: SeedRoleKey): SeedUserAccount {
     this.activeAccountKey = key;
-    const account = SEED_USER_ACCOUNTS[key];
+    const account = this.getAccount(key);
     experienceProfileService.saveLocalProfile(account.experienceProfile);
     if (typeof window !== "undefined") {
       window.dispatchEvent(
-        new CustomEvent("vyron:account_switched", { detail: account })
+        new CustomEvent<SeedUserAccount>("vyron:account_switched", { detail: account })
       );
     }
     return account;

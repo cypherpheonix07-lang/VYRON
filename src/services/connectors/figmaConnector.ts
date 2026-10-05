@@ -56,7 +56,7 @@ export class FigmaConnector {
     const now = new Date().toISOString();
     const hasToken =
       typeof import.meta !== "undefined" &&
-      Boolean(import.meta.env?.VITE_FIGMA_ACCESS_TOKEN);
+      Boolean(import.meta.env?.["VITE_FIGMA_ACCESS_TOKEN"]);
 
     if (!hasToken) {
       connectorStore.recordAudit({

@@ -591,7 +591,7 @@ class ConnectorStore {
       const latencyMs = Date.now() - startTime;
       const hasToken =
         typeof import.meta !== "undefined" &&
-        Boolean(import.meta.env?.VITE_FIGMA_ACCESS_TOKEN);
+        Boolean(import.meta.env?.["VITE_FIGMA_ACCESS_TOKEN"]);
 
       if (hasToken) {
         this.updateStatus(connectorId, "CONNECTED", null);
@@ -623,7 +623,7 @@ class ConnectorStore {
       const latencyMs = Date.now() - startTime;
       const hasKey =
         typeof import.meta !== "undefined" &&
-        Boolean(import.meta.env?.VITE_NOTION_API_KEY);
+        Boolean(import.meta.env?.["VITE_NOTION_API_KEY"]);
 
       if (hasKey) {
         this.updateStatus(connectorId, "CONNECTED", null);

@@ -27,7 +27,8 @@ export type BroadcastEventType =
   | "CRYPTO_SEAL_VERIFIED"
   | "USER_PRESENCE_HEARTBEAT"
   | "TEST_PING"
-  | "TEST_PONG";
+  | "TEST_PONG"
+  | "CUSTOM_EVENT";
 
 export interface RealtimeMessage<T = Record<string, unknown>> {
   id: string;
@@ -40,7 +41,7 @@ export interface RealtimeMessage<T = Record<string, unknown>> {
   };
   payload: T;
   timestamp: string;
-  latencyMs?: number;
+  latencyMs?: number | undefined;
 }
 
 export interface PresenceMember {
@@ -139,7 +140,7 @@ class SupabaseRealtimeHub {
 
     // 1. Broadcast Event Listeners
     channel.on("broadcast", { event: "*" }, (event) => {
-      const data = event.payload as RealtimeMessage;
+      const data = ((event as Record<string, unknown>)["payload"] || {}) as RealtimeMessage;
       let calculatedLatency: number | undefined;
 
       if (data.type === "TEST_PONG" && this.pingStartTime > 0) {

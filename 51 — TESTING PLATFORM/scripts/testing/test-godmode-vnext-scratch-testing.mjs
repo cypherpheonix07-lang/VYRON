@@ -5,23 +5,23 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { apiGateway } from "./src/architecture/gateway/apiGatewayEngine.ts";
-import { bffComposition } from "./src/architecture/bff/bffCompositionEngine.ts";
-import { bulkheadIsolation } from "./src/architecture/bulkhead/bulkheadIsolationEngine.ts";
-import { transactionalOutbox } from "./src/architecture/outbox/transactionalOutboxEngine.ts";
-import { hexagonalProjectService } from "./src/architecture/hexagonal/hexagonalCoreEngine.ts";
-import { lifecycleStack } from "./src/architecture/stack/lifecycleStackEngine.ts";
-import { releaseGateEngine } from "./src/services/release/releaseGateEngine.ts";
-import { blueprintGraphEngine } from "./src/services/blueprint/blueprintGraphEngine.ts";
-import { systemFlowEngine } from "./src/services/systemFlow/systemFlowEngine.ts";
-import { openAiBackendSentinel } from "./src/services/sentinel/openAiBackendSentinel.ts";
-import { sentinelToolRegistry } from "./src/services/sentinel/sentinelToolRegistry.ts";
-import { contextMesh } from "./src/services/copilot/contextMesh.ts";
-import { safeReasoningEngine } from "./src/services/copilot/safeReasoningEngine.ts";
-import { questionUnderstanding } from "./src/services/copilot/questionUnderstanding.ts";
-import { stageGateEngine } from "./src/services/copilot/stageGateEngine.ts";
-import { architectureDriftEngine } from "./src/services/intelligence/driftEngine.ts";
-import { generateVerificationHash } from "./src/services/ai/cryptoUtils.ts";
+import { apiGateway } from "../../../src/architecture/gateway/apiGatewayEngine.ts";
+import { bffComposition } from "../../../src/architecture/bff/bffCompositionEngine.ts";
+import { bulkheadIsolation } from "../../../src/architecture/bulkhead/bulkheadIsolationEngine.ts";
+import { transactionalOutbox } from "../../../src/architecture/outbox/transactionalOutboxEngine.ts";
+import { hexagonalProjectService } from "../../../src/architecture/hexagonal/hexagonalCoreEngine.ts";
+import { lifecycleStack } from "../../../src/architecture/stack/lifecycleStackEngine.ts";
+import { releaseGateEngine } from "../../../src/services/release/releaseGateEngine.ts";
+import { blueprintGraphEngine } from "../../../src/services/blueprint/blueprintGraphEngine.ts";
+import { systemFlowEngine } from "../../../src/services/systemFlow/systemFlowEngine.ts";
+import { openAiBackendSentinel } from "../../../src/services/sentinel/openAiBackendSentinel.ts";
+import { sentinelToolRegistry } from "../../../src/services/sentinel/sentinelToolRegistry.ts";
+import { contextMesh } from "../../../src/services/copilot/contextMesh.ts";
+import { safeReasoningEngine } from "../../../src/services/copilot/safeReasoningEngine.ts";
+import { questionUnderstanding } from "../../../src/services/copilot/questionUnderstanding.ts";
+import { stageGateEngine } from "../../../src/services/copilot/stageGateEngine.ts";
+import { architectureDriftEngine } from "../../../src/services/intelligence/driftEngine.ts";
+import { generateVerificationHash } from "../../../src/services/ai/cryptoUtils.ts";
 
 let passed = 0;
 let failed = 0;
@@ -48,10 +48,12 @@ async function runFromScratchTestingMission() {
   console.log("===============================================================================\n");
 
   // --- SUITE 1: ENVIRONMENT, BOOT & RECONSTRUCTION (Sections A, B, D, E) ---
-  console.log("--- 1. Environment, Boot & Landing Integrity (Sections A, B, D, E) ---");
-  const landingRes = await fetch("http://localhost:8080/");
+  const TEST_PORT = process.env.TEST_PORT || process.env.PORT || 5173;
+  const BASE_URL = `http://localhost:${TEST_PORT}`;
+  console.log(`--- 1. Environment, Boot & Landing Integrity on ${BASE_URL} (Sections A, B, D, E) ---`);
+  const landingRes = await fetch(`${BASE_URL}/`);
   const landingText = await landingRes.text();
-  assert("TEST-A-B-01", "Live Server Responds HTTP 200 on Port 8080", landingRes.status === 200, `Status: ${landingRes.status}`);
+  assert("TEST-A-B-01", `Live Server Responds HTTP 200 on Port ${TEST_PORT}`, landingRes.status === 200, `Status: ${landingRes.status}`);
   assert("TEST-D-01", "Landing Page Renders Official VYRON Title & Hero Content", landingText.includes("VYRON") && landingText.includes("PROJECT BRAHMA"), "Hero metadata validated");
   assert("TEST-E-01", "Landing Page Exposes Public Discovery & Showcase Entrypoints", landingText.includes("showcase") && landingText.includes("VYRON"), "Navigation entrypoints intact");
 
@@ -86,7 +88,7 @@ async function runFromScratchTestingMission() {
   ];
   let routeSuccess = 0;
   for (const r of routesToCheck) {
-    const res = await fetch(`http://localhost:8080${r}`);
+    const res = await fetch(`${BASE_URL}${r}`);
     if (res.status === 200) routeSuccess++;
   }
   assert("TEST-H-01", "All 11 Primary App Routes Respond HTTP 200 OK", routeSuccess === routesToCheck.length, `Verified ${routeSuccess}/${routesToCheck.length} routes`);
@@ -185,7 +187,7 @@ async function runFromScratchTestingMission() {
 
   // --- SUITE 11: DEMO MODE OPERATIONAL SIMULATION (Sections Z, AA, BF) ---
   console.log("\n--- 11. Demo Mode Operational Simulation (Sections Z, AA, BF) ---");
-  const demoRes = await fetch("http://localhost:8080/demo");
+  const demoRes = await fetch(`${BASE_URL}/demo`);
   const demoText = await demoRes.text();
   assert("TEST-Z-01", "Demo Autopilot Runs 12-Step Deterministic Simulation with Zero Live Side Effects", demoRes.status === 200 && demoText.includes("AUTOPILOT TOUR"), "Demo Mode active");
 

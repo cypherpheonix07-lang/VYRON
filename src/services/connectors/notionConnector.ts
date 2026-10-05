@@ -53,7 +53,7 @@ export class NotionConnector {
     const now = new Date().toISOString();
     const hasKey =
       typeof import.meta !== "undefined" &&
-      Boolean(import.meta.env?.VITE_NOTION_API_KEY);
+      Boolean(import.meta.env?.["VITE_NOTION_API_KEY"]);
 
     if (!hasKey) {
       connectorStore.recordAudit({

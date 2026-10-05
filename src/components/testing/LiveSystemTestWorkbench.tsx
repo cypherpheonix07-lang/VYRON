@@ -51,6 +51,7 @@ import {
   SEED_USER_ACCOUNTS,
 } from "@/services/auth/seedUserAccounts";
 import { analysisStore } from "@/state/analysis/analysisStore";
+import { analysisOrchestrator } from "@/services/orchestrator/analysisOrchestrator";
 
 export function LiveSystemTestWorkbench({ className }: { className?: string }) {
   // 1. Account & Persona State
@@ -238,10 +239,11 @@ export function LiveSystemTestWorkbench({ className }: { className?: string }) {
   const handleRunAnalysis = async () => {
     toast.info(`Launching 12-Stage Forensics as ${activeAccount.name}...`);
     try {
-      await analysisStore.executeAnalysis("sample_fraud_benchmark", {
-        recordsCount: 16,
-        operatorPersona: activeAccount.personaType,
-        operatorEmail: activeAccount.email,
+      await analysisOrchestrator.runPipeline({
+        datasetId: "sample_fraud_benchmark",
+        datasetName: "IEEE-CIS Fraud Benchmark (Test Partition)",
+        mode: "NORMAL",
+        speedMultiplier: 2.0,
       });
       toast.success("12-Stage Forensics pipeline completed and cryptographically sealed!");
     } catch (err) {
@@ -759,21 +761,21 @@ export function LiveSystemTestWorkbench({ className }: { className?: string }) {
                   <div className="p-3 rounded-lg border border-border/40 bg-zinc-950/60">
                     <span className="text-[11px] font-mono text-muted-foreground">RECORDS EVALUATED</span>
                     <p className="text-lg font-mono font-bold text-foreground mt-0.5">
-                      {activeRun.recordsEvaluated}
+                      {activeRun.telemetry.recordsProcessed}
                     </p>
                   </div>
 
                   <div className="p-3 rounded-lg border border-border/40 bg-zinc-950/60">
                     <span className="text-[11px] font-mono text-muted-foreground">OVERALL RISK INDEX</span>
                     <p className="text-lg font-mono font-bold text-amber-400 mt-0.5">
-                      {activeRun.overallRiskIndex} / 100
+                      {activeRun.telemetry.overallRiskScore} / 100
                     </p>
                   </div>
 
                   <div className="p-3 rounded-lg border border-border/40 bg-zinc-950/60">
                     <span className="text-[11px] font-mono text-muted-foreground">CRYPTOGRAPHIC SEAL</span>
                     <p className="text-xs font-mono font-bold text-emerald-400 truncate mt-0.5">
-                      {activeRun.cryptographicProofHash || "Awaiting seal..."}
+                      {activeRun.telemetry.verificationHash || activeRun.verificationHash || "Awaiting seal..."}
                     </p>
                   </div>
                 </div>
