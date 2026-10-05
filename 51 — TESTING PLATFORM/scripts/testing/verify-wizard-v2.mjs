@@ -265,11 +265,9 @@ async function runVerification() {
 
   // V9: RLS Draft State Security
   try {
-    // Check RLS definition in migration 0013
-    const migrationFile = resolve(
-      process.cwd(),
-      "supabase/migrations/0013_project_generator_v2_drift_proof.sql",
-    );
+    const p1 = resolve(process.cwd(), "supabase/migrations/0013_project_generator_v2_drift_proof.sql");
+    const p2 = resolve(process.cwd(), "12 — DATABASE PLATFORM/supabase/migrations/0013_project_generator_v2_drift_proof.sql");
+    const migrationFile = existsSync(p1) ? p1 : p2;
     const sql = readFileSync(migrationFile, "utf-8");
     const hasRls =
       sql.includes('CREATE POLICY "Users can manage own drafts"') &&

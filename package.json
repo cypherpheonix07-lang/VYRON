@@ -13,7 +13,12 @@
     "typecheck": "tsc --noEmit",
     "test": "node \"51 — TESTING PLATFORM/scripts/testing/verify-gates.js\"",
     "verify": "node \"05 — FRONTEND PLATFORM/verify-step1-8.mjs\"",
-    "verify:step1-8": "node \"05 — FRONTEND PLATFORM/verify-step1-8.mjs\""
+    "verify:step1-8": "node \"05 — FRONTEND PLATFORM/verify-step1-8.mjs\"",
+    "verify:copilot": "node verify-nextgen-copilot.mjs",
+    "verify:mission": "node verify-continuation-mission.mjs",
+    "verify:advancement": "node verify-continuation-advancement.mjs",
+    "verify:gates": "node \"51 — TESTING PLATFORM/test-acceptance-gates.mjs\"",
+    "verify:all": "node \"51 — TESTING PLATFORM/scripts/testing/test-godmode-vnext-scratch-testing.mjs\""
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

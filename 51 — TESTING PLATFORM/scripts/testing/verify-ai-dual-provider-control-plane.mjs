@@ -501,9 +501,12 @@ assert(
 );
 
 // -----------------------------------------------------------------------------
-const wizardV2Path = fs.existsSync(path.join(ROOT, "scripts", "testing", "verify-wizard-v2.mjs"))
-  ? path.join(ROOT, "scripts", "testing", "verify-wizard-v2.mjs")
-  : path.join(ROOT, "verify-wizard-v2.mjs");
+const wizardV2Path = [
+  path.join(ROOT, "51 — TESTING PLATFORM", "scripts", "testing", "verify-wizard-v2.mjs"),
+  path.join(ROOT, "05 — FRONTEND PLATFORM", "verify-wizard-v2.mjs"),
+  path.join(ROOT, "scripts", "testing", "verify-wizard-v2.mjs"),
+  path.join(ROOT, "verify-wizard-v2.mjs"),
+].find((p) => fs.existsSync(p)) || path.join(ROOT, "verify-wizard-v2.mjs");
 const wizardV2Test = fs.readFileSync(wizardV2Path, "utf8");
 const wizardShell = fs.readFileSync(
   path.join(ROOT, "src", "components", "wizard", "ProjectWizardShell.tsx"),

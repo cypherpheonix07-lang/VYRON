@@ -28,7 +28,11 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const projectRoot = path.resolve(__dirname, "../..");
+let rootSearch = __dirname;
+while (rootSearch !== path.dirname(rootSearch) && !fs.existsSync(path.join(rootSearch, "package.json"))) {
+  rootSearch = path.dirname(rootSearch);
+}
+const projectRoot = rootSearch;
 
 let passed = 0;
 let failed = 0;

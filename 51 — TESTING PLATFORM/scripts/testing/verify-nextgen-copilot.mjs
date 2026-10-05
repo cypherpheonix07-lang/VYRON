@@ -35,7 +35,11 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const projectRoot = path.resolve(__dirname, "../..");
+let rootSearch = __dirname;
+while (rootSearch !== path.dirname(rootSearch) && !fs.existsSync(path.join(rootSearch, "package.json"))) {
+  rootSearch = path.dirname(rootSearch);
+}
+const projectRoot = rootSearch;
 
 console.log("\n=======================================================================");
 console.log("   VYRON COPILOT NEXT-GEN ARCHITECTURE — 20-PHASE VERIFICATION SUITE   ");
