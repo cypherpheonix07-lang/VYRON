@@ -1,0 +1,4 @@
+OutputId,CaseId,OutputType,SourceEntity,ExpectedValue,ActualValue,Unit,Tolerance,Completeness,Provenance,Verdict
+"OUT_IQR_001","TC_0010","Counts and KPIs (IQR Outlier Filter)","Telemetry Sample Stream (N=10)","[100]","[100]","Outlier Values","Exact (0.00)","Complete","Deterministic IQR calculation: Q1=11, Q3=13, Upper Bound=16","PASSED"
+"OUT_RISK_002","TC_0011","Counts and KPIs (Composite Risk Score)","Project Reality Metric Triad (H=82, S=90, B=74)","83","83","Score Index (0-100)","Exact integer","Complete","Weighted aggregation: Health(40%) + Security(35%) + Business(25%)","PASSED"
+"OUT_CRYPTO_003","TC_0012","Findings & Integrity (HMAC SHA-256 Seal)","12-Stage Forensics Telemetry Payload","720d855ea5ce77283fa0eab856dc5d7185ae5d65881d0e66c68c7006d1a06895","720d855ea5ce77283fa0eab856dc5d7185ae5d65881d0e66c68c7006d1a06895","SHA-256 Hex Hash (64 chars)","Exact bitwise match","Complete","crypto.createHmac('sha256', key).update(payload).digest('hex')","PASSED"

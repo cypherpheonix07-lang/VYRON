@@ -1,0 +1,204 @@
+{
+  "TC_0001": {
+    "phaseId": "W01_P004",
+    "route": "/",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:11.516Z",
+    "evidence": [
+      "HTTP_200_Landing Page"
+    ]
+  },
+  "TC_0002": {
+    "phaseId": "W01_P004",
+    "route": "/login",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:11.915Z",
+    "evidence": [
+      "HTTP_200_Login Gateway"
+    ]
+  },
+  "TC_0003": {
+    "phaseId": "W01_P004",
+    "route": "/register",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:12.328Z",
+    "evidence": [
+      "HTTP_200_Registration Gateway"
+    ]
+  },
+  "TC_0004": {
+    "phaseId": "W01_P004",
+    "route": "/onboarding",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:12.780Z",
+    "evidence": [
+      "HTTP_200_Persona Onboarding Flow"
+    ]
+  },
+  "TC_0005": {
+    "phaseId": "W01_P004",
+    "route": "/app",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:13.134Z",
+    "evidence": [
+      "HTTP_200_Command Center Dashboard"
+    ]
+  },
+  "TC_0006": {
+    "phaseId": "W01_P004",
+    "route": "/app/analysis",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:13.502Z",
+    "evidence": [
+      "HTTP_200_12-Stage Forensics Surface"
+    ]
+  },
+  "TC_0007": {
+    "phaseId": "W01_P004",
+    "route": "/app/exports",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:13.829Z",
+    "evidence": [
+      "HTTP_200_Export Center Artifacts"
+    ]
+  },
+  "TC_0008": {
+    "phaseId": "W01_P004",
+    "route": "/app/projects/new",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:14.924Z",
+    "evidence": [
+      "HTTP_200_New Project Wizard"
+    ]
+  },
+  "TC_0009": {
+    "phaseId": "W01_P004",
+    "route": "/app/admin",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:15.332Z",
+    "evidence": [
+      "HTTP_200_Admin Console Entry Route"
+    ]
+  },
+  "TC_0010": {
+    "phaseId": "W01_P004",
+    "route": "/app/admin/workbench",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:15.804Z",
+    "evidence": [
+      "HTTP_200_Live System Test Workbench"
+    ]
+  },
+  "TC_0011": {
+    "phaseId": "W01_P004",
+    "route": "/app/admin/models",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:18.690Z",
+    "evidence": [
+      "HTTP_200_AI Model Routing"
+    ]
+  },
+  "TC_0012": {
+    "phaseId": "W01_P004",
+    "route": "/app/admin/audit",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:20.275Z",
+    "evidence": [
+      "HTTP_200_Global Audit Log"
+    ]
+  },
+  "TC_0013": {
+    "phaseId": "W03_P021",
+    "route": "/app",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:20.283Z",
+    "evidence": [
+      "src/services/persona/experienceProfileService.ts:STUDENT",
+      "src/services/auth/seedUserAccounts.ts:usr_student_001"
+    ]
+  },
+  "TC_0014": {
+    "phaseId": "W03_P022",
+    "route": "/app/studio/$id/collaborate",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:20.288Z",
+    "evidence": [
+      "src/routes/app.studio.$id.collaborate.tsx:ApprovalWorkflow",
+      "src/services/auth/seedUserAccounts.ts:usr_teacher_002"
+    ]
+  },
+  "TC_0015": {
+    "phaseId": "W03_P023",
+    "route": "/app/projects/$id/risk-business",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:20.294Z",
+    "evidence": [
+      "src/routes/app.projects.$id.risk-business.tsx",
+      "src/services/auth/seedUserAccounts.ts:usr_pro_003"
+    ]
+  },
+  "TC_0016": {
+    "phaseId": "W07_P061",
+    "route": "/app/admin",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:20.296Z",
+    "evidence": [
+      "src/routes/app.admin.tsx:38-59",
+      "src/components/brahma/app-shell.tsx:498"
+    ]
+  },
+  "TC_0017": {
+    "phaseId": "W09_P081",
+    "route": "/app/activity",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:20.298Z",
+    "evidence": [
+      "IQR Ground Truth Check: UpperBound=16, Value=100"
+    ]
+  },
+  "TC_0018": {
+    "phaseId": "W12_P111",
+    "route": "/app",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:20.298Z",
+    "evidence": [
+      "Weighted formula: 82*0.4 + 90*0.35 + 74*0.25 = 82.8 -> 83"
+    ]
+  },
+  "TC_0019": {
+    "phaseId": "W14_P131",
+    "route": "/app/analysis",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:20.302Z",
+    "evidence": [
+      "HMAC_SHA256_720d855ea5ce77283fa0eab856dc5d7185ae5d65881d0e66c68c7006d1a06895"
+    ]
+  },
+  "TC_0020": {
+    "phaseId": "W23_P221",
+    "route": "/app",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:27.698Z",
+    "evidence": [
+      "Throughput_2.7_rps"
+    ]
+  },
+  "TC_0021": {
+    "phaseId": "W23_P222",
+    "route": "/app",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:35.338Z",
+    "evidence": [
+      "Throughput_5.4_rps"
+    ]
+  },
+  "TC_0022": {
+    "phaseId": "W23_P223",
+    "route": "/app",
+    "status": "PASSED",
+    "timestamp": "2026-10-05T15:14:45.716Z",
+    "evidence": [
+      "Throughput_10_rps"
+    ]
+  }
+}
