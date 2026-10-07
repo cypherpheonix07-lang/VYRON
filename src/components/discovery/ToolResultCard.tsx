@@ -32,6 +32,7 @@ export function ToolResultCard({ result, onCompare, isComparing = false }: ToolR
   const { tool, relevanceScore, reasons, healthScore } = result;
   const [isSaved, setIsSaved] = useState(false);
   const [showExplanation, setShowExplanation] = useState(false);
+  const [now] = useState(() => Date.now());
 
   const handleSaveToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -86,7 +87,7 @@ export function ToolResultCard({ result, onCompare, isComparing = false }: ToolR
   const formatLastVerified = (isoString?: string) => {
     if (!isoString) return "Recently";
     try {
-      const diffMs = Date.now() - new Date(isoString).getTime();
+      const diffMs = now - new Date(isoString).getTime();
       const diffMins = Math.floor(diffMs / 60000);
       if (diffMins < 60) return `${Math.max(1, diffMins)}m ago`;
       const diffHours = Math.floor(diffMins / 60);

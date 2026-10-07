@@ -119,6 +119,13 @@ export const BlueprintReleaseConvergenceView: React.FC<{ projectId: string }> = 
   const [highlightedNodeIds, setHighlightedNodeIds] = useState<Set<string>>(new Set());
 
   // Load Initial Graph & Gates
+  const refreshData = useCallback(() => {
+    setNodes(blueprintGraphEngine.getAllNodes());
+    setEdges(blueprintGraphEngine.getAllEdges());
+    setGates(releaseGateEngine.getAllGates());
+    setReadiness(releaseGateEngine.evaluateReleaseReadiness());
+  }, []);
+
   useEffect(() => {
     refreshData();
     const unsubscribe = blueprintGateConvergence.subscribe((result) => {
@@ -128,14 +135,7 @@ export const BlueprintReleaseConvergenceView: React.FC<{ projectId: string }> = 
       });
     });
     return () => unsubscribe();
-  }, []);
-
-  const refreshData = () => {
-    setNodes(blueprintGraphEngine.getAllNodes());
-    setEdges(blueprintGraphEngine.getAllEdges());
-    setGates(releaseGateEngine.getAllGates());
-    setReadiness(releaseGateEngine.evaluateReleaseReadiness());
-  };
+  }, [refreshData]);
 
   // Convert to ReactFlow Nodes
   const flowNodes: FlowNode[] = useMemo(() => {

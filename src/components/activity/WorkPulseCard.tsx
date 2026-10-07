@@ -38,6 +38,7 @@ export function WorkPulseCard({
   density = "normal",
   variant = "card",
 }: WorkPulseCardProps) {
+  const [now] = useState(() => Date.now());
   // Determine state
   const state: "loading" | "empty" | "error" | "live" | "stale" | "anomaly" = useMemo(() => {
     if (isLoading) return "loading";
@@ -49,12 +50,12 @@ export function WorkPulseCard({
 
     // Check for stale: last event > 48h ago
     if (pulse.last_event_at) {
-      const diff = Date.now() - new Date(pulse.last_event_at).getTime();
+      const diff = now - new Date(pulse.last_event_at).getTime();
       if (diff > 48 * 3600 * 1000) return "stale";
     }
 
     return "live";
-  }, [isLoading, isError, pulse]);
+  }, [isLoading, isError, pulse, now]);
 
   const heightClass =
     density === "compact" ? "min-h-36 p-3.5" : density === "expanded" ? "min-h-72 p-6" : "min-h-56 p-5";

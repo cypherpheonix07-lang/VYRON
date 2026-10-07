@@ -181,7 +181,7 @@ export function SchemaDriftDetector() {
             </h3>
           </div>
           <span className="text-[10px] font-mono text-muted-foreground">
-            Audited at: {new Date(driftData?.timestamp || Date.now()).toLocaleTimeString()}
+            Audited at: {driftData?.timestamp ? new Date(driftData.timestamp).toLocaleTimeString() : "Pending"}
           </span>
         </div>
 

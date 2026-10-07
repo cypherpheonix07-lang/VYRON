@@ -172,7 +172,7 @@ export function GitHubConnectCard() {
   const [selectedRepo, setSelectedRepo] = useState<string>("");
   const [selectedBranch, setSelectedBranch] = useState<string>("main");
   const [loading, setLoading] = useState(true);
-  const [pushFeed, setPushFeed] = useState<IntegrationPushEvent[]>([
+  const [pushFeed, setPushFeed] = useState<IntegrationPushEvent[]>(() => [
     {
       id: "ev-p1",
       user_id: "u1",
@@ -199,7 +199,7 @@ export function GitHubConnectCard() {
 
   const ghIntegration = integrations.find((i) => i.provider === "github");
 
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     setLoading(true);
     try {
       const [ints, rList] = await Promise.all([
@@ -212,12 +212,12 @@ export function GitHubConnectCard() {
         setSelectedRepo(rList[0].full_name);
         setSelectedBranch(rList[0].default_branch);
       }
-    } catch (e) {
+    } catch {
       toast.error("Failed to load GitHub integration state.");
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
 
   useEffect(() => {
     loadData();
@@ -248,7 +248,7 @@ export function GitHubConnectCard() {
         supabase.removeChannel(channel);
       }
     };
-  }, [user]);
+  }, [loadData]);
 
   const handleConnectGitHub = () => {
     const clientId = import.meta.env["VITE_GITHUB_CLIENT_ID"] || "Iv1.8821941brahma";

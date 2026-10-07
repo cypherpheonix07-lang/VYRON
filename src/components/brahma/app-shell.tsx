@@ -745,9 +745,8 @@ function Breadcrumbs() {
   const availableProjects = liveProjects.length > 0 ? liveProjects : mockProjects;
   const crumbs = useMemo(() => {
     const parts = pathname.split("/").filter(Boolean);
-    let href = "";
-    return parts.map((part) => {
-      href += `/${part}`;
+    return parts.map((part, index) => {
+      const href = "/" + parts.slice(0, index + 1).join("/");
       const project = availableProjects.find((p) => p.id === part);
       return { label: project?.name ?? labelMap[part] ?? part, href };
     });

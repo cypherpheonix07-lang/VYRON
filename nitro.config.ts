@@ -1,10 +1,16 @@
 import { defineNitroConfig } from "nitro/config";
 
+interface RollupLog {
+  code?: string;
+  message?: string;
+  [key: string]: unknown;
+}
+
 const suppressDirectiveFilter = {
   checks: {
     moduleLevelDirective: false,
   },
-  onLog(level: any, log: any, defaultHandler: any) {
+  onLog(level: string, log: RollupLog, defaultHandler?: (level: string, log: RollupLog) => void) {
     if (
       log?.code === "MODULE_LEVEL_DIRECTIVE" ||
       log?.message?.includes("module level directive")
@@ -13,7 +19,7 @@ const suppressDirectiveFilter = {
     }
     defaultHandler?.(level, log);
   },
-  onwarn(warning: any, defaultHandler: any) {
+  onwarn(warning: RollupLog, defaultHandler?: (warning: RollupLog) => void) {
     if (
       warning?.code === "MODULE_LEVEL_DIRECTIVE" ||
       warning?.message?.includes("module level directive")

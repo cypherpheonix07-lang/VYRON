@@ -63,23 +63,21 @@ interface SavedViewsManagerProps {
 }
 
 export function SavedViewsManager({ currentFilters, onApplyPreset }: SavedViewsManagerProps) {
-  const [presets, setPresets] = useState<SavedViewPreset[]>([]);
-  const [newPresetName, setNewPresetName] = useState("");
-  const [isAdding, setIsAdding] = useState(false);
-
-  useEffect(() => {
+  const [presets, setPresets] = useState<SavedViewPreset[]>(() => {
+    if (typeof window === "undefined") return DEFAULT_PRESETS;
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        setPresets(JSON.parse(saved));
-      } else {
-        setPresets(DEFAULT_PRESETS);
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PRESETS));
+        return JSON.parse(saved);
       }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PRESETS));
     } catch {
-      setPresets(DEFAULT_PRESETS);
+      // Fallback on error
     }
-  }, []);
+    return DEFAULT_PRESETS;
+  });
+  const [newPresetName, setNewPresetName] = useState("");
+  const [isAdding, setIsAdding] = useState(false);
 
   const saveCurrentView = () => {
     if (!newPresetName.trim()) {

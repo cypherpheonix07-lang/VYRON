@@ -51,15 +51,16 @@ export function AuthLayout({
   footer,
   showFocusToggle = true,
 }: AuthLayoutProps) {
-  const [variant, setVariant] = useState<LayoutVariant>("A");
-
-  useEffect(() => {
-    // Read from localStorage to persist user's variant preference
-    const saved = localStorage.getItem("brahma.auth_variant") as LayoutVariant | null;
-    if (saved) {
-      setVariant(saved);
+  const [variant, setVariant] = useState<LayoutVariant>(() => {
+    if (typeof window === "undefined") return "A";
+    try {
+      const saved = localStorage.getItem("brahma.auth_variant") as LayoutVariant | null;
+      if (saved) return saved;
+    } catch {
+      // Fallback on storage access failure
     }
-  }, []);
+    return "A";
+  });
 
   const toggleVariant = () => {
     const next: LayoutVariant = variant === "A" ? "C" : variant === "C" ? "A" : "A";

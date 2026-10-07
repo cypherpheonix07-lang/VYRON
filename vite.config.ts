@@ -1,7 +1,13 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-const suppressDirectiveFilter: any = {
-  onLog(level: any, log: any, defaultHandler: any) {
+interface RollupLog {
+  code?: string;
+  message?: string;
+  [key: string]: unknown;
+}
+
+const suppressDirectiveFilter = {
+  onLog(level: string, log: RollupLog, defaultHandler?: (level: string, log: RollupLog) => void) {
     if (
       log?.code === "MODULE_LEVEL_DIRECTIVE" ||
       log?.message?.includes("module level directive")
@@ -10,7 +16,7 @@ const suppressDirectiveFilter: any = {
     }
     defaultHandler?.(level, log);
   },
-  onwarn(warning: any, warn: any) {
+  onwarn(warning: RollupLog, warn?: (warning: RollupLog) => void) {
     if (
       warning?.code === "MODULE_LEVEL_DIRECTIVE" ||
       warning?.message?.includes("module level directive")
@@ -27,6 +33,22 @@ export default defineConfig({
     server: { entry: "server" },
   },
   vite: {
+    server: {
+      watch: {
+        ignored: [
+          "**/.output/**",
+          "**/.wrangler/**",
+          "**/.vinxi/**",
+          "**/.chrome-demo-profile/**",
+          "**/brahma-engine/**",
+          "**/vyron-engine/**",
+          "**/.agents/**",
+          "**/51 — TESTING PLATFORM/**",
+          "**/acceptance-gates-report.json",
+          "**/continuation_advancement_report.json",
+        ],
+      },
+    },
     build: {
       rolldownOptions: suppressDirectiveFilter,
       rollupOptions: suppressDirectiveFilter,
