@@ -5,8 +5,8 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { aiProjectStore } from "@/state/aiProject/aiProjectStore";
-import { RequirementItem } from "@/types/aiProjectControlPlane";
+import { aiProjectStore } from "../../../state/aiProject/aiProjectStore.ts";
+import type { RequirementItem } from "../../../types/aiProjectControlPlane.ts";
 
 export type ToolType = "READ" | "PROPOSAL";
 

@@ -5,7 +5,7 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { MutationSensitivityLevel, AgentRole } from "@/types/aiProjectControlPlane";
+import type { MutationSensitivityLevel, AgentRole } from "../../../types/aiProjectControlPlane.ts";
 
 export type PolicyDecision = "ALLOW" | "DENY" | "REQUIRE_APPROVAL";
 

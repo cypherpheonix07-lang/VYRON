@@ -5,7 +5,7 @@
  * Strictly ZERO SQL.
  */
 
-import {
+import type {
   PluginTool,
   PluginResource,
   PluginContext,
@@ -14,9 +14,9 @@ import {
   PluginAuditEvent,
   PluginCategory,
   PluginLifecycleState,
-} from "./types";
-import { BrahmaIntelligenceError } from "@/lib/errors/brahmaErrors";
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
+} from "./types.ts";
+import { BrahmaIntelligenceError } from "../lib/errors/brahmaErrors.ts";
+import { generateVerificationHash } from "../services/ai/cryptoUtils.ts";
 
 type PluginRegistryListener = (manifests: PluginManifest[]) => void;
 

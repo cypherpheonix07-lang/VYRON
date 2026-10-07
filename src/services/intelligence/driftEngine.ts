@@ -5,7 +5,7 @@
  * Strictly ZERO SQL.
  */
 
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
+import { generateVerificationHash } from "../ai/cryptoUtils.ts";
 
 export type DriftType =
   | "MISSING_COMPONENT"

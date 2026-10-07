@@ -5,7 +5,7 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { ProjectLifecycleStage, ProjectEngineeringState } from "@/types/aiProjectControlPlane";
+import type { ProjectLifecycleStage, ProjectEngineeringState } from "../../../types/aiProjectControlPlane.ts";
 
 export interface ImpactAnalysisReport {
   changedStage: ProjectLifecycleStage;

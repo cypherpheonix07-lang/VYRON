@@ -13,8 +13,8 @@
  * - Strictly ZERO SQL.
  */
 
-import { GovernedSkill, SkillTestRunResult, SkillTestCase } from "./types";
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
+import type { GovernedSkill, SkillTestRunResult, SkillTestCase } from "./types.ts";
+import { generateVerificationHash } from "../ai/cryptoUtils.ts";
 
 export interface SandboxExecutionReport {
   skillId: string;

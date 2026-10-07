@@ -4,8 +4,8 @@
  * Used for Demo Mode and offline development.
  */
 
-import { AIAdapter, AICompletionRequest, AICompletionResponse } from "../types";
-import { generateVerificationHash } from "../cryptoUtils";
+import type { AIAdapter, AICompletionRequest, AICompletionResponse } from "../types.ts";
+import { generateVerificationHash } from "../cryptoUtils.ts";
 
 export class MockAIAdapter implements AIAdapter {
   public id = "MOCK_DETERMINISTIC" as const;

@@ -4,7 +4,7 @@
  * Strictly ZERO Raw SQL.
  */
 
-import {
+import type {
   AgentRole,
   ProjectEngineeringState,
   ProjectIntentModel,
@@ -23,9 +23,9 @@ import {
   RedTeamFinding,
   ProjectBlueprint,
   DiscoveryQuestion,
-} from "@/types/aiProjectControlPlane";
-import { aiModelGateway } from "../gateway/aiModelGateway";
-import { projectContextCompiler } from "../context/projectContextCompiler";
+} from "../../../types/aiProjectControlPlane.ts";
+import { aiModelGateway } from "../gateway/aiModelGateway.ts";
+import { projectContextCompiler } from "../context/projectContextCompiler.ts";
 
 export interface AgentExecutionOutput<T> {
   role: AgentRole;

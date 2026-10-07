@@ -4,9 +4,9 @@
  * ZERO API keys in the browser or frontend bundle.
  */
 
-import { AIAdapter, AICompletionRequest, AICompletionResponse } from "../types";
-import { generateVerificationHash } from "../cryptoUtils";
-import { MockAIAdapter } from "./mockAdapter";
+import type { AIAdapter, AICompletionRequest, AICompletionResponse } from "../types.ts";
+import { generateVerificationHash } from "../cryptoUtils.ts";
+import { MockAIAdapter } from "./mockAdapter.ts";
 
 export class OpenAiAdapter implements AIAdapter {
   public id = "OPENAI_GPT4O" as const;

@@ -3,7 +3,7 @@
  * Provider-neutral interfaces for Anthropic Claude, Moonshot Kimi, OpenAI, and Deterministic Mock engines.
  */
 
-import { AIModelType } from "../../state/copilot/copilotStore";
+import type { AIModelType } from "../../state/copilot/copilotStore.ts";
 
 export type AITaskType =
   | "REASONING" // Complex logic, architecture, tool-calls (Claude preferred)

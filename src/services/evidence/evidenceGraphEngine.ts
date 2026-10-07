@@ -6,8 +6,8 @@
  * Strictly ZERO SQL.
  */
 
-import { EvidenceLifecycleState } from "@/types/engineeringEntity";
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
+import type { EvidenceLifecycleState } from "../../types/engineeringEntity.ts";
+import { generateVerificationHash } from "../ai/cryptoUtils.ts";
 
 export interface EvidenceGraphNode {
   id: string;

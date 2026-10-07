@@ -5,9 +5,9 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { AgentRole, ProjectLifecycleStage } from "@/types/aiProjectControlPlane";
-import { agentRegistry } from "./agentRegistry";
-import { toolRegistry } from "./toolRegistry";
+import type { AgentRole, ProjectLifecycleStage } from "../../../types/aiProjectControlPlane.ts";
+import { agentRegistry } from "./agentRegistry.ts";
+import { toolRegistry } from "./toolRegistry.ts";
 
 export interface ToolAuthorizationDecision {
   allowed: boolean;

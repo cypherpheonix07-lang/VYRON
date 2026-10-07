@@ -5,8 +5,8 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { AgentRole, ProjectLifecycleStage } from "@/types/aiProjectControlPlane";
-import { PROMPT_REGISTRY, VersionedPrompt } from "../gateway/promptRegistry";
+import type { AgentRole, ProjectLifecycleStage } from "../../../types/aiProjectControlPlane.ts";
+import { PROMPT_REGISTRY, type VersionedPrompt } from "../gateway/promptRegistry.ts";
 
 export interface AgentPolicy {
   allowedStages: ProjectLifecycleStage[];

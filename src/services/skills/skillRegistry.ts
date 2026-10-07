@@ -10,9 +10,9 @@
  * - Strictly ZERO SQL.
  */
 
-import { GovernedSkill, SkillLifecycleState, SkillAuditEvent, SkillVersionRecord } from "./types";
-import { skillSandbox } from "./skillSandbox";
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
+import type { GovernedSkill, SkillLifecycleState, SkillAuditEvent, SkillVersionRecord } from "./types.ts";
+import { skillSandbox } from "./skillSandbox.ts";
+import { generateVerificationHash } from "../ai/cryptoUtils.ts";
 
 type SkillRegistryListener = (skills: GovernedSkill[]) => void;
 

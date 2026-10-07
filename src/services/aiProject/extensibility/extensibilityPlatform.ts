@@ -5,9 +5,9 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { IAIProviderClient } from "@/services/ai/providers/clientProviderTypes";
-import { clientProviderRegistry } from "@/services/ai/providers/clientProviderRegistry";
-import { toolRegistry, ToolDefinition } from "../runtime/toolRegistry";
+import type { IAIProviderClient } from "../../ai/providers/clientProviderTypes.ts";
+import { clientProviderRegistry } from "../../ai/providers/clientProviderRegistry.ts";
+import { toolRegistry, type ToolDefinition } from "../runtime/toolRegistry.ts";
 
 export interface CustomAgentExtension {
   id: string;

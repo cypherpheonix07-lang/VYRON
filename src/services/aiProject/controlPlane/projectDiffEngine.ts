@@ -5,7 +5,7 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { ProjectEngineeringState, ProjectDiffSummary } from "@/types/aiProjectControlPlane";
+import type { ProjectEngineeringState, ProjectDiffSummary } from "../../../types/aiProjectControlPlane.ts";
 
 export class ProjectDiffEngine {
   private static instance: ProjectDiffEngine | null = null;

@@ -5,12 +5,12 @@
  * Strictly ZERO Raw SQL.
  */
 
-import {
+import type {
   IAIProviderClient,
   ClientAIProviderId,
   ClientAIRequest,
   ClientAIResponse,
-} from "./clientProviderTypes";
+} from "./clientProviderTypes.ts";
 
 export class OpenRouterClientProvider implements IAIProviderClient {
   public readonly id: ClientAIProviderId = "openrouter";

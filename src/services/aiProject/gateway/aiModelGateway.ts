@@ -4,10 +4,10 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { AgentRole } from "@/types/aiProjectControlPlane";
-import { PROMPT_REGISTRY } from "./promptRegistry";
-import { aiRouter } from "@/services/ai/aiRouter";
-import { clientProviderRegistry } from "@/services/ai/providers/clientProviderRegistry";
+import type { AgentRole } from "../../../types/aiProjectControlPlane.ts";
+import { PROMPT_REGISTRY } from "./promptRegistry.ts";
+import { aiRouter } from "../../ai/aiRouter.ts";
+import { clientProviderRegistry } from "../../ai/providers/clientProviderRegistry.ts";
 
 export interface GatewayExecutionOptions {
   role: AgentRole;

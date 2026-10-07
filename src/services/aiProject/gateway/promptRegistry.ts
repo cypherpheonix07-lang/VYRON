@@ -5,7 +5,7 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { AgentRole, ProjectLifecycleStage } from "@/types/aiProjectControlPlane";
+import type { AgentRole, ProjectLifecycleStage } from "../../../types/aiProjectControlPlane.ts";
 
 export interface VersionedPrompt {
   id: string;

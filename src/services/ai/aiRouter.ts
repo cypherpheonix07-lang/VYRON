@@ -7,13 +7,13 @@
  * - Deterministic Mock: High-speed demo mode & offline execution.
  */
 
-import { AIAdapter, AICompletionRequest, AICompletionResponse } from "./types";
-import { ClaudeAdapter } from "./adapters/claudeAdapter";
-import { KimiAdapter } from "./adapters/kimiAdapter";
-import { OpenAiAdapter } from "./adapters/openAiAdapter";
-import { OpenRouterAdapter } from "./adapters/openRouterAdapter";
-import { MockAIAdapter } from "./adapters/mockAdapter";
-import { AIModelType } from "../../state/copilot/copilotStore";
+import type { AIAdapter, AICompletionRequest, AICompletionResponse } from "./types.ts";
+import { ClaudeAdapter } from "./adapters/claudeAdapter.ts";
+import { KimiAdapter } from "./adapters/kimiAdapter.ts";
+import { OpenAiAdapter } from "./adapters/openAiAdapter.ts";
+import { OpenRouterAdapter } from "./adapters/openRouterAdapter.ts";
+import { MockAIAdapter } from "./adapters/mockAdapter.ts";
+import type { AIModelType } from "../../state/copilot/copilotStore.ts";
 
 export class AIRouter {
   private adapters: Map<AIModelType, AIAdapter> = new Map();

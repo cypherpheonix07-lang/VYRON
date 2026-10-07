@@ -15,9 +15,9 @@
  * - Strictly ZERO SQL.
  */
 
-import { NormalizedConnectorDef, AUTHORITATIVE_CONNECTOR_CATALOG } from "./connectorCatalog";
-import { copilotStore } from "@/state/copilot/copilotStore";
-import { generateVerificationHash } from "@/services/ai/cryptoUtils";
+import { type NormalizedConnectorDef, AUTHORITATIVE_CONNECTOR_CATALOG } from "./connectorCatalog.ts";
+import { copilotStore } from "../../state/copilot/copilotStore.ts";
+import { generateVerificationHash } from "../ai/cryptoUtils.ts";
 
 export interface ConnectorAuditEvent {
   id: string;

@@ -4,9 +4,9 @@
  * Gracefully falls back to deterministic simulation when API credentials are not set.
  */
 
-import { AIAdapter, AICompletionRequest, AICompletionResponse } from "../types";
-import { generateVerificationHash } from "../cryptoUtils";
-import { MockAIAdapter } from "./mockAdapter";
+import type { AIAdapter, AICompletionRequest, AICompletionResponse } from "../types.ts";
+import { generateVerificationHash } from "../cryptoUtils.ts";
+import { MockAIAdapter } from "./mockAdapter.ts";
 
 export class KimiAdapter implements AIAdapter {
   public id = "KIMI_K3" as const;

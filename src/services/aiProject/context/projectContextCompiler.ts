@@ -5,7 +5,7 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { AgentRole, ProjectEngineeringState } from "@/types/aiProjectControlPlane";
+import type { AgentRole, ProjectEngineeringState } from "../../../types/aiProjectControlPlane.ts";
 
 export interface CompiledContextEnvelope {
   role: AgentRole;

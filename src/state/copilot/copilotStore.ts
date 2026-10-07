@@ -7,7 +7,7 @@
  * Strictly ZERO SQL.
  */
 
-import { AppMode } from "../mode/modeStore";
+import type { AppMode } from "../mode/modeStore.ts";
 import type { DynamicExecutionPlan, PlanStep } from "@/services/copilot/copilotPlanner";
 import type { CopilotIntentType } from "@/services/copilot/copilotIntentGateway";
 import type { EpistemicKnowledgeState } from "@/services/copilot/copilotEpistemicEngine";

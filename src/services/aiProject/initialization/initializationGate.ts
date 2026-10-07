@@ -4,10 +4,10 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { supabase } from "@/lib/supabaseClient";
-import { authService } from "@/services/authService";
-import { ProjectEngineeringState } from "@/types/aiProjectControlPlane";
-import { copilotMemory } from "@/services/copilot/copilotMemory";
+import { supabase } from "../../../lib/supabaseClient.ts";
+import { authService } from "../../authService.ts";
+import type { ProjectEngineeringState } from "../../../types/aiProjectControlPlane.ts";
+import { copilotMemory } from "../../copilot/copilotMemory.ts";
 
 export interface InitializationValidationResult {
   canInitialize: boolean;

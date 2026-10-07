@@ -5,11 +5,11 @@
  * Strictly ZERO Raw SQL.
  */
 
-import {
+import type {
   ProjectLifecycleStage,
   StageStatus,
   ProjectEngineeringState,
-} from "@/types/aiProjectControlPlane";
+} from "../../../types/aiProjectControlPlane.ts";
 
 export interface StageTransitionRule {
   stage: ProjectLifecycleStage;

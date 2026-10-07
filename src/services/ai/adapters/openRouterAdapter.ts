@@ -4,10 +4,10 @@
  * ZERO API keys in the browser or frontend bundle.
  */
 
-import { AIAdapter, AICompletionRequest, AICompletionResponse, AIToolCall } from "../types";
-import { generateVerificationHash } from "../cryptoUtils";
-import { MockAIAdapter } from "./mockAdapter";
-import { AIModelType } from "../../../state/copilot/copilotStore";
+import type { AIAdapter, AICompletionRequest, AICompletionResponse, AIToolCall } from "../types.ts";
+import { generateVerificationHash } from "../cryptoUtils.ts";
+import { MockAIAdapter } from "./mockAdapter.ts";
+import type { AIModelType } from "../../../state/copilot/copilotStore.ts";
 
 export class OpenRouterAdapter implements AIAdapter {
   public id: AIModelType = "OPENROUTER_AUTO";

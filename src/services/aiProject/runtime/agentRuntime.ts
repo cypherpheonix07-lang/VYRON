@@ -4,13 +4,13 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { AgentRole, ProjectLifecycleStage } from "@/types/aiProjectControlPlane";
-import { agentRegistry } from "./agentRegistry";
-import { toolRegistry } from "./toolRegistry";
-import { toolAuthorizationEngine } from "./toolAuthorization";
-import { aiModelGateway, GatewayExecutionOptions } from "../gateway/aiModelGateway";
-import { projectContextCompiler } from "../context/projectContextCompiler";
-import { aiProjectStore } from "@/state/aiProject/aiProjectStore";
+import type { AgentRole, ProjectLifecycleStage } from "../../../types/aiProjectControlPlane.ts";
+import { agentRegistry } from "./agentRegistry.ts";
+import { toolRegistry } from "./toolRegistry.ts";
+import { toolAuthorizationEngine } from "./toolAuthorization.ts";
+import { aiModelGateway, type GatewayExecutionOptions } from "../gateway/aiModelGateway.ts";
+import { projectContextCompiler } from "../context/projectContextCompiler.ts";
+import { aiProjectStore } from "../../../state/aiProject/aiProjectStore.ts";
 
 export interface AgentExecutionRequest {
   role: AgentRole;

@@ -4,9 +4,9 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { IAIProviderClient, ClientAIProviderId } from "./clientProviderTypes";
-import { openAiClientProvider } from "./openAiClientProvider";
-import { openRouterClientProvider } from "./openRouterClientProvider";
+import type { IAIProviderClient, ClientAIProviderId } from "./clientProviderTypes.ts";
+import { openAiClientProvider } from "./openAiClientProvider.ts";
+import { openRouterClientProvider } from "./openRouterClientProvider.ts";
 
 export class ClientProviderRegistry {
   private static instance: ClientProviderRegistry | null = null;
