@@ -418,6 +418,9 @@ Embedded directly inside feature pages (Analysis, Datasets, Release Gates):
 | `src/components/copilot/ThinkingControlsBar.tsx` | 290 | Interactive thinking depth slider (L0–L5) and policy selectors. |
 | `src/components/copilot/ContextLensModal.tsx` | 460 | Modal visualizer for inspecting the live `ContextPassport`. |
 | `src/components/copilot/ConversationTimeMachineModal.tsx` | 380 | Interactive timeline for rewinding and branching conversation history. |
+| `src/components/aether/AetherControlCenter.tsx` | 650 | AETHER Cognitive Control Center with Topology, Memory Lattice, and Rehearsal Lab. |
+| `src/routes/app.aether.tsx` | 25 | TanStack Router route for `/app/aether`. |
+| `AETHER_COPILOT_WALKTHROUGH.md` | 185 | Dedicated master architectural walkthrough for AETHER & Copilot integration. |
 
 ---
 
