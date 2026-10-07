@@ -47,6 +47,7 @@ import {
   Terminal,
   BarChart3,
   CheckSquare,
+  Cpu,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode, useRef } from "react";
 import { toast } from "sonner";
@@ -206,6 +207,7 @@ export const NAV_DOMAINS: NavDomain[] = [
     label: "AI",
     icon: Bot,
     items: [
+      { to: "/app/aether", label: "AETHER Cognitive Center", icon: Cpu, exact: false },
       { to: "/app/chat", label: "Copilot Intelligence Studio", icon: Bot, exact: false },
       { to: "/app/studio", label: "Autonomous AI Studio", icon: Sparkles, exact: false },
       { to: "/app/admin/models", label: "AI Model Governance", icon: Brain, exact: false },

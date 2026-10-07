@@ -29,6 +29,7 @@ import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppActivityRouteImport } from './routes/app.activity'
 import { Route as AppAdminRouteImport } from './routes/app.admin'
+import { Route as AppAetherRouteImport } from './routes/app.aether'
 import { Route as AppAnalysisRouteImport } from './routes/app.analysis'
 import { Route as AppBillingRouteImport } from './routes/app.billing'
 import { Route as AppChatRouteImport } from './routes/app.chat'
@@ -209,6 +210,11 @@ const AppActivityRoute = AppActivityRouteImport.update({
 const AppAdminRoute = AppAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAetherRoute = AppAetherRouteImport.update({
+  id: '/aether',
+  path: '/aether',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAnalysisRoute = AppAnalysisRouteImport.update({
@@ -641,6 +647,7 @@ export interface FileRoutesByFullPath {
   '/verify-email': typeof VerifyEmailRoute
   '/app/activity': typeof AppActivityRoute
   '/app/admin': typeof AppAdminRouteWithChildren
+  '/app/aether': typeof AppAetherRoute
   '/app/analysis': typeof AppAnalysisRoute
   '/app/billing': typeof AppBillingRouteWithChildren
   '/app/chat': typeof AppChatRoute
@@ -742,6 +749,7 @@ export interface FileRoutesByTo {
   '/showcase': typeof ShowcaseRoute
   '/verify-email': typeof VerifyEmailRoute
   '/app/activity': typeof AppActivityRoute
+  '/app/aether': typeof AppAetherRoute
   '/app/analysis': typeof AppAnalysisRoute
   '/app/billing': typeof AppBillingRouteWithChildren
   '/app/chat': typeof AppChatRoute
@@ -844,6 +852,7 @@ export interface FileRoutesById {
   '/verify-email': typeof VerifyEmailRoute
   '/app/activity': typeof AppActivityRoute
   '/app/admin': typeof AppAdminRouteWithChildren
+  '/app/aether': typeof AppAetherRoute
   '/app/analysis': typeof AppAnalysisRoute
   '/app/billing': typeof AppBillingRouteWithChildren
   '/app/chat': typeof AppChatRoute
@@ -949,6 +958,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/app/activity'
     | '/app/admin'
+    | '/app/aether'
     | '/app/analysis'
     | '/app/billing'
     | '/app/chat'
@@ -1050,6 +1060,7 @@ export interface FileRouteTypes {
     | '/showcase'
     | '/verify-email'
     | '/app/activity'
+    | '/app/aether'
     | '/app/analysis'
     | '/app/billing'
     | '/app/chat'
@@ -1151,6 +1162,7 @@ export interface FileRouteTypes {
     | '/verify-email'
     | '/app/activity'
     | '/app/admin'
+    | '/app/aether'
     | '/app/analysis'
     | '/app/billing'
     | '/app/chat'
@@ -1395,6 +1407,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/app/admin'
       preLoaderRoute: typeof AppAdminRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/aether': {
+      id: '/app/aether'
+      path: '/aether'
+      fullPath: '/app/aether'
+      preLoaderRoute: typeof AppAetherRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/analysis': {
@@ -2123,6 +2142,7 @@ const AppStudioIdRouteWithChildren = AppStudioIdRoute._addFileChildren(
 interface AppRouteChildren {
   AppActivityRoute: typeof AppActivityRoute
   AppAdminRoute: typeof AppAdminRouteWithChildren
+  AppAetherRoute: typeof AppAetherRoute
   AppAnalysisRoute: typeof AppAnalysisRoute
   AppBillingRoute: typeof AppBillingRouteWithChildren
   AppChatRoute: typeof AppChatRoute
@@ -2160,6 +2180,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppActivityRoute: AppActivityRoute,
   AppAdminRoute: AppAdminRouteWithChildren,
+  AppAetherRoute: AppAetherRoute,
   AppAnalysisRoute: AppAnalysisRoute,
   AppBillingRoute: AppBillingRouteWithChildren,
   AppChatRoute: AppChatRoute,
