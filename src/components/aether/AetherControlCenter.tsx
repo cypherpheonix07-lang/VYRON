@@ -135,7 +135,8 @@ const DEFAULT_TOOLS: ToolAdapter[] = [
 
 export function AetherControlCenter() {
   const { mode } = useAppMode();
-  const { projects, activeProject } = useProjects();
+  const { projects } = useProjects();
+  const activeProject = projects[0];
   const { submitPrompt } = useCopilot();
 
   const [activeTab, setActiveTab] = useState<"overview" | "architecture" | "memory" | "agents" | "tools" | "simulation">("overview");

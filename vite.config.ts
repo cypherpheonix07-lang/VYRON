@@ -6,8 +6,8 @@ interface RollupLog {
   [key: string]: unknown;
 }
 
-const suppressDirectiveFilter = {
-  onLog(level: string, log: RollupLog, defaultHandler?: (level: string, log: RollupLog) => void) {
+const suppressDirectiveFilter: any = {
+  onLog(level: string, log: any, defaultHandler?: any) {
     if (
       log?.code === "MODULE_LEVEL_DIRECTIVE" ||
       log?.message?.includes("module level directive")
@@ -16,7 +16,7 @@ const suppressDirectiveFilter = {
     }
     defaultHandler?.(level, log);
   },
-  onwarn(warning: RollupLog, warn?: (warning: RollupLog) => void) {
+  onwarn(warning: any, warn?: any) {
     if (
       warning?.code === "MODULE_LEVEL_DIRECTIVE" ||
       warning?.message?.includes("module level directive")
