@@ -11,9 +11,9 @@
  * Strictly ZERO SQL.
  */
 
-import { QuestionType, IntentCapsule, EngineeringLifecycleStage } from "./questionUnderstanding";
-import { ContextPassport } from "./contextMesh";
-import { ResourceTrailItem } from "./resourceProvenance";
+import { QuestionType, IntentCapsule, EngineeringLifecycleStage } from "./questionUnderstanding.ts";
+import { ContextPassport } from "./contextMesh.ts";
+import { ResourceTrailItem } from "./resourceProvenance.ts";
 
 export interface GovernedToolCard {
   toolName: string;

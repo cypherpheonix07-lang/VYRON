@@ -11,9 +11,9 @@
  * Strictly ZERO SQL.
  */
 
-import { AppMode, modeStore } from "@/state/mode/modeStore";
-import { copilotStore } from "@/state/copilot/copilotStore";
-import { QuestionUnderstandingEngine, IntentCapsule, EngineeringLifecycleStage } from "./questionUnderstanding";
+import { AppMode, modeStore } from "../../state/mode/modeStore.ts";
+import { copilotStore } from "../../state/copilot/copilotStore.ts";
+import { QuestionUnderstandingEngine, IntentCapsule, EngineeringLifecycleStage } from "./questionUnderstanding.ts";
 
 export type ContextMeshDomain =
   | "CURRENT_TURN"

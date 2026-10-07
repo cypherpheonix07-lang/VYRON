@@ -2,9 +2,9 @@
 
 **Title:** Boundary Enforcement for PaymentService Database Access  
 **Status:** REJECTED (Pending Remediation)  
-**Date:** 2026-10-05T20:18:26.543Z  
+**Date:** 2026-10-07T02:28:13.256Z  
 **Reviewer:** Dr. Sarah Connor (Faculty)  
-**Cryptographic Seal:** `ebd2e5779cb9737a4906a675c1b1b66c91b9d32e218a4ec06a685c6096e60a11`  
+**Cryptographic Seal:** `4b4181359b5123c11304d352c2cb016c99bc535050c99548c752da78d6b62db9`  
 
 ## Context
 A pull request injected a direct dependency on `@/db/rawConnectionPool` into `PaymentProcessor.ts`.
@@ -22,4 +22,4 @@ A pull request injected a direct dependency on `@/db/rawConnectionPool` into `Pa
 
 ## Verification Proof
 This document is bound to verifiable release dossier hash:
-`sha256:ebd2e5779cb9737a4906a675c1b1b66c91b9d32e218a4ec06a685c6096e60a11`
+`sha256:4b4181359b5123c11304d352c2cb016c99bc535050c99548c752da78d6b62db9`

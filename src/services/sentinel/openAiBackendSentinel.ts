@@ -5,8 +5,8 @@
  * Strictly ZERO Raw SQL.
  */
 
-import { sentinelToolRegistry } from "./sentinelToolRegistry";
-import { sentinelIncidentStore, type SentinelIncident, type DefectSeverity, type RootCauseChain } from "./sentinelIncidentStore";
+import { sentinelToolRegistry } from "./sentinelToolRegistry.ts";
+import { sentinelIncidentStore, type SentinelIncident, type DefectSeverity, type RootCauseChain } from "./sentinelIncidentStore.ts";
 
 export type SentinelMode =
   | "OBSERVE_ONLY"

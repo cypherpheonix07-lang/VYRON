@@ -10,8 +10,8 @@
  * Strictly ZERO SQL.
  */
 
-import { EngineeringLifecycleStage } from "./questionUnderstanding";
-import { ContextPassport } from "./contextMesh";
+import { EngineeringLifecycleStage } from "./questionUnderstanding.ts";
+import { ContextPassport } from "./contextMesh.ts";
 
 export type StageVerdict = "COMPLETE" | "PARTIAL" | "BLOCKED" | "FAILED";
 
