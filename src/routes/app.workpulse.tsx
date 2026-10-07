@@ -41,5 +41,3 @@ function WorkPulseRetiredPage() {
     </div>
   );
 }
-
-export default WorkPulseRetiredPage;

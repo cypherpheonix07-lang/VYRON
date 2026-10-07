@@ -429,4 +429,3 @@ function SystemAlertPage() {
     </div>
   );
 }
-export default SystemAlertPage;
