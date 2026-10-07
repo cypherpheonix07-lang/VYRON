@@ -95,7 +95,8 @@ export function useProjects() {
         setDraftCount(Math.max(count ?? 0, localCount));
       }
     } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : String(e);
+      const errObj = e as { message?: string; details?: string; hint?: string } | null;
+      const msg = errObj?.message || (e instanceof Error ? e.message : String(e));
       console.warn("[useProjects] Fetch error, falling back to cached seed:", msg);
       setProjects(DEMO_PROJECTS as unknown as Project[]);
       setError(null);
@@ -124,12 +125,25 @@ export function useProjects() {
 
     const userRes = await authService.getUser();
     const user = userRes.data;
+    if (!user?.id) {
+      const newProj: Project = {
+        id: `local-${Date.now()}`,
+        name,
+        description,
+        health_score: 95,
+        status: "active",
+        created_at: new Date().toISOString(),
+      };
+      setProjects((prev) => [newProj, ...prev]);
+      return newProj;
+    }
+
     const { data, error: err } = await supabase
       .from("projects")
       .insert({
         name,
         description,
-        owner_id: user?.id,
+        owner_id: user.id,
         health_score: 95,
         status: "active",
       })
