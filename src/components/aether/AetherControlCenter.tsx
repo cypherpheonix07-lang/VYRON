@@ -252,7 +252,7 @@ export function AetherControlCenter() {
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-bold tracking-wider text-sm text-white">AETHER</span>
+              <span className="font-bold tracking-wider text-sm text-white">ATHER</span>
               <span className="px-2 py-0.5 rounded-full text-[10px] font-mono tracking-widest bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
                 COGNITIVE CONTROL CENTER
               </span>
@@ -334,7 +334,7 @@ export function AetherControlCenter() {
                   A cognitive operating system that happens to look like chat.
                 </h1>
                 <p className="text-xs lg:text-sm text-muted-foreground leading-relaxed max-w-2xl">
-                  AETHER orchestrates frontier reasoning models, episodic-semantic memory, tool adapters, and verification loops into an accountable agent execution fabric.
+                  ATHER orchestrates frontier reasoning models, episodic-semantic memory, tool adapters, and verification loops into an accountable agent execution fabric.
                 </p>
 
                 <div className="flex flex-wrap gap-2 mt-5">
@@ -743,7 +743,7 @@ export function AetherControlCenter() {
             <div className="rounded-2xl border border-white/[0.08] bg-[#0a111b]/90 p-5 space-y-4">
               <h3 className="text-sm font-bold text-white">Memory Discipline Laws</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                AETHER rejects unstructured chat history accumulation. Memories must carry explicit provenance and confidence boundaries.
+                ATHER rejects unstructured chat history accumulation. Memories must carry explicit provenance and confidence boundaries.
               </p>
 
               <div className="space-y-3 text-xs">
@@ -980,7 +980,7 @@ export function AetherControlCenter() {
             <div className="rounded-2xl border border-white/[0.08] bg-[#0a111b]/90 p-5 space-y-4">
               <h3 className="text-sm font-bold text-white">Verification Contract</h3>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Before consequential side effects are dispatched, AETHER proves validity through deterministic assertions.
+                Before consequential side effects are dispatched, ATHER proves validity through deterministic assertions.
               </p>
 
               <div className="space-y-2.5 text-xs">
@@ -1017,7 +1017,7 @@ export function AetherControlCenter() {
               <X className="size-4" />
             </button>
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-400">AETHER AUDIT MODAL</span>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-cyan-400">ATHER AUDIT MODAL</span>
               <h3 className="text-base font-bold text-white mt-0.5">{modalData.title}</h3>
               {modalData.subtitle && <p className="text-xs text-muted-foreground">{modalData.subtitle}</p>}
             </div>

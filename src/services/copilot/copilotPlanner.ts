@@ -72,7 +72,23 @@ export class CopilotPlanner {
    * Determine if a user goal requires a multi-step structured plan vs a direct response.
    */
   public isComplexGoal(text: string): boolean {
-    const lower = text.toLowerCase();
+    const lower = text.trim().toLowerCase();
+    // Exclude informational questions and critique prompts
+    if (
+      lower.startsWith("what is") ||
+      lower.startsWith("what are") ||
+      lower.startsWith("how to") ||
+      lower.startsWith("how does") ||
+      lower.startsWith("how do") ||
+      lower.startsWith("can you explain") ||
+      lower.startsWith("explain ") ||
+      lower.startsWith("tell me about") ||
+      lower.includes("critique") ||
+      lower.includes("review this prompt") ||
+      lower.includes("evaluate this prompt")
+    ) {
+      return false;
+    }
     const complexKeywords = [
       "plan",
       "execute",

@@ -61,6 +61,13 @@ import { multimodalIntelligence } from "./multimodalIntelligence";
 import { safeReasoningEngine } from "./safeReasoningEngine";
 import { stageGateEngine } from "./stageGateEngine";
 import { conversationTimeMachine } from "./conversationTimeMachine";
+import {
+  atherOrchestrator,
+  atherExecutiveController,
+  ExecutionDepth,
+  AtherModelId,
+  SpecialistType,
+} from "@/services/ather";
 import { toast } from "sonner";
 
 export interface DispatchOptions {
@@ -182,11 +189,14 @@ export class CopilotDispatcher {
     copilotRealtimeListener.emitTypedCopilotEvent("INTENT", intent);
 
     // 5. Check if the objective requires autonomous multi-step planning (Level 4/5 or complex goal)
+    const atherContract = atherExecutiveController.parseRequest(text);
     if (
-      thinkingPolicy.effectiveDepth >= 4 ||
-      copilotPlanner.isComplexGoal(text) ||
-      intent.type === "MISSION" ||
-      intent.type === "INVESTIGATION"
+      !atherContract.isCritiqueOnly &&
+      atherContract.intent !== "QUESTION" &&
+      (thinkingPolicy.effectiveDepth >= 4 ||
+        copilotPlanner.isComplexGoal(text) ||
+        intent.type === "MISSION" ||
+        intent.type === "INVESTIGATION")
     ) {
       const liveContext = copilotContextEngine.assembleContext();
       const plan = copilotPlanner.formulatePlan(text, currentMode, liveContext.dataset.name, {
@@ -375,9 +385,44 @@ export class CopilotDispatcher {
         contextPassport
       );
 
+      // Execute through ATHER Cognitive Orchestrator
+      let atherDepth: ExecutionDepth = "AUTO";
+      if (thinkingPolicy.effectiveDepth === 0 || thinkingPolicy.effectiveDepth === 1 || session.thinkingMode === "FAST") atherDepth = "QUICK";
+      else if (thinkingPolicy.effectiveDepth === 2) atherDepth = "STANDARD";
+      else if (thinkingPolicy.effectiveDepth === 3) atherDepth = "DEEP";
+      else if (thinkingPolicy.effectiveDepth === 4) atherDepth = "INVESTIGATE";
+      else if (thinkingPolicy.effectiveDepth === 5) atherDepth = "HIGH_ASSURANCE";
+
+      let atherModel: AtherModelId = "AUTO";
+      if (activeModel === "CLAUDE_SONNET") atherModel = "CLAUDE_SONNET";
+      else if (activeModel === "OPENAI_GPT4O") atherModel = "OPENAI_GPT4O";
+      else if (activeModel === "KIMI_K3") atherModel = "KIMI_K3";
+      else if (activeModel === "MOCK_DETERMINISTIC") atherModel = "LOCAL_DETERMINISTIC";
+
+      let specialistType: SpecialistType = "DATA_ANALYST";
+      if (session.activeSpecialist === "SECURITY_OFFICER") specialistType = "SECURITY_OFFICER";
+      else if (session.activeSpecialist === "RELEASE_GATE_KEEPER") specialistType = "RELEASE_GATE_KEEPER";
+      else if (session.activeSpecialist === "ARCHITECTURE_CURATOR") specialistType = "ARCHITECTURE_CURATOR";
+      else if (session.activeSpecialist === "VERIFICATION_ENGINEER") specialistType = "VERIFICATION_ENGINEER";
+      else if (session.activeSpecialist === "DATA_ANALYST" || text.toLowerCase().includes("dataset") || text.toLowerCase().includes("csv") || text.toLowerCase().includes("missing")) specialistType = "DATA_ANALYST";
+      else specialistType = "GENERAL_COGNITIVE";
+
+      const atherPacket = await atherOrchestrator.processTurn(text, {
+        taskMode: "CHAT",
+        model: atherModel,
+        executionDepth: atherDepth,
+        specialist: specialistType,
+        skills: session.activeSkills,
+        connectors: session.activeConnectors,
+        responseDetail: session.responseDetail === "CONCISE" ? "CONCISE" : session.responseDetail === "DEEP" ? "EXHAUSTIVE" : "BALANCED",
+        projectId: session.context?.selectedEntityId || "proj_atlas_001",
+      });
+
+      const effectiveText = atherPacket.directAnswer || (response.text + deliberationSummary);
+
       // Synthesize Safe Dynamic Answer & End-of-Chat Proof Card
       const dynamicAnswer = safeReasoningEngine.composeDynamicAnswer({
-        rawCompletionText: response.text + deliberationSummary,
+        rawCompletionText: effectiveText,
         intentCapsule,
         contextPassport,
         resourceTrail,
@@ -392,14 +437,14 @@ export class CopilotDispatcher {
         activeSkills: session.activeSkills,
         activeConnectors: session.activeConnectors,
         contextSources: citations,
-        rawCompletionText: response.text + deliberationSummary,
+        rawCompletionText: effectiveText,
         responseDetail: thinkingPolicy.responseDetail,
         thinkingDepth: thinkingPolicy.effectiveDepth,
         suggestedActions: dynamicActions,
         executionVerificationHash: response.verificationHash,
       });
 
-      const turnId = `turn_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+      const turnId = atherPacket.turnId || `turn_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
 
       // Persist immutable turn record to Conversation Time Machine
       conversationTimeMachine.recordTurn({
@@ -408,7 +453,7 @@ export class CopilotDispatcher {
         timestamp: new Date().toISOString(),
         projectId: contextPassport.project.id,
         userQuery: text,
-        assistantAnswer: dynamicAnswer.firstBlock + "\n\n" + dynamicAnswer.detailedBody,
+        assistantAnswer: effectiveText,
         intentCapsule,
         contextPassport,
         resourceTrail,
@@ -424,9 +469,9 @@ export class CopilotDispatcher {
 
       copilotStore.addMessage(currentMode, {
         sender: "ASSISTANT",
-        text: response.text + deliberationSummary,
+        text: effectiveText,
         metadata: {
-          citations,
+          citations: Array.from(new Set([...citations, ...atherPacket.receipt.citedSources])),
           suggestedActions: dynamicActions,
           verificationHash: response.verificationHash,
           reasoningDurationMs: response.durationMs,
@@ -446,6 +491,7 @@ export class CopilotDispatcher {
           resourceTrail,
           safeReasoning: dynamicAnswer.safeReasoning,
           stageGate,
+          atherReceipt: atherPacket.receipt,
         },
       });
 

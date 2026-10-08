@@ -4,11 +4,11 @@ import { AetherControlCenter } from "@/components/aether/AetherControlCenter";
 export const Route = createFileRoute("/app/aether")({
   head: () => ({
     meta: [
-      { title: "AETHER Cognitive Control Center — VYRON" },
+      { title: "ATHER Cognitive Control Center — VYRON" },
       {
         name: "description",
         content:
-          "AETHER interactive cognitive agent operating system interface and closed-loop control center.",
+          "ATHER interactive cognitive agent operating system interface and closed-loop control center.",
       },
     ],
   }),

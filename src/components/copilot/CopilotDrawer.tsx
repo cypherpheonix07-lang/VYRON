@@ -76,6 +76,7 @@ import { ConnectorMarketplaceView } from "@/components/copilot/ConnectorMarketpl
 import { ActionPreviewModal } from "@/components/copilot/ActionPreviewModal";
 import { ContextLensModal } from "@/components/copilot/ContextLensModal";
 import { ConversationTimeMachineModal } from "@/components/copilot/ConversationTimeMachineModal";
+import { AtherExplanationPanel } from "@/components/copilot/AtherExplanationPanel";
 import { skillRegistry, GovernedSkill } from "@/services/skills";
 import { ActionPreviewPayload, connectorFabric } from "@/services/connectors";
 import { cn } from "@/lib/utils";
@@ -382,7 +383,7 @@ export function CopilotDrawer() {
             : "w-full sm:max-w-[500px]",
         )}
       >
-        <SheetTitle className="sr-only">Brahma AI Copilot</SheetTitle>
+        <SheetTitle className="sr-only">ATHER AI Copilot</SheetTitle>
 
         {/* Drawer Header */}
         <SheetHeader className="p-4 border-b border-border/40 space-y-2.5">
@@ -401,7 +402,7 @@ export function CopilotDrawer() {
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-black tracking-tight text-foreground">
-                    {mode === "DEMO" ? "Brahma Demo Copilot" : "Brahma Intelligence Copilot"}
+                    {mode === "DEMO" ? "ATHER Demo Copilot" : "ATHER Intelligence Copilot"}
                   </h3>
                   <Badge
                     variant="outline"
@@ -692,6 +693,10 @@ export function CopilotDrawer() {
                         )}
                       </>
                     )}
+
+                    {msg.sender === "ASSISTANT" && msg.metadata?.atherReceipt && (
+                      <AtherExplanationPanel receipt={msg.metadata.atherReceipt} />
+                    )}
                   </div>
                 </div>
               ))}
@@ -770,8 +775,8 @@ export function CopilotDrawer() {
                 type="text"
                 placeholder={
                   mode === "NORMAL"
-                    ? "Ask Brahma about live pipelines, contracts, or risk..."
-                    : "Ask Demo Copilot to inject anomalies or explain IQR..."
+                    ? "Ask ATHER about live pipelines, contracts, or risk..."
+                    : "Ask ATHER Demo to inject anomalies or explain IQR..."
                 }
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}

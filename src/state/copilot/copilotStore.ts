@@ -166,6 +166,7 @@ export interface CopilotMessage {
         safeReasoning?: import("@/services/copilot/safeReasoningEngine").SafeReasoningTransparency | undefined;
         stageGate?: import("@/services/copilot/stageGateEngine").StageGateTransition | undefined;
         checkpoint?: import("@/services/copilot/stageGateEngine").ResumableMissionCheckpoint | undefined;
+        atherReceipt?: import("@/services/ather/types").HowThisAnswerWasProduced | undefined;
       }
     | undefined;
 }

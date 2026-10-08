@@ -91,6 +91,7 @@ import { ConnectorMarketplaceView } from "./ConnectorMarketplaceView";
 import { ActionPreviewModal } from "./ActionPreviewModal";
 import { ContextLensModal } from "./ContextLensModal";
 import { ConversationTimeMachineModal } from "./ConversationTimeMachineModal";
+import { AtherExplanationPanel } from "./AtherExplanationPanel";
 import { Radar } from "lucide-react";
 import { ActionPreviewPayload } from "@/services/connectors/connectorFabric";
 import { skillRegistry, GovernedSkill } from "@/services/skills";
@@ -540,8 +541,8 @@ export function CopilotFullScreenStudio() {
               <div className="flex items-center gap-2">
                 <h2 className="text-base font-black tracking-tight text-foreground">
                   {mode === "DEMO"
-                    ? "Vyron Demo Copilot Studio"
-                    : "Vyron Cognitive Engineering Studio"}
+                    ? "ATHER Demo Copilot Studio"
+                    : "ATHER Cognitive Intelligence Studio"}
                 </h2>
                 <Badge
                   variant="outline"
@@ -761,6 +762,10 @@ export function CopilotFullScreenStudio() {
                         )}
                     </>
                   )}
+
+                  {msg.sender === "ASSISTANT" && msg.metadata?.atherReceipt && (
+                    <AtherExplanationPanel receipt={msg.metadata.atherReceipt} />
+                  )}
                 </div>
               </div>
             ))}
@@ -846,7 +851,7 @@ export function CopilotFullScreenStudio() {
           >
             <input
               type="text"
-              placeholder={`Ask Vyron Copilot in ${studioMode} mode...`}
+              placeholder={`Ask ATHER in ${studioMode} mode...`}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               disabled={isLoading}
