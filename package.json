@@ -105,9 +105,17 @@
     "vite": "^8.2.0"
   },
   "overrides": {
-    "js-yaml": "^4.3.2"
+    "js-yaml": "^4.3.2",
+    "shell-quote": "^1.12.0",
+    "seroval": "^1.6.8",
+    "seroval-plugins": "^1.6.8",
+    "source-map-js": "^1.2.2"
   },
   "resolutions": {
-    "js-yaml": "^4.3.2"
+    "js-yaml": "^4.3.2",
+    "shell-quote": "^1.12.0",
+    "seroval": "^1.6.8",
+    "seroval-plugins": "^1.6.8",
+    "source-map-js": "^1.2.2"
   }
 }
