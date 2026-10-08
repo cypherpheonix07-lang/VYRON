@@ -67,6 +67,7 @@ import {
   ExecutionDepth,
   AtherModelId,
   SpecialistType,
+  ResponseDetail,
 } from "@/services/ather";
 import { toast } from "sonner";
 
@@ -387,7 +388,7 @@ export class CopilotDispatcher {
 
       // Execute through ATHER Cognitive Orchestrator
       let atherDepth: ExecutionDepth = "AUTO";
-      if (thinkingPolicy.effectiveDepth === 0 || thinkingPolicy.effectiveDepth === 1 || session.thinkingMode === "FAST") atherDepth = "QUICK";
+      if (thinkingPolicy.effectiveDepth === 0 || thinkingPolicy.effectiveDepth === 1 || session.thinkingMode === "THINK_DISABLED") atherDepth = "QUICK";
       else if (thinkingPolicy.effectiveDepth === 2) atherDepth = "STANDARD";
       else if (thinkingPolicy.effectiveDepth === 3) atherDepth = "DEEP";
       else if (thinkingPolicy.effectiveDepth === 4) atherDepth = "INVESTIGATE";
@@ -400,12 +401,17 @@ export class CopilotDispatcher {
       else if (activeModel === "MOCK_DETERMINISTIC") atherModel = "LOCAL_DETERMINISTIC";
 
       let specialistType: SpecialistType = "DATA_ANALYST";
-      if (session.activeSpecialist === "SECURITY_OFFICER") specialistType = "SECURITY_OFFICER";
-      else if (session.activeSpecialist === "RELEASE_GATE_KEEPER") specialistType = "RELEASE_GATE_KEEPER";
-      else if (session.activeSpecialist === "ARCHITECTURE_CURATOR") specialistType = "ARCHITECTURE_CURATOR";
-      else if (session.activeSpecialist === "VERIFICATION_ENGINEER") specialistType = "VERIFICATION_ENGINEER";
+      if (session.activeSpecialist === "SECURITY_OFFICER") specialistType = "SECURITY_AUDITOR";
+      else if (session.activeSpecialist === "RELEASE_GATE_KEEPER") specialistType = "CRITIC";
+      else if (session.activeSpecialist === "ARCHITECTURE_CURATOR") specialistType = "SYSTEMS_ARCHITECT";
+      else if (session.activeSpecialist === "VERIFICATION_ENGINEER") specialistType = "CORE_ENGINEER";
       else if (session.activeSpecialist === "DATA_ANALYST" || text.toLowerCase().includes("dataset") || text.toLowerCase().includes("csv") || text.toLowerCase().includes("missing")) specialistType = "DATA_ANALYST";
-      else specialistType = "GENERAL_COGNITIVE";
+      else specialistType = "CORE_ENGINEER";
+
+      let atherResponseDetail: ResponseDetail = "BALANCED";
+      if (session.responseDetail === "STANDARD") atherResponseDetail = "CONCISE";
+      else if (session.responseDetail === "FULL_EVIDENCE_REPORT") atherResponseDetail = "EVIDENCE_FIRST";
+      else if (session.responseDetail === "ENGINEERING_DEEP_DIVE") atherResponseDetail = "IN_DEPTH";
 
       const atherPacket = await atherOrchestrator.processTurn(text, {
         taskMode: "CHAT",
@@ -414,7 +420,7 @@ export class CopilotDispatcher {
         specialist: specialistType,
         skills: session.activeSkills,
         connectors: session.activeConnectors,
-        responseDetail: session.responseDetail === "CONCISE" ? "CONCISE" : session.responseDetail === "DEEP" ? "EXHAUSTIVE" : "BALANCED",
+        responseDetail: atherResponseDetail,
         projectId: session.context?.selectedEntityId || "proj_atlas_001",
       });
 

@@ -25,7 +25,8 @@ import { useAiProject } from "@/state/aiProject/aiProjectStore";
 export const Stage09AiDesignWorkspace: React.FC = () => {
   const { state, executeStage, isExecuting, setAiEngineeringActive, addManualAiModelCandidate } =
     useAiProject();
-  const ai = state.ai;
+  const ai = state.ai || { isActive: false, modelCandidates: [], promptInjectionDefenses: [] };
+  const modelCandidates = ai.modelCandidates || [];
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [modelName, setModelName] = useState("");
@@ -254,9 +255,9 @@ export const Stage09AiDesignWorkspace: React.FC = () => {
               </div>
 
               {/* Model Candidates Grid */}
-              {ai.modelCandidates.length > 0 ? (
+              {modelCandidates.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {ai.modelCandidates.map((m) => (
+                  {modelCandidates.map((m) => (
                     <div
                       key={m.id}
                       className="p-4 rounded-xl border border-border/70 bg-card/40 space-y-3 transition-colors hover:border-border"

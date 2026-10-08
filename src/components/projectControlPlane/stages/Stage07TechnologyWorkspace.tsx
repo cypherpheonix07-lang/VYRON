@@ -16,7 +16,8 @@ import { TechStackDecision } from "@/types/aiProjectControlPlane";
 
 export const Stage07TechnologyWorkspace: React.FC = () => {
   const { state, executeStage, isExecuting, addManualDecision, updateDecision } = useAiProject();
-  const tech = state.technology;
+  const tech = state.technology || { decisions: [], stackFitScore: 0 };
+  const decisions = tech.decisions || [];
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [newCat, setNewCat] = useState<TechStackDecision["category"]>("backend");
@@ -171,9 +172,9 @@ export const Stage07TechnologyWorkspace: React.FC = () => {
           )}
 
           {/* Technology Decisions Grid */}
-          {tech.decisions.length > 0 ? (
+          {decisions.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {tech.decisions.map((d, idx) => (
+              {decisions.map((d, idx) => (
                 <div
                   key={idx}
                   className="p-4 rounded-xl border border-border/70 bg-card/40 space-y-3 transition-colors hover:border-border"

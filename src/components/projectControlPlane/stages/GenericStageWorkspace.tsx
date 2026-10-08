@@ -31,7 +31,7 @@ export const GenericStageWorkspace: React.FC<GenericStageWorkspaceProps> = ({ st
           icon: Layers,
           color: "text-amber-400",
           desc: "Hierarchical business and system capability taxonomy separated from technology implementation.",
-          items: state.capabilities.capabilities.map((c) => ({
+          items: (state.capabilities?.capabilities || []).map((c) => ({
             title: c.name,
             subtitle: c.category,
             details: c.description,
@@ -43,7 +43,7 @@ export const GenericStageWorkspace: React.FC<GenericStageWorkspaceProps> = ({ st
           icon: Cpu,
           color: "text-blue-400",
           desc: "Primary and alternative stacks with trade-offs, operational burden, and migration implications.",
-          items: state.technology.decisions.map((d) => ({
+          items: (state.technology?.decisions || []).map((d) => ({
             title: `${d.category.toUpperCase()}: ${d.selectedOption}`,
             subtitle: `Alternative: ${d.alternativeOption}`,
             details: d.rationale,
@@ -55,7 +55,7 @@ export const GenericStageWorkspace: React.FC<GenericStageWorkspaceProps> = ({ st
           icon: Database,
           color: "text-emerald-400",
           desc: "Domain entities, relationships, sensitivity classifications, retention windows, and multi-tenant RLS.",
-          items: state.data.entities.map((e) => ({
+          items: (state.data?.entities || []).map((e) => ({
             title: e.name,
             subtitle: `Sensitivity: ${e.sensitivity.toUpperCase()} • Retention: ${e.retentionPeriod}`,
             details: e.description,
@@ -67,7 +67,7 @@ export const GenericStageWorkspace: React.FC<GenericStageWorkspaceProps> = ({ st
           icon: Brain,
           color: "text-purple-400",
           desc: "Conditional AI architecture: candidate models, inference pipeline, prompt injection defense, and fallback strategies.",
-          items: state.ai.modelCandidates.map((m) => ({
+          items: (state.ai?.modelCandidates || []).map((m) => ({
             title: m.name,
             subtitle: `${m.provider.toUpperCase()} • ${m.costPer1kTokens * 1000}$ / 1M tokens`,
             details: m.purpose,
@@ -79,7 +79,7 @@ export const GenericStageWorkspace: React.FC<GenericStageWorkspaceProps> = ({ st
           icon: Activity,
           color: "text-orange-400",
           desc: "Component failure modes, timeout policies, circuit breaker thresholds, and deterministic fallback engines.",
-          items: state.reliability.scenarios.map((s) => ({
+          items: (state.reliability?.scenarios || []).map((s) => ({
             title: s.componentName,
             subtitle: `Timeout: ${s.timeoutMs}ms • Retries: ${s.retryCount}`,
             details: `Failure: ${s.failureScenario} -> Fallback: ${s.fallbackStrategy}`,
@@ -91,7 +91,7 @@ export const GenericStageWorkspace: React.FC<GenericStageWorkspaceProps> = ({ st
           icon: CheckSquare,
           color: "text-teal-400",
           desc: "Multi-tier test strategy and requirement-to-test traceability matrix ensuring zero unverified specifications.",
-          items: state.testing.testCases.map((tc) => ({
+          items: (state.testing?.testCases || []).map((tc) => ({
             title: `${tc.code}: ${tc.title}`,
             subtitle: `Type: ${tc.type.toUpperCase()} • Target: ${tc.targetRequirementCode}`,
             details: tc.assertion,

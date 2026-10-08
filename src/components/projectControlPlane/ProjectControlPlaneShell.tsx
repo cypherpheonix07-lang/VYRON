@@ -38,6 +38,8 @@ import { Input } from "@/components/ui/input";
 import { useAiProject } from "@/state/aiProject/aiProjectStore";
 import { ProjectLifecycleStage, CopilotMode } from "@/types/aiProjectControlPlane";
 
+import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
+
 // Stage Components (14 Dedicated Workspaces)
 import { Stage01IntentWorkspace } from "./stages/Stage01IntentWorkspace";
 import { Stage02ProblemWorkspace } from "./stages/Stage02ProblemWorkspace";
@@ -55,7 +57,9 @@ import { Stage13TestingWorkspace } from "./stages/Stage13TestingWorkspace";
 import { Stage14BlueprintWorkspace } from "./stages/Stage14BlueprintWorkspace";
 
 interface ProjectControlPlaneShellProps {
-  onSwitchToClassicWizard?: () => void;
+  onSwitchToClassicWizard?: (() => void) | undefined;
+  initialStage?: ProjectLifecycleStage | undefined;
+  onStageChange?: ((stage: ProjectLifecycleStage) => void) | undefined;
 }
 
 const STAGES_CONFIG: Array<{
@@ -81,6 +85,8 @@ const STAGES_CONFIG: Array<{
 
 export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> = ({
   onSwitchToClassicWizard,
+  initialStage,
+  onStageChange,
 }) => {
   const {
     state,
@@ -98,6 +104,17 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
     updateIntent,
     nextBestAction,
   } = useAiProject();
+
+  React.useEffect(() => {
+    if (initialStage && initialStage !== state.activeStage) {
+      setActiveStage(initialStage);
+    }
+  }, [initialStage, state.activeStage, setActiveStage]);
+
+  const handleStageSelect = (stageId: ProjectLifecycleStage) => {
+    setActiveStage(stageId);
+    onStageChange?.(stageId);
+  };
 
   const [copilotInput, setCopilotInput] = useState("");
   const [isCopilotDockOpen, setIsCopilotDockOpen] = useState(true);
@@ -452,7 +469,7 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
                 <button
                   key={stage.id}
                   type="button"
-                  onClick={() => setActiveStage(stage.id)}
+                  onClick={() => handleStageSelect(stage.id)}
                   className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
                     isActive
                       ? "bg-cyan-500/15 text-cyan-300 border border-cyan-500/40 shadow-sm"
@@ -473,7 +490,15 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
         </div>
 
         {/* Center: Stage Workspace Canvas */}
-        <div className="lg:col-span-6 space-y-4">{renderActiveStageComponent()}</div>
+        <div className="lg:col-span-6 space-y-4">
+          <ErrorBoundary
+            key={state.activeStage}
+            fallbackTitle={`Stage Workspace Exception (${state.activeStage})`}
+            fallbackMessage="An unexpected error occurred while rendering this lifecycle stage. The rest of the engineering control plane remains intact."
+          >
+            {renderActiveStageComponent()}
+          </ErrorBoundary>
+        </div>
 
         {/* Right Sidebar: Contextual AI Copilot & Understanding Dock */}
         <div className="lg:col-span-3 space-y-3">

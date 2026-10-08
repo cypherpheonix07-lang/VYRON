@@ -88,6 +88,7 @@ import { Route as AppProjectsIdIntegrationsRouteImport } from './routes/app.proj
 import { Route as AppProjectsIdPublishRouteImport } from './routes/app.projects.$id.publish'
 import { Route as AppProjectsIdReportsRouteImport } from './routes/app.projects.$id.reports'
 import { Route as AppProjectsIdRequirementsRouteImport } from './routes/app.projects.$id.requirements'
+import { Route as AppProjectsIdResultsRouteImport } from './routes/app.projects.$id.results'
 import { Route as AppProjectsIdRiskBusinessRouteImport } from './routes/app.projects.$id.risk-business'
 import { Route as AppProjectsIdScansRouteImport } from './routes/app.projects.$id.scans'
 import { Route as AppProjectsIdSecurityRouteImport } from './routes/app.projects.$id.security'
@@ -510,6 +511,11 @@ const AppProjectsIdRequirementsRoute =
     path: '/requirements',
     getParentRoute: () => AppProjectsIdRoute,
   } as any)
+const AppProjectsIdResultsRoute = AppProjectsIdResultsRouteImport.update({
+  id: '/results',
+  path: '/results',
+  getParentRoute: () => AppProjectsIdRoute,
+} as any)
 const AppProjectsIdRiskBusinessRoute =
   AppProjectsIdRiskBusinessRouteImport.update({
     id: '/risk-business',
@@ -706,6 +712,7 @@ export interface FileRoutesByFullPath {
   '/app/projects/$id/publish': typeof AppProjectsIdPublishRoute
   '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
+  '/app/projects/$id/results': typeof AppProjectsIdResultsRoute
   '/app/projects/$id/risk-business': typeof AppProjectsIdRiskBusinessRoute
   '/app/projects/$id/scans': typeof AppProjectsIdScansRoute
   '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
@@ -806,6 +813,7 @@ export interface FileRoutesByTo {
   '/app/projects/$id/publish': typeof AppProjectsIdPublishRoute
   '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
+  '/app/projects/$id/results': typeof AppProjectsIdResultsRoute
   '/app/projects/$id/risk-business': typeof AppProjectsIdRiskBusinessRoute
   '/app/projects/$id/scans': typeof AppProjectsIdScansRoute
   '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
@@ -911,6 +919,7 @@ export interface FileRoutesById {
   '/app/projects/$id/publish': typeof AppProjectsIdPublishRoute
   '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
+  '/app/projects/$id/results': typeof AppProjectsIdResultsRoute
   '/app/projects/$id/risk-business': typeof AppProjectsIdRiskBusinessRoute
   '/app/projects/$id/scans': typeof AppProjectsIdScansRoute
   '/app/projects/$id/security': typeof AppProjectsIdSecurityRoute
@@ -1017,6 +1026,7 @@ export interface FileRouteTypes {
     | '/app/projects/$id/publish'
     | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
+    | '/app/projects/$id/results'
     | '/app/projects/$id/risk-business'
     | '/app/projects/$id/scans'
     | '/app/projects/$id/security'
@@ -1117,6 +1127,7 @@ export interface FileRouteTypes {
     | '/app/projects/$id/publish'
     | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
+    | '/app/projects/$id/results'
     | '/app/projects/$id/risk-business'
     | '/app/projects/$id/scans'
     | '/app/projects/$id/security'
@@ -1221,6 +1232,7 @@ export interface FileRouteTypes {
     | '/app/projects/$id/publish'
     | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
+    | '/app/projects/$id/results'
     | '/app/projects/$id/risk-business'
     | '/app/projects/$id/scans'
     | '/app/projects/$id/security'
@@ -1822,6 +1834,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsIdRequirementsRouteImport
       parentRoute: typeof AppProjectsIdRoute
     }
+    '/app/projects/$id/results': {
+      id: '/app/projects/$id/results'
+      path: '/results'
+      fullPath: '/app/projects/$id/results'
+      preLoaderRoute: typeof AppProjectsIdResultsRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
     '/app/projects/$id/risk-business': {
       id: '/app/projects/$id/risk-business'
       path: '/risk-business'
@@ -2065,6 +2084,7 @@ interface AppProjectsIdRouteChildren {
   AppProjectsIdPublishRoute: typeof AppProjectsIdPublishRoute
   AppProjectsIdReportsRoute: typeof AppProjectsIdReportsRoute
   AppProjectsIdRequirementsRoute: typeof AppProjectsIdRequirementsRoute
+  AppProjectsIdResultsRoute: typeof AppProjectsIdResultsRoute
   AppProjectsIdRiskBusinessRoute: typeof AppProjectsIdRiskBusinessRoute
   AppProjectsIdScansRoute: typeof AppProjectsIdScansRoute
   AppProjectsIdSecurityRoute: typeof AppProjectsIdSecurityRoute
@@ -2083,6 +2103,7 @@ const AppProjectsIdRouteChildren: AppProjectsIdRouteChildren = {
   AppProjectsIdPublishRoute: AppProjectsIdPublishRoute,
   AppProjectsIdReportsRoute: AppProjectsIdReportsRoute,
   AppProjectsIdRequirementsRoute: AppProjectsIdRequirementsRoute,
+  AppProjectsIdResultsRoute: AppProjectsIdResultsRoute,
   AppProjectsIdRiskBusinessRoute: AppProjectsIdRiskBusinessRoute,
   AppProjectsIdScansRoute: AppProjectsIdScansRoute,
   AppProjectsIdSecurityRoute: AppProjectsIdSecurityRoute,

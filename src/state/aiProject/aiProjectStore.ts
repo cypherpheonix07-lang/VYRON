@@ -661,7 +661,147 @@ class AiProjectStoreManager {
     if (typeof window !== "undefined") {
       try {
         const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
-        if (raw) return JSON.parse(raw);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && typeof parsed === "object") {
+            const initial = createInitialProjectState();
+            return {
+              ...initial,
+              ...parsed,
+              intent: {
+                ...initial.intent,
+                ...(parsed.intent || {}),
+                targetUsers: Array.isArray(parsed.intent?.targetUsers)
+                  ? parsed.intent.targetUsers
+                  : initial.intent.targetUsers,
+                technicalSignals: Array.isArray(parsed.intent?.technicalSignals)
+                  ? parsed.intent.technicalSignals
+                  : initial.intent.technicalSignals,
+                goals: Array.isArray(parsed.intent?.goals)
+                  ? parsed.intent.goals
+                  : initial.intent.goals,
+                constraints: Array.isArray(parsed.intent?.constraints)
+                  ? parsed.intent.constraints
+                  : initial.intent.constraints,
+                detectedEntities: Array.isArray(parsed.intent?.detectedEntities)
+                  ? parsed.intent.detectedEntities
+                  : initial.intent.detectedEntities,
+              },
+              problem: {
+                ...initial.problem,
+                ...(parsed.problem || {}),
+                rootCauseTree: Array.isArray(parsed.problem?.rootCauseTree)
+                  ? parsed.problem.rootCauseTree
+                  : initial.problem.rootCauseTree,
+                successCriteria: Array.isArray(parsed.problem?.successCriteria)
+                  ? parsed.problem.successCriteria
+                  : initial.problem.successCriteria,
+                painPoints: Array.isArray(parsed.problem?.painPoints)
+                  ? parsed.problem.painPoints
+                  : initial.problem.painPoints,
+              },
+              requirements: Array.isArray(parsed.requirements) ? parsed.requirements : initial.requirements,
+              scope: {
+                ...initial.scope,
+                ...(parsed.scope || {}),
+                mvpRequirements: Array.isArray(parsed.scope?.mvpRequirements)
+                  ? parsed.scope.mvpRequirements
+                  : initial.scope.mvpRequirements,
+                v1Requirements: Array.isArray(parsed.scope?.v1Requirements)
+                  ? parsed.scope.v1Requirements
+                  : initial.scope.v1Requirements,
+                v2Requirements: Array.isArray(parsed.scope?.v2Requirements)
+                  ? parsed.scope.v2Requirements
+                  : initial.scope.v2Requirements,
+                outOfScope: Array.isArray(parsed.scope?.outOfScope)
+                  ? parsed.scope.outOfScope
+                  : initial.scope.outOfScope,
+                driftWarnings: Array.isArray(parsed.scope?.driftWarnings)
+                  ? parsed.scope.driftWarnings
+                  : initial.scope.driftWarnings,
+              },
+              capabilities: {
+                capabilities: Array.isArray(parsed.capabilities?.capabilities)
+                  ? parsed.capabilities.capabilities
+                  : initial.capabilities.capabilities,
+              },
+              architecture: {
+                ...initial.architecture,
+                ...(parsed.architecture || {}),
+                alternatives: Array.isArray(parsed.architecture?.alternatives)
+                  ? parsed.architecture.alternatives
+                  : initial.architecture.alternatives,
+              },
+              technology: {
+                ...initial.technology,
+                ...(parsed.technology || {}),
+                decisions: Array.isArray(parsed.technology?.decisions)
+                  ? parsed.technology.decisions
+                  : initial.technology.decisions,
+              },
+              data: {
+                ...initial.data,
+                ...(parsed.data || {}),
+                entities: Array.isArray(parsed.data?.entities)
+                  ? parsed.data.entities
+                  : initial.data.entities,
+              },
+              ai: {
+                ...initial.ai,
+                ...(parsed.ai || {}),
+                modelCandidates: Array.isArray(parsed.ai?.modelCandidates)
+                  ? parsed.ai.modelCandidates
+                  : initial.ai.modelCandidates,
+              },
+              security: {
+                ...initial.security,
+                ...(parsed.security || {}),
+                trustBoundaries: Array.isArray(parsed.security?.trustBoundaries)
+                  ? parsed.security.trustBoundaries
+                  : initial.security.trustBoundaries,
+                threats: Array.isArray(parsed.security?.threats)
+                  ? parsed.security.threats
+                  : initial.security.threats,
+              },
+              reliability: {
+                ...initial.reliability,
+                ...(parsed.reliability || {}),
+                scenarios: Array.isArray(parsed.reliability?.scenarios)
+                  ? parsed.reliability.scenarios
+                  : initial.reliability.scenarios,
+              },
+              implementation: {
+                ...initial.implementation,
+                ...(parsed.implementation || {}),
+                tasks: Array.isArray(parsed.implementation?.tasks)
+                  ? parsed.implementation.tasks
+                  : initial.implementation.tasks,
+                apiContracts: Array.isArray(parsed.implementation?.apiContracts)
+                  ? parsed.implementation.apiContracts
+                  : initial.implementation.apiContracts,
+              },
+              testing: {
+                testCases: Array.isArray(parsed.testing?.testCases)
+                  ? parsed.testing.testCases
+                  : initial.testing.testCases,
+                traceabilityMatrix: Array.isArray(parsed.testing?.traceabilityMatrix)
+                  ? parsed.testing.traceabilityMatrix
+                  : initial.testing.traceabilityMatrix,
+              },
+              discoveryQuestions: Array.isArray(parsed.discoveryQuestions)
+                ? parsed.discoveryQuestions
+                : initial.discoveryQuestions,
+              stageStatuses: { ...initial.stageStatuses, ...(parsed.stageStatuses || {}) },
+              understanding: { ...initial.understanding, ...(parsed.understanding || {}) },
+              redTeamFindings: Array.isArray(parsed.redTeamFindings)
+                ? parsed.redTeamFindings
+                : initial.redTeamFindings,
+              pendingProposals: Array.isArray(parsed.pendingProposals)
+                ? parsed.pendingProposals
+                : initial.pendingProposals,
+            };
+          }
+        }
       } catch {
         return null;
       }

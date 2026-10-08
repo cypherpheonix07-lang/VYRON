@@ -13,7 +13,8 @@ import { useAiProject } from "@/state/aiProject/aiProjectStore";
 
 export const Stage06ArchitectureWorkspace: React.FC = () => {
   const { state, executeStage, isExecuting } = useAiProject();
-  const arch = state.architecture;
+  const arch = state.architecture || { alternatives: [], selectedAlternativeId: "" };
+  const alternatives = arch.alternatives || [];
 
   const handleSynthesize = () => {
     executeStage("06_ARCHITECTURE");
@@ -47,12 +48,14 @@ export const Stage06ArchitectureWorkspace: React.FC = () => {
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {arch.alternatives.length > 0 ? (
+          {alternatives.length > 0 ? (
             <>
               {/* 3 Architecture Alternatives Grid */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {arch.alternatives.map((alt) => {
+                {alternatives.map((alt) => {
                   const isSelected = alt.id === arch.selectedAlternativeId;
+                  const tradeOffs = alt.tradeOffs || { complexityScore: 0, estimatedCostScore: 0, scalabilityScore: 0, timeToMvpWeeks: 0 };
+                  const pros = alt.pros || [];
                   return (
                     <div
                       key={alt.id}
@@ -65,7 +68,7 @@ export const Stage06ArchitectureWorkspace: React.FC = () => {
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
                           <Badge variant="outline" className="font-mono text-[10px] uppercase">
-                            {alt.type.replace("_", " ")}
+                            {(alt.type || "monolith").replace("_", " ")}
                           </Badge>
                           {isSelected && (
                             <Badge className="bg-cyan-500 text-black font-semibold text-[10px]">
@@ -81,20 +84,20 @@ export const Stage06ArchitectureWorkspace: React.FC = () => {
                         <div className="p-2.5 rounded-lg bg-background/50 border border-border/50 text-[11px] space-y-1.5 font-mono">
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Complexity:</span>
-                            <span className="font-bold">{alt.tradeOffs.complexityScore}/10</span>
+                            <span className="font-bold">{tradeOffs.complexityScore}/10</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Est. Cost:</span>
-                            <span className="font-bold">{alt.tradeOffs.estimatedCostScore}/10</span>
+                            <span className="font-bold">{tradeOffs.estimatedCostScore}/10</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Scalability:</span>
-                            <span className="font-bold">{alt.tradeOffs.scalabilityScore}/10</span>
+                            <span className="font-bold">{tradeOffs.scalabilityScore}/10</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Time to MVP:</span>
                             <span className="font-bold text-cyan-400">
-                              {alt.tradeOffs.timeToMvpWeeks} weeks
+                              {tradeOffs.timeToMvpWeeks} weeks
                             </span>
                           </div>
                         </div>
@@ -103,7 +106,7 @@ export const Stage06ArchitectureWorkspace: React.FC = () => {
                         <div className="space-y-1 text-[11px]">
                           <div className="text-emerald-400 font-semibold">Pros:</div>
                           <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
-                            {alt.pros.map((p, i) => (
+                            {pros.map((p, i) => (
                               <li key={i}>{p}</li>
                             ))}
                           </ul>
@@ -131,7 +134,7 @@ export const Stage06ArchitectureWorkspace: React.FC = () => {
                   Baseline Component Layers & Service Contracts
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {arch.alternatives[0]?.components.map((comp) => (
+                  {(alternatives[0]?.components || []).map((comp) => (
                     <div
                       key={comp.id}
                       className="p-3 rounded-xl border border-border/70 bg-background/40 space-y-2 text-xs"
@@ -145,7 +148,7 @@ export const Stage06ArchitectureWorkspace: React.FC = () => {
                       <p className="text-muted-foreground">{comp.description}</p>
                       <div className="text-[11px] text-muted-foreground">
                         APIs:{" "}
-                        <span className="font-mono text-cyan-400">{comp.apis.join(", ")}</span>
+                        <span className="font-mono text-cyan-400">{(comp.apis || []).join(", ")}</span>
                       </div>
                     </div>
                   ))}

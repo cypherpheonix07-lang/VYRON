@@ -33,13 +33,15 @@ export class InitializationGate {
     const blockers: string[] = [];
 
     // 1. Unresolved critical conflicts check
-    const criticalConflicts = state.requirements.filter((r) => r.conflictsWith.length > 0);
+    const reqs = Array.isArray(state.requirements) ? state.requirements : [];
+    const criticalConflicts = reqs.filter((r) => Array.isArray(r.conflictsWith) && r.conflictsWith.length > 0);
     if (criticalConflicts.length > 0) {
       blockers.push(`${criticalConflicts.length} requirement conflict(s) must be resolved.`);
     }
 
     // 2. Unresolved critical security threats check
-    const criticalThreats = state.security.threats.filter((t) => t.residualRisk === "HIGH");
+    const threats = Array.isArray(state.security?.threats) ? state.security.threats : [];
+    const criticalThreats = threats.filter((t) => t.residualRisk === "HIGH");
     if (criticalThreats.length > 0) {
       blockers.push(
         `${criticalThreats.length} high/critical residual risk security threat(s) unresolved.`,
@@ -47,7 +49,7 @@ export class InitializationGate {
     }
 
     // 3. Architecture selected check
-    if (!state.architecture.selectedAlternativeId) {
+    if (!state.architecture?.selectedAlternativeId) {
       blockers.push("An architectural baseline topology must be selected.");
     }
 

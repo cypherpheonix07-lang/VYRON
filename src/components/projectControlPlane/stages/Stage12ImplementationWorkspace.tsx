@@ -13,7 +13,9 @@ import { useAiProject } from "@/state/aiProject/aiProjectStore";
 
 export const Stage12ImplementationWorkspace: React.FC = () => {
   const { state, executeStage, isExecuting } = useAiProject();
-  const impl = state.implementation;
+  const impl = state.implementation || { tasks: [], apiContracts: [] };
+  const tasks = impl.tasks || [];
+  const apiContracts = impl.apiContracts || [];
 
   const handleSynthesize = () => {
     executeStage("12_IMPLEMENTATION");
@@ -47,7 +49,7 @@ export const Stage12ImplementationWorkspace: React.FC = () => {
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {impl.tasks.length > 0 ? (
+          {tasks.length > 0 ? (
             <>
               {/* API Contracts */}
               <div className="space-y-3">
@@ -56,7 +58,7 @@ export const Stage12ImplementationWorkspace: React.FC = () => {
                   API Service Contracts
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {impl.apiContracts.map((api) => (
+                  {apiContracts.map((api) => (
                     <div
                       key={api.id}
                       className="p-3.5 rounded-xl border border-border/70 bg-background/40 space-y-2 text-xs"
@@ -93,7 +95,10 @@ export const Stage12ImplementationWorkspace: React.FC = () => {
                   Dependency-Aware Task Graph
                 </h4>
                 <div className="space-y-3">
-                  {impl.tasks.map((task) => (
+                  {tasks.map((task) => {
+                    const dependsOn = task.dependsOn || [];
+                    const acceptanceCriteria = task.acceptanceCriteria || [];
+                    return (
                     <div
                       key={task.id}
                       className="p-4 rounded-xl border border-border/70 bg-card/40 space-y-2.5 text-xs transition-colors hover:border-border"
@@ -109,7 +114,7 @@ export const Stage12ImplementationWorkspace: React.FC = () => {
                           </Badge>
                         </div>
                         <Badge variant="secondary" className="text-[10px]">
-                          Status: {task.status.toUpperCase()}
+                          Status: {(task.status || "pending").toUpperCase()}
                         </Badge>
                       </div>
 
@@ -121,7 +126,7 @@ export const Stage12ImplementationWorkspace: React.FC = () => {
                         <div>
                           Depends On:{" "}
                           <span className="text-foreground font-mono">
-                            {task.dependsOn.length > 0 ? task.dependsOn.join(", ") : "None (Root)"}
+                            {dependsOn.length > 0 ? dependsOn.join(", ") : "None (Root)"}
                           </span>
                         </div>
                       </div>
@@ -131,13 +136,14 @@ export const Stage12ImplementationWorkspace: React.FC = () => {
                           Acceptance Verification Criteria:
                         </span>
                         <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
-                          {task.acceptanceCriteria.map((ac, idx) => (
+                          {acceptanceCriteria.map((ac, idx) => (
                             <li key={idx}>{ac}</li>
                           ))}
                         </ul>
                       </div>
                     </div>
-                  ))}
+                  );
+                })}
                 </div>
               </div>
             </>

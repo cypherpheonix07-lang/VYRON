@@ -438,6 +438,19 @@ export const authService = {
 
   async getUser(): Promise<AuthResponse<User | null>> {
     try {
+      if (typeof window !== "undefined") {
+        const demoStorage = localStorage.getItem("brahma_demo_session");
+        if (demoStorage) {
+          try {
+            const parsed = JSON.parse(demoStorage);
+            if (parsed && parsed.user) {
+              return { ok: true, data: parsed.user as User };
+            }
+          } catch {
+            /* ignore invalid JSON in demo session storage */
+          }
+        }
+      }
       const { data, error } = await supabase.auth.getUser();
       return error ? fail(error.message) : { ok: true, data: data.user };
     } catch (e: unknown) {

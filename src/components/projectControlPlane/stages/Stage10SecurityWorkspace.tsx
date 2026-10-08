@@ -13,7 +13,9 @@ import { useAiProject } from "@/state/aiProject/aiProjectStore";
 
 export const Stage10SecurityWorkspace: React.FC = () => {
   const { state, executeStage, isExecuting } = useAiProject();
-  const sec = state.security;
+  const sec = state.security || { threats: [], trustBoundaries: [], securityPostureScore: 0, promptInjectionDefense: true };
+  const threats = sec.threats || [];
+  const trustBoundaries = sec.trustBoundaries || [];
 
   const handleSynthesize = () => {
     executeStage("10_SECURITY");
@@ -67,7 +69,7 @@ export const Stage10SecurityWorkspace: React.FC = () => {
         </CardHeader>
 
         <CardContent className="space-y-6">
-          {sec.threats.length > 0 ? (
+          {threats.length > 0 ? (
             <>
               {/* Trust Boundaries Overview */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -76,7 +78,7 @@ export const Stage10SecurityWorkspace: React.FC = () => {
                     Audited Trust Boundaries
                   </span>
                   <div className="flex flex-wrap gap-2">
-                    {sec.trustBoundaries.map((tb, idx) => (
+                    {trustBoundaries.map((tb, idx) => (
                       <Badge key={idx} variant="secondary" className="text-xs">
                         {tb}
                       </Badge>
@@ -109,7 +111,7 @@ export const Stage10SecurityWorkspace: React.FC = () => {
                   STRIDE Threat Matrix & Mitigations
                 </h4>
                 <div className="grid grid-cols-1 gap-3">
-                  {sec.threats.map((threat) => (
+                  {threats.map((threat) => (
                     <div
                       key={threat.id}
                       className="p-4 rounded-xl border border-border/70 bg-card/40 space-y-2.5 text-xs transition-colors hover:border-border"

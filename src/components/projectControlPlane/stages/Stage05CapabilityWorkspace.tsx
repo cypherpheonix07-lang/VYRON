@@ -15,7 +15,9 @@ import { useAiProject } from "@/state/aiProject/aiProjectStore";
 
 export const Stage05CapabilityWorkspace: React.FC = () => {
   const { state, executeStage, isExecuting, addManualCapability } = useAiProject();
-  const capabilities = state.capabilities.capabilities;
+  const capabilities = Array.isArray(state.capabilities?.capabilities)
+    ? state.capabilities.capabilities
+    : [];
 
   const [filterCategory, setFilterCategory] = useState<string>("ALL");
   const [showManualForm, setShowManualForm] = useState(false);
@@ -52,7 +54,7 @@ export const Stage05CapabilityWorkspace: React.FC = () => {
   const filteredCapabilities =
     filterCategory === "ALL"
       ? capabilities
-      : capabilities.filter((c) => c.category.toUpperCase() === filterCategory);
+      : capabilities.filter((c) => c.category?.toUpperCase() === filterCategory);
 
   const categories = ["ALL", "CORE", "SUPPORTING", "GENERIC", "DOMAIN"];
 
@@ -195,14 +197,14 @@ export const Stage05CapabilityWorkspace: React.FC = () => {
                       <h4 className="text-sm font-bold text-foreground mt-1">{cap.name}</h4>
                     </div>
                     <Badge variant="secondary" className="text-[10px] shrink-0 font-mono">
-                      {cap.subCapabilities.length} sub-items
+                      {(Array.isArray(cap.subCapabilities) ? cap.subCapabilities : []).length} sub-items
                     </Badge>
                   </div>
 
                   <p className="text-xs text-muted-foreground leading-relaxed">{cap.description}</p>
 
                   {/* Sub-capabilities Tags */}
-                  {cap.subCapabilities.length > 0 && (
+                  {Array.isArray(cap.subCapabilities) && cap.subCapabilities.length > 0 && (
                     <div className="space-y-1.5 pt-1">
                       <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
                         Decomposed Sub-Capabilities:
@@ -222,7 +224,7 @@ export const Stage05CapabilityWorkspace: React.FC = () => {
                   )}
 
                   {/* Requirement Links */}
-                  {cap.satisfiesRequirementIds.length > 0 && (
+                  {Array.isArray(cap.satisfiesRequirementIds) && cap.satisfiesRequirementIds.length > 0 && (
                     <div className="text-[10px] text-muted-foreground flex items-center gap-1 pt-1 border-t border-border/40">
                       <CheckCircle2 className="h-3 w-3 text-emerald-400" />
                       <span>Satisfies Requirements: </span>

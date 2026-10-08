@@ -13,7 +13,14 @@ import { useAiProject } from "@/state/aiProject/aiProjectStore";
 
 export const Stage02ProblemWorkspace: React.FC = () => {
   const { state, executeStage, isExecuting } = useAiProject();
-  const problem = state.problem;
+  const problem = state.problem || {
+    problemStatement: "",
+    rootProblem: "",
+    rootCauseTree: [],
+    successCriteria: [],
+  };
+  const rootCauseTree = Array.isArray(problem.rootCauseTree) ? problem.rootCauseTree : [];
+  const successCriteria = Array.isArray(problem.successCriteria) ? problem.successCriteria : [];
 
   const handleSynthesize = () => {
     executeStage("02_PROBLEM");
@@ -73,7 +80,7 @@ export const Stage02ProblemWorkspace: React.FC = () => {
                   5-Whys Causal Decomposition Chain
                 </h4>
                 <div className="space-y-2.5">
-                  {problem.rootCauseTree.map((why) => (
+                  {rootCauseTree.map((why) => (
                     <div
                       key={why.level}
                       className="p-3 rounded-lg border border-border/70 bg-background/40 flex items-start gap-3"
@@ -96,7 +103,7 @@ export const Stage02ProblemWorkspace: React.FC = () => {
                   Measurable Success Criteria
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                  {problem.successCriteria.map((crit, idx) => (
+                  {successCriteria.map((crit, idx) => (
                     <div
                       key={idx}
                       className="p-3 rounded-xl border border-border/70 bg-card/40 flex items-start gap-2.5 text-xs"

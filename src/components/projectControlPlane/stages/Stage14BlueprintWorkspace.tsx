@@ -45,7 +45,7 @@ export const Stage14BlueprintWorkspace: React.FC = () => {
   const [showReviewDialog, setShowReviewDialog] = useState(false);
 
   const bp = state.blueprint;
-  const redTeam = state.redTeamFindings;
+  const redTeam = Array.isArray(state.redTeamFindings) ? state.redTeamFindings : [];
   const validation = initializationGate.validate(state);
 
   const handleCompile = () => {
@@ -175,7 +175,7 @@ export const Stage14BlueprintWorkspace: React.FC = () => {
 
               <div className="border border-border/70 rounded-xl overflow-hidden bg-background/40">
                 <div className="max-h-80 overflow-y-auto divide-y divide-border/40 text-xs">
-                  {bp.sections.map((sec) => {
+                  {(Array.isArray(bp.sections) ? bp.sections : []).map((sec) => {
                     const mapping = BLUEPRINT_26_SECTION_MAPPINGS.find((m) => m.sectionNumber === sec.index);
                     return (
                       <div

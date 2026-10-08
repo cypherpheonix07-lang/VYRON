@@ -14,7 +14,8 @@ import { useAiProject } from "@/state/aiProject/aiProjectStore";
 
 export const Stage11ReliabilityWorkspace: React.FC = () => {
   const { state, executeStage, isExecuting, addManualReliabilityScenario } = useAiProject();
-  const rel = state.reliability;
+  const rel = state.reliability || { scenarios: [], overallResilienceScore: 0 };
+  const scenarios = rel.scenarios || [];
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [componentName, setComponentName] = useState("");
@@ -161,9 +162,9 @@ export const Stage11ReliabilityWorkspace: React.FC = () => {
           )}
 
           {/* Scenarios Grid */}
-          {rel.scenarios.length > 0 ? (
+          {scenarios.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {rel.scenarios.map((s, idx) => (
+              {scenarios.map((s, idx) => (
                 <div
                   key={idx}
                   className="p-4 rounded-xl border border-border/70 bg-card/40 space-y-3 transition-colors hover:border-border"

@@ -16,7 +16,8 @@ import { DataEntity } from "@/types/aiProjectControlPlane";
 
 export const Stage08DataWorkspace: React.FC = () => {
   const { state, executeStage, isExecuting, addManualDataEntity } = useAiProject();
-  const data = state.data;
+  const data = state.data || { entities: [], dataRetentionPlan: "" };
+  const entities = data.entities || [];
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [name, setName] = useState("");
@@ -189,9 +190,11 @@ export const Stage08DataWorkspace: React.FC = () => {
           )}
 
           {/* Entities Grid */}
-          {data.entities.length > 0 ? (
+          {entities.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {data.entities.map((entity) => (
+              {entities.map((entity) => {
+                const fields = entity.fields || [];
+                return (
                 <div
                   key={entity.id}
                   className="p-4 rounded-xl border border-border/70 bg-card/40 space-y-3 transition-colors hover:border-border"
@@ -206,7 +209,7 @@ export const Stage08DataWorkspace: React.FC = () => {
                           variant="outline"
                           className={`text-[10px] font-mono uppercase ${getSensitivityBadge(entity.sensitivity)}`}
                         >
-                          {entity.sensitivity.replace("_", " ")}
+                          {(entity.sensitivity || "internal").replace("_", " ")}
                         </Badge>
                       </div>
                       <p className="text-xs text-muted-foreground leading-relaxed">
@@ -221,10 +224,10 @@ export const Stage08DataWorkspace: React.FC = () => {
                   {/* Schema Fields Table */}
                   <div className="space-y-1 pt-1">
                     <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">
-                      Normalized Fields ({entity.fields.length}):
+                      Normalized Fields ({fields.length}):
                     </span>
                     <div className="border border-border/50 rounded-lg overflow-hidden bg-background/50 text-[11px]">
-                      {entity.fields.slice(0, 4).map((f, i) => (
+                      {fields.slice(0, 4).map((f, i) => (
                         <div
                           key={i}
                           className="flex items-center justify-between px-2.5 py-1 border-b border-border/40 last:border-0 font-mono"
@@ -253,7 +256,8 @@ export const Stage08DataWorkspace: React.FC = () => {
                     )}
                   </div>
                 </div>
-              ))}
+              );
+            })}
             </div>
           ) : (
             <div className="py-12 text-center space-y-3">

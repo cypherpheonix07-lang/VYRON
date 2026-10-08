@@ -13,7 +13,21 @@ import { useAiProject } from "@/state/aiProject/aiProjectStore";
 
 export const Stage04ScopeWorkspace: React.FC = () => {
   const { state, executeStage, isExecuting } = useAiProject();
-  const scope = state.scope;
+  const scope = state.scope || {
+    coreProblem: "",
+    mvpRequirements: [],
+    v1Requirements: [],
+    v2Requirements: [],
+    outOfScope: [],
+    driftWarnings: [],
+    scopeStabilityScore: 0,
+  };
+  const driftWarnings = Array.isArray(scope.driftWarnings) ? scope.driftWarnings : [];
+  const mvpRequirements = Array.isArray(scope.mvpRequirements) ? scope.mvpRequirements : [];
+  const v1Requirements = Array.isArray(scope.v1Requirements) ? scope.v1Requirements : [];
+  const v2Requirements = Array.isArray(scope.v2Requirements) ? scope.v2Requirements : [];
+  const outOfScope = Array.isArray(scope.outOfScope) ? scope.outOfScope : [];
+  const reqList = Array.isArray(state.requirements) ? state.requirements : [];
 
   const handleSynthesize = () => {
     executeStage("04_SCOPE");
@@ -58,13 +72,13 @@ export const Stage04ScopeWorkspace: React.FC = () => {
 
         <CardContent className="space-y-6">
           {/* Scope Drift Alerts */}
-          {scope.driftWarnings.length > 0 && (
+          {driftWarnings.length > 0 && (
             <div className="space-y-3">
               <h4 className="text-xs font-semibold text-rose-400 uppercase tracking-wider flex items-center gap-1.5">
                 <ShieldAlert className="h-4 w-4" />
                 Scope Creep Warnings Detected
               </h4>
-              {scope.driftWarnings.map((warning) => (
+              {driftWarnings.map((warning) => (
                 <div
                   key={warning.id}
                   className="p-4 rounded-xl border border-rose-500/40 bg-rose-500/10 space-y-2 text-xs"
@@ -104,15 +118,15 @@ export const Stage04ScopeWorkspace: React.FC = () => {
                   MVP Core
                 </h4>
                 <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40 text-[10px]">
-                  {scope.mvpRequirements.length} REQS
+                  {mvpRequirements.length} REQS
                 </Badge>
               </div>
               <p className="text-[11px] text-muted-foreground">
                 Essential for launch. Cannot be removed.
               </p>
               <div className="space-y-1.5">
-                {scope.mvpRequirements.map((reqId) => {
-                  const req = state.requirements.find((r) => r.id === reqId);
+                {mvpRequirements.map((reqId) => {
+                  const req = reqList.find((r) => r.id === reqId);
                   return (
                     <div
                       key={reqId}
@@ -132,15 +146,15 @@ export const Stage04ScopeWorkspace: React.FC = () => {
                   Version 1.0
                 </h4>
                 <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/40 text-[10px]">
-                  {scope.v1Requirements.length} REQS
+                  {v1Requirements.length} REQS
                 </Badge>
               </div>
               <p className="text-[11px] text-muted-foreground">
                 Required for complete commercial release.
               </p>
               <div className="space-y-1.5">
-                {scope.v1Requirements.map((reqId) => {
-                  const req = state.requirements.find((r) => r.id === reqId);
+                {v1Requirements.map((reqId) => {
+                  const req = reqList.find((r) => r.id === reqId);
                   return (
                     <div
                       key={reqId}
@@ -160,12 +174,12 @@ export const Stage04ScopeWorkspace: React.FC = () => {
                   Version 2.0
                 </h4>
                 <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/40 text-[10px]">
-                  {scope.v2Requirements.length} REQS
+                  {v2Requirements.length} REQS
                 </Badge>
               </div>
               <p className="text-[11px] text-muted-foreground">Deferred roadmap items.</p>
               <div className="space-y-1.5">
-                {scope.v2Requirements.map((reqId) => (
+                {v2Requirements.map((reqId) => (
                   <div
                     key={reqId}
                     className="p-2 rounded bg-background/50 border border-border/50 text-xs font-medium text-muted-foreground"
@@ -183,14 +197,14 @@ export const Stage04ScopeWorkspace: React.FC = () => {
                   Out of Scope
                 </h4>
                 <Badge className="bg-rose-500/20 text-rose-300 border-rose-500/40 text-[10px]">
-                  {scope.outOfScope.length} ITEMS
+                  {outOfScope.length} ITEMS
                 </Badge>
               </div>
               <p className="text-[11px] text-muted-foreground">
                 Explicitly rejected to prevent distraction.
               </p>
               <div className="space-y-1.5">
-                {scope.outOfScope.map((item, idx) => (
+                {outOfScope.map((item, idx) => (
                   <div
                     key={idx}
                     className="p-2 rounded bg-background/50 border border-border/50 text-xs text-muted-foreground"

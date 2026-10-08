@@ -14,8 +14,18 @@ import type { WizardPayload, DraftState } from "@/types/wizard";
 import { ProjectWizardShell } from "@/components/wizard/ProjectWizardShell";
 import { ProjectControlPlaneShell } from "@/components/projectControlPlane/ProjectControlPlaneShell";
 import { Button } from "@/components/ui/button";
+import { ProjectLifecycleStage } from "@/types/aiProjectControlPlane";
+
+interface NewProjectSearch {
+  stage?: ProjectLifecycleStage | undefined;
+}
 
 export const Route = createFileRoute("/app/projects/new")({
+  validateSearch: (search: Record<string, unknown>): NewProjectSearch => {
+    return {
+      stage: typeof search["stage"] === "string" ? (search["stage"] as ProjectLifecycleStage) : undefined,
+    };
+  },
   head: () => ({
     meta: [
       { title: "AI Project Engineering Control Plane — VYRON" },
@@ -73,6 +83,7 @@ export const Route = createFileRoute("/app/projects/new")({
 
 function NewProjectPage() {
   const navigate = useNavigate();
+  const search = Route.useSearch();
   const loaderData = Route.useLoaderData();
   const [viewMode, setViewMode] = useState<"control_plane" | "wizard">("control_plane");
   const [isGenerating, setIsGenerating] = useState(false);
@@ -253,7 +264,17 @@ function NewProjectPage() {
 
       {/* Control Plane Mode vs Classic Wizard Mode */}
       {viewMode === "control_plane" ? (
-        <ProjectControlPlaneShell onSwitchToClassicWizard={() => setViewMode("wizard")} />
+        <ProjectControlPlaneShell
+          initialStage={search.stage}
+          onStageChange={(newStage) => {
+            navigate({
+              to: "/app/projects/new",
+              search: { stage: newStage },
+              replace: true,
+            });
+          }}
+          onSwitchToClassicWizard={() => setViewMode("wizard")}
+        />
       ) : (
         <div className="space-y-4">
           <div className="flex items-center justify-between p-3 rounded-xl border border-cyan-500/30 bg-cyan-500/10">

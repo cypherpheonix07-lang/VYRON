@@ -10,6 +10,7 @@ export const Route = createFileRoute("/app/projects/$id")({
 
 const tabs = [
   { to: "/app/projects/$id", label: "Overview", exact: true },
+  { to: "/app/projects/$id/results", label: "Results Workspace", exact: false },
   { to: "/app/projects/$id/activity", label: "Activity Stream", exact: false },
   { to: "/app/projects/$id/requirements", label: "Requirements", exact: false },
   { to: "/app/projects/$id/blueprint", label: "Blueprint", exact: false },

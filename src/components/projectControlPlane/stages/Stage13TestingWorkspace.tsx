@@ -24,7 +24,9 @@ import { TestCaseItem } from "@/types/aiProjectControlPlane";
 
 export const Stage13TestingWorkspace: React.FC = () => {
   const { state, executeStage, isExecuting, addManualTestCase } = useAiProject();
-  const testModel = state.testing;
+  const testModel = state.testing || { testCases: [], traceabilityMatrix: [] };
+  const traceabilityMatrix = testModel.traceabilityMatrix || [];
+  const testCases = testModel.testCases || [];
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [title, setTitle] = useState("");
@@ -69,8 +71,8 @@ export const Stage13TestingWorkspace: React.FC = () => {
     }
   };
 
-  const coveredCount = testModel.traceabilityMatrix.filter((m) => m.isCovered).length;
-  const totalReqCount = Math.max(1, testModel.traceabilityMatrix.length);
+  const coveredCount = traceabilityMatrix.filter((m) => m?.isCovered).length;
+  const totalReqCount = Math.max(1, traceabilityMatrix.length);
   const coveragePercent = Math.round((coveredCount / totalReqCount) * 100);
 
   return (
@@ -89,7 +91,7 @@ export const Stage13TestingWorkspace: React.FC = () => {
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
-              {testModel.traceabilityMatrix.length > 0 && (
+              {traceabilityMatrix.length > 0 && (
                 <Badge
                   variant="outline"
                   className="border-teal-500/40 text-teal-300 font-mono text-xs"
@@ -185,7 +187,7 @@ export const Stage13TestingWorkspace: React.FC = () => {
           )}
 
           {/* Traceability Matrix Banner */}
-          {testModel.traceabilityMatrix.length > 0 && (
+          {traceabilityMatrix.length > 0 && (
             <div className="p-3.5 rounded-xl border border-border/70 bg-background/40 space-y-2 text-xs">
               <div className="flex items-center justify-between">
                 <span className="font-semibold text-muted-foreground uppercase tracking-wider text-[11px]">
@@ -196,7 +198,7 @@ export const Stage13TestingWorkspace: React.FC = () => {
                 </span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {testModel.traceabilityMatrix.map((item, idx) => (
+                {traceabilityMatrix.map((item, idx) => (
                   <div
                     key={idx}
                     className="p-2 rounded-lg border border-border/50 bg-card/60 flex items-center justify-between"
@@ -222,9 +224,9 @@ export const Stage13TestingWorkspace: React.FC = () => {
           )}
 
           {/* Test Cases List */}
-          {testModel.testCases.length > 0 ? (
+          {testCases.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {testModel.testCases.map((tc) => (
+              {testCases.map((tc) => (
                 <div
                   key={tc.id}
                   className="p-4 rounded-xl border border-border/70 bg-card/40 space-y-3 transition-colors hover:border-border"
