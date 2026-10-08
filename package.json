@@ -52,9 +52,9 @@
     "@supabase/supabase-js": "^2.116.0",
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-query": "^5.101.1",
-    "@tanstack/react-router": "^1.170.18",
-    "@tanstack/react-start": "^1.168.56",
-    "@tanstack/router-plugin": "^1.168.23",
+    "@tanstack/react-router": "1.170.38",
+    "@tanstack/react-start": "1.168.56",
+    "@tanstack/router-plugin": "1.168.40",
     "@types/jszip": "^3.4.0",
     "@types/react-window": "^1.8.8",
     "@xyflow/react": "^12.11.2",
@@ -109,13 +109,19 @@
     "shell-quote": "^1.12.0",
     "seroval": "^1.6.8",
     "seroval-plugins": "^1.6.8",
-    "source-map-js": "^1.2.2"
+    "source-map-js": "^1.2.2",
+    "@tanstack/react-router": "1.170.38",
+    "@tanstack/router-core": "1.171.32",
+    "@tanstack/router-plugin": "1.168.40"
   },
   "resolutions": {
     "js-yaml": "^4.3.2",
     "shell-quote": "^1.12.0",
     "seroval": "^1.6.8",
     "seroval-plugins": "^1.6.8",
-    "source-map-js": "^1.2.2"
+    "source-map-js": "^1.2.2",
+    "@tanstack/react-router": "1.170.38",
+    "@tanstack/router-core": "1.171.32",
+    "@tanstack/router-plugin": "1.168.40"
   }
 }
