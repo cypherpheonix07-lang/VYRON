@@ -450,7 +450,7 @@ export function AlertTicker() {
       setActiveAlert((a) => (a + 1) % alerts.length);
     }, 4000);
     return () => clearInterval(timer);
-  }, []);
+  }, [alerts.length]);
 
   const cur = alerts[activeAlert] || alerts[0];
   if (!cur) return null;

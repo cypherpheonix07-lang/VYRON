@@ -99,7 +99,7 @@ export function useCopilot() {
   );
 
   const setExecutionStatus = useCallback(
-    (status: typeof currentSession.executionStatus) => {
+    (status: Parameters<typeof copilotStore.setExecutionStatus>[1]) => {
       copilotStore.setExecutionStatus(mode, status);
     },
     [mode],

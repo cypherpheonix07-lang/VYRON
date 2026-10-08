@@ -210,13 +210,15 @@ function RequirementsTab() {
 
   // Semantic Vector Deduplication via llmGateway.embed()
   useEffect(() => {
+    let isCancelled = false;
     async function runDeduplication() {
       const allTexts = activeReqs.functional.map((f) => f.text);
       if (allTexts.length < 2) return;
+      if (activeReqs.functional.some((f) => (f as EnhancedRequirementItem).isDuplicate)) return;
 
       try {
         const { embeddings } = await llmGateway.embed(allTexts);
-        if (embeddings && embeddings.length === allTexts.length) {
+        if (!isCancelled && embeddings && embeddings.length === allTexts.length) {
           const updatedFunctional = activeReqs.functional.map((item, i) => {
             const currentVec = embeddings[i];
             if (!currentVec) return item;
@@ -247,7 +249,10 @@ function RequirementsTab() {
       }
     }
     runDeduplication();
-  }, []);
+    return () => {
+      isCancelled = true;
+    };
+  }, [activeReqs.functional]);
 
   return (
     <div className="space-y-6">

@@ -34,7 +34,7 @@ export function useLLM() {
         setIsGenerating(false);
       }
     },
-    [isDemoMode],
+    [],
   );
 
   return {

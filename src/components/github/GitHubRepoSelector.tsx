@@ -122,9 +122,11 @@ export function GitHubRepoSelector({
 
         setRepos((prev) => (append ? [...prev, ...incomingRepos] : incomingRepos));
         setHasMore(!!data.has_more);
-        setTotalCount(
-          data.total_count || (append ? repos.length + incomingRepos.length : incomingRepos.length),
-        );
+        if (data.total_count !== undefined && data.total_count !== null) {
+          setTotalCount(data.total_count);
+        } else {
+          setTotalCount((prev) => (append ? prev + incomingRepos.length : incomingRepos.length));
+        }
       } catch (err) {
         console.warn("Proxy repo fetch exception, using fallback:", err);
         // Fallback realistic demo repository list

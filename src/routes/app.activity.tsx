@@ -179,10 +179,16 @@ function WorkspaceActivityPage() {
     const groups: Array<{ label: string; items: ActivityEvent[] }> = [];
     const dateMap = new Map<string, ActivityEvent[]>();
 
+    const today = new Date();
+    const todayStr = today.toDateString();
+    const yesterday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 1);
+    const yesterdayStr = yesterday.toDateString();
+
     displayedEvents.forEach((ev) => {
       const d = new Date(ev.created_at);
-      const isToday = new Date().toDateString() === d.toDateString();
-      const isYesterday = new Date(Date.now() - 86400000).toDateString() === d.toDateString();
+      const dateStr = d.toDateString();
+      const isToday = dateStr === todayStr;
+      const isYesterday = dateStr === yesterdayStr;
 
       let header = d.toLocaleDateString(undefined, {
         weekday: "short",

@@ -93,8 +93,9 @@ export function GitHubOverview({
     for (let w = 0; w < 52; w++) {
       const days = [];
       for (let d = 0; d < 7; d++) {
-        // Pseudo density matching real user activity
-        const level = Math.random() > 0.65 ? Math.floor(Math.random() * 4) + 1 : 0;
+        // Deterministic pseudo density matching user activity without impure Math.random
+        const pseudo = (((w * 7 + d) * 1664525 + 1013904223) >>> 0) / 4294967296;
+        const level = pseudo > 0.65 ? (Math.floor(pseudo * 10) % 4) + 1 : 0;
         days.push(level);
       }
       weeks.push(days);

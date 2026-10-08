@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   ShieldCheck,
   Laptop,
@@ -389,21 +389,21 @@ export function SecuritySessionsTab() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const loadEvents = async () => {
+  const loadEvents = useCallback(async () => {
     setLoading(true);
     try {
       const data = await fetchSignInEvents(user?.id);
       setEvents(data);
-    } catch (e) {
+    } catch {
       toast.error("Failed to load sign-in history.");
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
 
   useEffect(() => {
     loadEvents();
-  }, [user]);
+  }, [loadEvents]);
 
   // Filtered Events
   const filteredEvents = useMemo(() => {

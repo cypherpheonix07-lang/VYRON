@@ -12,7 +12,7 @@
  * Strictly ZERO SQL.
  */
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   Sparkles,
   Bot,
@@ -175,7 +175,7 @@ export function CopilotFullScreenStudio() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const refreshAllState = () => {
+  const refreshAllState = useCallback(() => {
     setLiveContext(copilotContextEngine.assembleContext());
     setMemoryEntries(copilotMemory.listMemories(mode));
     setMissionsList(missionEngine.getMissions());
@@ -186,12 +186,12 @@ export function CopilotFullScreenStudio() {
     setReleaseAudit(copilotReleaseIntelligence.evaluateReleaseReadiness());
     const latestTrace = copilotReasoningGraph.getLatestTrace();
     if (latestTrace) setLatestReasoningTrace(latestTrace.userVisibleTrace);
-  };
+  }, [mode]);
 
   useEffect(() => {
     copilotRealtimeListener.initialize();
     refreshAllState();
-  }, [mode]);
+  }, [mode, refreshAllState]);
 
   useEffect(() => {
     return copilotActionEngine.subscribe((actions) => {

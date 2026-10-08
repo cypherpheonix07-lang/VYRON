@@ -4,7 +4,7 @@
  * GOD MODE vULTIMA vNEXT — Strictly ZERO SQL.
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   Github,
   GitBranch,
@@ -48,22 +48,21 @@ export function EngineeringPortfolio() {
   const [newRepoInput, setNewRepoInput] = useState("");
   const [isEnrolling, setIsEnrolling] = useState(false);
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  async function loadData() {
+  const loadData = useCallback(async () => {
     const s = await ecosystemControlPlane.getOverviewSummary();
     setSummary(s);
-    setRepositories(ecosystemControlPlane.getEnrolledRepositories());
+    const repos = ecosystemControlPlane.getEnrolledRepositories();
+    setRepositories(repos);
     setAccounts(ecosystemControlPlane.getAccounts());
     setRecentEvents(ecosystemControlPlane.getRecentEvents(10));
     const slos = await ecosystemControlPlane.getHealthSlos();
     setHealthSlos(slos);
-    if (!selectedRepo && repositories.length > 0) {
-      setSelectedRepo(repositories[0] || null);
-    }
-  }
+    setSelectedRepo((curr) => curr || repos[0] || null);
+  }, []);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
   async function handleReconcile() {
     setIsReconciling(true);

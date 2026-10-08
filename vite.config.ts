@@ -1,11 +1,5 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
-interface RollupLog {
-  code?: string;
-  message?: string;
-  [key: string]: unknown;
-}
-
 const suppressDirectiveFilter: any = {
   onLog(level: string, log: any, defaultHandler?: any) {
     if (

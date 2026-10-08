@@ -36,6 +36,8 @@ export function GitHubDashboard() {
   >("overview");
   const [selectedRepo, setSelectedRepo] = useState<GitHubRepoItem | null>(null);
 
+  const [now, setNow] = useState(() => Date.now());
+
   // Data States
   const [profile, setProfile] = useState<GitHubUserProfile | null>(null);
   const [repos, setRepos] = useState<GitHubRepoItem[]>([]);
@@ -90,6 +92,7 @@ export function GitHubDashboard() {
   // 30s Polling countdown timer
   useEffect(() => {
     const interval = setInterval(() => {
+      setNow(Date.now());
       setSyncCountdown((prev) => {
         if (prev <= 1) {
           if (isConnected && rateLimit.remaining > 100) {
@@ -160,7 +163,7 @@ export function GitHubDashboard() {
             </span>
             <span className="text-[10px] text-zinc-500">
               (resets in{" "}
-              {Math.max(0, Math.round((rateLimit.resetTime.getTime() - Date.now()) / 60000))}m)
+              {Math.max(0, Math.round((rateLimit.resetTime.getTime() - now) / 60000))}m)
             </span>
           </div>
 

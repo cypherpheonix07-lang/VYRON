@@ -59,7 +59,7 @@ export const RefinementChat: React.FC<RefinementChatProps> = ({ project, onProje
     if (!feedbackText.trim() || isRefining) return;
 
     const userMsg: RefinementMessage = {
-      id: `msg-${Date.now()}`,
+      id: `msg-${crypto.randomUUID()}`,
       sender: "user",
       text: feedbackText.trim(),
       timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
@@ -84,7 +84,7 @@ export const RefinementChat: React.FC<RefinementChatProps> = ({ project, onProje
       }
 
       const aiMsg: RefinementMessage = {
-        id: `msg-${Date.now() + 1}`,
+        id: `msg-${crypto.randomUUID()}`,
         sender: "ai",
         text: `Refinement applied! I have updated the ${data.section_modified} layer without altering unrelated sections.`,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
@@ -109,7 +109,7 @@ export const RefinementChat: React.FC<RefinementChatProps> = ({ project, onProje
 
       const nextGen = (project.generation_step || 1) + 1;
       const fallbackAiMsg: RefinementMessage = {
-        id: `msg-${Date.now() + 1}`,
+        id: `msg-${crypto.randomUUID()}`,
         sender: "ai",
         text: `Applied targeted update based on your feedback: "${feedbackText}". Preview has been re-synchronized.`,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),

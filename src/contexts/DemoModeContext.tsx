@@ -116,7 +116,7 @@ export function DemoModeProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const saveSession = (newSession: typeof session) => {
+  const saveSession = useCallback((newSession: typeof session) => {
     setSession(newSession);
     modeStore.setMode(newSession.isDemo ? "DEMO" : "NORMAL");
 
@@ -129,7 +129,7 @@ export function DemoModeProvider({ children }: { children: ReactNode }) {
         window.dispatchEvent(new CustomEvent("brahma:demo:deactivated"));
       }
     }
-  };
+  }, []);
 
   const activate = useCallback((projectId?: string, domain?: string) => {
     const newSession = {
@@ -140,7 +140,7 @@ export function DemoModeProvider({ children }: { children: ReactNode }) {
       demoSessionId: crypto.randomUUID(),
     };
     saveSession(newSession);
-  }, []);
+  }, [saveSession]);
 
   const deactivate = useCallback(() => {
     const newSession = {
@@ -151,7 +151,7 @@ export function DemoModeProvider({ children }: { children: ReactNode }) {
       demoSessionId: "",
     };
     saveSession(newSession);
-  }, []);
+  }, [saveSession]);
 
   const setProject = useCallback((id: string) => {
     setSession((prev) => {

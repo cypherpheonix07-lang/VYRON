@@ -367,8 +367,9 @@ function NavList({
     const activeDomain = NAV_DOMAINS.find((d) =>
       d.items.some((item) => (item.exact ? pathname === item.to : pathname.startsWith(item.to))),
     );
-    if (activeDomain && !expandedDomains[activeDomain.id]) {
+    if (activeDomain) {
       setExpandedDomains((prev) => {
+        if (prev[activeDomain.id]) return prev;
         const next = { ...prev, [activeDomain.id]: true };
         try {
           localStorage.setItem("vyron_nav_expanded", JSON.stringify(next));

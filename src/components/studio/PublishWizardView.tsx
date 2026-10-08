@@ -65,7 +65,7 @@ export function PublishWizardView({ projectId }: { projectId?: string } = {}) {
   // Initialize gate report on mount
   useEffect(() => {
     runGateCheck(id, metrics);
-  }, [id, runGateCheck]);
+  }, [id, runGateCheck, metrics]);
 
   const handleReevaluate = async () => {
     toast.info("Triggering AST & Security evaluation...", {

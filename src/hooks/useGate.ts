@@ -97,7 +97,7 @@ export function useGate() {
         setIsRunning(false);
       }
     },
-    [isDemoMode],
+    [],
   );
 
   return {

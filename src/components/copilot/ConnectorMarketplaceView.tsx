@@ -108,6 +108,7 @@ export function ConnectorMarketplaceView({ className }: ConnectorMarketplaceView
   }, []);
 
   const filteredConnectors = useMemo(() => {
+    void connectors;
     return connectorMarketplace.search({
       query: searchQuery,
       category: selectedCategory,
@@ -117,6 +118,7 @@ export function ConnectorMarketplaceView({ className }: ConnectorMarketplaceView
   }, [searchQuery, selectedCategory, selectedStatus, connectionFilter, connectors]);
 
   const categories = useMemo(() => {
+    void connectors;
     return connectorMarketplace.getCategoriesWithCounts();
   }, [connectors]);
 

@@ -139,7 +139,7 @@ function AdminModelsPage() {
     fallbacks: 2,
   });
 
-  const [fallbackLogs, setFallbackLogs] = useState<FallbackLogItem[]>([
+  const [fallbackLogs, setFallbackLogs] = useState<FallbackLogItem[]>(() => [
     {
       id: "fb-1",
       task: "architecture_generation",
