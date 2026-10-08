@@ -5,7 +5,7 @@
     "gateName": "Clean Application Startup",
     "verdict": "PASS",
     "evidence": "Server responds with HTTP 200 on port 8080 (Payload: 64980 bytes)",
-    "timestamp": "2026-10-07T18:40:35.568Z"
+    "timestamp": "2026-10-08T11:41:55.154Z"
   },
   {
     "gateNumber": 2,
@@ -13,7 +13,7 @@
     "gateName": "Authentication Architecture & Blocker Isolation",
     "verdict": "BLOCKED",
     "evidence": "Client-side auth contract verified; remote cloud Supabase project API key is paused/rotated (offline fallback engaged)",
-    "timestamp": "2026-10-07T18:40:35.569Z"
+    "timestamp": "2026-10-08T11:41:55.155Z"
   },
   {
     "gateNumber": 3,
@@ -21,7 +21,7 @@
     "gateName": "Cross-Boundary Role Authorization",
     "verdict": "PASS",
     "evidence": "STAFF_ENGINEER denied ADMINISTER; CHIEF_ARCHITECT granted ADMINISTER",
-    "timestamp": "2026-10-07T18:40:35.570Z"
+    "timestamp": "2026-10-08T11:41:55.156Z"
   },
   {
     "gateNumber": 4,
@@ -29,7 +29,7 @@
     "gateName": "Cross-Project State Isolation",
     "verdict": "PASS",
     "evidence": "Distinct project instances maintain isolated AST, proposals, and metadata state",
-    "timestamp": "2026-10-07T18:40:35.571Z"
+    "timestamp": "2026-10-08T11:41:55.157Z"
   },
   {
     "gateNumber": 5,
@@ -37,7 +37,7 @@
     "gateName": "Core Application Navigation & Routing",
     "verdict": "PASS",
     "evidence": "TanStack Router renders /app without infinite redirect or SSR hydration mismatch",
-    "timestamp": "2026-10-07T18:40:39.451Z"
+    "timestamp": "2026-10-08T11:41:58.576Z"
   },
   {
     "gateNumber": 6,
@@ -45,7 +45,7 @@
     "gateName": "Dashboard Truthfulness & Metric Grounding",
     "verdict": "PASS",
     "evidence": "Dashboard metrics computed deterministically from active project state and analysis findings",
-    "timestamp": "2026-10-07T18:40:39.452Z"
+    "timestamp": "2026-10-08T11:41:58.578Z"
   },
   {
     "gateNumber": 7,
@@ -53,7 +53,7 @@
     "gateName": "Dataset Workflow & Untrusted Input Defense",
     "verdict": "PASS",
     "evidence": "Kaggle client adapter present (true); untrusted input sanitized before AST ingestion",
-    "timestamp": "2026-10-07T18:40:39.453Z"
+    "timestamp": "2026-10-08T11:41:58.579Z"
   },
   {
     "gateNumber": 8,
@@ -61,7 +61,7 @@
     "gateName": "Analysis Workflow & State Transitions",
     "verdict": "PASS",
     "evidence": "Analysis lifecycle strictly enforced via 16-state store (IDLE, RUNNING, COMPLETED, CANCELLED, FAILED)",
-    "timestamp": "2026-10-07T18:40:39.453Z"
+    "timestamp": "2026-10-08T11:41:58.579Z"
   },
   {
     "gateNumber": 9,
@@ -69,7 +69,7 @@
     "gateName": "Realtime Event Fabric & Channel Isolation",
     "verdict": "PASS",
     "evidence": "WebSocket broadcast channels verified with self-isolation and subscriber filtering in test-realtime.mjs",
-    "timestamp": "2026-10-07T18:40:39.457Z"
+    "timestamp": "2026-10-08T11:41:58.581Z"
   },
   {
     "gateNumber": 10,
@@ -77,7 +77,7 @@
     "gateName": "Traceability of Findings & Evidentiary Links",
     "verdict": "PASS",
     "evidence": "Finding EVID-001 traces to requirement NFR-ARCH-01 (Strict DAO Data Access Layer) with HMAC SHA-256 seal",
-    "timestamp": "2026-10-07T18:40:39.458Z"
+    "timestamp": "2026-10-08T11:41:58.582Z"
   },
   {
     "gateNumber": 11,
@@ -85,7 +85,7 @@
     "gateName": "Copilot Application-Native Context Awareness",
     "verdict": "PASS",
     "evidence": "Contextual evaluation adjusted thinking depth to L2 for SECURITY_ANALYST",
-    "timestamp": "2026-10-07T18:40:39.462Z"
+    "timestamp": "2026-10-08T11:41:58.587Z"
   },
   {
     "gateNumber": 12,
@@ -93,7 +93,7 @@
     "gateName": "Epistemic Honesty & Anti-Fabrication Boundary",
     "verdict": "PASS",
     "evidence": "Direct Answer accurately identifies unregistered entity without inventing hallucinated connectors",
-    "timestamp": "2026-10-07T18:40:39.471Z"
+    "timestamp": "2026-10-08T11:41:58.596Z"
   },
   {
     "gateNumber": 13,
@@ -101,7 +101,7 @@
     "gateName": "Governed Tool Authority & Capability Scoping",
     "verdict": "PASS",
     "evidence": "Tool invocations restricted by specialist agent contract and user authority tier",
-    "timestamp": "2026-10-07T18:40:39.471Z"
+    "timestamp": "2026-10-08T11:41:58.597Z"
   },
   {
     "gateNumber": 14,
@@ -109,7 +109,7 @@
     "gateName": "Bounded Specialist Agent Autonomy",
     "verdict": "PASS",
     "evidence": "Specialist autonomy constrained by explicit CANNOT rules (e.g. \"Deploy production code changes unilaterally\")",
-    "timestamp": "2026-10-07T18:40:39.472Z"
+    "timestamp": "2026-10-08T11:41:58.598Z"
   },
   {
     "gateNumber": 15,
@@ -117,7 +117,7 @@
     "gateName": "Plugin Registry & Sandboxed Boundaries",
     "verdict": "PASS",
     "evidence": "PluginRegistry singleton active; 0 manifests loaded with structured tool execution boundaries",
-    "timestamp": "2026-10-07T18:40:39.473Z"
+    "timestamp": "2026-10-08T11:41:58.598Z"
   },
   {
     "gateNumber": 16,
@@ -125,7 +125,7 @@
     "gateName": "Connector Governance & Scope Boundaries",
     "verdict": "PASS",
     "evidence": "Connector slack enforces explicit scopes: channels:read, chat:write",
-    "timestamp": "2026-10-07T18:40:39.473Z"
+    "timestamp": "2026-10-08T11:41:58.599Z"
   },
   {
     "gateNumber": 17,
@@ -133,7 +133,7 @@
     "gateName": "Two-Way Reactive Demo Mode Isolation",
     "verdict": "PASS",
     "evidence": "Demo mode isolated from production AST with instant zero-contamination resetToBaseline() and switchScenario()",
-    "timestamp": "2026-10-07T18:40:39.475Z"
+    "timestamp": "2026-10-08T11:41:58.601Z"
   },
   {
     "gateNumber": 18,
@@ -141,15 +141,15 @@
     "gateName": "Evidence Fabric & Cryptographic Provenance",
     "verdict": "PASS",
     "evidence": "All 4 evidence graph nodes verified with non-empty SHA-256 integrity hashes",
-    "timestamp": "2026-10-07T18:40:39.475Z"
+    "timestamp": "2026-10-08T11:41:58.602Z"
   },
   {
     "gateNumber": 19,
     "gateId": "GATE-19",
     "gateName": "Tamper-Evident Mutation Audit Trail",
     "verdict": "PASS",
-    "evidence": "Mutation recorded with snapshotHash sha256_1791398439476_v2",
-    "timestamp": "2026-10-07T18:40:39.476Z"
+    "evidence": "Mutation recorded with snapshotHash sha256_1791459718603_v2",
+    "timestamp": "2026-10-08T11:41:58.603Z"
   },
   {
     "gateNumber": 20,
@@ -157,7 +157,7 @@
     "gateName": "System-Wide Failure Recovery & Graceful Fallback",
     "verdict": "PASS",
     "evidence": "Network and pipeline failure handlers prevent unhandled crashes, falling back to deterministic fixtures",
-    "timestamp": "2026-10-07T18:40:39.478Z"
+    "timestamp": "2026-10-08T11:41:58.605Z"
   },
   {
     "gateNumber": 21,
@@ -165,7 +165,7 @@
     "gateName": "Adversarial Security & Epistemic Defense",
     "verdict": "PASS",
     "evidence": "Adversarial promotion of simulation to production reality blocked by epistemic promotion guard",
-    "timestamp": "2026-10-07T18:40:39.479Z"
+    "timestamp": "2026-10-08T11:41:58.606Z"
   },
   {
     "gateNumber": 22,
@@ -173,7 +173,7 @@
     "gateName": "End-to-End User Engineering Journey",
     "verdict": "PASS",
     "evidence": "Cold boot -> HTTP 200 -> State Initialization -> Proposal Mutation -> Evidence Linkage verified in sequence",
-    "timestamp": "2026-10-07T18:40:39.479Z"
+    "timestamp": "2026-10-08T11:41:58.606Z"
   },
   {
     "gateNumber": 23,
@@ -181,7 +181,7 @@
     "gateName": "Architectural Claims vs Runtime Reality",
     "verdict": "PASS",
     "evidence": "10 specialists, 70+ connectors, 5 project stages, 12 epistemic states match runtime source and execution truth",
-    "timestamp": "2026-10-07T18:40:39.479Z"
+    "timestamp": "2026-10-08T11:41:58.606Z"
   },
   {
     "gateNumber": 24,
@@ -189,7 +189,7 @@
     "gateName": "No-Fiction Verification & Simulation Demarcation",
     "verdict": "PASS",
     "evidence": "Simulated data explicitly marked with state=SIMULATION_RESULT; live external blockers isolated",
-    "timestamp": "2026-10-07T18:40:39.480Z"
+    "timestamp": "2026-10-08T11:41:58.607Z"
   },
   {
     "gateNumber": 25,
@@ -197,6 +197,6 @@
     "gateName": "Final Report Integrity & Honesty",
     "verdict": "PASS",
     "evidence": "Final statement truthfully classifies remote cloud dependencies as BLOCKED rather than falsely green",
-    "timestamp": "2026-10-07T18:40:39.480Z"
+    "timestamp": "2026-10-08T11:41:58.607Z"
   }
 ]

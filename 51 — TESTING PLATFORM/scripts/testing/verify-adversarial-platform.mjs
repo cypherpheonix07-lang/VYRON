@@ -20,7 +20,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const projectRoot = path.resolve(__dirname, "../..");
+const projectRoot = path.resolve(__dirname, "../../..");
 
 console.log("\n===================================================================");
 console.log("  PROJECT BRAHMA — ADVERSARIAL VERIFICATION SUITE (A1–A10)        ");

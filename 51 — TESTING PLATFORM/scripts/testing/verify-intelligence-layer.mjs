@@ -9,7 +9,7 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const projectRoot = path.resolve(__dirname, "../..");
+const projectRoot = path.resolve(__dirname, "../../..");
 
 console.log("\n=======================================================");
 console.log("  BRAHMA INTELLIGENCE LAYER — AUTOMATED GATES (V1-V10) ");
@@ -187,10 +187,10 @@ try {
 
 // ─── GATE V7: Kaggle Proxy Rate Limiting & Credentials ───────────────────────
 try {
-  const edgeProxy = fs.readFileSync(
-    path.join(projectRoot, "supabase/functions/kaggle-proxy/index.ts"),
-    "utf-8",
-  );
+  const edgeProxyPath = fs.existsSync(path.join(projectRoot, "supabase/functions/kaggle-proxy/index.ts"))
+    ? path.join(projectRoot, "supabase/functions/kaggle-proxy/index.ts")
+    : path.join(projectRoot, "12 — DATABASE PLATFORM/supabase/functions/kaggle-proxy/index.ts");
+  const edgeProxy = fs.readFileSync(edgeProxyPath, "utf-8");
   const hasRateLimit = edgeProxy.includes("rateLimitMap") && edgeProxy.includes("429");
   const hasBasicAuth = edgeProxy.includes("KAGGLE_USERNAME") && edgeProxy.includes("Basic");
 
