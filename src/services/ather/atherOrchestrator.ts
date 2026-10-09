@@ -12,7 +12,7 @@
  * Enforces the Shared Answer Contract and the 10 Required Scenarios.
  */
 
-import {
+import type {
   AtherAnswerPacket,
   HowThisAnswerWasProduced,
   ExecutionDepth,
@@ -20,14 +20,14 @@ import {
   SpecialistType,
   TaskMode,
   AtherToolReceipt,
-} from "./types";
-import { atherExecutiveController } from "./executiveController";
-import { atherWorldModel } from "./worldModel";
-import { atherMemoryFabric } from "./memoryFabric";
-import { atherMultiModelIntelligence, AtherModelId } from "./multiModelIntelligence";
-import { atherCriticSystem } from "./criticSystem";
-import { atherActionEngine } from "./actionEngine";
-import { atherDataAnalystSpecialist } from "./dataAnalystSpecialist";
+} from "./types.ts";
+import { atherExecutiveController } from "./executiveController.ts";
+import { atherWorldModel } from "./worldModel.ts";
+import { atherMemoryFabric } from "./memoryFabric.ts";
+import { atherMultiModelIntelligence, type AtherModelId } from "./multiModelIntelligence.ts";
+import { atherCriticSystem } from "./criticSystem.ts";
+import { atherActionEngine } from "./actionEngine.ts";
+import { atherDataAnalystSpecialist } from "./dataAnalystSpecialist.ts";
 
 export interface AtherTurnOptions {
   taskMode?: TaskMode;

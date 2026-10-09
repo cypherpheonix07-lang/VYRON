@@ -9,14 +9,14 @@
  * 4. Integrates request parsing with injection resistance (Scenario 3) and critique-separation (Scenario 2).
  */
 
-import {
+import type {
   ParsedRequestContract,
   RequestIntent,
   ExecutionDepth,
   ResponseDetail,
-} from "./types";
-import { atherCriticSystem } from "./criticSystem";
-import { atherWorldModel } from "./worldModel";
+} from "./types.ts";
+import { atherCriticSystem } from "./criticSystem.ts";
+import { atherWorldModel } from "./worldModel.ts";
 
 export interface ExecutionBudget {
   timeBudgetMs: number;

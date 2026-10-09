@@ -14,11 +14,11 @@
  * Scenario 10: Inspect answer explanation panel (every displayed item matches an actual receipt).
  */
 
-import { atherOrchestrator } from "./atherOrchestrator";
-import { atherWorldModel } from "./worldModel";
-import { atherMultiModelIntelligence } from "./multiModelIntelligence";
-import { atherActionEngine } from "./actionEngine";
-import { atherDataAnalystSpecialist } from "./dataAnalystSpecialist";
+import { atherOrchestrator } from "./atherOrchestrator.ts";
+import { atherWorldModel } from "./worldModel.ts";
+import { atherMultiModelIntelligence } from "./multiModelIntelligence.ts";
+import { atherActionEngine } from "./actionEngine.ts";
+import { atherDataAnalystSpecialist } from "./dataAnalystSpecialist.ts";
 
 export interface ScenarioTestResult {
   scenarioNumber: number;

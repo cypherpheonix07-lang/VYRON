@@ -10,8 +10,8 @@
  * 6. Format Compliance Check
  */
 
-import { ParsedRequestContract, CriticCheckReceipt } from "./types";
-import { atherWorldModel } from "./worldModel";
+import type { ParsedRequestContract, CriticCheckReceipt } from "./types.ts";
+import { atherWorldModel } from "./worldModel.ts";
 
 export class AtherCriticSystem {
   private static instance: AtherCriticSystem | null = null;

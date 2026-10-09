@@ -13,6 +13,8 @@
  * calibrated confidence, and transparent receipt logging.
  */
 
+export const ATHER_VERSION = "2.0.0";
+
 export type AtherBrainType =
   | "EXECUTIVE_CONTROLLER"
   | "WORLD_MODEL"

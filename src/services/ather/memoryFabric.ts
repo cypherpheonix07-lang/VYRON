@@ -11,8 +11,8 @@
  * - Zero Raw SQL mandate.
  */
 
-import { MemoryScope, MemoryType, MemoryFabricEntry } from "./types";
-import { atherWorldModel } from "./worldModel";
+import type { MemoryScope, MemoryType, MemoryFabricEntry } from "./types.ts";
+import { atherWorldModel } from "./worldModel.ts";
 
 export interface MemoryQueryOptions {
   scope?: MemoryScope;

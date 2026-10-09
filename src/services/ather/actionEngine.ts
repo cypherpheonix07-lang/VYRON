@@ -10,8 +10,8 @@
  * 4. Zero Raw SQL mandate.
  */
 
-import { AtherToolReceipt, AtherConnectorStatus } from "./types";
-import { atherWorldModel } from "./worldModel";
+import type { AtherToolReceipt, AtherConnectorStatus } from "./types.ts";
+import { atherWorldModel } from "./worldModel.ts";
 
 export interface ActionStep {
   stepId: string;
