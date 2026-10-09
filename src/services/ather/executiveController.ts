@@ -110,10 +110,10 @@ export class AtherExecutiveController {
 
     // 4. Subtasks extraction (e.g. numbered questions, commas, multiple sentences)
     const subtasks: string[] = [];
-    const numberedMatches = text.match(/\d+[\.)]\s*([^\n\r]+)/g);
+    const numberedMatches = text.match(/\d+[.)]\s*([^\n\r]+)/g);
     if (numberedMatches && numberedMatches.length > 0) {
       for (const m of numberedMatches) {
-        subtasks.push(m.replace(/^\d+[\.)]\s*/, "").trim());
+        subtasks.push(m.replace(/^\d+[.)]\s*/, "").trim());
       }
     } else if (text.includes("?") && text.split("?").length > 2) {
       const parts = text.split("?").map((p) => p.trim()).filter((p) => p.length > 5);
