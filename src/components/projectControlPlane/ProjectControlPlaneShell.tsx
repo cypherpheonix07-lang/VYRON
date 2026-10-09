@@ -105,13 +105,17 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
     nextBestAction,
   } = useAiProject();
 
+  const lastPropStageRef = React.useRef(initialStage);
+
   React.useEffect(() => {
-    if (initialStage && initialStage !== state.activeStage) {
+    if (initialStage && initialStage !== lastPropStageRef.current) {
+      lastPropStageRef.current = initialStage;
       setActiveStage(initialStage);
     }
-  }, [initialStage, state.activeStage, setActiveStage]);
+  }, [initialStage, setActiveStage]);
 
   const handleStageSelect = (stageId: ProjectLifecycleStage) => {
+    lastPropStageRef.current = stageId;
     setActiveStage(stageId);
     onStageChange?.(stageId);
   };

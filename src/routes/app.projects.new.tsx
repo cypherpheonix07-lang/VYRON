@@ -26,6 +26,7 @@ export const Route = createFileRoute("/app/projects/new")({
       stage: typeof search["stage"] === "string" ? (search["stage"] as ProjectLifecycleStage) : undefined,
     };
   },
+  loaderDeps: () => ({}),
   head: () => ({
     meta: [
       { title: "AI Project Engineering Control Plane — VYRON" },
