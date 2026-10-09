@@ -22,6 +22,7 @@ import { questionUnderstanding } from "../../../src/services/copilot/questionUnd
 import { stageGateEngine } from "../../../src/services/copilot/stageGateEngine.ts";
 import { architectureDriftEngine } from "../../../src/services/intelligence/driftEngine.ts";
 import { generateVerificationHash } from "../../../src/services/ai/cryptoUtils.ts";
+import fs from "fs";
 
 let passed = 0;
 let failed = 0;
@@ -48,7 +49,10 @@ async function runFromScratchTestingMission() {
   console.log("===============================================================================\n");
 
   // --- SUITE 1: ENVIRONMENT, BOOT & RECONSTRUCTION (Sections A, B, D, E) ---
-  const TEST_PORT = process.env.TEST_PORT || process.env.PORT || 5173;
+  const envPort = fs.existsSync("./.env")
+    ? fs.readFileSync("./.env", "utf-8").match(/VITE_APP_URL=https?:\/\/[^:]+:(\d+)/)?.[1]
+    : null;
+  const TEST_PORT = process.env.TEST_PORT || process.env.PORT || envPort || 8080;
   const BASE_URL = `http://localhost:${TEST_PORT}`;
   console.log(`--- 1. Environment, Boot & Landing Integrity on ${BASE_URL} (Sections A, B, D, E) ---`);
   const landingRes = await fetch(`${BASE_URL}/`);

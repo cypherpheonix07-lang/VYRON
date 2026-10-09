@@ -50,7 +50,10 @@ function recordGate(gateNumber, gateName, verdict, evidence) {
 }
 
 async function httpGet(urlPath) {
-  const port = process.env.TEST_PORT || process.env.PORT || 5173;
+  const envPort = fs.existsSync("./.env")
+    ? fs.readFileSync("./.env", "utf-8").match(/VITE_APP_URL=https?:\/\/[^:]+:(\d+)/)?.[1]
+    : null;
+  const port = process.env.TEST_PORT || process.env.PORT || envPort || 8080;
   return new Promise((resolve) => {
     const req = http.get(`http://localhost:${port}${urlPath}`, (res) => {
       let data = "";
