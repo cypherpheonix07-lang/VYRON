@@ -25,6 +25,7 @@ dist-ssr
 # Wrangler / Cloudflare
 .wrangler/
 .chrome-demo-profile/
+.chrome-realtime-agent-profile/
 .review/
 
 

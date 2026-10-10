@@ -1,0 +1,227 @@
+{
+  "timestamp": "2026-10-10T15:22:29.232Z",
+  "durationSeconds": "186.2",
+  "baseUrl": "http://localhost:8080",
+  "browserPath": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "totalSteps": 31,
+  "passedSteps": 21,
+  "steps": [
+    {
+      "stepNum": 1,
+      "name": "Landing Page Navigation",
+      "status": "RUNNING",
+      "details": "Loading /",
+      "elapsed": "4.2s"
+    },
+    {
+      "stepNum": 1,
+      "name": "Landing Page Navigation",
+      "status": "PASS",
+      "details": "Title: \"VYRON — From raw idea to validated software blueprint\"",
+      "elapsed": "8.6s"
+    },
+    {
+      "stepNum": 2,
+      "name": "App Control Plane & Telemetry",
+      "status": "RUNNING",
+      "details": "Navigating to /app",
+      "elapsed": "8.6s"
+    },
+    {
+      "stepNum": 2,
+      "name": "App Control Plane & Telemetry",
+      "status": "PASS",
+      "details": "Path: /app | Body Length: 71",
+      "elapsed": "43.6s"
+    },
+    {
+      "stepNum": 3,
+      "name": "14-Section Lifecycle Wizard",
+      "status": "RUNNING",
+      "details": "Navigating to /app/projects/new",
+      "elapsed": "43.6s"
+    },
+    {
+      "stepNum": 4,
+      "name": "Stage 01: Intent — Realtime Data Entry",
+      "status": "RUNNING",
+      "details": "Injecting realtime project specifications",
+      "elapsed": "153.6s"
+    },
+    {
+      "stepNum": 4,
+      "name": "Stage 01: Intent — Realtime Data Entry",
+      "status": "PASS",
+      "details": "Inputs populated: 0",
+      "elapsed": "153.6s"
+    },
+    {
+      "stepNum": 5,
+      "name": "14-Stage Navigation Traversal",
+      "status": "RUNNING",
+      "details": "Traversing all 14 stages in real time",
+      "elapsed": "155.1s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 01_INTENT",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "155.7s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 02_PROBLEM",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "156.4s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 03_REQUIREMENTS",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "157.0s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 04_SCOPE",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "157.7s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 05_CAPABILITY",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "158.4s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 06_ARCHITECTURE",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "159.0s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 07_TECHNOLOGY",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "159.6s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 08_DATA",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "160.3s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 09_AI_DESIGN",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "160.9s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 10_SECURITY",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "161.5s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 11_RELIABILITY",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "162.2s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 12_IMPLEMENTATION",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "162.8s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 13_TESTING",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "163.5s"
+    },
+    {
+      "stepNum": 5,
+      "name": "Stage Navigated: 14_BLUEPRINT",
+      "status": "PASS",
+      "details": "Verified stage workspace rendered without snapback",
+      "elapsed": "164.1s"
+    },
+    {
+      "stepNum": 6,
+      "name": "Dedicated Results Blueprint Route",
+      "status": "RUNNING",
+      "details": "Navigating to /app/projects/demo-proj-1/results",
+      "elapsed": "164.1s"
+    },
+    {
+      "stepNum": 6,
+      "name": "Dedicated Results Blueprint Route",
+      "status": "PASS",
+      "details": "Route Loaded: /app/projects/demo-proj-1/results",
+      "elapsed": "173.0s"
+    },
+    {
+      "stepNum": 7,
+      "name": "ATHER Full-Screen Copilot Studio",
+      "status": "RUNNING",
+      "details": "Navigating to /app/chat",
+      "elapsed": "173.0s"
+    },
+    {
+      "stepNum": 8,
+      "name": "ATHER Live Query Interaction",
+      "status": "RUNNING",
+      "details": "Submitting realtime architecture inquiry",
+      "elapsed": "177.1s"
+    },
+    {
+      "stepNum": 8,
+      "name": "ATHER Live Query Interaction",
+      "status": "PASS",
+      "details": "Interactive prompt executed: {}",
+      "elapsed": "177.1s"
+    },
+    {
+      "stepNum": 9,
+      "name": "Connectors & Capability Broker",
+      "status": "RUNNING",
+      "details": "Navigating to /app/connectors",
+      "elapsed": "180.6s"
+    },
+    {
+      "stepNum": 9,
+      "name": "Connectors & Capability Broker",
+      "status": "PASS",
+      "details": "Path: /app/connectors | Elements: 5",
+      "elapsed": "183.9s"
+    },
+    {
+      "stepNum": 10,
+      "name": "Live WorkPulse Control Plane Final Focus",
+      "status": "RUNNING",
+      "details": "Returning to /app with real-time state active",
+      "elapsed": "183.9s"
+    },
+    {
+      "stepNum": 10,
+      "name": "Live WorkPulse Control Plane Final Focus",
+      "status": "PASS",
+      "details": "Dashboard active and responsive on user desktop",
+      "elapsed": "186.2s"
+    }
+  ]
+}
