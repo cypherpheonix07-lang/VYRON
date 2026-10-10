@@ -40,31 +40,32 @@
 
 ---
 
-## 2. 26-Section Implementation Architecture Mapping (A–Z)
+## 2. 26-Workstream Implementation Architecture Mapping (A–Z)
 
-- **Section A: Repository Baseline & Execution Contract** (Phases A01–A10): Completed in Batch 0. Repository root, lockfiles, Node 24 runtime, zero raw SQL mandate, initial checkpoint.
-- **Section B: ATHER Answer-Quality Diagnosis** (Phases B01–B10): Completed in Batch 0. 7 representative baseline requests tested with verified receipts in `scripts/verify-batch0-baseline.mjs`.
-- **Section C: Fourteen-Section Loading Repair** (Phases C01–C10): Completed in Batch 1. S01–S14 mapped to dedicated stage workspaces, route loader decoupled, ErrorBoundary protection applied.
-- **Section D: Inputs Drafts & Submission Integrity** (Phases D01–D10): Completed in Batch 1. `aiProjectStore.ts` deep-merges defaults, autosaves to localStorage, captures immutable run snapshots.
-- **Section E: Identity Roles & Resource Authorization** (Phases E01–E10): Completed in Batch 1. `authService.ts` session management with offline fallback; RBAC verified in Gate 03.
-- **Section F: Domain Contracts & Persistent Identity** (Phases F01–F10): Completed in Batch 1. Project, draft, run, finding, and evidence entities uniquely identified.
-- **Section G: GitHub Connection & Repository Trial** (Phases G01–G10): Completed in Batch 2. `verify-github-qualification.mjs` validates 11/11 tests with reproducible PRNG seed.
-- **Section H: Source Ingestion & Supported Coverage** (Phases H01–H10): Completed in Batch 2. Untrusted text sanitized, file size limits enforced, symlink traversal rejected.
-- **Section I: Engineering Analysis & Findings** (Phases I01–I10): Completed in Batch 2. Specialized agents extract AST, STRIDE threats, architecture drift, and data models.
-- **Section J: Requirements & Independent Verification Design** (Phases J01–J10): Completed in Batch 1. Traceability links NFR requirements to verifiable HMAC evidence seals.
-- **Section K: Durable Execution & Recovery** (Phases K01–K10): Completed in Batch 3. `actionEngine.ts` enforces task lifecycle, cancellability, and durable checkpoint recovery.
-- **Section L: Dedicated Results & Artifact Workspace** (Phases L01–L10): Completed in Batch 3. Route `/app/projects/:id/results` displays 14-stage completion strip, findings, and downloads.
-- **Section M: ATHER Page & Composer Redesign** (Phases M01–M10): Completed in Batch 4. `CopilotFullScreenStudio.tsx` exposes Ask/Plan/Act modes, depth, and provider toggles.
-- **Section N: Chat Interaction & Continuity** (Phases N01–N10): Completed in Batch 4. History streaming, branching, regeneration without replay, and stop/cancel controls.
-- **Section O: Intent Understanding & Executive Planning** (Phases O01–O10): Completed in Batch 4. `executiveController.ts` parses intent, subtasks, explicit constraints, and completion criteria.
-- **Section P: Retrieval & World-State Grounding** (Phases P01–P10): Completed in Batch 4. `worldModel.ts` and `contextMesh.ts` bind project scope and citation provenance.
-- **Section Q: Memory Categories & User Controls** (Phases Q01–Q10): Completed in Batch 5. `memoryFabric.ts` manages 7 scopes and 7 memory types with user correction and forgetting.
-- **Section R: Model Access Routing & Depth Controls** (Phases R01–R10): Completed in Batch 4. `multiModelIntelligence.ts` manages provider entitlement and honest fallback disclosure.
-- **Section S: Tools, Skills, Connectors & Specialists** (Phases S01–S10): Completed in Batch 5. 32 tools, specialist agents, connector grants, and transparent execution receipts.
-- **Section T: Disagreement Critics & Rehearsal** (Phases T01–T10): Completed in Batch 5. `criticSystem.ts` and `simulationEngine.ts` generate objection cards and testable hypotheses.
-- **Section U: Integrated Tests & Negative Scenarios** (Phases U01–U10): Completed in Batch 6. Acceptance gates test wrong projects, prompt injections, and network failures.
-- **Section V: Security, Privacy & Execution Isolation** (Phases V01–V10): Completed across Batches 0–6. Epistemic promotion guards, zero raw SQL, zero secret logging.
-- **Section W: Observability, Performance & Cost** (Phases W01–W10): Completed in Batch 6. WorkPulse telemetry, token spend tracking, and microsecond event timestamps.
-- **Section X: Copilot Migration & Release Compatibility** (Phases X01–X10): Completed in Batch 6. Existing conversations preserved; legacy routes seamlessly redirected.
-- **Section Y: Product Evaluation & Bounded Claims** (Phases Y01–Y10): Completed in Batch 6. Zero-fiction verification ensures truth-bound metrics and explicit blocker isolation.
-- **Section Z: Owner Walkthrough & Evidence Handoff** (Phases Z01–Z10): Continuous across all batches. Plain-language end-to-end user journey walkthrough with actual code links.
+- **Workstream A: Repository baseline and source reconciliation** (Phases A01–A10): `package.json`, `vite.config.ts`, `nitro.config.ts`, `tsconfig.json`. Identifies repository identity, stack manifests, dev server baseline on port 8080, and initial checkpoint.
+- **Workstream B: Loading repair and first working journey** (Phases B01–B10): `src/routes/app.projects.new.tsx` (`loaderDeps: () => ({})`), `src/state/aiProject/aiProjectStore.ts`, `<ErrorBoundary>`. Decouples search params from loader, safe deep merge on drafts, eliminates navigation snapback across all 14 stages.
+- **Workstream C: Domain contracts and versioned state** (Phases C01–C10): `src/services/intelligence/canonicalDomainModel.ts`, `adrLifecycleEngine.ts`, `provenancePipeline.ts`. Tenant, project, revision contracts; immutable artifact versions; stable requirement IDs.
+- **Workstream D: Identity, permissions and personas** (Phases D01–D10): `src/services/intelligence/tenantIsolationEngine.ts`, `authService.ts`. Cross-tenant isolation boundaries, student/faculty/professional persona experiences decoupled from RBAC permissions.
+- **Workstream E: ATHER interface and conversation foundation** (Phases E01–E10): `src/components/copilot/CopilotFullScreenStudio.tsx`, `atherOrchestrator.ts`, `executiveController.ts`. Unified ATHER branding, message persistence, event streaming, Ask/Plan/Act modes, and effort controls.
+- **Workstream F: Request understanding and reasoning policy** (Phases F01–F10): `src/services/copilot/questionUnderstanding.ts`, `executiveController.ts`. 10-intent taxonomy, principal objective extraction, Critique vs Execution separation, ambiguity scoring, and task budgets.
+- **Workstream G: Source ingestion and resource handling** (Phases G01–G10): `src/services/intelligence/provenancePipeline.ts`, `dataAnalystSpecialist.ts`. SHA-256 content hashes, Markdown/PDF extraction, numerical analysis with Tukey IQR fences.
+- **Workstream H: ATLAS project knowledge and retrieval** (Phases H01–H10): `src/services/intelligence/knowledgeGraph.ts`, `epistemicTruthEngine.ts`, `architectureDriftGovernor.ts`. Entity graph with IMPLEMENTS / DEPENDS_ON / VERIFIED_BY edges, exact and semantic hybrid retrieval, change impact subgraphs.
+- **Workstream I: Memory and context compilation** (Phases I01–I10): `src/services/ather/memoryFabric.ts`, `src/services/copilot/contextMesh.ts`. 7 memory scopes, 7 memory types, 16-domain Context Passport compilation with token budgeting and user memory correction.
+- **Workstream J: Model Fabric and provider qualification** (Phases J01–J10): `src/services/ather/multiModelIntelligence.ts`. Claude, OpenAI, and Local Deterministic provider adapters; capability-based selection; honest fallback logging.
+- **Workstream K: Capability Broker and connectors** (Phases K01–K10): `src/services/copilot/copilotToolRegistry.ts`. 9 typed tools with parameters, side-effects, timeouts, permission checks, and tamper-evident audit logging.
+- **Workstream L: Durable missions and recovery** (Phases L01–L10): `src/services/ather/actionEngine.ts`, `missionControlOrchestrator.ts`. 16-state task lifecycle, dependency-ready DAG execution, step checkpoints, and crash recovery without effect duplication.
+- **Workstream M: Specialist workers and bounded collaboration** (Phases M01–M10): `src/services/intelligence/specialistAgentRuntime.ts`, `dataAnalystSpecialist.ts`. 10 specialist roles (Requirements, Architecture, Security, Data, QA, etc.) executing under mission controller.
+- **Workstream N: Intent, Problem and Requirements sections** (Phases N01–N10): `src/components/projectControlPlane/stages/01_IntentStage.tsx`, `02_ProblemStage.tsx`, `03_RequirementsStage.tsx`. User stories, NFRs with units, acceptance criteria.
+- **Workstream O: Scope and Capability sections** (Phases O01–O10): `src/components/projectControlPlane/stages/04_ScopeStage.tsx`, `05_CapabilityStage.tsx`. MVP boundaries, non-goals, resource constraints, persona capability mapping.
+- **Workstream P: Architecture and Technology sections** (Phases P01–P10): `src/components/projectControlPlane/stages/06_ArchitectureStage.tsx`, `07_TechnologyStage.tsx`. AST component maps, ADR lifecycle, technology qualification evidence.
+- **Workstream Q: Data and AI/ML sections** (Phases Q01–Q10): `src/components/projectControlPlane/stages/08_DataStage.tsx`, `09_AiDesignStage.tsx`. Canonical entity ownership, data lifecycle, hybrid vector search evaluation, model failure fallbacks.
+- **Workstream R: Security and Reliability sections** (Phases R01–R10): `src/components/projectControlPlane/stages/10_SecurityStage.tsx`, `11_ReliabilityStage.tsx`, `threatModelingEngine.ts`. STRIDE threat model, prompt injection fences, SLO targets, and circuit breakers.
+- **Workstream S: Implementation and Testing sections** (Phases S01–S10): `src/components/projectControlPlane/stages/12_ImplementationStage.tsx`, `13_TestingStage.tsx`. Task breakdown, independent acceptance tests, E2E verification suites.
+- **Workstream T: Blueprint and durable results page** (Phases T01–T10): `src/routes/app.projects.$id.results.tsx`, `src/components/projectControlPlane/stages/14_BlueprintStage.tsx`. Dedicated results route, 14-stage completion strip, HMAC SHA-256 evidence seal, JSON/Markdown exports.
+- **Workstream U: Governed changes and audit integrity** (Phases U01–U10): `src/services/intelligence/auditReconciliation.ts`, `proofCarryingAgentAction.ts`. Action scope binding, pre-mutation precondition recheck, SHA-256 tamper-evident audit history.
+- **Workstream V: Verification and evaluation infrastructure** (Phases V01–V10): `scripts/verify-260-phases.mjs`, `scripts/verify-batch0-baseline.mjs`, `test-acceptance-gates.mjs`. Zero synthetic tests, deterministic numerical verification, held-out task suites.
+- **Workstream W: Observability, latency and cost** (Phases W01–W10): `src/services/intelligence/otelFabricEngine.ts`, `workpulseOperationalEngine.ts`. W3C traceparent headers, useful-response latency tracking, token spend budgeting.
+- **Workstream X: Integrated scenarios and edge testing** (Phases X01–X10): `scripts/verify-ather-scenarios.mjs`. Student, Faculty, and Professional journeys; chaos fault injection; provider outage graceful degradation.
+- **Workstream Y: Rollout and operational readiness** (Phases Y01–Y10): `src/services/intelligence/releaseCertificationEngine.ts`. 5 canonical release gates, backward-compatible migrations, production build packaging.
+- **Workstream Z: Documentation, checkpoints and acceptance** (Phases Z01–Z10): `docs/implementation/checkpoint.md`, `evidence.md`, `coverage.md`, `phases-260-report.json`. 260-phase ledger, real file mappings, execution flows, and handoff instructions.
+

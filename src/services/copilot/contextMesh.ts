@@ -496,7 +496,7 @@ export class ContextMeshEngine {
     });
 
     // 15. Domain: UNCERTAINTY
-    if (intentCapsule.ambiguityScore > 0.4 || intentCapsule.missingInputs.length > 0) {
+    if ((intentCapsule.ambiguityScore || 0) > 0.4 || (intentCapsule.missingInputs && intentCapsule.missingInputs.length > 0)) {
       items.push({
         id: "ctx_uncert_ambiguity",
         domain: "UNCERTAINTY",
