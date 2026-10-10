@@ -13,8 +13,8 @@
  * Strictly ZERO SQL.
  */
 
-import { ContextAuthority, ContextMeshItem } from "./contextMesh";
-import { EngineeringLifecycleStage } from "./questionUnderstanding";
+import { ContextAuthority, ContextMeshItem } from "./contextMesh.ts";
+import { EngineeringLifecycleStage } from "./questionUnderstanding.ts";
 
 export type UserChatCorrection = "USE" | "NEVER_USE" | "REMEMBER" | "FORGET";
 

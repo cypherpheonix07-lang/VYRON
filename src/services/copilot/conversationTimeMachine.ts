@@ -18,11 +18,11 @@
  * Strictly ZERO SQL.
  */
 
-import { IntentCapsule, EngineeringLifecycleStage } from "./questionUnderstanding";
-import { ContextPassport, ContextMeshItem } from "./contextMesh";
-import { ResourceTrailItem } from "./resourceProvenance";
-import { GovernedToolCard, EndOfChatProofCard } from "./safeReasoningEngine";
-import { PictureContextArtifact, NumericalCalculationArtifact } from "./multimodalIntelligence";
+import { IntentCapsule, EngineeringLifecycleStage } from "./questionUnderstanding.ts";
+import { ContextPassport, ContextMeshItem } from "./contextMesh.ts";
+import { ResourceTrailItem } from "./resourceProvenance.ts";
+import { GovernedToolCard, EndOfChatProofCard } from "./safeReasoningEngine.ts";
+import { PictureContextArtifact, NumericalCalculationArtifact } from "./multimodalIntelligence.ts";
 
 export type TimeMachineViewLens =
   | "CHRONOLOGICAL"

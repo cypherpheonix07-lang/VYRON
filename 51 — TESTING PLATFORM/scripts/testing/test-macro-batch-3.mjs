@@ -5,16 +5,16 @@
  * Action Transaction Engine, and Postcondition Verification Engine.
  */
 
-import { KpiIntelligenceEngine } from "../../src/services/intelligence/kpiIntelligenceEngine.ts";
-import { ContextCompiler } from "../../src/services/intelligence/contextCompiler.ts";
-import { AiGatewayRouter } from "../../src/services/intelligence/aiGatewayRouter.ts";
-import { CopilotContextArchitecture } from "../../src/services/intelligence/copilotContextArchitecture.ts";
-import { SpecialistAgentRuntime } from "../../src/services/intelligence/specialistAgentRuntime.ts";
-import { ToolBrokerEngine } from "../../src/services/intelligence/toolBrokerEngine.ts";
-import { SkillSandboxEngine } from "../../src/services/intelligence/skillSandboxEngine.ts";
-import { ConnectorFabricEngine } from "../../src/services/intelligence/connectorFabricEngine.ts";
-import { ActionTransactionEngine } from "../../src/services/intelligence/actionTransactionEngine.ts";
-import { PostconditionVerificationEngine } from "../../src/services/intelligence/postconditionVerificationEngine.ts";
+import { KpiIntelligenceEngine } from "../../../src/services/intelligence/kpiIntelligenceEngine.ts";
+import { ContextCompiler } from "../../../src/services/intelligence/contextCompiler.ts";
+import { AiGatewayRouter } from "../../../src/services/intelligence/aiGatewayRouter.ts";
+import { CopilotContextArchitecture } from "../../../src/services/intelligence/copilotContextArchitecture.ts";
+import { SpecialistAgentRuntime } from "../../../src/services/intelligence/specialistAgentRuntime.ts";
+import { ToolBrokerEngine } from "../../../src/services/intelligence/toolBrokerEngine.ts";
+import { SkillSandboxEngine } from "../../../src/services/intelligence/skillSandboxEngine.ts";
+import { ConnectorFabricEngine } from "../../../src/services/intelligence/connectorFabricEngine.ts";
+import { ActionTransactionEngine } from "../../../src/services/intelligence/actionTransactionEngine.ts";
+import { PostconditionVerificationEngine } from "../../../src/services/intelligence/postconditionVerificationEngine.ts";
 
 console.log("================================================================================");
 console.log("  VYRON GOD MODE vNEXT — MACRO-BATCH 3 VERIFICATION (P21 - P30)");

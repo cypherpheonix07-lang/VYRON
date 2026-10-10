@@ -6,16 +6,16 @@
  * and Continuous Evolution Engine.
  */
 
-import { AdversarialHardeningEngine } from "../../src/services/intelligence/adversarialHardeningEngine.ts";
-import { ComplianceAttestationEngine } from "../../src/services/intelligence/complianceAttestationEngine.ts";
-import { SreAutomationEngine } from "../../src/services/intelligence/sreAutomationEngine.ts";
-import { EnterpriseOrgEngine } from "../../src/services/intelligence/enterpriseOrgEngine.ts";
-import { AccessibilityAuditEngine } from "../../src/services/intelligence/accessibilityAuditEngine.ts";
-import { WorkpulseFederationEngine } from "../../src/services/intelligence/workpulseFederationEngine.ts";
-import { PilotEnablementEngine } from "../../src/services/intelligence/pilotEnablementEngine.ts";
-import { SupplyChainSecurityEngine } from "../../src/services/intelligence/supplyChainSecurityEngine.ts";
-import { FinalAcceptanceAuditEngine } from "../../src/services/intelligence/finalAcceptanceAuditEngine.ts";
-import { ContinuousEvolutionEngine } from "../../src/services/intelligence/continuousEvolutionEngine.ts";
+import { AdversarialHardeningEngine } from "../../../src/services/intelligence/adversarialHardeningEngine.ts";
+import { ComplianceAttestationEngine } from "../../../src/services/intelligence/complianceAttestationEngine.ts";
+import { SreAutomationEngine } from "../../../src/services/intelligence/sreAutomationEngine.ts";
+import { EnterpriseOrgEngine } from "../../../src/services/intelligence/enterpriseOrgEngine.ts";
+import { AccessibilityAuditEngine } from "../../../src/services/intelligence/accessibilityAuditEngine.ts";
+import { WorkpulseFederationEngine } from "../../../src/services/intelligence/workpulseFederationEngine.ts";
+import { PilotEnablementEngine } from "../../../src/services/intelligence/pilotEnablementEngine.ts";
+import { SupplyChainSecurityEngine } from "../../../src/services/intelligence/supplyChainSecurityEngine.ts";
+import { FinalAcceptanceAuditEngine } from "../../../src/services/intelligence/finalAcceptanceAuditEngine.ts";
+import { ContinuousEvolutionEngine } from "../../../src/services/intelligence/continuousEvolutionEngine.ts";
 
 console.log("================================================================================");
 console.log("  VYRON GOD MODE vNEXT — MACRO-BATCH 5 VERIFICATION (P41 - P50)");

@@ -7,12 +7,12 @@
 import fs from "fs";
 import path from "path";
 
-import { CopilotThinkingEngine } from "../../src/services/copilot/copilotThinkingEngine.ts";
-import { CopilotExactAnswerEngine } from "../../src/services/copilot/copilotExactAnswerEngine.ts";
-import { copilotEpistemicEngine } from "../../src/services/copilot/copilotEpistemicEngine.ts";
-import { mutationEngine } from "../../src/services/aiProject/controlPlane/mutationEngine.ts";
-import { createInitialProjectState } from "../../src/state/aiProject/aiProjectStore.ts";
-import { GovernanceAuthorizationEngine } from "../../src/services/governance/governanceAuthorizationEngine.ts";
+import { CopilotThinkingEngine } from "../../../src/services/copilot/copilotThinkingEngine.ts";
+import { CopilotExactAnswerEngine } from "../../../src/services/copilot/copilotExactAnswerEngine.ts";
+import { copilotEpistemicEngine } from "../../../src/services/copilot/copilotEpistemicEngine.ts";
+import { mutationEngine } from "../../../src/services/aiProject/controlPlane/mutationEngine.ts";
+import { createInitialProjectState } from "../../../src/state/aiProject/aiProjectStore.ts";
+import { GovernanceAuthorizationEngine } from "../../../src/services/governance/governanceAuthorizationEngine.ts";
 
 const GREEN = "\x1b[32m";
 const RED = "\x1b[31m";
