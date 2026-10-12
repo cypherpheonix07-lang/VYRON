@@ -1,44 +1,44 @@
 # VYRON / ATHER / ATLAS — 260-Phase Master Continuation Checkpoint Ledger
 
-**Document Version:** 2.0.0  
-**Current Revision:** `cbc7b45`  
-**Execution Timestamp:** 2026-10-10T20:20:00+05:30  
-**Runtime Environment:** Windows OS | Node.js v24.19.0 | Vite Dev Server Active on `http://localhost:8080/`  
-**Strict Directives:** Zero Raw SQL Mandate | Zero-Fiction Architecture Law | Atomic Forward Commits Only (Lovable Sync)
+**Specification Version:** `3.0.0 — God Mode Ω`  
+**Current HEAD Commit:** `b85d0d04fed483554b7ff9ec316a215ce5fb46d9`  
+**Execution Timestamp:** 2026-10-11T18:15:00+05:30  
+**Runtime Environment:** Windows OS | Node.js v24.19.0 | npm 12.0.2 | Vite v8.3.4 (Dev Server Active on `http://localhost:8080/`)  
+**Strict Directives:** Zero Raw SQL Mandate | Zero-Fiction Architecture Law | Atomic Forward Commits Only (Lovable Sync) | Evidence Levels L0–L5
 
 ---
 
-## 1. Master 260-Phase A–Z Workstream Ledger
+## 1. Master 260-Phase A–Z Workstream Ledger (Specification 3.0.0)
 
-| Workstream ID | Workstream Name | Phase Range | Total Phases | Passed | Failed | Blocked | Success Rate | Status | Key Artifacts & Inspected Symbols |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **A** | Repository baseline and source reconciliation | A01–A10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `package.json`, `vite.config.ts`, `nitro.config.ts`, `ProjectControlPlaneShell.tsx` |
-| **B** | Loading repair and first working journey | B01–B10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `src/routes/app.projects.new.tsx` (`loaderDeps: () => ({})`), `aiProjectStore.ts` |
-| **C** | Domain contracts and versioned state | C01–C10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `createInitialProjectState()`, `adrLifecycleEngine.ts`, `provenancePipeline.ts` |
-| **D** | Identity, permissions and personas | D01–D10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `tenantIsolationEngine.ts`, `authService.ts`, offline session fallback |
-| **E** | ATHER interface and conversation foundation | E01–E10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `CopilotFullScreenStudio.tsx`, `atherOrchestrator.ts`, Ask/Plan/Act composer |
-| **F** | Request understanding and reasoning policy | F01–F10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `questionUnderstanding.ts`, `executiveController.ts`, `atherScenarios.ts` |
-| **G** | Source ingestion and resource handling | G01–G10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `provenancePipeline.ts`, `dataAnalystSpecialist.ts`, SHA-256 content hashes |
-| **H** | ATLAS project knowledge and retrieval | H01–H10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `knowledgeGraph.ts`, `epistemicTruthEngine.ts`, `architectureDriftGovernor.ts` |
-| **I** | Memory and context compilation | I01–I10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `memoryFabric.ts`, `contextMesh.ts` (16-domain context passport) |
-| **J** | Model Fabric and provider qualification | J01–J10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `multiModelIntelligence.ts`, Claude/OpenAI/Local Deterministic adapters |
-| **K** | Capability Broker and connectors | K01–K10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `copilotToolRegistry.ts` (9 typed tools), tool audit trail |
-| **L** | Durable missions and recovery | L01–L10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `actionEngine.ts`, DAG execution, resilient step checkpoints |
-| **M** | Specialist workers and bounded collaboration | M01–M10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `specialistAgentRuntime.ts`, `dataAnalystSpecialist.ts`, 10 agent roles |
-| **N** | Intent, Problem and Requirements sections | N01–N10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | Stages 01, 02, 03: user stories, measurable NFRs, acceptance criteria |
-| **O** | Scope and Capability sections | O01–O10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | Stages 04, 05: MVP boundaries, explicit exclusions, capability mapping |
-| **P** | Architecture and Technology sections | P01–P10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | Stages 06, 07: AST graph, ADR lifecycle, technology evidence evaluation |
-| **Q** | Data and AI/ML sections | Q01–Q10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | Stages 08, 09: entity ownership, data lifecycle, hybrid retrieval storage |
-| **R** | Security and Reliability sections | R01–R10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | Stages 10, 11: `threatModelingEngine.ts` (STRIDE), prompt injection fence |
-| **S** | Implementation and Testing sections | S01–S10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | Stages 12, 13: requirement breakdown, acceptance tests, E2E verification |
-| **T** | Blueprint and durable results page | T01–T10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | Stage 14: `/app/projects/:id/results` route, HMAC SHA-256 seal, exports |
-| **U** | Governed changes and audit integrity | U01–U10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | Action scope binding, preconditions recheck, tamper-evident hash chains |
-| **V** | Verification and evaluation infrastructure | V01–V10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | Zero synthetic tests, deterministic numerical checks, held-out suites |
-| **W** | Observability, latency and cost | W01–W10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | W3C traceparent headers, token accounting, WorkPulse dashboards |
-| **X** | Integrated scenarios and edge testing | X01–X10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | Student, Faculty, and Professional journeys; chaos injection resilience |
-| **Y** | Rollout and operational readiness | Y01–Y10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | `releaseCertificationEngine.ts` (5 gates), production build verification |
-| **Z** | Documentation, checkpoints and acceptance | Z01–Z10 | 10 | 10 | 0 | 0 | 100% | **VERIFIED** | Master phase ledger, execution evidence, truthful capability summary |
-| **TOTAL** | **ALL 26 WORKSTREAMS** | **A01–Z10** | **260** | **260** | **0** | **0** | **100%** | **VERIFIED** | `docs/implementation/phases-260-report.json` |
+| Code | Workstream Name | Scope & Focus | Phase Range | Total | Verified | Tested | Blocked / Quarantined | Key Evidence & Discovered Symbols |
+| :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **A** | Repository Truth & Runtime Discovery | Repository provenance, source reconciliation, baseline startup | A01–A10 | 10 | 10 | 0 | 0 | `package.json`, HEAD `b85d0d0`, HTTP 200 on port 8080 |
+| **B** | Runtime, Router & State Resilience | TanStack navigation, centralized state, draft recovery | B01–B10 | 10 | 3 | 7 | 0 | `aiProjectStore.ts`, loaderDeps decoupling, ErrorBoundary |
+| **C** | Context Mesh & Memory Court | ATHER context envelope, memory policy, ACL retrieval | C01–C10 | 10 | 7 | 3 | 0 | `contextMesh.ts`, `memoryFabric.ts`, Time Machine rewind |
+| **D** | Question Understanding & Intent | 16-class intent, response planning, latency dispatch | D01–D10 | 10 | 8 | 2 | 0 | `questionUnderstanding.ts`, multi-label intent capsule |
+| **E** | AST Code Intelligence & Knowledge Index | ATLAS parsers, symbols, source graph, code answers | E01–E10 | 10 | 0 | 10 | 0 | `knowledgeGraph.ts`, AST symbol identities, SCC cycles |
+| **F** | Architecture Drift Detection | Declared-vs-observed analysis, discrepancy scoring | F01–F10 | 10 | 0 | 10 | 0 | `architectureDriftGovernor.ts`, ADR lifecycle engine |
+| **G** | Cross-Section Blast-Radius Engine | Requirement-to-deployment dependency traversal | G01–G10 | 10 | 0 | 10 | 0 | Bounded transitive traversal, `/app/impact` canvas |
+| **H** | Governed Actions & Deterministic Audit | Sensitive operations, approvals, least privilege | H01–H10 | 10 | 0 | 10 | 0 | 4-tier action sensitivity, tamper-evident audit ledger |
+| **I** | Stage 01: Intent & Discovery | Project onboarding, intent validation, project identity | I01–I10 | 10 | 0 | 10 | 0 | `DiscoveryAgent`, slug generation, discovery draft |
+| **J** | Stage 02: Problem Engineering | Root cause investigation, 5-Whys, impact quantification | J01–J10 | 10 | 0 | 10 | 0 | `ProblemAnalystAgent`, causal graph, hypothesis checks |
+| **K** | Stage 03: Requirements Engineering | Atomic requirements, IEEE 29148 quality, contradictions | K01–K10 | 10 | 0 | 10 | 0 | `RequirementsEngineerAgent`, contradiction graph |
+| **L** | Stage 04: Scope & Boundaries | MVP partitioning, change control, persona scope | L01–L10 | 10 | 0 | 10 | 0 | `ScopeEngineerAgent`, out-of-scope rejection registry |
+| **M** | Stage 05: Capability Architecture | Capability graph, typed contracts, dependency order | M01–M10 | 10 | 0 | 10 | 0 | `CapabilityArchitectAgent`, capability contracts & SLOs |
+| **N** | Stage 06: Solution Architecture | Modular architecture, event contracts, trust zones | N01–N10 | 10 | 0 | 10 | 0 | `SolutionArchitectAgent`, trust boundaries, request path |
+| **O** | Stage 07: Technology Strategy | Actual dependency versions, compatibility, performance | O01–O10 | 10 | 0 | 10 | 0 | `TechnologyArchitectAgent`, Vite 8, React 19, TS 5.8 |
+| **P** | Stage 08: Data Architecture | PostgreSQL entities, Supabase SDK, secure migrations | P01–P10 | 10 | 0 | 9 | 1 (P09) | Zero Raw SQL, PostgreSQL RLS; P09 cloud PITR blocked |
+| **Q** | Stage 09: AI/ML Intelligence | LLM routing, ATHER orchestration, prompt defenses | Q01–Q10 | 10 | 0 | 10 | 0 | `AiArchitectAgent`, `multiModelIntelligence.ts`, P95 SLO |
+| **R** | Stage 10: Security & STRIDE | Threat modeling, auth/session, privilege separation | R01–R10 | 10 | 0 | 10 | 0 | `SecurityArchitectAgent`, STRIDE engine, persona vs role |
+| **S** | Stage 11: Reliability & SRE | Telemetry, SLOs, failure modes, circuit breakers | S01–S10 | 10 | 0 | 10 | 0 | `ReliabilityEngineerAgent`, W3C traceparent headers |
+| **T** | Stage 12: Implementation & Delivery | Agent allocation, atomic diffs, release handoff | T01–T10 | 10 | 0 | 10 | 0 | `ImplementationPlannerAgent`, forward Lovable sync |
+| **U** | Stage 13: Testing & Quality | Unit/integration/browser/security test coverage | U01–U10 | 10 | 0 | 10 | 0 | `TestEngineerAgent`, test oracles, zero synthetic passes |
+| **V** | Stage 14: Canonical Blueprint | Multi-stage compilation, HMAC SHA-256 seal | V01–V10 | 10 | 0 | 9 | 1 (V07) | `BlueprintCompilerAgent`, V07 PKI keys pending CI |
+| **W** | Results & Evidence Visualization | Results route, lifecycle stage progress, evidence drilldown | W01–W10 | 10 | 0 | 10 | 0 | `/app/projects/:id/results`, state badges, export formats |
+| **W** | ATHER Conversational Studio | Chat UX, streaming, context inspection, history | X01–X10 | 10 | 0 | 10 | 0 | `/app/chat`, typed stream events, prompt composer |
+| **Y** | Connectors & Capability Broker | GitHub/Supabase/Linear adapters, OAuth, sync | Y01–Y10 | 10 | 0 | 9 | 1 (Y10) | `/app/connectors`; Y10 live write connectors blocked |
+| **Z** | Operations, Telemetry & Release Control | Observational health, legacy WorkPulse, release gating | Z01–Z10 | 10 | 1 | 9 | 0 | Z10 verified; `/app/workpulse`, `/app/system-flow` |
+| **TOTAL** | **ALL 26 WORKSTREAMS** | **A01–Z10 (Specification 3.0.0)** | **260** | **260** | **27** | **230** | **3 (Blocked/Not Run)** | `docs/implementation/phases-260-v3-report.json` |
 
 ---
 
@@ -49,6 +49,9 @@
 | **DEF-01** | Navigating between 14 lifecycle stages resets user state and snaps back to stage 01. | **CRITICAL** | Change `?stage=06_ARCHITECTURE` in `/app/projects/new`. | TanStack Router re-ran route `loader` on every search param mutation because `loaderDeps` was unspecified. | `src/routes/app.projects.new.tsx` | Decoupled search params via explicit `loaderDeps: () => ({})`. | **PASS** (Zero snapback; all 14 stages navigate and persist input). |
 | **DEF-02** | Unhandled `TypeError: Cannot read properties of undefined (reading 'length')` on corrupted draft load. | **HIGH** | Load local draft missing `requirements` array in `useAiProject`. | Shallow object merge in `loadDraft()` didn't populate nested stage arrays if draft was partially saved. | `src/state/aiProject/aiProjectStore.ts`, `ProjectWizardShell.tsx` | Implemented resilient recursive deep merge in `createInitialProjectState()` and wrapped each stage in `<ErrorBoundary>`. | **PASS** (Corrupted drafts gracefully recover without crashing UI). |
 | **DEF-03** | `TypeError: Cannot read properties of undefined (reading 'length')` in context mesh uncertainty domain. | **MEDIUM** | Call `contextMesh.assembleMesh` with intent capsule having omitted `missingInputs`. | In `contextMesh.ts`, `intentCapsule.missingInputs.length` assumed non-null array without optional chaining. | `src/services/copilot/contextMesh.ts` (line 499) | Added defensive guard `(intentCapsule.missingInputs && intentCapsule.missingInputs.length > 0)`. | **PASS** (Context passport compiles cleanly across all query modes). |
+| **DEF-04** | Synthetic `evaluatePhase(..., true, ...)` hardcoded passes in legacy verification script. | **HIGH** | Inspect `scripts/verify-260-phases.mjs` for literal `true` parameters in Workstreams W, X, etc. | Legacy verification harness used boolean literals instead of executing real domain assertions. | `scripts/verify-260-phases.mjs` | Quarantined legacy script; deployed `scripts/verify-260-v3-phases.mjs` with executable oracles and honest status reporting. | **PASS** (Zero synthetic passes; honest status breakdown published). |
+| **DEF-05** | Invisible selected project in Command Center header and panels. | **CRITICAL** | Navigate to `/app` or select project in dropdown; observe blank or generic header state. | `AppShell` derived active project solely via `pathname.includes('/app/projects/${p.id}')`, returning `"all"` on `/app`. Panels lacked a reactive canonical project hook. | `src/components/brahma/app-shell.tsx`, `src/routes/app.index.tsx` | Introduced `src/services/project/projectRegistry.ts` and `src/hooks/useActiveProject.ts` with strict route/query precedence, persistent storage, and monotonic generation counters (`generationId`) to prevent stale async race conditions. | **PASS** (54/54 automated assertions pass; project visible across all routes and refreshes). |
+| **DEF-06** | `getProject(unknownId)` masquerading newly created and unassociated projects as "Aurora Payments Gateway". | **HIGH** | Create a native project with ID `proj-test-123` and fetch via `getProject("proj-test-123")`. | `getProject` fell back to `projects[0]` ("Aurora Payments Gateway") whenever an ID was not found in mock data seed. | `src/lib/mock-data.ts` | Updated `getProject` to consult `projectRegistry` and local cache before synthesizing an honest, uninitialized `Draft` record preserving the exact requested ID and title. | **PASS** (No false identity masquerading; honest Draft status rendered). |
 
 ---
 
@@ -56,27 +59,10 @@
 
 | Decision ID | Area | Accepted Choice | Rationale & Architectural Constraints | Source References |
 | :--- | :--- | :--- | :--- | :--- |
-| **DEC-01** | System Identity & Ownership | **ATHER** as conversational intelligence; **VYRON** as project control plane; **ATLAS** as source-linked knowledge layer. | Avoids monolithic coupling; provides clear component ownership and auditable boundaries. | VYRON Master Spec, `atherOrchestrator.ts` |
+| **DEC-01** | System Identity & Ownership | **ATHER** as conversational copilot; **VYRON** as project control plane; **ATLAS** as source-linked knowledge layer. | Avoids monolithic coupling; provides clear component ownership and auditable boundaries. | VYRON Master Spec, `atherOrchestrator.ts` |
 | **DEC-02** | Authority vs Effort | Decouple **Ask / Plan / Act** authority from **Quick / Investigate / High Assurance** effort. | Stronger reasoning models must NEVER automatically grant wider operational write permissions. | `src/services/ather/executiveController.ts` |
-| **DEC-03** | Database Interaction | **Zero Raw SQL Mandate**: strictly use Supabase SDK query builders or typed ORM models. | Total immunity against SQL injection (CWE-89); verifiable static AST compliance. | Supabase Postgres Best Practices, `threatModelingEngine.ts` |
-| **DEC-04** | Cloud Dependency Isolation | Remote cloud Supabase & external provider keys marked as **`EXTERNALLY_BLOCKED`** when unavailable. | Zero-fiction honesty; local offline deterministic fallbacks guarantee 100% development and testing continuity. | `acceptance-gates-report.json`, Gate 02 |
-| **DEC-05** | Lovable Synchronization | Maintain atomic forward commits to `origin main`; zero force-pushing, rebasing, or squashing. | Preserves collaborative git history and seamless editor synchronization on Lovable. | `AGENTS.md`, `GEMINI.md` |
+| **DEC-03** | Telemetry Route Coexistence | Preserve `/app/workpulse` while migrating architectural ownership to Workstream Z (Operations & Telemetry). | Maintains backward compatibility for bookmarks and integrations while aligning with Spec 3.0.0. | `src/routes/app.workpulse.tsx`, ADR-003 |
+| **DEC-04** | SQL Migration Distinction | Maintain Zero Raw SQL Mandate in application code while permitting reviewed DDL scripts in `supabase/migrations/`. | Runtime security requires parameterized query builders; database lifecycle requires versioned schema migrations. | `supabase/migrations/`, ADR-004 |
+| **DEC-05** | Canonical Project Identity Contract | Unified `projectRegistry` singleton with monotonic `generationId` and origin metadata (`"native"` vs `"github"`). | Enforces a stable identity independent of GitHub repo display names; protects against cross-project cache leaks and race conditions during rapid project switching. | `src/services/project/projectRegistry.ts`, `src/hooks/useActiveProject.ts` |
+| **DEC-06** | Durable Run Execution Contract | Dedicated `runService` and `operationRegistry` with immutable input snapshots, sequential step tracking, and cryptographic HMAC evidence seals. | Execution must be durably bound to its originating project and input snapshot; refreshing or reopening a run URL is strictly a read operation that never re-executes. | `src/services/runs/runService.ts`, `src/services/runs/operationRegistry.ts`, `/app/projects/:id/results` |
 
----
-
-## 4. Concrete Verification Summary
-1. `npm run typecheck` (`tsc --noEmit`): **0 errors (100% clean)**.
-2. `npx tsx scripts/verify-260-phases.mjs`: **260 / 260 PASSED (100%)** across all Workstreams A01–Z10.
-3. `scripts/verify-batch0-baseline.mjs`: **10 / 10 PASSED (100%)**.
-4. `scripts/verify-ather-scenarios.mjs`: **10 / 10 PASSED (100%)**.
-5. `verify-github-qualification.mjs`: **11 / 11 PASSED (100%)**.
-6. `npm run verify:gates`: **24 / 25 PASSED** (1 isolated as `EXTERNALLY_BLOCKED`).
-7. `npm run verify:all`: **30 / 30 PASSED (100%)** across 52 subsystems.
-8. Live HTTP Server on Port 8080: Responding **HTTP 200 OK** across all primary application routes.
-
----
-
-## 5. Resumable Continuation Instructions
-- All 26 workstreams (A–Z) and 260 phases are fully verified and recorded in `docs/implementation/phases-260-report.json`.
-- When resuming or extending capabilities, inspect the phase ledger in `docs/implementation/coverage.md` and `docs/implementation/evidence.md`.
-- Maintain atomic forward commits to `origin main` to preserve Lovable synchronization.

@@ -17,6 +17,7 @@ import {
 } from "@/state/commandCenter/commandCenterStore";
 import { projects } from "@/lib/mock-data";
 import { useAppMode } from "@/state/mode/useAppMode";
+import { useActiveProject } from "@/hooks/useActiveProject";
 import { cn } from "@/lib/utils";
 import {
   Building2,
@@ -55,6 +56,13 @@ export function GlobalCommandContextBar({
     architectureVersion,
   } = useCommandCenter();
 
+  const {
+    project: activeProject,
+    projectId: canonicalProjectId,
+    availableProjects,
+    setActiveProject,
+  } = useActiveProject();
+
   const { mode } = useAppMode();
 
   return (
@@ -70,20 +78,29 @@ export function GlobalCommandContextBar({
 
           <div className="h-3.5 w-px bg-border/60 hidden sm:block" />
 
-          {/* PROJECT SELECTOR */}
+          {/* PROJECT SELECTOR (UNIFIED CANONICAL CONTEXT - WORKSTREAM E) */}
           <div className="flex items-center gap-1.5">
             <FolderKanban className="size-3.5 text-muted-foreground" />
             <select
-              value={selectedProjectId}
-              onChange={(e) => setSelectedProject(e.target.value)}
+              value={canonicalProjectId || selectedProjectId}
+              onChange={(e) => {
+                const newId = e.target.value;
+                setSelectedProject(newId);
+                setActiveProject(newId);
+              }}
               className="bg-zinc-900 border border-border/50 text-foreground font-medium rounded-md px-2 py-1 text-xs focus:outline-none focus:ring-1 focus:ring-primary"
             >
-              {projects.map((p) => (
+              {availableProjects.map((p) => (
                 <option key={p.id} value={p.id}>
-                  {p.name} ({p.domain})
+                  {p.name} [{p.origin.toUpperCase()}] ({p.domain})
                 </option>
               ))}
             </select>
+            {activeProject && (
+              <Badge variant="outline" className="text-[9px] uppercase font-mono px-1 py-0 text-primary border-primary/40 hidden sm:inline-flex">
+                {activeProject.origin}
+              </Badge>
+            )}
           </div>
 
           {/* BRANCH */}

@@ -1,12 +1,12 @@
 # VYRON (Project Brahma) — Master Architecture, System Specification & Project Walkthrough
 
-**Document Version:** `2.5.0` (God Mode vNext & Real-Time Intelligence Edition)  
+**Document Version:** `3.0.0` (God Mode Ω — Executable Engineering-Agent Program)  
 **System Classification:** Autonomous Engineering Intelligence, AI Architecture Synthesis & Living Software Blueprint Platform  
 **Architecture Style:** Modular Clean Architecture · Event-Driven Reactive State Mesh · Zero Raw SQL Parameterized Query Builders  
-**Core Technologies:** React 19, TypeScript 5.8 (Strict), Vite 6, TanStack Router & Start, Tailwind CSS v4, Supabase PostgreSQL SDK, Nitro Cloudflare Edge SSR  
+**Core Technologies:** React 19, TypeScript 5.8 (Strict), Vite v8.3.4 (declared `^8.2.0`), TanStack Router & Start, Tailwind CSS v4, Supabase PostgreSQL SDK, Nitro Cloudflare Edge SSR  
 **Remote Git Repository:** `https://github.com/cypherpheonix07-lang/VYRON.git`  
-**Current Branch / Commit:** `main` @ `740d9a5` (Synchronized with Lovable)  
-**Verification Pass Rate:** **260 / 260 Master Phases (100%)** · **26 / 26 Omega Benchmark Assertions (100%)** · **27 / 27 God Mode Gates (100%)**
+**Current Branch / Commit:** `main` @ `b85d0d04fed483554b7ff9ec316a215ce5fb46d9` (Synchronized with Lovable)  
+**Verification Pass Rate:** **260 / 260 Master Directives Evaluated** (27 Verified · 230 Tested · 2 Externally Blocked · 1 Not Run · 0 Failed) · **26 / 26 Omega Benchmark Assertions (100%)** · **24 / 25 Acceptance Gates (1 Externally Blocked)**
 
 ---
 
@@ -120,42 +120,42 @@ flowchart TD
 - **Routing:** TanStack Router (`@tanstack/react-router`) with 105 route definitions in `src/routes/`. Query parameters are decoupled (`loaderDeps: () => ({})`) to guarantee zero route reload thrashing.
 - **State Management:** Reactive central store (`src/state/aiProject/aiProjectStore.ts`) with deep-merge resilience and `<ErrorBoundary>` isolation.
 - **Database Client:** `@supabase/supabase-js` v2.116 + `@supabase/ssr` v0.12.
-- **Build Engine:** Vite 6 with Rolldown directive suppression compiling into `.output/` in 7.68 seconds.
+- **Build Engine:** Vite v8.3.4 (declared `^8.2.0`) with Rolldown directive suppression compiling client and SSR bundles into `.output/` in 7.78 seconds.
 
 ---
 
 ## 4. 26-Workstream (A–Z) & 260-Phase Master Matrix
 
-The platform implementation is organized across **26 lettered workstreams**, each comprising **10 distinct phases (260 total phases)**. All 260 phases have been evaluated and verified at 100% pass rate in [`docs/implementation/phases-260-report.json`](file:///c:/Users/Phanindra/OneDrive/Desktop/PANDU-FINAL%20YEAR%20PROJECTS/PROJECT-VYRON/VYRON-main/docs/implementation/phases-260-report.json):
+Under **Specification 3.0.0 (God Mode Ω)**, the platform architecture is codified into **26 lettered workstreams**, each with **10 evidence-driven directives (260 total phases)**. The authoritative status is tracked in [`docs/implementation/phases-260-v3-report.json`](docs/implementation/phases-260-v3-report.json):
 
-| Workstream | Name & Subsystem | Focus & Key Deliverable | Verified Phases |
-| :---: | :--- | :--- | :---: |
-| **A** | Runtime & Router Diagnostics | TanStack router prefetching, 0-snapback query param decoupling | A01 – A10 (100%) |
-| **B** | State Store & Draft Recovery | `aiProjectStore` resilience, recursive deep-merge, ErrorBoundary | B01 – B10 (100%) |
-| **C** | Context Mesh & Memory Retrieval | 8-dimensional history scoring, Memory Court admission rules | C01 – C10 (100%) |
-| **D** | Question Classifier & Intent | 16-class question taxonomy, multi-label capsule builder | D01 – D10 (100%) |
-| **E** | Code Interrogation & AST Index | Tree-sitter AST extraction, symbol mapping, circular graph checks | E01 – E10 (100%) |
-| **F** | Architecture Drift Detection | Spec vs reality diffing, drift severity calculation | F01 – F10 (100%) |
-| **G** | Cross-Section Impact Engine | Upstream/downstream blast radius, transitive dependency trees | G01 – G10 (100%) |
-| **H** | Governed Action Auditing | Sensitivity levels (L1–L4), human signature approval gates | H01 – H10 (100%) |
-| **I** | Stage 01: Intent & Discovery | Natural language parsing, dynamic 3-factor prioritized questions | I01 – I10 (100%) |
-| **J** | Stage 02: Problem & 5-Whys | 5-Whys causal decomposition, root problem vs technology isolation | J01 – J10 (100%) |
-| **K** | Stage 03: Requirements Quality | Atomic normalization, IEEE 29148 quality scoring, contradiction checks | K01 – K10 (100%) |
-| **L** | Stage 04: Scope & Boundaries | MVP vs v1 vs v2 boundaries, out-of-scope rejection criteria | L01 – L10 (100%) |
-| **M** | Stage 05: Capability Graph | Functional capability nodes, connector dependency links | M01 – M10 (100%) |
-| **N** | Stage 06: Solution Architecture | Microservice topology, sequence contracts, consistency score | N01 – N10 (100%) |
-| **O** | Stage 07: Technology Stack | Stack fit evaluation, runtime compatibility, licensing checks | O01 – O10 (100%) |
-| **P** | Stage 08: Data Architecture | Relational entities, schema contracts, Zero Raw SQL invariant rules | P01 – P10 (100%) |
-| **Q** | Stage 09: AI/ML System Design | Dual-provider model routing, OWASP LLM01:2026 prompt injection defense | Q01 – Q10 (100%) |
-| **R** | Stage 10: Security & STRIDE | STRIDE threat model, zero-trust RLS policies, posture score | R01 – R10 (100%) |
-| **S** | Stage 11: Reliability & SRE | Component failure scenarios, SLO error budgets, chaos resilience | S01 – S10 (100%) |
-| **T** | Stage 12: Implementation Plan | Atomic sprint tasks, work breakdown structure, DORA cadence | T01 – T10 (100%) |
-| **U** | Stage 13: Testing & Quality | Test suite matrix, traceability mapping, zero synthetic pass enforcement | U01 – U10 (100%) |
-| **V** | Stage 14: Canonical Blueprint | Cryptographic SHA-256 seal, SLSA Level 3 manifest synthesis | V01 – V10 (100%) |
-| **W** | Results Route & Visualizer | `/app/projects/:id/results` 14-stage completion status strip | W01 – W10 (100%) |
-| **X** | Copilot Studio Interactive | `/app/chat` streaming response, time machine rewind, context inspector | X01 – X10 (100%) |
-| **Y** | Connectors & Capability Broker | `/app/connectors` GitHub, Supabase, Cloudflare, Linear, Datadog mesh | Y01 – Y10 (100%) |
-| **Z** | Telemetry & WorkPulse | `/app` WorkPulse living gauges, node radar, real-time event ledger | Z01 – Z10 (100%) |
+| Code | Workstream Name | Scope & Focus | Phase Range | Status |
+| :---: | :--- | :--- | :---: | :---: |
+| **A** | Repository Truth & Runtime Discovery | Repository provenance, source reconciliation, baseline startup | A01 – A10 | VERIFIED (10/10) |
+| **B** | Runtime, Router & State Resilience | React/TanStack navigation, centralized state, draft recovery | B01 – B10 | TESTED / VERIFIED |
+| **C** | Context Mesh & Memory Court | ATHER context envelope, memory policy, ACL-aware retrieval | C01 – C10 | TESTED / VERIFIED |
+| **D** | Question Understanding & Intent | 16-class intent, response planning, latency-aware dispatch | D01 – D10 | TESTED / VERIFIED |
+| **E** | AST Code Intelligence & Knowledge Index | ATLAS parsers, symbols, source graph, source-grounded answers | E01 – E10 | TESTED |
+| **F** | Architecture Drift Detection | Declared-vs-observed system analysis, discrepancy scoring | F01 – F10 | TESTED |
+| **G** | Cross-Section Blast-Radius Engine | Requirement-to-deployment dependency graphs, impact predictions | G01 – G10 | TESTED |
+| **H** | Governed Actions & Deterministic Audit | Sensitive operations, approvals, least privilege, audit ledger | H01 – H10 | TESTED |
+| **I** | Stage 01: Intent & Discovery | Project onboarding, stakeholder discovery, intent validation | I01 – I10 | TESTED |
+| **J** | Stage 02: Problem Engineering | Root cause investigation, 5-Whys, impact quantification | J01 – J10 | TESTED |
+| **K** | Stage 03: Requirements Engineering | Atomic requirements, IEEE 29148 quality, contradictions | K01 – K10 | TESTED |
+| **L** | Stage 04: Scope & Boundaries | MVP partitioning, change control, persona scope | L01 – L10 | TESTED |
+| **M** | Stage 05: Capability Architecture | Capability graph, typed contracts, ownership, sourcing | M01 – M10 | TESTED |
+| **N** | Stage 06: Solution Architecture | Modular architecture, service/event contracts, trust boundaries | N01 – N10 | TESTED |
+| **O** | Stage 07: Technology Strategy | Actual dependency versions, compatibility, performance | O01 – O10 | TESTED |
+| **P** | Stage 08: Data Architecture | PostgreSQL entities, Supabase SDK, secure migrations, RLS | P01 – P10 | TESTED (P09 Blocked) |
+| **Q** | Stage 09: AI/ML Intelligence | LLM routing, ATHER orchestration, prompt-injection controls | Q01 – Q10 | TESTED |
+| **R** | Stage 10: Security & STRIDE | Threat modeling, auth/session, privilege separation, attack tests | R01 – R10 | TESTED |
+| **S** | Stage 11: Reliability & SRE | Telemetry, SLOs, failure modes, circuit breakers, recovery | S01 – S10 | TESTED |
+| **T** | Stage 12: Implementation & Delivery | Agent allocation, implementation planning, atomic diffs | T01 – T10 | TESTED |
+| **U** | Stage 13: Testing & Quality | Unit/integration/browser/security test coverage | U01 – U10 | TESTED |
+| **V** | Stage 14: Canonical Blueprint | Multi-stage compilation, provenance, HMAC SHA-256 seal | V01 – V10 | TESTED (V07 Not Run) |
+| **W** | Results & Evidence Visualization | Results route, lifecycle stage progress, evidence drilldown | W01 – W10 | TESTED |
+| **X** | ATHER Conversational Studio | Chat UX, streaming, context inspection, history rewind | X01 – X10 | TESTED |
+| **Y** | Connectors & Capability Broker | GitHub/Supabase/Cloudflare/Linear/Datadog adapters | Y01 – Y10 | TESTED (Y10 Blocked) |
+| **Z** | Operations, Telemetry & Release Control | Observational health, legacy WorkPulse, release gating | Z01 – Z10 | TESTED / VERIFIED |
 
 ---
 
@@ -276,36 +276,36 @@ const { data, error } = await supabase
 
 ## 10. Automated Verification & Real-Time Test Evidence
 
-The platform features an automated verification suite confirming 100% operational integrity:
+The platform features an automated, zero-fiction verification suite confirming operational integrity under **Specification 3.0.0**:
 
 ```
 ===================================================================================================
                                VYRON MASTER VERIFICATION SCORECARD
 ===================================================================================================
- Verification Suite            Execution Script                     Pass Rate     Duration
+ Verification Suite            Execution Script                     Pass / Status Duration
  ─────────────────────────────────────────────────────────────────────────────────────────────────
- Master 260-Phase Suite        scripts/verify-260-phases.mjs        260 / 260     2.8s (100% PASS)
+ Specification 3.0.0 Directives scripts/verify-260-v3-phases.mjs     260 Evaluated 2.6s (27 Ver / 230 Test)
  Omega 20-Campaign Benchmark   test-copilot-godmode-omega.mjs       26 / 26       1.4s (100% PASS)
- God Mode vNext 28-Gate Audit  verify-new-project-god-mode-vnext    27 / 27       1.8s (100% PASS)
- Real-Time Chrome CDP Runner   scripts/run-realtime-agent-journey   25 / 25       114.7s (100% PASS)
- TypeScript Type Check         npm run typecheck (tsc --noEmit)     0 Errors      38.2s (100% PASS)
- Production Bundle Build       npm run build (Vite + Nitro)         0 Errors      7.68s (100% PASS)
+ 25 Convergence Gates          test-acceptance-gates.mjs            24 / 25       1.8s (1 Blocked)
+ TypeScript Strict Check       npm run typecheck (tsc --noEmit)     0 Errors      38.2s (100% PASS)
+ Production Bundle Build       npm run build (Vite + Nitro)         0 Errors      7.78s (100% PASS)
+ Local Baseline Health         HTTP GET http://localhost:8080/      HTTP 200 OK   64.9 kB verified
 ===================================================================================================
 ```
 
 ### Key Reports Saved on Disk:
-- [`docs/implementation/phases-260-report.json`](file:///c:/Users/Phanindra/OneDrive/Desktop/PANDU-FINAL%20YEAR%20PROJECTS/PROJECT-VYRON/VYRON-main/docs/implementation/phases-260-report.json) (260/260 complete report)
-- [`docs/implementation/realtime-agent-run-report.json`](file:///c:/Users/Phanindra/OneDrive/Desktop/PANDU-FINAL%20YEAR%20PROJECTS/PROJECT-VYRON/VYRON-main/docs/implementation/realtime-agent-run-report.json) (25/25 live desktop browser journey)
-- [`docs/implementation/checkpoint.md`](file:///c:/Users/Phanindra/OneDrive/Desktop/PANDU-FINAL%20YEAR%20PROJECTS/PROJECT-VYRON/VYRON-main/docs/implementation/checkpoint.md)
-- [`docs/implementation/coverage.md`](file:///c:/Users/Phanindra/OneDrive/Desktop/PANDU-FINAL%20YEAR%20PROJECTS/PROJECT-VYRON/VYRON-main/docs/implementation/coverage.md)
+- [`docs/implementation/phases-260-v3-report.json`](docs/implementation/phases-260-v3-report.json) (Specification 3.0.0 260-phase master report)
+- [`docs/implementation/checkpoint.md`](docs/implementation/checkpoint.md) (Master continuation ledger)
+- [`docs/implementation/coverage.md`](docs/implementation/coverage.md) (Traceability matrix)
+- [`docs/implementation/evidence.md`](docs/implementation/evidence.md) (Terminal receipts and test evidence)
 
 ---
 
 ## 11. Local Development & Real-Time Execution Runbook
 
 ### Prerequisites
-- Node.js `v20+` or `v22+`
-- npm `v10+`
+- Node.js `v20+` or `v24+`
+- npm `v10+` or `v12+`
 - Google Chrome or Microsoft Edge installed on the host system
 
 ### Quick Start Commands
@@ -317,14 +317,14 @@ npx vite dev --port 8080
 # 2. In a second terminal, verify TypeScript compilation
 npm run typecheck
 
-# 3. Execute the Master 260-Phase Programmatic Audit
-node scripts/verify-260-phases.mjs
+# 3. Execute the Specification 3.0.0 Master 260-Phase Programmatic Audit
+node scripts/verify-260-v3-phases.mjs
 
 # 4. Execute the Omega 20-Campaign Copilot Benchmark
-node "51 — TESTING PLATFORM/scripts/testing/test-copilot-godmode-omega.mjs"
+npx -- tsx test-copilot-godmode-omega.mjs
 
-# 5. Launch the Live Desktop Browser Journey (Spawns visible Chrome via CDP)
-node scripts/run-realtime-agent-journey.mjs
+# 5. Execute the 25 Convergence Acceptance Gates
+node "51 — TESTING PLATFORM/test-acceptance-gates.mjs"
 
 # 6. Build the Production Bundle for Deployment
 npm run build
@@ -332,9 +332,9 @@ npm run build
 
 ### Git & Lovable Synchronization Protocol
 ```bash
-# Atomic forward commit and push (Strictly NO rebase or squash)
+# Atomic forward commit and push (Strictly NO rebase, amend, or force-push)
 git add .
-git commit -m "feat(scope): atomic description of forward change"
+git commit -m "feat(audit): reconcile 260-phase directives to Specification 3.0.0"
 git push origin main
 ```
 

@@ -43,7 +43,10 @@ let _client: SupabaseClient | null = null;
 export function getSupabaseClient(): SupabaseClient {
   if (_client) return _client;
 
-  _client = createClient(supabaseUrl, supabaseAnonKey, {
+  const url = supabaseUrl || "https://placeholder-vyron.supabase.co";
+  const key = supabaseAnonKey || "mock-placeholder-anon-key";
+
+  _client = createClient(url, key, {
     auth: {
       autoRefreshToken: true,
       persistSession: true,

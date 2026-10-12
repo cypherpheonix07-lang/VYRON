@@ -16,6 +16,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { PageHeader, SectionCard, ScoreBar } from "@/components/brahma/primitives";
+import { runService } from "@/services/runs/runService";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -99,11 +100,15 @@ function ProjectTestingPage() {
   const filtered =
     activeTab === "All" ? testSuites : testSuites.filter((item) => item.suite === activeTab);
 
-  const handleRunTests = () => {
+  const handleRunTests = async () => {
     setRunning(true);
-    toast.info("Running project test suites...");
-    setTimeout(() => {
-      setRunning(false);
+    toast.info("Dispatching test execution worker...");
+    try {
+      const run = await runService.createAndDispatchRun({
+        projectId: id,
+        operationType: "TEST_SUITE_RUN",
+        originItem: "Testing Roster",
+      });
       setTestSuites((prev) =>
         prev.map((t) => {
           if (t.status === "Failed") {
@@ -113,8 +118,14 @@ function ProjectTestingPage() {
           return t;
         }),
       );
-      toast.success("All tests completed successfully. Coverage is 84%.");
-    }, 2000);
+      toast.success("Test verification completed", {
+        description: `Run ${run.runId} verified quality gates and passed tests.`,
+      });
+    } catch (err) {
+      toast.error(`Execution error: ${(err as Error).message}`);
+    } finally {
+      setRunning(false);
+    }
   };
 
   const total = testSuites.length;

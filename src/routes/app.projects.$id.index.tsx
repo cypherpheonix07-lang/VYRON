@@ -1,10 +1,11 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
-import { Download, GitBranch, Network, Play } from "lucide-react";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { Download, GitBranch, Network, Play, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { ScoreGauge, SectionCard, StatCard } from "@/components/brahma/primitives";
 import { Button } from "@/components/ui/button";
 import { getProject } from "@/lib/mock-data";
+import { runService } from "@/services/runs/runService";
 
 export const Route = createFileRoute("/app/projects/$id/")({
   head: () => ({
@@ -25,6 +26,7 @@ export const Route = createFileRoute("/app/projects/$id/")({
 });
 
 function OverviewTab() {
+  const navigate = useNavigate();
   const { id } = Route.useParams();
   const p = getProject(id);
 
@@ -76,11 +78,21 @@ function OverviewTab() {
       >
         <div className="flex flex-wrap gap-2">
           <Button
-            onClick={() =>
-              toast.success("Analysis queued", {
-                description: "You'll be notified when it completes.",
-              })
-            }
+            onClick={async () => {
+              const run = await runService.createAndDispatchRun({
+                projectId: id,
+                operationType: "REPOSITORY_ANALYSIS",
+                originItem: "Project Overview Action",
+              });
+              toast.success("Analysis dispatched", {
+                description: `Durable run ${run.runId} initiated for this project.`,
+              });
+              navigate({
+                to: "/app/projects/$id/results",
+                params: { id },
+                search: { runId: run.runId },
+              });
+            }}
           >
             <Play className="size-4" aria-hidden /> Run analysis
           </Button>

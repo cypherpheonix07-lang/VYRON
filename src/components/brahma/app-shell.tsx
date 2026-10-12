@@ -84,6 +84,7 @@ import { authService } from "@/services/authService";
 import { notifications as mockNotifications, projects as mockProjects } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import { useProjects } from "@/hooks/useProjects";
+import { useActiveProject } from "@/hooks/useActiveProject";
 import { copilotRealtimeListener } from "@/services/copilot/copilotRealtimeListener";
 
 const labelMap: Record<string, string> = {
@@ -318,18 +319,17 @@ function NavList({
   const { user } = useAuth();
   const { mode } = useAppMode();
   const isAdmin = user?.role === "Admin";
-  const { draftCount, projects: liveProjects } = useProjects();
-  const availableProjects = liveProjects.length > 0 ? liveProjects : mockProjects;
+  const { draftCount } = useProjects();
+  const {
+    project: activeProjectData,
+    projectId: activeProjectId,
+    availableProjects,
+  } = useActiveProject();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   // Contextual Mode Detection
   const isSimulationRoute = pathname === "/app/simulation";
-  const projectRouteMatch = pathname.match(/^\/app\/projects\/([a-zA-Z0-9_-]+)/);
-  const activeProjectId =
-    projectRouteMatch && projectRouteMatch[1] !== "new" ? projectRouteMatch[1] : null;
-  const focusedProject = activeProjectId
-    ? availableProjects.find((p) => p.id === activeProjectId)
-    : null;
+  const focusedProject = activeProjectData;
 
   // 4 Contextual Navigation Modes: GLOBAL, PROJECT, SIMULATION, DEMO
   const contextualNavMode: "GLOBAL" | "PROJECT" | "SIMULATION" | "DEMO" =
@@ -779,10 +779,13 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, ready, logout } = useAuth();
   const { theme, toggle } = useTheme();
-  const { projects: liveProjects, draftCount } = useProjects();
-  const availableProjects = useMemo(() => {
-    return liveProjects && liveProjects.length > 0 ? liveProjects : mockProjects;
-  }, [liveProjects]);
+  const { draftCount } = useProjects();
+  const {
+    project: activeProjectData,
+    projectId: activeProjectId,
+    availableProjects,
+    setActiveProject,
+  } = useActiveProject();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
@@ -897,8 +900,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const activeProject =
-    availableProjects.find((p) => pathname.includes(`/app/projects/${p.id}`))?.id ?? "all";
+  const activeProject = activeProjectId || "all";
 
   // Mock global search index data matching Part 7 Requirements
   const searchIndex = useMemo(() => {
@@ -1341,30 +1343,60 @@ export function AppShell({ children }: { children: ReactNode }) {
               )}
             </Button>
 
-            {/* PROJECTS SELECTOR */}
-            <Select
-              value={activeProject}
-              onValueChange={(v) =>
-                v === "all"
-                  ? navigate({ to: "/app/projects" })
-                  : navigate({ to: "/app/projects/$id", params: { id: v } })
-              }
-            >
-              <SelectTrigger
-                className="hidden w-[210px] sm:flex h-8 text-xs"
-                aria-label="Project selector"
+            {/* PROJECTS SELECTOR (PERSISTENT ACTIVE IDENTITY - WORKSTREAM E) */}
+            <div className="hidden sm:flex items-center gap-2">
+              <Select
+                value={activeProject}
+                onValueChange={(v) => {
+                  if (v === "all") {
+                    navigate({ to: "/app/projects" });
+                  } else {
+                    setActiveProject(v, {
+                      navigateToProject: pathname.startsWith("/app/projects/"),
+                    });
+                  }
+                }}
               >
-                <SelectValue placeholder="Select project" />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-950 border border-border">
-                <SelectItem value="all">All projects</SelectItem>
-                {availableProjects.map((p) => (
-                  <SelectItem key={p.id} value={p.id}>
-                    {p.name}
+                <SelectTrigger
+                  className="w-[210px] sm:w-[220px] h-8 text-xs bg-card/60 border-border/80"
+                  aria-label="Project selector"
+                >
+                  <div className="flex items-center gap-1.5 truncate">
+                    <FolderKanban className="size-3.5 text-primary shrink-0" />
+                    <SelectValue placeholder="Select project" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-950 border border-border max-h-[320px]">
+                  <SelectItem value="all" className="font-semibold text-muted-foreground">
+                    All projects
                   </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+                  {availableProjects.map((p) => (
+                    <SelectItem key={p.id} value={p.id}>
+                      <div className="flex items-center justify-between gap-2 w-full">
+                        <span className="truncate">{p.name}</span>
+                        <span className="text-[9px] uppercase px-1 py-0 rounded bg-muted/60 text-muted-foreground font-mono">
+                          {p.origin}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {activeProjectData && (
+                <div className="hidden md:flex items-center gap-1.5 text-[11px] font-mono">
+                  <Badge variant="outline" className="text-[10px] uppercase font-mono px-1.5 py-0 border-primary/30 text-primary">
+                    {activeProjectData.origin}
+                  </Badge>
+                  {activeProjectData.repoConnected && (
+                    <Badge variant="secondary" className="text-[10px] font-mono px-1 py-0 flex items-center gap-1">
+                      <Github className="size-2.5" />
+                      {activeProjectData.default_branch || "main"}
+                    </Badge>
+                  )}
+                </div>
+              )}
+            </div>
 
             {/* GLOBAL SEARCH IN HEADER WITH AUTOCOMPLETE RESULTS */}
             <div

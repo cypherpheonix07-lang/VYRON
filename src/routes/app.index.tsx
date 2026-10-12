@@ -1,4 +1,6 @@
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useActiveProject } from "@/hooks/useActiveProject";
+import { runService } from "@/services/runs/runService";
 import {
   Activity,
   FileBarChart2,
@@ -117,11 +119,18 @@ const activityIcon = {
 type ViewState = "loaded" | "loading" | "empty" | "error";
 
 function Dashboard() {
+  const navigate = useNavigate();
   const { mode } = useAppMode();
   const [state, setState] = useState<ViewState>("loaded");
   const [showTimeMachine, setShowTimeMachine] = useState(false);
 
   const { selectEntity } = useCommandCenter();
+  const {
+    project: activeProject,
+    projectId: activeProjectId,
+    availableProjects,
+    availability,
+  } = useActiveProject();
 
   const { projects: liveProjects } = useProjects();
   const displayProjects = useMemo(() => {
@@ -189,15 +198,31 @@ function Dashboard() {
               </TabsList>
             </Tabs>
 
-            {/* DOMINANT RUN ANALYSIS BUTTON */}
+            {/* CONTEXT-SENSITIVE RUN ANALYSIS BUTTON (WORKSTREAM I & K) */}
             <Button
-              asChild
+              onClick={async () => {
+                if (activeProject) {
+                  const run = await runService.createAndDispatchRun({
+                    projectId: activeProject.id,
+                    operationType: "REPOSITORY_ANALYSIS",
+                    originItem: "Command Center Top Action",
+                  });
+                  toast.success("Repository analysis initiated", {
+                    description: `Durable run ${run.runId} dispatched for ${activeProject.name}.`,
+                  });
+                  navigate({
+                    to: "/app/projects/$id/results",
+                    params: { id: activeProject.id },
+                    search: { runId: run.runId },
+                  });
+                } else {
+                  navigate({ to: "/app/analysis" });
+                }
+              }}
               className="font-bold text-xs bg-gradient-to-r from-primary via-indigo-500 to-purple-600 hover:from-primary/90 hover:to-indigo-500 text-white shadow-md shadow-primary/20 border border-white/20"
             >
-              <Link to="/app/analysis">
-                <Play className="size-3.5 fill-current text-white mr-1.5" />
-                RUN ANALYSIS
-              </Link>
+              <Play className="size-3.5 fill-current text-white mr-1.5" />
+              RUN ANALYSIS
             </Button>
 
             <Button asChild variant="outline">
@@ -214,6 +239,170 @@ function Dashboard() {
         showTimeMachine={showTimeMachine}
         onToggleTimeMachine={() => setShowTimeMachine((prev) => !prev)}
       />
+
+      {/* ACTIVE PROJECT COMMAND PANEL (WORKSTREAM F) */}
+      {activeProject ? (
+        <div className="p-4 rounded-xl border border-primary/30 bg-gradient-to-r from-primary/10 via-card/80 to-card/60 backdrop-blur-md shadow-lg space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-primary/20 text-primary font-bold border border-primary/30">
+                  ACTIVE PROJECT
+                </span>
+                <Badge variant="outline" className="text-[10px] uppercase font-mono px-1.5 py-0">
+                  {activeProject.origin}
+                </Badge>
+                <StatusBadge status={activeProject.status} />
+              </div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
+                  {activeProject.name}
+                </h2>
+                <span className="text-xs font-mono text-muted-foreground">
+                  ({activeProject.domain})
+                </span>
+              </div>
+              <p className="text-xs text-muted-foreground line-clamp-1 max-w-2xl">
+                {activeProject.description}
+              </p>
+            </div>
+
+            {/* CONTEXT-SENSITIVE RUN TRIGGER ACTIONS */}
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-xs border-primary/40 bg-primary/5 hover:bg-primary/15 text-primary gap-1.5 h-8 font-semibold shadow-sm"
+                onClick={async () => {
+                  const run = await runService.createAndDispatchRun({
+                    projectId: activeProject.id,
+                    operationType: "BLUEPRINT_GENERATION",
+                    originItem: "Command Center Blueprint Action",
+                  });
+                  toast.success("Blueprint synthesis queued", {
+                    description: `Run ${run.runId} initiated for ${activeProject.name}.`,
+                  });
+                  navigate({
+                    to: "/app/projects/$id/results",
+                    params: { id: activeProject.id },
+                    search: { runId: run.runId },
+                  });
+                }}
+              >
+                <Sparkles className="size-3.5" />
+                Synthesize Blueprint
+              </Button>
+
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-xs border-border bg-card/60 hover:bg-card gap-1.5 h-8"
+                onClick={async () => {
+                  const run = await runService.createAndDispatchRun({
+                    projectId: activeProject.id,
+                    operationType: "TEST_SUITE_RUN",
+                    originItem: "Command Center Test Action",
+                  });
+                  toast.success("Test verification run queued", {
+                    description: `Run ${run.runId} running quality gates.`,
+                  });
+                  navigate({
+                    to: "/app/projects/$id/results",
+                    params: { id: activeProject.id },
+                    search: { runId: run.runId },
+                  });
+                }}
+              >
+                <CheckSquare className="size-3.5" />
+                Run Tests
+              </Button>
+
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-xs border-border bg-card/60 hover:bg-card gap-1.5 h-8"
+                onClick={async () => {
+                  const run = await runService.createAndDispatchRun({
+                    projectId: activeProject.id,
+                    operationType: "SECURITY_SCAN",
+                    originItem: "Command Center Security Action",
+                  });
+                  toast.success("STRIDE security audit queued", {
+                    description: `Run ${run.runId} auditing STRIDE surface.`,
+                  });
+                  navigate({
+                    to: "/app/projects/$id/results",
+                    params: { id: activeProject.id },
+                    search: { runId: run.runId },
+                  });
+                }}
+              >
+                <Lock className="size-3.5" />
+                Security Scan
+              </Button>
+
+              <Button asChild size="sm" className="text-xs bg-primary text-primary-foreground gap-1.5 h-8 shadow-sm">
+                <Link to={`/app/projects/${activeProject.id}` as never}>
+                  <FolderKanban className="size-3.5" />
+                  View Lifecycle
+                </Link>
+              </Button>
+            </div>
+          </div>
+
+          {/* PROJECT METRICS STRIP */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-border/40 text-xs font-mono">
+            <div>
+              <span className="text-[10px] text-muted-foreground uppercase">Health Score</span>
+              <div className="font-bold text-foreground text-sm flex items-center gap-1.5">
+                <span className="size-2 rounded-full bg-emerald-400" />
+                {activeProject.healthScore}/100
+              </div>
+            </div>
+            <div>
+              <span className="text-[10px] text-muted-foreground uppercase">Security Posture</span>
+              <div className="font-bold text-foreground text-sm flex items-center gap-1.5">
+                <span className="size-2 rounded-full bg-blue-400" />
+                {activeProject.securityScore}/100
+              </div>
+            </div>
+            <div>
+              <span className="text-[10px] text-muted-foreground uppercase">Delivery Risk</span>
+              <div className="font-bold text-foreground text-sm flex items-center gap-1.5">
+                <RiskBadge level={activeProject.deliveryRisk} />
+              </div>
+            </div>
+            <div>
+              <span className="text-[10px] text-muted-foreground uppercase">Repository</span>
+              <div className="font-medium text-foreground truncate">
+                {activeProject.repoConnected ? activeProject.repoUrl || activeProject.repo_full_name || "Connected" : "Native (No Git)"}
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="p-4 rounded-xl border border-dashed border-border bg-card/40 text-center space-y-2">
+          <FolderKanban className="size-6 text-muted-foreground mx-auto" />
+          <h3 className="text-sm font-semibold">No project selected</h3>
+          <p className="text-xs text-muted-foreground max-w-md mx-auto">
+            Choose an existing project from the selector above, create a new native blueprint, or connect a GitHub repository.
+          </p>
+          <div className="flex items-center justify-center gap-2 pt-1">
+            <Button asChild size="sm" variant="default" className="text-xs">
+              <Link to="/app/projects/new">
+                <PlusCircle className="size-3.5 mr-1.5" />
+                Create New Project
+              </Link>
+            </Button>
+            <Button asChild size="sm" variant="outline" className="text-xs">
+              <Link to="/app/github">
+                <GitBranch className="size-3.5 mr-1.5" />
+                Connect GitHub
+              </Link>
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* PHASE 18: TIME MACHINE COMPARATOR */}
       {showTimeMachine && (

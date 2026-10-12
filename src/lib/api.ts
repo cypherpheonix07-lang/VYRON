@@ -2,8 +2,9 @@ import { toast } from "sonner";
 import { authService } from "../services/authService";
 
 // Centralized Configuration Flags
-export const USE_REAL_ENGINE = import.meta.env["VITE_USE_REAL_ENGINE"] === "true";
-export const BACKEND_API_URL = import.meta.env["VITE_BACKEND_API_URL"] || "http://localhost:8000";
+const _env = typeof import.meta !== "undefined" && import.meta.env ? import.meta.env : ({} as Record<string, string>);
+export const USE_REAL_ENGINE = (_env["VITE_USE_REAL_ENGINE"] ?? process.env?.["VITE_USE_REAL_ENGINE"]) === "true";
+export const BACKEND_API_URL = _env["VITE_BACKEND_API_URL"] ?? process.env?.["VITE_BACKEND_API_URL"] ?? "http://localhost:8000";
 
 // --- Types matching Backend Schemas ---
 export interface RequirementItem {

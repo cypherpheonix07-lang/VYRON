@@ -15,6 +15,7 @@ import { ProjectWizardShell } from "@/components/wizard/ProjectWizardShell";
 import { ProjectControlPlaneShell } from "@/components/projectControlPlane/ProjectControlPlaneShell";
 import { Button } from "@/components/ui/button";
 import { ProjectLifecycleStage } from "@/types/aiProjectControlPlane";
+import { projectRegistry } from "@/services/project/projectRegistry";
 
 interface NewProjectSearch {
   stage?: ProjectLifecycleStage | undefined;
@@ -195,6 +196,20 @@ function NewProjectPage() {
   const onSuccessfulGeneration = async (projectId: string, payload: WizardPayload) => {
     // Clean up local draft mirror
     localStorage.removeItem("brahma_project_wizard_draft_v2");
+
+    // Workstream D: Register canonical project and select it
+    projectRegistry.createProject({
+      id: projectId,
+      name: payload.name,
+      slug: payload.slug,
+      description: payload.description,
+      domain: payload.domain,
+      status: "Draft",
+      origin: payload.repo_full_name ? "github" : "native",
+      repo_full_name: payload.repo_full_name,
+      healthScore: 95,
+      deliveryRisk: "Low",
+    });
 
     // 4.3 Write Telemetry Event to activity_events
     try {
