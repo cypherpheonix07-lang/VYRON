@@ -85,6 +85,7 @@ import { Route as AppProjectsIdBlueprintRouteImport } from './routes/app.project
 import { Route as AppProjectsIdCodeHealthRouteImport } from './routes/app.projects.$id.code-health'
 import { Route as AppProjectsIdCollaborateRouteImport } from './routes/app.projects.$id.collaborate'
 import { Route as AppProjectsIdIntegrationsRouteImport } from './routes/app.projects.$id.integrations'
+import { Route as AppProjectsIdOutputRouteImport } from './routes/app.projects.$id.output'
 import { Route as AppProjectsIdPublishRouteImport } from './routes/app.projects.$id.publish'
 import { Route as AppProjectsIdReportsRouteImport } from './routes/app.projects.$id.reports'
 import { Route as AppProjectsIdRequirementsRouteImport } from './routes/app.projects.$id.requirements'
@@ -495,6 +496,11 @@ const AppProjectsIdIntegrationsRoute =
     path: '/integrations',
     getParentRoute: () => AppProjectsIdRoute,
   } as any)
+const AppProjectsIdOutputRoute = AppProjectsIdOutputRouteImport.update({
+  id: '/output',
+  path: '/output',
+  getParentRoute: () => AppProjectsIdRoute,
+} as any)
 const AppProjectsIdPublishRoute = AppProjectsIdPublishRouteImport.update({
   id: '/publish',
   path: '/publish',
@@ -709,6 +715,7 @@ export interface FileRoutesByFullPath {
   '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
   '/app/projects/$id/collaborate': typeof AppProjectsIdCollaborateRoute
   '/app/projects/$id/integrations': typeof AppProjectsIdIntegrationsRoute
+  '/app/projects/$id/output': typeof AppProjectsIdOutputRoute
   '/app/projects/$id/publish': typeof AppProjectsIdPublishRoute
   '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
@@ -810,6 +817,7 @@ export interface FileRoutesByTo {
   '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
   '/app/projects/$id/collaborate': typeof AppProjectsIdCollaborateRoute
   '/app/projects/$id/integrations': typeof AppProjectsIdIntegrationsRoute
+  '/app/projects/$id/output': typeof AppProjectsIdOutputRoute
   '/app/projects/$id/publish': typeof AppProjectsIdPublishRoute
   '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
@@ -916,6 +924,7 @@ export interface FileRoutesById {
   '/app/projects/$id/code-health': typeof AppProjectsIdCodeHealthRoute
   '/app/projects/$id/collaborate': typeof AppProjectsIdCollaborateRoute
   '/app/projects/$id/integrations': typeof AppProjectsIdIntegrationsRoute
+  '/app/projects/$id/output': typeof AppProjectsIdOutputRoute
   '/app/projects/$id/publish': typeof AppProjectsIdPublishRoute
   '/app/projects/$id/reports': typeof AppProjectsIdReportsRoute
   '/app/projects/$id/requirements': typeof AppProjectsIdRequirementsRoute
@@ -1023,6 +1032,7 @@ export interface FileRouteTypes {
     | '/app/projects/$id/code-health'
     | '/app/projects/$id/collaborate'
     | '/app/projects/$id/integrations'
+    | '/app/projects/$id/output'
     | '/app/projects/$id/publish'
     | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
@@ -1124,6 +1134,7 @@ export interface FileRouteTypes {
     | '/app/projects/$id/code-health'
     | '/app/projects/$id/collaborate'
     | '/app/projects/$id/integrations'
+    | '/app/projects/$id/output'
     | '/app/projects/$id/publish'
     | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
@@ -1229,6 +1240,7 @@ export interface FileRouteTypes {
     | '/app/projects/$id/code-health'
     | '/app/projects/$id/collaborate'
     | '/app/projects/$id/integrations'
+    | '/app/projects/$id/output'
     | '/app/projects/$id/publish'
     | '/app/projects/$id/reports'
     | '/app/projects/$id/requirements'
@@ -1813,6 +1825,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsIdIntegrationsRouteImport
       parentRoute: typeof AppProjectsIdRoute
     }
+    '/app/projects/$id/output': {
+      id: '/app/projects/$id/output'
+      path: '/output'
+      fullPath: '/app/projects/$id/output'
+      preLoaderRoute: typeof AppProjectsIdOutputRouteImport
+      parentRoute: typeof AppProjectsIdRoute
+    }
     '/app/projects/$id/publish': {
       id: '/app/projects/$id/publish'
       path: '/publish'
@@ -2081,6 +2100,7 @@ interface AppProjectsIdRouteChildren {
   AppProjectsIdCodeHealthRoute: typeof AppProjectsIdCodeHealthRoute
   AppProjectsIdCollaborateRoute: typeof AppProjectsIdCollaborateRoute
   AppProjectsIdIntegrationsRoute: typeof AppProjectsIdIntegrationsRoute
+  AppProjectsIdOutputRoute: typeof AppProjectsIdOutputRoute
   AppProjectsIdPublishRoute: typeof AppProjectsIdPublishRoute
   AppProjectsIdReportsRoute: typeof AppProjectsIdReportsRoute
   AppProjectsIdRequirementsRoute: typeof AppProjectsIdRequirementsRoute
@@ -2100,6 +2120,7 @@ const AppProjectsIdRouteChildren: AppProjectsIdRouteChildren = {
   AppProjectsIdCodeHealthRoute: AppProjectsIdCodeHealthRoute,
   AppProjectsIdCollaborateRoute: AppProjectsIdCollaborateRoute,
   AppProjectsIdIntegrationsRoute: AppProjectsIdIntegrationsRoute,
+  AppProjectsIdOutputRoute: AppProjectsIdOutputRoute,
   AppProjectsIdPublishRoute: AppProjectsIdPublishRoute,
   AppProjectsIdReportsRoute: AppProjectsIdReportsRoute,
   AppProjectsIdRequirementsRoute: AppProjectsIdRequirementsRoute,

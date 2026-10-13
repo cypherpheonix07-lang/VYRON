@@ -49,7 +49,7 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "04_SCOPE": {
     stage: "04_SCOPE",
     label: "Scope Engineering",
-    allowedNextStages: ["05_CAPABILITY", "06_ARCHITECTURE"],
+    allowedNextStages: ["05_CAPABILITY", "15_EXPERIENCE", "06_ARCHITECTURE"],
     requiredPreConditions: (state) => ({
       valid: state.scope.mvpRequirements.length > 0,
       error: "At least one requirement must be allocated to MVP scope.",
@@ -58,10 +58,19 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "05_CAPABILITY": {
     stage: "05_CAPABILITY",
     label: "Capability Modeling",
-    allowedNextStages: ["06_ARCHITECTURE"],
+    allowedNextStages: ["15_EXPERIENCE", "06_ARCHITECTURE"],
     requiredPreConditions: (state) => ({
       valid: state.capabilities.capabilities.length > 0,
       error: "At least one system capability must be defined.",
+    }),
+  },
+  "15_EXPERIENCE": {
+    stage: "15_EXPERIENCE",
+    label: "Experience & Accessibility",
+    allowedNextStages: ["06_ARCHITECTURE", "07_TECHNOLOGY", "16_INTEGRATION"],
+    requiredPreConditions: (state) => ({
+      valid: !!state.experience,
+      error: "Experience and accessibility model must be initialized.",
     }),
   },
   "06_ARCHITECTURE": {
@@ -86,7 +95,7 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "08_DATA": {
     stage: "08_DATA",
     label: "Data Architecture",
-    allowedNextStages: ["09_AI_DESIGN", "10_SECURITY", "11_RELIABILITY"],
+    allowedNextStages: ["09_AI_DESIGN", "16_INTEGRATION", "10_SECURITY", "11_RELIABILITY"],
     requiredPreConditions: (state) => ({
       valid: state.data.entities.length > 0,
       error: "At least one core data entity is required.",
@@ -95,8 +104,17 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "09_AI_DESIGN": {
     stage: "09_AI_DESIGN",
     label: "AI / ML Systems",
-    allowedNextStages: ["10_SECURITY", "11_RELIABILITY", "12_IMPLEMENTATION"],
+    allowedNextStages: ["16_INTEGRATION", "10_SECURITY", "11_RELIABILITY", "12_IMPLEMENTATION"],
     requiredPreConditions: () => ({ valid: true }), // Conditional stage
+  },
+  "16_INTEGRATION": {
+    stage: "16_INTEGRATION",
+    label: "Integration & Interoperability",
+    allowedNextStages: ["10_SECURITY", "11_RELIABILITY", "12_IMPLEMENTATION"],
+    requiredPreConditions: (state) => ({
+      valid: !!state.integration,
+      error: "Integration contracts and endpoints must be initialized.",
+    }),
   },
   "10_SECURITY": {
     stage: "10_SECURITY",
@@ -128,10 +146,46 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "13_TESTING": {
     stage: "13_TESTING",
     label: "Test Engineering",
-    allowedNextStages: ["14_BLUEPRINT"],
+    allowedNextStages: ["17_RELEASE", "18_OPERATIONS", "14_BLUEPRINT"],
     requiredPreConditions: (state) => ({
       valid: state.testing.testCases.length > 0,
       error: "Automated test verification cases are required.",
+    }),
+  },
+  "17_RELEASE": {
+    stage: "17_RELEASE",
+    label: "Release & Migration",
+    allowedNextStages: ["18_OPERATIONS", "19_EVALUATION", "14_BLUEPRINT"],
+    requiredPreConditions: (state) => ({
+      valid: !!state.release,
+      error: "Release and migration strategy must be configured.",
+    }),
+  },
+  "18_OPERATIONS": {
+    stage: "18_OPERATIONS",
+    label: "Operations & Incident Response",
+    allowedNextStages: ["19_EVALUATION", "20_RETIREMENT", "14_BLUEPRINT"],
+    requiredPreConditions: (state) => ({
+      valid: !!state.operations,
+      error: "Operations and runbook procedures must be configured.",
+    }),
+  },
+  "19_EVALUATION": {
+    stage: "19_EVALUATION",
+    label: "Evaluation & Improvement",
+    allowedNextStages: ["20_RETIREMENT", "14_BLUEPRINT"],
+    requiredPreConditions: (state) => ({
+      valid: !!state.evaluation,
+      error: "Evaluation telemetry and error budget baselines must be initialized.",
+    }),
+  },
+  "20_RETIREMENT": {
+    stage: "20_RETIREMENT",
+    label: "Retirement & Transition",
+    allowedNextStages: ["14_BLUEPRINT"],
+    requiredPreConditions: (state) => ({
+      valid: !!state.retirement,
+      error: "Retirement and data retention plans must be initialized.",
     }),
   },
   "14_BLUEPRINT": {

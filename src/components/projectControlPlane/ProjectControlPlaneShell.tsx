@@ -56,32 +56,16 @@ import { Stage12ImplementationWorkspace } from "./stages/Stage12ImplementationWo
 import { Stage13TestingWorkspace } from "./stages/Stage13TestingWorkspace";
 import { Stage14BlueprintWorkspace } from "./stages/Stage14BlueprintWorkspace";
 
+import { GenericStageWorkspace } from "./stages/GenericStageWorkspace";
+import { LIFECYCLE_20_SECTIONS } from "@/services/aiProject/lifecycleRegistry";
+
 interface ProjectControlPlaneShellProps {
   onSwitchToClassicWizard?: (() => void) | undefined;
   initialStage?: ProjectLifecycleStage | undefined;
   onStageChange?: ((stage: ProjectLifecycleStage) => void) | undefined;
 }
 
-const STAGES_CONFIG: Array<{
-  id: ProjectLifecycleStage;
-  label: string;
-  icon: React.ElementType;
-}> = [
-  { id: "01_INTENT", label: "01 Intent", icon: Brain },
-  { id: "02_PROBLEM", label: "02 Problem", icon: Target },
-  { id: "03_REQUIREMENTS", label: "03 Requirements", icon: CheckSquare },
-  { id: "04_SCOPE", label: "04 Scope", icon: Layers },
-  { id: "05_CAPABILITY", label: "05 Capability", icon: Layers },
-  { id: "06_ARCHITECTURE", label: "06 Architecture", icon: Server },
-  { id: "07_TECHNOLOGY", label: "07 Technology", icon: Cpu },
-  { id: "08_DATA", label: "08 Data", icon: Database },
-  { id: "09_AI_DESIGN", label: "09 AI/ML", icon: Brain },
-  { id: "10_SECURITY", label: "10 Security", icon: Shield },
-  { id: "11_RELIABILITY", label: "11 Reliability", icon: Activity },
-  { id: "12_IMPLEMENTATION", label: "12 Implementation", icon: Terminal },
-  { id: "13_TESTING", label: "13 Testing", icon: CheckSquare },
-  { id: "14_BLUEPRINT", label: "14 Blueprint", icon: FileText },
-];
+const STAGES_CONFIG = LIFECYCLE_20_SECTIONS;
 
 export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> = ({
   onSwitchToClassicWizard,
@@ -200,6 +184,8 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
         return <Stage04ScopeWorkspace />;
       case "05_CAPABILITY":
         return <Stage05CapabilityWorkspace />;
+      case "15_EXPERIENCE":
+        return <GenericStageWorkspace stage="15_EXPERIENCE" />;
       case "06_ARCHITECTURE":
         return <Stage06ArchitectureWorkspace />;
       case "07_TECHNOLOGY":
@@ -208,6 +194,8 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
         return <Stage08DataWorkspace />;
       case "09_AI_DESIGN":
         return <Stage09AiDesignWorkspace />;
+      case "16_INTEGRATION":
+        return <GenericStageWorkspace stage="16_INTEGRATION" />;
       case "10_SECURITY":
         return <Stage10SecurityWorkspace />;
       case "11_RELIABILITY":
@@ -216,6 +204,14 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
         return <Stage12ImplementationWorkspace />;
       case "13_TESTING":
         return <Stage13TestingWorkspace />;
+      case "17_RELEASE":
+        return <GenericStageWorkspace stage="17_RELEASE" />;
+      case "18_OPERATIONS":
+        return <GenericStageWorkspace stage="18_OPERATIONS" />;
+      case "19_EVALUATION":
+        return <GenericStageWorkspace stage="19_EVALUATION" />;
+      case "20_RETIREMENT":
+        return <GenericStageWorkspace stage="20_RETIREMENT" />;
       case "14_BLUEPRINT":
         return <Stage14BlueprintWorkspace />;
       default:
@@ -226,24 +222,30 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
   const getStageStatusBadge = (stageId: ProjectLifecycleStage) => {
     const status = state.stageStatuses[stageId] || "not_started";
     switch (status) {
+      case "accepted":
       case "complete":
-        return <span className="h-2 w-2 rounded-full bg-emerald-400 shrink-0" title="Complete" />;
+        return <span className="h-2 w-2 rounded-full bg-emerald-400 shrink-0" title="Accepted / Complete" />;
       case "in_progress":
+      case "inspecting":
         return (
           <span
             className="h-2 w-2 rounded-full bg-cyan-400 animate-pulse shrink-0"
-            title="In Progress"
+            title="In Progress / Inspecting"
           />
         );
+      case "needs_reinspection":
+      case "changes_required":
       case "stale":
-        return <span className="h-2 w-2 rounded-full bg-orange-400 shrink-0" title="Stale" />;
+        return <span className="h-2 w-2 rounded-full bg-amber-400 shrink-0" title="Changes Required / Reinspection" />;
       case "blocked":
         return <span className="h-2 w-2 rounded-full bg-rose-400 shrink-0" title="Blocked" />;
+      case "awaiting_decision":
+        return <span className="h-2 w-2 rounded-full bg-purple-400 shrink-0" title="Awaiting Decision" />;
       default:
         return (
           <span
-            className="h-2 w-2 rounded-full bg-muted-foreground/30 shrink-0"
-            title="Not Started"
+            className="h-1.5 w-1.5 rounded-full bg-muted-foreground/30 shrink-0"
+            title="Draft / Not Started"
           />
         );
     }

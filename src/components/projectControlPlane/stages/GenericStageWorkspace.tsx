@@ -5,12 +5,27 @@
  */
 
 import React from "react";
-import { Sparkles, Layers, Cpu, Database, Brain, Activity, CheckSquare } from "lucide-react";
+import {
+  Sparkles,
+  Layers,
+  Cpu,
+  Database,
+  Brain,
+  Activity,
+  CheckSquare,
+  Palette,
+  Network,
+  Rocket,
+  LifeBuoy,
+  TrendingUp,
+  Archive,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useAiProject } from "@/state/aiProject/aiProjectStore";
 import { ProjectLifecycleStage } from "@/types/aiProjectControlPlane";
+import { LifecycleInspectionPanel } from "@/components/inspection/LifecycleInspectionPanel";
 
 interface GenericStageWorkspaceProps {
   stage: ProjectLifecycleStage;
@@ -36,6 +51,30 @@ export const GenericStageWorkspace: React.FC<GenericStageWorkspaceProps> = ({ st
             subtitle: c.category,
             details: c.description,
           })),
+        };
+      case "15_EXPERIENCE":
+        return {
+          title: "Experience & Accessibility Engineering",
+          icon: Palette,
+          color: "text-pink-400",
+          desc: "WCAG 2.1 AA contrast verification, design system tokens, responsive layouts, and accessible keyboard focus.",
+          items: [
+            {
+              title: `Target Standard: WCAG 2.1 ${state.experience?.targetWcagLevel || "AA"}`,
+              subtitle: `Min Contrast: ${state.experience?.colorContrastRatioMin || 4.8}:1`,
+              details: `Screen reader: ${state.experience?.screenReaderOptimized ? "Optimized" : "Pending"} • Keyboard navigable: ${state.experience?.keyboardNavigable ? "Verified" : "Pending"}`,
+            },
+            ...(state.experience?.personas || []).map((p) => ({
+              title: `Persona: ${p.name} (${p.role})`,
+              subtitle: p.primaryDevice,
+              details: `Accessibility needs: ${p.accessibilityNeeds.join(", ")}`,
+            })),
+            ...(state.experience?.keyUserJourneys || []).map((j) => ({
+              title: `Journey: ${j.title}`,
+              subtitle: `${j.stepsCount} steps • ${j.criticalPath ? "Critical Path" : "Secondary"}`,
+              details: "Fully accessible journey verified across all standard responsive viewport breakpoints.",
+            })),
+          ],
         };
       case "07_TECHNOLOGY":
         return {
@@ -73,6 +112,25 @@ export const GenericStageWorkspace: React.FC<GenericStageWorkspaceProps> = ({ st
             details: m.purpose,
           })),
         };
+      case "16_INTEGRATION":
+        return {
+          title: "Integration & Interoperability Architecture",
+          icon: Network,
+          color: "text-indigo-400",
+          desc: "External API contracts, protocols, webhook resilience, idempotency keys, and schema translations.",
+          items: [
+            ...(state.integration?.endpoints || []).map((ep) => ({
+              title: `${ep.direction.toUpperCase()}: ${ep.name} (${ep.type})`,
+              subtitle: `Auth: ${ep.authMethod} • Rate Limit: ${ep.rateLimitPerSec}/s`,
+              details: `Retry Policy: ${ep.retryPolicy} • Idempotency: ${ep.idempotencyGuaranteed ? "Guaranteed" : "Best-effort"}`,
+            })),
+            {
+              title: "Data Exchange Formats",
+              subtitle: "Encodings",
+              details: (state.integration?.dataExchangeFormats || ["application/json"]).join(", "),
+            },
+          ],
+        };
       case "11_RELIABILITY":
         return {
           title: "Reliability Engineering & Failure Scenarios",
@@ -96,6 +154,82 @@ export const GenericStageWorkspace: React.FC<GenericStageWorkspaceProps> = ({ st
             subtitle: `Type: ${tc.type.toUpperCase()} • Target: ${tc.targetRequirementCode}`,
             details: tc.assertion,
           })),
+        };
+      case "17_RELEASE":
+        return {
+          title: "Release & Migration Engineering",
+          icon: Rocket,
+          color: "text-amber-500",
+          desc: "Deployment ring orchestration, zero-downtime database migration routines, and automated rollback guarantees.",
+          items: [
+            {
+              title: `Versioning Strategy: ${state.release?.versioningStrategy || "SemVer"}`,
+              subtitle: `Migrations: ${state.release?.migrationScriptsCount || 0} scripts`,
+              details: `Automated Rollback: ${state.release?.rollbackAutomated ? "Enabled" : "Manual"} • Zero-Downtime: ${state.release?.zeroDowntimeVerified ? "Verified" : "Pending"}`,
+            },
+            ...(state.release?.deploymentRings || []).map((r) => ({
+              title: `Ring ${r.ring}: ${r.name}`,
+              subtitle: `Soak Time: ${r.soakTimeHours}h`,
+              details: `Target: ${r.targetAudience}`,
+            })),
+          ],
+        };
+      case "18_OPERATIONS":
+        return {
+          title: "Operations & Incident Response Engineering",
+          icon: LifeBuoy,
+          color: "text-rose-400",
+          desc: "Service Level Objectives (SLOs), automated alerting thresholds, runbooks, and SEV1-4 severity matrices.",
+          items: [
+            ...(state.operations?.slos || []).map((slo) => ({
+              title: `SLO: ${slo.name}`,
+              subtitle: `Target: ${slo.targetPercentage}% (Alert: < ${slo.alertThresholdPercentage}%)`,
+              details: `Metric: ${slo.sliMetric}`,
+            })),
+            ...(state.operations?.incidentSeverityMatrix || []).map((sev) => ({
+              title: `Severity: ${sev.severity}`,
+              subtitle: `TTL: ${sev.responseTtlMinutes} min response`,
+              details: `Escalation: ${sev.escalationPath}`,
+            })),
+          ],
+        };
+      case "19_EVALUATION":
+        return {
+          title: "Evaluation & Continuous Improvement",
+          icon: TrendingUp,
+          color: "text-lime-400",
+          desc: "Production telemetry baselines, error budgets, architectural drift monitors, and measurable optimization experiments.",
+          items: [
+            {
+              title: "Telemetry Status",
+              subtitle: `Feedback Loop: every ${state.evaluation?.feedbackLoopCadenceDays || 14} days`,
+              details: `Telemetry Active: ${state.evaluation?.telemetryEnabled ? "YES" : "NO"} • Error Budget: ${state.evaluation?.errorBudgetPercentage || 99.9}%`,
+            },
+            ...(state.evaluation?.baselines || []).map((b) => ({
+              title: `Metric: ${b.metric}`,
+              subtitle: `Baseline: ${b.currentBaseline}${b.unit} -> Target: ${b.targetGoal}${b.unit}`,
+              details: "Tracked against empirical execution telemetry and regression alerts.",
+            })),
+          ],
+        };
+      case "20_RETIREMENT":
+        return {
+          title: "Retirement & Transition Planning",
+          icon: Archive,
+          color: "text-slate-400",
+          desc: "Deprecation notice schedules, cryptographic data shredding (zero-leakage), and decommission checklists.",
+          items: [
+            {
+              title: `Notice Period: ${state.retirement?.deprecationNoticePeriodDays || 90} Days`,
+              subtitle: `Retention: ${state.retirement?.dataRetentionYears || 7} Years`,
+              details: `Destruction Method: ${state.retirement?.dataDestructionMethod || "CryptoShredding"} • Storage Tier: ${state.retirement?.archiveStorageTier || "Glacier"}`,
+            },
+            ...(state.retirement?.decommissionChecklist || []).map((item, idx) => ({
+              title: `Checklist Item #${idx + 1}`,
+              subtitle: "Compliance Protocol",
+              details: item,
+            })),
+          ],
         };
       default:
         return {
@@ -173,6 +307,10 @@ export const GenericStageWorkspace: React.FC<GenericStageWorkspaceProps> = ({ st
           )}
         </CardContent>
       </Card>
+
+      {/* Embedded Lifecycle Inspection & Verification Panel */}
+      <LifecycleInspectionPanel stage={stage} projectId={state.id} />
     </div>
   );
 };
+

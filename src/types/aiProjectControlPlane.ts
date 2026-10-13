@@ -18,10 +18,29 @@ export type ProjectLifecycleStage =
   | "11_RELIABILITY"
   | "12_IMPLEMENTATION"
   | "13_TESTING"
-  | "14_BLUEPRINT";
+  | "14_BLUEPRINT"
+  | "15_EXPERIENCE"
+  | "16_INTEGRATION"
+  | "17_RELEASE"
+  | "18_OPERATIONS"
+  | "19_EVALUATION"
+  | "20_RETIREMENT";
 
 export type StageStatus =
-  "not_started" | "in_progress" | "needs_review" | "stale" | "blocked" | "complete";
+  | "not_started"
+  | "in_progress"
+  | "needs_review"
+  | "stale"
+  | "blocked"
+  | "complete"
+  | "draft"
+  | "ready_for_inspection"
+  | "inspecting"
+  | "changes_required"
+  | "awaiting_decision"
+  | "accepted"
+  | "needs_reinspection"
+  | "archived";
 
 export type ProjectMaturity =
   "IDEA" | "UNDERSTOOD" | "DEFINED" | "DESIGNED" | "VALIDATED" | "READY" | "INITIALIZED";
@@ -41,14 +60,20 @@ export type AgentRole =
   | "RequirementsEngineerAgent"
   | "ScopeEngineerAgent"
   | "CapabilityArchitectAgent"
+  | "ExperienceArchitectAgent"
   | "SolutionArchitectAgent"
   | "TechnologyArchitectAgent"
   | "DataArchitectAgent"
   | "AiArchitectAgent"
+  | "IntegrationArchitectAgent"
   | "SecurityArchitectAgent"
   | "ReliabilityEngineerAgent"
   | "ImplementationPlannerAgent"
   | "TestEngineerAgent"
+  | "ReleaseEngineerAgent"
+  | "OperationsEngineerAgent"
+  | "EvaluationEngineerAgent"
+  | "RetirementPlannerAgent"
   | "RedTeamAgent"
   | "BlueprintCompilerAgent";
 
@@ -511,6 +536,123 @@ export interface AiMutation {
 }
 
 // ---------------------------------------------------------------------------
+// NEW LIFECYCLE DOMAIN MODELS (Stages 15 through 20)
+// ---------------------------------------------------------------------------
+
+// STAGE 15 (Display 06): Experience & Accessibility
+export interface ExperiencePersona {
+  id: string;
+  name: string;
+  role: string;
+  accessibilityNeeds: string[];
+  primaryDevice: string;
+}
+
+export interface ExperienceModel {
+  targetWcagLevel: "A" | "AA" | "AAA";
+  colorContrastRatioMin: number;
+  screenReaderOptimized: boolean;
+  keyboardNavigable: boolean;
+  designSystemTokens: string[];
+  supportedBreakpoints: string[];
+  personas: ExperiencePersona[];
+  keyUserJourneys: Array<{
+    id: string;
+    title: string;
+    stepsCount: number;
+    criticalPath: boolean;
+  }>;
+  createdAt: string;
+}
+
+// STAGE 16 (Display 11): Integration & Interoperability
+export interface IntegrationEndpoint {
+  id: string;
+  name: string;
+  type: "REST" | "GraphQL" | "gRPC" | "Webhook" | "MessageQueue";
+  direction: "inbound" | "outbound" | "bidirectional";
+  authMethod: "OAuth2" | "APIKey" | "mTLS" | "HMAC";
+  rateLimitPerSec: number;
+  retryPolicy: string;
+  idempotencyGuaranteed: boolean;
+}
+
+export interface IntegrationModel {
+  endpoints: IntegrationEndpoint[];
+  dataExchangeFormats: string[];
+  schemaTranslationEngines: string[];
+  circuitBreakerEnabled: boolean;
+  createdAt: string;
+}
+
+// STAGE 17 (Display 16): Release & Migration
+export interface DeploymentRing {
+  ring: number;
+  name: string;
+  targetAudience: string;
+  soakTimeHours: number;
+}
+
+export interface ReleaseMigrationModel {
+  versioningStrategy: "SemVer" | "CalVer";
+  migrationScriptsCount: number;
+  rollbackAutomated: boolean;
+  deploymentRings: DeploymentRing[];
+  zeroDowntimeVerified: boolean;
+  featureFlagsCount: number;
+  createdAt: string;
+}
+
+// STAGE 18 (Display 17): Operations & Incident Response
+export interface SloTarget {
+  name: string;
+  sliMetric: string;
+  targetPercentage: number;
+  alertThresholdPercentage: number;
+}
+
+export interface OperationsModel {
+  slos: SloTarget[];
+  runbooksCount: number;
+  onCallRotationConfigured: boolean;
+  incidentSeverityMatrix: Array<{
+    severity: "SEV1" | "SEV2" | "SEV3" | "SEV4";
+    responseTtlMinutes: number;
+    escalationPath: string;
+  }>;
+  healthCheckEndpoints: string[];
+  createdAt: string;
+}
+
+// STAGE 19 (Display 18): Evaluation & Improvement
+export interface MetricBaseline {
+  metric: string;
+  currentBaseline: number;
+  targetGoal: number;
+  unit: string;
+}
+
+export interface EvaluationModel {
+  telemetryEnabled: boolean;
+  feedbackLoopCadenceDays: number;
+  baselines: MetricBaseline[];
+  errorBudgetPercentage: number;
+  userSatisfactionScoreTarget: number;
+  createdAt: string;
+}
+
+// STAGE 20 (Display 19): Retirement & Transition
+export interface RetirementModel {
+  deprecationNoticePeriodDays: number;
+  dataRetentionYears: number;
+  customerOffboardingPath: string;
+  dataDestructionMethod: "CryptoShredding" | "MultiPassOverwrite" | "StoragePurge";
+  archiveStorageTier: "Glacier" | "Coldline" | "DeepArchive";
+  decommissionChecklist: string[];
+  createdAt: string;
+}
+
+// ---------------------------------------------------------------------------
 // Complete Unified Project Engineering State
 // ---------------------------------------------------------------------------
 export interface ProjectEngineeringState {
@@ -524,7 +666,7 @@ export interface ProjectEngineeringState {
   maturity: ProjectMaturity;
   stageStatuses: Record<ProjectLifecycleStage, StageStatus>;
 
-  // Intelligence Subsystems
+  // Intelligence Subsystems (All 20 Lifecycle Stages)
   intent: ProjectIntentModel;
   understanding: ProjectUnderstanding;
   discoveryQuestions: DiscoveryQuestion[];
@@ -532,14 +674,20 @@ export interface ProjectEngineeringState {
   requirements: RequirementItem[];
   scope: ScopeModel;
   capabilities: CapabilityModel;
+  experience: ExperienceModel;
   architecture: ArchitectureModel;
   technology: TechnologyModel;
   data: DataArchitectureModel;
   ai: AiEngineeringModel;
+  integration: IntegrationModel;
   security: SecurityModel;
   reliability: ReliabilityModel;
   implementation: ImplementationModel;
   testing: TestModel;
+  release: ReleaseMigrationModel;
+  operations: OperationsModel;
+  evaluation: EvaluationModel;
+  retirement: RetirementModel;
   redTeamFindings: RedTeamFinding[];
   blueprint: ProjectBlueprint | null;
 
@@ -549,3 +697,13 @@ export interface ProjectEngineeringState {
   staleNodes: string[];
   updatedAt: string;
 }
+
+export {
+  LIFECYCLE_20_SECTIONS,
+  LIFECYCLE_REGISTRY,
+  ORIGINAL_14_STAGE_IDS,
+  NEW_6_STAGE_IDS,
+  type LifecycleSectionDefinition,
+  type WorkAreaCategory,
+} from "../services/aiProject/lifecycleRegistry.ts";
+

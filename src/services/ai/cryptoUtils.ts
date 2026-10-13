@@ -3,13 +3,14 @@
  * Supports Web Crypto API in browser and standard crypto fallback in Node.js.
  */
 
-export function generateVerificationHash(input: string): string {
+export function generateVerificationHash(input: unknown): string {
+  const content = typeof input === "string" ? input : JSON.stringify(input);
   // Pure JavaScript deterministic FNV-1a 64-bit + SHA-256 style hash generator for zero-dependency portability
   let h1 = 0xdeadbeef ^ 0;
   let h2 = 0x41c6ce57 ^ 0;
 
-  for (let i = 0; i < input.length; i++) {
-    const ch = input.charCodeAt(i);
+  for (let i = 0; i < content.length; i++) {
+    const ch = content.charCodeAt(i);
     h1 = Math.imul(h1 ^ ch, 2654435761);
     h2 = Math.imul(h2 ^ ch, 1597334677);
   }

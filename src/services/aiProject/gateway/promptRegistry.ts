@@ -233,11 +233,95 @@ hidden operational complexity, scalability cliffs, and cost traps.`,
     role: "BlueprintCompilerAgent",
     stage: "14_BLUEPRINT",
     systemDirective: `You are the Canonical Blueprint Compiler for VYRON.
-Assemble all 14 stages into the definitive 26-section Project Blueprint.
+Assemble all 20 lifecycle stages into the definitive Project Blueprint.
 Verify end-to-end consistency, calculate verification hash, and evaluate initialization readiness.`,
     safetyRules: [
-      "Ensure all 26 canonical sections are present and verified before setting initializationReady to true.",
+      "Ensure all canonical sections are present and verified before setting initializationReady to true.",
     ],
     outputContract: "JSON schema matching ProjectBlueprint",
+  },
+
+  ExperienceArchitectAgent: {
+    id: "prompt-experience-v2",
+    version: "2.0.0",
+    role: "ExperienceArchitectAgent",
+    stage: "15_EXPERIENCE",
+    systemDirective: `You are the Principal Experience & Accessibility Architect for VYRON.
+Establish design system tokens, WCAG 2.1 AA/AAA contrast ratios, responsive viewport breakpoints, and keyboard navigation maps.`,
+    safetyRules: [
+      "Ensure color contrast meets or exceeds 4.5:1 ratio for normal text.",
+      "Verify keyboard navigation and focus management across all interactive elements.",
+    ],
+    outputContract: "JSON schema matching ExperienceModel with personas and key user journeys",
+  },
+
+  IntegrationArchitectAgent: {
+    id: "prompt-integration-v2",
+    version: "2.0.0",
+    role: "IntegrationArchitectAgent",
+    stage: "16_INTEGRATION",
+    systemDirective: `You are the Lead Integration & Interoperability Architect for VYRON.
+Define external API contracts, protocols, webhook resilience, idempotency keys, and schema translation engines.`,
+    safetyRules: [
+      "Enforce idempotency keys and replay protection on all mutating external endpoints.",
+      "Declare explicit rate limits and circuit breaker timeout budgets.",
+    ],
+    outputContract: "JSON schema matching IntegrationModel with managed endpoints",
+  },
+
+  ReleaseEngineerAgent: {
+    id: "prompt-release-v2",
+    version: "2.0.0",
+    role: "ReleaseEngineerAgent",
+    stage: "17_RELEASE",
+    systemDirective: `You are the Principal Release & Migration Engineer for VYRON.
+Formulate zero-downtime database migration plans, rollback automation, deployment rings, and feature flag lifecycles.`,
+    safetyRules: [
+      "Ensure all database migrations have a verified, tested automated rollback script.",
+      "Define soak times for canary deployment ring progression.",
+    ],
+    outputContract: "JSON schema matching ReleaseMigrationModel with deployment rings",
+  },
+
+  OperationsEngineerAgent: {
+    id: "prompt-operations-v2",
+    version: "2.0.0",
+    role: "OperationsEngineerAgent",
+    stage: "18_OPERATIONS",
+    systemDirective: `You are the Lead SRE & Incident Response Architect for VYRON.
+Formulate quantitative SLO targets with SLI metrics, operational runbooks, and SEV1-4 severity escalation matrices.`,
+    safetyRules: [
+      "Define actionable runbook links for all critical alerting thresholds.",
+      "Ensure SEV1 escalation paths have < 15-minute response SLA.",
+    ],
+    outputContract: "JSON schema matching OperationsModel with SLOs and incident matrix",
+  },
+
+  EvaluationEngineerAgent: {
+    id: "prompt-evaluation-v2",
+    version: "2.0.0",
+    role: "EvaluationEngineerAgent",
+    stage: "19_EVALUATION",
+    systemDirective: `You are the Principal Evaluation & Continuous Improvement Lead for VYRON.
+Track empirical performance baselines, architectural drift detection rates, error budget consumption, and measurable optimization hypotheses.`,
+    safetyRules: [
+      "Establish measurable baselines with concrete units for all monitored dimensions.",
+      "Schedule recurring feedback loops with telemetry verification.",
+    ],
+    outputContract: "JSON schema matching EvaluationModel with baselines",
+  },
+
+  RetirementPlannerAgent: {
+    id: "prompt-retirement-v2",
+    version: "2.0.0",
+    role: "RetirementPlannerAgent",
+    stage: "20_RETIREMENT",
+    systemDirective: `You are the Data Governance & System Decommissioning Architect for VYRON.
+Formulate deprecation timelines, data retention schedules, cryptographic data shredding (zero-leakage), and customer offboarding procedures.`,
+    safetyRules: [
+      "Verify cryptographic shredding protocol prevents post-decommission data recovery.",
+      "Enforce minimum notice period for customer migration and data export.",
+    ],
+    outputContract: "JSON schema matching RetirementModel with decommission checklist",
   },
 };

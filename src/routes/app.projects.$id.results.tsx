@@ -50,7 +50,7 @@ import { useAiProject } from "@/state/aiProject/aiProjectStore";
 import { getProject } from "@/lib/mock-data";
 import { generateVerificationHash } from "@/services/ai/cryptoUtils";
 import { supabase } from "@/lib/supabaseClient";
-import { ProjectLifecycleStage } from "@/types/aiProjectControlPlane";
+import { ProjectLifecycleStage, LIFECYCLE_20_SECTIONS } from "@/types/aiProjectControlPlane";
 import { runService, type DurableRun } from "@/services/runs/runService";
 import { projectRegistry } from "@/services/project/projectRegistry";
 import { OPERATION_REGISTRY, listSupportedOperations } from "@/services/runs/operationRegistry";
@@ -69,7 +69,7 @@ export const Route = createFileRoute("/app/projects/$id/results")({
       {
         name: "description",
         content:
-          "Durable autonomous AI project synthesis results: 14-stage completion strip, STRIDE threats, architecture topology, and cryptographic evidence seal.",
+          "Durable autonomous AI project synthesis results: 20-stage completion strip, STRIDE threats, architecture topology, and cryptographic evidence seal.",
       },
       { property: "og:title", content: "Engineering Results Workspace — VYRON" },
       {
@@ -81,27 +81,12 @@ export const Route = createFileRoute("/app/projects/$id/results")({
   component: ResultsWorkspacePage,
 });
 
-const STAGES_META: Array<{
-  id: ProjectLifecycleStage;
-  num: string;
-  name: string;
-  icon: React.ElementType;
-}> = [
-  { id: "01_INTENT", num: "01", name: "Intent", icon: Brain },
-  { id: "02_PROBLEM", num: "02", name: "Problem", icon: Target },
-  { id: "03_REQUIREMENTS", num: "03", name: "Requirements", icon: CheckSquare },
-  { id: "04_SCOPE", num: "04", name: "Scope", icon: Layers },
-  { id: "05_CAPABILITY", num: "05", name: "Capability", icon: Layers },
-  { id: "06_ARCHITECTURE", num: "06", name: "Architecture", icon: Server },
-  { id: "07_TECHNOLOGY", num: "07", name: "Technology", icon: Cpu },
-  { id: "08_DATA", num: "08", name: "Data", icon: Database },
-  { id: "09_AI_DESIGN", num: "09", name: "AI/ML", icon: Brain },
-  { id: "10_SECURITY", num: "10", name: "Security", icon: Shield },
-  { id: "11_RELIABILITY", num: "11", name: "Reliability", icon: Activity },
-  { id: "12_IMPLEMENTATION", num: "12", name: "Implementation", icon: Terminal },
-  { id: "13_TESTING", num: "13", name: "Testing", icon: CheckSquare },
-  { id: "14_BLUEPRINT", num: "14", name: "Blueprint", icon: FileText },
-];
+const STAGES_META = LIFECYCLE_20_SECTIONS.map((s) => ({
+  id: s.id,
+  num: s.displayNum,
+  name: s.shortName,
+  icon: s.icon,
+}));
 
 function ResultsWorkspacePage() {
   const { id } = Route.useParams();
@@ -412,12 +397,12 @@ function ResultsWorkspacePage() {
           </span>
         </div>
 
-        {/* Horizontal Navigation Ribbon */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2">
+        {/* Horizontal Navigation Ribbon (All 20 Lifecycle Sections) */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-10 gap-2">
           {STAGES_META.map((stage) => {
             const Icon = stage.icon;
             const status = liveState.stageStatuses[stage.id] || "complete";
-            const isCompleted = status === "complete";
+            const isCompleted = status === "complete" || status === "accepted";
             const isCurrent = liveState.activeStage === stage.id;
 
             return (

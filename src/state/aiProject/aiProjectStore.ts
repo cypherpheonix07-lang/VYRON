@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import type {
   ProjectEngineeringState,
   ProjectLifecycleStage,
+  StageStatus,
   CopilotMode,
   AiProposal,
   ProjectUnderstanding,
@@ -71,6 +72,12 @@ export function createInitialProjectState(): ProjectEngineeringState {
       "12_IMPLEMENTATION": "not_started",
       "13_TESTING": "not_started",
       "14_BLUEPRINT": "not_started",
+      "15_EXPERIENCE": "not_started",
+      "16_INTEGRATION": "not_started",
+      "17_RELEASE": "not_started",
+      "18_OPERATIONS": "not_started",
+      "19_EVALUATION": "not_started",
+      "20_RETIREMENT": "not_started",
     },
     intent: {
       projectName: "Vyron Architecture Mesh",
@@ -151,6 +158,17 @@ export function createInitialProjectState(): ProjectEngineeringState {
       scopeStabilityScore: 0,
     },
     capabilities: { capabilities: [] },
+    experience: {
+      targetWcagLevel: "AA",
+      colorContrastRatioMin: 4.5,
+      screenReaderOptimized: true,
+      keyboardNavigable: true,
+      designSystemTokens: ["color.primary", "color.surface", "spacing.unit", "radius.md"],
+      supportedBreakpoints: ["sm: 640px", "md: 768px", "lg: 1024px", "xl: 1280px"],
+      personas: [],
+      keyUserJourneys: [],
+      createdAt: new Date().toISOString(),
+    },
     architecture: { alternatives: [], selectedAlternativeId: "", consistencyScore: 0 },
     technology: { decisions: [], stackFitScore: 0 },
     data: { entities: [], governanceRules: [] },
@@ -171,6 +189,13 @@ export function createInitialProjectState(): ProjectEngineeringState {
         auditLevel: "FULL",
       },
     },
+    integration: {
+      endpoints: [],
+      dataExchangeFormats: ["application/json"],
+      schemaTranslationEngines: ["zod_v3"],
+      circuitBreakerEnabled: true,
+      createdAt: new Date().toISOString(),
+    },
     security: {
       trustBoundaries: [],
       entryPoints: [],
@@ -182,6 +207,61 @@ export function createInitialProjectState(): ProjectEngineeringState {
     reliability: { scenarios: [], overallResilienceScore: 0 },
     implementation: { modules: [], apiContracts: [], tasks: [], milestones: [] },
     testing: { testCases: [], traceabilityMatrix: [] },
+    release: {
+      versioningStrategy: "SemVer",
+      migrationScriptsCount: 0,
+      rollbackAutomated: true,
+      deploymentRings: [
+        { ring: 0, name: "Canary / Internal", targetAudience: "Engineering", soakTimeHours: 1 },
+        { ring: 1, name: "Staging / Pre-prod", targetAudience: "QA & Integration", soakTimeHours: 4 },
+        { ring: 2, name: "General Availability", targetAudience: "All Tenants", soakTimeHours: 24 },
+      ],
+      zeroDowntimeVerified: true,
+      featureFlagsCount: 0,
+      createdAt: new Date().toISOString(),
+    },
+    operations: {
+      slos: [
+        { name: "Availability", sliMetric: "uptime_percentage", targetPercentage: 99.9, alertThresholdPercentage: 99.5 },
+        { name: "API Latency p95", sliMetric: "http_duration_p95_ms", targetPercentage: 95.0, alertThresholdPercentage: 90.0 },
+      ],
+      runbooksCount: 0,
+      onCallRotationConfigured: true,
+      incidentSeverityMatrix: [
+        { severity: "SEV1", responseTtlMinutes: 15, escalationPath: "Incident Commander -> VP Eng" },
+        { severity: "SEV2", responseTtlMinutes: 30, escalationPath: "Primary On-Call -> Engineering Lead" },
+        { severity: "SEV3", responseTtlMinutes: 120, escalationPath: "Team Queue" },
+        { severity: "SEV4", responseTtlMinutes: 1440, escalationPath: "Backlog Triage" },
+      ],
+      healthCheckEndpoints: ["/api/health", "/api/ready"],
+      createdAt: new Date().toISOString(),
+    },
+    evaluation: {
+      telemetryEnabled: true,
+      feedbackLoopCadenceDays: 14,
+      baselines: [
+        { metric: "Error Rate", currentBaseline: 0.05, targetGoal: 0.01, unit: "%" },
+        { metric: "P95 Latency", currentBaseline: 180, targetGoal: 100, unit: "ms" },
+      ],
+      errorBudgetPercentage: 99.9,
+      userSatisfactionScoreTarget: 90,
+      createdAt: new Date().toISOString(),
+    },
+    retirement: {
+      deprecationNoticePeriodDays: 90,
+      dataRetentionYears: 7,
+      customerOffboardingPath: "/app/account/export",
+      dataDestructionMethod: "CryptoShredding",
+      archiveStorageTier: "Glacier",
+      decommissionChecklist: [
+        "Customer notification issued 90 days prior",
+        "Tenant data export archive verified",
+        "API traffic decommission audit confirmed zero requests",
+        "Cryptographic keys shredded",
+        "Cloud storage buckets purged",
+      ],
+      createdAt: new Date().toISOString(),
+    },
     redTeamFindings: [],
     blueprint: null,
     pendingProposals: [],
@@ -232,6 +312,18 @@ class AiProjectStoreManager {
 
   public setActiveStage(stage: ProjectLifecycleStage) {
     this.state = { ...this.state, activeStage: stage };
+    this.notify();
+  }
+
+  public updateStageStatus(stage: ProjectLifecycleStage, status: StageStatus) {
+    this.state = {
+      ...this.state,
+      stageStatuses: {
+        ...this.state.stageStatuses,
+        [stage]: status,
+      },
+      updatedAt: new Date().toISOString(),
+    };
     this.notify();
   }
 
@@ -828,6 +920,8 @@ export function useAiProject() {
     setProviderPreference: (pref: "auto" | "openrouter" | "openai" | "deterministic") =>
       aiProjectStore.setProviderPreference(pref),
     setActiveStage: (stage: ProjectLifecycleStage) => aiProjectStore.setActiveStage(stage),
+    updateStageStatus: (stage: ProjectLifecycleStage, status: StageStatus) =>
+      aiProjectStore.updateStageStatus(stage, status),
     setCopilotMode: (mode: CopilotMode) => aiProjectStore.setCopilotMode(mode),
     updateIntent: (partial: Partial<ProjectEngineeringState["intent"]>) =>
       aiProjectStore.updateIntent(partial),
