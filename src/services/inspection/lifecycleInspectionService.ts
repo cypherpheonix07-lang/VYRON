@@ -447,6 +447,18 @@ class LifecycleInspectionService {
         return !!state.operations;
       case "19_EVALUATION":
         return !!state.evaluation;
+      case "21_VALUE":
+        return !!state.value;
+      case "22_GOVERNANCE":
+        return !!state.governance;
+      case "23_DEPENDENCY_ASSURANCE":
+        return !!state.dependencyAssurance;
+      case "24_DELIVERY":
+        return !!state.delivery;
+      case "25_COMPLIANCE":
+        return !!state.compliance;
+      case "26_DOCUMENTATION":
+        return !!state.documentation;
       case "20_RETIREMENT":
         return !!state.retirement;
       case "14_BLUEPRINT":

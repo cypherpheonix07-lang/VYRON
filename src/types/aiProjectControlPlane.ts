@@ -24,7 +24,13 @@ export type ProjectLifecycleStage =
   | "17_RELEASE"
   | "18_OPERATIONS"
   | "19_EVALUATION"
-  | "20_RETIREMENT";
+  | "20_RETIREMENT"
+  | "21_VALUE"
+  | "22_GOVERNANCE"
+  | "23_DEPENDENCY_ASSURANCE"
+  | "24_DELIVERY"
+  | "25_COMPLIANCE"
+  | "26_DOCUMENTATION";
 
 export type StageStatus =
   | "not_started"
@@ -74,6 +80,12 @@ export type AgentRole =
   | "OperationsEngineerAgent"
   | "EvaluationEngineerAgent"
   | "RetirementPlannerAgent"
+  | "FinancialAnalystAgent"
+  | "GovernanceAuditorAgent"
+  | "SupplierAssuranceAgent"
+  | "DeliveryCoordinatorAgent"
+  | "ComplianceOfficerAgent"
+  | "TechnicalWriterAgent"
   | "RedTeamAgent"
   | "BlueprintCompilerAgent";
 
@@ -641,7 +653,7 @@ export interface EvaluationModel {
   createdAt: string;
 }
 
-// STAGE 20 (Display 19): Retirement & Transition
+// STAGE 20 (Display 25, Workstream Y): Retirement & Transition
 export interface RetirementModel {
   deprecationNoticePeriodDays: number;
   dataRetentionYears: number;
@@ -649,6 +661,111 @@ export interface RetirementModel {
   dataDestructionMethod: "CryptoShredding" | "MultiPassOverwrite" | "StoragePurge";
   archiveStorageTier: "Glacier" | "Coldline" | "DeepArchive";
   decommissionChecklist: string[];
+  createdAt: string;
+}
+
+// STAGE 21 (Display 03, Workstream C): Business Value & Financial Viability
+export interface ValueModel {
+  estimatedDevelopmentHours: number;
+  estimatedMonthlyCloudCost: number;
+  estimatedMonthlyAiCost: number;
+  roiMultiplier: number;
+  pricingTiers: Array<{
+    name: string;
+    targetUsers: string;
+    monthlyPrice: number;
+  }>;
+  valueAssumptions: string[];
+  costSensitivityDrivers: string[];
+  createdAt: string;
+}
+
+// STAGE 22 (Display 07, Workstream G): Governance & Decision Accountability
+export interface GovernanceModel {
+  projectOwner: string;
+  decisionMakers: Array<{
+    role: string;
+    scope: string;
+    delegatedTo?: string;
+  }>;
+  reviewPolicies: Array<{
+    name: string;
+    requiresApproval: boolean;
+    escalationThreshold: string;
+  }>;
+  exceptionsRegister: Array<{
+    id: string;
+    reason: string;
+    approvedBy: string;
+    expiryDate: string;
+  }>;
+  auditRetentionDays: number;
+  createdAt: string;
+}
+
+// STAGE 23 (Display 11, Workstream K): Dependency & Supplier Assurance
+export interface DependencyAssuranceModel {
+  qualifiedSuppliers: Array<{
+    name: string;
+    category: "cloud" | "ai_provider" | "database" | "library" | "saas";
+    status: "qualified" | "pending" | "deprecated";
+    fallbackStrategy: string;
+  }>;
+  aiProviders: Array<{
+    provider: string;
+    model: string;
+    dataExposureRisk: "low" | "medium" | "high";
+    slaAvailability: number;
+  }>;
+  concentrationRiskRating: "low" | "medium" | "high";
+  licenseComplianceVerified: boolean;
+  createdAt: string;
+}
+
+// STAGE 24 (Display 22, Workstream V): Delivery Planning & Coordination
+export interface DeliveryPlanningModel {
+  workPackagesCount: number;
+  criticalPathTasks: string[];
+  milestones: Array<{
+    id: string;
+    title: string;
+    targetDate: string;
+    status: "pending" | "in_progress" | "completed";
+  }>;
+  estimatedDeliveryWeeks: number;
+  blockersCount: number;
+  contingencyBufferPercentage: number;
+  createdAt: string;
+}
+
+// STAGE 25 (Display 23, Workstream W): Compliance & Data Stewardship
+export interface ComplianceModel {
+  dataClassifications: Array<{
+    category: string;
+    dataTypes: string[];
+    retentionYears: number;
+    encryptionRequired: boolean;
+  }>;
+  regulatoryObligations: Array<{
+    standard: "SOC2" | "HIPAA" | "GDPR" | "ISO27001" | "CCPA";
+    status: "compliant" | "in_progress" | "not_applicable";
+    controlsCount: number;
+  }>;
+  auditTrailImmutable: boolean;
+  exportFormatSupported: "JSON" | "CSV" | "EncryptedZip";
+  createdAt: string;
+}
+
+// STAGE 26 (Display 24, Workstream X): Documentation, Training & Knowledge Transfer
+export interface DocumentationModel {
+  guidesCount: number;
+  studentGuideReady: boolean;
+  facultyGuideReady: boolean;
+  professionalGuideReady: boolean;
+  apiRunbooksCount: number;
+  trainingMaterialsCount: number;
+  handoverPackageReady: boolean;
+  lastAuditedAt: string;
   createdAt: string;
 }
 
@@ -666,17 +783,20 @@ export interface ProjectEngineeringState {
   maturity: ProjectMaturity;
   stageStatuses: Record<ProjectLifecycleStage, StageStatus>;
 
-  // Intelligence Subsystems (All 20 Lifecycle Stages)
+  // Intelligence Subsystems (All 26 Lifecycle Stages)
   intent: ProjectIntentModel;
   understanding: ProjectUnderstanding;
   discoveryQuestions: DiscoveryQuestion[];
   problem: ProblemModel;
+  value: ValueModel;
   requirements: RequirementItem[];
   scope: ScopeModel;
   capabilities: CapabilityModel;
+  governance: GovernanceModel;
   experience: ExperienceModel;
   architecture: ArchitectureModel;
   technology: TechnologyModel;
+  dependencyAssurance: DependencyAssuranceModel;
   data: DataArchitectureModel;
   ai: AiEngineeringModel;
   integration: IntegrationModel;
@@ -687,6 +807,9 @@ export interface ProjectEngineeringState {
   release: ReleaseMigrationModel;
   operations: OperationsModel;
   evaluation: EvaluationModel;
+  delivery: DeliveryPlanningModel;
+  compliance: ComplianceModel;
+  documentation: DocumentationModel;
   retirement: RetirementModel;
   redTeamFindings: RedTeamFinding[];
   blueprint: ProjectBlueprint | null;
@@ -699,11 +822,17 @@ export interface ProjectEngineeringState {
 }
 
 export {
+  LIFECYCLE_26_SECTIONS,
   LIFECYCLE_20_SECTIONS,
   LIFECYCLE_REGISTRY,
   ORIGINAL_14_STAGE_IDS,
   NEW_6_STAGE_IDS,
+  ADDITIONAL_6_STAGE_IDS,
+  ALL_26_STAGE_IDS,
+  SAAS_15_TECHNICAL_AREAS,
   type LifecycleSectionDefinition,
   type WorkAreaCategory,
+  type SaasTechnicalAreaMapping,
 } from "../services/aiProject/lifecycleRegistry.ts";
+
 

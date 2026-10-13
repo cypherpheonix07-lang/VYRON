@@ -81,7 +81,7 @@ export const ProjectOutputApprovalView: React.FC<ProjectOutputApprovalViewProps>
     setCandidateManifest(updated);
     setDiffReport(outputApprovalService.generateDifferenceReview(updated.packageId));
     toast.success(`Compiled Candidate Package #${updated.candidateNumber}!`, {
-      description: `Readiness score: ${updated.readinessScore}% across all 20 sections.`,
+      description: `Readiness score: ${updated.readinessScore}% across all ${updated.totalSectionsCount} sections.`,
     });
   };
 

@@ -2,8 +2,8 @@
  * PROJECT BRAHMA / VYRON — PROJECT OUTPUT & APPROVAL ROUTE
  * Destination: /app/projects/:id/output
  *
- * Dedicated delivery destination after Section 20 (Blueprint):
- * - Candidate package manifests across all 20 lifecycle sections
+ * Dedicated delivery destination after Section 26 (Blueprint):
+ * - Candidate package manifests across all 26 lifecycle sections
  * - Side-by-side difference reviews against accepted baselines
  * - Exact-version approval commits with HMAC-SHA256 evidence seals
  *
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/app/projects/$id/output")({
       {
         property: "og:description",
         content:
-          "Candidate package manifest across 20 lifecycle sections with cryptographic audit seals.",
+          "Candidate package manifest across 26 lifecycle sections with cryptographic audit seals.",
       },
     ],
   }),

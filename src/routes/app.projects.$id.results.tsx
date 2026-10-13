@@ -50,7 +50,7 @@ import { useAiProject } from "@/state/aiProject/aiProjectStore";
 import { getProject } from "@/lib/mock-data";
 import { generateVerificationHash } from "@/services/ai/cryptoUtils";
 import { supabase } from "@/lib/supabaseClient";
-import { ProjectLifecycleStage, LIFECYCLE_20_SECTIONS } from "@/types/aiProjectControlPlane";
+import { ProjectLifecycleStage, LIFECYCLE_26_SECTIONS } from "@/types/aiProjectControlPlane";
 import { runService, type DurableRun } from "@/services/runs/runService";
 import { projectRegistry } from "@/services/project/projectRegistry";
 import { OPERATION_REGISTRY, listSupportedOperations } from "@/services/runs/operationRegistry";
@@ -69,7 +69,7 @@ export const Route = createFileRoute("/app/projects/$id/results")({
       {
         name: "description",
         content:
-          "Durable autonomous AI project synthesis results: 20-stage completion strip, STRIDE threats, architecture topology, and cryptographic evidence seal.",
+          "Durable autonomous AI project synthesis results: 26-stage completion strip, STRIDE threats, architecture topology, and cryptographic evidence seal.",
       },
       { property: "og:title", content: "Engineering Results Workspace — VYRON" },
       {
@@ -81,7 +81,7 @@ export const Route = createFileRoute("/app/projects/$id/results")({
   component: ResultsWorkspacePage,
 });
 
-const STAGES_META = LIFECYCLE_20_SECTIONS.map((s) => ({
+const STAGES_META = LIFECYCLE_26_SECTIONS.map((s) => ({
   id: s.id,
   num: s.displayNum,
   name: s.shortName,

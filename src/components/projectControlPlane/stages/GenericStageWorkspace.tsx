@@ -19,6 +19,12 @@ import {
   LifeBuoy,
   TrendingUp,
   Archive,
+  Coins,
+  Scale,
+  Truck,
+  Calendar,
+  ShieldCheck,
+  BookOpen,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -210,6 +216,115 @@ export const GenericStageWorkspace: React.FC<GenericStageWorkspaceProps> = ({ st
               subtitle: `Baseline: ${b.currentBaseline}${b.unit} -> Target: ${b.targetGoal}${b.unit}`,
               details: "Tracked against empirical execution telemetry and regression alerts.",
             })),
+          ],
+        };
+      case "21_VALUE":
+        return {
+          title: "Business Value & Financial Viability",
+          icon: Coins,
+          color: "text-amber-400",
+          desc: "Development effort, hosting/storage/AI token cost projections, and financial viability scenarios.",
+          items: [
+            {
+              title: `ROI Multiplier: ${state.value?.roiMultiplier || 4.5}x`,
+              subtitle: `Est. Monthly Cloud: $${state.value?.estimatedMonthlyCloudCost || 150} • AI Tokens: $${state.value?.estimatedMonthlyAiCost || 80}`,
+              details: `Dev Effort: ${state.value?.estimatedDevelopmentHours || 120} hours • Pricing Tiers: ${(state.value?.pricingTiers || []).map((p) => `${p.name} ($${p.monthlyPrice}/mo)`).join(", ")}`,
+            },
+            ...(state.value?.valueAssumptions || []).map((a, i) => ({
+              title: `Value Assumption #${i + 1}`,
+              subtitle: "Economic Benefit",
+              details: a,
+            })),
+          ],
+        };
+      case "22_GOVERNANCE":
+        return {
+          title: "Governance & Decision Accountability",
+          icon: Scale,
+          color: "text-indigo-400",
+          desc: "Project-scoped decision rights, authority delegation, review policies, and exception registers.",
+          items: [
+            {
+              title: `Project Owner: ${state.governance?.projectOwner || "Engineering Lead"}`,
+              subtitle: `Audit Retention: ${state.governance?.auditRetentionDays || 365} Days`,
+              details: `${(state.governance?.decisionMakers || []).length} decision makers • ${(state.governance?.reviewPolicies || []).length} review policies configured`,
+            },
+            ...(state.governance?.decisionMakers || []).map((dm) => ({
+              title: `Decision Maker: ${dm.role}`,
+              subtitle: `Scope: ${dm.scope}`,
+              details: dm.delegatedTo ? `Delegated to: ${dm.delegatedTo}` : "Direct authority",
+            })),
+          ],
+        };
+      case "23_DEPENDENCY_ASSURANCE":
+        return {
+          title: "Dependency & Supplier Assurance",
+          icon: Truck,
+          color: "text-orange-400",
+          desc: "Critical external packages, AI model providers, cloud suppliers, and concentration risk mitigation.",
+          items: [
+            {
+              title: `Concentration Risk: ${(state.dependencyAssurance?.concentrationRiskRating || "low").toUpperCase()}`,
+              subtitle: `License Compliance: ${state.dependencyAssurance?.licenseComplianceVerified ? "VERIFIED" : "PENDING"}`,
+              details: `${(state.dependencyAssurance?.qualifiedSuppliers || []).length} qualified suppliers • ${(state.dependencyAssurance?.aiProviders || []).length} AI providers`,
+            },
+            ...(state.dependencyAssurance?.qualifiedSuppliers || []).map((s) => ({
+              title: `Supplier: ${s.name} (${s.category.toUpperCase()})`,
+              subtitle: `Status: ${s.status.toUpperCase()}`,
+              details: `Fallback: ${s.fallbackStrategy}`,
+            })),
+          ],
+        };
+      case "24_DELIVERY":
+        return {
+          title: "Delivery Planning & Coordination",
+          icon: Calendar,
+          color: "text-teal-400",
+          desc: "Work packages, dependency readiness, milestone scheduling, and team coordination checkpoints.",
+          items: [
+            {
+              title: `Estimated Delivery: ${state.delivery?.estimatedDeliveryWeeks || 6} Weeks`,
+              subtitle: `Buffer: ${state.delivery?.contingencyBufferPercentage || 20}% • Active Blockers: ${state.delivery?.blockersCount || 0}`,
+              details: `${state.delivery?.workPackagesCount || 26} work packages • ${(state.delivery?.milestones || []).length} milestones`,
+            },
+            ...(state.delivery?.milestones || []).map((m) => ({
+              title: `Milestone: ${m.title}`,
+              subtitle: `Target: ${m.targetDate}`,
+              details: `Status: ${m.status.toUpperCase()}`,
+            })),
+          ],
+        };
+      case "25_COMPLIANCE":
+        return {
+          title: "Compliance & Data Stewardship",
+          icon: ShieldCheck,
+          color: "text-emerald-400",
+          desc: "Data classification, regulatory obligations (GDPR/HIPAA/SOC2), retention rules, and audit logging.",
+          items: [
+            {
+              title: `Immutable Audit Trail: ${state.compliance?.auditTrailImmutable ? "ENFORCED" : "PENDING"}`,
+              subtitle: `Export Format: ${state.compliance?.exportFormatSupported || "JSON"}`,
+              details: `${(state.compliance?.regulatoryObligations || []).length} regulatory frameworks • ${(state.compliance?.dataClassifications || []).length} data tiers`,
+            },
+            ...(state.compliance?.regulatoryObligations || []).map((o) => ({
+              title: `Obligation: ${o.standard}`,
+              subtitle: `Status: ${o.status.toUpperCase()}`,
+              details: `${o.controlsCount} controls mapped and verified`,
+            })),
+          ],
+        };
+      case "26_DOCUMENTATION":
+        return {
+          title: "Documentation, Training & Knowledge Transfer",
+          icon: BookOpen,
+          color: "text-sky-400",
+          desc: "Role onboarding guides (Student/Faculty/Pro), API contracts, operational runbooks, and handover packages.",
+          items: [
+            {
+              title: `Handover Package: ${state.documentation?.handoverPackageReady ? "READY" : "IN PROGRESS"}`,
+              subtitle: `Student Guide: ${state.documentation?.studentGuideReady ? "YES" : "NO"} • Faculty: ${state.documentation?.facultyGuideReady ? "YES" : "NO"} • Pro: ${state.documentation?.professionalGuideReady ? "YES" : "NO"}`,
+              details: `${state.documentation?.guidesCount || 6} role guides • ${state.documentation?.apiRunbooksCount || 14} operational runbooks`,
+            },
           ],
         };
       case "20_RETIREMENT":

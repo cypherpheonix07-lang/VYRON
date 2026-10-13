@@ -22,7 +22,7 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "01_INTENT": {
     stage: "01_INTENT",
     label: "Project Intent",
-    allowedNextStages: ["02_PROBLEM", "03_REQUIREMENTS"],
+    allowedNextStages: ["02_PROBLEM", "21_VALUE", "03_REQUIREMENTS"],
     requiredPreConditions: (state) => ({
       valid: !!state.intent.naturalLanguageIntent.trim(),
       error: "Natural language intent cannot be empty.",
@@ -31,10 +31,19 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "02_PROBLEM": {
     stage: "02_PROBLEM",
     label: "Problem Engineering",
-    allowedNextStages: ["03_REQUIREMENTS"],
+    allowedNextStages: ["21_VALUE", "03_REQUIREMENTS"],
     requiredPreConditions: (state) => ({
       valid: !!state.problem.problemStatement.trim(),
       error: "Problem statement must be synthesized before proceeding.",
+    }),
+  },
+  "21_VALUE": {
+    stage: "21_VALUE",
+    label: "Business Value & Financial Viability",
+    allowedNextStages: ["03_REQUIREMENTS", "04_SCOPE"],
+    requiredPreConditions: (state) => ({
+      valid: !!state.value,
+      error: "Business value and financial viability assumptions must be initialized.",
     }),
   },
   "03_REQUIREMENTS": {
@@ -49,7 +58,7 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "04_SCOPE": {
     stage: "04_SCOPE",
     label: "Scope Engineering",
-    allowedNextStages: ["05_CAPABILITY", "15_EXPERIENCE", "06_ARCHITECTURE"],
+    allowedNextStages: ["05_CAPABILITY", "22_GOVERNANCE", "15_EXPERIENCE", "06_ARCHITECTURE"],
     requiredPreConditions: (state) => ({
       valid: state.scope.mvpRequirements.length > 0,
       error: "At least one requirement must be allocated to MVP scope.",
@@ -58,10 +67,19 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "05_CAPABILITY": {
     stage: "05_CAPABILITY",
     label: "Capability Modeling",
-    allowedNextStages: ["15_EXPERIENCE", "06_ARCHITECTURE"],
+    allowedNextStages: ["22_GOVERNANCE", "15_EXPERIENCE", "06_ARCHITECTURE"],
     requiredPreConditions: (state) => ({
       valid: state.capabilities.capabilities.length > 0,
       error: "At least one system capability must be defined.",
+    }),
+  },
+  "22_GOVERNANCE": {
+    stage: "22_GOVERNANCE",
+    label: "Governance & Decision Accountability",
+    allowedNextStages: ["15_EXPERIENCE", "06_ARCHITECTURE"],
+    requiredPreConditions: (state) => ({
+      valid: !!state.governance,
+      error: "Governance model and decision rights must be configured.",
     }),
   },
   "15_EXPERIENCE": {
@@ -76,7 +94,7 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "06_ARCHITECTURE": {
     stage: "06_ARCHITECTURE",
     label: "System Architecture",
-    allowedNextStages: ["07_TECHNOLOGY", "08_DATA", "10_SECURITY"],
+    allowedNextStages: ["07_TECHNOLOGY", "23_DEPENDENCY_ASSURANCE", "08_DATA", "10_SECURITY"],
     requiredPreConditions: (state) => ({
       valid:
         state.architecture.alternatives.length > 0 && !!state.architecture.selectedAlternativeId,
@@ -86,10 +104,19 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "07_TECHNOLOGY": {
     stage: "07_TECHNOLOGY",
     label: "Technology Stack",
-    allowedNextStages: ["08_DATA", "09_AI_DESIGN", "10_SECURITY"],
+    allowedNextStages: ["23_DEPENDENCY_ASSURANCE", "08_DATA", "09_AI_DESIGN", "10_SECURITY"],
     requiredPreConditions: (state) => ({
       valid: state.technology.decisions.length > 0,
       error: "Technology decisions must be established.",
+    }),
+  },
+  "23_DEPENDENCY_ASSURANCE": {
+    stage: "23_DEPENDENCY_ASSURANCE",
+    label: "Dependency & Supplier Assurance",
+    allowedNextStages: ["08_DATA", "16_INTEGRATION", "10_SECURITY"],
+    requiredPreConditions: (state) => ({
+      valid: !!state.dependencyAssurance,
+      error: "Dependency and supplier assurance records must be established.",
     }),
   },
   "08_DATA": {
@@ -164,7 +191,7 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "18_OPERATIONS": {
     stage: "18_OPERATIONS",
     label: "Operations & Incident Response",
-    allowedNextStages: ["19_EVALUATION", "20_RETIREMENT", "14_BLUEPRINT"],
+    allowedNextStages: ["19_EVALUATION", "24_DELIVERY", "20_RETIREMENT", "14_BLUEPRINT"],
     requiredPreConditions: (state) => ({
       valid: !!state.operations,
       error: "Operations and runbook procedures must be configured.",
@@ -173,10 +200,37 @@ export const STAGE_TRANSITION_RULES: Record<ProjectLifecycleStage, StageTransiti
   "19_EVALUATION": {
     stage: "19_EVALUATION",
     label: "Evaluation & Improvement",
-    allowedNextStages: ["20_RETIREMENT", "14_BLUEPRINT"],
+    allowedNextStages: ["24_DELIVERY", "25_COMPLIANCE", "20_RETIREMENT", "14_BLUEPRINT"],
     requiredPreConditions: (state) => ({
       valid: !!state.evaluation,
       error: "Evaluation telemetry and error budget baselines must be initialized.",
+    }),
+  },
+  "24_DELIVERY": {
+    stage: "24_DELIVERY",
+    label: "Delivery Planning & Coordination",
+    allowedNextStages: ["25_COMPLIANCE", "26_DOCUMENTATION", "14_BLUEPRINT"],
+    requiredPreConditions: (state) => ({
+      valid: !!state.delivery,
+      error: "Delivery planning milestones and work packages must be configured.",
+    }),
+  },
+  "25_COMPLIANCE": {
+    stage: "25_COMPLIANCE",
+    label: "Compliance & Data Stewardship",
+    allowedNextStages: ["26_DOCUMENTATION", "20_RETIREMENT", "14_BLUEPRINT"],
+    requiredPreConditions: (state) => ({
+      valid: !!state.compliance,
+      error: "Compliance obligations and data classifications must be registered.",
+    }),
+  },
+  "26_DOCUMENTATION": {
+    stage: "26_DOCUMENTATION",
+    label: "Documentation, Training & Knowledge Transfer",
+    allowedNextStages: ["20_RETIREMENT", "14_BLUEPRINT"],
+    requiredPreConditions: (state) => ({
+      valid: !!state.documentation,
+      error: "Documentation guides and operational runbooks must be prepared.",
     }),
   },
   "20_RETIREMENT": {

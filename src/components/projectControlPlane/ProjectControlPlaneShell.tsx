@@ -57,7 +57,7 @@ import { Stage13TestingWorkspace } from "./stages/Stage13TestingWorkspace";
 import { Stage14BlueprintWorkspace } from "./stages/Stage14BlueprintWorkspace";
 
 import { GenericStageWorkspace } from "./stages/GenericStageWorkspace";
-import { LIFECYCLE_20_SECTIONS } from "@/services/aiProject/lifecycleRegistry";
+import { LIFECYCLE_26_SECTIONS } from "@/services/aiProject/lifecycleRegistry";
 
 interface ProjectControlPlaneShellProps {
   onSwitchToClassicWizard?: (() => void) | undefined;
@@ -65,7 +65,7 @@ interface ProjectControlPlaneShellProps {
   onStageChange?: ((stage: ProjectLifecycleStage) => void) | undefined;
 }
 
-const STAGES_CONFIG = LIFECYCLE_20_SECTIONS;
+const STAGES_CONFIG = LIFECYCLE_26_SECTIONS;
 
 export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> = ({
   onSwitchToClassicWizard,
@@ -178,18 +178,24 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
         return <Stage01IntentWorkspace />;
       case "02_PROBLEM":
         return <Stage02ProblemWorkspace />;
+      case "21_VALUE":
+        return <GenericStageWorkspace stage="21_VALUE" />;
       case "03_REQUIREMENTS":
         return <Stage03RequirementsWorkspace />;
       case "04_SCOPE":
         return <Stage04ScopeWorkspace />;
       case "05_CAPABILITY":
         return <Stage05CapabilityWorkspace />;
+      case "22_GOVERNANCE":
+        return <GenericStageWorkspace stage="22_GOVERNANCE" />;
       case "15_EXPERIENCE":
         return <GenericStageWorkspace stage="15_EXPERIENCE" />;
       case "06_ARCHITECTURE":
         return <Stage06ArchitectureWorkspace />;
       case "07_TECHNOLOGY":
         return <Stage07TechnologyWorkspace />;
+      case "23_DEPENDENCY_ASSURANCE":
+        return <GenericStageWorkspace stage="23_DEPENDENCY_ASSURANCE" />;
       case "08_DATA":
         return <Stage08DataWorkspace />;
       case "09_AI_DESIGN":
@@ -210,6 +216,12 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
         return <GenericStageWorkspace stage="18_OPERATIONS" />;
       case "19_EVALUATION":
         return <GenericStageWorkspace stage="19_EVALUATION" />;
+      case "24_DELIVERY":
+        return <GenericStageWorkspace stage="24_DELIVERY" />;
+      case "25_COMPLIANCE":
+        return <GenericStageWorkspace stage="25_COMPLIANCE" />;
+      case "26_DOCUMENTATION":
+        return <GenericStageWorkspace stage="26_DOCUMENTATION" />;
       case "20_RETIREMENT":
         return <GenericStageWorkspace stage="20_RETIREMENT" />;
       case "14_BLUEPRINT":
@@ -270,7 +282,7 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground">
-              Autonomous AI Engineering Environment • 14 Lifecycle Stages • Deterministic Control
+              Autonomous AI Engineering Environment • 26 Lifecycle Stages • Deterministic Control
               Plane Governance
             </p>
           </div>
@@ -513,7 +525,7 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Brain className="h-4 w-4 text-purple-400" />
-                <span className="text-xs font-bold text-foreground">Contextual AI Copilot</span>
+                <span className="text-xs font-bold text-foreground">Contextual ATHER Intelligence</span>
               </div>
               <Badge
                 variant="outline"
@@ -614,7 +626,7 @@ export const ProjectControlPlaneShell: React.FC<ProjectControlPlaneShellProps> =
                 <Input
                   value={copilotInput}
                   onChange={(e) => setCopilotInput(e.target.value)}
-                  placeholder="Ask copilot or type /requirements, /architecture..."
+                  placeholder="Ask ATHER or type /requirements, /architecture..."
                   className="bg-background/60 border-border/70 text-xs pr-8 h-8"
                 />
                 <button

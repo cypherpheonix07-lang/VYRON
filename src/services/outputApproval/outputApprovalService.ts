@@ -37,7 +37,7 @@ export interface CandidatePackageManifest {
   readinessScore: number; // 0-100%
   completedSectionsCount: number;
   acceptedSectionsCount: number;
-  totalSectionsCount: 20;
+  totalSectionsCount: number;
   overallGatingVerdict: "READY_FOR_APPROVAL" | "CHANGES_REQUIRED" | "IN_PROGRESS";
   blockingIssuesCount: number;
   packageSha256: string;
@@ -123,7 +123,7 @@ class OutputApprovalService {
 
     const acceptedCount = sections.filter((s) => s.isAccepted).length;
     const completedCount = sections.filter((s) => s.status === "complete" || s.status === "accepted").length;
-    const readinessScore = Math.round((completedCount / 20) * 100);
+    const readinessScore = Math.round((completedCount / (sections.length || 26)) * 100);
 
     const blockingIssuesCount = sections.filter((s) => s.status === "blocked" || s.status === "changes_required").length;
 
@@ -156,7 +156,7 @@ class OutputApprovalService {
       readinessScore,
       completedSectionsCount: completedCount,
       acceptedSectionsCount: acceptedCount,
-      totalSectionsCount: 20,
+      totalSectionsCount: sections.length,
       overallGatingVerdict: verdict,
       blockingIssuesCount,
       packageSha256,
@@ -299,6 +299,12 @@ class OutputApprovalService {
       case "17_RELEASE": return state.release;
       case "18_OPERATIONS": return state.operations;
       case "19_EVALUATION": return state.evaluation;
+      case "21_VALUE": return state.value;
+      case "22_GOVERNANCE": return state.governance;
+      case "23_DEPENDENCY_ASSURANCE": return state.dependencyAssurance;
+      case "24_DELIVERY": return state.delivery;
+      case "25_COMPLIANCE": return state.compliance;
+      case "26_DOCUMENTATION": return state.documentation;
       case "20_RETIREMENT": return state.retirement;
       case "14_BLUEPRINT": return state.blueprint;
       default: return {};
@@ -311,18 +317,24 @@ class OutputApprovalService {
         return state.intent?.naturalLanguageIntent?.slice(0, 80) || "No intent defined";
       case "02_PROBLEM":
         return state.problem?.problemStatement?.slice(0, 80) || "No problem statement";
+      case "21_VALUE":
+        return `${(state.value?.pricingTiers || []).length} pricing tiers, ROI multiplier ${state.value?.roiMultiplier || 1.0}x`;
       case "03_REQUIREMENTS":
         return `${(state.requirements || []).length} atomic requirements`;
       case "04_SCOPE":
         return `${(state.scope?.mvpRequirements || []).length} MVP requirements`;
       case "05_CAPABILITY":
         return `${(state.capabilities?.capabilities || []).length} capabilities mapped`;
+      case "22_GOVERNANCE":
+        return `${(state.governance?.decisionMakers || []).length} decision makers, ${(state.governance?.reviewPolicies || []).length} review policies`;
       case "15_EXPERIENCE":
         return `WCAG 2.1 ${state.experience?.targetWcagLevel || "AA"} contrast verified, ${(state.experience?.keyUserJourneys || []).length} user journeys`;
       case "06_ARCHITECTURE":
         return `${(state.architecture?.alternatives || []).length} topology alternatives`;
       case "07_TECHNOLOGY":
         return `${(state.technology?.decisions || []).length} stack decisions`;
+      case "23_DEPENDENCY_ASSURANCE":
+        return `${(state.dependencyAssurance?.qualifiedSuppliers || []).length} qualified suppliers, ${(state.dependencyAssurance?.aiProviders || []).length} AI providers`;
       case "08_DATA":
         return `${(state.data?.entities || []).length} domain entities with RLS`;
       case "09_AI_DESIGN":
@@ -343,6 +355,12 @@ class OutputApprovalService {
         return `${(state.operations?.slos || []).length} SLO targets with runbooks`;
       case "19_EVALUATION":
         return `${(state.evaluation?.baselines || []).length} telemetry baselines active`;
+      case "24_DELIVERY":
+        return `${(state.delivery?.milestones || []).length} milestones, ${state.delivery?.workPackagesCount || 0} work packages`;
+      case "25_COMPLIANCE":
+        return `${(state.compliance?.regulatoryObligations || []).length} regulatory obligations, ${(state.compliance?.dataClassifications || []).length} data tiers`;
+      case "26_DOCUMENTATION":
+        return `${state.documentation?.guidesCount || 0} user guides, ${state.documentation?.apiRunbooksCount || 0} operational runbooks`;
       case "20_RETIREMENT":
         return `${state.retirement?.deprecationNoticePeriodDays || 90}-day sunset notice and crypto-shredding`;
       case "14_BLUEPRINT":
