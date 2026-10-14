@@ -26,13 +26,13 @@ import { Label } from "../components/ui/label";
 export const Route = createFileRoute("/login")({
   head: () => ({
     meta: [
-      { title: "Sign in — PROJECT BRAHMA" },
+      { title: "Sign in - PROJECT BRAHMA" },
       {
         name: "description",
         content:
           "Sign in to PROJECT BRAHMA to review blueprints, code health, security and delivery risk.",
       },
-      { property: "og:title", content: "Sign in — PROJECT BRAHMA" },
+      { property: "og:title", content: "Sign in - PROJECT BRAHMA" },
       { property: "og:description", content: "Access your engineering intelligence workspace." },
     ],
   }),
