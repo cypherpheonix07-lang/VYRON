@@ -779,7 +779,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, ready, logout } = useAuth();
   const { theme, toggle } = useTheme();
-  const { draftCount } = useProjects();
+  const { projects: liveProjects, draftCount } = useProjects();
   const {
     project: activeProjectData,
     projectId: activeProjectId,
