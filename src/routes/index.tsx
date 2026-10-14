@@ -36,15 +36,15 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "VYRON — From raw idea to validated software blueprint" },
+      { title: "VYRON - From raw idea to validated software blueprint" },
       {
         name: "description",
         content:
-          "Blueprint-driven requirements, architecture, code health, security and delivery risk analysis mapped to business impact — in one engineering intelligence platform.",
+          "Blueprint-driven requirements, architecture, code health, security and delivery risk analysis mapped to business impact in one engineering intelligence platform.",
       },
       {
         property: "og:title",
-        content: "VYRON — From raw idea to validated software blueprint",
+        content: "VYRON - From raw idea to validated software blueprint",
       },
       {
         property: "og:description",
@@ -65,7 +65,7 @@ const features = [
   {
     icon: Network,
     title: "Architecture Generator",
-    body: "Produces a service topology, database schema and API contract from validated requirements — not a generic template.",
+    body: "Produces a service topology, database schema and API contract from validated requirements, not a generic template.",
   },
   {
     icon: Target,
@@ -249,10 +249,8 @@ function Landing() {
           <h1 className="mt-6 max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl">
             From raw idea to <span className="text-gradient">validated software blueprint.</span>
           </h1>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            PROJECT BRAHMA turns a project brief into structured requirements, generates a
-            reviewable architecture, analyzes code health and security, predicts delivery risk, and
-            maps every technical issue to its business impact.
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+            Transform project briefs into verified requirements, generated architectures, code security audits, and quantified business risk.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <Button asChild size="lg">
@@ -281,7 +279,7 @@ function Landing() {
           </dl>
 
           {/* Interactive Live Blueprint & Risk Showcase Container */}
-          <div className="mt-12 space-y-4 rounded-2xl border border-primary/30 bg-zinc-950/70 p-5 sm:p-7 shadow-2xl backdrop-blur-sm">
+          <div className="mt-14 space-y-4 rounded-2xl border border-primary/25 bg-zinc-950/80 p-5 sm:p-7 shadow-2xl backdrop-blur-md">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/50 pb-4">
               <div>
                 <span className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-cyan-400">
@@ -308,7 +306,7 @@ function Landing() {
         <div className="grid gap-10 lg:grid-cols-2">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.18em] text-[var(--warning)]">
-              The problem
+              Architecture Gaps
             </p>
             <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
               Projects start unvalidated and stay that way
@@ -347,43 +345,64 @@ function Landing() {
         </div>
       </section>
 
-      {/* Solution */}
+      {/* Solution — Asymmetric Bento Layout */}
       <section className="border-y border-border/60 bg-card/30">
         <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
           <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
-            The solution
+            The Blueprint Foundation
           </p>
           <h2 className="mt-3 max-w-2xl text-2xl font-semibold tracking-tight sm:text-3xl">
             One unified engineering intelligence platform
           </h2>
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                icon: Braces,
-                t: "Validated blueprint first",
-                d: "Every project begins with structured, scored requirements and a generated architecture your reviewers can challenge.",
-              },
-              {
-                icon: BarChart3,
-                t: "Continuous quality signal",
-                d: "Code health, security posture and delivery risk recalculated on every analysis run.",
-              },
-              {
-                icon: Boxes,
-                t: "Business alignment built in",
-                d: "Findings are ranked by business impact, so the highest-value fix is always at the top.",
-              },
-            ].map((s) => (
-              <Card key={s.t} className="surface">
-                <CardContent className="pt-2">
-                  <span className="grid size-9 place-items-center rounded-lg bg-primary/12 text-primary">
-                    <s.icon className="size-4" aria-hidden />
+          <div className="mt-10 grid gap-4 lg:grid-cols-12">
+            {/* Primary Lead Bento Card — 7 Columns */}
+            <div className="surface group relative flex flex-col justify-between rounded-2xl border border-primary/30 p-6 lg:col-span-7 transition-all duration-300 hover:border-primary/60">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="grid size-10 place-items-center rounded-xl bg-primary/15 text-primary">
+                    <Braces className="size-5" aria-hidden />
                   </span>
-                  <p className="mt-4 font-medium">{s.t}</p>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{s.d}</p>
-                </CardContent>
-              </Card>
-            ))}
+                  <span className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                    Core Blueprint
+                  </span>
+                </div>
+                <h3 className="mt-6 text-xl font-semibold tracking-tight">Validated blueprint first</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  Every project begins with structured, scored requirements and a generated architecture your reviewers can inspect, challenge, and certify before writing code.
+                </p>
+              </div>
+              <div className="mt-6 flex items-center gap-2 text-xs font-medium text-primary">
+                <span>Deterministic trace validation</span>
+                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" aria-hidden />
+              </div>
+            </div>
+
+            {/* Secondary Stacked Bento Cards — 5 Columns */}
+            <div className="grid gap-4 lg:col-span-5">
+              <div className="surface group rounded-2xl border border-border/70 p-5 transition-all duration-300 hover:border-primary/40">
+                <div className="flex items-center gap-3">
+                  <span className="grid size-9 place-items-center rounded-lg bg-primary/12 text-primary">
+                    <BarChart3 className="size-4" aria-hidden />
+                  </span>
+                  <h4 className="font-medium">Continuous quality signal</h4>
+                </div>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                  Code health, security posture, and delivery risk recalculated on every analysis run.
+                </p>
+              </div>
+
+              <div className="surface group rounded-2xl border border-border/70 p-5 transition-all duration-300 hover:border-primary/40">
+                <div className="flex items-center gap-3">
+                  <span className="grid size-9 place-items-center rounded-lg bg-primary/12 text-primary">
+                    <Boxes className="size-4" aria-hidden />
+                  </span>
+                  <h4 className="font-medium">Business alignment built in</h4>
+                </div>
+                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+                  Findings ranked by measurable revenue and operational impact, putting high-value fixes first.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
