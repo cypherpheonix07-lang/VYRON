@@ -18,7 +18,8 @@
     "verify:mission": "node verify-continuation-mission.mjs",
     "verify:advancement": "node verify-continuation-advancement.mjs",
     "verify:gates": "node \"51 — TESTING PLATFORM/test-acceptance-gates.mjs\"",
-    "verify:all": "node \"51 — TESTING PLATFORM/scripts/testing/test-godmode-vnext-scratch-testing.mjs\""
+    "verify:all": "node \"51 — TESTING PLATFORM/scripts/testing/test-godmode-vnext-scratch-testing.mjs\"",
+    "verify:two-phase": "node \"51 — TESTING PLATFORM/scripts/testing/run-two-phase-verification.mjs\""
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
