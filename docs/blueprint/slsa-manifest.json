@@ -5,7 +5,7 @@
     {
       "name": "vyron-canonical-blueprint",
       "digest": {
-        "sha256": "1c9402415a2a8b5e049d5d3736a5b9cd0ab2a1942fdafdb99d9a3ea9f6d6a0a7"
+        "sha256": "32e65f61c686e75f4b839020ee329c6adfb34ef69f901a2a436d3f7d007b27e2"
       }
     }
   ],
@@ -15,13 +15,13 @@
   "buildType": "https://vyron.dev/blueprint-compiler/v3",
   "invocation": {
     "parameters": {
-      "commit": "39a41bcf4f931b612589e84dba94be72f87e77c0",
-      "timestamp": "2026-10-13T12:08:35.879Z"
+      "commit": "70d077e1ecbddd0d040af99015682232086ac376",
+      "timestamp": "2026-10-14T08:59:44.689Z"
     }
   },
   "materials": [
     {
-      "uri": "git+https://github.com/cypherpheonix07-lang/VYRON.git@39a41bcf4f931b612589e84dba94be72f87e77c0"
+      "uri": "git+https://github.com/cypherpheonix07-lang/VYRON.git@70d077e1ecbddd0d040af99015682232086ac376"
     }
   ]
 }
