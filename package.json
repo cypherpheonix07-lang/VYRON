@@ -54,7 +54,7 @@
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-query": "^5.101.1",
     "@tanstack/react-router": "1.170.38",
-    "@tanstack/react-start": "1.168.56",
+    "@tanstack/react-start": "^1.169.3",
     "@tanstack/router-plugin": "1.168.40",
     "@types/jszip": "^3.4.0",
     "@types/react-window": "^1.8.8",
