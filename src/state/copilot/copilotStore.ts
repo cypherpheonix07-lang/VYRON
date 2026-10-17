@@ -167,6 +167,7 @@ export interface CopilotMessage {
         stageGate?: import("@/services/copilot/stageGateEngine").StageGateTransition | undefined;
         checkpoint?: import("@/services/copilot/stageGateEngine").ResumableMissionCheckpoint | undefined;
         atherReceipt?: import("@/services/ather/types").HowThisAnswerWasProduced | undefined;
+        attachments?: Array<{ name: string; content: string; type?: string }> | undefined;
       }
     | undefined;
 }

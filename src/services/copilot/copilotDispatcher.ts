@@ -76,6 +76,7 @@ export interface DispatchOptions {
   modelOverride?: import("@/state/copilot/copilotStore").AIModelType | undefined;
   metadata?: CopilotMessage["metadata"] | undefined;
   onPlanCreated?: ((plan: import("./copilotPlanner").DynamicExecutionPlan) => void) | undefined;
+  attachments?: Array<{ name: string; content: string; type?: string }> | undefined;
 }
 
 export class CopilotDispatcher {
@@ -95,6 +96,12 @@ export class CopilotDispatcher {
     return this.isProcessing;
   }
 
+  public stop(mode?: AppMode): void {
+    const currentMode = mode || modeStore.getState().mode;
+    this.isProcessing = false;
+    copilotStore.setLoading(currentMode, false);
+  }
+
   /**
    * Main dispatch entry point. Accepts any user query or prompt chip from anywhere in the application.
    */
@@ -106,6 +113,30 @@ export class CopilotDispatcher {
     const storeState = copilotStore.getState();
     const session = currentMode === "NORMAL" ? storeState.normalSession : storeState.demoSession;
     const activeModel = options.modelOverride || session.activeModel;
+
+    // Fast-path for explicit stop / cancel request (Scenario 23)
+    const lowerText = text.toLowerCase();
+    if (lowerText === "stop" || lowerText === "cancel") {
+      this.isProcessing = false;
+      copilotStore.setLoading(currentMode, false);
+      const atherPacket = await atherOrchestrator.processTurn("stop", {
+        taskMode: "CHAT",
+        model: "LOCAL_DETERMINISTIC",
+        executionDepth: "QUICK",
+        specialist: "CORE_ENGINEER",
+        projectId: session.context?.selectedEntityId || "proj_atlas_001",
+      });
+      copilotStore.addMessage(currentMode, {
+        sender: "ASSISTANT",
+        text: atherPacket.directAnswer || "Operation halted. Active response generation stopped and any pending task steps have been cancelled.",
+        metadata: {
+          intent: "ACTION_EXECUTION",
+          intentConfidence: 1.0,
+          atherReceipt: atherPacket.receipt,
+        },
+      });
+      return;
+    }
 
     // 1. Check for Natural Language Command Center Interception (Skills, Connectors, Thinking)
     const commandResult = copilotCommandCenter.evaluateAndExecuteCommand(text, currentMode);
@@ -133,6 +164,10 @@ export class CopilotDispatcher {
       return;
     }
 
+    // Live application context & project grounding
+    const liveContext = copilotContextEngine.assembleContext();
+    const currentProjectId = session.context?.selectedEntityId || liveContext.project.id || "proj_atlas_001";
+
     // 2. Classify intent through Intent Gateway & Question Understanding Engine (16 types)
     const intent: CopilotIntent = copilotIntentGateway.classifyIntent(text, {
       mode: currentMode,
@@ -140,20 +175,20 @@ export class CopilotDispatcher {
     });
 
     const intentCapsule = questionUnderstanding.analyzeAndBuildCapsule(text, {
-      activeProject: session.context?.selectedEntityId || "proj_atlas_001",
+      activeProject: currentProjectId,
     });
 
     // 2.1 Memory Court & 8-Dimensional History Retrieval
     const { admittedItems: admittedOldChats, autoReferences } = historyRetrieval.evaluateAndAdmit(
       text,
-      "proj_atlas_001",
+      currentProjectId,
       intentCapsule.lifecycleStage
     );
 
     // 2.2 Assemble Multi-Domain Context Mesh & Seal Context Passport
     const contextPassport = contextMesh.assembleMesh(text, intentCapsule, {
       mode: currentMode,
-      activeProjectId: "proj_atlas_001",
+      activeProjectId: currentProjectId,
       activeStage: intentCapsule.lifecycleStage,
       selectedOldChats: admittedOldChats,
     });
@@ -175,6 +210,7 @@ export class CopilotDispatcher {
       text,
       metadata: {
         ...options.metadata,
+        attachments: options.attachments,
         intent: intent.type,
         intentConfidence: intent.confidence,
         intentCapsule,
@@ -420,11 +456,17 @@ export class CopilotDispatcher {
         specialist: specialistType,
         skills: session.activeSkills,
         connectors: session.activeConnectors,
+        attachments: options.attachments,
         responseDetail: atherResponseDetail,
-        projectId: session.context?.selectedEntityId || "proj_atlas_001",
+        projectId: currentProjectId,
       });
 
-      const effectiveText = atherPacket.directAnswer || (response.text + deliberationSummary);
+      // Use specific Ather response; fall back to AI Router completion if Ather produced a generic fallback template
+      const isAtherFallback =
+        atherPacket.directAnswer.startsWith("Regarding your question on") ||
+        atherPacket.directAnswer.startsWith("### Analysis for ");
+      const baseText = isAtherFallback && response.text ? response.text : atherPacket.directAnswer;
+      const effectiveText = deliberationSummary ? `${baseText}\n\n${deliberationSummary}` : baseText;
 
       // Synthesize Safe Dynamic Answer & End-of-Chat Proof Card
       const dynamicAnswer = safeReasoningEngine.composeDynamicAnswer({
@@ -544,8 +586,14 @@ export class CopilotDispatcher {
           id: "act_drift",
           label: "Run Architecture Drift Detection",
           actionType: "DETECT_ARCHITECTURE_DRIFT",
+          payload: { projectId: "proj-brahma", saveSnapshot: true },
         },
-        { id: "act_impact", label: "Analyze Change Impact", actionType: "ANALYZE_CHANGE_IMPACT" },
+        {
+          id: "act_impact",
+          label: "Analyze Change Impact",
+          actionType: "ANALYZE_CHANGE_IMPACT",
+          payload: { changedFile: "src/services/settlementEngine.ts" },
+        },
       );
     } else if (
       lower.includes("impact") ||
@@ -553,11 +601,20 @@ export class CopilotDispatcher {
       lower.includes("transitive")
     ) {
       actions.push(
-        { id: "act_impact", label: "Analyze Change Impact", actionType: "ANALYZE_CHANGE_IMPACT" },
+        {
+          id: "act_impact",
+          label: "Analyze Change Impact",
+          actionType: "ANALYZE_CHANGE_IMPACT",
+          payload: { changedFile: "src/services/settlementEngine.ts" },
+        },
         {
           id: "act_mission",
           label: "Start Verification Mission",
           actionType: "START_ENGINEERING_MISSION",
+          payload: {
+            title: "Pre-Release Verification Mission",
+            objective: "Audit drift, security findings, and release gates",
+          },
         },
       );
     } else if (
@@ -570,11 +627,16 @@ export class CopilotDispatcher {
           id: "act_mission",
           label: "Launch Release Verification Mission",
           actionType: "START_ENGINEERING_MISSION",
+          payload: {
+            title: "Pre-Release Verification Mission",
+            objective: "Audit drift, security findings, and release gates",
+          },
         },
         {
           id: "act_pol",
           label: "Evaluate Release Policies",
           actionType: "EVALUATE_ENGINEERING_POLICIES",
+          payload: { releaseCandidate: "rc-2.0" },
         },
       );
     } else if (
@@ -583,7 +645,12 @@ export class CopilotDispatcher {
       lower.includes("run 12")
     ) {
       actions.push(
-        { id: "act_run", label: "Execute 12-Stage Pipeline", actionType: "RUN_ANALYSIS" },
+        {
+          id: "act_run",
+          label: "Execute 12-Stage Pipeline",
+          actionType: "RUN_ANALYSIS",
+          payload: { speedMultiplier: 1.5 },
+        },
         {
           id: "act_view",
           label: "Inspect Stage Telemetry",
@@ -597,19 +664,30 @@ export class CopilotDispatcher {
           id: "act_anom",
           label: "Investigate Anomaly Outliers",
           actionType: "INVESTIGATE_ANOMALY",
+          payload: { anomalyId: "anom_high_iqr" },
         },
-        { id: "act_burst", label: "Inject Anomaly Burst", actionType: "INJECT_DEMO_ANOMALY" },
+        {
+          id: "act_burst",
+          label: "Inject Anomaly Burst",
+          actionType: "INJECT_DEMO_ANOMALY",
+          payload: { count: 5 },
+        },
       );
     } else if (lower.includes("dataset") || lower.includes("kaggle") || lower.includes("schema")) {
       actions.push(
         { id: "act_val", label: "Validate Schema Contracts", actionType: "VALIDATE_DATASET" },
-        { id: "act_search_ds", label: "Search Kaggle Benchmarks", actionType: "SEARCH_DATASETS" },
+        {
+          id: "act_search_ds",
+          label: "Search Kaggle Benchmarks",
+          actionType: "SEARCH_DATASETS",
+          payload: { query: "fraud" },
+        },
       );
     } else if (lower.includes("connector") || lower.includes("github") || lower.includes("mcp")) {
       actions.push(
         {
           id: "act_conn_test",
-          label: "Test Connector Health",
+          label: "Test GitHub Connector",
           actionType: "TEST_CONNECTOR",
           payload: { connectorId: "github" },
         },
@@ -618,6 +696,39 @@ export class CopilotDispatcher {
           label: "Verify Kaggle Connector",
           actionType: "TEST_CONNECTOR",
           payload: { connectorId: "kaggle" },
+        },
+      );
+    } else if (
+      lower.includes("time machine") ||
+      lower.includes("snapshot") ||
+      lower.includes("rewind")
+    ) {
+      actions.push(
+        {
+          id: "act_tm_compare",
+          label: "Compare Time Machine Snapshots",
+          actionType: "COMPARE_TIME_MACHINE_SNAPSHOTS",
+          payload: { baseSnapshotId: "snap-baseline", targetSnapshotId: "snap-regression" },
+        },
+        {
+          id: "act_tm_health",
+          label: "Inspect Project Health",
+          actionType: "GET_PROJECT_HEALTH",
+        },
+      );
+    } else if (lower.includes("decision") || lower.includes("adr") || lower.includes("decay")) {
+      actions.push(
+        {
+          id: "act_rec_adr",
+          label: "Record Architecture Decision",
+          actionType: "RECORD_ARCHITECTURE_DECISION",
+          payload: { title: "Strict Microservice AST Boundary Enforcement" },
+        },
+        {
+          id: "act_drift",
+          label: "Run Architecture Drift Detection",
+          actionType: "DETECT_ARCHITECTURE_DRIFT",
+          payload: { projectId: "proj-brahma", saveSnapshot: true },
         },
       );
     } else if (lower.includes("scenario") || lower.includes("reset") || lower.includes("demo")) {
@@ -638,8 +749,14 @@ export class CopilotDispatcher {
             id: "act_demo_anom",
             label: "Inject Sample Anomaly",
             actionType: "INJECT_DEMO_ANOMALY",
+            payload: { count: 5 },
           },
-          { id: "act_demo_run", label: "Run Demo Pipeline", actionType: "RUN_ANALYSIS" },
+          {
+            id: "act_demo_run",
+            label: "Run Demo Pipeline",
+            actionType: "RUN_ANALYSIS",
+            payload: { speedMultiplier: 1.5 },
+          },
         );
       } else {
         actions.push(
@@ -652,6 +769,7 @@ export class CopilotDispatcher {
             id: "act_norm_drift",
             label: "Evaluate Architecture Drift",
             actionType: "DETECT_ARCHITECTURE_DRIFT",
+            payload: { projectId: "proj-brahma", saveSnapshot: true },
           },
         );
       }

@@ -41,6 +41,7 @@ import {
   ArrowRight,
   Plug,
   Square,
+  Paperclip,
 } from "lucide-react";
 import { useCopilot } from "@/state/copilot/useCopilot";
 import {
@@ -137,6 +138,8 @@ export function CopilotFullScreenStudio() {
   const [isContextLensOpen, setIsContextLensOpen] = useState(false);
   const [isTimeMachineOpen, setIsTimeMachineOpen] = useState(false);
   const [selectedPassport, setSelectedPassport] = useState<any>(null);
+  const [attachments, setAttachments] = useState<Array<{ name: string; content: string; type?: string }>>([]);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     return copilotStore.subscribe((s) => {
@@ -144,6 +147,13 @@ export function CopilotFullScreenStudio() {
       setIsTimeMachineOpen(s.isTimeMachineOpen);
       if (s.selectedPassportForLens) {
         setSelectedPassport(s.selectedPassportForLens);
+      } else {
+        const latestWithPassport = [...s.normalSession.messages, ...s.demoSession.messages]
+          .reverse()
+          .find((m) => m.metadata?.contextPassport);
+        if (latestWithPassport?.metadata?.contextPassport) {
+          setSelectedPassport(latestWithPassport.metadata.contextPassport);
+        }
       }
     });
   }, []);
@@ -152,6 +162,27 @@ export function CopilotFullScreenStudio() {
   const [activePlan, setActivePlan] = useState<DynamicExecutionPlan | null>(
     () => session.activePlan || null,
   );
+
+  useEffect(() => {
+    if (session.activePlan) {
+      setActivePlan(session.activePlan);
+    }
+  }, [session.activePlan]);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const content = event.target?.result as string;
+        setAttachments((prev) => [...prev, { name: file.name, content, type: file.type || "text/plain" }]);
+        toast.success(`Attached document: ${file.name}`);
+      };
+      reader.readAsText(file);
+    });
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
   const [isPlanning, setIsPlanning] = useState(false);
   const [isExecutingPlan, setIsExecutingPlan] = useState(false);
   const [actionHistory, setActionHistory] = useState<ActionInvocation[]>([]);
@@ -259,9 +290,13 @@ export function CopilotFullScreenStudio() {
       }
     }
 
+    const attachedDocs = attachments.length > 0 ? [...attachments] : undefined;
+    setAttachments([]);
+
     await copilotDispatcher.dispatch(text, {
       mode,
       modelOverride: activeModel,
+      attachments: attachedDocs,
       onPlanCreated: (plan) => {
         setActivePlan(plan);
         setActiveInspectorTab("plan");
@@ -389,41 +424,42 @@ export function CopilotFullScreenStudio() {
     id: string;
     label: string;
     actionType: string;
+    payload?: Record<string, unknown>;
   }) => {
     toast.loading(`Executing action: ${action.label}...`, { id: "exec-action" });
     try {
-      let type: ActionType = "RUN_ANALYSIS";
-      let params: Record<string, unknown> = {};
+      const type = action.actionType as ActionType;
+      const params: Record<string, unknown> = { ...(action.payload || {}) };
 
-      if (action.actionType === "DETECT_ARCHITECTURE_DRIFT") {
-        type = "DETECT_ARCHITECTURE_DRIFT";
-        params = { projectId: liveContext?.project.id || "proj-brahma", saveSnapshot: true };
-      } else if (action.actionType === "ANALYZE_CHANGE_IMPACT") {
-        type = "ANALYZE_CHANGE_IMPACT";
-        params = { changedFile: "src/services/settlementEngine.ts" };
-      } else if (action.actionType === "START_ENGINEERING_MISSION") {
-        type = "START_ENGINEERING_MISSION";
-        params = {
-          title: "Pre-Release Verification Mission",
-          objective: "Audit drift, security findings, and release gates",
-        };
-      } else if (action.actionType === "EVALUATE_ENGINEERING_POLICIES") {
-        type = "EVALUATE_ENGINEERING_POLICIES";
-        params = { releaseCandidate: "rc-2.0" };
-      } else if (action.actionType === "COMPARE_TIME_MACHINE_SNAPSHOTS") {
-        type = "COMPARE_TIME_MACHINE_SNAPSHOTS";
-        params = { baseSnapshotId: "snap-baseline", targetSnapshotId: "snap-regression" };
-      } else if (action.actionType === "RUN_SIMULATION_SCENARIO") {
-        type = "RUN_SIMULATION_SCENARIO";
-        params = { scenarioId: "SCENARIO_01_DRIFT" };
-      } else if (action.actionType === "RESET_DEMO") {
-        type = "RESET_DEMO";
-      } else if (action.actionType === "VALIDATE_DATASET") {
-        type = "VALIDATE_DATASET";
-        params = { datasetId: liveContext?.dataset.id || "ieee_fraud_benchmark" };
-      } else {
-        type = "RUN_ANALYSIS";
-        params = { speedMultiplier: 1.5 };
+      if (type === "DETECT_ARCHITECTURE_DRIFT" && !params.projectId) {
+        params.projectId = liveContext?.project.id || "proj-brahma";
+        params.saveSnapshot = true;
+      } else if (type === "ANALYZE_CHANGE_IMPACT" && !params.changedFile) {
+        params.changedFile = "src/services/settlementEngine.ts";
+      } else if (type === "START_ENGINEERING_MISSION" && !params.title) {
+        params.title = "Pre-Release Verification Mission";
+        params.objective = "Audit drift, security findings, and release gates";
+      } else if (type === "EVALUATE_ENGINEERING_POLICIES" && !params.releaseCandidate) {
+        params.releaseCandidate = "rc-2.0";
+      } else if (type === "COMPARE_TIME_MACHINE_SNAPSHOTS" && !params.baseSnapshotId) {
+        params.baseSnapshotId = "snap-baseline";
+        params.targetSnapshotId = "snap-regression";
+      } else if (type === "RUN_SIMULATION_SCENARIO" && !params.scenarioId) {
+        params.scenarioId = "SCENARIO_01_DRIFT";
+      } else if (type === "VALIDATE_DATASET" && !params.datasetId) {
+        params.datasetId = liveContext?.dataset.id || "ieee_fraud_benchmark";
+      } else if (type === "TEST_CONNECTOR" && !params.connectorId) {
+        params.connectorId = "github";
+      } else if (type === "INSPECT_STAGE" && !params.stageId) {
+        params.stageId = 5;
+      } else if (type === "INJECT_DEMO_ANOMALY" && !params.count) {
+        params.count = 5;
+      } else if (type === "SWITCH_DEMO_SCENARIO" && !params.scenarioId) {
+        params.scenarioId = "brazilian_ecommerce";
+      } else if (type === "INVESTIGATE_ANOMALY" && !params.anomalyId) {
+        params.anomalyId = "anom_high_iqr";
+      } else if (type === "RUN_ANALYSIS" && !params.speedMultiplier) {
+        params.speedMultiplier = 1.5;
       }
 
       const res = await copilotActionEngine.dispatchAction(
@@ -902,11 +938,52 @@ export function CopilotFullScreenStudio() {
             </span>
           </div>
 
+          {/* Attached documents preview */}
+          {attachments.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 px-3 pt-2 bg-card/70 border-t border-border/40">
+              {attachments.map((att, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/30 text-[10px] font-mono text-primary shadow-sm"
+                >
+                  <Paperclip className="size-3" />
+                  <span className="max-w-[140px] truncate">{att.name}</span>
+                  <button
+                    type="button"
+                    onClick={() => setAttachments((prev) => prev.filter((_, i) => i !== idx))}
+                    className="hover:text-destructive cursor-pointer transition-colors"
+                  >
+                    <X className="size-3" />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+
           {/* Input Box */}
           <form
             onSubmit={handleSend}
             className="p-3 pt-1.5 bg-card/70 flex items-center gap-2"
           >
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              multiple
+              accept=".csv,.json,.txt,.md,.log,.pdf"
+              className="hidden"
+            />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={isLoading}
+              title="Attach document or dataset (CSV, JSON, TXT, Log)"
+              className="size-9 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary/80 shrink-0 cursor-pointer"
+            >
+              <Paperclip className="size-4" />
+            </Button>
             <input
               type="text"
               placeholder={`Ask ATHER in ${studioMode} mode... (Enter to send)`}
@@ -928,6 +1005,7 @@ export function CopilotFullScreenStudio() {
                 size="sm"
                 variant="destructive"
                 onClick={() => {
+                  copilotDispatcher.stop(mode);
                   copilotDispatcher.dispatch("stop");
                   copilotStore.setLoading(mode, false);
                   toast.info("Stopped active generation.");
@@ -942,7 +1020,7 @@ export function CopilotFullScreenStudio() {
               <Button
                 type="submit"
                 size="sm"
-                disabled={!inputText.trim()}
+                disabled={!inputText.trim() && attachments.length === 0}
                 className="h-9 px-4 rounded-xl bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20 cursor-pointer"
               >
                 <Send className="size-4" />
