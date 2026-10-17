@@ -3,6 +3,9 @@ import { Link, Outlet, createFileRoute, useRouterState } from "@tanstack/react-r
 import { StatusBadge } from "@/components/brahma/primitives";
 import { getProject } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { useDemoMode } from "@/contexts/DemoModeContext";
+import { LiveProjectProvider, useLiveProject } from "@/contexts/LiveProjectContext";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/app/projects/$id")({
   component: ProjectLayout,
@@ -28,11 +31,37 @@ const tabs = [
 
 function ProjectLayout() {
   const { id } = Route.useParams();
+  const { isDemoMode } = useDemoMode();
+  return isDemoMode ? <DemoProjectLayout /> : (
+    <LiveProjectProvider key={id} id={id}><LiveProjectLayout /></LiveProjectProvider>
+  );
+}
+
+function LiveProjectLayout() {
+  const { id } = Route.useParams();
+  const { data, status, error, refresh } = useLiveProject();
+  if (status === "loading") return <p role="status">Loading project from the database…</p>;
+  if (status === "error") return <div role="alert" className="space-y-3"><p>{error}</p><Button onClick={refresh}>Retry database request</Button></div>;
+  if (!data) return <div className="space-y-3"><p>Project not found or access is unavailable. No sample project has been substituted.</p><Button onClick={refresh}>Check again</Button></div>;
+  return <ProjectShell id={id} project={data.project} />;
+}
+
+function DemoProjectLayout() {
+  const { id } = Route.useParams();
   const project = getProject(id);
+  return <ProjectShell id={id} project={project} demo />;
+}
+
+function ProjectShell({ id, project, demo = false }: {
+  id: string;
+  project: { name: string; description: string | null; status: string };
+  demo?: boolean;
+}) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
     <div className="space-y-6">
+      {demo && <p role="status" className="text-sm text-amber-400">Demo mode — sample data, not database results.</p>}
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 sm:flex sm:items-center sm:justify-between">
         <div className="min-w-0">
           <h1 className="truncate text-xl font-semibold tracking-tight sm:text-2xl">

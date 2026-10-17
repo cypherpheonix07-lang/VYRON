@@ -23,6 +23,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { useDemoMode } from "@/contexts/DemoModeContext";
 
 import {
   EmptyState,
@@ -139,9 +140,10 @@ function ProjectsPage() {
   const [risk, setRisk] = useState("all");
   const [health, setHealth] = useState("all");
 
-  const { projects: dbProjects, loading: dbLoading, draftCount } = useProjects();
+  const { isDemoMode } = useDemoMode();
+  const { projects: dbProjects, loading: dbLoading, draftCount, error: dbError, refetch } = useProjects();
 
-  // Combine dbProjects with mock projects so all catalogs & user-created projects exist
+  // Only explicit demo mode may add sample projects.
   const unifiedProjects = useMemo<DisplayProject[]>(() => {
     const list: DisplayProject[] = [];
     const seenIds = new Set<string>();
@@ -158,7 +160,7 @@ function ProjectsPage() {
           domain_secondary: p.domain_secondary || [],
           description: p.description || "Generated via Brahma God Mode v2 generator.",
           status: isDraft ? "Draft (Wizard)" : p.status || "Active",
-          healthScore: p.health_score || (isDraft ? 85 : 92),
+          healthScore: p.health_score ?? 0,
           securityScore: 88,
           riskScore: 24,
           deliveryRisk: "Low",
@@ -178,7 +180,7 @@ function ProjectsPage() {
     }
 
     // Add mock projects not yet in db
-    for (const m of mockProjects) {
+    for (const m of isDemoMode ? mockProjects : []) {
       if (!seenIds.has(m.id)) {
         list.push({
           id: m.id,
@@ -206,7 +208,7 @@ function ProjectsPage() {
     }
 
     return list;
-  }, [dbProjects]);
+  }, [dbProjects, isDemoMode]);
 
   const filtered = useMemo(
     () =>
@@ -236,17 +238,17 @@ function ProjectsPage() {
     <>
       <PageHeader
         title="Projects"
-        description="Every project in this workspace with its latest blueprint, health, gate strictness, and risk signals."
+        description={isDemoMode ? "Demo project catalog — sample data." : "Database projects. Stored health fields may contain defaults; risk metrics are not yet assessed."}
         actions={
           <>
-            <Tabs value={state} onValueChange={(v) => setState(v as ViewState)}>
+            {isDemoMode && <Tabs value={state} onValueChange={(v) => setState(v as ViewState)}>
               <TabsList aria-label="Preview list states">
                 <TabsTrigger value="loaded">Loaded</TabsTrigger>
                 <TabsTrigger value="loading">Loading</TabsTrigger>
                 <TabsTrigger value="empty">Empty</TabsTrigger>
                 <TabsTrigger value="error">Error</TabsTrigger>
               </TabsList>
-            </Tabs>
+            </Tabs>}
             <Button asChild className="gap-1.5 shadow-sm">
               <Link to="/app/projects/new">
                 <PlusCircle className="size-4" aria-hidden />
@@ -336,10 +338,10 @@ function ProjectsPage() {
       </div>
 
       {state === "loading" || dbLoading ? <LoadingSkeleton variant="table" /> : null}
-      {state === "error" ? (
+      {state === "error" || dbError ? (
         <ErrorState
-          description="The project index could not be loaded."
-          onRetry={() => setState("loaded")}
+          description={dbError || "The project index could not be loaded."}
+          onRetry={() => { setState("loaded"); void refetch(); }}
         />
       ) : null}
       {state === "empty" ? (
@@ -354,7 +356,7 @@ function ProjectsPage() {
         />
       ) : null}
 
-      {state === "loaded" && !dbLoading ? (
+      {state === "loaded" && !dbLoading && !dbError ? (
         filtered.length === 0 ? (
           <EmptyState
             title="No projects match these filters"
@@ -491,7 +493,7 @@ function ProjectsPage() {
                         />
                         <div className="space-y-0.5">
                           <div className="text-[11px] font-semibold text-foreground flex items-center gap-1.5">
-                            <span>Health {p.healthScore}%</span>
+                            <span>{isDemoMode ? "Health" : "Stored value"} {p.healthScore}</span>
                             <span className="text-[9px] text-cyan-400 font-mono">
                               (Target &ge;{p.kpiTargets?.health_min ?? 80}%)
                             </span>
@@ -505,7 +507,7 @@ function ProjectsPage() {
                         </div>
                       </div>
 
-                      <RiskBadge level={p.deliveryRisk} />
+                      {isDemoMode ? <RiskBadge level={p.deliveryRisk} /> : <span className="text-xs text-muted-foreground">Risk not assessed</span>}
                     </div>
                   </CardContent>
                 </Card>
@@ -638,7 +640,7 @@ function ProjectsPage() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          <RiskBadge level={p.deliveryRisk} />
+                          {isDemoMode ? <RiskBadge level={p.deliveryRisk} /> : <span className="text-xs text-muted-foreground">Risk not assessed</span>}
                         </TableCell>
                         <TableCell className="hidden max-w-[180px] truncate text-xs text-muted-foreground lg:table-cell">
                           {p.repoConnected ? p.repoUrl : "Not connected"}

@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ProjectGitHubIntegrationHub } from "@/components/github/ProjectGitHubIntegrationHub";
 import { getProject } from "@/lib/mock-data";
+import { useDemoMode } from "@/contexts/DemoModeContext";
+import { useLiveProject } from "@/contexts/LiveProjectContext";
 
 export const Route = createFileRoute("/app/projects/$id/integrations")({
   head: () => ({
@@ -17,6 +19,17 @@ export const Route = createFileRoute("/app/projects/$id/integrations")({
 });
 
 function ProjectIntegrationsPage() {
+  const { isDemoMode } = useDemoMode();
+  return isDemoMode ? <DemoIntegrations /> : <LiveIntegrations />;
+}
+
+function LiveIntegrations() {
+  const { id } = Route.useParams();
+  const { data } = useLiveProject();
+  return data ? <ProjectGitHubIntegrationHub projectId={id} projectName={data.project.name} /> : null;
+}
+
+function DemoIntegrations() {
   const { id } = Route.useParams();
   const project = getProject(id);
 

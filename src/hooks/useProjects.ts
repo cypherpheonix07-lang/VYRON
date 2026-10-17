@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { authService } from "@/services/authService";
 import { useDemoMode } from "@/contexts/DemoModeContext";
@@ -41,7 +41,11 @@ export function useProjects() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const requestVersion = useRef(0);
   const fetchProjects = useCallback(async () => {
+    const request = ++requestVersion.current;
+    setError(null);
+    setDraftCount(0);
     if (isDemoMode) {
       setProjects(DEMO_PROJECTS as unknown as Project[]);
       // Check local draft
@@ -63,11 +67,8 @@ export function useProjects() {
         .order("created_at", { ascending: false });
 
       if (err) throw err;
-      if (!data || data.length === 0) {
-        setProjects(DEMO_PROJECTS as unknown as Project[]);
-      } else {
-        setProjects(data as Project[]);
-      }
+      if (request !== requestVersion.current) return;
+      setProjects((data ?? []) as Project[]);
 
       // Query active draft count for current user
       const userRes = await authService.getUser();
@@ -92,21 +93,23 @@ export function useProjects() {
           // ignore localStorage access error
         }
 
-        setDraftCount(Math.max(count ?? 0, localCount));
+        if (request === requestVersion.current) setDraftCount(Math.max(count ?? 0, localCount));
       }
     } catch (e: unknown) {
       const errObj = e as { message?: string; details?: string; hint?: string } | null;
       const msg = errObj?.message || (e instanceof Error ? e.message : String(e));
-      console.warn("[useProjects] Fetch error, falling back to cached seed:", msg);
-      setProjects(DEMO_PROJECTS as unknown as Project[]);
-      setError(null);
+      if (request !== requestVersion.current) return;
+      console.warn("[useProjects] Database request failed:", msg);
+      setProjects([]);
+      setError(msg);
     } finally {
-      setLoading(false);
+      if (request === requestVersion.current) setLoading(false);
     }
   }, [isDemoMode]);
 
   useEffect(() => {
-    fetchProjects();
+    void fetchProjects();
+    return () => { requestVersion.current++; };
   }, [fetchProjects]);
 
   const createProject = async (name: string, description: string) => {
@@ -126,48 +129,23 @@ export function useProjects() {
     const userRes = await authService.getUser();
     const user = userRes.data;
     if (!user?.id) {
-      const newProj: Project = {
-        id: `local-${Date.now()}`,
-        name,
-        description,
-        health_score: 95,
-        status: "active",
-        created_at: new Date().toISOString(),
-      };
-      setProjects((prev) => [newProj, ...prev]);
-      return newProj;
+      throw new Error("Sign in before creating a database project.");
     }
 
-    try {
-      const { data, error: err } = await supabase
-        .from("projects")
-        .insert({
-          name,
-          description,
-          owner_id: user.id,
-          health_score: 95,
-          status: "active",
-        })
-        .select()
-        .single();
-
-      if (err) throw err;
-      setProjects((prev) => [data as Project, ...prev]);
-      return data as Project;
-    } catch (createErr) {
-      console.warn("[useProjects] Remote insert failed, using local project fallback:", createErr);
-      const fallbackProj: Project = {
-        id: `proj-${Date.now()}`,
+    const { data, error: err } = await supabase
+      .from("projects")
+      .insert({
         name,
         description,
-        health_score: 95,
-        status: "active",
-        created_at: new Date().toISOString(),
         owner_id: user.id,
-      };
-      setProjects((prev) => [fallbackProj, ...prev]);
-      return fallbackProj;
-    }
+        status: "draft",
+      })
+      .select()
+      .single();
+
+    if (err) throw err;
+    setProjects((prev) => [data as Project, ...prev]);
+    return data as Project;
   };
 
   const deleteProject = async (id: string) => {
@@ -175,12 +153,8 @@ export function useProjects() {
       setProjects((prev) => prev.filter((p) => p.id !== id));
       return;
     }
-    try {
-      const { error: err } = await supabase.from("projects").delete().eq("id", id);
-      if (err) throw err;
-    } catch (delErr) {
-      console.warn("[useProjects] Remote delete failed, filtering local state:", delErr);
-    }
+    const { error: err } = await supabase.from("projects").delete().eq("id", id);
+    if (err) throw err;
     setProjects((prev) => prev.filter((p) => p.id !== id));
   };
 
@@ -196,7 +170,7 @@ export function useProjects() {
 }
 
 export function useProject(id: string) {
-  const { projects, loading } = useProjects();
-  const project = projects.find((p) => p.id === id) || projects[0] || null;
-  return { project, loading };
+  const { projects, loading, error } = useProjects();
+  const project = projects.find((p) => p.id === id) ?? null;
+  return { project, loading, error };
 }
