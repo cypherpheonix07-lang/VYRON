@@ -623,16 +623,18 @@ export async function disconnectUserIntegration(
 
 export async function fetchGitHubRepos(userId?: string): Promise<GitHubRepoItem[]> {
   try {
-    // Attempt to query via edge function proxy
-    const edgeUrl = `${import.meta.env["VITE_SUPABASE_URL"] || ""}/functions/v1/github-proxy?path=/user/repos`;
-    const session = (await authService.getSession()).data;
-    if (session?.access_token) {
-      const res = await fetch(edgeUrl, {
-        headers: { Authorization: `Bearer ${session.access_token}` },
-      });
-      if (res.ok) {
-        const repos = await res.json();
-        if (Array.isArray(repos)) return repos;
+    // Only attempt to query via edge function proxy when explicitly enabled in environment
+    if (import.meta.env["VITE_ENABLE_GITHUB_PROXY"] === "true") {
+      const edgeUrl = `${import.meta.env["VITE_SUPABASE_URL"] || ""}/functions/v1/github-proxy?path=/user/repos`;
+      const session = (await authService.getSession()).data;
+      if (session?.access_token) {
+        const res = await fetch(edgeUrl, {
+          headers: { Authorization: `Bearer ${session.access_token}` },
+        });
+        if (res.ok) {
+          const repos = await res.json();
+          if (Array.isArray(repos)) return repos;
+        }
       }
     }
   } catch (e) {

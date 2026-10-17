@@ -148,16 +148,40 @@ function SettingsPage() {
   const [deleteConfirmHandle, setDeleteConfirmHandle] = useState("");
   const [deleting, setDeleting] = useState(false);
 
-  // Load User Preferences from DB
+  // Circuit breaker state for optional user_settings table/RPC
+  const [isDbPrefsSupported, setIsDbPrefsSupported] = useState<boolean>(true);
+
+  // Load User Preferences from LocalStorage & DB
   useEffect(() => {
+    // 1. Immediately load locally cached preferences
+    try {
+      const local = JSON.parse(localStorage.getItem("vyron_user_prefs") || "{}");
+      if (local.default_template) setDefaultTemplate(local.default_template);
+      if (local.model_tier) setModelTier(local.model_tier);
+      if (local.copilot_mode) setCopilotMode(local.copilot_mode);
+      if (local.density) setDensity(local.density);
+      if (typeof local.reduced_motion === "boolean") setReducedMotion(local.reduced_motion);
+      if (typeof local.high_contrast === "boolean") setHighContrast(local.high_contrast);
+      if (local.date_format) setDateFormat(local.date_format);
+      if (local.language) setLanguage(local.language);
+    } catch {
+      // ignore
+    }
+
+    // 2. Best-effort query DB if supported
     async function loadSettings() {
-      if (!user?.id) return;
+      if (!user?.id || !isDbPrefsSupported) return;
       try {
-        const { data } = await supabase
+        const { data, error } = await supabase
           .from("user_settings")
           .select("prefs")
           .eq("user_id", user.id)
           .maybeSingle();
+
+        if (error) {
+          setIsDbPrefsSupported(false);
+          return;
+        }
 
         if (data && data.prefs) {
           const p = data.prefs;
@@ -170,20 +194,38 @@ function SettingsPage() {
           if (p.date_format) setDateFormat(p.date_format);
           if (p.language) setLanguage(p.language);
         }
-      } catch (err) {
-        console.warn("Failed to load user settings:", err);
+      } catch {
+        setIsDbPrefsSupported(false);
       }
     }
     loadSettings();
-  }, [user?.id]);
+  }, [user?.id, isDbPrefsSupported]);
 
   const persistPref = async (key: string, value: unknown) => {
+    // 1. Always persist to localStorage for instant responsiveness
     try {
-      await supabase.rpc("set_user_setting", { p_key: key, p_value: value });
-      toast.success("Preference saved to database");
+      const local = JSON.parse(localStorage.getItem("vyron_user_prefs") || "{}");
+      local[key] = value;
+      localStorage.setItem("vyron_user_prefs", JSON.stringify(local));
     } catch {
-      toast.info("Preference saved locally");
+      // ignore
     }
+
+    // 2. Try DB persistence only if RPC is available
+    if (isDbPrefsSupported) {
+      try {
+        const { error } = await supabase.rpc("set_user_setting", { p_key: key, p_value: value });
+        if (!error) {
+          toast.success("Preference saved to database");
+          return;
+        }
+        setIsDbPrefsSupported(false);
+      } catch {
+        setIsDbPrefsSupported(false);
+      }
+    }
+
+    toast.info("Preference saved locally");
   };
 
   const handleReducedMotion = (enabled: boolean) => {
