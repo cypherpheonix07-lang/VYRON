@@ -1,27 +1,36 @@
 import { createClient } from "@supabase/supabase-js";
 import fs from "fs";
 
-// Load env variables
+// Load env variables safely (support both .env file and environment variables)
 const envPath = "./.env";
-const envContent = fs.readFileSync(envPath, "utf-8");
-const env = {};
-envContent.split("\n").forEach((line) => {
-  const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)\s*$/);
-  if (match) {
-    let value = match[2].trim();
-    if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
-    if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
-    env[match[1]] = value;
-  }
-});
+const env = { ...process.env };
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, "utf-8");
+  envContent.split("\n").forEach((line) => {
+    const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)\s*$/);
+    if (match) {
+      let value = match[2].trim();
+      if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
+      if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
+      env[match[1]] = value;
+    }
+  });
+}
 
 const url = env.SUPABASE_URL || env.VITE_SUPABASE_URL;
 const serviceKey = env.SUPABASE_SECRET_KEY;
 const anonKey = env.VITE_SUPABASE_ANON_KEY;
 
 if (!url || !serviceKey || !anonKey) {
-  console.error("Missing configuration in .env!");
-  process.exit(1);
+  if (process.env.REQUIRE_REMOTE_SUPABASE === "true") {
+    console.error("Missing required Supabase remote configuration in environment!");
+    process.exit(1);
+  } else {
+    console.log("⚠️  [GATED] Remote Supabase credentials not configured in environment.");
+    console.log("   Remote verification gates T1-T12 are BLOCKED/SKIPPED.");
+    console.log("   Run 'npm run test:offline' to verify offline and fixture suites.\n");
+    process.exit(0);
+  }
 }
 
 const serviceClient = createClient(url, serviceKey, {

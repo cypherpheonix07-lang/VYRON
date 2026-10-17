@@ -134,37 +134,43 @@ function Dashboard() {
 
   const { projects: liveProjects } = useProjects();
   const displayProjects = useMemo(() => {
-    if (!liveProjects || liveProjects.length === 0) return mockProjects;
-    return liveProjects.map((lp) => ({
-      id: lp.id,
-      name: lp.name,
-      description: lp.description || "",
-      domain: lp.domain || "General",
-      status:
-        (lp.status as "Analyzed" | "Analyzing" | "Draft" | "Needs Review" | "At Risk") ||
-        "Analyzed",
-      healthScore: lp.health_score ?? 75,
-      securityScore: 80,
-      businessImpactScore: 78,
-      requirementClarity: 85,
-      deliveryRisk: (lp.health_score && lp.health_score > 80
-        ? "Low"
-        : lp.health_score && lp.health_score > 60
-          ? "Medium"
-          : "High") as "Low" | "Medium" | "High" | "Critical",
-      riskScore: lp.health_score ? 100 - lp.health_score : 25,
-      repoConnected: !!lp.repo_full_name,
-      teamSize: 5,
-      deadline: "2026-10-30",
-      lastUpdated: lp.created_at || new Date().toISOString(),
-      lastAnalysis: lp.created_at || new Date().toISOString(),
-    }));
-  }, [liveProjects]);
+    if (!liveProjects || liveProjects.length === 0) {
+      return mode === "DEMO" ? mockProjects : [];
+    }
+    return liveProjects.map((lp) => {
+      const hScore = lp.health_score ?? (lp as unknown as { healthScore?: number }).healthScore ?? 0;
+      return {
+        id: lp.id,
+        name: lp.name,
+        description: lp.description || "",
+        domain: lp.domain || "General",
+        status:
+          (lp.status as "Analyzed" | "Analyzing" | "Draft" | "Needs Review" | "At Risk") ||
+          "Draft",
+        healthScore: hScore,
+        securityScore: (lp as unknown as { securityScore?: number }).securityScore ?? 0,
+        businessImpactScore: (lp as unknown as { businessImpactScore?: number }).businessImpactScore ?? 0,
+        requirementClarity: (lp as unknown as { requirementClarity?: number }).requirementClarity ?? 0,
+        deliveryRisk: (hScore > 80
+          ? "Low"
+          : hScore > 60
+            ? "Medium"
+            : "High") as "Low" | "Medium" | "High" | "Critical",
+        riskScore: hScore > 0 ? Math.max(0, 100 - hScore) : 0,
+        repoConnected: !!lp.repo_full_name,
+        teamSize: (lp as unknown as { teamSize?: number }).teamSize ?? 1,
+        deadline: (lp as unknown as { deadline?: string }).deadline || "2026-12-31",
+        lastUpdated: lp.created_at || new Date().toISOString(),
+        lastAnalysis: (lp as unknown as { lastAnalysis?: string }).lastAnalysis || lp.created_at || new Date().toISOString(),
+      };
+    });
+  }, [liveProjects, mode]);
 
   const avgHealth = useMemo(() => {
+    if (displayProjects.length === 0) return 0;
     return Math.round(
-      displayProjects.reduce((acc, p) => acc + (p.healthScore || 70), 0) /
-        Math.max(displayProjects.length, 1),
+      displayProjects.reduce((acc, p) => acc + (p.healthScore || 0), 0) /
+        displayProjects.length,
     );
   }, [displayProjects]);
 

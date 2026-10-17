@@ -26,14 +26,17 @@ import {
   DiscoverySearchResponse,
 } from "@/types/discovery";
 
+import { ProjectRealityMap } from "@/components/discovery/ProjectRealityMap";
+import { Network, Grid } from "lucide-react";
+
 export const Route = createFileRoute("/discover")({
   head: () => ({
     meta: [
-      { title: "AI Discovery & Intent Intelligence — PROJECT BRAHMA" },
+      { title: "Project Reality Map & AI Discovery — PROJECT BRAHMA" },
       {
         name: "description",
         content:
-          "Intent-first AI discovery engine powered by semantic vector search, hierarchical task taxonomy, and live link health telemetry.",
+          "Unified Project Reality Map topology and Intent-first AI discovery engine powered by semantic vector search and live link health telemetry.",
       },
     ],
   }),
@@ -41,14 +44,19 @@ export const Route = createFileRoute("/discover")({
     return {
       q: (search["q"] as string) || "",
       category: (search["category"] as string) || "",
+      tab: (search["tab"] as string) || "reality-map",
     };
   },
   component: DiscoverPage,
 });
 
 function DiscoverPage() {
-  const { q, category } = Route.useSearch();
+  const { q, category, tab } = Route.useSearch();
   const navigate = useNavigate();
+
+  const [activeTab, setActiveTab] = useState<"reality-map" | "ai-tools">(
+    tab === "ai-tools" ? "ai-tools" : "reality-map",
+  );
 
   const [query, setQuery] = useState(q || "");
   const [tasks, setTasks] = useState<AITask[]>([]);
@@ -174,57 +182,104 @@ function DiscoverPage() {
         </div>
       </header>
 
-      {/* Main Discovery Container */}
+      {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-6">
-        {/* Natural Language Intent Search */}
-        <DiscoverySearch initialQuery={query} onSearch={handleSearch} isLoading={isLoading} />
-
-        {/* Intent Understood Banner */}
-        {searchResponse?.intent && query.trim().length > 0 && (
-          <IntentSummary intent={searchResponse.intent} onRefineQuery={handleRefineIntent} />
-        )}
-
-        {/* Filter Controls */}
-        <DiscoveryFilters
-          filters={filters}
-          onChange={setFilters}
-          tasks={tasks}
-          categories={categories}
-        />
-
-        {/* Results / Empty States */}
-        {isLoading ? (
-          <div className="py-20 flex flex-col items-center justify-center gap-3 text-muted-foreground">
-            <div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-            <p className="text-xs font-mono">
-              Running vector similarity search & health telemetry...
-            </p>
-          </div>
-        ) : searchResponse && searchResponse.results.length > 0 ? (
-          <ToolResults
-            results={searchResponse.results}
-            query={query}
-            executionTimeMs={searchResponse.executionTimeMs}
-          />
-        ) : (
-          <EmptyDiscoveryState
-            query={query}
-            suggestedRefinements={searchResponse?.suggestedRefinements ?? []}
-            nearbyCategories={searchResponse?.nearbyCategories ?? []}
-            fallbackTasks={tasks}
-            onSelectTask={handleSelectTask}
-            onSelectRefinement={handleSearch}
-            onResetFilters={() => {
-              setFilters({
-                pricing: "all",
-                verification: "all",
-                healthStatus: "all",
-                hasApi: false,
-                sortBy: "relevance",
+        {/* Domain View Selector */}
+        <div className="flex items-center gap-2 border-b border-border/60 pb-3">
+          <Button
+            variant={activeTab === "reality-map" ? "default" : "outline"}
+            size="sm"
+            className="h-8 text-xs gap-2"
+            onClick={() => {
+              setActiveTab("reality-map");
+              (
+                navigate as unknown as (opts: {
+                  search: (prev: Record<string, unknown>) => Record<string, unknown>;
+                }) => void
+              )({
+                search: (prev: Record<string, unknown>) => ({ ...prev, tab: "reality-map" }),
               });
-              setQuery("");
             }}
-          />
+          >
+            <Network className="size-3.5" />
+            Project Reality Map
+          </Button>
+
+          <Button
+            variant={activeTab === "ai-tools" ? "default" : "outline"}
+            size="sm"
+            className="h-8 text-xs gap-2"
+            onClick={() => {
+              setActiveTab("ai-tools");
+              (
+                navigate as unknown as (opts: {
+                  search: (prev: Record<string, unknown>) => Record<string, unknown>;
+                }) => void
+              )({
+                search: (prev: Record<string, unknown>) => ({ ...prev, tab: "ai-tools" }),
+              });
+            }}
+          >
+            <Sparkles className="size-3.5" />
+            AI Discovery & Tool Matrix
+          </Button>
+        </div>
+
+        {activeTab === "reality-map" ? (
+          <ProjectRealityMap />
+        ) : (
+          <div className="space-y-6">
+            {/* Natural Language Intent Search */}
+            <DiscoverySearch initialQuery={query} onSearch={handleSearch} isLoading={isLoading} />
+
+            {/* Intent Understood Banner */}
+            {searchResponse?.intent && query.trim().length > 0 && (
+              <IntentSummary intent={searchResponse.intent} onRefineQuery={handleRefineIntent} />
+            )}
+
+            {/* Filter Controls */}
+            <DiscoveryFilters
+              filters={filters}
+              onChange={setFilters}
+              tasks={tasks}
+              categories={categories}
+            />
+
+            {/* Results / Empty States */}
+            {isLoading ? (
+              <div className="py-20 flex flex-col items-center justify-center gap-3 text-muted-foreground">
+                <div className="size-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                <p className="text-xs font-mono">
+                  Running vector similarity search & health telemetry...
+                </p>
+              </div>
+            ) : searchResponse && searchResponse.results.length > 0 ? (
+              <ToolResults
+                results={searchResponse.results}
+                query={query}
+                executionTimeMs={searchResponse.executionTimeMs}
+              />
+            ) : (
+              <EmptyDiscoveryState
+                query={query}
+                suggestedRefinements={searchResponse?.suggestedRefinements ?? []}
+                nearbyCategories={searchResponse?.nearbyCategories ?? []}
+                fallbackTasks={tasks}
+                onSelectTask={handleSelectTask}
+                onSelectRefinement={handleSearch}
+                onResetFilters={() => {
+                  setFilters({
+                    pricing: "all",
+                    verification: "all",
+                    healthStatus: "all",
+                    hasApi: false,
+                    sortBy: "relevance",
+                  });
+                  setQuery("");
+                }}
+              />
+            )}
+          </div>
         )}
       </main>
 

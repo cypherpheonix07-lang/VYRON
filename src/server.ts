@@ -5,6 +5,7 @@ import { modelRegistry } from "./server/ai/modelRegistry";
 import { modelRouter } from "./server/ai/modelRouter";
 import { openAiServerAdapter } from "./server/ai/adapters/openAiServerAdapter";
 import { openRouterServerAdapter } from "./server/ai/adapters/openRouterServerAdapter";
+import { moonshotServerAdapter } from "./server/ai/adapters/moonshotServerAdapter";
 import { providerRegistry } from "./server/ai/providerRegistry";
 
 function renderFallbackErrorHtml(): string {
@@ -237,6 +238,9 @@ async function handleAiServerRoutes(request: Request): Promise<Response | null> 
         return new Response(JSON.stringify(result), { status: 200, headers: jsonHeaders });
       } else if (provider === "openrouter") {
         const result = await openRouterServerAdapter.healthCheck();
+        return new Response(JSON.stringify(result), { status: 200, headers: jsonHeaders });
+      } else if (provider === "moonshot") {
+        const result = await moonshotServerAdapter.healthCheck();
         return new Response(JSON.stringify(result), { status: 200, headers: jsonHeaders });
       } else {
         return new Response(JSON.stringify({ error: "Unknown provider" }), {

@@ -9,21 +9,30 @@ import {
   Layers,
   ChevronRight,
   ArrowRight,
+  Clock,
+  ShieldCheck,
+  Activity,
+  Bot,
 } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageHeader, SectionCard } from "@/components/brahma/primitives";
 import { BrahmaLogo } from "@/components/brahma/logo";
+import { projectRegistry } from "@/services/project/projectRegistry";
+import { useActiveProject } from "@/hooks/useActiveProject";
+import { architectureDriftEngine } from "@/services/intelligence/driftEngine";
+import { realityMapService } from "@/services/discovery/realityMapService";
+import { authService } from "@/services/authService";
 
 export const Route = createFileRoute("/app/search")({
   head: () => ({
     meta: [
-      { title: "Search Results — PROJECT BRAHMA" },
+      { title: "Global Search — PROJECT BRAHMA" },
       {
         name: "description",
-        content: "Platform search utility finding items across requirements and codebase logs.",
+        content: "Platform search utility finding items across live requirements, projects, and architecture findings.",
       },
     ],
   }),
@@ -35,178 +44,171 @@ export const Route = createFileRoute("/app/search")({
   component: SearchResultsPage,
 });
 
+interface SearchItem {
+  category: string;
+  title: string;
+  subtitle: string;
+  href: string;
+  badge: string;
+  icon: React.ComponentType<{ className?: string }>;
+}
+
 function SearchResultsPage() {
   const { q } = Route.useSearch();
   const navigate = useNavigate();
+  const { project } = useActiveProject();
 
   const [query, setQuery] = useState(q);
   const [activeCategory, setActiveCategory] = useState("All");
+  const [startTime] = useState(performance.now());
+  const [executionTimeMs, setExecutionTimeMs] = useState(0);
 
-  const searchIndex = useMemo(() => {
-    return [
-      {
+  // Dynamic Grounded Search Index (E01-E05)
+  const searchIndex = useMemo<SearchItem[]>(() => {
+    const items: SearchItem[] = [];
+    const isDemo = authService.getCurrentSession()?.mode === "DEMO";
+
+    // 1. Live Projects from canonical registry
+    const liveProjects = projectRegistry.getAllProjects();
+    for (const proj of liveProjects) {
+      items.push({
         category: "Projects",
-        title: "Aurora Payments Gateway",
-        subtitle: "PCI-aware fintech payment orchestration system.",
-        href: "/app/projects/brahma-core",
-        badge: "brahma-core",
+        title: proj.name,
+        subtitle: proj.description || `Canonical Project ${proj.slug} (Health: ${proj.healthScore}%)`,
+        href: `/app/projects`,
+        badge: proj.slug || proj.id,
         icon: FolderKanban,
+      });
+    }
+
+    // 2. Live Architecture Drift Findings
+    const driftReport = architectureDriftEngine.evaluateDrift();
+    for (const finding of driftReport.findings) {
+      items.push({
+        category: "Drift",
+        title: `${finding.id}: ${finding.componentId} (${finding.deviationType})`,
+        subtitle: finding.description,
+        href: `/app/drift`,
+        badge: finding.severity,
+        icon: Layers,
+      });
+    }
+
+    // 3. Reality Map Entities for the active project
+    const snapshot = realityMapService.getProjectSnapshot(project?.id || "brahma-core");
+    for (const ent of snapshot.entities) {
+      items.push({
+        category: ent.type === "requirement" ? "Requirements" : ent.type === "test" ? "Tests" : "Components",
+        title: ent.name,
+        subtitle: `${ent.description} [${ent.sourcePath || "declared"}]`,
+        href: `/discover?tab=reality-map`,
+        badge: ent.status,
+        icon: ent.type === "requirement" ? Sparkles : ent.type === "test" ? ShieldCheck : Layers,
+      });
+    }
+
+    // 4. Canonical Platform Workspaces & Tools
+    items.push(
+      {
+        category: "Platform",
+        title: "12-Stage Forensic Pipeline",
+        subtitle: "Deep AST and security pipeline evaluation.",
+        href: "/app/analysis",
+        badge: "Analysis",
+        icon: Activity,
       },
       {
-        category: "Projects",
-        title: "MediSync Patient Portal",
-        subtitle: "Clinical appointment and laboratory report sync tool.",
-        href: "/app/projects/medisync",
-        badge: "medisync",
-        icon: FolderKanban,
+        category: "Platform",
+        title: "Release Gates & Twin",
+        subtitle: "21-Family gate verification, rehearsal, and reversible rollback.",
+        href: "/app/release",
+        badge: "Release",
+        icon: ShieldCheck,
       },
       {
-        category: "Projects",
-        title: "Smart Campus Portal",
-        subtitle: "University attendance and grades dashboard.",
-        href: "/app/projects/campusflow",
-        badge: "campusflow",
-        icon: FolderKanban,
-      },
-      {
-        category: "Requirements",
-        title: "FR-02 Retry settlements idempotently",
-        subtitle: "Must retry failed settlements with idempotency keys.",
-        href: "/app/projects/brahma-core/requirements",
-        badge: "brahma-core",
-        icon: Sparkles,
-      },
-      {
-        category: "Vulnerabilities",
-        title: "Hardcoded signing secret in auth module",
-        subtitle: "Critical JWT signature verification risk.",
-        href: "/app/projects/brahma-core/security",
-        badge: "brahma-core",
-        icon: ShieldAlert,
-      },
-      {
-        category: "Reports",
-        title: "Executive Summary — August PDF",
-        subtitle: "Executive blueprint summary ready.",
-        href: "/app/reports",
-        badge: "Global",
+        category: "Platform",
+        title: "Artifact & Export Center",
+        subtitle: "Download system blueprints, OpenAPI documentation, and audit records.",
+        href: "/app/exports",
+        badge: "Exports",
         icon: FileBarChart2,
       },
       {
-        category: "Members",
-        title: "Puli Phanindhra",
-        subtitle: "Full Stack Developer & Cybersecurity Researcher.",
-        href: "/app/team",
-        badge: "Editor",
-        icon: Users,
+        category: "Platform",
+        title: "ATHER Copilot & Cognitive Center",
+        subtitle: "Natural language dual-stream AI assistant.",
+        href: "/app/chat",
+        badge: "AI Core",
+        icon: Bot,
       },
-      {
-        category: "Templates",
-        title: "E-Commerce Gateway Blueprint",
-        subtitle: "Acquirer settlement & merchant panel stack.",
-        href: "/app/studio/templates",
-        badge: "Template",
-        icon: BrahmaLogo,
-      },
-      {
-        category: "Missions",
-        title: "MSN-SETTLE-01: Zero-Loss Settlement Verification",
-        subtitle: "Multi-step agentic mission verifying idempotent settlements.",
-        href: "/app/missions",
-        badge: "Mission",
-        icon: FolderKanban,
-      },
-      {
-        category: "Drift",
-        title: "DFT-01: Settlement Engine Missing from Repository AST",
-        subtitle: "Structural divergence between blueprint and observed source code.",
-        href: "/app/drift",
-        badge: "Drift",
-        icon: Layers,
-      },
-      {
-        category: "Impact",
-        title: "IMP-01: Direct & Transitive Blast Radius Analysis",
-        subtitle: "Blast radius computation for payment gateway changes.",
-        href: "/app/impact",
-        badge: "Impact",
-        icon: ShieldAlert,
-      },
-      {
-        category: "Decisions",
-        title: "ADR-001: SHA-256 HMAC for Webhook Signatures",
-        subtitle: "Cryptographically sealed architectural decision record.",
-        href: "/app/missions",
-        badge: "ADR",
-        icon: ShieldAlert,
-      },
-      {
-        category: "Simulation",
-        title: "SIM-01: 11 Concrete Anomaly Scenarios",
-        subtitle: "Interactive failure injection and deterministic reset lab.",
-        href: "/app/simulation",
-        badge: "Simulation",
-        icon: Sparkles,
-      },
-      {
-        category: "Datasets",
-        title: "IEEE-CIS Fraud & Transaction Drift Benchmark",
-        subtitle: "Kaggle benchmark partition with 12,480 live transactions.",
-        href: "/app/datasets",
-        badge: "Dataset",
-        icon: Layers,
-      },
-      {
-        category: "Plugins",
-        title: "Claude-Inspired Extensibility Plugins",
-        subtitle: "Manifest-governed plugins for analysis, GitHub, and reports.",
-        href: "/app/plugins",
-        badge: "Plugin",
-        icon: Layers,
-      },
-    ];
-  }, []);
+    );
 
+    // 5. Demo fixtures only if mode is explicitly DEMO
+    if (isDemo) {
+      items.push(
+        {
+          category: "Templates",
+          title: "E-Commerce Gateway Blueprint",
+          subtitle: "Acquirer settlement & merchant panel stack.",
+          href: "/app/studio/templates",
+          badge: "Demo Template",
+          icon: BrahmaLogo,
+        },
+        {
+          category: "Datasets",
+          title: "IEEE-CIS Fraud & Transaction Drift Benchmark",
+          subtitle: "Kaggle benchmark partition with 12,480 live transactions.",
+          href: "/app/datasets",
+          badge: "Demo Dataset",
+          icon: Layers,
+        },
+      );
+    }
+
+    return items;
+  }, [project?.id]);
+
+  // Filtered Results with latency measurement (E05, E08, E10)
   const results = useMemo(() => {
-    if (!q.trim()) return [];
+    const t0 = performance.now();
+    if (!q.trim()) {
+      setExecutionTimeMs(0);
+      return [];
+    }
     const lowerQuery = q.toLowerCase();
     const matches = searchIndex.filter(
       (item) =>
         item.title.toLowerCase().includes(lowerQuery) ||
         item.subtitle.toLowerCase().includes(lowerQuery) ||
-        item.category.toLowerCase().includes(lowerQuery),
+        item.category.toLowerCase().includes(lowerQuery) ||
+        item.badge.toLowerCase().includes(lowerQuery),
     );
-    if (activeCategory === "All") return matches;
-    return matches.filter((item) => item.category === activeCategory);
+    const finalMatches =
+      activeCategory === "All" ? matches : matches.filter((item) => item.category === activeCategory);
+
+    const t1 = performance.now();
+    setExecutionTimeMs(Math.round((t1 - t0) * 10) / 10);
+    return finalMatches;
   }, [q, activeCategory, searchIndex]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    navigate({ to: "/app/search", search: { q: query } });
+    (navigate as unknown as (opts: { to: string; search: { q: string } }) => void)({
+      to: "/app/search",
+      search: { q: query },
+    });
   };
 
-  const categories = [
-    "All",
-    "Projects",
-    "Missions",
-    "Drift",
-    "Impact",
-    "Decisions",
-    "Simulation",
-    "Datasets",
-    "Requirements",
-    "Vulnerabilities",
-    "Reports",
-    "Plugins",
-    "Members",
-    "Templates",
-  ];
+  const categories = useMemo(() => {
+    const set = new Set(searchIndex.map((i) => i.category));
+    return ["All", ...Array.from(set)];
+  }, [searchIndex]);
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Global Search"
-        description="Browse assets across all active workspaces and compliance records."
+        title="Global Discovery Search"
+        description="Search across authenticated projects, live architecture invariants, AST drift findings, and platform services."
       />
 
       <form onSubmit={handleSearchSubmit} className="flex gap-2 max-w-xl">
@@ -218,8 +220,8 @@ function SearchResultsPage() {
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type search parameters..."
-            className="pl-9 h-9 text-xs"
+            placeholder="Type keywords, entity IDs, or project names..."
+            className="pl-9 h-9 text-xs bg-background/50 border-border"
           />
         </div>
         <Button type="submit" size="sm" className="bg-primary text-primary-foreground text-xs h-9">
@@ -228,27 +230,34 @@ function SearchResultsPage() {
       </form>
 
       {q.trim() !== "" && (
-        <div className="flex flex-wrap gap-2">
-          {categories.map((cat) => (
-            <Button
-              key={cat}
-              variant={activeCategory === cat ? "default" : "outline"}
-              size="sm"
-              className="h-7 text-[10px] font-semibold"
-              onClick={() => setActiveCategory(cat)}
-            >
-              {cat}
-            </Button>
-          ))}
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap gap-1.5">
+            {categories.map((cat) => (
+              <Button
+                key={cat}
+                variant={activeCategory === cat ? "default" : "outline"}
+                size="sm"
+                className="h-7 text-[10px] font-semibold"
+                onClick={() => setActiveCategory(cat)}
+              >
+                {cat}
+              </Button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-mono">
+            <Clock className="size-3 text-primary" />
+            <span>Indexed in {executionTimeMs}ms</span>
+          </div>
         </div>
       )}
 
       <SectionCard
-        title={q.trim() === "" ? "Search results" : `Matches for "${q}"`}
+        title={q.trim() === "" ? "Search Results" : `Matches for "${q}"`}
         description={
           q.trim() === ""
-            ? "Enter a query above to lookup elements."
-            : `Found ${results.length} matching entries.`
+            ? "Enter a query above to lookup live workspace elements."
+            : `Found ${results.length} authenticated entries across ${searchIndex.length} total indexed resources.`
         }
       >
         {q.trim() === "" ? (
@@ -260,26 +269,25 @@ function SearchResultsPage() {
           <div className="p-16 text-center space-y-3">
             <Search className="size-10 text-muted-foreground/30 mx-auto" />
             <h4 className="text-xs font-semibold text-foreground">
-              No matches for &lsquo;{q}&rsquo;
+              No live matches for &lsquo;{q}&rsquo;
             </h4>
             <p className="text-[10px] text-muted-foreground max-w-xs mx-auto leading-relaxed">
-              Verify terms spelling, check category filters, or explore suggested platform sections
-              below.
+              Zero-Fiction Law: No synthetic results are fabricated. Check your spelling or active category filters.
             </p>
             <div className="flex justify-center gap-2 pt-2">
               <Button size="sm" variant="outline" className="text-[10px]" asChild>
                 <Link to="/app">Dashboard</Link>
               </Button>
               <Button size="sm" variant="outline" className="text-[10px]" asChild>
-                <Link to="/app/studio">AI Studio</Link>
+                <Link to="/discover">Reality Map</Link>
               </Button>
             </div>
           </div>
         ) : (
           <div className="divide-y divide-border/60">
-            {results.map((item) => (
+            {results.map((item, idx) => (
               <Link
-                key={item.title}
+                key={`${item.title}-${idx}`}
                 to={item.href as never}
                 className="py-4 flex items-center justify-between gap-4 group hover:bg-secondary/[0.04] transition-colors rounded-lg px-2 -mx-2"
               >

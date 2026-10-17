@@ -192,7 +192,7 @@ export const NAV_DOMAINS: NavDomain[] = [
     label: "RELEASE",
     icon: ShieldCheck,
     items: [
-      { to: "/app/missions", label: "Release Gates & Twin", icon: ShieldCheck, exact: false },
+      { to: "/app/release", label: "Release Gates & Twin", icon: ShieldCheck, exact: false },
       { to: "/app/exports", label: "Artifact & Export Center", icon: Download, exact: true },
     ],
   },

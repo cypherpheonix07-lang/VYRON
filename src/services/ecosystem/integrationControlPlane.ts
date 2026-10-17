@@ -117,9 +117,14 @@ export class EcosystemControlPlane {
 
   async autoEnrollRepository(fullName: string): Promise<EnrolledRepositoryEntity> {
     const [owner, name] = fullName.split("/");
+    // Deterministic repo ID derived strictly from repository full name
+    const deterministicId = Math.abs(
+      fullName.split("").reduce((acc, c) => ((acc << 5) - acc) + c.charCodeAt(0), 5381)
+    );
+
     const repo: EnrolledRepositoryEntity = {
       id: `repo-${fullName}`,
-      githubRepoId: Math.floor(Math.random() * 900000 + 100000),
+      githubRepoId: deterministicId,
       owner: owner || "cypherpheonix07-lang",
       name: name || "new-repo",
       fullName,
@@ -134,10 +139,10 @@ export class EcosystemControlPlane {
       starsCount: 0,
       forksCount: 0,
       openIssuesCount: 0,
-      healthScore: 96,
+      healthScore: 0, // Unassessed until verified by first AST & security scan
       enrollmentStatus: "ENROLLED",
       connectedVibePlatforms: ["github"],
-      freshness: "LIVE",
+      freshness: "SYNCED",
       lastEventAt: new Date().toISOString(),
       lastReconciledAt: new Date().toISOString(),
       astDriftScore: 0,

@@ -2,18 +2,19 @@
  * PROJECT BRAHMA — ARCHITECTURE DRIFT ENGINE
  * Detects structural divergence between intended architectural blueprints and
  * actual repository implementations (AST, OpenAPI contracts, dependencies).
- * Strictly ZERO SQL.
+ * Strictly ZERO SQL. Grounded to Canonical Project Scope.
  */
 
 import { generateVerificationHash } from "../ai/cryptoUtils.ts";
+import { projectRegistry } from "../project/projectRegistry.ts";
 
 export type DriftType =
-  | "MISSING_COMPONENT"
-  | "UNEXPECTED_COMPONENT"
-  | "UNAUTHORIZED_DEPENDENCY"
   | "BOUNDARY_VIOLATION"
-  | "CIRCULAR_DEPENDENCY"
   | "REQUIREMENT_ORPHAN"
+  | "UNEXPECTED_COMPONENT"
+  | "MISSING_COMPONENT"
+  | "UNAUTHORIZED_DEPENDENCY"
+  | "CIRCULAR_DEPENDENCY"
   | "API_CONTRACT_DRIFT";
 
 export type DriftSeverity = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
@@ -30,6 +31,7 @@ export interface DriftFinding {
   confidence: number; // 0 to 1
   remediation: string;
   detectedAt: string;
+  projectId?: string;
 }
 
 export interface ArchitectureSnapshot {
@@ -45,8 +47,8 @@ export interface ArchitectureSnapshot {
 
 export class ArchitectureDriftEngine {
   private static instance: ArchitectureDriftEngine | null = null;
-  private snapshots: ArchitectureSnapshot[] = [];
-  private currentFindings: DriftFinding[] = [];
+  private snapshotsByProject: Map<string, ArchitectureSnapshot[]> = new Map();
+  private findingsByProject: Map<string, DriftFinding[]> = new Map();
 
   private constructor() {
     this.seedBaselineDrift();
@@ -60,9 +62,10 @@ export class ArchitectureDriftEngine {
   }
 
   /**
-   * Compares declared blueprint architecture against observed repository AST.
+   * Compares declared blueprint architecture against observed repository AST
+   * for the given canonical project.
    */
-  public evaluateDrift(projectId = "proj-brahma"): {
+  public evaluateDrift(projectId?: string): {
     findings: DriftFinding[];
     summary: {
       criticalCount: number;
@@ -72,7 +75,18 @@ export class ArchitectureDriftEngine {
       overallDriftScore: number;
     };
   } {
-    const findings = [...this.currentFindings];
+    const activeId = projectId || projectRegistry.getActiveProject()?.id || "brahma-core";
+
+    // Retrieve findings scoped to project or baseline for seed projects
+    let findings = this.findingsByProject.get(activeId);
+    if (!findings) {
+      if (activeId === "brahma-core" || activeId === "proj-brahma") {
+        findings = this.findingsByProject.get("brahma-core") || [];
+      } else {
+        findings = [];
+      }
+    }
+
     const criticalCount = findings.filter((f) => f.severity === "CRITICAL").length;
     const highCount = findings.filter((f) => f.severity === "HIGH").length;
     const mediumCount = findings.filter((f) => f.severity === "MEDIUM").length;
@@ -85,7 +99,7 @@ export class ArchitectureDriftEngine {
     );
 
     return {
-      findings,
+      findings: [...findings],
       summary: {
         criticalCount,
         highCount,
@@ -96,17 +110,18 @@ export class ArchitectureDriftEngine {
     };
   }
 
-  public takeSnapshot(projectId = "proj-brahma", blueprintVersion = "2.4.0"): ArchitectureSnapshot {
-    const evaluation = this.evaluateDrift(projectId);
+  public takeSnapshot(projectId?: string, blueprintVersion = "2.4.0"): ArchitectureSnapshot {
+    const targetProject = projectId || projectRegistry.getActiveProject()?.id || "brahma-core";
+    const evaluation = this.evaluateDrift(targetProject);
     const now = new Date().toISOString();
     const snapId = `drift_snap_${Date.now()}`;
     const hash = generateVerificationHash(
-      `${snapId}:${projectId}:${evaluation.summary.overallDriftScore}`,
+      `${snapId}:${targetProject}:${evaluation.summary.overallDriftScore}`,
     );
 
     const snapshot: ArchitectureSnapshot = {
       id: snapId,
-      projectId,
+      projectId: targetProject,
       timestamp: now,
       blueprintVersion,
       totalServices: 6,
@@ -115,28 +130,43 @@ export class ArchitectureDriftEngine {
       verificationHash: hash,
     };
 
-    this.snapshots.unshift(snapshot);
-    if (this.snapshots.length > 20) this.snapshots.pop();
+    const projectSnaps = this.snapshotsByProject.get(targetProject) || [];
+    projectSnaps.unshift(snapshot);
+    if (projectSnaps.length > 20) projectSnaps.pop();
+    this.snapshotsByProject.set(targetProject, projectSnaps);
+
     return snapshot;
   }
 
-  public getSnapshots(): ArchitectureSnapshot[] {
-    return [...this.snapshots];
+  public getSnapshots(projectId?: string): ArchitectureSnapshot[] {
+    const targetProject = projectId || projectRegistry.getActiveProject()?.id || "brahma-core";
+    return [...(this.snapshotsByProject.get(targetProject) || [])];
   }
 
-  public resolveDriftFinding(findingId: string): boolean {
-    const initialLen = this.currentFindings.length;
-    this.currentFindings = this.currentFindings.filter((f) => f.id !== findingId);
-    return this.currentFindings.length < initialLen;
+  public resolveDriftFinding(findingId: string, projectId?: string): boolean {
+    const targetProject = projectId || projectRegistry.getActiveProject()?.id || "brahma-core";
+    const current = this.findingsByProject.get(targetProject) || [];
+    const initialLen = current.length;
+    const filtered = current.filter((f) => f.id !== findingId);
+    this.findingsByProject.set(targetProject, filtered);
+    return filtered.length < initialLen;
   }
 
-  public injectSimulatedDrift(finding: Omit<DriftFinding, "id" | "detectedAt">): DriftFinding {
+  public injectSimulatedDrift(
+    finding: Omit<DriftFinding, "id" | "detectedAt">,
+    projectId?: string,
+  ): DriftFinding {
+    const targetProject = projectId || projectRegistry.getActiveProject()?.id || "brahma-core";
     const fullFinding: DriftFinding = {
       ...finding,
       id: `drift_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`,
       detectedAt: new Date().toISOString(),
+      projectId: targetProject,
     };
-    this.currentFindings.unshift(fullFinding);
+
+    const current = this.findingsByProject.get(targetProject) || [];
+    current.unshift(fullFinding);
+    this.findingsByProject.set(targetProject, current);
     return fullFinding;
   }
 
@@ -145,7 +175,7 @@ export class ArchitectureDriftEngine {
   }
 
   private seedBaselineDrift(): void {
-    this.currentFindings = [
+    const baselineFindings: DriftFinding[] = [
       {
         id: "drift-01",
         type: "BOUNDARY_VIOLATION",
@@ -158,6 +188,7 @@ export class ArchitectureDriftEngine {
         confidence: 0.96,
         remediation: "Refactor billing query builder to use typed repository interfaces.",
         detectedAt: new Date().toISOString(),
+        projectId: "brahma-core",
       },
       {
         id: "drift-02",
@@ -171,6 +202,7 @@ export class ArchitectureDriftEngine {
         confidence: 0.89,
         remediation: "Implement Redis-backed idempotency filter and link to FR-02 test suite.",
         detectedAt: new Date().toISOString(),
+        projectId: "brahma-core",
       },
       {
         id: "drift-03",
@@ -185,11 +217,15 @@ export class ArchitectureDriftEngine {
         confidence: 0.94,
         remediation: "Add legacy export service to blueprint or decommission unused container.",
         detectedAt: new Date().toISOString(),
+        projectId: "brahma-core",
       },
     ];
 
+    this.findingsByProject.set("brahma-core", baselineFindings);
+    this.findingsByProject.set("proj-brahma", baselineFindings);
+
     // Seed initial historical snapshot
-    this.takeSnapshot("proj-brahma", "2.3.9");
+    this.takeSnapshot("brahma-core", "2.3.9");
   }
 }
 

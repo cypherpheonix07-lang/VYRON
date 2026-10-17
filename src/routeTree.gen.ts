@@ -45,6 +45,7 @@ import { Route as AppNotificationsRouteImport } from './routes/app.notifications
 import { Route as AppPluginsRouteImport } from './routes/app.plugins'
 import { Route as AppPreviewRouteImport } from './routes/app.preview'
 import { Route as AppProfileRouteImport } from './routes/app.profile'
+import { Route as AppReleaseRouteImport } from './routes/app.release'
 import { Route as AppReportsRouteImport } from './routes/app.reports'
 import { Route as AppSearchRouteImport } from './routes/app.search'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
@@ -292,6 +293,11 @@ const AppPreviewRoute = AppPreviewRouteImport.update({
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppReleaseRoute = AppReleaseRouteImport.update({
+  id: '/release',
+  path: '/release',
   getParentRoute: () => AppRoute,
 } as any)
 const AppReportsRoute = AppReportsRouteImport.update({
@@ -675,6 +681,7 @@ export interface FileRoutesByFullPath {
   '/app/plugins': typeof AppPluginsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/release': typeof AppReleaseRoute
   '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
@@ -779,6 +786,7 @@ export interface FileRoutesByTo {
   '/app/plugins': typeof AppPluginsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/release': typeof AppReleaseRoute
   '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
@@ -884,6 +892,7 @@ export interface FileRoutesById {
   '/app/plugins': typeof AppPluginsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/release': typeof AppReleaseRoute
   '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
   '/app/settings': typeof AppSettingsRoute
@@ -992,6 +1001,7 @@ export interface FileRouteTypes {
     | '/app/plugins'
     | '/app/preview'
     | '/app/profile'
+    | '/app/release'
     | '/app/reports'
     | '/app/search'
     | '/app/settings'
@@ -1096,6 +1106,7 @@ export interface FileRouteTypes {
     | '/app/plugins'
     | '/app/preview'
     | '/app/profile'
+    | '/app/release'
     | '/app/reports'
     | '/app/search'
     | '/app/settings'
@@ -1200,6 +1211,7 @@ export interface FileRouteTypes {
     | '/app/plugins'
     | '/app/preview'
     | '/app/profile'
+    | '/app/release'
     | '/app/reports'
     | '/app/search'
     | '/app/settings'
@@ -1543,6 +1555,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/app/profile'
       preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/release': {
+      id: '/app/release'
+      path: '/release'
+      fullPath: '/app/release'
+      preLoaderRoute: typeof AppReleaseRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/reports': {
@@ -2200,6 +2219,7 @@ interface AppRouteChildren {
   AppPluginsRoute: typeof AppPluginsRoute
   AppPreviewRoute: typeof AppPreviewRoute
   AppProfileRoute: typeof AppProfileRoute
+  AppReleaseRoute: typeof AppReleaseRoute
   AppReportsRoute: typeof AppReportsRouteWithChildren
   AppSearchRoute: typeof AppSearchRoute
   AppSettingsRoute: typeof AppSettingsRoute
@@ -2238,6 +2258,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppPluginsRoute: AppPluginsRoute,
   AppPreviewRoute: AppPreviewRoute,
   AppProfileRoute: AppProfileRoute,
+  AppReleaseRoute: AppReleaseRoute,
   AppReportsRoute: AppReportsRouteWithChildren,
   AppSearchRoute: AppSearchRoute,
   AppSettingsRoute: AppSettingsRoute,

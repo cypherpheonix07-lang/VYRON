@@ -9,6 +9,7 @@ import { IAIProvider, ProviderCapabilities } from "./providers/types";
 import { openRouterServerAdapter } from "./adapters/openRouterServerAdapter";
 import { openAiServerAdapter } from "./adapters/openAiServerAdapter";
 import { deterministicServerAdapter } from "./adapters/deterministicServerAdapter";
+import { moonshotServerAdapter } from "./adapters/moonshotServerAdapter";
 
 export class ProviderRegistry {
   private static instance: ProviderRegistry | null = null;
@@ -18,6 +19,7 @@ export class ProviderRegistry {
     this.register(openRouterServerAdapter as unknown as IAIProvider);
     this.register(openAiServerAdapter as unknown as IAIProvider);
     this.register(deterministicServerAdapter as unknown as IAIProvider);
+    this.register(moonshotServerAdapter as unknown as IAIProvider);
   }
 
   public static getInstance(): ProviderRegistry {

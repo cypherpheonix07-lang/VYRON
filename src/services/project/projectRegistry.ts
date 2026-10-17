@@ -204,26 +204,41 @@ class ProjectRegistry {
       domain: payload.domain || "Software Engineering",
       status: payload.status || "Draft",
       origin: payload.origin || "native",
-      healthScore: payload.healthScore ?? 85,
-      securityScore: payload.securityScore ?? 80,
-      businessImpactScore: payload.businessImpactScore ?? 75,
-      requirementClarity: payload.requirementClarity ?? 70,
+      healthScore: payload.healthScore ?? 0,
+      securityScore: payload.securityScore ?? 0,
+      businessImpactScore: payload.businessImpactScore ?? 0,
+      requirementClarity: payload.requirementClarity ?? 0,
       deliveryRisk: payload.deliveryRisk || "Low",
-      riskScore: payload.riskScore ?? 15,
+      riskScore: payload.riskScore ?? 0,
       repoConnected: !!payload.repo_full_name,
       repoUrl: payload.repoUrl ?? (payload.repo_full_name ? `github.com/${payload.repo_full_name}` : undefined),
       repo_full_name: payload.repo_full_name ?? null,
       default_branch: payload.default_branch ?? "main",
-      teamSize: payload.teamSize ?? 4,
+      teamSize: payload.teamSize ?? 1,
       deadline: payload.deadline ?? new Date(Date.now() + 86400000 * 30).toISOString().split("T")[0] ?? "2026-12-31",
       lastUpdated: new Date().toISOString(),
       lastAnalysis: new Date().toISOString(),
       created_at: payload.created_at ?? new Date().toISOString(),
       owner_id: payload.owner_id,
-      health_score: payload.healthScore ?? 85,
+      health_score: payload.healthScore ?? 0,
     };
 
     return this.registerProject(newProject);
+  }
+
+  public clearUserScope(): void {
+    this.bumpGeneration();
+    this.activeProjectId = null;
+    this.localProjects.clear();
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem(ACTIVE_PROJECT_KEY);
+        localStorage.removeItem(LOCAL_STORAGE_PROJECTS_KEY);
+      } catch {
+        // ignore
+      }
+    }
+    this.notifyListeners(null);
   }
 
   public updateProject(id: string, updates: Partial<CanonicalProject>): CanonicalProject | null {
@@ -329,3 +344,4 @@ class ProjectRegistry {
 }
 
 export const projectRegistry = ProjectRegistry.getInstance();
+export { useActiveProject } from "@/hooks/useActiveProject";

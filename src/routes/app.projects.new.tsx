@@ -101,9 +101,9 @@ function NewProjectPage() {
 
     try {
       const userRes = await authService.getUser();
-      const userId = userRes.data?.id || "4666a9f0-f28d-4845-9a21-9b9210b18af9"; // Fallback to demo admin
+      const userId = userRes.data?.id || (typeof window !== "undefined" ? authService.getStoredSession()?.user?.id : null) || null;
 
-      // Prepare complete database upsert row
+      // Prepare complete database upsert row with unassessed initial baseline (Zero-Fiction)
       const projectRow = {
         owner_id: userId,
         name: payload.name,
@@ -131,7 +131,7 @@ function NewProjectPage() {
         budget_cap_usd: payload.budget_cap_usd,
         milestone: payload.milestone,
         cadence: payload.cadence,
-        health_score: 95,
+        health_score: 0,
         status: "draft",
         wizard_step: 0,
         draft_state: null, // clear draft state
@@ -155,7 +155,7 @@ function NewProjectPage() {
             owner_id: userId,
             name: payload.name,
             description: payload.description,
-            health_score: 95,
+            health_score: 0,
             status: "draft",
           };
 
@@ -207,7 +207,7 @@ function NewProjectPage() {
       status: "Draft",
       origin: payload.repo_full_name ? "github" : "native",
       repo_full_name: payload.repo_full_name,
-      healthScore: 95,
+      healthScore: 0,
       deliveryRisk: "Low",
     });
 

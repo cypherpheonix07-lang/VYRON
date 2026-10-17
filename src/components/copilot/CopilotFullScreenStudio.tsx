@@ -138,7 +138,9 @@ export function CopilotFullScreenStudio() {
   const [isContextLensOpen, setIsContextLensOpen] = useState(false);
   const [isTimeMachineOpen, setIsTimeMachineOpen] = useState(false);
   const [selectedPassport, setSelectedPassport] = useState<any>(null);
-  const [attachments, setAttachments] = useState<Array<{ name: string; content: string; type?: string }>>([]);
+  const [attachments, setAttachments] = useState<
+    Array<{ name: string; content: string; type?: string }>
+  >([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -176,7 +178,10 @@ export function CopilotFullScreenStudio() {
       const reader = new FileReader();
       reader.onload = (event) => {
         const content = event.target?.result as string;
-        setAttachments((prev) => [...prev, { name: file.name, content, type: file.type || "text/plain" }]);
+        setAttachments((prev) => [
+          ...prev,
+          { name: file.name, content, type: file.type || "text/plain" },
+        ]);
         toast.success(`Attached document: ${file.name}`);
       };
       reader.readAsText(file);
@@ -716,7 +721,9 @@ export function CopilotFullScreenStudio() {
             <div className="flex items-center gap-1.5">
               <span className="font-bold text-foreground">VYRON</span>
               <span>·</span>
-              <span className="text-primary font-semibold">{liveContext?.project?.name || "Active Project"}</span>
+              <span className="text-primary font-semibold">
+                {liveContext?.project?.name || "Active Project"}
+              </span>
               <span>·</span>
               <span>Finding SEC-014 (Active Lens)</span>
             </div>
@@ -923,8 +930,8 @@ export function CopilotFullScreenStudio() {
                   className={cn(
                     "px-2.5 py-0.5 rounded-md text-[10px] font-bold transition-colors cursor-pointer",
                     (m === "Ask" && studioMode === "CHAT") ||
-                    (m === "Plan" && studioMode === "MISSION") ||
-                    (m === "Act" && studioMode === "SIMULATION")
+                      (m === "Plan" && studioMode === "MISSION") ||
+                      (m === "Act" && studioMode === "SIMULATION")
                       ? "bg-primary text-primary-foreground shadow-sm"
                       : "bg-secondary/60 hover:bg-secondary text-muted-foreground hover:text-foreground border border-border/40",
                   )}
@@ -961,10 +968,7 @@ export function CopilotFullScreenStudio() {
           )}
 
           {/* Input Box */}
-          <form
-            onSubmit={handleSend}
-            className="p-3 pt-1.5 bg-card/70 flex items-center gap-2"
-          >
+          <form onSubmit={handleSend} className="p-3 pt-1.5 bg-card/70 flex items-center gap-2">
             <input
               type="file"
               ref={fileInputRef}
