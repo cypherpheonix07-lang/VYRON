@@ -229,16 +229,18 @@ export const activityService = {
    * Fetch project pulse metrics using SQL RPC project_pulse.
    */
   async getProjectPulse(projectId: string): Promise<ProjectPulse> {
-    try {
-      const { data, error } = await supabase.rpc("project_pulse", {
-        p_project_id: projectId,
-      });
+    if (import.meta.env["VITE_ENABLE_REMOTE_PULSE_RPC"] === "true") {
+      try {
+        const { data, error } = await supabase.rpc("project_pulse", {
+          p_project_id: projectId,
+        });
 
-      if (!error && data) {
-        return data as ProjectPulse;
+        if (!error && data) {
+          return data as ProjectPulse;
+        }
+      } catch {
+        // fallback
       }
-    } catch {
-      // fallback
     }
 
     // Deterministic arithmetic fallback matching Postgres formula
@@ -262,13 +264,15 @@ export const activityService = {
    * Fetch global workspace pulse using SQL RPC workspace_pulse.
    */
   async getWorkspacePulse(): Promise<WorkspacePulse> {
-    try {
-      const { data, error } = await supabase.rpc("workspace_pulse");
-      if (!error && data) {
-        return data as WorkspacePulse;
+    if (import.meta.env["VITE_ENABLE_REMOTE_PULSE_RPC"] === "true") {
+      try {
+        const { data, error } = await supabase.rpc("workspace_pulse");
+        if (!error && data) {
+          return data as WorkspacePulse;
+        }
+      } catch {
+        // fallback
       }
-    } catch {
-      // fallback
     }
 
     return {
@@ -347,4 +351,101 @@ export const activityService = {
       generated_at: new Date().toISOString(),
     };
   },
+
+  _isRpcSupported: null as boolean | null,
+
+  recordFallbackEvent(params: EmitActivityParams) {
+    const newEvent: ActivityEvent = {
+      id: `act-ev-local-${Date.now()}`,
+      project_id: params.projectId || null,
+      project_name: params.projectId ? "Active Project" : "Workspace Gateway",
+      actor_id: params.actorId || null,
+      actor_name: params.actorName || "System Operator",
+      event_type: params.eventType as ActivityEvent["event_type"],
+      severity: params.severity || "info",
+      title: params.title,
+      description: params.description || "",
+      payload: params.payload || {},
+      provenance_sha: params.provenanceSha || null,
+      created_at: new Date().toISOString(),
+    };
+    INITIAL_FALLBACK_EVENTS.unshift(newEvent);
+  },
+
+  /**
+   * Safely emit an activity event with circuit-breaker protection.
+   * If the remote RPC is unavailable, gracefully buffers to in-memory fallback
+   * without triggering repetitive 404 network errors in the browser console.
+   */
+  async emitActivity(params: EmitActivityParams): Promise<string | null> {
+    const isRemoteRpcEnabled = import.meta.env["VITE_ENABLE_REMOTE_ACTIVITY_RPC"] === "true";
+
+    if (!isRemoteRpcEnabled) {
+      this.recordFallbackEvent(params);
+      return null;
+    }
+
+    if (typeof window !== "undefined" && this._isRpcSupported === null) {
+      const cached = sessionStorage.getItem("vyron_rpc_emit_activity_event");
+      if (cached === "unsupported") this._isRpcSupported = false;
+      else if (cached === "supported") this._isRpcSupported = true;
+    }
+
+    if (this._isRpcSupported === false) {
+      this.recordFallbackEvent(params);
+      return null;
+    }
+
+    try {
+      const isUuid =
+        Boolean(params.projectId) &&
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(params.projectId!);
+
+      const { data, error } = await supabase.rpc("emit_activity_event", {
+        p_project_id: isUuid ? params.projectId : null,
+        p_actor_id: params.actorId || null,
+        p_actor_name: params.actorName || "System Operator",
+        p_event_type: params.eventType,
+        p_severity: params.severity || "info",
+        p_title: params.title,
+        p_description: params.description || "",
+        p_payload: params.payload || {},
+        p_provenance_sha: params.provenanceSha || null,
+      });
+
+      if (error) {
+        this._isRpcSupported = false;
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem("vyron_rpc_emit_activity_event", "unsupported");
+        }
+        this.recordFallbackEvent(params);
+        return null;
+      }
+
+      this._isRpcSupported = true;
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("vyron_rpc_emit_activity_event", "supported");
+      }
+      return data as string;
+    } catch {
+      this._isRpcSupported = false;
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("vyron_rpc_emit_activity_event", "unsupported");
+      }
+      this.recordFallbackEvent(params);
+      return null;
+    }
+  },
 };
+
+export interface EmitActivityParams {
+  projectId?: string | null | undefined;
+  actorId?: string | null | undefined;
+  actorName?: string | undefined;
+  eventType: string;
+  severity?: "info" | "low" | "medium" | "high" | "critical" | undefined;
+  title: string;
+  description?: string | undefined;
+  payload?: Record<string, unknown> | undefined;
+  provenanceSha?: string | null | undefined;
+}

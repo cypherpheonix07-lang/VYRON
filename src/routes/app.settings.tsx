@@ -149,7 +149,9 @@ function SettingsPage() {
   const [deleting, setDeleting] = useState(false);
 
   // Circuit breaker state for optional user_settings table/RPC
-  const [isDbPrefsSupported, setIsDbPrefsSupported] = useState<boolean>(true);
+  const [isDbPrefsSupported, setIsDbPrefsSupported] = useState<boolean>(
+    () => import.meta.env["VITE_ENABLE_REMOTE_USER_SETTINGS"] === "true",
+  );
 
   // Load User Preferences from LocalStorage & DB
   useEffect(() => {

@@ -74,11 +74,13 @@ export async function ensureProfile(
 ): Promise<void> {
   if (authService.isDemoMode()) return;
 
-  try {
-    const { error: rpcError } = await supabase.rpc("ensure_profile");
-    if (!rpcError) return;
-  } catch {
-    // RPC may not exist in database yet, proceed to direct check
+  if (import.meta.env["VITE_ENABLE_REMOTE_PROFILE_RPC"] === "true") {
+    try {
+      const { error: rpcError } = await supabase.rpc("ensure_profile");
+      if (!rpcError) return;
+    } catch {
+      // RPC may not exist in database yet, proceed to direct check
+    }
   }
 
   try {

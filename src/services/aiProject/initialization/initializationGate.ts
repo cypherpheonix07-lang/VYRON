@@ -6,6 +6,7 @@
 
 import { supabase } from "../../../lib/supabaseClient.ts";
 import { authService } from "../../authService.ts";
+import { activityService } from "../../activityService.ts";
 import type { ProjectEngineeringState } from "../../../types/aiProjectControlPlane.ts";
 import { copilotMemory } from "../../copilot/copilotMemory.ts";
 
@@ -154,24 +155,23 @@ export class InitializationGate {
         createdProjectId = fallbackProj.id;
       }
 
-      // 2. Log Telemetry to activity_events via emit_activity_event RPC
+      // 2. Log Telemetry via activityService with circuit breaker
       try {
-        const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(createdProjectId);
-        await supabase.rpc("emit_activity_event", {
-          p_project_id: isUuid ? createdProjectId : null,
-          p_actor_id: userId,
-          p_actor_name: userRes.data?.email ? userRes.data.email.split("@")[0] : "System Architect",
-          p_event_type: "integration_connect",
-          p_severity: "info",
-          p_title: "AI Project Control Plane Initialized",
-          p_description: `Project "${state.name}" provisioned from canonical blueprint v${state.version} with 14 verified engineering stages.`,
-          p_payload: {
+        await activityService.emitActivity({
+          projectId: createdProjectId,
+          actorId: userId,
+          actorName: userRes.data?.email ? userRes.data.email.split("@")[0] : "System Architect",
+          eventType: "integration_connect",
+          severity: "info",
+          title: "AI Project Control Plane Initialized",
+          description: `Project "${state.name}" provisioned from canonical blueprint v${state.version} with 14 verified engineering stages.`,
+          payload: {
             blueprintSha256: state.blueprint?.sha256,
             requirementsCount: state.requirements.length,
             architecture: state.architecture.selectedAlternativeId,
             timestamp: new Date().toISOString(),
           },
-          p_provenance_sha: null,
+          provenanceSha: null,
         });
       } catch {
         // Best-effort telemetry

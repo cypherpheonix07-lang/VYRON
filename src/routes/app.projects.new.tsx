@@ -16,6 +16,7 @@ import { ProjectControlPlaneShell } from "@/components/projectControlPlane/Proje
 import { Button } from "@/components/ui/button";
 import { ProjectLifecycleStage } from "@/types/aiProjectControlPlane";
 import { projectRegistry } from "@/services/project/projectRegistry";
+import { activityService } from "@/services/activityService";
 
 interface NewProjectSearch {
   stage?: ProjectLifecycleStage | undefined;
@@ -210,19 +211,18 @@ function NewProjectPage() {
       deliveryRisk: "Low",
     });
 
-    // 4.3 Write Telemetry Event to activity_events via emit_activity_event RPC
+    // 4.3 Write Telemetry Event via activityService with circuit-breaker protection
     try {
       const userRes = await authService.getUser();
-      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(projectId);
-      await supabase.rpc("emit_activity_event", {
-        p_project_id: isUuid ? projectId : null,
-        p_actor_id: userRes.data?.id || null,
-        p_actor_name: userRes.data?.email ? userRes.data.email.split("@")[0] : "System Operator",
-        p_event_type: "integration_connect",
-        p_severity: "info",
-        p_title: "Project Generated via Wizard v2",
-        p_description: `Project "${payload.name}" provisioned across ${payload.platforms.join(", ")} with ${payload.gate_strictness} release gate strictness.`,
-        p_payload: {
+      await activityService.emitActivity({
+        projectId,
+        actorId: userRes.data?.id || null,
+        actorName: userRes.data?.email ? userRes.data.email.split("@")[0] : "System Operator",
+        eventType: "integration_connect",
+        severity: "info",
+        title: "Project Generated via Wizard v2",
+        description: `Project "${payload.name}" provisioned across ${payload.platforms.join(", ")} with ${payload.gate_strictness} release gate strictness.`,
+        payload: {
           project_id: projectId,
           name: payload.name,
           domain: payload.domain,
@@ -231,7 +231,7 @@ function NewProjectPage() {
           target_users_count: payload.target_users.length,
           timestamp: new Date().toISOString(),
         },
-        p_provenance_sha: null,
+        provenanceSha: null,
       });
     } catch {
       // Telemetry best-effort

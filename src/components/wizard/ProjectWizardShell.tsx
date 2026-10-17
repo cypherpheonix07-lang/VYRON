@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
+import { activityService } from "@/services/activityService";
 import type { WizardPayload, DraftState } from "@/types/wizard";
 import { validateStep } from "@/lib/wizardSchemas";
 import { Step1Identity } from "./Step1Identity";
@@ -235,18 +236,18 @@ export const ProjectWizardShell: React.FC<WizardShellProps> = ({
           .eq("owner_id", userSession.session.user.id)
           .eq("status", "draft");
 
-        // Write telemetry event via emit_activity_event RPC
+        // Write telemetry event via activityService with circuit breaker
         try {
-          await supabase.rpc("emit_activity_event", {
-            p_project_id: null,
-            p_actor_id: userSession.session.user.id,
-            p_actor_name: "System Operator",
-            p_event_type: "publish_attempt",
-            p_severity: "info",
-            p_title: "Wizard Draft Discarded",
-            p_description: "Operator discarded in-progress project creation wizard draft.",
-            p_payload: { timestamp: new Date().toISOString() },
-            p_provenance_sha: null,
+          await activityService.emitActivity({
+            projectId: null,
+            actorId: userSession.session.user.id,
+            actorName: "System Operator",
+            eventType: "publish_attempt",
+            severity: "info",
+            title: "Wizard Draft Discarded",
+            description: "Operator discarded in-progress project creation wizard draft.",
+            payload: { timestamp: new Date().toISOString() },
+            provenanceSha: null,
           });
         } catch {
           // ignore telemetry failure

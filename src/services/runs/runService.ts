@@ -14,6 +14,7 @@ import {
   type OperationDefinition,
 } from "./operationRegistry";
 import { projectRegistry } from "@/services/project/projectRegistry";
+import { activityService } from "@/services/activityService";
 
 export type RunStatus =
   | "queued"
@@ -354,26 +355,23 @@ class RunService {
     this.saveToStorage();
     this.notify(finalRun);
 
-    // Best-effort Telemetry persistence to activity_events via emit_activity_event RPC
+    // Protected Telemetry persistence with circuit breaker to avoid 404 console errors
     try {
-      const isUuid =
-        Boolean(finalRun.projectId) &&
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(finalRun.projectId);
-      await supabase.rpc("emit_activity_event", {
-        p_project_id: isUuid ? finalRun.projectId : null,
-        p_actor_id: null,
-        p_actor_name: "VYRON Engine Runner",
-        p_event_type: "scan_completion",
-        p_severity: "info",
-        p_title: `Run Succeeded: ${finalRun.operationName}`,
-        p_description: `Run ${finalRun.runId} completed with verification hash ${verificationHash.slice(0, 16)}...`,
-        p_payload: {
+      await activityService.emitActivity({
+        projectId: finalRun.projectId,
+        actorId: null,
+        actorName: "VYRON Engine Runner",
+        eventType: "scan_completion",
+        severity: "info",
+        title: `Run Succeeded: ${finalRun.operationName}`,
+        description: `Run ${finalRun.runId} completed with verification hash ${verificationHash.slice(0, 16)}...`,
+        payload: {
           runId: finalRun.runId,
           operationType: finalRun.operationType,
           durationMs,
           verificationHash,
         },
-        p_provenance_sha: verificationHash && verificationHash.length === 64 ? verificationHash : null,
+        provenanceSha: verificationHash && verificationHash.length === 64 ? verificationHash : null,
       });
     } catch {
       // Telemetry best-effort
