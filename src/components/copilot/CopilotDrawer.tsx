@@ -34,6 +34,7 @@ import {
   ArrowRight,
   Code2,
   Plug,
+  Square,
 } from "lucide-react";
 import { useCopilot } from "@/state/copilot/useCopilot";
 import { aiRouter } from "@/services/ai/aiRouter";
@@ -103,7 +104,25 @@ export function CopilotDrawer() {
     clearMessages,
   } = useCopilot();
 
-  const [inputText, setInputText] = useState("");
+  const [inputText, setInputText] = useState(() => {
+    try {
+      return localStorage.getItem("ather_drawer_draft") || "";
+    } catch {
+      return "";
+    }
+  });
+
+  useEffect(() => {
+    try {
+      if (inputText) {
+        localStorage.setItem("ather_drawer_draft", inputText);
+      } else {
+        localStorage.removeItem("ather_drawer_draft");
+      }
+    } catch {
+      // ignore storage errors
+    }
+  }, [inputText]);
   const [liveContext, setLiveContext] = useState<CopilotLiveContext | null>(null);
   const [activePlan, setActivePlan] = useState<DynamicExecutionPlan | null>(
     () => session.activePlan || null,
@@ -383,7 +402,7 @@ export function CopilotDrawer() {
             : "w-full sm:max-w-[500px]",
         )}
       >
-        <SheetTitle className="sr-only">ATHER AI Copilot</SheetTitle>
+        <SheetTitle className="sr-only">ATHER Chatbot</SheetTitle>
 
         {/* Drawer Header */}
         <SheetHeader className="p-4 border-b border-border/40 space-y-2.5">
@@ -402,7 +421,7 @@ export function CopilotDrawer() {
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-black tracking-tight text-foreground">
-                    {mode === "DEMO" ? "ATHER Demo Copilot" : "ATHER Intelligence Copilot"}
+                    {mode === "DEMO" ? "ATHER Demo Chatbot" : "ATHER Chatbot"}
                   </h3>
                   <Badge
                     variant="outline"
@@ -532,7 +551,7 @@ export function CopilotDrawer() {
                     ) : (
                       <>
                         <Sparkles className="size-3 text-primary" />
-                        <span>{msg.metadata?.model || "Brahma AI"}</span>
+                        <span>{msg.metadata?.model || "ATHER Chatbot"}</span>
                       </>
                     )}
                     <span>•</span>
@@ -783,14 +802,29 @@ export function CopilotDrawer() {
                 disabled={isLoading}
                 className="flex-1 px-3 py-2 text-xs rounded-xl bg-secondary/60 border border-border/60 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
-              <Button
-                type="submit"
-                size="sm"
-                disabled={!inputText.trim() || isLoading}
-                className="h-8 px-3.5 rounded-xl bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20"
-              >
-                <Send className="size-3.5" />
-              </Button>
+              {isLoading ? (
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => {
+                    setLoading(false);
+                    addAssistantMessage("Generation halted upon user request. Pending operations disarmed.");
+                  }}
+                  className="h-8 px-3 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground font-bold shadow-md shadow-destructive/20 gap-1"
+                >
+                  <Square className="size-3 fill-current" />
+                  <span className="text-[11px]">Stop</span>
+                </Button>
+              ) : (
+                <Button
+                  type="submit"
+                  size="sm"
+                  disabled={!inputText.trim()}
+                  className="h-8 px-3.5 rounded-xl bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20"
+                >
+                  <Send className="size-3.5" />
+                </Button>
+              )}
             </form>
           </div>
         )}

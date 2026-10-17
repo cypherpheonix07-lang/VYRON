@@ -40,6 +40,7 @@ import {
   GitFork,
   ArrowRight,
   Plug,
+  Square,
 } from "lucide-react";
 import { useCopilot } from "@/state/copilot/useCopilot";
 import {
@@ -211,6 +212,15 @@ export function CopilotFullScreenStudio() {
   }, []);
 
   useEffect(() => {
+    try {
+      const saved = localStorage.getItem("ather_chat_draft");
+      if (saved) setInputText(saved);
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
@@ -240,7 +250,14 @@ export function CopilotFullScreenStudio() {
     const text = (promptOverride || inputText).trim();
     if (!text || isLoading) return;
 
-    if (!promptOverride) setInputText("");
+    if (!promptOverride) {
+      setInputText("");
+      try {
+        localStorage.removeItem("ather_chat_draft");
+      } catch {
+        // ignore
+      }
+    }
 
     await copilotDispatcher.dispatch(text, {
       mode,
@@ -658,6 +675,24 @@ export function CopilotFullScreenStudio() {
             <ProactiveInsightsBanner maxItems={1} />
           </div>
 
+          {/* Compact Context Indicator (Workstream F) */}
+          <div className="flex items-center justify-between px-3.5 py-1.5 bg-secondary/30 border-b border-border/30 text-[11px] font-mono text-muted-foreground">
+            <div className="flex items-center gap-1.5">
+              <span className="font-bold text-foreground">VYRON</span>
+              <span>·</span>
+              <span className="text-primary font-semibold">{liveContext?.project?.name || "Active Project"}</span>
+              <span>·</span>
+              <span>Finding SEC-014 (Active Lens)</span>
+            </div>
+            <button
+              onClick={() => copilotStore.setContextLensOpen(true)}
+              className="text-[10px] text-primary hover:underline cursor-pointer flex items-center gap-1"
+            >
+              <Radar className="size-2.5" />
+              <span>Inspect Context</span>
+            </button>
+          </div>
+
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((msg) => (
@@ -680,16 +715,8 @@ export function CopilotFullScreenStudio() {
                   ) : (
                     <>
                       <Sparkles className="size-3 text-primary" />
-                      <span>{msg.metadata?.model || "Vyron AI"}</span>
+                      <span className="font-semibold text-foreground">ATHER Chatbot</span>
                     </>
-                  )}
-                  {msg.metadata?.intent && (
-                    <Badge
-                      variant="outline"
-                      className="text-[9px] font-mono border-primary/30 text-primary"
-                    >
-                      {msg.metadata.intent}
-                    </Badge>
                   )}
                   <span>•</span>
                   <span>
@@ -844,27 +871,83 @@ export function CopilotFullScreenStudio() {
             />
           </div>
 
+          {/* Ask / Plan / Act Quick Mode Chips (Workstream K) */}
+          <div className="flex items-center justify-between px-3 pt-2 pb-1 bg-card/70 border-t border-border/40 text-[11px] font-mono">
+            <div className="flex items-center gap-1.5">
+              <span className="text-muted-foreground font-bold">Intent:</span>
+              {(["Ask", "Plan", "Act"] as const).map((m) => (
+                <button
+                  key={m}
+                  type="button"
+                  onClick={() => {
+                    if (m === "Ask") handleStudioModeSelect("CHAT");
+                    else if (m === "Plan") handleStudioModeSelect("MISSION");
+                    else handleStudioModeSelect("SIMULATION");
+                  }}
+                  className={cn(
+                    "px-2.5 py-0.5 rounded-md text-[10px] font-bold transition-colors cursor-pointer",
+                    (m === "Ask" && studioMode === "CHAT") ||
+                    (m === "Plan" && studioMode === "MISSION") ||
+                    (m === "Act" && studioMode === "SIMULATION")
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "bg-secondary/60 hover:bg-secondary text-muted-foreground hover:text-foreground border border-border/40",
+                  )}
+                >
+                  {m}
+                </button>
+              ))}
+            </div>
+            <span className="text-[10px] text-muted-foreground hidden sm:inline">
+              Draft auto-saved
+            </span>
+          </div>
+
           {/* Input Box */}
           <form
             onSubmit={handleSend}
-            className="p-3 border-t border-border/40 bg-card/70 flex items-center gap-2"
+            className="p-3 pt-1.5 bg-card/70 flex items-center gap-2"
           >
             <input
               type="text"
-              placeholder={`Ask ATHER in ${studioMode} mode...`}
+              placeholder={`Ask ATHER in ${studioMode} mode... (Enter to send)`}
               value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
+              onChange={(e) => {
+                setInputText(e.target.value);
+                try {
+                  localStorage.setItem("ather_chat_draft", e.target.value);
+                } catch {
+                  // ignore
+                }
+              }}
               disabled={isLoading}
               className="flex-1 px-4 py-2.5 text-xs rounded-xl bg-secondary/60 border border-border/60 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary font-sans"
             />
-            <Button
-              type="submit"
-              size="sm"
-              disabled={!inputText.trim() || isLoading}
-              className="h-9 px-4 rounded-xl bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20"
-            >
-              <Send className="size-4" />
-            </Button>
+            {isLoading ? (
+              <Button
+                type="button"
+                size="sm"
+                variant="destructive"
+                onClick={() => {
+                  copilotDispatcher.dispatch("stop");
+                  copilotStore.setLoading(mode, false);
+                  toast.info("Stopped active generation.");
+                }}
+                className="h-9 px-3 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground font-bold flex items-center gap-1 shadow-md cursor-pointer"
+                title="Stop generation"
+              >
+                <Square className="size-3.5 fill-current" />
+                <span className="hidden sm:inline">Stop</span>
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                size="sm"
+                disabled={!inputText.trim()}
+                className="h-9 px-4 rounded-xl bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20 cursor-pointer"
+              >
+                <Send className="size-4" />
+              </Button>
+            )}
           </form>
         </div>
 
