@@ -1,7 +1,7 @@
 {
   "blueprintId": "vyron-brahma-canonical-blueprint-v2.5.0",
   "version": "2.5.0",
-  "timestamp": "2026-10-11T11:28:06.924Z",
+  "timestamp": "2026-10-17T08:25:23.775Z",
   "gitCommit": "b85d0d04fed483554b7ff9ec316a215ce5fb46d9",
   "gitBranch": "main",
   "technologyStack": {
@@ -313,8 +313,8 @@
   },
   "cryptographicSeal": {
     "algorithm": "SHA-256",
-    "digest": "67b22724676340b0a01d16226902c0df78c8bdca1b71b3d22854e1fb61f6b7a3",
-    "sealedAt": "2026-10-11T11:28:06.924Z"
+    "digest": "5691c2702d75e4a584b8a9fdea88ff1f5c56eb37f2915c8a312f2ba538bff509",
+    "sealedAt": "2026-10-17T08:25:23.775Z"
   },
   "slsaManifest": {
     "_type": "https://in-toto.io/Statement/v1",
@@ -322,7 +322,7 @@
       {
         "name": "vyron-production-release",
         "digest": {
-          "sha256": "67b22724676340b0a01d16226902c0df78c8bdca1b71b3d22854e1fb61f6b7a3"
+          "sha256": "5691c2702d75e4a584b8a9fdea88ff1f5c56eb37f2915c8a312f2ba538bff509"
         }
       }
     ],
@@ -348,9 +348,9 @@
           "version": "2.5.0"
         },
         "metadata": {
-          "invocationId": "inv-1791718086937",
+          "invocationId": "inv-1792225523788",
           "startedOn": "2026-10-11T11:27:49.651Z",
-          "finishedOn": "2026-10-11T11:28:06.924Z"
+          "finishedOn": "2026-10-17T08:25:23.775Z"
         }
       }
     }

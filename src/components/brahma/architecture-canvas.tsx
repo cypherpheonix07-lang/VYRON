@@ -71,7 +71,6 @@ export function ArchitectureCanvas({
         fitView
         minZoom={0.3}
         maxZoom={2}
-        proOptions={{ hideAttribution: true }}
         onNodeClick={(_, node) => {
           const found = blueprintNodes.find((n) => n.id === node.id);
           if (found) onSelect(found);
