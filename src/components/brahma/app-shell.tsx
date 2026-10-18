@@ -1,4 +1,4 @@
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import {
   Bell,
   ChevronRight,
@@ -325,7 +325,7 @@ function NavList({
     projectId: activeProjectId,
     availableProjects,
   } = useActiveProject();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { pathname } = useLocation();
 
   // Contextual Mode Detection
   const isSimulationRoute = pathname === "/app/simulation";
@@ -744,7 +744,7 @@ function NotificationBell() {
 }
 
 function Breadcrumbs() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { pathname } = useLocation();
   const { projects: liveProjects } = useProjects();
   const availableProjects = liveProjects.length > 0 ? liveProjects : mockProjects;
   const crumbs = useMemo(() => {
@@ -787,7 +787,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     setActiveProject,
   } = useActiveProject();
   const navigate = useNavigate();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { pathname } = useLocation();
 
   // UI state for search dropdown
   const [searchQuery, setSearchQuery] = useState("");

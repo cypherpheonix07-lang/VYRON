@@ -18,7 +18,7 @@ export class KimiAdapter implements AIAdapter {
     if (typeof window !== "undefined") {
       return false; // Browser relies on authenticated server endpoints or simulated deterministic fallback
     }
-    const serverKey = process.env["MOONSHOT_API_KEY"];
+    const serverKey = typeof process !== "undefined" ? process.env?.["MOONSHOT_API_KEY"] : undefined;
     return Boolean(serverKey && serverKey.length > 5);
   }
 
@@ -71,7 +71,7 @@ export class KimiAdapter implements AIAdapter {
       };
     }
 
-    const apiKey = process.env["MOONSHOT_API_KEY"];
+    const apiKey = typeof process !== "undefined" ? process.env?.["MOONSHOT_API_KEY"] : undefined;
 
     if (!apiKey || apiKey === "mock_key") {
       const mockRes = await this.fallbackAdapter.complete(request);

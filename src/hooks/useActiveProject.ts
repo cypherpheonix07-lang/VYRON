@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { useRouterState, useNavigate } from "@tanstack/react-router";
+import { useLocation, useNavigate } from "@tanstack/react-router";
 import {
   projectRegistry,
   type CanonicalProject,
@@ -25,8 +25,9 @@ export interface ActiveProjectContextValue {
 
 export function useActiveProject(): ActiveProjectContextValue {
   const navigate = useNavigate();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const searchStr = useRouterState({ select: (s) => s.location.searchStr });
+  const location = useLocation();
+  const pathname = location?.pathname || "";
+  const searchStr = location?.searchStr || "";
 
   // 1. Resolve project ID from route param hierarchy (B04)
   // Priority 1: Route param /app/projects/:id

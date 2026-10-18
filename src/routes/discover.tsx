@@ -145,9 +145,7 @@ function DiscoverPage() {
       <header className="sticky top-0 z-40 w-full border-b border-border/50 bg-background/80 backdrop-blur-xl px-4 sm:px-8 py-3.5">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-              <BrahmaLogo />
-            </Link>
+            <BrahmaLogo to="/" />
             <Badge className="hidden sm:inline-flex bg-primary/10 text-primary border-primary/25 text-[11px] font-semibold tracking-wider">
               AI DISCOVERY MATRIX
             </Badge>
