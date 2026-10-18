@@ -95,20 +95,11 @@ function AuthCallbackPage() {
           }
 
           if (discoveredAccounts.length === 0) {
-            discoveredAccounts = [
-              {
-                login: "brahma-developer",
-                type: "user",
-                avatar_url:
-                  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80",
-              },
-              {
-                login: "brahma-labs",
-                type: "organization",
-                avatar_url:
-                  "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&auto=format&fit=crop&q=80",
-              },
-            ];
+            sessionStorage.removeItem("brahma_discovered_github_accounts");
+            sessionStorage.removeItem("brahma_selected_github_account");
+            toast.error("GitHub integration exchange did not return any authorized accounts.");
+            navigate({ to: "/app/integrations", replace: true });
+            return;
           }
 
           sessionStorage.setItem(

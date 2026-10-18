@@ -251,7 +251,6 @@ export const authService = {
             access_type: "offline",
             prompt: "select_account",
           },
-          skipBrowserRedirect: true,
         },
       });
       if (error) {
@@ -263,36 +262,11 @@ export const authService = {
         }).catch(() => undefined);
         return fail(error.message);
       }
-      if (data?.url) {
-        // Pre-validate whether Supabase has Google OAuth enabled
-        try {
-          const probe = await fetch(data.url, { method: "GET" });
-          if (!probe.ok) {
-            const errJson = (await probe.json().catch(() => null)) as {
-              msg?: string;
-              error_code?: string;
-            } | null;
-            if (
-              errJson?.msg?.includes("provider is not enabled") ||
-              errJson?.error_code === "validation_failed"
-            ) {
-              const msg =
-                "Google OAuth is not enabled in your Supabase project (hbbunfizlwgvripgwzdo). Please enable Google in Supabase Dashboard > Authentication > Providers, or use GitHub / Demo Login.";
-              logAuthEvent({
-                event: "oauth",
-                method: "GOOGLE OAuth",
-                status: "failed",
-                email: "oauth.google@brahma.dev",
-              }).catch(() => undefined);
-              return fail(msg);
-            }
-          }
-        } catch {
-          // If probe is blocked by CORS, proceed with standard browser redirect
-        }
-        if (typeof window !== "undefined") {
-          window.location.assign(data.url);
-        }
+      if (!data?.url) {
+        return fail("Failed to obtain Google authorization URL from identity provider.");
+      }
+      if (typeof window !== "undefined" && window.location.href !== data.url) {
+        window.location.assign(data.url);
       }
       return { ok: true };
     } catch (e: unknown) {
@@ -309,7 +283,6 @@ export const authService = {
         options: {
           redirectTo: getRedirectUrl(),
           scopes: "read:user user:email",
-          skipBrowserRedirect: true,
         },
       });
       if (error) {
@@ -321,23 +294,11 @@ export const authService = {
         }).catch(() => undefined);
         return fail(error.message);
       }
-      if (data?.url) {
-        try {
-          const probe = await fetch(data.url, { method: "GET" });
-          if (!probe.ok) {
-            const errJson = (await probe.json().catch(() => null)) as { msg?: string } | null;
-            if (errJson?.msg?.includes("provider is not enabled")) {
-              return fail(
-                "GitHub OAuth is not enabled in your Supabase project. Please enable GitHub in Supabase Dashboard or use Demo login.",
-              );
-            }
-          }
-        } catch {
-          // If probe is blocked by CORS, proceed with standard browser redirect
-        }
-        if (typeof window !== "undefined") {
-          window.location.assign(data.url);
-        }
+      if (!data?.url) {
+        return fail("Failed to obtain GitHub authorization URL from identity provider.");
+      }
+      if (typeof window !== "undefined" && window.location.href !== data.url) {
+        window.location.assign(data.url);
       }
       return { ok: true };
     } catch (e: unknown) {
@@ -354,7 +315,6 @@ export const authService = {
         options: {
           redirectTo: getRedirectUrl(),
           scopes: "read_user openid profile email",
-          skipBrowserRedirect: true,
         },
       });
       if (error) {
@@ -366,10 +326,11 @@ export const authService = {
         }).catch(() => undefined);
         return fail(error.message);
       }
-      if (data?.url) {
-        if (typeof window !== "undefined") {
-          window.location.assign(data.url);
-        }
+      if (!data?.url) {
+        return fail("Failed to obtain GitLab authorization URL from identity provider.");
+      }
+      if (typeof window !== "undefined" && window.location.href !== data.url) {
+        window.location.assign(data.url);
       }
       return { ok: true };
     } catch (e: unknown) {

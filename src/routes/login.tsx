@@ -230,6 +230,7 @@ function LoginPage() {
 
   // OAuth Sign In
   const handleOAuthLogin = async (provider: "google" | "github" | "gitlab") => {
+    if (oauthLoading || loading) return;
     setOauthLoading(provider);
     setFormError(null);
     const providerLabel = provider === "google" ? "Google" : provider === "github" ? "GitHub" : "GitLab";

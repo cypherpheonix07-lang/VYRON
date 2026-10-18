@@ -165,6 +165,7 @@ function RegisterPage() {
   ]);
 
   const handleOAuthRegister = async (provider: "google" | "github" | "gitlab") => {
+    if (oauthLoading || loading) return;
     setOauthLoading(provider);
     const providerLabel = provider === "google" ? "Google" : provider === "github" ? "GitHub" : "GitLab";
     toast.loading(`Redirecting to ${providerLabel}...`, {
@@ -283,9 +284,14 @@ function RegisterPage() {
 
       if (!result.ok) {
         toast.error(result.error?.message ?? "Signup failed.");
+      } else if (result.data?.session) {
+        sessionStorage.removeItem(SIGNUP_DRAFT_KEY);
+        toast.success("Account created successfully!");
+        await refresh();
+        navigate({ to: "/onboarding", replace: true });
       } else {
-        toast.success("Account created! A confirmation code has been sent.");
-        setStep(5); // Go to verification
+        toast.success("Account created! A confirmation code or email has been sent.");
+        setStep(5); // Go to verification step
         setCountdown(30);
       }
     } catch (err) {

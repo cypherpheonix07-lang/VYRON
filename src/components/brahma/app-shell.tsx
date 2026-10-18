@@ -210,7 +210,7 @@ export const NAV_DOMAINS: NavDomain[] = [
     icon: Bot,
     items: [
       { to: "/app/aether", label: "ATHER Cognitive Center", icon: Cpu, exact: false },
-      { to: "/app/chat", label: "ATHER Copilot Studio", icon: Bot, exact: false },
+      { to: "/app/chat", label: "ATHER Chatbot Studio", icon: Bot, exact: false },
       { to: "/app/studio", label: "Autonomous AI Studio", icon: Sparkles, exact: false },
       { to: "/app/admin/models", label: "AI Model Governance", icon: Brain, exact: false },
     ],
