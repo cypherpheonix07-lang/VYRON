@@ -41,23 +41,46 @@ export async function fetchLiveOverview(
   if (error) throw new Error(`Project could not be loaded (${error.code}). Check database configuration and access policies.`);
   if (!project) return null; // Do not distinguish inaccessible from nonexistent projects.
 
-  const [repos, requirements] = await Promise.all([
-    client.from("project_repos")
+  let reposResult: { data: RepositoryBinding[] | null; error: { code: string; message: string } | null } = { data: null, error: null };
+  try {
+    const res = await client
+      .from("project_repos")
       // Never fetch webhook_secret or account credentials into an overview/export.
       .select("id,repo_full_name,sync_status,last_synced_at")
       .eq("project_id", projectId)
-      .order("created_at", { ascending: false }),
-    client.from("requirements").select("id", { count: "exact", head: true })
-      .eq("project_id", projectId),
-  ]);
+      .order("created_at", { ascending: false });
+    reposResult = res as typeof reposResult;
+  } catch (err: unknown) {
+    reposResult = { data: null, error: { code: "FETCH_ERROR", message: err instanceof Error ? err.message : String(err) } };
+  }
+
+  let reqsResult: { count: number | null; error: { code: string; message: string } | null } = { count: null, error: null };
+  try {
+    const res = await client
+      .from("requirements")
+      .select("id", { count: "exact", head: true })
+      .eq("project_id", projectId);
+    reqsResult = res as typeof reqsResult;
+  } catch (err: unknown) {
+    reqsResult = { count: null, error: { code: "FETCH_ERROR", message: err instanceof Error ? err.message : String(err) } };
+  }
+
   const warnings: string[] = [];
-  if (repos.error) warnings.push(`Repository bindings unavailable (${repos.error.code}).`);
-  if (requirements.error) warnings.push(`Requirement count unavailable (${requirements.error.code}).`);
+  if (reposResult.error) {
+    warnings.push(`Repository bindings unavailable (${reposResult.error.code}).`);
+  }
+  if (reqsResult.error) {
+    if (reqsResult.error.code === "PGRST205" || reqsResult.error.code === "42P01") {
+      warnings.push("Requirements schema table is not provisioned in database.");
+    } else {
+      warnings.push(`Requirement count unavailable (${reqsResult.error.code}).`);
+    }
+  }
 
   return {
     project: project as LiveProjectRecord,
-    repositories: repos.error ? null : (repos.data as RepositoryBinding[]),
-    requirementCount: requirements.error ? null : requirements.count,
+    repositories: reposResult.error ? null : (reposResult.data as RepositoryBinding[]),
+    requirementCount: reqsResult.error ? null : reqsResult.count,
     warnings,
     fetchedAt: new Date().toISOString(),
   };

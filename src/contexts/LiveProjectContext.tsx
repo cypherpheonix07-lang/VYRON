@@ -58,7 +58,6 @@ export function LiveProjectProvider({ id, children }: { id: string; children: Re
     const channel = supabase.channel(`project-overview:${id}:${currentGeneration}`)
       .on("postgres_changes", { event: "*", schema: "public", table: "projects", filter: `id=eq.${id}` }, () => { void load(); })
       .on("postgres_changes", { event: "*", schema: "public", table: "project_repos", filter: `project_id=eq.${id}` }, () => { void load(); })
-      .on("postgres_changes", { event: "*", schema: "public", table: "requirements", filter: `project_id=eq.${id}` }, () => { void load(); })
       .subscribe((status) => {
         if (!active) return;
         setRealtime(status === "SUBSCRIBED"
