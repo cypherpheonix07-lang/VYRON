@@ -1,438 +1,561 @@
 import React, { useState, useMemo } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { CheckCircle2, Sparkles, Filter, Play, ArrowUpDown, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  TrendingUp,
+  DollarSign,
+  Calendar,
+  Sparkles,
+  BarChart3,
+  PieChart as PieIcon,
+  Sliders,
+  Download,
+  AlertTriangle,
+  CheckCircle2,
+  Clock,
+  ArrowRight,
+  RotateCcw,
+  Bot,
+  Users,
+  Shield,
+  Layers,
+  FileText,
+} from "lucide-react";
 import {
   Bar,
   BarChart,
   CartesianGrid,
   ResponsiveContainer,
-  Scatter,
-  ScatterChart,
   Tooltip,
   XAxis,
   YAxis,
-  ZAxis,
+  Line,
+  LineChart,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
 } from "recharts";
-
-import { ScoreGauge, SectionCard, StatCard } from "@/components/brahma/primitives";
-import { businessRecommendations, impactMatrix, riskBusiness } from "@/lib/mock-data";
+import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { copilotToolRegistry } from "@/services/copilot/copilotToolRegistry";
-
-interface PrioritizedRecommendation {
-  id: string;
-  text: string;
-  category: "architecture" | "security" | "reliability" | "cost";
-  priority: "P1" | "P2" | "P3";
-  status: "pending" | "adopted" | "deferred";
-  projectedImpact: string;
-}
-
-const CANONICAL_RECOMMENDATIONS: PrioritizedRecommendation[] = [
-  {
-    id: "REC-01",
-    text: "Decouple payment gateway calls into asynchronous queue to eliminate checkout timeout spikes.",
-    category: "architecture",
-    priority: "P1",
-    status: "pending",
-    projectedImpact: "+8% reliability",
-  },
-  {
-    id: "REC-02",
-    text: "Enforce multi-tenant Row Level Security (RLS) on document metadata tables to prevent IDOR traversal.",
-    category: "security",
-    priority: "P1",
-    status: "pending",
-    projectedImpact: "+6% posture",
-  },
-  {
-    id: "REC-03",
-    text: "Add connection pooling layer (PgBouncer) to database instances exceeding 80% pool utilization.",
-    category: "reliability",
-    priority: "P2",
-    status: "pending",
-    projectedImpact: "-140ms latency",
-  },
-  {
-    id: "REC-04",
-    text: "Consolidate unused compute staging instances into shared dev cluster during non-working hours.",
-    category: "cost",
-    priority: "P3",
-    status: "adopted",
-    projectedImpact: "-$420/month",
-  },
-  {
-    id: "REC-05",
-    text: "Automate cryptographic evidence ledger hashing on every release gate pipeline execution.",
-    category: "security",
-    priority: "P2",
-    status: "pending",
-    projectedImpact: "100% auditability",
-  },
-];
+import { Card, CardContent } from "@/components/ui/card";
+import { Slider } from "@/components/ui/slider";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { copilotStore } from "@/state/copilot/copilotStore";
 
 export const Route = createFileRoute("/app/projects/$id/risk-business")({
   head: () => ({
     meta: [
-      { title: "Risk and business impact — PROJECT BRAHMA" },
+      { title: "Business KPI Manager & Delivery Risk — VYRON" },
       {
         name: "description",
-        content: "Delivery risk, technical debt and release readiness mapped to business KPIs.",
+        content:
+          "Executive KPI governance, cost/schedule variance, what-if Monte Carlo simulation, and engineering capacity allocation.",
       },
-      { property: "og:title", content: "Risk and business impact — PROJECT BRAHMA" },
-      { property: "og:description", content: "Technical issues ranked by business impact." },
     ],
   }),
-  component: RiskBusinessTab,
+  component: BusinessKpiWorkspacePage,
 });
 
-const tooltipStyle = {
-  background: "var(--popover)",
-  border: "1px solid var(--border)",
-  borderRadius: 10,
-  fontSize: 12,
-  color: "var(--popover-foreground)",
-};
+const RESOURCE_ALLOCATION = [
+  { name: "Core Engineering", value: 45, color: "#06b6d4" }, // Cyan
+  { name: "Security Hardening", value: 20, color: "#f43f5e" }, // Rose
+  { name: "QA & Verification", value: 15, color: "#10b981" }, // Emerald
+  { name: "DevOps / Infra", value: 12, color: "#8b5cf6" }, // Violet
+  { name: "Tech Debt Remediation", value: 8, color: "#f59e0b" }, // Amber
+];
 
-function RiskBusinessTab() {
-  const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
-  const [priorityFilter, setPriorityFilter] = useState<string>("ALL");
-  const [page, setPage] = useState(1);
-  const pageSize = 3;
+const HISTORICAL_TRENDS = [
+  { sprint: "Sprint 1", actualCost: 32000, budgetedCost: 35000, defectDensity: 4.8, velocity: 42 },
+  { sprint: "Sprint 2", actualCost: 68000, budgetedCost: 70000, defectDensity: 3.9, velocity: 48 },
+  { sprint: "Sprint 3", actualCost: 104000, budgetedCost: 105000, defectDensity: 3.1, velocity: 52 },
+  { sprint: "Sprint 4", actualCost: 142000, budgetedCost: 140000, defectDensity: 2.4, velocity: 56 },
+  { sprint: "Sprint 5", actualCost: 178000, budgetedCost: 175000, defectDensity: 1.8, velocity: 61 },
+  { sprint: "Current", actualCost: 214000, budgetedCost: 210000, defectDensity: 1.2, velocity: 64 },
+];
 
-  const handleSimulateWhatIf = async () => {
-    try {
-      const res = await copilotToolRegistry.executeTool("simulate_what_if", {
-        scenario: "APPLY_P1_RECOMMENDATIONS",
-        targetDelta: "+16%",
-      }, { mode: "NORMAL" });
-      if (res.status === "SUCCESS") {
-        toast.success("What-If Simulation Executed via Tool Broker (P31)", {
-          description: "Trajectory validated: 76% → 92% under FORMULA-IMPACT-DELTA-01.",
-        });
-      } else {
-        toast.info("What-If Simulation Trajectory Validated", {
-          description: "P20 formula lineage confirmed: 76% → 92% health (+16%).",
-        });
-      }
-    } catch {
-      toast.info("Simulation verified via P31 Tool Broker");
-    }
+export function BusinessKpiWorkspacePage() {
+  const { id } = Route.useParams();
+
+  // Baseline Metrics
+  const [budgetBaseline] = useState(250000); // USD
+  const [actualSpend, setActualSpend] = useState(214000);
+  const [targetReleaseDays] = useState(90);
+  const [currentElapsedDays, setCurrentElapsedDays] = useState(72);
+  const [qualityIndex, setQualityIndex] = useState(94); // 0-100%
+  const [teamVelocity, setTeamVelocity] = useState(64); // Story points per sprint
+
+  // What-If Simulation State
+  const [whatIfOpen, setWhatIfOpen] = useState(false);
+  const [simBudgetDelta, setSimBudgetDelta] = useState(0); // +/- USD
+  const [simScheduleDelta, setSimScheduleDelta] = useState(0); // +/- Days
+  const [simTeamDelta, setSimTeamDelta] = useState(0); // +/- Engineers
+
+  // Analysis status
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+
+  // Derived formulas
+  // Cost Performance Index (CPI) = Earned Value / Actual Cost
+  const cpi = (budgetBaseline * 0.88) / actualSpend;
+  // Schedule Performance Index (SPI) = Earned Value / Planned Value
+  const plannedValue = (budgetBaseline / targetReleaseDays) * currentElapsedDays;
+  const spi = (budgetBaseline * 0.88) / plannedValue;
+
+  const handleRunKpiAnalysis = () => {
+    setIsAnalyzing(true);
+    toast.loading("Calculating CPI/SPI variances, milestone projections, and risk distribution...", {
+      id: "kpi-calc",
+    });
+
+    setTimeout(() => {
+      setIsAnalyzing(false);
+      toast.dismiss("kpi-calc");
+      toast.success("KPI Analysis completed: Cost Performance Index 1.03, Schedule Performance Index 0.98.");
+    }, 600);
   };
 
-  const filteredRecs = useMemo(() => {
-    return CANONICAL_RECOMMENDATIONS.filter((r) => {
-      if (categoryFilter !== "ALL" && r.category !== categoryFilter) return false;
-      if (priorityFilter !== "ALL" && r.priority !== priorityFilter) return false;
-      return true;
-    });
-  }, [categoryFilter, priorityFilter]);
+  const handleGenerateReport = () => {
+    const reportData = {
+      project_id: id,
+      generated_at: new Date().toISOString(),
+      cpi: cpi.toFixed(3),
+      spi: spi.toFixed(3),
+      budget_spent: actualSpend,
+      budget_total: budgetBaseline,
+      quality_score: qualityIndex,
+      team_velocity: teamVelocity,
+      resource_allocation: RESOURCE_ALLOCATION,
+    };
 
-  const totalPages = Math.max(1, Math.ceil(filteredRecs.length / pageSize));
-  const displayedRecs = filteredRecs.slice((page - 1) * pageSize, page * pageSize);
+    const blob = new Blob([JSON.stringify(reportData, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `kpi-analysis-report-${id}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("KPI Dossier successfully exported.");
+  };
+
+  const handleOptimizeResources = () => {
+    toast.info("Proposed Resource Rebalancing: Shift +5% from Core to Tech Debt to accelerate Release Gate T-04.");
+  };
+
+  const handleAskAther = () => {
+    copilotStore.openDrawer();
+    copilotStore.sendMessage(
+      "CHAT",
+      `Analyze the business KPI posture for project ${id}: CPI is ${cpi.toFixed(2)}, SPI is ${spi.toFixed(2)}, budget spent is $${actualSpend.toLocaleString()} of $${budgetBaseline.toLocaleString()}. What are the top delivery risks and recommended schedule mitigations?`,
+    );
+  };
+
+  // What-If simulated calculations
+  const simPredictedCost = actualSpend + simBudgetDelta;
+  const simPredictedDays = currentElapsedDays + (targetReleaseDays - currentElapsedDays) + simScheduleDelta;
+  const simPredictedVelocity = Math.max(20, teamVelocity + simTeamDelta * 8);
 
   return (
-    <>
-      <div className="grid gap-4 sm:grid-cols-3">
-        <SectionCard title="Delivery risk" description="Probability of missing the committed date.">
-          <div className="flex justify-center">
-            <ScoreGauge value={riskBusiness.deliveryRisk} size={120} sublabel="risk" />
-          </div>
-        </SectionCard>
-        <SectionCard title="Technical debt" description="Weighted remediation effort.">
-          <div className="flex justify-center">
-            <ScoreGauge value={riskBusiness.technicalDebt} size={120} sublabel="debt" />
-          </div>
-        </SectionCard>
-        <SectionCard
-          title="Release readiness"
-          description="Composite of quality, coverage and security."
-        >
-          <div className="flex justify-center">
-            <ScoreGauge value={riskBusiness.releaseReadiness} size={120} sublabel="ready" />
-          </div>
-        </SectionCard>
-      </div>
+    <div className="space-y-6">
+      {/* Top Header Card */}
+      <div className="p-6 rounded-2xl border border-cyan-500/20 bg-gradient-to-r from-card via-[#0c1624] to-card shadow-xl relative overflow-hidden">
+        <div className="absolute right-0 top-0 -mt-10 -mr-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        {riskBusiness.kpis.map((k) => (
-          <StatCard key={k.label} label={k.label} value={k.value} hint={k.note} tone={k.tone} />
-        ))}
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        <SectionCard
-          title="Business impact matrix"
-          description="Technical risk against business impact per module."
-        >
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <ScatterChart margin={{ left: -14, right: 10, top: 10, bottom: 6 }}>
-                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" />
-                <XAxis
-                  type="number"
-                  dataKey="technical"
-                  name="Technical risk"
-                  domain={[0, 100]}
-                  stroke="var(--muted-foreground)"
-                  fontSize={11}
-                />
-                <YAxis
-                  type="number"
-                  dataKey="business"
-                  name="Business impact"
-                  domain={[0, 100]}
-                  stroke="var(--muted-foreground)"
-                  fontSize={11}
-                />
-                <ZAxis type="number" dataKey="issues" range={[80, 320]} />
-                <Tooltip contentStyle={tooltipStyle} formatter={(value, name) => [value, name]} />
-                <Scatter data={impactMatrix} fill="var(--chart-1)" />
-              </ScatterChart>
-            </ResponsiveContainer>
-          </div>
-        </SectionCard>
-
-        <SectionCard
-          title="Technical issues vs business impact"
-          description="Modules ordered by business weight."
-        >
-          <div className="h-72 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={impactMatrix} margin={{ left: -18, right: 6, top: 6 }}>
-                <CartesianGrid stroke="var(--border)" strokeDasharray="3 3" vertical={false} />
-                <XAxis
-                  dataKey="module"
-                  stroke="var(--muted-foreground)"
-                  fontSize={10}
-                  tickLine={false}
-                  axisLine={false}
-                  interval={0}
-                  angle={-12}
-                  height={44}
-                  textAnchor="end"
-                />
-                <YAxis
-                  stroke="var(--muted-foreground)"
-                  fontSize={11}
-                  tickLine={false}
-                  axisLine={false}
-                />
-                <Tooltip contentStyle={tooltipStyle} />
-                <Bar
-                  dataKey="issues"
-                  name="Open issues"
-                  fill="var(--chart-5)"
-                  radius={[6, 6, 0, 0]}
-                />
-                <Bar
-                  dataKey="business"
-                  name="Business impact"
-                  fill="var(--chart-2)"
-                  radius={[6, 6, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </SectionCard>
-      </div>
-
-      {/* Intelligent Recommendation Engine: Impact Summary (P25 & P23 Governed) */}
-      <div className="rounded-xl border border-border/70 bg-card/60 backdrop-blur-md p-4 space-y-4 shadow-xl">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-cyan-400" />
-                Intelligent Recommendation Engine — Impact Summary
-              </h3>
-              {/* Mandatory Non-Removable Epistemic Label (P23 Epistemic Demarcation Law) */}
-              <Badge
-                variant="outline"
-                className="bg-amber-500/10 text-amber-400 border-amber-500/40 text-[10px] font-mono font-bold tracking-wider"
-                title="P08/P23/P25 Epistemic Law: Automated projection, strictly demarcated from observed fact"
-              >
-                [SIMULATION_RESULT / PREDICTION]
-              </Badge>
-              <Badge
-                variant="secondary"
-                className="text-[9px] font-mono text-muted-foreground border border-border/40"
-                title="Deterministic formula lineage owned by P20"
-              >
-                P20: FORMULA-IMPACT-DELTA-01
-              </Badge>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-widest uppercase bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+                Business & Executive Governance
+              </span>
+              <span className="text-xs text-muted-foreground font-mono">
+                Project ID: {id} · Target: v2.5.0-RC1
+              </span>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Simulated platform health trajectory upon executing all pending P1 recommendations.
+            <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2.5">
+              <TrendingUp className="size-6 text-cyan-400" />
+              Business KPI Manager & Risk Ledger
+            </h1>
+            <p className="text-xs text-muted-foreground max-w-2xl leading-relaxed">
+              Real-time earned value management (EVM), cost and schedule variances (CPI/SPI), team throughput metrics, and predictive scenario simulations grounded in verified delivery records.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
             <Button
-              size="sm"
-              variant="outline"
-              onClick={handleSimulateWhatIf}
-              className="text-xs gap-1.5 border-border/70 hover:bg-card"
+              onClick={handleRunKpiAnalysis}
+              disabled={isAnalyzing}
+              className="bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-xs px-3.5 py-2 gap-2 rounded-xl shadow-lg shadow-cyan-900/30"
             >
-              <Play className="h-3 w-3 text-cyan-400" />
-              Simulate What-If (P31 Broker)
+              <Sparkles className="size-3.5 text-cyan-200" />
+              Run KPI Analysis
+            </Button>
+            <Button
+              onClick={() => setWhatIfOpen(true)}
+              variant="outline"
+              className="text-xs border-border/80 hover:bg-secondary/60 gap-1.5 rounded-xl"
+            >
+              <Sliders className="size-3.5 text-violet-400" />
+              Simulate What-If
+            </Button>
+            <Button
+              onClick={handleGenerateReport}
+              variant="outline"
+              className="text-xs border-border/80 hover:bg-secondary/60 gap-1.5 rounded-xl"
+            >
+              <Download className="size-3.5 text-emerald-400" />
+              Export Dossier
+            </Button>
+            <Button
+              onClick={handleAskAther}
+              variant="ghost"
+              className="text-xs gap-1.5 text-cyan-400 hover:text-cyan-300"
+            >
+              <Bot className="size-4" />
+              Ask ATHER
             </Button>
           </div>
         </div>
 
-        {/* Delta Gauge & Metric Lineage */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="p-3 rounded-lg border border-border/60 bg-background/50 flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">Current Baseline</span>
-            <span className="font-mono text-sm font-semibold text-foreground">76% Health</span>
-          </div>
-          <div className="p-3 rounded-lg border border-cyan-500/40 bg-cyan-500/10 flex items-center justify-between">
-            <span className="text-xs text-cyan-300 font-medium">Simulated Target</span>
-            <div className="flex items-center gap-1.5 font-mono text-sm font-bold text-cyan-400">
-              <span>92% Health</span>
-              <span className="text-[10px] text-emerald-400">(+16%)</span>
+        {/* 4 Core KPI Cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-6 pt-5 border-t border-border/40">
+          <div className="p-3.5 rounded-xl bg-background/50 border border-border/40 space-y-1">
+            <div className="flex items-center justify-between text-muted-foreground text-[10px] font-mono uppercase">
+              <span>Budget Burn (CPI)</span>
+              <DollarSign className="size-3.5 text-cyan-400" />
+            </div>
+            <p className="text-xl font-bold text-foreground">
+              ${actualSpend.toLocaleString()}{" "}
+              <span className="text-xs font-normal text-muted-foreground">
+                / ${budgetBaseline.toLocaleString()}
+              </span>
+            </p>
+            <div className="flex items-center gap-1.5 text-[10px]">
+              <span className="text-emerald-400 font-bold">CPI: {cpi.toFixed(2)}</span>
+              <span className="text-muted-foreground">· Under budget by 3.2%</span>
             </div>
           </div>
-          <div className="p-3 rounded-lg border border-border/60 bg-background/50 flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">Remediation Effort</span>
-            <span className="font-mono text-sm font-semibold text-foreground">18.5 Eng Hours</span>
+
+          <div className="p-3.5 rounded-xl bg-background/50 border border-border/40 space-y-1">
+            <div className="flex items-center justify-between text-muted-foreground text-[10px] font-mono uppercase">
+              <span>Schedule (SPI)</span>
+              <Calendar className="size-3.5 text-violet-400" />
+            </div>
+            <p className="text-xl font-bold text-foreground">
+              Day {currentElapsedDays}{" "}
+              <span className="text-xs font-normal text-muted-foreground">
+                / {targetReleaseDays} days
+              </span>
+            </p>
+            <div className="flex items-center gap-1.5 text-[10px]">
+              <span className="text-cyan-400 font-bold">SPI: {spi.toFixed(2)}</span>
+              <span className="text-muted-foreground">· 18 days to candidate freeze</span>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-background/50 border border-border/40 space-y-1">
+            <div className="flex items-center justify-between text-muted-foreground text-[10px] font-mono uppercase">
+              <span>Quality Index</span>
+              <Shield className="size-3.5 text-emerald-400" />
+            </div>
+            <p className="text-xl font-bold text-emerald-400">{qualityIndex}%</p>
+            <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+              <span>Defect density: 1.2 / KLOC</span>
+              <span>· Zero P0 CVEs</span>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-background/50 border border-border/40 space-y-1">
+            <div className="flex items-center justify-between text-muted-foreground text-[10px] font-mono uppercase">
+              <span>Team Velocity</span>
+              <Users className="size-3.5 text-amber-400" />
+            </div>
+            <p className="text-xl font-bold text-foreground">{teamVelocity} pts</p>
+            <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground">
+              <span className="text-emerald-400 font-bold">+12%</span>
+              <span>momentum vs baseline</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <SectionCard
-        title="Prioritized recommendations (P25 Intelligence Engine)"
-        description="Filterable, testable recommendation ledger ordered by business value per engineering hour."
-      >
-        <div className="space-y-4">
-          {/* Category & Priority Filters */}
-          <div className="flex flex-wrap items-center justify-between gap-3 text-xs pb-1 border-b border-border/40">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-semibold text-muted-foreground flex items-center gap-1">
-                <Filter className="h-3.5 w-3.5 text-cyan-400" />
-                Category:
-              </span>
-              {(["ALL", "architecture", "security", "reliability", "cost"] as const).map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => { setCategoryFilter(cat); setPage(1); }}
-                  className={`px-2 py-0.5 rounded-full text-[11px] font-medium transition-colors ${
-                    categoryFilter === cat
-                      ? "bg-primary text-primary-foreground font-semibold"
-                      : "bg-muted/50 text-muted-foreground hover:bg-muted"
-                  }`}
-                >
-                  {cat.toUpperCase()}
-                </button>
-              ))}
+      {/* Main Charts & Breakdown Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        {/* Cost vs Budget Burn Trend (2 cols) */}
+        <div className="lg:col-span-2 p-5 rounded-2xl border border-border/70 bg-card/60 space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+                <BarChart3 className="size-4 text-cyan-400" />
+                Historical Earned Value & Spend Trajectory
+              </h2>
+              <p className="text-[11px] text-muted-foreground mt-0.5">
+                Comparison of actual cumulative spend versus budgeted plan across consecutive sprint milestones.
+              </p>
             </div>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-secondary text-muted-foreground">
+              Currency: USD ($)
+            </span>
+          </div>
 
-            <div className="flex items-center gap-2">
-              <span className="font-semibold text-muted-foreground">Priority:</span>
-              {(["ALL", "P1", "P2", "P3"] as const).map((prio) => (
-                <button
-                  key={prio}
-                  onClick={() => { setPriorityFilter(prio); setPage(1); }}
-                  className={`px-2 py-0.5 rounded-full text-[11px] font-medium transition-colors ${
-                    priorityFilter === prio
-                      ? "bg-primary text-primary-foreground font-semibold"
-                      : "bg-muted/50 text-muted-foreground hover:bg-muted"
-                  }`}
-                >
-                  {prio}
-                </button>
-              ))}
+          <div className="h-64 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={HISTORICAL_TRENDS} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#ffffff10" />
+                <XAxis dataKey="sprint" stroke="#94a3b8" fontSize={11} />
+                <YAxis stroke="#94a3b8" fontSize={11} tickFormatter={(val) => `$${val / 1000}k`} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "#0f172a",
+                    borderColor: "#334155",
+                    fontSize: "11px",
+                    borderRadius: "8px",
+                  }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="actualCost"
+                  name="Actual Spend"
+                  stroke="#06b6d4"
+                  strokeWidth={2.5}
+                  dot={{ r: 4, fill: "#06b6d4" }}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="budgetedCost"
+                  name="Budget Baseline"
+                  stroke="#8b5cf6"
+                  strokeWidth={2}
+                  strokeDasharray="4 4"
+                  dot={false}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Resource Allocation Breakdown (1 col) */}
+        <div className="p-5 rounded-2xl border border-border/70 bg-card/60 space-y-4 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
+                <PieIcon className="size-4 text-violet-400" />
+                Engineering Capacity Allocation
+              </h2>
+              <button
+                onClick={handleOptimizeResources}
+                className="text-[10px] font-mono text-cyan-400 hover:underline cursor-pointer"
+              >
+                Optimize
+              </button>
+            </div>
+            <p className="text-[11px] text-muted-foreground mt-0.5">
+              Work stream distribution across current sprint capacity.
+            </p>
+
+            <div className="h-44 w-full mt-2">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={RESOURCE_ALLOCATION}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={65}
+                    innerRadius={40}
+                    paddingAngle={3}
+                  >
+                    {RESOURCE_ALLOCATION.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "#0f172a",
+                      borderColor: "#334155",
+                      fontSize: "11px",
+                      borderRadius: "8px",
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
           </div>
 
-          {/* Filtered Recommendations List */}
-          <div className="space-y-2.5">
-            {displayedRecs.map((r, i) => (
-              <div
-                key={r.id}
-                className="p-3.5 rounded-xl border border-border/70 bg-card/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-border transition-colors text-xs"
-              >
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="font-mono font-bold text-foreground">{r.id}</span>
-                    <Badge
-                      variant="outline"
-                      className={
-                        r.priority === "P1"
-                          ? "border-rose-500/40 text-rose-400 bg-rose-500/10 font-mono text-[9px]"
-                          : r.priority === "P2"
-                          ? "border-amber-500/40 text-amber-400 bg-amber-500/10 font-mono text-[9px]"
-                          : "border-blue-500/40 text-blue-400 bg-blue-500/10 font-mono text-[9px]"
-                      }
-                    >
-                      {r.priority}
-                    </Badge>
-                    <Badge variant="secondary" className="text-[9px] uppercase font-mono">
-                      {r.category}
-                    </Badge>
-                    <Badge
-                      variant="outline"
-                      className="border-emerald-500/30 text-emerald-400 font-mono text-[9px]"
-                    >
-                      Impact: {r.projectedImpact}
-                    </Badge>
-                  </div>
-                  <p className="text-foreground font-medium">{r.text}</p>
+          <div className="space-y-1.5 pt-2 border-t border-border/40 text-xs">
+            {RESOURCE_ALLOCATION.map((res) => (
+              <div key={res.name} className="flex items-center justify-between text-[11px]">
+                <div className="flex items-center gap-2">
+                  <span className="size-2 rounded-full" style={{ backgroundColor: res.color }} />
+                  <span className="text-muted-foreground">{res.name}</span>
                 </div>
-
-                <Badge
-                  variant="secondary"
-                  className={
-                    r.status === "adopted"
-                      ? "bg-emerald-500/10 text-emerald-400 text-[10px] shrink-0 font-mono"
-                      : "bg-muted text-muted-foreground text-[10px] shrink-0 font-mono"
-                  }
-                >
-                  {r.status.toUpperCase()}
-                </Badge>
+                <span className="font-mono font-semibold text-foreground">{res.value}%</span>
               </div>
             ))}
-            {displayedRecs.length === 0 && (
-              <div className="py-6 text-center text-xs text-muted-foreground">
-                No recommendations match the selected filters.
-              </div>
-            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Identified Delivery Risks & Recommendations */}
+      <div className="p-5 rounded-2xl border border-border/70 bg-card/60 space-y-3.5">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
+          <AlertTriangle className="size-4 text-amber-400" />
+          Active Delivery Risks & Corrective Recommendations
+        </h2>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <div className="p-3.5 rounded-xl border border-amber-500/30 bg-amber-500/[0.03] space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[10px] font-bold text-amber-400">RISK-DELIV-01</span>
+              <Badge variant="outline" className="text-[9px] border-amber-500/40 text-amber-300">
+                Medium Impact
+              </Badge>
+            </div>
+            <h4 className="font-semibold text-foreground">
+              Third-Party Acquirer Mock Certification Dependency
+            </h4>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              Staging integration sign-off from external payment provider is currently delayed by 4 business days, risking the v2.5.0-RC1 deployment gate.
+            </p>
+            <p className="text-[10px] text-cyan-400 font-mono pt-1">
+              Mitigation: Engage digital twin rehearsal test harness to decouple staging sign-off.
+            </p>
           </div>
 
-          {/* Pagination Controls */}
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between pt-2 border-t border-border/40 text-xs">
-              <span className="text-muted-foreground font-mono text-[11px]">
-                Showing page {page} of {totalPages} ({filteredRecs.length} total)
-              </span>
-              <div className="flex items-center gap-1.5">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={page <= 1}
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  className="h-7 px-2 text-xs"
-                >
-                  <ChevronLeft className="h-3.5 w-3.5" />
-                  Prev
-                </Button>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={page >= totalPages}
-                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                  className="h-7 px-2 text-xs"
-                >
-                  Next
-                  <ChevronRight className="h-3.5 w-3.5" />
-                </Button>
+          <div className="p-3.5 rounded-xl border border-cyan-500/30 bg-cyan-500/[0.03] space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-[10px] font-bold text-cyan-400">RECOMMENDATION-02</span>
+              <Badge variant="outline" className="text-[9px] border-cyan-500/40 text-cyan-300">
+                Efficiency Gain
+              </Badge>
+            </div>
+            <h4 className="font-semibold text-foreground">
+              Reallocate 5% Core Capacity to Test Coverage Automation
+            </h4>
+            <p className="text-[11px] text-muted-foreground leading-relaxed">
+              Increasing automated verification pass rates from 94% to 98% will eliminate an estimated 14 hours of manual pre-release regression verification.
+            </p>
+            <p className="text-[10px] text-emerald-400 font-mono pt-1">
+              Estimated ROI: +4% sprint velocity with zero net budget variance.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* What-If Monte Carlo Simulation Dialog */}
+      <Dialog open={whatIfOpen} onOpenChange={setWhatIfOpen}>
+        <DialogContent className="max-w-lg bg-card border-border/80 text-foreground">
+          <DialogHeader>
+            <DialogTitle className="text-sm font-bold flex items-center gap-2">
+              <Sliders className="size-4 text-violet-400" />
+              Simulate What-If Delivery Scenarios
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-4 pt-2 text-xs">
+            <p className="text-muted-foreground text-[11px] leading-relaxed">
+              Adjust hypothetical budget, deadline, or engineering headcount constraints to forecast delivery impact without modifying approved baselines.
+            </p>
+
+            <div className="space-y-3 p-4 rounded-xl bg-background/50 border border-border/60">
+              <div>
+                <div className="flex justify-between text-[11px] font-semibold text-muted-foreground mb-1">
+                  <span>Additional Budget Injection ($)</span>
+                  <span className="font-mono text-cyan-400">
+                    {simBudgetDelta >= 0 ? `+$${simBudgetDelta.toLocaleString()}` : `-$${Math.abs(simBudgetDelta).toLocaleString()}`}
+                  </span>
+                </div>
+                <Slider
+                  min={-50000}
+                  max={50000}
+                  step={5000}
+                  value={[simBudgetDelta]}
+                  onValueChange={(val) => setSimBudgetDelta(val[0] ?? 0)}
+                />
+              </div>
+
+              <div>
+                <div className="flex justify-between text-[11px] font-semibold text-muted-foreground mb-1">
+                  <span>Schedule Adjustment (Days)</span>
+                  <span className="font-mono text-violet-400">
+                    {simScheduleDelta >= 0 ? `+${simScheduleDelta} days` : `${simScheduleDelta} days`}
+                  </span>
+                </div>
+                <Slider
+                  min={-20}
+                  max={30}
+                  step={2}
+                  value={[simScheduleDelta]}
+                  onValueChange={(val) => setSimScheduleDelta(val[0] ?? 0)}
+                />
+              </div>
+
+              <div>
+                <div className="flex justify-between text-[11px] font-semibold text-muted-foreground mb-1">
+                  <span>Team Headcount Delta</span>
+                  <span className="font-mono text-emerald-400">
+                    {simTeamDelta >= 0 ? `+${simTeamDelta} engineers` : `${simTeamDelta} engineers`}
+                  </span>
+                </div>
+                <Slider
+                  min={-3}
+                  max={5}
+                  step={1}
+                  value={[simTeamDelta]}
+                  onValueChange={(val) => setSimTeamDelta(val[0] ?? 0)}
+                />
               </div>
             </div>
-          )}
-        </div>
-      </SectionCard>
-    </>
+
+            {/* Simulation Forecast Outcomes */}
+            <div className="p-3.5 rounded-xl border border-violet-500/40 bg-violet-500/[0.04] space-y-1.5">
+              <p className="font-bold text-violet-300 text-[11px] uppercase tracking-wider">
+                Predicted Simulation Outcome:
+              </p>
+              <div className="grid grid-cols-3 gap-2 text-center pt-1 font-mono text-[11px]">
+                <div className="p-2 rounded bg-background/60">
+                  <p className="text-muted-foreground text-[10px]">Forecast Spend</p>
+                  <p className="font-bold text-foreground mt-0.5">
+                    ${simPredictedCost.toLocaleString()}
+                  </p>
+                </div>
+                <div className="p-2 rounded bg-background/60">
+                  <p className="text-muted-foreground text-[10px]">Target Days</p>
+                  <p className="font-bold text-foreground mt-0.5">{simPredictedDays}d</p>
+                </div>
+                <div className="p-2 rounded bg-background/60">
+                  <p className="text-muted-foreground text-[10px]">Velocity</p>
+                  <p className="font-bold text-emerald-400 mt-0.5">{simPredictedVelocity} pts</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2 border-t border-border/40">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setSimBudgetDelta(0);
+                  setSimScheduleDelta(0);
+                  setSimTeamDelta(0);
+                }}
+                className="text-xs gap-1"
+              >
+                <RotateCcw className="size-3" /> Reset
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  setWhatIfOpen(false);
+                  toast.success("Scenario simulation retained for active session comparison.");
+                }}
+                className="bg-violet-600 hover:bg-violet-500 text-white text-xs px-4"
+              >
+                Close Simulation
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }

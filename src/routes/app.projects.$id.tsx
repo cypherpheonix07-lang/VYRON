@@ -39,10 +39,41 @@ function ProjectLayout() {
 
 function LiveProjectLayout() {
   const { id } = Route.useParams();
+  const { activate } = useDemoMode();
   const { data, status, error, refresh } = useLiveProject();
   if (status === "loading") return <p role="status">Loading project from the database…</p>;
-  if (status === "error") return <div role="alert" className="space-y-3"><p>{error}</p><Button onClick={refresh}>Retry database request</Button></div>;
-  if (!data) return <div className="space-y-3"><p>Project not found or access is unavailable. No sample project has been substituted.</p><Button onClick={refresh}>Check again</Button></div>;
+  if (status === "error") {
+    return (
+      <div role="alert" className="space-y-4 rounded-xl border border-destructive/30 bg-destructive/10 p-6">
+        <div>
+          <h2 className="text-base font-semibold text-foreground">Database Access Unavailable</h2>
+          <p className="mt-1 text-sm text-muted-foreground">{error}</p>
+        </div>
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <Button onClick={refresh} variant="outline" size="sm">Retry database request</Button>
+          <Button onClick={() => activate(id, "fintech")} variant="default" size="sm">
+            Switch to Demo Mode (Sample Fixtures)
+          </Button>
+        </div>
+      </div>
+    );
+  }
+  if (!data) {
+    return (
+      <div className="space-y-4 rounded-xl border border-border/40 bg-card p-6">
+        <div>
+          <h2 className="text-base font-semibold text-foreground">Project Not Found in Database</h2>
+          <p className="mt-1 text-sm text-muted-foreground">Project not found or access is unavailable. No sample project has been substituted.</p>
+        </div>
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <Button onClick={refresh} variant="outline" size="sm">Check again</Button>
+          <Button onClick={() => activate(id, "fintech")} variant="default" size="sm">
+            Explore in Demo Mode (Sample Fixtures)
+          </Button>
+        </div>
+      </div>
+    );
+  }
   return <ProjectShell id={id} project={data.project} />;
 }
 

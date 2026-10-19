@@ -381,6 +381,19 @@ class CopilotStore {
     this.setDrawerOpen(!this.state.isDrawerOpen);
   }
 
+  public openDrawer() {
+    this.setDrawerOpen(true);
+  }
+
+  public sendMessage(mode: AppMode | "CHAT", text: string) {
+    this.setDrawerOpen(true);
+    const appMode: AppMode = mode === "CHAT" ? "NORMAL" : mode;
+    this.addMessage(appMode, {
+      sender: "USER",
+      text,
+    });
+  }
+
   public setContextLensOpen(isOpen: boolean, passport?: import("@/services/copilot/contextMesh").ContextPassport | null) {
     this.state.isContextLensOpen = isOpen;
     if (passport !== undefined) {

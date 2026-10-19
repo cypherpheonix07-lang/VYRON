@@ -165,6 +165,7 @@ export const NAV_DOMAINS: NavDomain[] = [
       { to: "/app/drift", label: "Architecture Drift", icon: Compass, exact: false },
       { to: "/app/impact", label: "Causal Change Impact", icon: GitPullRequest, exact: false },
       { to: "/app/missions", label: "Decisions & Missions", icon: Target, exact: false },
+      { to: "/app/recommendations", label: "Recommendations", icon: Sparkles, exact: false },
     ],
   },
   {
