@@ -76,27 +76,29 @@ const classify = (raw?: string): AuthErrorCode => {
   if (m.includes("email not confirmed")) return "email_not_confirmed";
   if (m.includes("already registered") || m.includes("user already registered"))
     return "email_exists";
-  if (m.includes("rate limit") || m.includes("too many")) return "rate_limited";
+  if (m.includes("rate limit") || m.includes("too many") || m.includes("email rate limit exceeded"))
+    return "rate_limited";
   if (m.includes("api key") || m.includes("anon key") || m.includes("invalid key"))
     return "invalid_api_key";
   if (m.includes("failed to fetch") || m.includes("network") || m.includes("fetch"))
     return "network";
   if (m.includes("password") && m.includes("weak")) return "weak_password";
-  if (m.includes("provider") || m.includes("oauth")) return "provider_error";
+  if (m.includes("provider") || m.includes("oauth") || m.includes("redirect_uri_mismatch"))
+    return "provider_error";
   return "unknown";
 };
 
 const HUMAN: Record<AuthErrorCode, string> = {
-  invalid_credentials: "Incorrect email or password.",
-  email_not_confirmed: "Email not confirmed. Check your inbox.",
-  email_exists: "Already registered. Sign in instead.",
-  rate_limited: "Too many attempts. Wait 30 seconds and retry.",
-  invalid_api_key: "Supabase key misconfigured — contact support.",
-  network: "Network error. Check your connection.",
-  weak_password: "Password too weak. Use uppercase, numbers, and symbols.",
-  provider_error: "OAuth provider misconfigured — check the Supabase dashboard.",
+  invalid_credentials: "Incorrect email or password. Please check your credentials and try again.",
+  email_not_confirmed: "Email address not confirmed. Please check your inbox for the confirmation email.",
+  email_exists: "An account with this email address already exists. Please sign in instead.",
+  rate_limited: "Email verification rate limit exceeded on this project. Please wait a few minutes before trying again or sign in with an existing account.",
+  invalid_api_key: "Supabase project key misconfigured — contact administrator.",
+  network: "Network connection error. Check your connection and retry.",
+  weak_password: "Password too weak. Please use at least 8 characters with numbers and symbols.",
+  provider_error: "OAuth provider misconfigured — Google redirect URI must be registered in Google Cloud Console.",
   not_implemented: "This feature is not enabled in this build.",
-  unknown: "Unexpected authentication error.",
+  unknown: "Unexpected authentication error occurred. Please try again.",
 };
 
 const fail = <T>(raw?: string): AuthResponse<T> => {
@@ -114,9 +116,10 @@ export const authService = {
       const search = new URLSearchParams(window.location.search);
       if (search.get("demo") === "true") return true;
       if (localStorage.getItem("brahma_demo_mode") === "true") return true;
+      if (sessionStorage.getItem("brahma_demo_session")) return true;
       if (localStorage.getItem("brahma_demo_session")) return true;
     }
-    return Boolean(import.meta.env.DEV || import.meta.env["VITE_ENABLE_DEMO"] === "true");
+    return import.meta.env["VITE_ENABLE_DEMO"] === "true";
   },
 
   isOAuthProviderEnabled(provider: "google" | "github" | "gitlab"): boolean {
@@ -179,44 +182,6 @@ export const authService = {
         password,
       });
       if (error) {
-        const errCode = classify(error.message);
-        if (
-          errCode === "invalid_api_key" ||
-          errCode === "network" ||
-          cleanEmail.includes("demo") ||
-          cleanEmail.includes("admin") ||
-          cleanEmail.includes("faculty") ||
-          cleanEmail.includes("developer")
-        ) {
-          const role = cleanEmail.includes("admin") ? "admin" : "faculty";
-          const fallbackSession = {
-            access_token: "demo-token-" + Date.now(),
-            refresh_token: "demo-refresh-token",
-            expires_at: Math.floor(Date.now() / 1000) + 86400,
-            user: {
-              id: "demo-user-" + Date.now(),
-              email: cleanEmail,
-              name: cleanEmail.split("@")[0] || "Chief Architect",
-              role: role as Role,
-              onboarded: true,
-              isDemo: true,
-            },
-          };
-          if (typeof window !== "undefined") {
-            localStorage.setItem("brahma_demo_session", JSON.stringify(fallbackSession));
-            localStorage.setItem("brahma_demo_mode", "true");
-          }
-          logAuthEvent({
-            event: "signed_in",
-            method: "Local Fallback (Quarantined Supabase)",
-            status: "success",
-            email: cleanEmail,
-            user_id: fallbackSession.user.id,
-          }).catch(() => undefined);
-
-          return { ok: true, data: fallbackSession as unknown as Session };
-        }
-
         logAuthEvent({
           event: "failed_password",
           method: "Password",
@@ -351,6 +316,11 @@ export const authService = {
     try {
       if (typeof window !== "undefined") {
         localStorage.removeItem("brahma_demo_session");
+        localStorage.removeItem("brahma_demo_mode");
+        sessionStorage.removeItem("brahma_demo_session");
+        sessionStorage.removeItem("brahma.signup_draft");
+        sessionStorage.removeItem("brahma_selected_github_account");
+        sessionStorage.removeItem("brahma_discovered_github_accounts");
       }
       let emailForLog = "unknown@brahma.dev";
       const { data: sd } = await supabase.auth.getSession();
@@ -375,8 +345,8 @@ export const authService = {
 
   async getSession(): Promise<AuthResponse<Session | null>> {
     try {
-      if (typeof window !== "undefined") {
-        const demoStorage = localStorage.getItem("brahma_demo_session");
+      if (typeof window !== "undefined" && this.isDemoMode()) {
+        const demoStorage = localStorage.getItem("brahma_demo_session") || sessionStorage.getItem("brahma_demo_session");
         if (demoStorage) {
           try {
             const parsed = JSON.parse(demoStorage);
@@ -396,8 +366,8 @@ export const authService = {
   },
 
   getStoredSession(): (Session & { mode?: string }) | null {
-    if (typeof window === "undefined") return null;
-    const demoStorage = localStorage.getItem("brahma_demo_session");
+    if (typeof window === "undefined" || !this.isDemoMode()) return null;
+    const demoStorage = localStorage.getItem("brahma_demo_session") || sessionStorage.getItem("brahma_demo_session");
     if (demoStorage) {
       try {
         const parsed = JSON.parse(demoStorage);
@@ -418,8 +388,8 @@ export const authService = {
 
   async getUser(): Promise<AuthResponse<User | null>> {
     try {
-      if (typeof window !== "undefined") {
-        const demoStorage = localStorage.getItem("brahma_demo_session");
+      if (typeof window !== "undefined" && this.isDemoMode()) {
+        const demoStorage = localStorage.getItem("brahma_demo_session") || sessionStorage.getItem("brahma_demo_session");
         if (demoStorage) {
           try {
             const parsed = JSON.parse(demoStorage);
