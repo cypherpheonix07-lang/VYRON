@@ -44,6 +44,8 @@ export interface CanonicalProject {
   updated_at?: string | undefined;
   owner_id?: string | undefined;
   health_score?: number | undefined; // compatibility
+  revision?: string | undefined;
+  version?: string | undefined;
 }
 
 const LOCAL_STORAGE_PROJECTS_KEY = "vyron_canonical_projects_v1";

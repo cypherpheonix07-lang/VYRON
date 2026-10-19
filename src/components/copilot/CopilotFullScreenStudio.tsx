@@ -403,72 +403,63 @@ export function CopilotFullScreenStudio() {
     }
   };
 
-  // Dynamic suggested actions based on active project state and system model
-  const dynamicSuggestedActions = [
+  const dynamicSuggestedActions: CopilotAction[] = [
     {
       id: "act-drift",
       label: "Audit Architecture Drift",
       actionType: "DETECT_ARCHITECTURE_DRIFT",
-      description: "Compare declared architecture blueprint against live AST realities",
     },
     {
       id: "act-impact",
       label: "Analyze Change Blast Radius",
       actionType: "ANALYZE_CHANGE_IMPACT",
-      description: "Inspect direct and transitive dependencies affected by changes",
     },
     {
       id: "act-mission",
       label: "Launch Pre-Release Mission",
       actionType: "START_ENGINEERING_MISSION",
-      description: "Coordinate bounded specialist agents to verify release readiness",
     },
   ];
 
-  const handleExecuteSuggestedAction = async (action: {
-    id: string;
-    label: string;
-    actionType: string;
-    payload?: Record<string, unknown>;
-  }) => {
+  const handleExecuteSuggestedAction = async (action: CopilotAction) => {
     toast.loading(`Executing action: ${action.label}...`, { id: "exec-action" });
     try {
-      const type = action.actionType as ActionType;
+      const type = action.actionType;
       const params: Record<string, unknown> = { ...(action.payload || {}) };
 
-      if (type === "DETECT_ARCHITECTURE_DRIFT" && !params.projectId) {
-        params.projectId = liveContext?.project.id || "proj-brahma";
-        params.saveSnapshot = true;
-      } else if (type === "ANALYZE_CHANGE_IMPACT" && !params.changedFile) {
-        params.changedFile = "src/services/settlementEngine.ts";
-      } else if (type === "START_ENGINEERING_MISSION" && !params.title) {
-        params.title = "Pre-Release Verification Mission";
-        params.objective = "Audit drift, security findings, and release gates";
-      } else if (type === "EVALUATE_ENGINEERING_POLICIES" && !params.releaseCandidate) {
-        params.releaseCandidate = "rc-2.0";
-      } else if (type === "COMPARE_TIME_MACHINE_SNAPSHOTS" && !params.baseSnapshotId) {
-        params.baseSnapshotId = "snap-baseline";
-        params.targetSnapshotId = "snap-regression";
-      } else if (type === "RUN_SIMULATION_SCENARIO" && !params.scenarioId) {
-        params.scenarioId = "SCENARIO_01_DRIFT";
-      } else if (type === "VALIDATE_DATASET" && !params.datasetId) {
-        params.datasetId = liveContext?.dataset.id || "ieee_fraud_benchmark";
-      } else if (type === "TEST_CONNECTOR" && !params.connectorId) {
-        params.connectorId = "github";
-      } else if (type === "INSPECT_STAGE" && !params.stageId) {
-        params.stageId = 5;
-      } else if (type === "INJECT_DEMO_ANOMALY" && !params.count) {
-        params.count = 5;
-      } else if (type === "SWITCH_DEMO_SCENARIO" && !params.scenarioId) {
-        params.scenarioId = "brazilian_ecommerce";
-      } else if (type === "INVESTIGATE_ANOMALY" && !params.anomalyId) {
-        params.anomalyId = "anom_high_iqr";
-      } else if (type === "RUN_ANALYSIS" && !params.speedMultiplier) {
-        params.speedMultiplier = 1.5;
+      if (type === "DETECT_ARCHITECTURE_DRIFT" && !params["projectId"]) {
+        params["projectId"] = liveContext?.project.id || "proj-brahma";
+        params["saveSnapshot"] = true;
+      } else if (type === "ANALYZE_CHANGE_IMPACT" && !params["changedFile"]) {
+        params["changedFile"] = "src/services/settlementEngine.ts";
+      } else if (type === "START_ENGINEERING_MISSION" && !params["title"]) {
+        params["title"] = "Pre-Release Verification Mission";
+        params["objective"] = "Audit drift, security findings, and release gates";
+      } else if (type === "EVALUATE_ENGINEERING_POLICIES" && !params["releaseCandidate"]) {
+        params["releaseCandidate"] = "rc-2.0";
+      } else if (type === "COMPARE_TIME_MACHINE_SNAPSHOTS" && !params["baseSnapshotId"]) {
+        params["baseSnapshotId"] = "snap-baseline";
+        params["targetSnapshotId"] = "snap-regression";
+      } else if (type === "RUN_SIMULATION_SCENARIO" && !params["scenarioId"]) {
+        params["scenarioId"] = "SCENARIO_01_DRIFT";
+      } else if (type === "VALIDATE_DATASET" && !params["datasetId"]) {
+        params["datasetId"] = liveContext?.dataset.id || "ieee_fraud_benchmark";
+      } else if (type === "TEST_CONNECTOR" && !params["connectorId"]) {
+        params["connectorId"] = "github";
+      } else if (type === "INSPECT_STAGE" && !params["stageId"]) {
+        params["stageId"] = 5;
+      } else if (type === "INJECT_DEMO_ANOMALY" && !params["count"]) {
+        params["count"] = 5;
+      } else if (type === "SWITCH_DEMO_SCENARIO" && !params["scenarioId"]) {
+        params["scenarioId"] = "brazilian_ecommerce";
+      } else if (type === "INVESTIGATE_ANOMALY" && !params["anomalyId"]) {
+        params["anomalyId"] = "anom_high_iqr";
+      } else if (type === "RUN_ANALYSIS" && !params["speedMultiplier"]) {
+        params["speedMultiplier"] = 1.5;
       }
 
       const res = await copilotActionEngine.dispatchAction(
-        type,
+        type as import("@/services/copilot/copilotActionEngine").ActionType,
         action.label,
         `Action dispatched from Copilot conversation`,
         params,

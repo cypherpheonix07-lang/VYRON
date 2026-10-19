@@ -19,7 +19,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageHeader, SectionCard } from "@/components/brahma/primitives";
-import { BrahmaLogo } from "@/components/brahma/logo";
 import { projectRegistry } from "@/services/project/projectRegistry";
 import { useActiveProject } from "@/hooks/useActiveProject";
 import { architectureDriftEngine } from "@/services/intelligence/driftEngine";
@@ -66,7 +65,7 @@ function SearchResultsPage() {
   // Dynamic Grounded Search Index (E01-E05)
   const searchIndex = useMemo<SearchItem[]>(() => {
     const items: SearchItem[] = [];
-    const isDemo = authService.getCurrentSession()?.mode === "DEMO";
+    const isDemo = authService.getStoredSession()?.mode === "DEMO";
 
     // 1. Live Projects from canonical registry
     const liveProjects = projectRegistry.getAllProjects();
@@ -86,8 +85,8 @@ function SearchResultsPage() {
     for (const finding of driftReport.findings) {
       items.push({
         category: "Drift",
-        title: `${finding.id}: ${finding.componentId} (${finding.deviationType})`,
-        subtitle: finding.description,
+        title: `${finding.id}: ${finding.title} (${finding.type})`,
+        subtitle: finding.remediation || finding.evidence,
         href: `/app/drift`,
         badge: finding.severity,
         icon: Layers,
@@ -152,7 +151,7 @@ function SearchResultsPage() {
           subtitle: "Acquirer settlement & merchant panel stack.",
           href: "/app/studio/templates",
           badge: "Demo Template",
-          icon: BrahmaLogo,
+          icon: Sparkles,
         },
         {
           category: "Datasets",
@@ -279,7 +278,7 @@ function SearchResultsPage() {
                 <Link to="/app">Dashboard</Link>
               </Button>
               <Button size="sm" variant="outline" className="text-[10px]" asChild>
-                <Link to="/discover">Reality Map</Link>
+                <Link to="/discover" search={{ q: "", category: "", tab: "reality-map" }}>Reality Map</Link>
               </Button>
             </div>
           </div>

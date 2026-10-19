@@ -436,6 +436,10 @@ export class ReleaseGateEngine {
     };
   }
 
+  public getDecomposedScore(): DecomposedReleaseScore {
+    return this.evaluateReleaseReadiness();
+  }
+
   /**
    * Explains the exact causal chain of why a gate is failed or blocked.
    */
@@ -567,6 +571,10 @@ export class ReleaseGateEngine {
       rehearsalHash,
       verdict: readiness.blockingGateIds.length === 0 ? "PASSED_REHEARSAL" : "FAILED_REHEARSAL",
     };
+  }
+
+  public runReleaseTwinRehearsal(targetReleaseVersion = "v2.5.0"): ReleaseTwinRehearsalResult {
+    return this.rehearseReleaseTwin(targetReleaseVersion);
   }
 
   /**

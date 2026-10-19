@@ -260,7 +260,7 @@ export const activityService = {
       velocity_24h: velocity24h,
       velocity_prev_24h: Math.max(0, velocity24h - 1),
       momentum: velocity24h > 0 ? 50.0 : 0.0,
-      gate_status: criticalEvents > 0 ? "blocked" : (health > 80 ? "pass" : "evaluating"),
+      gate_status: criticalEvents > 0 ? "blocked" : (health > 80 ? "pass" : "warning"),
       open_critical: criticalEvents,
       active_scans: 0,
       last_event_at: recentEvents[0]?.created_at || (proj?.lastUpdated || new Date().toISOString()),

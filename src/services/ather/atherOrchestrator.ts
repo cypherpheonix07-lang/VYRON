@@ -30,16 +30,16 @@ import { atherActionEngine } from "./actionEngine.ts";
 import { atherDataAnalystSpecialist } from "./dataAnalystSpecialist.ts";
 
 export interface AtherTurnOptions {
-  taskMode?: TaskMode;
-  model?: AtherModelId;
-  executionDepth?: ExecutionDepth;
-  specialist?: SpecialistType;
-  skills?: string[];
-  connectors?: string[];
-  responseDetail?: ResponseDetail;
-  attachments?: Array<{ name: string; content: string; type?: string }>;
-  projectId?: string;
-  allowFallback?: boolean;
+  taskMode?: TaskMode | undefined;
+  model?: AtherModelId | undefined;
+  executionDepth?: ExecutionDepth | undefined;
+  specialist?: SpecialistType | undefined;
+  skills?: string[] | undefined;
+  connectors?: string[] | undefined;
+  responseDetail?: ResponseDetail | undefined;
+  attachments?: Array<{ name: string; content: string; type?: string }> | undefined;
+  projectId?: string | undefined;
+  allowFallback?: boolean | undefined;
 }
 
 export class AtherOrchestrator {

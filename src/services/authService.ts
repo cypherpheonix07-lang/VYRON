@@ -395,6 +395,25 @@ export const authService = {
     }
   },
 
+  getStoredSession(): (Session & { mode?: string }) | null {
+    if (typeof window === "undefined") return null;
+    const demoStorage = localStorage.getItem("brahma_demo_session");
+    if (demoStorage) {
+      try {
+        const parsed = JSON.parse(demoStorage);
+        if (parsed && (parsed.user || parsed.mode)) return parsed as (Session & { mode?: string });
+      } catch {
+        // ignore JSON parse error
+      }
+    }
+    return null;
+  },
+
+  async getCurrentSession(): Promise<(Session & { mode?: string }) | null> {
+    const res = await this.getSession();
+    return res.ok && res.data ? (res.data as (Session & { mode?: string })) : this.getStoredSession();
+  },
+
   // ── 7. getUser ───────────────────────────────────────────────────────────
 
   async getUser(): Promise<AuthResponse<User | null>> {

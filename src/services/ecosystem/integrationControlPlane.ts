@@ -142,7 +142,7 @@ export class EcosystemControlPlane {
       healthScore: 0, // Unassessed until verified by first AST & security scan
       enrollmentStatus: "ENROLLED",
       connectedVibePlatforms: ["github"],
-      freshness: "SYNCED",
+      freshness: "FRESH",
       lastEventAt: new Date().toISOString(),
       lastReconciledAt: new Date().toISOString(),
       astDriftScore: 0,
