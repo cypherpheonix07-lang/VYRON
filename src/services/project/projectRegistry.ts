@@ -5,9 +5,9 @@
  * Strictly ZERO Raw SQL & Zero-Fiction Architecture Law enforced.
  */
 
-import { supabase } from "@/lib/supabaseClient";
-import { authService } from "@/services/authService";
-import { projects as seedProjects, type Project as MockProject } from "@/lib/mock-data";
+import { supabase } from "../../lib/supabaseClient.ts";
+import { authService } from "../authService.ts";
+import { projects as seedProjects, type Project as MockProject } from "../../lib/mock-data.ts";
 
 export type ProjectOrigin = "native" | "github";
 export type ProjectAvailability =
@@ -346,4 +346,4 @@ class ProjectRegistry {
 }
 
 export const projectRegistry = ProjectRegistry.getInstance();
-export { useActiveProject } from "@/hooks/useActiveProject";
+

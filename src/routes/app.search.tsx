@@ -59,7 +59,6 @@ function SearchResultsPage() {
 
   const [query, setQuery] = useState(q);
   const [activeCategory, setActiveCategory] = useState("All");
-  const [startTime] = useState(performance.now());
   const [executionTimeMs, setExecutionTimeMs] = useState(0);
 
   // Dynamic Grounded Search Index (E01-E05)
@@ -167,11 +166,9 @@ function SearchResultsPage() {
     return items;
   }, [project?.id]);
 
-  // Filtered Results with latency measurement (E05, E08, E10)
+  // Filtered Results (E05, E08, E10)
   const results = useMemo(() => {
-    const t0 = performance.now();
     if (!q.trim()) {
-      setExecutionTimeMs(0);
       return [];
     }
     const lowerQuery = q.toLowerCase();
@@ -182,12 +179,26 @@ function SearchResultsPage() {
         item.category.toLowerCase().includes(lowerQuery) ||
         item.badge.toLowerCase().includes(lowerQuery),
     );
-    const finalMatches =
-      activeCategory === "All" ? matches : matches.filter((item) => item.category === activeCategory);
+    return activeCategory === "All" ? matches : matches.filter((item) => item.category === activeCategory);
+  }, [q, activeCategory, searchIndex]);
 
+  // Measure search latency in side effect to maintain render purity
+  useEffect(() => {
+    if (!q.trim()) {
+      setExecutionTimeMs(0);
+      return;
+    }
+    const t0 = performance.now();
+    const lowerQuery = q.toLowerCase();
+    searchIndex.filter(
+      (item) =>
+        item.title.toLowerCase().includes(lowerQuery) ||
+        item.subtitle.toLowerCase().includes(lowerQuery) ||
+        item.category.toLowerCase().includes(lowerQuery) ||
+        item.badge.toLowerCase().includes(lowerQuery),
+    );
     const t1 = performance.now();
     setExecutionTimeMs(Math.round((t1 - t0) * 10) / 10);
-    return finalMatches;
   }, [q, activeCategory, searchIndex]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {

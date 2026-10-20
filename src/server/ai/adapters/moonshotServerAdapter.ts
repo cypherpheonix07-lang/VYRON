@@ -20,7 +20,7 @@ function computeSha256(data: unknown): string {
 }
 
 export class MoonshotServerAdapter implements IAIProvider {
-  public readonly id: "moonshot" = "moonshot";
+  public readonly id = "moonshot" as const;
   public readonly name = "Moonshot Kimi K3 MoE Gateway";
   private static instance: MoonshotServerAdapter | null = null;
   private readonly baseUrl = "https://api.moonshot.cn/v1";

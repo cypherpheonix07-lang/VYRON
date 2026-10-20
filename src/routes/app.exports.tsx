@@ -16,7 +16,7 @@ import {
   ShieldCheck,
   CheckCircle2,
 } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { toast } from "sonner";
 
 import { PageHeader, SectionCard } from "@/components/brahma/primitives";
@@ -193,7 +193,7 @@ This audit validates the compliance of repository AST call graphs against declar
   const [generatingId, setGeneratingId] = useState<string | null>(null);
 
   // Synchronize artifacts when active project changes
-  useMemo(() => {
+  useEffect(() => {
     setArtifacts(defaultArtifacts);
   }, [defaultArtifacts]);
 

@@ -20,9 +20,9 @@
     "verify:copilot": "node verify-nextgen-copilot.mjs",
     "verify:mission": "node verify-continuation-mission.mjs",
     "verify:advancement": "node verify-continuation-advancement.mjs",
-    "verify:gates": "node \"51 — TESTING PLATFORM/test-acceptance-gates.mjs\"",
-    "verify:all": "node \"51 — TESTING PLATFORM/scripts/testing/test-godmode-vnext-scratch-testing.mjs\"",
-    "verify:two-phase": "node \"51 — TESTING PLATFORM/scripts/testing/run-two-phase-verification.mjs\"",
+    "verify:gates": "npx tsx \"51 — TESTING PLATFORM/test-acceptance-gates.mjs\"",
+    "verify:all": "npx tsx \"51 — TESTING PLATFORM/scripts/testing/test-godmode-vnext-scratch-testing.mjs\"",
+    "verify:two-phase": "npx tsx \"51 — TESTING PLATFORM/scripts/testing/run-two-phase-verification.mjs\"",
     "test:ather": "node test-ather-conversation-suite.mjs"
   },
   "dependencies": {
