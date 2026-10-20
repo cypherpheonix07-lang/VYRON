@@ -21,7 +21,7 @@ services:
 
   brahma-engine:
     build:
-      context: ./vyron-engine
+      context: ./07 — BACKEND SERVICE MESH/vyron-engine
       dockerfile: Dockerfile
     container_name: brahma-engine
     restart: always
@@ -41,7 +41,7 @@ services:
 
   brahma-worker:
     build:
-      context: ./vyron-engine
+      context: ./07 — BACKEND SERVICE MESH/vyron-engine
       dockerfile: Dockerfile
     container_name: brahma-worker
     restart: always

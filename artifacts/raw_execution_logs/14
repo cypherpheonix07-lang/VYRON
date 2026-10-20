@@ -1,0 +1,23 @@
+===============================================================
+GOD MODE — NEW PROJECT GENERATOR v2: ASSERTION SUITE (V1 - V14)
+===============================================================
+
+[✅ PASS] V1: Domain Catalog Ingestion Count - Database active domains count = 30 (expected 30)
+[✅ PASS] V2: Persona Selection & Priority Ranking - Length: 5, Custom Flags: [false, false, false, true, true], Priorities: [1, 2, 3, 4, 5]
+[✅ PASS] V3: Boundary Sanitization against XSS & Injection - Dirty: "<script>alert("XSS")</script> & 'DROP TABLE' /\" -> Cleaned: "scriptalert(XSS)script  DROP TABLE" (zero dangerous chars)
+[✅ PASS] V4: Draft Autosave Schema & Versioning - Draft version === 2, saved_at: 2026-10-19T20:17:39.679Z
+[✅ PASS] V5: Dependency Rule R1 (Payments -> Auth Blocking) - Payments without Auth correctly flagged: "Payment processing requires user authentication to secure billing sessions."
+[✅ PASS] V6: Dynamic Pricing Formula & Copilot Delta - Initial: $0.0105, With Copilot: $0.0149, Delta: $0.0044 (matches formula ±0.0001)
+[✅ PASS] V7: Generator Payload Validation & Constraints - Strictness IN ('advisory','standard','strict'): true, Target Users: 1
+[✅ PASS] V8: Registry Card Contract Verification - Domain icon, user chips, strictness badge, and health mini-ring wired in app.projects.index.tsx
+[✅ PASS] V9: RLS Draft State Isolation Policy - Policy "Users can manage own drafts" enforces auth.uid() = owner_id on projects table
+[✅ PASS] V10: Combobox 5-State Machine & A11y Navigation - State matrix [closed, open, filtering, creating, invalid] with keyboard controls [ArrowDown, ArrowUp, Enter, Escape]
+[✅ PASS] V11: Typecheck and Build Script Contract - Scripts declared in package.json: typecheck: "tsc --noEmit", build: "vite build"
+[✅ PASS] V12: TanStack Query Caching & Stale Window - staleTime: 10 minutes (true), retries: 2 with backoff (true)
+[✅ PASS] V13: BRA-409 Concurrency Recovery Card - ProjectWizardShell detects outdated draft version and renders BRA-409 resolution card
+[✅ PASS] V14: Accessibility Compliance (WCAG 2.1 AA / Touch Targets) - aria-live polite: true, combobox ARIA: true, 44px touch targets enforced
+
+===============================================================
+VERIFICATION SUMMARY: 14/14 PASSED
+===============================================================
+
