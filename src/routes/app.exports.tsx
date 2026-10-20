@@ -42,7 +42,8 @@ export const Route = createFileRoute("/app/exports")({
       { title: "Export Center — PROJECT BRAHMA" },
       {
         name: "description",
-        content: "Download verified system blueprints, OpenAPI documentation, and audit records with real payload generation.",
+        content:
+          "Download verified system blueprints, OpenAPI documentation, and audit records with real payload generation.",
       },
     ],
   }),
@@ -240,9 +241,7 @@ This audit validates the compliance of repository AST call graphs against declar
     toast.info("Compiling live artifact snapshot...");
     setTimeout(() => {
       setArtifacts((prev) =>
-        prev.map((art) =>
-          art.id === id ? { ...art, status: "Completed", size: "128 KB" } : art,
-        ),
+        prev.map((art) => (art.id === id ? { ...art, status: "Completed", size: "128 KB" } : art)),
       );
       setGeneratingId(null);
       toast.success("Artifact compiled successfully.");
