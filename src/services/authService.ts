@@ -8,10 +8,10 @@
  *  - ZERO MOCK LOGIC. All methods make real Supabase authentication calls.
  */
 
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "../lib/supabaseClient.ts";
 import type { Session, AuthChangeEvent, User } from "@supabase/supabase-js";
-import type { Role } from "../lib/auth";
-import { logAuthEvent } from "../lib/api";
+import type { Role } from "../lib/auth.ts";
+import { logAuthEvent } from "../lib/api.ts";
 
 export { logAuthEvent };
 

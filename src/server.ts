@@ -1,12 +1,37 @@
 import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
-import { gatewayEngine } from "./server/ai/gatewayEngine";
-import { modelRegistry } from "./server/ai/modelRegistry";
-import { modelRouter } from "./server/ai/modelRouter";
-import { openAiServerAdapter } from "./server/ai/adapters/openAiServerAdapter";
-import { openRouterServerAdapter } from "./server/ai/adapters/openRouterServerAdapter";
-import { moonshotServerAdapter } from "./server/ai/adapters/moonshotServerAdapter";
-import { providerRegistry } from "./server/ai/providerRegistry";
+let aiModulesPromise: Promise<{
+  gatewayEngine: any;
+  modelRegistry: any;
+  modelRouter: any;
+  openAiServerAdapter: any;
+  openRouterServerAdapter: any;
+  moonshotServerAdapter: any;
+  providerRegistry: any;
+}> | null = null;
+
+async function getAiModules() {
+  if (!aiModulesPromise) {
+    aiModulesPromise = Promise.all([
+      import("./server/ai/gatewayEngine.ts"),
+      import("./server/ai/modelRegistry.ts"),
+      import("./server/ai/modelRouter.ts"),
+      import("./server/ai/adapters/openAiServerAdapter.ts"),
+      import("./server/ai/adapters/openRouterServerAdapter.ts"),
+      import("./server/ai/adapters/moonshotServerAdapter.ts"),
+      import("./server/ai/providerRegistry.ts"),
+    ]).then(([gw, mr, rt, oai, or, ms, pr]) => ({
+      gatewayEngine: gw.gatewayEngine,
+      modelRegistry: mr.modelRegistry,
+      modelRouter: rt.modelRouter,
+      openAiServerAdapter: oai.openAiServerAdapter,
+      openRouterServerAdapter: or.openRouterServerAdapter,
+      moonshotServerAdapter: ms.moonshotServerAdapter,
+      providerRegistry: pr.providerRegistry,
+    }));
+  }
+  return aiModulesPromise;
+}
 
 function renderFallbackErrorHtml(): string {
   return `<!doctype html>
@@ -130,9 +155,23 @@ async function handleAiServerRoutes(request: Request): Promise<Response | null> 
     });
   }
 
-  if (request.method === "OPTIONS" && path.startsWith("/api/ai")) {
+  if (!path.startsWith("/api/ai")) {
+    return null;
+  }
+
+  if (request.method === "OPTIONS") {
     return new Response(null, { status: 204, headers: jsonHeaders });
   }
+
+  const {
+    gatewayEngine,
+    modelRegistry,
+    modelRouter,
+    openAiServerAdapter,
+    openRouterServerAdapter,
+    moonshotServerAdapter,
+    providerRegistry,
+  } = await getAiModules();
 
   if (path === "/api/ai/health") {
     const health = await gatewayEngine.getHealth();
