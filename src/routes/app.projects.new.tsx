@@ -85,6 +85,10 @@ export const Route = createFileRoute("/app/projects/new")({
   component: NewProjectPage,
 });
 
+function generateFallbackProjectId(): string {
+  return `proj-${Date.now()}`;
+}
+
 function NewProjectPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
@@ -211,7 +215,7 @@ function NewProjectPage() {
 
       if (!createdId) {
         // Deterministic local project ID if remote DB is unreachable or rejects schema
-        createdId = `proj-${Date.now()}`;
+        createdId = generateFallbackProjectId();
       }
 
       return onSuccessfulGeneration(createdId, payload);

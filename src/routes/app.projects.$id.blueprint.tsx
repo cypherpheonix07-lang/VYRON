@@ -287,7 +287,7 @@ function ArchitectureAlternativesPage() {
       alternativeId: "ALT-01",
       alternativeName: "Domain-Separated Modular Monolith",
       status: "ACCEPTED",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString(),
+      timestamp: "2026-10-14T12:00:00.000Z",
       justification:
         "Selected to minimize cloud infrastructure costs, eliminate distributed network latency, and preserve transactional integrity for MVP release gate qualification.",
       downstreamImpact: {

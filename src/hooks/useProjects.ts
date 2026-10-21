@@ -109,7 +109,8 @@ export function useProjects() {
 
   useEffect(() => {
     void fetchProjects();
-    return () => { requestVersion.current++; };
+    const reqVer = requestVersion;
+    return () => { reqVer.current++; };
   }, [fetchProjects]);
 
   const createProject = async (name: string, description: string) => {

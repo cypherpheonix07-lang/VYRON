@@ -10,19 +10,21 @@
  */
 
 export interface RegisteredWorkspaceSection {
-  id: string; // e.g. "requirements", "security", "blueprint", "editor"
-  label: string; // User-facing label e.g. "Requirements Specification"
-  projectId?: string | undefined;
+  id?: string; // e.g. "requirements", "security", "blueprint", "editor"
+  label?: string; // User-facing label e.g. "Requirements Specification"
+  sectionId?: string; // Alias for id
+  sectionName?: string; // Alias for label
+  projectId?: string | null | undefined;
   isDirty: () => boolean;
   getDirtySummary?: () => string;
-  save: () => Promise<boolean>;
+  save: () => Promise<boolean | void> | boolean | void;
   discard: () => Promise<void> | void;
 }
 
 export interface DirtySectionDetail {
   id: string;
   label: string;
-  projectId?: string | undefined;
+  projectId?: string | null | undefined;
   summary?: string | undefined;
 }
 
@@ -48,11 +50,18 @@ class WorkspaceChangeRegistry {
    * Returns an unregister function for component unmount cleanup.
    */
   public register(section: RegisteredWorkspaceSection): () => void {
-    this.sections.set(section.id, section);
+    const key = section.id || section.sectionId || `section-${Math.random().toString(36).substring(2, 9)}`;
+    const label = section.label || section.sectionName || key;
+    const normalized: RegisteredWorkspaceSection = {
+      ...section,
+      id: key,
+      label,
+    };
+    this.sections.set(key, normalized);
     this.notifyListeners();
 
     return () => {
-      this.sections.delete(section.id);
+      this.sections.delete(key);
       this.notifyListeners();
     };
   }
@@ -60,14 +69,14 @@ class WorkspaceChangeRegistry {
   /**
    * Check if any registered section within the target project has unsaved changes.
    */
-  public hasUnsavedChanges(projectId?: string): boolean {
+  public hasUnsavedChanges(projectId?: string | null): boolean {
     return this.getDirtySections(projectId).length > 0;
   }
 
   /**
    * Enumerate all currently dirty sections (optionally scoped to a specific project).
    */
-  public getDirtySections(projectId?: string): DirtySectionDetail[] {
+  public getDirtySections(projectId?: string | null): DirtySectionDetail[] {
     const dirty: DirtySectionDetail[] = [];
 
     for (const section of this.sections.values()) {
@@ -77,9 +86,11 @@ class WorkspaceChangeRegistry {
 
       try {
         if (section.isDirty()) {
+          const id = section.id || section.sectionId || "unknown";
+          const label = section.label || section.sectionName || id;
           dirty.push({
-            id: section.id,
-            label: section.label,
+            id,
+            label,
             projectId: section.projectId,
             summary: section.getDirtySummary ? section.getDirtySummary() : undefined,
           });
@@ -96,7 +107,7 @@ class WorkspaceChangeRegistry {
    * Execute save handlers for all dirty sections.
    * Saves are invoked sequentially or independently; tracks partial successes and failures.
    */
-  public async saveAll(projectId?: string): Promise<SaveAllResult> {
+  public async saveAll(projectId?: string | null): Promise<SaveAllResult> {
     const saved: string[] = [];
     const failed: string[] = [];
     const errors: Record<string, string> = {};
@@ -110,17 +121,21 @@ class WorkspaceChangeRegistry {
         continue;
       }
 
+      const id = section.id || section.sectionId || "unknown";
+      const label = section.label || section.sectionName || id;
+
       try {
-        const ok = await section.save();
+        const result = await section.save();
+        const ok = result !== false;
         if (ok) {
-          saved.push(section.label);
+          saved.push(label);
         } else {
-          failed.push(section.label);
-          errors[section.id] = "Section save handler returned unsuccessful status.";
+          failed.push(label);
+          errors[id] = "Section save handler returned unsuccessful status.";
         }
       } catch (err) {
-        failed.push(section.label);
-        errors[section.id] = err instanceof Error ? err.message : String(err);
+        failed.push(label);
+        errors[id] = err instanceof Error ? err.message : String(err);
       }
     }
 
@@ -138,7 +153,7 @@ class WorkspaceChangeRegistry {
    * Discard all unsaved edits across registered dirty sections.
    * Restores each section to its confirmed saved baseline without deleting existing project data.
    */
-  public async discardAll(projectId?: string): Promise<DiscardAllResult> {
+  public async discardAll(projectId?: string | null): Promise<DiscardAllResult> {
     const discarded: string[] = [];
 
     for (const section of this.sections.values()) {
@@ -150,11 +165,14 @@ class WorkspaceChangeRegistry {
         continue;
       }
 
+      const id = section.id || section.sectionId || "unknown";
+      const label = section.label || section.sectionName || id;
+
       try {
         await section.discard();
-        discarded.push(section.label);
+        discarded.push(label);
       } catch (err) {
-        console.error(`[WorkspaceChangeRegistry] Error discarding edits in section "${section.id}":`, err);
+        console.error(`[WorkspaceChangeRegistry] Error discarding edits in section "${id}":`, err);
       }
     }
 

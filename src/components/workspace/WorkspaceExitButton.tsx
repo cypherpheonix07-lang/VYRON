@@ -18,8 +18,8 @@ import { workspaceExitCoordinator } from "@/services/workspace/workspaceExitCoor
 import { cn } from "@/lib/utils";
 
 export interface WorkspaceExitButtonProps {
-  projectId?: string | undefined;
-  projectName?: string | undefined;
+  projectId?: string | null | undefined;
+  projectName?: string | null | undefined;
   className?: string | undefined;
   variant?: "ghost" | "outline" | "default";
   size?: "sm" | "default" | "icon";

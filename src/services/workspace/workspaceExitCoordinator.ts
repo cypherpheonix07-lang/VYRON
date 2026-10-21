@@ -26,16 +26,16 @@ export type ExitState =
 export type ExitOutcome = "saved" | "discarded" | "clean";
 
 export interface ExitAttemptOptions {
-  projectId?: string | undefined;
-  projectName?: string | undefined;
+  projectId?: string | null | undefined;
+  projectName?: string | null | undefined;
   navigate: (to: string, options?: Record<string, unknown>) => void;
   onConfirmRequired?: (dirtySections: DirtySectionDetail[]) => void;
 }
 
 export interface ExitCoordinatorState {
   status: ExitState;
-  projectId?: string | undefined;
-  projectName?: string | undefined;
+  projectId?: string | null | undefined;
+  projectName?: string | null | undefined;
   dirtySections: DirtySectionDetail[];
   error?: string | undefined;
   failedSections: string[];
@@ -213,8 +213,8 @@ class WorkspaceExitCoordinator {
    * Helper to construct safe URL parameters and route to dedicated /app/exit page.
    */
   private navigateToExitPage(params: {
-    projectId?: string | undefined;
-    projectName?: string | undefined;
+    projectId?: string | null | undefined;
+    projectName?: string | null | undefined;
     outcome: ExitOutcome;
     sections?: string[] | undefined;
   }): void {

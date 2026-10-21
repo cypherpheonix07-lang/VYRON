@@ -10,15 +10,16 @@ import { useEffect, useCallback } from "react";
 import { workspaceChangeRegistry } from "@/services/workspace/workspaceChangeRegistry";
 import { workspaceExitCoordinator } from "@/services/workspace/workspaceExitCoordinator";
 
-export function useWorkspaceExitGuard(projectId?: string, projectName?: string) {
+export function useWorkspaceExitGuard(projectId?: string | null, projectName?: string | null) {
   useEffect(() => {
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent): string | undefined => {
       if (workspaceChangeRegistry.hasUnsavedChanges(projectId)) {
         // Standard cross-browser unload protection
         e.preventDefault();
         e.returnValue = "";
         return "";
       }
+      return undefined;
     };
 
     window.addEventListener("beforeunload", handleBeforeUnload);
