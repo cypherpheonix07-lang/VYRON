@@ -74,7 +74,7 @@ const HISTORICAL_TRENDS = [
   { sprint: "Current", actualCost: 214000, budgetedCost: 210000, defectDensity: 1.2, velocity: 64 },
 ];
 
-export function BusinessKpiWorkspacePage() {
+function BusinessKpiWorkspacePage() {
   const { id } = Route.useParams();
 
   // Baseline Metrics

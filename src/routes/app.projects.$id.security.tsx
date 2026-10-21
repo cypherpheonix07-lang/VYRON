@@ -250,7 +250,7 @@ const INITIAL_THREATS: StrideThreat[] = [
   },
 ];
 
-export function SecurityWorkspacePage() {
+function SecurityWorkspacePage() {
   const { id } = Route.useParams();
   const [trustBoundaries] = useState<TrustBoundary[]>(INITIAL_TRUST_BOUNDARIES);
   const [threats, setThreats] = useState<StrideThreat[]>(() => {

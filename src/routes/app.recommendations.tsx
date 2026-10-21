@@ -152,7 +152,7 @@ const INITIAL_RECOMMENDATIONS: CodeRecommendation[] = [
   },
 ];
 
-export function RecommendationsEnginePage() {
+function RecommendationsEnginePage() {
   const [recommendations, setRecommendations] = useState<CodeRecommendation[]>(() => {
     try {
       const stored = localStorage.getItem("vyron_recommendations_v1");

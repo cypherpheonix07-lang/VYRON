@@ -256,7 +256,7 @@ const INITIAL_REQUIREMENTS: AtomicRequirement[] = [
   },
 ];
 
-export function RequirementsWorkspacePage() {
+function RequirementsWorkspacePage() {
   const { id } = Route.useParams();
   const [requirements, setRequirements] = useState<AtomicRequirement[]>(() => {
     try {

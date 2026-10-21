@@ -131,7 +131,7 @@ const COMPLEXITY_DISTRIBUTION = [
   { file: "realityMapService.ts", complexity: 8, issues: 1 },
 ];
 
-export function CodeAnalysisWorkspacePage() {
+function CodeAnalysisWorkspacePage() {
   const { id } = Route.useParams();
 
   // Scope & Commit selectors

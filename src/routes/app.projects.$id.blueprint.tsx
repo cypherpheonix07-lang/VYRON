@@ -211,7 +211,7 @@ const INITIAL_ALTERNATIVES: ArchitectureAlternative[] = [
   },
 ];
 
-export function ArchitectureAlternativesPage() {
+function ArchitectureAlternativesPage() {
   const { id } = Route.useParams();
   const [alternatives, setAlternatives] = useState<ArchitectureAlternative[]>(() => {
     try {
