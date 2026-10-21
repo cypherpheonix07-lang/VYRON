@@ -48,6 +48,7 @@ import {
   BarChart3,
   CheckSquare,
   Cpu,
+  ArrowRightFromLine,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode, useRef } from "react";
 import { toast } from "sonner";
@@ -86,6 +87,9 @@ import { cn } from "@/lib/utils";
 import { useProjects } from "@/hooks/useProjects";
 import { useActiveProject } from "@/hooks/useActiveProject";
 import { copilotRealtimeListener } from "@/services/copilot/copilotRealtimeListener";
+import { WorkspaceExitButton } from "@/components/workspace/WorkspaceExitButton";
+import { WorkspaceExitDialog } from "@/components/workspace/WorkspaceExitDialog";
+import { workspaceExitCoordinator } from "@/services/workspace/workspaceExitCoordinator";
 
 const labelMap: Record<string, string> = {
   app: "Dashboard",
@@ -1520,6 +1524,13 @@ export function AppShell({ children }: { children: ReactNode }) {
               {/* DEMO MODE SWITCH & TOGGLE */}
               <DemoModeToggle />
 
+              {/* WORKSPACE EXIT ACTION */}
+              <WorkspaceExitButton
+                projectId={activeProjectId}
+                projectName={activeProjectData?.name}
+                className="hidden sm:inline-flex"
+              />
+
               {/* Keyboard info indicator */}
               <Button
                 variant="ghost"
@@ -1622,6 +1633,17 @@ export function AppShell({ children }: { children: ReactNode }) {
                     </DropdownMenuItem>
                   ) : null}
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => {
+                      workspaceExitCoordinator.requestExit({
+                        projectId: activeProjectId,
+                        projectName: activeProjectData?.name,
+                        navigate: (to) => navigate({ to }),
+                      });
+                    }}
+                  >
+                    <ArrowRightFromLine className="size-4 mr-2" aria-hidden /> Exit workspace
+                  </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
                       logout();
@@ -1843,6 +1865,9 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Dual-Mode AI Copilot Floating Pill and Drawer */}
       <CopilotFloatingButton />
       <CopilotDrawer />
+
+      {/* Global Workspace Exit Guard Dialog */}
+      <WorkspaceExitDialog />
     </div>
   );
 }

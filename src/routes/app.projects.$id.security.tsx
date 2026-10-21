@@ -20,7 +20,7 @@ import {
   Cpu,
   Key,
 } from "lucide-react";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { copilotStore } from "@/state/copilot/copilotStore";
+import { workspaceChangeRegistry } from "@/services/workspace/workspaceChangeRegistry";
 
 export const Route = createFileRoute("/app/projects/$id/security")({
   head: () => ({
@@ -263,6 +264,38 @@ function SecurityWorkspacePage() {
     return INITIAL_THREATS;
   });
 
+  const savedBaselineRef = useRef<string>(JSON.stringify(threats));
+
+  // Register section with workspace change registry for exit protection
+  useEffect(() => {
+    const sectionId = `security-${id}`;
+    const unregister = workspaceChangeRegistry.register({
+      sectionId,
+      sectionName: "Security Engineering & STRIDE",
+      isDirty: () => JSON.stringify(threats) !== savedBaselineRef.current,
+      save: async () => {
+        try {
+          localStorage.setItem(`vyron_threats_${id}`, JSON.stringify(threats));
+          savedBaselineRef.current = JSON.stringify(threats);
+        } catch (err) {
+          throw new Error("Failed to persist security threat records: " + String(err));
+        }
+      },
+      discard: () => {
+        try {
+          const baseline = JSON.parse(savedBaselineRef.current);
+          setThreats(baseline);
+        } catch {
+          // fallback
+        }
+      },
+    });
+
+    return () => {
+      unregister();
+    };
+  }, [id, threats]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [selectedSeverity, setSelectedSeverity] = useState<string>("ALL");
@@ -274,6 +307,7 @@ function SecurityWorkspacePage() {
     setThreats(updated);
     try {
       localStorage.setItem(`vyron_threats_${id}`, JSON.stringify(updated));
+      savedBaselineRef.current = JSON.stringify(updated);
     } catch {
       // storage error
     }

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   Layers,
@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { copilotStore } from "@/state/copilot/copilotStore";
+import { workspaceChangeRegistry } from "@/services/workspace/workspaceChangeRegistry";
 
 export const Route = createFileRoute("/app/projects/$id/blueprint")({
   head: () => ({
@@ -223,10 +224,61 @@ function ArchitectureAlternativesPage() {
     return INITIAL_ALTERNATIVES;
   });
 
+  const savedBaselineRef = useRef<string>(JSON.stringify(alternatives));
+
   const [decisionModalOpen, setDecisionModalOpen] = useState(false);
   const [targetCandidate, setTargetCandidate] = useState<ArchitectureAlternative | null>(null);
   const [adrJustification, setAdrJustification] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+
+  // Register section with workspace change registry for robust exit protection
+  useEffect(() => {
+    const sectionId = `blueprint-${id}`;
+    const unregister = workspaceChangeRegistry.register({
+      sectionId,
+      sectionName: "Architecture Alternatives & ADRs",
+      isDirty: () => {
+        return (
+          JSON.stringify(alternatives) !== savedBaselineRef.current ||
+          (decisionModalOpen && !!targetCandidate)
+        );
+      },
+      save: async () => {
+        try {
+          // If modal switch proposal is pending, apply it
+          let toPersist = alternatives;
+          if (targetCandidate) {
+            toPersist = alternatives.map((a) => ({
+              ...a,
+              isSelected: a.id === targetCandidate.id,
+            }));
+            setAlternatives(toPersist);
+            setDecisionModalOpen(false);
+            setTargetCandidate(null);
+          }
+          localStorage.setItem(`vyron_architecture_${id}`, JSON.stringify(toPersist));
+          savedBaselineRef.current = JSON.stringify(toPersist);
+        } catch (err) {
+          throw new Error("Failed to persist architecture alternatives: " + String(err));
+        }
+      },
+      discard: () => {
+        try {
+          const baseline = JSON.parse(savedBaselineRef.current);
+          setAlternatives(baseline);
+          setDecisionModalOpen(false);
+          setTargetCandidate(null);
+          setAdrJustification("");
+        } catch {
+          // fallback
+        }
+      },
+    });
+
+    return () => {
+      unregister();
+    };
+  }, [id, alternatives, decisionModalOpen, targetCandidate]);
 
   const [adrs, setAdrs] = useState<ArchitectureDecisionRecord[]>([
     {

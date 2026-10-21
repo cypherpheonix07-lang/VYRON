@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useDemoMode } from "@/contexts/DemoModeContext";
 import { LiveProjectProvider, useLiveProject } from "@/contexts/LiveProjectContext";
 import { Button } from "@/components/ui/button";
+import { WorkspaceExitButton } from "@/components/workspace/WorkspaceExitButton";
 
 export const Route = createFileRoute("/app/projects/$id")({
   component: ProjectLayout,
@@ -102,7 +103,10 @@ function ProjectShell({ id, project, demo = false }: {
             {project.description}
           </p>
         </div>
-        <StatusBadge status={project.status} />
+        <div className="flex items-center gap-2.5 shrink-0">
+          <StatusBadge status={project.status} />
+          <WorkspaceExitButton projectId={id} projectName={project.name} variant="outline" size="sm" />
+        </div>
       </header>
 
       <nav className="-mx-1 overflow-x-auto" aria-label="Project sections">

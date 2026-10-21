@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   TrendingUp,
@@ -42,6 +42,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { copilotStore } from "@/state/copilot/copilotStore";
+import { workspaceChangeRegistry } from "@/services/workspace/workspaceChangeRegistry";
 
 export const Route = createFileRoute("/app/projects/$id/risk-business")({
   head: () => ({
@@ -90,6 +91,48 @@ function BusinessKpiWorkspacePage() {
   const [simBudgetDelta, setSimBudgetDelta] = useState(0); // +/- USD
   const [simScheduleDelta, setSimScheduleDelta] = useState(0); // +/- Days
   const [simTeamDelta, setSimTeamDelta] = useState(0); // +/- Engineers
+
+  const savedBaselineRef = useRef<string>(
+    JSON.stringify({ simBudgetDelta: 0, simScheduleDelta: 0, simTeamDelta: 0 })
+  );
+
+  // Register section with workspace change registry for exit protection
+  useEffect(() => {
+    const sectionId = `risk-business-${id}`;
+    const unregister = workspaceChangeRegistry.register({
+      sectionId,
+      sectionName: "Business KPIs & Risk Simulation",
+      isDirty: () => {
+        const current = JSON.stringify({ simBudgetDelta, simScheduleDelta, simTeamDelta });
+        return current !== savedBaselineRef.current;
+      },
+      save: async () => {
+        try {
+          const current = { simBudgetDelta, simScheduleDelta, simTeamDelta };
+          localStorage.setItem(`vyron_kpi_sim_${id}`, JSON.stringify(current));
+          savedBaselineRef.current = JSON.stringify(current);
+        } catch (err) {
+          throw new Error("Failed to save KPI simulation parameters: " + String(err));
+        }
+      },
+      discard: () => {
+        try {
+          const baseline = JSON.parse(savedBaselineRef.current);
+          setSimBudgetDelta(baseline.simBudgetDelta || 0);
+          setSimScheduleDelta(baseline.simScheduleDelta || 0);
+          setSimTeamDelta(baseline.simTeamDelta || 0);
+        } catch {
+          setSimBudgetDelta(0);
+          setSimScheduleDelta(0);
+          setSimTeamDelta(0);
+        }
+      },
+    });
+
+    return () => {
+      unregister();
+    };
+  }, [id, simBudgetDelta, simScheduleDelta, simTeamDelta]);
 
   // Analysis status
   const [isAnalyzing, setIsAnalyzing] = useState(false);

@@ -19,7 +19,8 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useRef, useEffect } from "react";
+import { workspaceChangeRegistry } from "@/services/workspace/workspaceChangeRegistry";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -268,6 +269,45 @@ function RequirementsWorkspacePage() {
     return INITIAL_REQUIREMENTS;
   });
 
+  const savedBaselineRef = useRef<string>(JSON.stringify(requirements));
+
+  useEffect(() => {
+    return workspaceChangeRegistry.register({
+      id: `requirements-${id}`,
+      label: "Requirements Specification",
+      projectId: id,
+      isDirty: () => JSON.stringify(requirements) !== savedBaselineRef.current,
+      getDirtySummary: () => {
+        try {
+          const baseline: AtomicRequirement[] = JSON.parse(savedBaselineRef.current);
+          const diff = Math.abs(requirements.length - baseline.length);
+          return diff > 0
+            ? `${requirements.length} requirement(s) (${diff} added/removed)`
+            : `${requirements.length} requirement(s) modified`;
+        } catch {
+          return "Modified requirement records";
+        }
+      },
+      save: async () => {
+        try {
+          localStorage.setItem(`vyron_requirements_${id}`, JSON.stringify(requirements));
+          savedBaselineRef.current = JSON.stringify(requirements);
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      discard: () => {
+        try {
+          const baseline = JSON.parse(savedBaselineRef.current);
+          setRequirements(baseline);
+        } catch (e) {
+          console.error("Failed to restore requirements baseline:", e);
+        }
+      },
+    });
+  }, [id, requirements]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [selectedPriority, setSelectedPriority] = useState<string>("ALL");
@@ -292,6 +332,7 @@ function RequirementsWorkspacePage() {
 
   const saveRequirements = (updated: AtomicRequirement[]) => {
     setRequirements(updated);
+    savedBaselineRef.current = JSON.stringify(updated);
     try {
       localStorage.setItem(`vyron_requirements_${id}`, JSON.stringify(updated));
     } catch {

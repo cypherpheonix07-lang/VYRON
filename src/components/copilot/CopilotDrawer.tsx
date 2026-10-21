@@ -58,6 +58,7 @@ import {
   CopilotToolDef,
   ToolCategory,
 } from "@/services/copilot/copilotToolRegistry";
+import { workspaceChangeRegistry } from "@/services/workspace/workspaceChangeRegistry";
 import {
   copilotAgentOrchestrator,
   SpecialistAgentType,
@@ -123,6 +124,38 @@ export function CopilotDrawer() {
       // ignore storage errors
     }
   }, [inputText]);
+
+  // Register uncommitted copilot draft with workspaceChangeRegistry
+  useEffect(() => {
+    const sectionId = "ather-chat-draft";
+    const unregister = workspaceChangeRegistry.register({
+      sectionId,
+      sectionName: "ATHER AI Copilot Chat Draft",
+      isDirty: () => inputText.trim().length > 0,
+      save: async () => {
+        try {
+          if (inputText.trim().length > 0) {
+            localStorage.setItem("ather_drawer_draft", inputText);
+          }
+        } catch {
+          // ignore
+        }
+      },
+      discard: () => {
+        setInputText("");
+        try {
+          localStorage.removeItem("ather_drawer_draft");
+        } catch {
+          // ignore
+        }
+      },
+    });
+
+    return () => {
+      unregister();
+    };
+  }, [inputText]);
+
   const [liveContext, setLiveContext] = useState<CopilotLiveContext | null>(null);
   const [activePlan, setActivePlan] = useState<DynamicExecutionPlan | null>(
     () => session.activePlan || null,

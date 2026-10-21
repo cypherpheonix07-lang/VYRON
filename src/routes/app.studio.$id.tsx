@@ -1,6 +1,7 @@
 import { Link, Outlet, createFileRoute, useRouterState } from "@tanstack/react-router";
 
 import { StatusBadge } from "@/components/brahma/primitives";
+import { WorkspaceExitButton } from "@/components/workspace/WorkspaceExitButton";
 import { getProject } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
@@ -49,6 +50,7 @@ function StudioLayout() {
         </div>
         <div className="flex items-center gap-3 shrink-0">
           <StatusBadge status={project.status} />
+          <WorkspaceExitButton projectId={id} projectName={project.name} variant="outline" size="sm" />
         </div>
       </header>
 

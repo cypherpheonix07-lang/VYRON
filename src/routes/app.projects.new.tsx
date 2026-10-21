@@ -4,7 +4,7 @@
  */
 
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { AlertTriangle, RefreshCw, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { ProjectLifecycleStage } from "@/types/aiProjectControlPlane";
 import { projectRegistry } from "@/services/project/projectRegistry";
 import { activityService } from "@/services/activityService";
+import { workspaceChangeRegistry } from "@/services/workspace/workspaceChangeRegistry";
 
 interface NewProjectSearch {
   stage?: ProjectLifecycleStage | undefined;
@@ -92,6 +93,37 @@ function NewProjectPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [lastPayload, setLastPayload] = useState<WizardPayload | null>(null);
+
+  // Register section with workspace change registry for exit protection
+  useEffect(() => {
+    const sectionId = "new-project-wizard";
+    const unregister = workspaceChangeRegistry.register({
+      sectionId,
+      sectionName: "Project Provisioning Wizard Draft",
+      isDirty: () => {
+        try {
+          const raw = localStorage.getItem("brahma_project_wizard_draft_v2");
+          return !!raw && raw.length > 2;
+        } catch {
+          return false;
+        }
+      },
+      save: async () => {
+        // Draft is automatically persisted in local storage
+      },
+      discard: () => {
+        try {
+          localStorage.removeItem("brahma_project_wizard_draft_v2");
+        } catch {
+          // ignore
+        }
+      },
+    });
+
+    return () => {
+      unregister();
+    };
+  }, []);
 
   // 4.2 Generate Project Handler
   const handleGenerate = async (payload: WizardPayload) => {
