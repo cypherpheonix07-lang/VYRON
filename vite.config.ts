@@ -21,12 +21,71 @@ const suppressDirectiveFilter: any = {
   },
 };
 
+const ssrTimeoutPlugin: any = {
+  name: "vyron:ssr-timeout",
+  configureServer(server: any) {
+    const patchEnvironment = (env: any) => {
+      if (!env) return;
+      const applyTimeout = (runner: any) => {
+        if (!runner) return;
+        try {
+          if (runner.options?.transport) {
+            runner.options.transport.timeout = 300000;
+          }
+          if (runner.transport) {
+            runner.transport.timeout = 300000;
+          }
+        } catch {}
+      };
+
+      try {
+        if (env.runner) {
+          applyTimeout(env.runner);
+        }
+      } catch {}
+
+      const proto = Object.getPrototypeOf(env);
+      const desc = Object.getOwnPropertyDescriptor(proto, "runner") || Object.getOwnPropertyDescriptor(env, "runner");
+      if (desc?.get) {
+        const originalGet = desc.get;
+        Object.defineProperty(env, "runner", {
+          get() {
+            const runner = originalGet.call(this);
+            applyTimeout(runner);
+            return runner;
+          },
+          configurable: true,
+        });
+      }
+    };
+
+    patchEnvironment(server.environments?.ssr);
+    patchEnvironment(server.environments?.server);
+  },
+};
+
 export default defineConfig({
   tanstackStart: {
     client: { entry: "client" },
     server: { entry: "server" },
   },
   vite: {
+    plugins: [ssrTimeoutPlugin],
+    optimizeDeps: {
+      entries: ["src/client.tsx"],
+      include: [
+        "react",
+        "react-dom",
+        "react/jsx-runtime",
+        "@tanstack/react-router",
+        "@tanstack/react-query",
+        "@supabase/supabase-js",
+        "lucide-react",
+        "sonner",
+        "clsx",
+        "tailwind-merge",
+      ],
+    },
     server: {
       port: 8080,
       watch: {
