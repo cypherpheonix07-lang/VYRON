@@ -34,6 +34,10 @@ import {
   ProjectPhaseRecord,
   calculateMasterBuildProgress,
 } from "@/data/masterBuildPrompt";
+import {
+  MASTER_SDLC_AUDIT_BASELINE,
+  CODEBASE_AUDIT_SUMMARY,
+} from "@/data/masterBuildAuditBaseline";
 import { cn } from "@/lib/utils";
 
 interface MasterBuildPromptWorkbenchProps {
@@ -83,7 +87,7 @@ export function MasterBuildPromptWorkbench({
 }: MasterBuildPromptWorkbenchProps) {
   const storageKey = `vyron_master_build_sdlc_${projectId}`;
 
-  // Initial load from localStorage
+  // Initial load from localStorage, defaulting to authentic empirical codebase audit baseline
   const [phaseRecords, setPhaseRecords] = useState<Record<string, ProjectPhaseRecord>>(() => {
     try {
       const saved = localStorage.getItem(storageKey);
@@ -91,13 +95,37 @@ export function MasterBuildPromptWorkbench({
     } catch {
       // ignore
     }
-    return {};
+    return MASTER_SDLC_AUDIT_BASELINE;
   });
 
   const [activeLetter, setActiveLetter] = useState<string>("A");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [statusFilter, setStatusFilter] = useState<string>("ALL");
   const [expandedNotes, setExpandedNotes] = useState<Record<string, boolean>>({});
+
+  const handleLoadAuditBaseline = () => {
+    setPhaseRecords(MASTER_SDLC_AUDIT_BASELINE);
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(MASTER_SDLC_AUDIT_BASELINE));
+    } catch {
+      // ignore
+    }
+    if (onDirtyChange) onDirtyChange(true);
+    toast.success(
+      `Loaded Codebase Audit Baseline (${CODEBASE_AUDIT_SUMMARY.totalVerified} Verified, ${CODEBASE_AUDIT_SUMMARY.totalInProgress} In Progress — ${CODEBASE_AUDIT_SUMMARY.maturityScorePct}% Maturity)`
+    );
+  };
+
+  const handleResetClean = () => {
+    setPhaseRecords({});
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({}));
+    } catch {
+      // ignore
+    }
+    if (onDirtyChange) onDirtyChange(true);
+    toast.info("Reset SDLC plan to clean pending state.");
+  };
 
   // Sync with localStorage
   const handleUpdateStatus = (code: string, newStatus: PhaseStatus) => {
@@ -292,6 +320,24 @@ Please assess the current project state against these 20 phases and recommend an
 
           <div className="flex items-center gap-2.5 shrink-0 flex-wrap">
             <Button
+              onClick={handleLoadAuditBaseline}
+              variant="outline"
+              size="sm"
+              className="border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 text-xs gap-1.5"
+            >
+              <Shield className="size-3.5 text-emerald-400" />
+              Load Codebase Audit
+            </Button>
+            <Button
+              onClick={handleResetClean}
+              variant="ghost"
+              size="sm"
+              className="border border-border/50 text-muted-foreground hover:text-foreground text-xs gap-1.5"
+            >
+              <RotateCcw className="size-3.5 text-muted-foreground" />
+              Reset Plan
+            </Button>
+            <Button
               onClick={handleExportMarkdown}
               variant="outline"
               size="sm"
@@ -363,6 +409,44 @@ Please assess the current project state against these 20 phases and recommend an
             <div className="text-lg font-bold text-rose-400 mt-0.5">{progress.blocked}</div>
             <div className="text-[10px] text-muted-foreground mt-0.5">Obstacles flagged</div>
           </div>
+        </div>
+      </div>
+
+      {/* Codebase Audit Status Banner */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3.5 rounded-xl bg-violet-950/20 border border-violet-500/25 text-xs shadow-inner">
+        <div className="flex items-center gap-2.5">
+          <div className="size-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 grid place-items-center shrink-0">
+            <Shield className="size-4 text-emerald-400" />
+          </div>
+          <div>
+            <div className="font-semibold text-foreground flex items-center gap-2">
+              <span>Empirical Codebase Audit (Zero-Fiction Law)</span>
+              <Badge variant="outline" className="text-[10px] bg-emerald-500/15 text-emerald-300 border-emerald-500/30">
+                {CODEBASE_AUDIT_SUMMARY.maturityScorePct}% Maturity
+              </Badge>
+            </div>
+            <div className="text-[11px] text-muted-foreground mt-0.5 font-mono flex items-center gap-2 flex-wrap">
+              <span className="text-emerald-400 font-bold">{CODEBASE_AUDIT_SUMMARY.totalVerified} Verified</span>
+              <span className="text-border">•</span>
+              <span className="text-amber-400 font-bold">{CODEBASE_AUDIT_SUMMARY.totalInProgress} In Progress</span>
+              <span className="text-border">•</span>
+              <span className="text-slate-400 font-bold">{CODEBASE_AUDIT_SUMMARY.totalGaps} Gaps</span>
+              <span className="text-border">•</span>
+              <span>26 Domains Audited</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+          <Button
+            onClick={handleLoadAuditBaseline}
+            variant="outline"
+            size="sm"
+            className="h-7 text-[11px] border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 gap-1.5"
+          >
+            <CheckCircle2 className="size-3 text-emerald-400" />
+            Apply Baseline
+          </Button>
         </div>
       </div>
 
@@ -537,6 +621,19 @@ Please assess the current project state against these 20 phases and recommend an
                   </span>
                   {phase.instruction}
                 </div>
+
+                {/* Empirical Codebase Evidence */}
+                {(rec?.evidence || MASTER_SDLC_AUDIT_BASELINE[phase.code]?.evidence) && (
+                  <div className="px-2.5 py-1.5 rounded-lg bg-emerald-950/20 border border-emerald-500/20 text-[11px] text-emerald-300 font-mono flex items-start gap-1.5">
+                    <CheckCircle2 className="size-3 text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="leading-tight">
+                      <span className="text-[9px] uppercase font-bold text-emerald-400/80 block">
+                        Codebase Evidence:
+                      </span>
+                      {rec?.evidence || MASTER_SDLC_AUDIT_BASELINE[phase.code]?.evidence}
+                    </div>
+                  </div>
+                )}
 
                 {/* Domain Tag (helpful when searching globally) */}
                 {searchQuery && (

@@ -31,6 +31,7 @@ export interface ProjectPhaseRecord {
   updatedAt: string;
   notes?: string;
   verifiedBy?: string;
+  evidence?: string;
 }
 
 export const MASTER_BUILD_DOMAINS: MasterBuildDomain[] = [

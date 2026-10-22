@@ -23,7 +23,8 @@
     "verify:gates": "npx tsx \"51 — TESTING PLATFORM/test-acceptance-gates.mjs\"",
     "verify:all": "npx tsx \"51 — TESTING PLATFORM/scripts/testing/test-godmode-vnext-scratch-testing.mjs\"",
     "verify:two-phase": "npx tsx \"51 — TESTING PLATFORM/scripts/testing/run-two-phase-verification.mjs\"",
-    "test:ather": "node test-ather-conversation-suite.mjs"
+    "test:ather": "node test-ather-conversation-suite.mjs",
+    "audit:520": "node scripts/audit-master-sdlc-520.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
