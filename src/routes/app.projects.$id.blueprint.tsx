@@ -26,6 +26,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { copilotStore } from "@/state/copilot/copilotStore";
 import { workspaceChangeRegistry } from "@/services/workspace/workspaceChangeRegistry";
+import { cn } from "@/lib/utils";
+import { MasterBuildPromptWorkbench } from "@/components/blueprint/MasterBuildPromptWorkbench";
 
 export const Route = createFileRoute("/app/projects/$id/blueprint")({
   head: () => ({
@@ -230,6 +232,7 @@ function ArchitectureAlternativesPage() {
   const [targetCandidate, setTargetCandidate] = useState<ArchitectureAlternative | null>(null);
   const [adrJustification, setAdrJustification] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [activeTab, setActiveTab] = useState<"SDLC_ENGINE" | "ALTERNATIVES">("SDLC_ENGINE");
 
   // Register section with workspace change registry for robust exit protection
   useEffect(() => {
@@ -372,8 +375,55 @@ function ArchitectureAlternativesPage() {
 
   return (
     <div className="space-y-6">
-      {/* Top Header Card */}
-      <div className="p-6 rounded-2xl border border-violet-500/20 bg-gradient-to-r from-card via-[#120e24] to-card shadow-xl relative overflow-hidden">
+      {/* Blueprint Mode Switcher: 520-Phase Master SDLC vs Architecture Alternatives */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-2 rounded-2xl bg-card/80 border border-border/60">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setActiveTab("SDLC_ENGINE")}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all",
+              activeTab === "SDLC_ENGINE"
+                ? "bg-violet-600 text-white shadow-lg shadow-violet-900/30 font-bold"
+                : "bg-secondary/40 text-muted-foreground hover:text-foreground hover:bg-secondary"
+            )}
+          >
+            <Layers className="size-4 text-violet-300" />
+            520-Phase Master SDLC Engine
+            <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-white/20 font-mono">
+              26 Domains (A–Z)
+            </span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab("ALTERNATIVES")}
+            className={cn(
+              "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all",
+              activeTab === "ALTERNATIVES"
+                ? "bg-violet-600 text-white shadow-lg shadow-violet-900/30 font-bold"
+                : "bg-secondary/40 text-muted-foreground hover:text-foreground hover:bg-secondary"
+            )}
+          >
+            <Sliders className="size-4 text-violet-300" />
+            Architecture Alternatives & ADRs
+            <span className="px-1.5 py-0.5 rounded-full text-[10px] bg-white/20 font-mono">
+              Trade-Offs
+            </span>
+          </button>
+        </div>
+
+        <div className="text-[11px] text-muted-foreground font-mono px-2 hidden sm:block">
+          {activeTab === "SDLC_ENGINE"
+            ? "520 Actionable Engineering Milestones"
+            : "ADR Governance & Boundary Impact"}
+        </div>
+      </div>
+
+      {activeTab === "SDLC_ENGINE" ? (
+        <MasterBuildPromptWorkbench projectId={id} />
+      ) : (
+        <>
+          {/* Top Header Card */}
+          <div className="p-6 rounded-2xl border border-violet-500/20 bg-gradient-to-r from-card via-[#120e24] to-card shadow-xl relative overflow-hidden">
         <div className="absolute right-0 top-0 -mt-10 -mr-10 w-72 h-72 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -642,6 +692,8 @@ function ArchitectureAlternativesPage() {
           ))}
         </div>
       </div>
+    </>
+  )}
 
       {/* Select Alternative Proposal & Impact Review Dialog */}
       <Dialog open={decisionModalOpen} onOpenChange={setDecisionModalOpen}>

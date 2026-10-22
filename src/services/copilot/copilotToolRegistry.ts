@@ -16,6 +16,7 @@
 import { AppMode } from "@/state/mode/modeStore";
 import { generateVerificationHash } from "@/services/ai/cryptoUtils";
 import { UserAuthority } from "@/types/engineeringEntity";
+import { getMasterPhase, getMasterDomain, searchMasterPhases } from "@/data/masterBuildPrompt";
 
 export type ToolCategory =
   | "data"
@@ -293,6 +294,57 @@ export class CopilotToolRegistry {
         policyId: args["policyId"],
         durationHours: 48,
       }),
+    });
+
+    // 10. RETRIEVE: Master Build Prompt (520 SDLC Phases across 26 Domains)
+    this.registerTool({
+      id: "query_master_build_phase",
+      name: "Query Master Build SDLC Phase",
+      description:
+        "Queries the 520-phase Master Build Prompt framework (26 domains A-Z, 20 phases each) for actionable engineering specifications.",
+      category: "retrieval",
+      capability: "RETRIEVE",
+      sideEffects: ["READ"],
+      risk: "SAFE",
+      supportedModes: ["NORMAL", "DEMO"],
+      parameters: [
+        {
+          name: "codeOrQuery",
+          type: "string",
+          description: "Phase code (e.g. 'A.01', 'S.06') or domain letter (e.g. 'A') or search query",
+          required: true,
+        },
+      ],
+      timeoutMs: 5000,
+      requiresApproval: false,
+      handler: async (args) => {
+        const query = String(args["codeOrQuery"] || "").trim();
+        const phase = getMasterPhase(query);
+        if (phase) {
+          return { status: "SUCCESS", matchType: "EXACT_PHASE", phase };
+        }
+        const domain = getMasterDomain(query);
+        if (domain) {
+          return {
+            status: "SUCCESS",
+            matchType: "DOMAIN",
+            domain: {
+              letter: domain.letter,
+              name: domain.name,
+              description: domain.description,
+              phaseCount: domain.phaseCount,
+              phases: domain.phases,
+            },
+          };
+        }
+        const results = searchMasterPhases(query);
+        return {
+          status: "SUCCESS",
+          matchType: "SEARCH",
+          total: results.length,
+          matches: results.slice(0, 10),
+        };
+      },
     });
   }
 
