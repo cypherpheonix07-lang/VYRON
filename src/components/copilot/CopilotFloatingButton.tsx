@@ -28,7 +28,10 @@ export function CopilotFloatingButton() {
   return (
     <button
       type="button"
-      onClick={() => setDrawerOpen(!isDrawerOpen)}
+      onClick={(e) => {
+        e.currentTarget.blur();
+        setDrawerOpen(!isDrawerOpen);
+      }}
       className={cn(
         "fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-full font-bold text-xs shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 border cursor-pointer",
         mode === "DEMO"
