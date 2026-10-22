@@ -114,6 +114,13 @@ export function useActiveProject(): ActiveProjectContextValue {
         return;
       }
 
+      if (!id || id === "none") {
+        projectRegistry.clearActiveProject();
+        setCurrentProject(null);
+        setGenerationId(projectRegistry.getGenerationId());
+        return;
+      }
+
       projectRegistry.setActiveProjectId(id);
       const target = projectRegistry.getProjectById(id);
       setCurrentProject(target);

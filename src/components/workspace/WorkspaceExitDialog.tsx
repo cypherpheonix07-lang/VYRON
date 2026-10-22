@@ -87,7 +87,7 @@ export function WorkspaceExitDialog() {
           <AlertDialogDescription id="workspace-exit-desc" className="text-xs text-muted-foreground leading-relaxed">
             You have unsaved changes in your workspace
             {state.projectName ? ` for ${state.projectName}` : ""}.
-            Choose how you would like to proceed before exiting to the exit summary page.
+            Choose how you would like to proceed before exiting to the empty dashboard.
           </AlertDialogDescription>
         </AlertDialogHeader>
 

@@ -301,7 +301,8 @@ function ArchitectureAlternativesPage() {
     },
   ]);
 
-  const activeAlternative = alternatives.find((a) => a.isSelected) || alternatives[0];
+  const activeAlternative: ArchitectureAlternative =
+    alternatives.find((a) => a.isSelected) || alternatives[0] || INITIAL_ALTERNATIVES[0]!;
 
   const handleOpenSelectProposal = (alt: ArchitectureAlternative) => {
     if (alt.isSelected) {

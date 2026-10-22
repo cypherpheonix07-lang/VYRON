@@ -7,7 +7,7 @@
  */
 
 import React from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import {
   CheckCircle2,
   FolderKanban,
@@ -45,6 +45,19 @@ export const Route = createFileRoute("/app/exit")({
       sections: typeof search["sections"] === "string" ? search["sections"] : undefined,
       ts: typeof search["ts"] === "string" ? search["ts"] : undefined,
     };
+  },
+  beforeLoad: ({ search }) => {
+    // The empty dashboard at /app replaces the previously proposed exit-summary page
+    throw redirect({
+      to: "/app",
+      search: {
+        exitOutcome: search.outcome || "clean",
+        projectId: search.projectId,
+        projectName: search.projectName,
+        sections: search.sections,
+        ts: search.ts,
+      },
+    });
   },
   head: () => ({
     meta: [

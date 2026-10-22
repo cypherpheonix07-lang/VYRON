@@ -112,12 +112,21 @@ class ProjectRegistry {
   private initDefaultActiveProject() {
     if (typeof window !== "undefined") {
       const storedActive = localStorage.getItem(ACTIVE_PROJECT_KEY);
+      if (storedActive === "none") {
+        this.activeProjectId = null;
+        return;
+      }
       if (storedActive && this.localProjects.has(storedActive)) {
         this.activeProjectId = storedActive;
         return;
       }
     }
-    // Default to first seed project if available
+    // Default to first seed project if available and not explicitly cleared
+    const stored = typeof window !== "undefined" ? localStorage.getItem(ACTIVE_PROJECT_KEY) : null;
+    if (stored === "none") {
+      this.activeProjectId = null;
+      return;
+    }
     const first = Array.from(this.localProjects.values())[0];
     this.activeProjectId = first?.id || null;
   }
@@ -136,7 +145,7 @@ class ProjectRegistry {
   }
 
   public getProjectById(id: string): CanonicalProject | null {
-    if (!id || id === "all") return null;
+    if (!id || id === "all" || id === "none") return null;
     return this.localProjects.get(id) || null;
   }
 
@@ -145,11 +154,34 @@ class ProjectRegistry {
   }
 
   public getActiveProject(): CanonicalProject | null {
-    if (!this.activeProjectId) return null;
+    if (!this.activeProjectId || this.activeProjectId === "none") return null;
     return this.getProjectById(this.activeProjectId);
   }
 
-  public setActiveProjectId(id: string): CanonicalProject | null {
+  public clearActiveProject(): void {
+    this.bumpGeneration();
+    this.activeProjectId = null;
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(ACTIVE_PROJECT_KEY, "none");
+        window.dispatchEvent(
+          new CustomEvent("vyron:project_changed", {
+            detail: { projectId: null, project: null },
+          })
+        );
+      } catch {
+        // ignore
+      }
+    }
+    this.notifyListeners(null);
+  }
+
+  public setActiveProjectId(id: string | null): CanonicalProject | null {
+    if (!id || id === "none") {
+      this.clearActiveProject();
+      return null;
+    }
+
     this.bumpGeneration();
     const project = this.getProjectById(id);
     this.activeProjectId = id;

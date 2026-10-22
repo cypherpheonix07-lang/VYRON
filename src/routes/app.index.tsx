@@ -1,6 +1,8 @@
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useActiveProject } from "@/hooks/useActiveProject";
 import { runService } from "@/services/runs/runService";
+import { useAuth } from "@/lib/auth";
+import { WorkspaceExitButton } from "@/components/workspace/WorkspaceExitButton";
 import {
   Activity,
   FileBarChart2,
@@ -30,6 +32,10 @@ import {
   Binary,
   Radio,
   Zap,
+  ArrowRight,
+  Clock,
+  Trash2,
+  Info,
 } from "lucide-react";
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
@@ -90,7 +96,29 @@ import { CopilotPartnerCard } from "@/components/dashboard/CopilotPartnerCard";
 import { EvidenceExplorer } from "@/components/dashboard/EvidenceExplorer";
 import { TimeMachineComparator } from "@/components/dashboard/TimeMachineComparator";
 
+export interface DashboardSearch {
+  exitOutcome?: "saved" | "discarded" | "clean" | undefined;
+  sections?: string | undefined;
+  projectName?: string | undefined;
+  projectId?: string | undefined;
+  ts?: string | undefined;
+}
+
 export const Route = createFileRoute("/app/")({
+  validateSearch: (search: Record<string, unknown>): DashboardSearch => {
+    return {
+      exitOutcome:
+        search["exitOutcome"] === "saved" ||
+        search["exitOutcome"] === "discarded" ||
+        search["exitOutcome"] === "clean"
+          ? search["exitOutcome"]
+          : undefined,
+      sections: typeof search["sections"] === "string" ? search["sections"] : undefined,
+      projectName: typeof search["projectName"] === "string" ? search["projectName"] : undefined,
+      projectId: typeof search["projectId"] === "string" ? search["projectId"] : undefined,
+      ts: typeof search["ts"] === "string" ? search["ts"] : undefined,
+    };
+  },
   head: () => ({
     meta: [
       { title: "Dashboard — VYRON" },
@@ -120,6 +148,8 @@ type ViewState = "loaded" | "loading" | "empty" | "error";
 
 function Dashboard() {
   const navigate = useNavigate();
+  const search = Route.useSearch();
+  const { user } = useAuth();
   const { mode } = useAppMode();
   const [state, setState] = useState<ViewState>("loaded");
   const [showTimeMachine, setShowTimeMachine] = useState(false);
@@ -130,6 +160,7 @@ function Dashboard() {
     projectId: activeProjectId,
     availableProjects,
     availability,
+    setActiveProject,
   } = useActiveProject();
 
   const { projects: liveProjects } = useProjects();
@@ -188,6 +219,275 @@ function Dashboard() {
   );
   const graphData = useMemo(() => engineeringKnowledgeGraph.exportGraphData(), []);
 
+  // DELIBERATE NO-PROJECT-SELECTED EMPTY DASHBOARD (PHASE T: T01–T20)
+  if (!activeProject) {
+    const exitOutcome = search.exitOutcome;
+    const sectionsList = search.sections ? search.sections.split(",").filter(Boolean) : [];
+    const exitTime = search.ts ? new Date(search.ts).toLocaleTimeString() : undefined;
+
+    return (
+      <div className="space-y-6 max-w-6xl mx-auto py-2">
+        {/* Page Header for Empty Dashboard (T04, T05) */}
+        <PageHeader
+          title="Engineering intelligence overview"
+          description="Workspace is currently closed. No project selected."
+          actions={
+            <div className="flex items-center gap-2">
+              <Button asChild variant="outline" size="sm" className="text-xs gap-1.5 h-8">
+                <Link to="/app/projects">
+                  <FolderKanban className="size-3.5" />
+                  Open Project
+                </Link>
+              </Button>
+              <Button asChild size="sm" className="text-xs bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 h-8">
+                <Link to="/app/projects/new">
+                  <PlusCircle className="size-3.5" />
+                  New Project
+                </Link>
+              </Button>
+            </div>
+          }
+        />
+
+        {/* AUTHORITATIVE EXIT OUTCOME NOTICE (T16) */}
+        {exitOutcome ? (
+          <Card className="surface border border-border/80 bg-zinc-950/90 shadow-xl rounded-2xl overflow-hidden animate-in fade-in duration-300">
+            <div
+              className={`h-1.5 w-full ${
+                exitOutcome === "saved"
+                  ? "bg-emerald-500"
+                  : exitOutcome === "discarded"
+                    ? "bg-amber-500"
+                    : "bg-primary"
+              }`}
+            />
+            <CardContent className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-3.5 min-w-0">
+                <span
+                  className={`grid size-10 shrink-0 place-items-center rounded-xl border ${
+                    exitOutcome === "saved"
+                      ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/25"
+                      : exitOutcome === "discarded"
+                        ? "bg-amber-500/15 text-amber-400 border-amber-500/25"
+                        : "bg-primary/15 text-primary border-primary/25"
+                  }`}
+                >
+                  {exitOutcome === "saved" ? (
+                    <CheckCircle2 className="size-5" />
+                  ) : exitOutcome === "discarded" ? (
+                    <Trash2 className="size-5" />
+                  ) : (
+                    <ShieldCheck className="size-5" />
+                  )}
+                </span>
+                <div className="space-y-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h3 className="text-sm font-bold text-foreground">
+                      {exitOutcome === "saved"
+                        ? "Workspace safely exited — verified changes saved"
+                        : exitOutcome === "discarded"
+                          ? "Workspace exited — unsaved changes discarded"
+                          : "Workspace closed cleanly"}
+                    </h3>
+                    {search.projectName && (
+                      <Badge variant="outline" className="text-[10px] font-mono border-primary/30 text-primary">
+                        {search.projectName}
+                      </Badge>
+                    )}
+                    {exitTime && (
+                      <span className="text-[11px] text-muted-foreground font-mono flex items-center gap-1">
+                        <Clock className="size-3" />
+                        {exitTime}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground leading-relaxed">
+                    {exitOutcome === "saved"
+                      ? `All modified records${search.projectName ? ` for ${search.projectName}` : ""} were committed to project storage before leaving.`
+                      : exitOutcome === "discarded"
+                        ? `Only uncommitted edits were discarded. Previously saved records and conversations for ${search.projectName || "your project"} remain completely intact.`
+                        : "Workspace closed cleanly with zero pending mutations or background tasks."}
+                  </p>
+                  {sectionsList.length > 0 && (
+                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                      <span className="text-[10px] uppercase font-mono text-muted-foreground">Synchronized Sections:</span>
+                      {sectionsList.map((sec) => (
+                        <Badge key={sec} variant="secondary" className="text-[10px] bg-zinc-900 border border-border/60">
+                          {sec}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate({ to: "/app" })}
+                className="text-xs text-muted-foreground hover:text-foreground shrink-0 self-end sm:self-center"
+              >
+                Dismiss
+              </Button>
+            </CardContent>
+          </Card>
+        ) : (
+          /* NEUTRAL DIRECT-ACCESS WELCOME NOTICE (T17) */
+          <div className="rounded-2xl border border-border/60 bg-gradient-to-r from-card/80 via-card/50 to-primary/5 p-5 shadow-sm space-y-2">
+            <div className="flex items-center gap-2.5 text-primary">
+              <Compass className="size-5" />
+              <h2 className="text-sm font-semibold tracking-tight text-foreground">
+                No active project open
+              </h2>
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
+              You are viewing the dashboard with no active project selected. Select a project below to inspect its architecture, run verified analysis gates, or synthesize new blueprints.
+            </p>
+          </div>
+        )}
+
+        {/* PRIMARY ACTION CALLOUTS (T06, T07, T20) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <Card className="surface border border-border/80 bg-zinc-950/60 p-5 rounded-2xl space-y-3 hover:border-primary/40 transition-colors">
+            <div className="size-10 rounded-xl bg-primary/10 border border-primary/20 grid place-items-center text-primary">
+              <PlusCircle className="size-5" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-sm font-bold text-foreground">Create New Project</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Initialize an architecture blueprint from requirements or domain specification with zero synthetic data.
+              </p>
+            </div>
+            <Button asChild size="sm" className="w-full text-xs font-semibold bg-primary hover:bg-primary/90 text-primary-foreground">
+              <Link to="/app/projects/new">
+                Start New Project <ArrowRight className="size-3.5 ml-1.5" />
+              </Link>
+            </Button>
+          </Card>
+
+          <Card className="surface border border-border/80 bg-zinc-950/60 p-5 rounded-2xl space-y-3 hover:border-violet-500/40 transition-colors">
+            <div className="size-10 rounded-xl bg-violet-500/10 border border-violet-500/20 grid place-items-center text-violet-400">
+              <FolderKanban className="size-5" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-sm font-bold text-foreground">Open Existing Project</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Browse all authorized workspaces. Previously saved records, findings, and conversation history are fully preserved.
+              </p>
+            </div>
+            <Button asChild variant="outline" size="sm" className="w-full text-xs font-semibold border-violet-500/30 text-violet-300 hover:bg-violet-500/10">
+              <Link to="/app/projects">
+                Browse Projects <ArrowRight className="size-3.5 ml-1.5" />
+              </Link>
+            </Button>
+          </Card>
+
+          <Card className="surface border border-border/80 bg-zinc-950/60 p-5 rounded-2xl space-y-3 hover:border-emerald-500/40 transition-colors">
+            <div className="size-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 grid place-items-center text-emerald-400">
+              <GitBranch className="size-5" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-sm font-bold text-foreground">Connect Git Repository</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Link GitHub or GitLab to run repository analysis, detect architecture drift, and enforce release gates.
+              </p>
+            </div>
+            <Button asChild variant="outline" size="sm" className="w-full text-xs font-semibold border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/10">
+              <Link to="/app/github">
+                Connect Repository <ArrowRight className="size-3.5 ml-1.5" />
+              </Link>
+            </Button>
+          </Card>
+        </div>
+
+        {/* SAVED PROJECTS RE-ENTRY DIRECTORY (U13, U14, U16) */}
+        <div className="space-y-3 pt-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <FolderKanban className="size-4 text-primary" />
+              <h3 className="text-sm font-bold text-foreground">
+                Your Saved Projects ({availableProjects.length})
+              </h3>
+            </div>
+            <Button asChild variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
+              <Link to="/app/projects">View all in directory &rarr;</Link>
+            </Button>
+          </div>
+
+          {availableProjects.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {availableProjects.map((proj) => (
+                <div
+                  key={proj.id}
+                  className="group rounded-xl border border-border/70 bg-card/40 hover:bg-card/70 p-4 transition-all hover:border-primary/40 space-y-3 flex flex-col justify-between"
+                >
+                  <div className="space-y-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors truncate">
+                        {proj.name}
+                      </h4>
+                      <Badge variant="outline" className="text-[10px] font-mono shrink-0">
+                        {proj.origin}
+                      </Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                      {proj.description || `Architecture workspace for ${proj.name}`}
+                    </p>
+                    <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-mono pt-1">
+                      <span>{proj.domain}</span>
+                      <span>&bull;</span>
+                      <StatusBadge status={proj.status} />
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-border/40 flex items-center justify-between gap-2">
+                    <span className="text-[10px] font-mono text-muted-foreground">
+                      Updated {proj.lastUpdated ? new Date(proj.lastUpdated).toLocaleDateString() : "Recently"}
+                    </span>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => setActiveProject(proj.id, { navigateToProject: true })}
+                      className="text-xs h-7 px-2.5 font-medium border-border hover:border-primary hover:bg-primary/10 hover:text-primary gap-1"
+                    >
+                      Open Workspace <ArrowRight className="size-3" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="p-8 rounded-2xl border border-dashed border-border bg-card/20 text-center space-y-2">
+              <FolderKanban className="size-8 text-muted-foreground mx-auto" />
+              <h4 className="text-sm font-bold text-foreground">No projects in storage</h4>
+              <p className="text-xs text-muted-foreground max-w-sm mx-auto">
+                No architecture projects have been created yet. Create a new project to get started.
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* AUTHENTICATION & SESSION RETENTION FOOTER (E15, T09) */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-xl border border-border/60 bg-zinc-950/40 text-xs text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <Info className="size-4 text-primary shrink-0" />
+            <span>
+              Signed in as <strong className="text-foreground">{user?.email || "developer@vyron.ai"}</strong>. Your authenticated session remains active across workspace exits.
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button asChild variant="ghost" size="sm" className="h-7 text-xs">
+              <Link to="/app/settings">Account Settings</Link>
+            </Button>
+            <Button asChild variant="ghost" size="sm" className="h-7 text-xs">
+              <Link to="/help">Help & Docs</Link>
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <PageHeader
@@ -203,6 +503,16 @@ function Dashboard() {
                 <TabsTrigger value="error">Error</TabsTrigger>
               </TabsList>
             </Tabs>
+
+            {/* EXIT WORKSPACE ACTION */}
+            {activeProject && (
+              <WorkspaceExitButton
+                projectId={activeProject.id}
+                projectName={activeProject.name}
+                variant="outline"
+                className="border-border text-xs"
+              />
+            )}
 
             {/* CONTEXT-SENSITIVE RUN ANALYSIS BUTTON (WORKSTREAM I & K) */}
             <Button

@@ -54,7 +54,20 @@ export function WorkspaceExitButton({
     await workspaceExitCoordinator.requestExit({
       projectId,
       projectName,
-      navigate: (to) => navigate({ to }),
+      navigate: (to) => {
+        if (to.includes("?")) {
+          const [path, qs] = to.split("?");
+          const searchObj: Record<string, string> = {};
+          if (qs) {
+            new URLSearchParams(qs).forEach((v, k) => {
+              searchObj[k] = v;
+            });
+          }
+          navigate({ to: (path || "/app") as never, search: searchObj as never });
+        } else {
+          navigate({ to: to as never });
+        }
+      },
     });
   };
 

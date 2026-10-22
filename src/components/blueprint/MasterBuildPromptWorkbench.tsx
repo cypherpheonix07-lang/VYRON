@@ -209,10 +209,10 @@ export function MasterBuildPromptWorkbench({
   }, [phaseRecords]);
 
   // Active domain
-  const activeDomain = useMemo(() => {
+  const activeDomain: MasterBuildDomain = useMemo(() => {
     return (
       MASTER_BUILD_DOMAINS.find((d) => d.letter === activeLetter) ||
-      MASTER_BUILD_DOMAINS[0]
+      MASTER_BUILD_DOMAINS[0]!
     );
   }, [activeLetter]);
 
