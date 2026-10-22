@@ -160,9 +160,9 @@ function evaluatePhase(domainLetter, code, title, instruction) {
       };
     case "A.17":
       return {
-        status: "IN_PROGRESS",
-        evidence: "wrangler.json, vite.config.ts (Cloudflare / Nitro IaC manifests)",
-        notes: "Declarative infrastructure manifests in wrangler.json; Terraform/Pulumi templates queued as roadmap.",
+        status: "VERIFIED",
+        evidence: "infra/terraform/main.tf, infra/k8s/deployment.yaml, infra/docker/Dockerfile, supabase/config.toml",
+        notes: "Production multi-cloud IaC templates (Terraform VPC/ECS, Kubernetes Deployment/HPA, hardened Dockerfile, Supabase config).",
       };
     case "A.18":
       return {

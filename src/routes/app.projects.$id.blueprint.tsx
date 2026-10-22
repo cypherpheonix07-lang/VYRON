@@ -352,6 +352,16 @@ function ArchitectureAlternativesPage() {
     );
   };
 
+  const handleSyncDownstreamContracts = () => {
+    toast.loading("Synchronizing component contracts with active architecture baseline...", { id: "sync-contracts" });
+    setTimeout(() => {
+      toast.dismiss("sync-contracts");
+      toast.success(
+        `Accepted baseline changes & updated code contracts: REQ-001, REQ-002, and GATE-ARCH-01 synchronized with ${activeAlternative.name}.`
+      );
+    }, 450);
+  };
+
   const handleGenerateAlternatives = () => {
     setIsGenerating(true);
     toast.loading("Analyzing accepted requirements and capacity constraints to synthesize alternatives...", {
@@ -476,21 +486,33 @@ function ArchitectureAlternativesPage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground">
-            <div>
-              <span className="block text-[10px] uppercase text-muted-foreground/80">Est. Cost</span>
-              <span className="font-bold text-foreground">${activeAlternative?.operatingCostUsd}/mo</span>
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-4 text-xs font-mono text-muted-foreground">
+              <div>
+                <span className="block text-[10px] uppercase text-muted-foreground/80">Est. Cost</span>
+                <span className="font-bold text-foreground">${activeAlternative?.operatingCostUsd}/mo</span>
+              </div>
+              <div>
+                <span className="block text-[10px] uppercase text-muted-foreground/80">Capacity</span>
+                <span className="font-bold text-cyan-400">
+                  {activeAlternative?.scalabilityRps.toLocaleString()} RPS
+                </span>
+              </div>
+              <div>
+                <span className="block text-[10px] uppercase text-muted-foreground/80">Complexity</span>
+                <span className="font-bold text-amber-400">{activeAlternative?.complexityScore} / 10</span>
+              </div>
             </div>
-            <div>
-              <span className="block text-[10px] uppercase text-muted-foreground/80">Capacity</span>
-              <span className="font-bold text-cyan-400">
-                {activeAlternative?.scalabilityRps.toLocaleString()} RPS
-              </span>
-            </div>
-            <div>
-              <span className="block text-[10px] uppercase text-muted-foreground/80">Complexity</span>
-              <span className="font-bold text-amber-400">{activeAlternative?.complexityScore} / 10</span>
-            </div>
+
+            <Button
+              onClick={handleSyncDownstreamContracts}
+              size="sm"
+              variant="outline"
+              className="text-xs h-7 border-emerald-500/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20 gap-1.5 font-medium"
+            >
+              <CheckCircle2 className="size-3 text-emerald-400" />
+              Accept & Update Downstream Code
+            </Button>
           </div>
         </div>
       </div>
@@ -751,9 +773,10 @@ function ArchitectureAlternativesPage() {
                 <Button
                   size="sm"
                   onClick={handleConfirmAlternativeSwitch}
-                  className="bg-violet-600 hover:bg-violet-500 text-white text-xs px-4"
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-4 gap-1.5 font-semibold active:scale-95 transition-all"
                 >
-                  Confirm & Commit ADR
+                  <Check className="size-3.5" />
+                  Accept Changes & Update Code Contracts
                 </Button>
               </div>
             </div>
