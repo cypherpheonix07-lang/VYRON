@@ -125,29 +125,53 @@ class GitHubService {
     percentRemaining: 100,
   };
 
+  private static readonly STORAGE_KEY = "vyron_github_token";
+
   constructor() {
-    // Check if token stored in memory/session
     this.hydrateToken();
   }
 
-  private async hydrateToken(): Promise<string | null> {
+  public async hydrateToken(): Promise<string | null> {
+    if (this.token) return this.token;
     try {
+      // 1. Check local storage for directly configured PAT
+      if (typeof window !== "undefined") {
+        const stored = localStorage.getItem(GitHubService.STORAGE_KEY);
+        if (stored?.trim()) {
+          this.token = stored.trim();
+          return this.token;
+        }
+      }
+
+      // 2. Check Supabase Auth session for provider token
       const res = await authService.getSession();
       const session = res.data;
       if (session?.provider_token) {
         this.token = session.provider_token;
+        if (typeof window !== "undefined") {
+          localStorage.setItem(GitHubService.STORAGE_KEY, this.token);
+        }
         return this.token;
       }
-      // Check database tokens table
+
+      // 3. Check Supabase github_tokens table (with silent graceful fallback if table not yet created)
       if (session?.user?.id) {
-        const { data } = await supabase
-          .from("github_tokens")
-          .select("access_token")
-          .eq("user_id", session.user.id)
-          .maybeSingle();
-        if (data?.access_token) {
-          this.token = data.access_token;
-          return this.token;
+        try {
+          const { data, error } = await supabase
+            .from("github_tokens")
+            .select("access_token")
+            .eq("user_id", session.user.id)
+            .maybeSingle();
+
+          if (!error && data?.access_token) {
+            this.token = data.access_token;
+            if (typeof window !== "undefined") {
+              localStorage.setItem(GitHubService.STORAGE_KEY, this.token);
+            }
+            return this.token;
+          }
+        } catch {
+          // Table does not exist on remote schema - gracefully ignored
         }
       }
     } catch (e) {
@@ -156,8 +180,79 @@ class GitHubService {
     return this.token;
   }
 
-  public setToken(token: string) {
-    this.token = token;
+  public hasToken(): boolean {
+    if (this.token) return true;
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem(GitHubService.STORAGE_KEY);
+      if (stored?.trim()) {
+        this.token = stored.trim();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public setToken(token: string | null) {
+    this.token = token ? token.trim() : null;
+    if (typeof window !== "undefined") {
+      if (this.token) {
+        localStorage.setItem(GitHubService.STORAGE_KEY, this.token);
+      } else {
+        localStorage.removeItem(GitHubService.STORAGE_KEY);
+      }
+    }
+    this.clearCache();
+  }
+
+  public async saveToken(token: string): Promise<{ ok: boolean; error?: string; user?: GitHubUserProfile }> {
+    const cleanToken = token.trim();
+    if (!cleanToken) return { ok: false, error: "GitHub token cannot be empty." };
+
+    try {
+      const res = await fetch("https://api.github.com/user", {
+        headers: {
+          Accept: "application/vnd.github.v3+json",
+          Authorization: `Bearer ${cleanToken}`,
+        },
+      });
+
+      if (!res.ok) {
+        if (res.status === 401) {
+          return { ok: false, error: "Invalid GitHub token. Please verify token permissions (repo, read:user)." };
+        }
+        return { ok: false, error: `GitHub API error: ${res.statusText} (${res.status})` };
+      }
+
+      const userData = (await res.json()) as GitHubUserProfile;
+      this.setToken(cleanToken);
+
+      // Attempt storing in Supabase if session exists
+      try {
+        const sessionRes = await authService.getSession();
+        if (sessionRes.ok && sessionRes.data?.user?.id) {
+          await supabase.from("github_tokens").upsert({
+            user_id: sessionRes.data.user.id,
+            access_token: cleanToken,
+            token_type: "bearer",
+            github_username: userData.login,
+            github_user_id: userData.id,
+            scopes: res.headers.get("x-oauth-scopes") || "repo,read:user",
+            updated_at: new Date().toISOString(),
+          });
+        }
+      } catch {
+        // Table may not exist yet; token is safely saved in localStorage
+      }
+
+      return { ok: true, user: userData };
+    } catch (err: unknown) {
+      return { ok: false, error: err instanceof Error ? err.message : String(err) };
+    }
+  }
+
+  public disconnect() {
+    this.setToken(null);
+    this.clearCache();
   }
 
   public getToken(): string | null {
@@ -298,7 +393,9 @@ class GitHubService {
   // ─── 7 DATA LAYERS ────────────────────────────────────────────────────────
 
   // LAYER 1: USER PROFILE (TTL: 1 hour)
-  public async fetchUserProfile(forceRefresh = false): Promise<GitHubUserProfile> {
+  public async fetchUserProfile(forceRefresh = false): Promise<GitHubUserProfile | null> {
+    const token = await this.hydrateToken();
+    if (!token) return null;
     return this.resilientFetch<GitHubUserProfile>("/user", 3600, forceRefresh);
   }
 
@@ -309,6 +406,8 @@ class GitHubService {
     sort: "updated" | "stars" | "pushed" = "updated",
     forceRefresh = false,
   ): Promise<GitHubRepoItem[]> {
+    const token = await this.hydrateToken();
+    if (!token) return [];
     return this.resilientFetch<GitHubRepoItem[]>(
       `/user/repos?per_page=${perPage}&page=${page}&sort=${sort}`,
       300,
@@ -374,6 +473,8 @@ class GitHubService {
 
   // LAYER 6: ORGANIZATIONS (TTL: 1 hour)
   public async fetchOrganizations(forceRefresh = false): Promise<GitHubOrgItem[]> {
+    const token = await this.hydrateToken();
+    if (!token) return [];
     return this.resilientFetch<GitHubOrgItem[]>("/user/orgs", 3600, forceRefresh);
   }
 
@@ -383,6 +484,8 @@ class GitHubService {
     perPage: number = 30,
     forceRefresh = false,
   ): Promise<GitHubEventItem[]> {
+    const token = await this.hydrateToken();
+    if (!token && !username) return [];
     return this.resilientFetch<GitHubEventItem[]>(
       `/users/${username}/events?per_page=${perPage}`,
       120,

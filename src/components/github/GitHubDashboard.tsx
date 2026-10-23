@@ -25,9 +25,16 @@ import {
   Sparkles,
   ExternalLink,
   Lock,
+  Key,
+  LogOut,
+  Eye,
+  EyeOff,
+  AlertTriangle,
+  CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
 export function GitHubDashboard() {
@@ -51,12 +58,37 @@ export function GitHubDashboard() {
   const [syncCountdown, setSyncCountdown] = useState(30);
   const [isConnected, setIsConnected] = useState(false);
 
+  // Direct PAT Connection States
+  const [patInput, setPatInput] = useState("");
+  const [isSavingPat, setIsSavingPat] = useState(false);
+  const [showPatToken, setShowPatToken] = useState(false);
+  const [connectionMode, setConnectionMode] = useState<"pat" | "oauth">("pat");
+
   // Sync data from GitHub
   const fetchData = useCallback(
     async (forceRefresh = false) => {
       try {
         setIsRefreshing(true);
+        const hasToken = githubService.hasToken();
+        if (!hasToken) {
+          setIsConnected(false);
+          setProfile(null);
+          setRepos([]);
+          setOrgs([]);
+          setEvents([]);
+          return;
+        }
+
         const userProfile = await githubService.fetchUserProfile(forceRefresh);
+        if (!userProfile) {
+          setIsConnected(false);
+          setProfile(null);
+          setRepos([]);
+          setOrgs([]);
+          setEvents([]);
+          return;
+        }
+
         setProfile(userProfile);
         setIsConnected(true);
 
@@ -72,7 +104,6 @@ export function GitHubDashboard() {
         setRateLimit(githubService.getRateLimitStatus());
       } catch (err: unknown) {
         console.warn("[GitHubDashboard] Sync error:", err);
-        // Fallback demo user if not connected to live OAuth yet
         if (!profile) {
           setIsConnected(false);
         }
@@ -113,6 +144,37 @@ export function GitHubDashboard() {
     if (!res.ok) {
       toast.error(res.error?.message || "Failed to start GitHub OAuth", { id: "gh-oauth" });
     }
+  };
+
+  const handleSavePat = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!patInput.trim()) {
+      toast.error("Please enter your GitHub Personal Access Token.");
+      return;
+    }
+
+    setIsSavingPat(true);
+    toast.loading("Verifying GitHub token...", { id: "gh-token-verify" });
+    const res = await githubService.saveToken(patInput);
+    setIsSavingPat(false);
+
+    if (res.ok && res.user) {
+      toast.success(`Connected as @${res.user.login}!`, { id: "gh-token-verify" });
+      setPatInput("");
+      await fetchData(true);
+    } else {
+      toast.error(res.error || "Failed to verify GitHub token", { id: "gh-token-verify" });
+    }
+  };
+
+  const handleDisconnect = () => {
+    githubService.disconnect();
+    setIsConnected(false);
+    setProfile(null);
+    setRepos([]);
+    setOrgs([]);
+    setEvents([]);
+    toast.info("Disconnected from GitHub account.");
   };
 
   const handleForceRefresh = () => {
@@ -186,10 +248,36 @@ export function GitHubDashboard() {
             </Button>
           </div>
 
-          {!isConnected && (
+          {isConnected ? (
+            <div className="flex items-center gap-2">
+              {profile?.avatar_url && (
+                <img
+                  src={profile.avatar_url}
+                  alt={profile.login}
+                  className="size-6 rounded-full border border-zinc-700"
+                />
+              )}
+              <span className="text-xs font-mono font-semibold text-zinc-300">
+                @{profile?.login}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleDisconnect}
+                className="h-8 px-2.5 text-xs border-red-900/60 bg-red-950/20 text-red-400 hover:bg-red-900/40 hover:text-red-300 gap-1.5"
+              >
+                <LogOut className="size-3.5" />
+                <span>Disconnect</span>
+              </Button>
+            </div>
+          ) : (
             <Button
               size="sm"
-              onClick={handleConnectGitHub}
+              onClick={() => {
+                const el = document.getElementById("pat-connect-input");
+                if (el) el.focus();
+                else handleConnectGitHub();
+              }}
               className="bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-xs gap-1.5 h-8"
             >
               <Github className="size-3.5" />
@@ -251,7 +339,7 @@ export function GitHubDashboard() {
               }`}
             >
               <Activity className="size-4" />
-              <span>Live Activity Stream</span>
+              <span>Activity Feed</span>
             </button>
 
             <button
@@ -290,23 +378,127 @@ export function GitHubDashboard() {
                 onNavigateTab={(t) => setActiveTab(t)}
               />
             ) : (
-              <div className="p-12 text-center rounded-2xl border border-border bg-zinc-950/60 space-y-4 max-w-md mx-auto my-12">
-                <Github className="size-12 text-zinc-500 mx-auto" />
-                <div className="space-y-1">
-                  <h3 className="text-sm font-bold text-white">
-                    Connect GitHub to Start Mirroring
+              <div className="p-8 text-center rounded-2xl border border-border bg-zinc-950/60 space-y-6 max-w-lg mx-auto my-8 shadow-xl">
+                <div className="size-14 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-white mx-auto shadow-md">
+                  <Github className="size-8 text-zinc-300" />
+                </div>
+                <div className="space-y-1.5">
+                  <h3 className="text-base font-bold text-white tracking-tight">
+                    Connect GitHub Account
                   </h3>
-                  <p className="text-xs text-zinc-400">
-                    Authenticate your GitHub account to access your repositories, branch trees, and
-                    live telemetry feeds.
+                  <p className="text-xs text-zinc-400 max-w-md mx-auto">
+                    Mirror your repositories, branch trees, commit logs, and activity telemetry in realtime.
                   </p>
                 </div>
-                <Button
-                  onClick={handleConnectGitHub}
-                  className="bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-xs"
-                >
-                  Connect GitHub Account
-                </Button>
+
+                {/* Connection Mode Selector */}
+                <div className="flex items-center justify-center gap-1 p-1 bg-zinc-900/90 border border-zinc-800 rounded-xl w-fit mx-auto text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setConnectionMode("pat")}
+                    className={`px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1.5 ${
+                      connectionMode === "pat"
+                        ? "bg-cyan-500 text-zinc-950 shadow-sm"
+                        : "text-zinc-400 hover:text-white"
+                    }`}
+                  >
+                    <Key className="size-3.5" />
+                    <span>Personal Access Token</span>
+                    <Badge className="h-4 px-1 text-[8px] bg-emerald-950 text-emerald-400 border-emerald-800">
+                      Direct
+                    </Badge>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setConnectionMode("oauth")}
+                    className={`px-3 py-1.5 rounded-lg font-semibold transition-colors flex items-center gap-1.5 ${
+                      connectionMode === "oauth"
+                        ? "bg-cyan-500 text-zinc-950 shadow-sm"
+                        : "text-zinc-400 hover:text-white"
+                    }`}
+                  >
+                    <Github className="size-3.5" />
+                    <span>OAuth Sign-In</span>
+                  </button>
+                </div>
+
+                {connectionMode === "pat" ? (
+                  <form onSubmit={handleSavePat} className="space-y-4 text-left">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs font-semibold text-zinc-300">
+                        <span>Personal Access Token</span>
+                        <a
+                          href="https://github.com/settings/tokens/new?scopes=repo,read:user,read:org&description=VYRON%20Workspace"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[11px] text-cyan-400 hover:underline flex items-center gap-1"
+                        >
+                          <span>Generate Token</span>
+                          <ExternalLink className="size-3" />
+                        </a>
+                      </div>
+                      <div className="relative">
+                        <Input
+                          id="pat-connect-input"
+                          type={showPatToken ? "text" : "password"}
+                          value={patInput}
+                          onChange={(e) => setPatInput(e.target.value)}
+                          placeholder="ghp_... or github_pat_..."
+                          className="bg-zinc-900/90 border-zinc-700 text-xs pr-10 font-mono text-zinc-200"
+                          disabled={isSavingPat}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPatToken((prev) => !prev)}
+                          className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-white"
+                        >
+                          {showPatToken ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                        </button>
+                      </div>
+                      <p className="text-[11px] text-zinc-500">
+                        Requires <code className="text-zinc-300">repo</code> and <code className="text-zinc-300">read:user</code> scopes. Direct token authorization avoids OAuth callback issues.
+                      </p>
+                    </div>
+
+                    <Button
+                      type="submit"
+                      disabled={isSavingPat || !patInput.trim()}
+                      className="w-full bg-cyan-500 hover:bg-cyan-400 text-zinc-950 font-bold text-xs h-9 gap-1.5"
+                    >
+                      {isSavingPat ? (
+                        <>
+                          <RefreshCw className="size-3.5 animate-spin" />
+                          <span>Verifying with GitHub...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Key className="size-3.5" />
+                          <span>Connect with Token</span>
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="p-3.5 rounded-xl border border-amber-800/60 bg-amber-950/20 text-left space-y-1.5">
+                      <div className="flex items-center gap-1.5 text-amber-400 font-semibold text-xs">
+                        <AlertTriangle className="size-3.5" />
+                        <span>OAuth Configuration Notice</span>
+                      </div>
+                      <p className="text-[11px] text-zinc-400 leading-relaxed">
+                        If GitHub displays a <strong>404 Not Found</strong> during authorization, your Supabase Auth provider currently has an invalid Client ID (e.g. numeric App ID <code className="text-zinc-300">1919453</code>). Use the <strong>Personal Access Token</strong> tab above for instant, 100% reliable connection.
+                      </p>
+                    </div>
+
+                    <Button
+                      onClick={handleConnectGitHub}
+                      className="w-full bg-white hover:bg-zinc-200 text-zinc-950 font-bold text-xs h-9 gap-2"
+                    >
+                      <Github className="size-4" />
+                      <span>Authorize via GitHub OAuth</span>
+                    </Button>
+                  </div>
+                )}
               </div>
             )
           ) : activeTab === "repos" ? (
