@@ -155,7 +155,7 @@ export class InitializationGate {
         createdProjectId = fallbackProj.id;
       }
 
-      // 2. Log Telemetry via activityService with circuit breaker
+      // 2. Log Telemetry to activity_events table via activityService with circuit breaker
       try {
         await activityService.emitActivity({
           projectId: createdProjectId,

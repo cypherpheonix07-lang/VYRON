@@ -35,14 +35,18 @@ const ssrTimeoutPlugin: any = {
           if (runner.transport) {
             runner.transport.timeout = 300000;
           }
-        } catch {}
+        } catch (_err) {
+          // ignore ssr transport timeout setting errors
+        }
       };
 
       try {
         if (env.runner) {
           applyTimeout(env.runner);
         }
-      } catch {}
+      } catch (_err) {
+        // ignore runner inspection errors
+      }
 
       const proto = Object.getPrototypeOf(env);
       const desc = Object.getOwnPropertyDescriptor(proto, "runner") || Object.getOwnPropertyDescriptor(env, "runner");

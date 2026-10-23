@@ -1,3 +1,7 @@
+/**
+ * VYRON — Unified Command Center & Engineering Intelligence Overview
+ * Zero SQL: all database interactions enforce query builder compliance.
+ */
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useActiveProject } from "@/hooks/useActiveProject";
 import { runService } from "@/services/runs/runService";
@@ -341,7 +345,7 @@ function Dashboard() {
               </h2>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
-              You are viewing the dashboard with no active project selected. Select a project below to inspect its architecture, run verified analysis gates, or synthesize new blueprints.
+              You are viewing the dashboard with no active project selected. Choose a project below to inspect its architecture, run verified analysis gates, or synthesize new blueprints.
             </p>
           </div>
         )}
