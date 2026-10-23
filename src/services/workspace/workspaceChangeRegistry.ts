@@ -19,6 +19,10 @@ export interface RegisteredWorkspaceSection {
   getDirtySummary?: () => string;
   save: () => Promise<boolean | void> | boolean | void;
   discard: () => Promise<void> | void;
+  hasPendingWrites?: () => boolean;
+  cancelPendingWrites?: () => void;
+  waitForPendingWrites?: () => Promise<void>;
+  isSaving?: () => boolean;
 }
 
 export interface DirtySectionDetail {
@@ -169,6 +173,13 @@ class WorkspaceChangeRegistry {
       const label = section.label || section.sectionName || id;
 
       try {
+        // Workstream N & Journey 7: Reconcile in-flight writes and cancel debounce timers
+        if (typeof section.cancelPendingWrites === "function") {
+          section.cancelPendingWrites();
+        }
+        if (typeof section.waitForPendingWrites === "function") {
+          await section.waitForPendingWrites();
+        }
         await section.discard();
         discarded.push(label);
       } catch (err) {
@@ -179,6 +190,24 @@ class WorkspaceChangeRegistry {
     this.notifyListeners();
 
     return { discarded };
+  }
+
+  /**
+   * Check if any registered section within the target project has in-flight writes or active saves.
+   */
+  public hasPendingWrites(projectId?: string | null): boolean {
+    for (const section of this.sections.values()) {
+      if (projectId && section.projectId && section.projectId !== projectId) {
+        continue;
+      }
+      if (section.hasPendingWrites && section.hasPendingWrites()) {
+        return true;
+      }
+      if (section.isSaving && section.isSaving()) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**

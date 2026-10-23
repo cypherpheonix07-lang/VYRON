@@ -120,15 +120,11 @@ class ProjectRegistry {
         this.activeProjectId = storedActive;
         return;
       }
-    }
-    // Default to first seed project if available and not explicitly cleared
-    const stored = typeof window !== "undefined" ? localStorage.getItem(ACTIVE_PROJECT_KEY) : null;
-    if (stored === "none") {
+      // J07, H12: Zero silent auto-selection of sample/seed projects; preserve null active state
       this.activeProjectId = null;
       return;
     }
-    const first = Array.from(this.localProjects.values())[0];
-    this.activeProjectId = first?.id || null;
+    this.activeProjectId = null;
   }
 
   public getGenerationId(): number {

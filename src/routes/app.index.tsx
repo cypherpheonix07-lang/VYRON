@@ -40,6 +40,8 @@ import {
   Clock,
   Trash2,
   Info,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
@@ -99,8 +101,10 @@ import { AtlasSystemExplorer } from "@/components/dashboard/AtlasSystemExplorer"
 import { CopilotPartnerCard } from "@/components/dashboard/CopilotPartnerCard";
 import { EvidenceExplorer } from "@/components/dashboard/EvidenceExplorer";
 import { TimeMachineComparator } from "@/components/dashboard/TimeMachineComparator";
+import { workspaceExitCoordinator } from "@/services/workspace/workspaceExitCoordinator";
 
 export interface DashboardSearch {
+  attemptId?: string | undefined;
   exitOutcome?: "saved" | "discarded" | "clean" | undefined;
   sections?: string | undefined;
   projectName?: string | undefined;
@@ -111,6 +115,7 @@ export interface DashboardSearch {
 export const Route = createFileRoute("/app/")({
   validateSearch: (search: Record<string, unknown>): DashboardSearch => {
     return {
+      attemptId: typeof search["attemptId"] === "string" ? search["attemptId"] : undefined,
       exitOutcome:
         search["exitOutcome"] === "saved" ||
         search["exitOutcome"] === "discarded" ||
@@ -157,6 +162,7 @@ function Dashboard() {
   const { mode } = useAppMode();
   const [state, setState] = useState<ViewState>("loaded");
   const [showTimeMachine, setShowTimeMachine] = useState(false);
+  const [showSavedProjects, setShowSavedProjects] = useState(false);
 
   const { selectEntity } = useCommandCenter();
   const {
@@ -225,9 +231,20 @@ function Dashboard() {
 
   // DELIBERATE NO-PROJECT-SELECTED EMPTY DASHBOARD (PHASE T: T01–T20)
   if (!activeProject) {
-    const exitOutcome = search.exitOutcome;
-    const sectionsList = search.sections ? search.sections.split(",").filter(Boolean) : [];
-    const exitTime = search.ts ? new Date(search.ts).toLocaleTimeString() : undefined;
+    // Verify outcome token against coordinator receipts (Domain I, Journey 11)
+    const confirmedRecord = workspaceExitCoordinator.verifyExitOutcome({
+      attemptId: search.attemptId,
+      exitOutcome: search.exitOutcome,
+    });
+
+    const exitOutcome = confirmedRecord?.outcome;
+    const sectionsList = confirmedRecord?.sections || (search.sections ? search.sections.split(",").filter(Boolean) : []);
+    const outcomeProject = confirmedRecord?.projectName || search.projectName;
+    const exitTime = confirmedRecord?.timestamp
+      ? new Date(confirmedRecord.timestamp).toLocaleTimeString()
+      : search.ts
+        ? new Date(search.ts).toLocaleTimeString()
+        : undefined;
 
     return (
       <div className="space-y-6 max-w-6xl mx-auto py-2">
@@ -237,11 +254,14 @@ function Dashboard() {
           description="Workspace is currently closed. No project selected."
           actions={
             <div className="flex items-center gap-2">
-              <Button asChild variant="outline" size="sm" className="text-xs gap-1.5 h-8">
-                <Link to="/app/projects">
-                  <FolderKanban className="size-3.5" />
-                  Open Project
-                </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowSavedProjects((prev) => !prev)}
+                className="text-xs gap-1.5 h-8"
+              >
+                <FolderKanban className="size-3.5" />
+                {showSavedProjects ? "Hide Projects" : "Open Project"}
               </Button>
               <Button asChild size="sm" className="text-xs bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 h-8">
                 <Link to="/app/projects/new">
@@ -253,7 +273,7 @@ function Dashboard() {
           }
         />
 
-        {/* AUTHORITATIVE EXIT OUTCOME NOTICE (T16) */}
+        {/* AUTHORITATIVE EXIT OUTCOME NOTICE (T16, Domain I) */}
         {exitOutcome ? (
           <Card className="surface border border-border/80 bg-zinc-950/90 shadow-xl rounded-2xl overflow-hidden animate-in fade-in duration-300">
             <div
@@ -293,9 +313,9 @@ function Dashboard() {
                           ? "Workspace exited — unsaved changes discarded"
                           : "Workspace closed cleanly"}
                     </h3>
-                    {search.projectName && (
+                    {outcomeProject && (
                       <Badge variant="outline" className="text-[10px] font-mono border-primary/30 text-primary">
-                        {search.projectName}
+                        {outcomeProject}
                       </Badge>
                     )}
                     {exitTime && (
@@ -307,9 +327,9 @@ function Dashboard() {
                   </div>
                   <p className="text-xs text-muted-foreground leading-relaxed">
                     {exitOutcome === "saved"
-                      ? `All modified records${search.projectName ? ` for ${search.projectName}` : ""} were committed to project storage before leaving.`
+                      ? `All modified records${outcomeProject ? ` for ${outcomeProject}` : ""} were committed to project storage before leaving.`
                       : exitOutcome === "discarded"
-                        ? `Only uncommitted edits were discarded. Previously saved records and conversations for ${search.projectName || "your project"} remain completely intact.`
+                        ? `Only uncommitted edits were discarded. Previously saved records and conversations for ${outcomeProject || "your project"} remain completely intact.`
                         : "Workspace closed cleanly with zero pending mutations or background tasks."}
                   </p>
                   {sectionsList.length > 0 && (
@@ -328,7 +348,12 @@ function Dashboard() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigate({ to: "/app" })}
+                onClick={() => {
+                  if (confirmedRecord?.attemptId) {
+                    workspaceExitCoordinator.consumeExitOutcome(confirmedRecord.attemptId);
+                  }
+                  navigate({ to: "/app" });
+                }}
                 className="text-xs text-muted-foreground hover:text-foreground shrink-0 self-end sm:self-center"
               >
                 Dismiss
@@ -336,13 +361,18 @@ function Dashboard() {
             </CardContent>
           </Card>
         ) : (
-          /* NEUTRAL DIRECT-ACCESS WELCOME NOTICE (T17) */
+          /* NEUTRAL DIRECT-ACCESS WELCOME NOTICE (T17, Domain I) */
           <div className="rounded-2xl border border-border/60 bg-gradient-to-r from-card/80 via-card/50 to-primary/5 p-5 shadow-sm space-y-2">
             <div className="flex items-center gap-2.5 text-primary">
               <Compass className="size-5" />
               <h2 className="text-sm font-semibold tracking-tight text-foreground">
                 No active project open
               </h2>
+              {search.exitOutcome && (
+                <Badge variant="outline" className="text-[10px] font-mono border-amber-500/30 text-amber-400 ml-auto">
+                  Direct URL View — Unverified
+                </Badge>
+              )}
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
               You are viewing the dashboard with no active project selected. Choose a project below to inspect its architecture, run verified analysis gates, or synthesize new blueprints.
@@ -369,7 +399,10 @@ function Dashboard() {
             </Button>
           </Card>
 
-          <Card className="surface border border-border/80 bg-zinc-950/60 p-5 rounded-2xl space-y-3 hover:border-violet-500/40 transition-colors">
+          <Card className={cn(
+            "surface border border-border/80 bg-zinc-950/60 p-5 rounded-2xl space-y-3 transition-colors",
+            showSavedProjects ? "border-violet-500/50 bg-violet-950/15" : "hover:border-violet-500/40"
+          )}>
             <div className="size-10 rounded-xl bg-violet-500/10 border border-violet-500/20 grid place-items-center text-violet-400">
               <FolderKanban className="size-5" />
             </div>
@@ -379,10 +412,15 @@ function Dashboard() {
                 Browse all authorized workspaces. Previously saved records, findings, and conversation history are fully preserved.
               </p>
             </div>
-            <Button asChild variant="outline" size="sm" className="w-full text-xs font-semibold border-violet-500/30 text-violet-300 hover:bg-violet-500/10">
-              <Link to="/app/projects">
-                Browse Projects <ArrowRight className="size-3.5 ml-1.5" />
-              </Link>
+            <Button
+              type="button"
+              variant={showSavedProjects ? "secondary" : "outline"}
+              size="sm"
+              onClick={() => setShowSavedProjects((prev) => !prev)}
+              className="w-full text-xs font-semibold border-violet-500/30 text-violet-300 hover:bg-violet-500/10 flex items-center justify-between"
+            >
+              <span>{showSavedProjects ? "Hide Saved Projects" : "Open Existing Project"}</span>
+              {showSavedProjects ? <ChevronUp className="size-3.5 ml-1.5" /> : <ChevronDown className="size-3.5 ml-1.5" />}
             </Button>
           </Card>
 
@@ -404,72 +442,84 @@ function Dashboard() {
           </Card>
         </div>
 
-        {/* SAVED PROJECTS RE-ENTRY DIRECTORY (U13, U14, U16) */}
-        <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <FolderKanban className="size-4 text-primary" />
-              <h3 className="text-sm font-bold text-foreground">
-                Your Saved Projects ({availableProjects.length})
-              </h3>
-            </div>
-            <Button asChild variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
-              <Link to="/app/projects">View all in directory &rarr;</Link>
-            </Button>
-          </div>
-
-          {availableProjects.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {availableProjects.map((proj) => (
-                <div
-                  key={proj.id}
-                  className="group rounded-xl border border-border/70 bg-card/40 hover:bg-card/70 p-4 transition-all hover:border-primary/40 space-y-3 flex flex-col justify-between"
+        {/* SAVED PROJECTS RE-ENTRY DIRECTORY (H04, B16, U13, U14, U16) — Displayed ONLY after explicit Open Existing Project interaction */}
+        {showSavedProjects && (
+          <div className="space-y-3 pt-2 animate-in fade-in duration-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <FolderKanban className="size-4 text-primary" />
+                <h3 className="text-sm font-bold text-foreground">
+                  Your Saved Projects ({availableProjects.length})
+                </h3>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button asChild variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
+                  <Link to="/app/projects">View all in directory &rarr;</Link>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowSavedProjects(false)}
+                  className="text-xs text-muted-foreground hover:text-foreground h-7 px-2"
                 >
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between gap-2">
-                      <h4 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors truncate">
-                        {proj.name}
-                      </h4>
-                      <Badge variant="outline" className="text-[10px] font-mono shrink-0">
-                        {proj.origin}
-                      </Badge>
-                    </div>
-                    <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                      {proj.description || `Architecture workspace for ${proj.name}`}
-                    </p>
-                    <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-mono pt-1">
-                      <span>{proj.domain}</span>
-                      <span>&bull;</span>
-                      <StatusBadge status={proj.status} />
-                    </div>
-                  </div>
+                  <X className="size-3.5 mr-1" /> Close
+                </Button>
+              </div>
+            </div>
 
-                  <div className="pt-2 border-t border-border/40 flex items-center justify-between gap-2">
-                    <span className="text-[10px] font-mono text-muted-foreground">
-                      Updated {proj.lastUpdated ? new Date(proj.lastUpdated).toLocaleDateString() : "Recently"}
-                    </span>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => setActiveProject(proj.id, { navigateToProject: true })}
-                      className="text-xs h-7 px-2.5 font-medium border-border hover:border-primary hover:bg-primary/10 hover:text-primary gap-1"
-                    >
-                      Open Workspace <ArrowRight className="size-3" />
-                    </Button>
+            {availableProjects.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {availableProjects.map((proj) => (
+                  <div
+                    key={proj.id}
+                    className="group rounded-xl border border-border/70 bg-card/40 hover:bg-card/70 p-4 transition-all hover:border-primary/40 space-y-3 flex flex-col justify-between"
+                  >
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between gap-2">
+                        <h4 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors truncate">
+                          {proj.name}
+                        </h4>
+                        <Badge variant="outline" className="text-[10px] font-mono shrink-0">
+                          {proj.origin}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                        {proj.description || `Architecture workspace for ${proj.name}`}
+                      </p>
+                      <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-mono pt-1">
+                        <span>{proj.domain}</span>
+                        <span>&bull;</span>
+                        <StatusBadge status={proj.status} />
+                      </div>
+                    </div>
+
+                    <div className="pt-2 border-t border-border/40 flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-mono text-muted-foreground">
+                        Updated {proj.lastUpdated ? new Date(proj.lastUpdated).toLocaleDateString() : "Recently"}
+                      </span>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => setActiveProject(proj.id, { navigateToProject: true })}
+                        className="text-xs h-7 px-2.5 font-medium border-border hover:border-primary hover:bg-primary/10 hover:text-primary gap-1"
+                      >
+                        Open Workspace <ArrowRight className="size-3" />
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-8 rounded-2xl border border-dashed border-border bg-card/20 text-center space-y-2">
-              <FolderKanban className="size-8 text-muted-foreground mx-auto" />
-              <h4 className="text-sm font-bold text-foreground">No projects in storage</h4>
-              <p className="text-xs text-muted-foreground max-w-sm mx-auto">
-                No architecture projects have been created yet. Create a new project to get started.
-              </p>
-            </div>
-          )}
-        </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-8 rounded-2xl border border-dashed border-border bg-card/20 text-center space-y-2">
+                <FolderKanban className="size-8 text-muted-foreground mx-auto" />
+                <h4 className="text-sm font-bold text-foreground">No projects in storage</h4>
+                <p className="text-xs text-muted-foreground max-w-sm mx-auto">
+                  No architecture projects have been created yet. Create a new project to get started.
+                </p>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* AUTHENTICATION & SESSION RETENTION FOOTER (E15, T09) */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-xl border border-border/60 bg-zinc-950/40 text-xs text-muted-foreground">
