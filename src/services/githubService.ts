@@ -444,6 +444,60 @@ class GitHubService {
     );
   }
 
+  // LAYER 3B: REPOSITORY README (TTL: 30 mins)
+  public async fetchRepoReadme(
+    owner: string,
+    repo: string,
+    ref?: string,
+    forceRefresh = false,
+  ): Promise<{ text: string; size: number; path: string } | null> {
+    try {
+      const endpoint = ref
+        ? `/repos/${owner}/${repo}/readme?ref=${encodeURIComponent(ref)}`
+        : `/repos/${owner}/${repo}/readme`;
+
+      const res = await this.resilientFetch<{
+        name: string;
+        path: string;
+        size: number;
+        content: string;
+        encoding: string;
+      }>(endpoint, 1800, forceRefresh);
+
+      if (!res?.content) return null;
+
+      let decoded = "";
+      if (res.encoding === "base64") {
+        try {
+          const cleanBase64 = res.content.replace(/\s/g, "");
+          if (typeof window !== "undefined" && typeof window.atob === "function") {
+            const binary = window.atob(cleanBase64);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+              bytes[i] = binary.charCodeAt(i);
+            }
+            decoded = new TextDecoder().decode(bytes);
+          } else {
+            decoded = Buffer.from(cleanBase64, "base64").toString("utf-8");
+          }
+        } catch {
+          decoded = res.content;
+        }
+      } else {
+        decoded = res.content;
+      }
+
+      return {
+        text: decoded,
+        size: res.size,
+        path: res.path,
+      };
+    } catch {
+      // Missing README or network error handled gracefully
+      return null;
+    }
+  }
+
   // LAYER 4: COMMITS HISTORY (TTL: 10 mins)
   public async fetchCommits(
     owner: string,

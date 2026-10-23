@@ -31,17 +31,33 @@ import {
   EyeOff,
   AlertTriangle,
   CheckCircle2,
+  FolderOpen,
+  FolderPlus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { MultiRepoSelectModal } from "./MultiRepoSelectModal";
+import { WorkspaceFolderTree } from "./WorkspaceFolderTree";
+import { workspaceRepoStore } from "@/state/workspace/workspaceRepoStore";
+import { initiateGitHubOAuth } from "@/lib/github/oauth";
 
 export function GitHubDashboard() {
   const [activeTab, setActiveTab] = useState<
-    "overview" | "repos" | "orgs" | "activity" | "starred"
-  >("overview");
+    "overview" | "repos" | "orgs" | "activity" | "starred" | "workspace-folders"
+  >("workspace-folders");
   const [selectedRepo, setSelectedRepo] = useState<GitHubRepoItem | null>(null);
+  const [isSelectModalOpen, setIsSelectModalOpen] = useState(false);
+  const [organizedCount, setOrganizedCount] = useState(() =>
+    workspaceRepoStore.getTotalRepoCount(),
+  );
+
+  useEffect(() => {
+    return workspaceRepoStore.subscribe(() => {
+      setOrganizedCount(workspaceRepoStore.getTotalRepoCount());
+    });
+  }, []);
 
   const [now, setNow] = useState(() => Date.now());
 
@@ -139,10 +155,15 @@ export function GitHubDashboard() {
   }, [isConnected, rateLimit.remaining, fetchData]);
 
   const handleConnectGitHub = async () => {
-    toast.loading("Initiating GitHub OAuth...", { id: "gh-oauth" });
-    const res = await authService.signInWithOAuth("github");
-    if (!res.ok) {
-      toast.error(res.error?.message || "Failed to start GitHub OAuth", { id: "gh-oauth" });
+    const initiated = initiateGitHubOAuth();
+    if (!initiated) {
+      toast.info("Using Direct Token Connection mode", {
+        description:
+          "VITE_GITHUB_CLIENT_ID is not configured in .env. Enter your Personal Access Token below for instant repository mirror connection.",
+      });
+      setConnectionMode("pat");
+      const el = document.getElementById("pat-connect-input");
+      if (el) el.focus();
     }
   };
 
@@ -162,6 +183,7 @@ export function GitHubDashboard() {
       toast.success(`Connected as @${res.user.login}!`, { id: "gh-token-verify" });
       setPatInput("");
       await fetchData(true);
+      setIsSelectModalOpen(true);
     } else {
       toast.error(res.error || "Failed to verify GitHub token", { id: "gh-token-verify" });
     }
@@ -250,6 +272,14 @@ export function GitHubDashboard() {
 
           {isConnected ? (
             <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                onClick={() => setIsSelectModalOpen(true)}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs gap-1.5 h-8 shadow-sm"
+              >
+                <FolderPlus className="size-3.5" />
+                <span>Select & Segregate Repos</span>
+              </Button>
               {profile?.avatar_url && (
                 <img
                   src={profile.avatar_url}
@@ -292,6 +322,26 @@ export function GitHubDashboard() {
         {/* SIDEBAR */}
         <aside className="w-full lg:w-60 shrink-0 border-r border-border/80 bg-zinc-950/40 p-4 space-y-6">
           <div className="space-y-1">
+            <button
+              onClick={() => {
+                setActiveTab("workspace-folders");
+                setSelectedRepo(null);
+              }}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${
+                activeTab === "workspace-folders" && !selectedRepo
+                  ? "bg-primary/20 text-primary border border-primary/30"
+                  : "text-muted-foreground hover:bg-zinc-900 hover:text-foreground"
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <FolderOpen className="size-4 text-primary" />
+                <span>AI Workspace Folders</span>
+              </div>
+              <Badge variant="outline" className="h-4 px-1 text-[9px] font-mono border-primary/40 text-primary">
+                {organizedCount}
+              </Badge>
+            </button>
+
             <button
               onClick={() => {
                 setActiveTab("overview");
@@ -368,6 +418,28 @@ export function GitHubDashboard() {
         <main className="flex-1 p-4 lg:p-8 overflow-y-auto max-h-[calc(100vh-60px)] space-y-6">
           {selectedRepo ? (
             <GitHubRepoDetail repo={selectedRepo} onBack={() => setSelectedRepo(null)} />
+          ) : activeTab === "workspace-folders" ? (
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                  <h2 className="text-base font-bold text-foreground">AI Repository Workspace Folders</h2>
+                  <p className="text-xs text-muted-foreground">
+                    Repositories organized by AI into internal workspace folders according to project README content.
+                  </p>
+                </div>
+                {isConnected && (
+                  <Button
+                    size="sm"
+                    onClick={() => setIsSelectModalOpen(true)}
+                    className="bg-primary text-primary-foreground font-semibold text-xs gap-1.5 h-8 shadow-sm"
+                  >
+                    <FolderPlus className="size-3.5" />
+                    <span>Select Repos to Segregate</span>
+                  </Button>
+                )}
+              </div>
+              <WorkspaceFolderTree />
+            </div>
           ) : activeTab === "overview" ? (
             profile ? (
               <GitHubOverview
@@ -543,6 +615,14 @@ export function GitHubDashboard() {
           ) : null}
         </main>
       </div>
+
+      {/* MULTI REPOSITORY SELECTION MODAL */}
+      <MultiRepoSelectModal
+        open={isSelectModalOpen}
+        onOpenChange={setIsSelectModalOpen}
+        repositories={repos}
+        onImportComplete={() => setActiveTab("workspace-folders")}
+      />
     </div>
   );
 }

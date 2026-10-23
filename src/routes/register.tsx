@@ -283,7 +283,17 @@ function RegisterPage() {
       });
 
       if (!result.ok) {
-        toast.error(result.error?.message ?? "Signup failed.");
+        if (result.error?.code === "email_exists") {
+          toast.error(result.error.message, {
+            action: {
+              label: "Sign in",
+              onClick: () => navigate({ to: "/login" }),
+            },
+            duration: 8000,
+          });
+        } else {
+          toast.error(result.error?.message ?? "Signup failed.");
+        }
       } else if (result.data?.session) {
         sessionStorage.removeItem(SIGNUP_DRAFT_KEY);
         toast.success("Account created successfully!");

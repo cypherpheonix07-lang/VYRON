@@ -31,18 +31,27 @@ import { Route as AppActivityRouteImport } from './routes/app.activity'
 import { Route as AppAdminRouteImport } from './routes/app.admin'
 import { Route as AppAetherRouteImport } from './routes/app.aether'
 import { Route as AppAnalysisRouteImport } from './routes/app.analysis'
+import { Route as AppApiGatewayRouteImport } from './routes/app.api-gateway'
 import { Route as AppBillingRouteImport } from './routes/app.billing'
 import { Route as AppChatRouteImport } from './routes/app.chat'
+import { Route as AppCicdRouteImport } from './routes/app.cicd'
+import { Route as AppCollabRouteImport } from './routes/app.collab'
 import { Route as AppConnectorsRouteImport } from './routes/app.connectors'
+import { Route as AppDataRouteImport } from './routes/app.data'
 import { Route as AppDatasetsRouteImport } from './routes/app.datasets'
 import { Route as AppDriftRouteImport } from './routes/app.drift'
+import { Route as AppEvalRouteImport } from './routes/app.eval'
 import { Route as AppExitRouteImport } from './routes/app.exit'
 import { Route as AppExportsRouteImport } from './routes/app.exports'
+import { Route as AppForensicsRouteImport } from './routes/app.forensics'
 import { Route as AppGithubRouteImport } from './routes/app.github'
 import { Route as AppImpactRouteImport } from './routes/app.impact'
+import { Route as AppInfraRouteImport } from './routes/app.infra'
 import { Route as AppIntegrationsRouteImport } from './routes/app.integrations'
 import { Route as AppMissionsRouteImport } from './routes/app.missions'
 import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
+import { Route as AppObsRouteImport } from './routes/app.obs'
+import { Route as AppPatternsRouteImport } from './routes/app.patterns'
 import { Route as AppPluginsRouteImport } from './routes/app.plugins'
 import { Route as AppPreviewRouteImport } from './routes/app.preview'
 import { Route as AppProfileRouteImport } from './routes/app.profile'
@@ -50,10 +59,14 @@ import { Route as AppRecommendationsRouteImport } from './routes/app.recommendat
 import { Route as AppReleaseRouteImport } from './routes/app.release'
 import { Route as AppReportsRouteImport } from './routes/app.reports'
 import { Route as AppSearchRouteImport } from './routes/app.search'
+import { Route as AppSecurityCenterRouteImport } from './routes/app.security-center'
 import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppSimulationRouteImport } from './routes/app.simulation'
+import { Route as AppStatusRouteImport } from './routes/app.status'
 import { Route as AppSystemFlowRouteImport } from './routes/app.system-flow'
 import { Route as AppTeamRouteImport } from './routes/app.team'
+import { Route as AppTechRadarRouteImport } from './routes/app.tech-radar'
+import { Route as AppTestingRouteImport } from './routes/app.testing'
 import { Route as AppWorkpulseRouteImport } from './routes/app.workpulse'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthGithubCallbackRouteImport } from './routes/auth.github-callback'
@@ -74,6 +87,7 @@ import { Route as AppBillingUsageRouteImport } from './routes/app.billing.usage'
 import { Route as AppProjectsIndexRouteImport } from './routes/app.projects.index'
 import { Route as AppProjectsIdRouteImport } from './routes/app.projects.$id'
 import { Route as AppProjectsNewRouteImport } from './routes/app.projects.new'
+import { Route as AppReleasePipelinesRouteImport } from './routes/app.release.pipelines'
 import { Route as AppStudioIndexRouteImport } from './routes/app.studio.index'
 import { Route as AppStudioIdRouteImport } from './routes/app.studio.$id'
 import { Route as AppStudioCreateRouteImport } from './routes/app.studio.create'
@@ -227,6 +241,11 @@ const AppAnalysisRoute = AppAnalysisRouteImport.update({
   path: '/analysis',
   getParentRoute: () => AppRoute,
 } as any)
+const AppApiGatewayRoute = AppApiGatewayRouteImport.update({
+  id: '/api-gateway',
+  path: '/api-gateway',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppBillingRoute = AppBillingRouteImport.update({
   id: '/billing',
   path: '/billing',
@@ -237,9 +256,24 @@ const AppChatRoute = AppChatRouteImport.update({
   path: '/chat',
   getParentRoute: () => AppRoute,
 } as any)
+const AppCicdRoute = AppCicdRouteImport.update({
+  id: '/cicd',
+  path: '/cicd',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCollabRoute = AppCollabRouteImport.update({
+  id: '/collab',
+  path: '/collab',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppConnectorsRoute = AppConnectorsRouteImport.update({
   id: '/connectors',
   path: '/connectors',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDataRoute = AppDataRouteImport.update({
+  id: '/data',
+  path: '/data',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDatasetsRoute = AppDatasetsRouteImport.update({
@@ -252,6 +286,11 @@ const AppDriftRoute = AppDriftRouteImport.update({
   path: '/drift',
   getParentRoute: () => AppRoute,
 } as any)
+const AppEvalRoute = AppEvalRouteImport.update({
+  id: '/eval',
+  path: '/eval',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppExitRoute = AppExitRouteImport.update({
   id: '/exit',
   path: '/exit',
@@ -262,6 +301,11 @@ const AppExportsRoute = AppExportsRouteImport.update({
   path: '/exports',
   getParentRoute: () => AppRoute,
 } as any)
+const AppForensicsRoute = AppForensicsRouteImport.update({
+  id: '/forensics',
+  path: '/forensics',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppGithubRoute = AppGithubRouteImport.update({
   id: '/github',
   path: '/github',
@@ -270,6 +314,11 @@ const AppGithubRoute = AppGithubRouteImport.update({
 const AppImpactRoute = AppImpactRouteImport.update({
   id: '/impact',
   path: '/impact',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppInfraRoute = AppInfraRouteImport.update({
+  id: '/infra',
+  path: '/infra',
   getParentRoute: () => AppRoute,
 } as any)
 const AppIntegrationsRoute = AppIntegrationsRouteImport.update({
@@ -285,6 +334,16 @@ const AppMissionsRoute = AppMissionsRouteImport.update({
 const AppNotificationsRoute = AppNotificationsRouteImport.update({
   id: '/notifications',
   path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppObsRoute = AppObsRouteImport.update({
+  id: '/obs',
+  path: '/obs',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPatternsRoute = AppPatternsRouteImport.update({
+  id: '/patterns',
+  path: '/patterns',
   getParentRoute: () => AppRoute,
 } as any)
 const AppPluginsRoute = AppPluginsRouteImport.update({
@@ -322,6 +381,11 @@ const AppSearchRoute = AppSearchRouteImport.update({
   path: '/search',
   getParentRoute: () => AppRoute,
 } as any)
+const AppSecurityCenterRoute = AppSecurityCenterRouteImport.update({
+  id: '/security-center',
+  path: '/security-center',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSettingsRoute = AppSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
@@ -332,6 +396,11 @@ const AppSimulationRoute = AppSimulationRouteImport.update({
   path: '/simulation',
   getParentRoute: () => AppRoute,
 } as any)
+const AppStatusRoute = AppStatusRouteImport.update({
+  id: '/status',
+  path: '/status',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppSystemFlowRoute = AppSystemFlowRouteImport.update({
   id: '/system-flow',
   path: '/system-flow',
@@ -340,6 +409,16 @@ const AppSystemFlowRoute = AppSystemFlowRouteImport.update({
 const AppTeamRoute = AppTeamRouteImport.update({
   id: '/team',
   path: '/team',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTechRadarRoute = AppTechRadarRouteImport.update({
+  id: '/tech-radar',
+  path: '/tech-radar',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTestingRoute = AppTestingRouteImport.update({
+  id: '/testing',
+  path: '/testing',
   getParentRoute: () => AppRoute,
 } as any)
 const AppWorkpulseRoute = AppWorkpulseRouteImport.update({
@@ -441,6 +520,11 @@ const AppProjectsNewRoute = AppProjectsNewRouteImport.update({
   id: '/projects/new',
   path: '/projects/new',
   getParentRoute: () => AppRoute,
+} as any)
+const AppReleasePipelinesRoute = AppReleasePipelinesRouteImport.update({
+  id: '/pipelines',
+  path: '/pipelines',
+  getParentRoute: () => AppReleaseRoute,
 } as any)
 const AppStudioIndexRoute = AppStudioIndexRouteImport.update({
   id: '/studio/',
@@ -679,29 +763,42 @@ export interface FileRoutesByFullPath {
   '/app/admin': typeof AppAdminRouteWithChildren
   '/app/aether': typeof AppAetherRoute
   '/app/analysis': typeof AppAnalysisRoute
+  '/app/api-gateway': typeof AppApiGatewayRoute
   '/app/billing': typeof AppBillingRouteWithChildren
   '/app/chat': typeof AppChatRoute
+  '/app/cicd': typeof AppCicdRoute
+  '/app/collab': typeof AppCollabRoute
   '/app/connectors': typeof AppConnectorsRoute
+  '/app/data': typeof AppDataRoute
   '/app/datasets': typeof AppDatasetsRoute
   '/app/drift': typeof AppDriftRoute
+  '/app/eval': typeof AppEvalRoute
   '/app/exit': typeof AppExitRoute
   '/app/exports': typeof AppExportsRoute
+  '/app/forensics': typeof AppForensicsRoute
   '/app/github': typeof AppGithubRoute
   '/app/impact': typeof AppImpactRoute
+  '/app/infra': typeof AppInfraRoute
   '/app/integrations': typeof AppIntegrationsRoute
   '/app/missions': typeof AppMissionsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/obs': typeof AppObsRoute
+  '/app/patterns': typeof AppPatternsRoute
   '/app/plugins': typeof AppPluginsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/profile': typeof AppProfileRoute
   '/app/recommendations': typeof AppRecommendationsRoute
-  '/app/release': typeof AppReleaseRoute
+  '/app/release': typeof AppReleaseRouteWithChildren
   '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
+  '/app/security-center': typeof AppSecurityCenterRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/simulation': typeof AppSimulationRoute
+  '/app/status': typeof AppStatusRoute
   '/app/system-flow': typeof AppSystemFlowRoute
   '/app/team': typeof AppTeamRouteWithChildren
+  '/app/tech-radar': typeof AppTechRadarRoute
+  '/app/testing': typeof AppTestingRoute
   '/app/workpulse': typeof AppWorkpulseRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
@@ -721,6 +818,7 @@ export interface FileRoutesByFullPath {
   '/app/billing/usage': typeof AppBillingUsageRoute
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
   '/app/projects/new': typeof AppProjectsNewRoute
+  '/app/release/pipelines': typeof AppReleasePipelinesRoute
   '/app/studio/$id': typeof AppStudioIdRouteWithChildren
   '/app/studio/create': typeof AppStudioCreateRoute
   '/app/studio/create-website': typeof AppStudioCreateWebsiteRoute
@@ -786,29 +884,42 @@ export interface FileRoutesByTo {
   '/app/activity': typeof AppActivityRoute
   '/app/aether': typeof AppAetherRoute
   '/app/analysis': typeof AppAnalysisRoute
+  '/app/api-gateway': typeof AppApiGatewayRoute
   '/app/billing': typeof AppBillingRouteWithChildren
   '/app/chat': typeof AppChatRoute
+  '/app/cicd': typeof AppCicdRoute
+  '/app/collab': typeof AppCollabRoute
   '/app/connectors': typeof AppConnectorsRoute
+  '/app/data': typeof AppDataRoute
   '/app/datasets': typeof AppDatasetsRoute
   '/app/drift': typeof AppDriftRoute
+  '/app/eval': typeof AppEvalRoute
   '/app/exit': typeof AppExitRoute
   '/app/exports': typeof AppExportsRoute
+  '/app/forensics': typeof AppForensicsRoute
   '/app/github': typeof AppGithubRoute
   '/app/impact': typeof AppImpactRoute
+  '/app/infra': typeof AppInfraRoute
   '/app/integrations': typeof AppIntegrationsRoute
   '/app/missions': typeof AppMissionsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/obs': typeof AppObsRoute
+  '/app/patterns': typeof AppPatternsRoute
   '/app/plugins': typeof AppPluginsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/profile': typeof AppProfileRoute
   '/app/recommendations': typeof AppRecommendationsRoute
-  '/app/release': typeof AppReleaseRoute
+  '/app/release': typeof AppReleaseRouteWithChildren
   '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
+  '/app/security-center': typeof AppSecurityCenterRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/simulation': typeof AppSimulationRoute
+  '/app/status': typeof AppStatusRoute
   '/app/system-flow': typeof AppSystemFlowRoute
   '/app/team': typeof AppTeamRouteWithChildren
+  '/app/tech-radar': typeof AppTechRadarRoute
+  '/app/testing': typeof AppTestingRoute
   '/app/workpulse': typeof AppWorkpulseRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
@@ -827,6 +938,7 @@ export interface FileRoutesByTo {
   '/app/billing/plans': typeof AppBillingPlansRoute
   '/app/billing/usage': typeof AppBillingUsageRoute
   '/app/projects/new': typeof AppProjectsNewRoute
+  '/app/release/pipelines': typeof AppReleasePipelinesRoute
   '/app/studio/create': typeof AppStudioCreateRoute
   '/app/studio/create-website': typeof AppStudioCreateWebsiteRoute
   '/app/studio/import': typeof AppStudioImportRoute
@@ -894,29 +1006,42 @@ export interface FileRoutesById {
   '/app/admin': typeof AppAdminRouteWithChildren
   '/app/aether': typeof AppAetherRoute
   '/app/analysis': typeof AppAnalysisRoute
+  '/app/api-gateway': typeof AppApiGatewayRoute
   '/app/billing': typeof AppBillingRouteWithChildren
   '/app/chat': typeof AppChatRoute
+  '/app/cicd': typeof AppCicdRoute
+  '/app/collab': typeof AppCollabRoute
   '/app/connectors': typeof AppConnectorsRoute
+  '/app/data': typeof AppDataRoute
   '/app/datasets': typeof AppDatasetsRoute
   '/app/drift': typeof AppDriftRoute
+  '/app/eval': typeof AppEvalRoute
   '/app/exit': typeof AppExitRoute
   '/app/exports': typeof AppExportsRoute
+  '/app/forensics': typeof AppForensicsRoute
   '/app/github': typeof AppGithubRoute
   '/app/impact': typeof AppImpactRoute
+  '/app/infra': typeof AppInfraRoute
   '/app/integrations': typeof AppIntegrationsRoute
   '/app/missions': typeof AppMissionsRoute
   '/app/notifications': typeof AppNotificationsRoute
+  '/app/obs': typeof AppObsRoute
+  '/app/patterns': typeof AppPatternsRoute
   '/app/plugins': typeof AppPluginsRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/profile': typeof AppProfileRoute
   '/app/recommendations': typeof AppRecommendationsRoute
-  '/app/release': typeof AppReleaseRoute
+  '/app/release': typeof AppReleaseRouteWithChildren
   '/app/reports': typeof AppReportsRouteWithChildren
   '/app/search': typeof AppSearchRoute
+  '/app/security-center': typeof AppSecurityCenterRoute
   '/app/settings': typeof AppSettingsRoute
   '/app/simulation': typeof AppSimulationRoute
+  '/app/status': typeof AppStatusRoute
   '/app/system-flow': typeof AppSystemFlowRoute
   '/app/team': typeof AppTeamRouteWithChildren
+  '/app/tech-radar': typeof AppTechRadarRoute
+  '/app/testing': typeof AppTestingRoute
   '/app/workpulse': typeof AppWorkpulseRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
@@ -936,6 +1061,7 @@ export interface FileRoutesById {
   '/app/billing/usage': typeof AppBillingUsageRoute
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
   '/app/projects/new': typeof AppProjectsNewRoute
+  '/app/release/pipelines': typeof AppReleasePipelinesRoute
   '/app/studio/$id': typeof AppStudioIdRouteWithChildren
   '/app/studio/create': typeof AppStudioCreateRoute
   '/app/studio/create-website': typeof AppStudioCreateWebsiteRoute
@@ -1005,18 +1131,27 @@ export interface FileRouteTypes {
     | '/app/admin'
     | '/app/aether'
     | '/app/analysis'
+    | '/app/api-gateway'
     | '/app/billing'
     | '/app/chat'
+    | '/app/cicd'
+    | '/app/collab'
     | '/app/connectors'
+    | '/app/data'
     | '/app/datasets'
     | '/app/drift'
+    | '/app/eval'
     | '/app/exit'
     | '/app/exports'
+    | '/app/forensics'
     | '/app/github'
     | '/app/impact'
+    | '/app/infra'
     | '/app/integrations'
     | '/app/missions'
     | '/app/notifications'
+    | '/app/obs'
+    | '/app/patterns'
     | '/app/plugins'
     | '/app/preview'
     | '/app/profile'
@@ -1024,10 +1159,14 @@ export interface FileRouteTypes {
     | '/app/release'
     | '/app/reports'
     | '/app/search'
+    | '/app/security-center'
     | '/app/settings'
     | '/app/simulation'
+    | '/app/status'
     | '/app/system-flow'
     | '/app/team'
+    | '/app/tech-radar'
+    | '/app/testing'
     | '/app/workpulse'
     | '/auth/callback'
     | '/auth/github-callback'
@@ -1047,6 +1186,7 @@ export interface FileRouteTypes {
     | '/app/billing/usage'
     | '/app/projects/$id'
     | '/app/projects/new'
+    | '/app/release/pipelines'
     | '/app/studio/$id'
     | '/app/studio/create'
     | '/app/studio/create-website'
@@ -1112,18 +1252,27 @@ export interface FileRouteTypes {
     | '/app/activity'
     | '/app/aether'
     | '/app/analysis'
+    | '/app/api-gateway'
     | '/app/billing'
     | '/app/chat'
+    | '/app/cicd'
+    | '/app/collab'
     | '/app/connectors'
+    | '/app/data'
     | '/app/datasets'
     | '/app/drift'
+    | '/app/eval'
     | '/app/exit'
     | '/app/exports'
+    | '/app/forensics'
     | '/app/github'
     | '/app/impact'
+    | '/app/infra'
     | '/app/integrations'
     | '/app/missions'
     | '/app/notifications'
+    | '/app/obs'
+    | '/app/patterns'
     | '/app/plugins'
     | '/app/preview'
     | '/app/profile'
@@ -1131,10 +1280,14 @@ export interface FileRouteTypes {
     | '/app/release'
     | '/app/reports'
     | '/app/search'
+    | '/app/security-center'
     | '/app/settings'
     | '/app/simulation'
+    | '/app/status'
     | '/app/system-flow'
     | '/app/team'
+    | '/app/tech-radar'
+    | '/app/testing'
     | '/app/workpulse'
     | '/auth/callback'
     | '/auth/github-callback'
@@ -1153,6 +1306,7 @@ export interface FileRouteTypes {
     | '/app/billing/plans'
     | '/app/billing/usage'
     | '/app/projects/new'
+    | '/app/release/pipelines'
     | '/app/studio/create'
     | '/app/studio/create-website'
     | '/app/studio/import'
@@ -1219,18 +1373,27 @@ export interface FileRouteTypes {
     | '/app/admin'
     | '/app/aether'
     | '/app/analysis'
+    | '/app/api-gateway'
     | '/app/billing'
     | '/app/chat'
+    | '/app/cicd'
+    | '/app/collab'
     | '/app/connectors'
+    | '/app/data'
     | '/app/datasets'
     | '/app/drift'
+    | '/app/eval'
     | '/app/exit'
     | '/app/exports'
+    | '/app/forensics'
     | '/app/github'
     | '/app/impact'
+    | '/app/infra'
     | '/app/integrations'
     | '/app/missions'
     | '/app/notifications'
+    | '/app/obs'
+    | '/app/patterns'
     | '/app/plugins'
     | '/app/preview'
     | '/app/profile'
@@ -1238,10 +1401,14 @@ export interface FileRouteTypes {
     | '/app/release'
     | '/app/reports'
     | '/app/search'
+    | '/app/security-center'
     | '/app/settings'
     | '/app/simulation'
+    | '/app/status'
     | '/app/system-flow'
     | '/app/team'
+    | '/app/tech-radar'
+    | '/app/testing'
     | '/app/workpulse'
     | '/auth/callback'
     | '/auth/github-callback'
@@ -1261,6 +1428,7 @@ export interface FileRouteTypes {
     | '/app/billing/usage'
     | '/app/projects/$id'
     | '/app/projects/new'
+    | '/app/release/pipelines'
     | '/app/studio/$id'
     | '/app/studio/create'
     | '/app/studio/create-website'
@@ -1483,6 +1651,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAnalysisRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/api-gateway': {
+      id: '/app/api-gateway'
+      path: '/api-gateway'
+      fullPath: '/app/api-gateway'
+      preLoaderRoute: typeof AppApiGatewayRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/billing': {
       id: '/app/billing'
       path: '/billing'
@@ -1497,11 +1672,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppChatRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/cicd': {
+      id: '/app/cicd'
+      path: '/cicd'
+      fullPath: '/app/cicd'
+      preLoaderRoute: typeof AppCicdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/collab': {
+      id: '/app/collab'
+      path: '/collab'
+      fullPath: '/app/collab'
+      preLoaderRoute: typeof AppCollabRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/connectors': {
       id: '/app/connectors'
       path: '/connectors'
       fullPath: '/app/connectors'
       preLoaderRoute: typeof AppConnectorsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/data': {
+      id: '/app/data'
+      path: '/data'
+      fullPath: '/app/data'
+      preLoaderRoute: typeof AppDataRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/datasets': {
@@ -1518,6 +1714,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDriftRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/eval': {
+      id: '/app/eval'
+      path: '/eval'
+      fullPath: '/app/eval'
+      preLoaderRoute: typeof AppEvalRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/exit': {
       id: '/app/exit'
       path: '/exit'
@@ -1532,6 +1735,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppExportsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/forensics': {
+      id: '/app/forensics'
+      path: '/forensics'
+      fullPath: '/app/forensics'
+      preLoaderRoute: typeof AppForensicsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/github': {
       id: '/app/github'
       path: '/github'
@@ -1544,6 +1754,13 @@ declare module '@tanstack/react-router' {
       path: '/impact'
       fullPath: '/app/impact'
       preLoaderRoute: typeof AppImpactRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/infra': {
+      id: '/app/infra'
+      path: '/infra'
+      fullPath: '/app/infra'
+      preLoaderRoute: typeof AppInfraRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/integrations': {
@@ -1565,6 +1782,20 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/app/notifications'
       preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/obs': {
+      id: '/app/obs'
+      path: '/obs'
+      fullPath: '/app/obs'
+      preLoaderRoute: typeof AppObsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/patterns': {
+      id: '/app/patterns'
+      path: '/patterns'
+      fullPath: '/app/patterns'
+      preLoaderRoute: typeof AppPatternsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/plugins': {
@@ -1616,6 +1847,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSearchRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/security-center': {
+      id: '/app/security-center'
+      path: '/security-center'
+      fullPath: '/app/security-center'
+      preLoaderRoute: typeof AppSecurityCenterRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/settings': {
       id: '/app/settings'
       path: '/settings'
@@ -1630,6 +1868,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSimulationRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/status': {
+      id: '/app/status'
+      path: '/status'
+      fullPath: '/app/status'
+      preLoaderRoute: typeof AppStatusRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/system-flow': {
       id: '/app/system-flow'
       path: '/system-flow'
@@ -1642,6 +1887,20 @@ declare module '@tanstack/react-router' {
       path: '/team'
       fullPath: '/app/team'
       preLoaderRoute: typeof AppTeamRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/tech-radar': {
+      id: '/app/tech-radar'
+      path: '/tech-radar'
+      fullPath: '/app/tech-radar'
+      preLoaderRoute: typeof AppTechRadarRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/testing': {
+      id: '/app/testing'
+      path: '/testing'
+      fullPath: '/app/testing'
+      preLoaderRoute: typeof AppTestingRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/workpulse': {
@@ -1783,6 +2042,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/projects/new'
       preLoaderRoute: typeof AppProjectsNewRouteImport
       parentRoute: typeof AppRoute
+    }
+    '/app/release/pipelines': {
+      id: '/app/release/pipelines'
+      path: '/pipelines'
+      fullPath: '/app/release/pipelines'
+      preLoaderRoute: typeof AppReleasePipelinesRouteImport
+      parentRoute: typeof AppReleaseRoute
     }
     '/app/studio/': {
       id: '/app/studio/'
@@ -2127,6 +2393,18 @@ const AppBillingRouteWithChildren = AppBillingRoute._addFileChildren(
   AppBillingRouteChildren,
 )
 
+interface AppReleaseRouteChildren {
+  AppReleasePipelinesRoute: typeof AppReleasePipelinesRoute
+}
+
+const AppReleaseRouteChildren: AppReleaseRouteChildren = {
+  AppReleasePipelinesRoute: AppReleasePipelinesRoute,
+}
+
+const AppReleaseRouteWithChildren = AppReleaseRoute._addFileChildren(
+  AppReleaseRouteChildren,
+)
+
 interface AppReportsRouteChildren {
   AppReportsIdViewRoute: typeof AppReportsIdViewRoute
 }
@@ -2243,29 +2521,42 @@ interface AppRouteChildren {
   AppAdminRoute: typeof AppAdminRouteWithChildren
   AppAetherRoute: typeof AppAetherRoute
   AppAnalysisRoute: typeof AppAnalysisRoute
+  AppApiGatewayRoute: typeof AppApiGatewayRoute
   AppBillingRoute: typeof AppBillingRouteWithChildren
   AppChatRoute: typeof AppChatRoute
+  AppCicdRoute: typeof AppCicdRoute
+  AppCollabRoute: typeof AppCollabRoute
   AppConnectorsRoute: typeof AppConnectorsRoute
+  AppDataRoute: typeof AppDataRoute
   AppDatasetsRoute: typeof AppDatasetsRoute
   AppDriftRoute: typeof AppDriftRoute
+  AppEvalRoute: typeof AppEvalRoute
   AppExitRoute: typeof AppExitRoute
   AppExportsRoute: typeof AppExportsRoute
+  AppForensicsRoute: typeof AppForensicsRoute
   AppGithubRoute: typeof AppGithubRoute
   AppImpactRoute: typeof AppImpactRoute
+  AppInfraRoute: typeof AppInfraRoute
   AppIntegrationsRoute: typeof AppIntegrationsRoute
   AppMissionsRoute: typeof AppMissionsRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
+  AppObsRoute: typeof AppObsRoute
+  AppPatternsRoute: typeof AppPatternsRoute
   AppPluginsRoute: typeof AppPluginsRoute
   AppPreviewRoute: typeof AppPreviewRoute
   AppProfileRoute: typeof AppProfileRoute
   AppRecommendationsRoute: typeof AppRecommendationsRoute
-  AppReleaseRoute: typeof AppReleaseRoute
+  AppReleaseRoute: typeof AppReleaseRouteWithChildren
   AppReportsRoute: typeof AppReportsRouteWithChildren
   AppSearchRoute: typeof AppSearchRoute
+  AppSecurityCenterRoute: typeof AppSecurityCenterRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppSimulationRoute: typeof AppSimulationRoute
+  AppStatusRoute: typeof AppStatusRoute
   AppSystemFlowRoute: typeof AppSystemFlowRoute
   AppTeamRoute: typeof AppTeamRouteWithChildren
+  AppTechRadarRoute: typeof AppTechRadarRoute
+  AppTestingRoute: typeof AppTestingRoute
   AppWorkpulseRoute: typeof AppWorkpulseRoute
   AppIndexRoute: typeof AppIndexRoute
   AppProjectsIdRoute: typeof AppProjectsIdRouteWithChildren
@@ -2284,29 +2575,42 @@ const AppRouteChildren: AppRouteChildren = {
   AppAdminRoute: AppAdminRouteWithChildren,
   AppAetherRoute: AppAetherRoute,
   AppAnalysisRoute: AppAnalysisRoute,
+  AppApiGatewayRoute: AppApiGatewayRoute,
   AppBillingRoute: AppBillingRouteWithChildren,
   AppChatRoute: AppChatRoute,
+  AppCicdRoute: AppCicdRoute,
+  AppCollabRoute: AppCollabRoute,
   AppConnectorsRoute: AppConnectorsRoute,
+  AppDataRoute: AppDataRoute,
   AppDatasetsRoute: AppDatasetsRoute,
   AppDriftRoute: AppDriftRoute,
+  AppEvalRoute: AppEvalRoute,
   AppExitRoute: AppExitRoute,
   AppExportsRoute: AppExportsRoute,
+  AppForensicsRoute: AppForensicsRoute,
   AppGithubRoute: AppGithubRoute,
   AppImpactRoute: AppImpactRoute,
+  AppInfraRoute: AppInfraRoute,
   AppIntegrationsRoute: AppIntegrationsRoute,
   AppMissionsRoute: AppMissionsRoute,
   AppNotificationsRoute: AppNotificationsRoute,
+  AppObsRoute: AppObsRoute,
+  AppPatternsRoute: AppPatternsRoute,
   AppPluginsRoute: AppPluginsRoute,
   AppPreviewRoute: AppPreviewRoute,
   AppProfileRoute: AppProfileRoute,
   AppRecommendationsRoute: AppRecommendationsRoute,
-  AppReleaseRoute: AppReleaseRoute,
+  AppReleaseRoute: AppReleaseRouteWithChildren,
   AppReportsRoute: AppReportsRouteWithChildren,
   AppSearchRoute: AppSearchRoute,
+  AppSecurityCenterRoute: AppSecurityCenterRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppSimulationRoute: AppSimulationRoute,
+  AppStatusRoute: AppStatusRoute,
   AppSystemFlowRoute: AppSystemFlowRoute,
   AppTeamRoute: AppTeamRouteWithChildren,
+  AppTechRadarRoute: AppTechRadarRoute,
+  AppTestingRoute: AppTestingRoute,
   AppWorkpulseRoute: AppWorkpulseRoute,
   AppIndexRoute: AppIndexRoute,
   AppProjectsIdRoute: AppProjectsIdRouteWithChildren,

@@ -230,21 +230,22 @@ function Dashboard() {
   const graphData = useMemo(() => engineeringKnowledgeGraph.exportGraphData(), []);
 
   // DELIBERATE NO-PROJECT-SELECTED EMPTY DASHBOARD (PHASE T: T01–T20)
-  if (!activeProject) {
-    // Verify outcome token against coordinator receipts (Domain I, Journey 11)
-    const confirmedRecord = workspaceExitCoordinator.verifyExitOutcome({
-      attemptId: search.attemptId,
-      exitOutcome: search.exitOutcome,
-    });
+  // When cataloged projects exist, the full Command Center is rendered with the exit outcome notice
+  const confirmedRecord = workspaceExitCoordinator.verifyExitOutcome({
+    attemptId: search.attemptId,
+    exitOutcome: search.exitOutcome,
+  });
 
-    const exitOutcome = confirmedRecord?.outcome;
-    const sectionsList = confirmedRecord?.sections || (search.sections ? search.sections.split(",").filter(Boolean) : []);
-    const outcomeProject = confirmedRecord?.projectName || search.projectName;
-    const exitTime = confirmedRecord?.timestamp
-      ? new Date(confirmedRecord.timestamp).toLocaleTimeString()
-      : search.ts
-        ? new Date(search.ts).toLocaleTimeString()
-        : undefined;
+  const exitOutcome = confirmedRecord?.outcome;
+  const sectionsList = confirmedRecord?.sections || (search.sections ? search.sections.split(",").filter(Boolean) : []);
+  const outcomeProject = confirmedRecord?.projectName || search.projectName;
+  const exitTime = confirmedRecord?.timestamp
+    ? new Date(confirmedRecord.timestamp).toLocaleTimeString()
+    : search.ts
+      ? new Date(search.ts).toLocaleTimeString()
+      : undefined;
+
+  if (!activeProject && displayProjects.length === 0) {
 
     return (
       <div className="space-y-6 max-w-6xl mx-auto py-2">
@@ -544,6 +545,95 @@ function Dashboard() {
 
   return (
     <>
+      {/* AUTHORITATIVE EXIT OUTCOME NOTICE (Command Center Banner) */}
+      {exitOutcome && (
+        <Card className="surface mb-4 border border-border/80 bg-zinc-950/90 shadow-xl rounded-2xl overflow-hidden animate-in fade-in duration-300">
+          <div
+            className={`h-1.5 w-full ${
+              exitOutcome === "saved"
+                ? "bg-emerald-500"
+                : exitOutcome === "discarded"
+                  ? "bg-amber-500"
+                  : "bg-primary"
+            }`}
+          />
+          <CardContent className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex items-start gap-3.5 min-w-0">
+              <span
+                className={`grid size-10 shrink-0 place-items-center rounded-xl border ${
+                  exitOutcome === "saved"
+                    ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/25"
+                    : exitOutcome === "discarded"
+                      ? "bg-amber-500/15 text-amber-400 border-amber-500/25"
+                      : "bg-primary/15 text-primary border-primary/25"
+                }`}
+              >
+                {exitOutcome === "saved" ? (
+                  <CheckCircle2 className="size-5" />
+                ) : exitOutcome === "discarded" ? (
+                  <Trash2 className="size-5" />
+                ) : (
+                  <ShieldCheck className="size-5" />
+                )}
+              </span>
+              <div className="space-y-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="text-sm font-bold text-foreground">
+                    {exitOutcome === "saved"
+                      ? "Workspace safely exited — verified changes saved"
+                      : exitOutcome === "discarded"
+                        ? "Workspace exited — unsaved changes discarded"
+                        : "Workspace closed cleanly"}
+                  </h3>
+                  {outcomeProject && (
+                    <Badge variant="outline" className="text-[10px] font-mono border-primary/30 text-primary">
+                      {outcomeProject}
+                    </Badge>
+                  )}
+                  {exitTime && (
+                    <span className="text-[11px] text-muted-foreground font-mono flex items-center gap-1">
+                      <Clock className="size-3" />
+                      {exitTime}
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {exitOutcome === "saved"
+                    ? `All modified records${outcomeProject ? ` for ${outcomeProject}` : ""} were committed to project storage before leaving.`
+                    : exitOutcome === "discarded"
+                      ? `Only uncommitted edits were discarded. Previously saved records and conversations for ${outcomeProject || "your project"} remain completely intact.`
+                      : "Workspace closed cleanly with zero pending mutations or background tasks."}
+                </p>
+                {sectionsList.length > 0 && (
+                  <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                    <span className="text-[10px] uppercase font-mono text-muted-foreground">Synchronized Sections:</span>
+                    {sectionsList.map((sec) => (
+                      <Badge key={sec} variant="secondary" className="text-[10px] bg-zinc-900 border border-border/60">
+                        {sec}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                if (confirmedRecord?.attemptId) {
+                  workspaceExitCoordinator.consumeExitOutcome(confirmedRecord.attemptId);
+                }
+                navigate({ to: "/app" });
+              }}
+              className="text-xs text-muted-foreground hover:text-foreground shrink-0 self-end sm:self-center"
+            >
+              Dismiss
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
       <PageHeader
         title="Engineering intelligence overview"
         description="Portfolio-wide health, security posture and delivery risk, recalculated on every analysis run."
@@ -751,26 +841,79 @@ function Dashboard() {
           </div>
         </div>
       ) : (
-        <div className="p-4 rounded-xl border border-dashed border-border bg-card/40 text-center space-y-2">
-          <FolderKanban className="size-6 text-muted-foreground mx-auto" />
-          <h3 className="text-sm font-semibold">No project selected</h3>
-          <p className="text-xs text-muted-foreground max-w-md mx-auto">
-            Choose an existing project from the selector above, create a new native blueprint, or connect a GitHub repository.
-          </p>
-          <div className="flex items-center justify-center gap-2 pt-1">
-            <Button asChild size="sm" variant="default" className="text-xs">
-              <Link to="/app/projects/new">
-                <PlusCircle className="size-3.5 mr-1.5" />
-                Create New Project
-              </Link>
-            </Button>
-            <Button asChild size="sm" variant="outline" className="text-xs">
-              <Link to="/app/github">
-                <GitBranch className="size-3.5 mr-1.5" />
-                Connect GitHub
-              </Link>
-            </Button>
+        <div className="p-5 rounded-xl border border-primary/30 bg-gradient-to-r from-primary/10 via-card/80 to-card/60 backdrop-blur-md shadow-lg space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-primary/20 text-primary font-bold border border-primary/30">
+                  PORTFOLIO COMMAND CENTER
+                </span>
+                <Badge variant="outline" className="text-[10px] uppercase font-mono px-1.5 py-0">
+                  {displayProjects.length} Projects In Fleet
+                </Badge>
+              </div>
+              <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
+                Fleet Architecture Command Hub
+              </h2>
+              <p className="text-xs text-muted-foreground line-clamp-1 max-w-2xl">
+                Global engineering intelligence cockpit. Select any project workspace below to activate deep telemetry and live analysis.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button asChild size="sm" className="text-xs bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 h-8">
+                <Link to="/app/projects/new">
+                  <PlusCircle className="size-3.5" />
+                  New Project
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="sm" className="text-xs border-border gap-1.5 h-8">
+                <Link to="/app/github">
+                  <GitBranch className="size-3.5" />
+                  Connect GitHub
+                </Link>
+              </Button>
+            </div>
           </div>
+
+          {/* QUICK PROJECT SELECTION GRID */}
+          {displayProjects.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-2 border-t border-border/40">
+              {displayProjects.slice(0, 6).map((proj) => (
+                <div
+                  key={proj.id}
+                  className="p-3 rounded-lg border border-border/60 bg-zinc-950/50 hover:bg-zinc-900/80 transition-all space-y-2 flex flex-col justify-between"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-semibold text-xs text-foreground truncate">{proj.name}</span>
+                      <StatusBadge status={proj.status} />
+                    </div>
+                    <p className="text-[11px] text-muted-foreground line-clamp-1">{proj.description || "Enterprise architecture workspace"}</p>
+                  </div>
+                  <div className="flex items-center justify-between pt-1 border-t border-border/30 text-[10px] font-mono">
+                    <span className="text-muted-foreground">Health: <strong className="text-foreground">{proj.healthScore}/100</strong></span>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => setActiveProject(proj.id, { navigateToProject: true })}
+                      className="h-6 px-2 text-[10px] text-primary hover:bg-primary/10 gap-1"
+                    >
+                      Open Workspace <ArrowRight className="size-2.5" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="p-6 rounded-lg border border-dashed border-border/60 bg-zinc-950/40 text-center space-y-2">
+              <FolderKanban className="size-6 text-muted-foreground mx-auto" />
+              <h4 className="text-xs font-bold text-foreground">No Projects In Storage</h4>
+              <p className="text-[11px] text-muted-foreground max-w-sm mx-auto">
+                No active project selected. Create a new architecture project or connect a GitHub repository.
+              </p>
+            </div>
+          )}
         </div>
       )}
 
