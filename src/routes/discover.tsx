@@ -151,14 +151,16 @@ function DiscoverPage() {
             </Badge>
           </div>
 
-          <div className="flex items-center gap-3">
-            <WorkspacePulse variant="compact" />
+          <div className="flex items-center gap-2.5">
+            {activeTab !== "reality-map" && (
+              <WorkspacePulse variant="compact" />
+            )}
 
             <Button
               asChild
               variant="outline"
               size="sm"
-              className="text-xs h-8 gap-1.5 border-border"
+              className="text-xs h-8 gap-1.5 border-border hover:bg-secondary/40 transition-colors"
             >
               <Link to="/help">
                 <HelpCircle className="size-3.5" />
@@ -169,7 +171,7 @@ function DiscoverPage() {
             <Button
               asChild
               size="sm"
-              className="text-xs h-8 gap-1.5 bg-primary text-primary-foreground"
+              className="text-xs h-8 gap-1.5 bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
             >
               <Link to="/app">
                 <LayoutDashboard className="size-3.5" />

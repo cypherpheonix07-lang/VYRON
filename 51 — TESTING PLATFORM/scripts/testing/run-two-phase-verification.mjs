@@ -658,10 +658,10 @@ async function main() {
 
   if (p1Passed === p1Total && p2Passed === p2Total) {
     console.log(`${GREEN}${BOLD}🌟 BOTH PHASES (SAMPLE DATA & REAL-TIME DATA) PASSED CONVERGENCE 100%!${RESET}\n`);
-    process.exitCode = 0;
+    process.exit(0);
   } else {
     console.log(`${RED}${BOLD}❌ CONVERGENCE FAILED: Some tests did not pass.${RESET}\n`);
-    process.exitCode = 1;
+    process.exit(1);
   }
 }
 

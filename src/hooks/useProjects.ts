@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabaseClient";
 import { authService } from "@/services/authService";
 import { useDemoMode } from "@/contexts/DemoModeContext";
 import { DEMO_PROJECTS } from "@/data/demoSeedData";
+import { projectRegistry } from "@/services/project/projectRegistry";
 
 export interface Project {
   [x: string]: unknown;
@@ -152,11 +153,13 @@ export function useProjects() {
   const deleteProject = async (id: string) => {
     if (isDemoMode) {
       setProjects((prev) => prev.filter((p) => p.id !== id));
+      projectRegistry.deleteProject(id);
       return;
     }
     const { error: err } = await supabase.from("projects").delete().eq("id", id);
     if (err) throw err;
     setProjects((prev) => prev.filter((p) => p.id !== id));
+    projectRegistry.deleteProject(id);
   };
 
   return {

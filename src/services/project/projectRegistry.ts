@@ -292,6 +292,17 @@ class ProjectRegistry {
     return updated;
   }
 
+  public deleteProject(id: string): boolean {
+    const existed = this.localProjects.delete(id);
+    if (existed) {
+      this.saveToStorage();
+      if (this.activeProjectId === id) {
+        this.clearActiveProject();
+      }
+    }
+    return existed;
+  }
+
   /**
    * Sync projects from Supabase database with Zero Raw SQL
    */
