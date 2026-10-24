@@ -24,6 +24,33 @@ const suppressDirectiveFilter: any = {
 const ssrTimeoutPlugin: any = {
   name: "vyron:ssr-timeout",
   configureServer(server: any) {
+    // Absorb client disconnects / aborted sockets on Vite dev server
+    server.middlewares.use((req: any, _res: any, next: any) => {
+      req.on?.("error", (err: any) => {
+        if (
+          err?.code === "ECONNRESET" ||
+          err?.message === "aborted" ||
+          (typeof err?.message === "string" && err.message.includes("aborted"))
+        ) {
+          return;
+        }
+      });
+      next();
+    });
+
+    if (server.httpServer) {
+      server.httpServer.on?.("clientError", (err: any, socket: any) => {
+        if (
+          err?.code === "ECONNRESET" ||
+          err?.message === "aborted" ||
+          (typeof err?.message === "string" && err.message.includes("aborted"))
+        ) {
+          if (!socket.destroyed) socket.destroy();
+          return;
+        }
+      });
+    }
+
     const patchEnvironment = (env: any) => {
       if (!env) return;
       const applyTimeout = (runner: any) => {

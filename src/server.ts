@@ -346,7 +346,16 @@ export default {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
-    } catch (error) {
+    } catch (error: any) {
+      if (
+        request.signal?.aborted ||
+        error?.name === "AbortError" ||
+        error?.code === "ECONNRESET" ||
+        error?.message === "aborted" ||
+        (typeof error?.message === "string" && error.message.includes("aborted"))
+      ) {
+        return new Response(null, { status: 499, statusText: "Client Closed Request" });
+      }
       console.error(error);
       return new Response(renderFallbackErrorHtml(), {
         status: 500,
