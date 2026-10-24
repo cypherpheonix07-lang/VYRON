@@ -39,6 +39,7 @@ import {
   ArrowRight,
   Clock,
   Trash2,
+  Loader2,
   Info,
   ChevronDown,
   ChevronUp,
@@ -48,6 +49,16 @@ import { toast } from "sonner";
 import { useAppMode } from "@/state/mode/useAppMode";
 import { SimulatorControls } from "@/components/demo/SimulatorControls";
 import { AnomalyTimeline } from "@/components/demo/AnomalyTimeline";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 import {
   EmptyState,
@@ -174,6 +185,28 @@ function Dashboard() {
   } = useActiveProject();
 
   const { projects: liveProjects } = useProjects();
+  const { deleteProject } = useProjects();
+  const [projectToDelete, setProjectToDelete] = useState<{ id: string; name: string } | null>(null);
+  const [isDeletingProject, setIsDeletingProject] = useState(false);
+
+  const handleConfirmDeleteProject = async () => {
+    if (!projectToDelete) return;
+    setIsDeletingProject(true);
+    try {
+      await deleteProject(projectToDelete.id);
+      if (activeProjectId === projectToDelete.id) {
+        setActiveProject(null);
+      }
+      toast.success(`Project "${projectToDelete.name}" deleted successfully.`);
+      setProjectToDelete(null);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      toast.error(`Failed to delete project: ${msg}`);
+    } finally {
+      setIsDeletingProject(false);
+    }
+  };
+
   const displayProjects = useMemo(() => {
     if (!liveProjects || liveProjects.length === 0) {
       return mode === "DEMO" ? mockProjects : [];
@@ -893,14 +926,29 @@ function Dashboard() {
                   </div>
                   <div className="flex items-center justify-between pt-1 border-t border-border/30 text-[10px] font-mono">
                     <span className="text-muted-foreground">Health: <strong className="text-foreground">{proj.healthScore}/100</strong></span>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => setActiveProject(proj.id, { navigateToProject: true })}
-                      className="h-6 px-2 text-[10px] text-primary hover:bg-primary/10 gap-1"
-                    >
-                      Open Workspace <ArrowRight className="size-2.5" />
-                    </Button>
+                    <div className="flex items-center gap-1.5">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setProjectToDelete({ id: proj.id, name: proj.name });
+                        }}
+                        className="h-6 w-6 p-0 text-muted-foreground hover:text-rose-400 hover:bg-rose-500/10 rounded transition-colors"
+                        title={`Delete ${proj.name}`}
+                        aria-label={`Delete ${proj.name}`}
+                      >
+                        <Trash2 className="size-3 text-rose-400/80 hover:text-rose-400" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setActiveProject(proj.id, { navigateToProject: true })}
+                        className="h-6 px-2 text-[10px] text-primary hover:bg-primary/10 gap-1"
+                      >
+                        Open Workspace <ArrowRight className="size-2.5" />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -914,6 +962,58 @@ function Dashboard() {
               </p>
             </div>
           )}
+
+          {/* CONFIRM PROJECT DELETION DIALOG */}
+          <AlertDialog open={!!projectToDelete} onOpenChange={(open) => !open && !isDeletingProject && setProjectToDelete(null)}>
+            <AlertDialogContent className="border-border bg-zinc-950 text-foreground max-w-md shadow-2xl">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="flex items-center gap-2 text-rose-400 text-sm font-bold">
+                  <AlertTriangle className="size-4 shrink-0 text-rose-400" />
+                  Delete Project from Command Hub
+                </AlertDialogTitle>
+                <AlertDialogDescription className="text-xs text-muted-foreground space-y-2.5 pt-1">
+                  <p>
+                    Are you sure you want to delete <strong className="text-foreground">{projectToDelete?.name}</strong>?
+                  </p>
+                  <div className="p-2.5 rounded bg-zinc-900/90 border border-border/80 text-[11px] text-zinc-300 space-y-1">
+                    <p className="font-semibold text-rose-300">Consequences of Deletion:</p>
+                    <p>
+                      This operation permanently removes this project record, local analysis runs, and telemetry findings from your internal VYRON workspace.
+                    </p>
+                  </div>
+                  <p className="text-[11px] text-emerald-400 font-medium bg-emerald-500/10 border border-emerald-500/20 p-2 rounded">
+                    🛡️ Zero Remote Mutation: Your remote GitHub repository, branches, commits, and external files will NOT be deleted or altered.
+                  </p>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter className="gap-2 pt-2">
+                <AlertDialogCancel
+                  disabled={isDeletingProject}
+                  onClick={() => setProjectToDelete(null)}
+                  className="text-xs h-8 border-border bg-zinc-900 hover:bg-zinc-800"
+                >
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  disabled={isDeletingProject}
+                  onClick={handleConfirmDeleteProject}
+                  className="text-xs h-8 bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold gap-1.5"
+                >
+                  {isDeletingProject ? (
+                    <>
+                      <Loader2 className="size-3 animate-spin" />
+                      Deleting...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 className="size-3" />
+                      Delete Project
+                    </>
+                  )}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       )}
 

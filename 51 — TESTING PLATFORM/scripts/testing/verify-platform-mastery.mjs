@@ -334,7 +334,8 @@ try {
   );
 
   const dynamicDashboard =
-    dashboardContent.includes("const { projects: liveProjects } = useProjects()") &&
+    (dashboardContent.includes("const { projects: liveProjects } = useProjects()") ||
+      dashboardContent.includes("projects: liveProjects")) &&
     dashboardContent.includes("displayProjects.length") &&
     dashboardContent.includes("avgHealth");
 
