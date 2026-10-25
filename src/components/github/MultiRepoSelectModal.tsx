@@ -214,7 +214,7 @@ export function MultiRepoSelectModal({
                 Select & Connect GitHub Repositories
               </DialogTitle>
               <DialogDescription className="text-xs text-muted-foreground">
-                Choose any number of repositories to import. The internal AI will inspect each project's README and segregate them into organized workspace folders.
+                Choose any number of repositories to import. The internal AI will inspect each project's README and segregate them into organized workspace folders. Zero-Remote-Mutation Policy: No remote branches, commits, or files on GitHub will ever be created, pushed, or altered.
               </DialogDescription>
             </div>
           </div>

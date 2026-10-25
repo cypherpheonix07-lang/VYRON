@@ -415,6 +415,59 @@ class GitHubService {
     );
   }
 
+  // LAYER 2B: COMPLETE MULTI-PAGE REPOSITORY ENUMERATION (TTL: 5 mins)
+  // Enumerates all accessible repositories across all paginated API pages until exhausted
+  public async fetchAllUserRepositories(
+    sort: "updated" | "stars" | "pushed" = "updated",
+    forceRefresh = false,
+    maxPages = 30,
+    onProgress?: (totalSoFar: number, currentPage: number) => void,
+  ): Promise<GitHubRepoItem[]> {
+    const token = await this.hydrateToken();
+    if (!token) return [];
+
+    const perPage = 100;
+    let page = 1;
+    const allRepos: GitHubRepoItem[] = [];
+    const seenIds = new Set<number>();
+
+    while (page <= maxPages) {
+      try {
+        const batch = await this.fetchRepositories(page, perPage, sort, forceRefresh);
+        if (!batch || !Array.isArray(batch) || batch.length === 0) {
+          break;
+        }
+
+        for (const repo of batch) {
+          if (!seenIds.has(repo.id)) {
+            seenIds.add(repo.id);
+            allRepos.push(repo);
+          }
+        }
+
+        if (onProgress) {
+          onProgress(allRepos.length, page);
+        }
+
+        // If returned items count is less than perPage, this is the last available page
+        if (batch.length < perPage) {
+          break;
+        }
+
+        page++;
+      } catch (err) {
+        // If first page fails, throw; if subsequent page fails, preserve accumulated pages with warning
+        if (page === 1) {
+          throw err;
+        }
+        console.warn(`[GitHubService] Multi-page pagination reached page ${page} with warning:`, err);
+        break;
+      }
+    }
+
+    return allRepos;
+  }
+
   // LAYER 3: REPOSITORY FILE TREE (TTL: 30 mins)
   public async fetchFileTree(
     owner: string,

@@ -109,7 +109,7 @@ export function GitHubDashboard() {
         setIsConnected(true);
 
         const [repoList, orgList, eventList] = await Promise.all([
-          githubService.fetchRepositories(1, 100, "updated", forceRefresh),
+          githubService.fetchAllUserRepositories("updated", forceRefresh),
           githubService.fetchOrganizations(forceRefresh),
           githubService.fetchActivityEvents(userProfile.login, 30, forceRefresh),
         ]);

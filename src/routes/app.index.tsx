@@ -531,14 +531,29 @@ function Dashboard() {
                       <span className="text-[10px] font-mono text-muted-foreground">
                         Updated {proj.lastUpdated ? new Date(proj.lastUpdated).toLocaleDateString() : "Recently"}
                       </span>
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setActiveProject(proj.id, { navigateToProject: true })}
-                        className="text-xs h-7 px-2.5 font-medium border-border hover:border-primary hover:bg-primary/10 hover:text-primary gap-1"
-                      >
-                        Open Workspace <ArrowRight className="size-3" />
-                      </Button>
+                      <div className="flex items-center gap-1.5">
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setProjectToDelete({ id: proj.id, name: proj.name });
+                          }}
+                          className="text-xs h-7 px-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 gap-1"
+                          title={`Delete ${proj.name}`}
+                          aria-label={`Delete ${proj.name}`}
+                        >
+                          <Trash2 className="size-3 text-destructive/80 hover:text-destructive" />
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => setActiveProject(proj.id, { navigateToProject: true })}
+                          className="text-xs h-7 px-2.5 font-medium border-border hover:border-primary hover:bg-primary/10 hover:text-primary gap-1"
+                        >
+                          Open Workspace <ArrowRight className="size-3" />
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -839,6 +854,17 @@ function Dashboard() {
                   <FolderKanban className="size-3.5" />
                   View Lifecycle
                 </Link>
+              </Button>
+
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-xs border-destructive/40 bg-destructive/5 hover:bg-destructive/15 text-destructive gap-1.5 h-8 font-semibold shadow-sm"
+                onClick={() => setProjectToDelete({ id: activeProject.id, name: activeProject.name })}
+                title={`Delete ${activeProject.name}`}
+              >
+                <Trash2 className="size-3.5" />
+                Delete Project
               </Button>
             </div>
           </div>
@@ -1231,6 +1257,7 @@ function Dashboard() {
                       <TableHead className="hidden md:table-cell">Security</TableHead>
                       <TableHead>Delivery risk</TableHead>
                       <TableHead className="hidden lg:table-cell">Updated</TableHead>
+                      <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -1292,6 +1319,18 @@ function Dashboard() {
                             day: "2-digit",
                             month: "short",
                           })}
+                        </TableCell>
+                        <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => setProjectToDelete({ id: p.id, name: p.name })}
+                            className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                            title={`Delete ${p.name}`}
+                            aria-label={`Delete ${p.name}`}
+                          >
+                            <Trash2 className="size-3 text-destructive/80 hover:text-destructive" />
+                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -1464,6 +1503,73 @@ function Dashboard() {
           </SectionCard>
         </div>
       ) : null}
+
+      {/* DELETE PROJECT CONFIRMATION DIALOG (SECTION C) */}
+      <AlertDialog
+        open={!!projectToDelete}
+        onOpenChange={(open) => {
+          if (!open && !isDeletingProject) {
+            setProjectToDelete(null);
+          }
+        }}
+      >
+        <AlertDialogContent className="bg-zinc-950 border border-border sm:max-w-md">
+          <AlertDialogHeader>
+            <div className="flex items-center gap-2 text-destructive">
+              <AlertTriangle className="size-5 shrink-0" />
+              <AlertDialogTitle className="text-base font-bold">
+                Delete Architecture Project?
+              </AlertDialogTitle>
+            </div>
+            <AlertDialogDescription className="text-xs text-muted-foreground space-y-2 pt-1 leading-relaxed">
+              <p>
+                Are you sure you want to delete{" "}
+                <strong className="text-foreground font-semibold">
+                  "{projectToDelete?.name}"
+                </strong>
+                ?
+              </p>
+              <div className="rounded-lg bg-zinc-900/80 p-2.5 border border-border/60 text-[11px] space-y-1">
+                <p className="font-semibold text-zinc-300">Consequences of deletion:</p>
+                <ul className="list-disc pl-4 space-y-0.5 text-zinc-400">
+                  <li>Project architecture blueprint and entity topology will be removed.</li>
+                  <li>Analysis runs, health metrics, and assessment history will be detached.</li>
+                  <li>If currently active, your workspace will return to the unselected portfolio view.</li>
+                </ul>
+              </div>
+              <div className="rounded-lg bg-emerald-950/20 p-2.5 border border-emerald-800/30 text-[11px] text-emerald-400/90">
+                <strong>Zero-Remote-Mutation Policy:</strong> External GitHub repositories, branches, commits, and files are completely untouched and will never be modified or deleted.
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="gap-2 sm:gap-0">
+            <AlertDialogCancel
+              disabled={isDeletingProject}
+              onClick={() => setProjectToDelete(null)}
+              className="text-xs h-8"
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              disabled={isDeletingProject}
+              onClick={handleConfirmDeleteProject}
+              className="text-xs h-8 bg-destructive text-destructive-foreground hover:bg-destructive/90 font-semibold gap-1.5"
+            >
+              {isDeletingProject ? (
+                <>
+                  <Loader2 className="size-3.5 animate-spin" />
+                  Deleting Project...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="size-3.5" />
+                  Confirm Delete
+                </>
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* PHASE 17: UNIVERSAL DETAIL DRAWER */}
       <UniversalDetailDrawer />
