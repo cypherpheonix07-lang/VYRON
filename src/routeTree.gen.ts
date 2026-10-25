@@ -39,6 +39,7 @@ import { Route as AppCollabRouteImport } from './routes/app.collab'
 import { Route as AppConnectorsRouteImport } from './routes/app.connectors'
 import { Route as AppDataRouteImport } from './routes/app.data'
 import { Route as AppDatasetsRouteImport } from './routes/app.datasets'
+import { Route as AppDeploymentsRouteImport } from './routes/app.deployments'
 import { Route as AppDriftRouteImport } from './routes/app.drift'
 import { Route as AppEvalRouteImport } from './routes/app.eval'
 import { Route as AppExitRouteImport } from './routes/app.exit'
@@ -279,6 +280,11 @@ const AppDataRoute = AppDataRouteImport.update({
 const AppDatasetsRoute = AppDatasetsRouteImport.update({
   id: '/datasets',
   path: '/datasets',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDeploymentsRoute = AppDeploymentsRouteImport.update({
+  id: '/deployments',
+  path: '/deployments',
   getParentRoute: () => AppRoute,
 } as any)
 const AppDriftRoute = AppDriftRouteImport.update({
@@ -771,6 +777,7 @@ export interface FileRoutesByFullPath {
   '/app/connectors': typeof AppConnectorsRoute
   '/app/data': typeof AppDataRoute
   '/app/datasets': typeof AppDatasetsRoute
+  '/app/deployments': typeof AppDeploymentsRoute
   '/app/drift': typeof AppDriftRoute
   '/app/eval': typeof AppEvalRoute
   '/app/exit': typeof AppExitRoute
@@ -892,6 +899,7 @@ export interface FileRoutesByTo {
   '/app/connectors': typeof AppConnectorsRoute
   '/app/data': typeof AppDataRoute
   '/app/datasets': typeof AppDatasetsRoute
+  '/app/deployments': typeof AppDeploymentsRoute
   '/app/drift': typeof AppDriftRoute
   '/app/eval': typeof AppEvalRoute
   '/app/exit': typeof AppExitRoute
@@ -1014,6 +1022,7 @@ export interface FileRoutesById {
   '/app/connectors': typeof AppConnectorsRoute
   '/app/data': typeof AppDataRoute
   '/app/datasets': typeof AppDatasetsRoute
+  '/app/deployments': typeof AppDeploymentsRoute
   '/app/drift': typeof AppDriftRoute
   '/app/eval': typeof AppEvalRoute
   '/app/exit': typeof AppExitRoute
@@ -1139,6 +1148,7 @@ export interface FileRouteTypes {
     | '/app/connectors'
     | '/app/data'
     | '/app/datasets'
+    | '/app/deployments'
     | '/app/drift'
     | '/app/eval'
     | '/app/exit'
@@ -1260,6 +1270,7 @@ export interface FileRouteTypes {
     | '/app/connectors'
     | '/app/data'
     | '/app/datasets'
+    | '/app/deployments'
     | '/app/drift'
     | '/app/eval'
     | '/app/exit'
@@ -1381,6 +1392,7 @@ export interface FileRouteTypes {
     | '/app/connectors'
     | '/app/data'
     | '/app/datasets'
+    | '/app/deployments'
     | '/app/drift'
     | '/app/eval'
     | '/app/exit'
@@ -1705,6 +1717,13 @@ declare module '@tanstack/react-router' {
       path: '/datasets'
       fullPath: '/app/datasets'
       preLoaderRoute: typeof AppDatasetsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/deployments': {
+      id: '/app/deployments'
+      path: '/deployments'
+      fullPath: '/app/deployments'
+      preLoaderRoute: typeof AppDeploymentsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/drift': {
@@ -2529,6 +2548,7 @@ interface AppRouteChildren {
   AppConnectorsRoute: typeof AppConnectorsRoute
   AppDataRoute: typeof AppDataRoute
   AppDatasetsRoute: typeof AppDatasetsRoute
+  AppDeploymentsRoute: typeof AppDeploymentsRoute
   AppDriftRoute: typeof AppDriftRoute
   AppEvalRoute: typeof AppEvalRoute
   AppExitRoute: typeof AppExitRoute
@@ -2583,6 +2603,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppConnectorsRoute: AppConnectorsRoute,
   AppDataRoute: AppDataRoute,
   AppDatasetsRoute: AppDatasetsRoute,
+  AppDeploymentsRoute: AppDeploymentsRoute,
   AppDriftRoute: AppDriftRoute,
   AppEvalRoute: AppEvalRoute,
   AppExitRoute: AppExitRoute,

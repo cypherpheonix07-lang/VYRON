@@ -48,8 +48,10 @@ function AuthCallbackPage() {
                 code === "access_denied"
                   ? "Access was denied by the identity provider or user cancelled consent."
                   : code === "invalid_client"
-                    ? "OAuth misconfigured — invalid_client. Admin: verify provider console credentials."
-                    : msg,
+                    ? "OAuth misconfigured — invalid_client. If using GitLab, ensure the OAuth application registered on gitlab.com matches the configured Client ID and has redirect URI 'https://hbbunfizlwgvripgwzdo.supabase.co/auth/v1/callback'."
+                    : code === "redirect_uri_mismatch"
+                      ? "OAuth redirect_uri_mismatch — Verify that 'https://hbbunfizlwgvripgwzdo.supabase.co/auth/v1/callback' is registered in your Google Cloud / OAuth provider console."
+                      : msg,
             });
           }
 

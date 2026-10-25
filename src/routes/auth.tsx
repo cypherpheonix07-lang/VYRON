@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { AlertCircle, Loader2, ShieldCheck, Lock, Mail, User, ArrowRight } from "lucide-react";
+import { AlertCircle, Loader2, ShieldCheck, Lock, Mail, User, ArrowRight, Chrome, Github, Gitlab } from "lucide-react";
 import { useState, type FormEvent, useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -215,12 +215,13 @@ function UnifiedAuthPage() {
     }
   };
 
-  const handleOAuth = async (provider: "google" | "github") => {
+  const handleOAuth = async (provider: "google" | "github" | "gitlab") => {
     setLoading(true);
+    const providerLabel = provider === "google" ? "Google" : provider === "github" ? "GitHub" : "GitLab";
     try {
       const res = await authService.signInWithOAuth(provider);
       if (!res.ok) {
-        toast.error(res.error?.message || `Failed to initiate ${provider} OAuth.`);
+        toast.error(res.error?.message || `Failed to initiate ${providerLabel} OAuth.`);
       }
     } catch (err) {
       toast.error("OAuth initiation error");
@@ -413,26 +414,42 @@ function UnifiedAuthPage() {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs h-8.5 font-medium"
+                    className="text-xs h-9 font-medium flex items-center justify-center gap-1.5"
                     onClick={() => handleOAuth("google")}
                     disabled={loading}
+                    aria-label="Sign in with Google"
                   >
-                    Google
+                    <Chrome className="size-3.5 text-red-400" />
+                    <span>Google</span>
                   </Button>
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs h-8.5 font-medium"
+                    className="text-xs h-9 font-medium flex items-center justify-center gap-1.5"
                     onClick={() => handleOAuth("github")}
                     disabled={loading}
+                    aria-label="Sign in with GitHub"
                   >
-                    GitHub
+                    <Github className="size-3.5 text-slate-300" />
+                    <span>GitHub</span>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-9 font-medium flex items-center justify-center gap-1.5"
+                    onClick={() => handleOAuth("gitlab")}
+                    disabled={loading}
+                    aria-label="Sign in with GitLab"
+                  >
+                    <Gitlab className="size-3.5 text-orange-400" />
+                    <span>GitLab</span>
                   </Button>
                 </div>
 
@@ -559,6 +576,54 @@ function UnifiedAuthPage() {
                     )}
                   </Button>
                 </form>
+
+                <div className="relative flex items-center justify-center py-2">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-border/60" />
+                  </div>
+                  <span className="relative bg-card px-2 text-[10px] uppercase tracking-wider text-muted-foreground">
+                    Or sign up with
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-9 font-medium flex items-center justify-center gap-1.5"
+                    onClick={() => handleOAuth("google")}
+                    disabled={loading}
+                    aria-label="Sign up with Google"
+                  >
+                    <Chrome className="size-3.5 text-red-400" />
+                    <span>Google</span>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-9 font-medium flex items-center justify-center gap-1.5"
+                    onClick={() => handleOAuth("github")}
+                    disabled={loading}
+                    aria-label="Sign up with GitHub"
+                  >
+                    <Github className="size-3.5 text-slate-300" />
+                    <span>GitHub</span>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="text-xs h-9 font-medium flex items-center justify-center gap-1.5"
+                    onClick={() => handleOAuth("gitlab")}
+                    disabled={loading}
+                    aria-label="Sign up with GitLab"
+                  >
+                    <Gitlab className="size-3.5 text-orange-400" />
+                    <span>GitLab</span>
+                  </Button>
+                </div>
               </TabsContent>
             </Tabs>
           </div>

@@ -83,7 +83,13 @@ const classify = (raw?: string): AuthErrorCode => {
   if (m.includes("failed to fetch") || m.includes("network") || m.includes("fetch"))
     return "network";
   if (m.includes("password") && m.includes("weak")) return "weak_password";
-  if (m.includes("provider") || m.includes("oauth") || m.includes("redirect_uri_mismatch"))
+  if (
+    m.includes("provider") ||
+    m.includes("oauth") ||
+    m.includes("redirect_uri_mismatch") ||
+    m.includes("invalid_client") ||
+    m.includes("client does not exist")
+  )
     return "provider_error";
   return "unknown";
 };
@@ -96,7 +102,7 @@ const HUMAN: Record<AuthErrorCode, string> = {
   invalid_api_key: "Supabase project key misconfigured — contact administrator.",
   network: "Network connection error. Check your connection and retry.",
   weak_password: "Password too weak. Please use at least 8 characters with numbers and symbols.",
-  provider_error: "OAuth provider misconfigured — Google redirect URI must be registered in Google Cloud Console.",
+  provider_error: "OAuth provider configuration error — Ensure the OAuth client ID and redirect URI (https://hbbunfizlwgvripgwzdo.supabase.co/auth/v1/callback) are registered in the provider console (Google Cloud, GitHub, or GitLab).",
   not_implemented: "This feature is not enabled in this build.",
   unknown: "Unexpected authentication error occurred. Please try again.",
 };

@@ -136,6 +136,7 @@ const labelMap: Record<string, string> = {
   patterns: "Architecture Patterns",
   forensics: "Threat Matrix",
   pipelines: "Deployment Pipelines",
+  deployments: "Deployment Platforms",
 };
 
 export interface NavItem {
@@ -218,6 +219,18 @@ export const NAV_DOMAINS: NavDomain[] = [
       { to: "/app/release", label: "Release Gates & Twin", icon: ShieldCheck, exact: false },
       { to: "/app/exports", label: "Artifact & Export Center", icon: Download, exact: true },
       { to: "/app/release/pipelines", label: "Deployment Pipelines", icon: ShieldCheck, exact: false },
+    ],
+  },
+  {
+    id: "deployments",
+    label: "DEPLOYMENT PLATFORMS",
+    icon: Server,
+    items: [
+      { to: "/app/deployments", label: "Deployment Overview", icon: LayoutDashboard, exact: true },
+      { to: "/app/deployments?tab=platforms", label: "Connected Platforms", icon: Cable, exact: false },
+      { to: "/app/deployments?tab=environments", label: "Environments & Runtimes", icon: Cpu, exact: false },
+      { to: "/app/deployments?tab=logs", label: "Build & Deploy Logs", icon: Terminal, exact: false },
+      { to: "/app/release/pipelines", label: "Pipeline Canaries", icon: ShieldCheck, exact: false },
     ],
   },
   {
@@ -398,6 +411,7 @@ const navGroups = [
       { to: "/app/github", label: "GitHub Mirror", icon: Github, exact: false },
       { to: "/app/integrations", label: "Integrations", icon: Cable, exact: true },
       { to: "/app/team", label: "Team Space", icon: Users, exact: true },
+      { to: "/app/deployments", label: "Deployment Platforms", icon: Server, exact: false },
       { to: "/app/activity", label: "Activity Feed", icon: Activity, exact: true },
       { to: "/app/exports", label: "Export Center", icon: Download, exact: true },
     ],
@@ -455,6 +469,7 @@ function NavList({
       ai: false,
       integrations: false,
       governance: false,
+      deployments: true,
     };
   });
 

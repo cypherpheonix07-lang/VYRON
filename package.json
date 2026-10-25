@@ -12,7 +12,7 @@
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
     "test": "node \"51 — TESTING PLATFORM/scripts/testing/verify-gates.js\"",
-    "test:offline": "node test-vyron-complete-journey.mjs && node test-ather-conversation-suite.mjs && node test-workspace-exit-flow.mjs && node test-fleet-command-hub-scenarios.mjs",
+    "test:offline": "node test-vyron-complete-journey.mjs && node test-ather-conversation-suite.mjs && node test-workspace-exit-flow.mjs && node test-fleet-command-hub-scenarios.mjs && node test-auth-deployment-audit.mjs",
     "test:scenarios": "node test-fleet-command-hub-scenarios.mjs",
     "test:journey": "node test-vyron-complete-journey.mjs",
     "test:exit": "node test-workspace-exit-flow.mjs",
