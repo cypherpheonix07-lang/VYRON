@@ -26,7 +26,7 @@ export interface ImportedRepoRecord {
   summary: string;
   tags: string[];
   readmeSize: number;
-  readmePath?: string;
+  readmePath?: string | undefined;
   importedAt: string;
 }
 

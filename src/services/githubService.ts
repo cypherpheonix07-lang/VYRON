@@ -44,6 +44,7 @@ export interface GitHubRepoItem {
   topics: string[];
   clone_url: string;
   ssh_url: string;
+  owner?: { login: string; avatar_url?: string } | null;
 }
 
 export interface GitHubCommitItem {
@@ -165,7 +166,7 @@ class GitHubService {
 
           if (!error && data?.access_token) {
             this.token = data.access_token;
-            if (typeof window !== "undefined") {
+            if (typeof window !== "undefined" && this.token) {
               localStorage.setItem(GitHubService.STORAGE_KEY, this.token);
             }
             return this.token;

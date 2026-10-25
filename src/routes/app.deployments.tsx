@@ -337,7 +337,7 @@ function DeploymentPlatformsPage() {
                 variant="outline"
                 size="sm"
                 className="text-xs"
-                onClick={() => setSelectedPlatform(PLATFORM_INVENTORY[0])}
+                onClick={() => setSelectedPlatform(PLATFORM_INVENTORY[0] ?? null)}
               >
                 Inspect Setup &rarr;
               </Button>

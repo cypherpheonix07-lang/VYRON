@@ -108,7 +108,7 @@ export function useActiveProject(): ActiveProjectContextValue {
   }, [isResolving, currentProject, resolvedTargetId]);
 
   const setActiveProject = useCallback(
-    (id: string, options?: { navigateToProject?: boolean }) => {
+    (id: string | null, options?: { navigateToProject?: boolean }) => {
       if (id === "all") {
         navigate({ to: "/app/projects" });
         return;

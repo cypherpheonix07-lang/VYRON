@@ -169,7 +169,7 @@ export class AIRepoClassifier {
       this.sanitizeReadme(meta.readmeText || "").toLowerCase(),
     ].join(" ");
 
-    let bestCategory = CLASSIFICATION_CATEGORIES[CLASSIFICATION_CATEGORIES.length - 1]; // default to uncategorized
+    let bestCategory = CLASSIFICATION_CATEGORIES[CLASSIFICATION_CATEGORIES.length - 1]!; // default to uncategorized
     let highestScore = 0;
     const matchedTags: string[] = [];
 
@@ -187,7 +187,7 @@ export class AIRepoClassifier {
       }
 
       // Weight boosts
-      if (meta.topics?.some((t) => cat.keywords.includes(t.toLowerCase()))) {
+      if (cat.keywords.some((kw) => meta.topics?.some((t) => t.toLowerCase() === kw))) {
         score += 3;
       }
       if (cat.keywords.some((kw) => meta.name.toLowerCase().includes(kw))) {
@@ -240,7 +240,7 @@ ${CLASSIFICATION_CATEGORIES.map((c) => `- ${c.name}`).join("\n")}
 Respond with JSON strictly matching:
 {"category": "Category Name", "confidence": 0.9, "summary": "1 sentence summary", "tags": ["tag1", "tag2"]}`;
 
-        const llmRes = await llmGateway.executeTask("report_prose", { prompt }, { max_tokens: 300 });
+        const llmRes = await llmGateway.draftReport({ prompt }, undefined, { max_tokens: 300 });
         if (llmRes.ok && llmRes.content && typeof llmRes.content === "object") {
           const parsed = llmRes.content as {
             category?: string;

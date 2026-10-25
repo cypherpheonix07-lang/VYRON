@@ -39,7 +39,7 @@ export interface DomainMetric {
 export interface DomainEntity {
   id: string;
   name: string;
-  status: "Operational" | "Degraded" | "Active" | "Passed" | "Analyzing";
+  status: "Operational" | "Degraded" | "Active" | "Passed" | "Analyzing" | (string & {});
   description: string;
   tags?: string[];
   metrics?: Record<string, string | number>;
