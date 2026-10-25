@@ -1,0 +1,960 @@
+/**
+ * Helper script to assemble and generate:
+ * 1. src/data/masterBuildPrompt.ts
+ * 2. public/data/master-build-prompt-520.json
+ * 3. docs/MASTER_BUILD_PROMPT_520_SDLC.md
+ */
+
+import fs from "node:fs";
+import path from "node:path";
+
+const DOMAINS_DATA = [
+  {
+    letter: "A",
+    name: "Architecture & System Design",
+    description: "Define the structural foundation before a single line of code is written.",
+    icon: "Layers",
+    color: "blue",
+    phases: [
+      { code: "A.01", title: "Define overall system architecture", instruction: "Decide between monolith, microservices, or modular monolith and document the rationale." },
+      { code: "A.02", title: "Create a high-level architecture diagram", instruction: "Show every service, database, and external integration and how they connect." },
+      { code: "A.03", title: "Plan component interaction and data flow", instruction: "Define who owns which data and which service calls which." },
+      { code: "A.04", title: "Design the API gateway layer", instruction: "Routing, auth enforcement, rate limiting, and load balancing entry point." },
+      { code: "A.05", title: "Define service boundaries and responsibilities", instruction: "Ensure no two services own the same domain logic." },
+      { code: "A.06", title: "Plan the caching layer strategy", instruction: "Determine where Redis, in-memory, or CDN caching applies across the stack." },
+      { code: "A.07", title: "Design event-driven architecture", instruction: "Define events, producers, consumers, and the message broker of choice." },
+      { code: "A.08", title: "Plan file storage and CDN strategy", instruction: "Structured vs. unstructured data, S3-compatible buckets, signed URLs." },
+      { code: "A.09", title: "Design load balancing approach", instruction: "Layer 4 vs. Layer 7, session stickiness, health check configuration." },
+      { code: "A.10", title: "Define disaster recovery plan", instruction: "RPO, RTO, failover regions, and backup verification strategy." },
+      { code: "A.11", title: "Plan horizontal and vertical scaling strategy", instruction: "Autoscaling triggers, limits, and costs for each service." },
+      { code: "A.12", title: "Design multi-tenant architecture if applicable", instruction: "Data isolation approach, tenant routing, shared vs. dedicated resources." },
+      { code: "A.13", title: "Define environment separation (dev / staging / prod)", instruction: "Infrastructure parity, data policies per environment." },
+      { code: "A.14", title: "Plan third-party service integrations at architecture level", instruction: "Identify all external dependencies and failure modes." },
+      { code: "A.15", title: "Create technical architecture documentation", instruction: "ADRs (Architecture Decision Records) for every major choice." },
+      { code: "A.16", title: "Define data consistency and synchronization strategy", instruction: "Eventual consistency zones, strong consistency requirements." },
+      { code: "A.17", title: "Plan infrastructure as code approach", instruction: "Terraform, Pulumi, or CDK, with state management and module structure." },
+      { code: "A.18", title: "Design network topology", instruction: "VPC layout, subnet segmentation (public/private/isolated), NAT gateways, peering." },
+      { code: "A.19", title: "Define service discovery mechanism", instruction: "DNS-based, sidecar proxy, or service mesh (Istio/Linkerd)." },
+      { code: "A.20", title: "Architecture review and sign-off", instruction: "Present to stakeholders, capture open questions, get written approval before build." },
+    ]
+  },
+  {
+    letter: "B",
+    name: "Backend Development",
+    description: "Build the engine. Controllers, services, business logic — every layer that powers the product.",
+    icon: "Server",
+    color: "emerald",
+    phases: [
+      { code: "B.01", title: "Initialize backend project", instruction: "Choose framework (Express/NestJS/FastAPI/Django), scaffold folder structure, install core dependencies." },
+      { code: "B.02", title: "Set up project folder architecture", instruction: "Controllers, services, repositories, DTOs, utils — enforce module pattern from day one." },
+      { code: "B.03", title: "Configure environment variables and secrets management", instruction: "Dotenv setup, startup validation, no hardcoded values anywhere." },
+      { code: "B.04", title: "Build core application bootstrap and startup logic", instruction: "Database connection, cache warm-up, graceful shutdown handlers." },
+      { code: "B.05", title: "Implement request/response pipeline", instruction: "Middleware chain ordering, logging context attachment, correlation ID injection." },
+      { code: "B.06", title: "Create base controller and service layer pattern", instruction: "Abstract classes, response wrappers, consistent HTTP status usage." },
+      { code: "B.07", title: "Build CRUD operations for all core entities", instruction: "List, read, create, update, delete with proper authorization checks." },
+      { code: "B.08", title: "Implement business logic layer", instruction: "Rules, calculations, state machines, and validations that are framework-agnostic." },
+      { code: "B.09", title: "Set up dependency injection container", instruction: "Wiring services, repositories, and adapters without manual instantiation." },
+      { code: "B.10", title: "Create data transfer objects (DTOs) and mappers", instruction: "Separate internal domain models from API contracts." },
+      { code: "B.11", title: "Build file upload and processing handlers", instruction: "Multipart parsing, size limits, type validation, storage integration." },
+      { code: "B.12", title: "Implement rate limiting logic", instruction: "Per-user, per-IP, and per-endpoint limits with configurable windows." },
+      { code: "B.13", title: "Create health check and ping endpoints", instruction: "Liveness, readiness, and deep dependency checks for orchestrators." },
+      { code: "B.14", title: "Build admin-only backend routes", instruction: "Protected by role, with audit logging on every write operation." },
+      { code: "B.15", title: "Implement pagination and filtering helpers", instruction: "Cursor-based and offset pagination, sort, search, and field-selection utilities." },
+      { code: "B.16", title: "Set up background job runner integration", instruction: "Connect queue adapter, define worker process, handle concurrency." },
+      { code: "B.17", title: "Create event emitters and listeners", instruction: "Internal domain events for decoupled side effects (email, audit, cache)." },
+      { code: "B.18", title: "Build webhook receiver and sender", instruction: "Validate inbound signatures, dispatch outbound with retry and secret rotation." },
+      { code: "B.19", title: "Implement data export handlers", instruction: "CSV, PDF, and JSON export endpoints with streaming for large datasets." },
+      { code: "B.20", title: "Code review, refactor, and backend documentation", instruction: "JSDoc/docstring coverage, README for each service, deprecation notes." },
+    ]
+  },
+  {
+    letter: "C",
+    name: "Components & UI Building",
+    description: "The atoms and molecules of the interface. Build once, reuse everywhere — documented and tested in isolation.",
+    icon: "LayoutGrid",
+    color: "pink",
+    phases: [
+      { code: "C.01", title: "Set up component library baseline", instruction: "Folder structure, naming convention, export barrel files, and design token imports." },
+      { code: "C.02", title: "Build reusable button component", instruction: "Variants (primary/secondary/ghost/danger), sizes, loading state, disabled state." },
+      { code: "C.03", title: "Build form input components", instruction: "Text, email, password, number, select, multi-select, checkbox, radio, textarea with validation states." },
+      { code: "C.04", title: "Build modal and dialog components", instruction: "Focus trap, keyboard dismiss, backdrop click, animation enter/exit." },
+      { code: "C.05", title: "Build navigation bar and sidebar", instruction: "Responsive collapse, active state, nested menus, mobile drawer variant." },
+      { code: "C.06", title: "Build table and data grid components", instruction: "Sortable columns, row selection, bulk actions, column resizing, empty state." },
+      { code: "C.07", title: "Build card and list item components", instruction: "Configurable layout, action menu, status badge slot, responsive stacking." },
+      { code: "C.08", title: "Build toast and notification components", instruction: "Success/error/warning/info variants, queue management, auto-dismiss timer." },
+      { code: "C.09", title: "Build loader and skeleton screen components", instruction: "Page-level spinner, inline spinner, skeleton matching content shape." },
+      { code: "C.10", title: "Build pagination component", instruction: "Page buttons, previous/next, ellipsis for large ranges, items-per-page selector." },
+      { code: "C.11", title: "Build breadcrumb and tab components", instruction: "Dynamic breadcrumb from route, scrollable tabs, tab panels with lazy render." },
+      { code: "C.12", title: "Build file upload dropzone", instruction: "Drag-and-drop, click-to-browse, progress bar, file preview, remove button." },
+      { code: "C.13", title: "Build search and filter bar", instruction: "Debounced input, active filter chips, clear-all, filter drawer on mobile." },
+      { code: "C.14", title: "Build chart and graph wrapper components", instruction: "Bar, line, pie, donut using a charting library, with loading and empty states." },
+      { code: "C.15", title: "Build avatar and profile components", instruction: "Image with fallback initials, size variants, group stack, online indicator." },
+      { code: "C.16", title: "Build empty state and error state components", instruction: "Illustration slot, headline, sub-copy, primary action CTA." },
+      { code: "C.17", title: "Build responsive layout grid", instruction: "Fixed sidebar + main, full-width, two-column, three-column with gutter control." },
+      { code: "C.18", title: "Build date picker and calendar component", instruction: "Single date, range, time picker, locale support, keyboard navigation." },
+      { code: "C.19", title: "Build tooltip and popover", instruction: "Positioning engine, arrow, delay, click vs. hover trigger, portal rendering." },
+      { code: "C.20", title: "Component documentation and Storybook setup", instruction: "Story for every variant, args table, a11y addon, chromatic integration." },
+    ]
+  },
+  {
+    letter: "D",
+    name: "Database Design & Management",
+    description: "The source of truth. Design schemas that scale, migrate cleanly, and never lose data.",
+    icon: "Database",
+    color: "amber",
+    phases: [
+      { code: "D.01", title: "Choose database engine", instruction: "PostgreSQL, MySQL, MongoDB, or hybrid — and document the rationale per use case." },
+      { code: "D.02", title: "Design entity-relationship (ER) diagram", instruction: "All tables/collections, relationships, cardinalities, and foreign keys." },
+      { code: "D.03", title: "Define all table schemas and data types", instruction: "Column names, types, nullability, defaults, and constraints." },
+      { code: "D.04", title: "Create initial database migration files", instruction: "Version-controlled, idempotent, and reversible down migrations." },
+      { code: "D.05", title: "Set up database connection pooling", instruction: "Pool size, timeout, idle eviction, and overflow handling configuration." },
+      { code: "D.06", title: "Implement ORM/ODM configuration", instruction: "Model definitions, relations, lifecycle hooks, and query logging in dev." },
+      { code: "D.07", title: "Create seed data for development", instruction: "Realistic fake data with referential integrity, using a repeatable seed script." },
+      { code: "D.08", title: "Build database backup strategy", instruction: "Automated daily snapshots, point-in-time recovery, off-site storage, and restore tests." },
+      { code: "D.09", title: "Set up read replica for performance", instruction: "Separate read and write connections, replica lag monitoring and alerting." },
+      { code: "D.10", title: "Implement soft delete pattern", instruction: "deleted_at timestamp, row filter at ORM level, archive queries for admin." },
+      { code: "D.11", title: "Design indexing strategy", instruction: "Composite indexes per query pattern, covering indexes, partial indexes, avoid over-indexing." },
+      { code: "D.12", title: "Set up audit trail tables", instruction: "Who changed what and when, with before/after snapshots for all critical entities." },
+      { code: "D.13", title: "Create stored procedures or database functions where needed", instruction: "Complex aggregations or constraints enforced at DB level." },
+      { code: "D.14", title: "Implement full-text search configuration", instruction: "tsvector columns, GIN indexes, or Elasticsearch sync pipeline." },
+      { code: "D.15", title: "Set up database monitoring", instruction: "Slow query log threshold, long-running transaction alerts, connection count dashboards." },
+      { code: "D.16", title: "Design multi-tenancy data isolation", instruction: "Row-level security (RLS), separate schemas, or separate databases per tenant." },
+      { code: "D.17", title: "Implement data archiving strategy", instruction: "Move old records to cold storage, partition by date for time-series data." },
+      { code: "D.18", title: "Create database rollback procedures", instruction: "Tested rollback scripts for every migration, runbook for emergency rollback." },
+      { code: "D.19", title: "Set up database migration CI", instruction: "Migrations run automatically in CI, validated against staging before prod deploy." },
+      { code: "D.20", title: "Database performance testing", instruction: "EXPLAIN ANALYZE on all hot queries, index tuning, and load test with realistic data volume." },
+    ]
+  },
+  {
+    letter: "E",
+    name: "Endpoints & API Design",
+    description: "The contract between systems. Design APIs that are predictable, versioned, and a joy to consume.",
+    icon: "Network",
+    color: "lime",
+    phases: [
+      { code: "E.01", title: "Define RESTful API naming conventions", instruction: "Noun-based URLs, plural resources, consistent casing and nesting rules." },
+      { code: "E.02", title: "Design API versioning strategy", instruction: "URL path versioning (/v1/), header versioning, or content negotiation." },
+      { code: "E.03", title: "Write OpenAPI / Swagger specification", instruction: "Full schema definitions for every request body, response, and query param." },
+      { code: "E.04", title: "Build user-related endpoints", instruction: "GET/POST/PATCH/DELETE /users with proper role-gated access." },
+      { code: "E.05", title: "Build authentication endpoints", instruction: "POST /auth/login, /auth/logout, /auth/refresh, /auth/verify-email." },
+      { code: "E.06", title: "Build resource/entity endpoints per feature", instruction: "Full CRUD per domain entity, nested resources where logical." },
+      { code: "E.07", title: "Implement search and filter endpoints", instruction: "GET with query params for search, filter, sort, and field projection." },
+      { code: "E.08", title: "Build file upload and download endpoints", instruction: "Multipart upload, signed URL generation, streaming download." },
+      { code: "E.09", title: "Create admin-only endpoints", instruction: "Prefixed at /admin/, protected by admin role, with action logging on every call." },
+      { code: "E.10", title: "Implement inbound webhook endpoints", instruction: "POST /webhooks/{source}, signature verification, idempotency key check." },
+      { code: "E.11", title: "Build bulk operation endpoints", instruction: "POST /bulk-create, /bulk-update with transaction wrapping and partial failure reporting." },
+      { code: "E.12", title: "Implement export endpoints", instruction: "GET /export?format=csv|pdf with async job dispatch for large datasets." },
+      { code: "E.13", title: "Create status and health check endpoints", instruction: "GET /health (liveness), /health/ready (readiness), /health/deep." },
+      { code: "E.14", title: "Build notification preference endpoints", instruction: "GET/PATCH /me/notification-preferences per channel and event type." },
+      { code: "E.15", title: "Implement analytics and reporting endpoints", instruction: "Aggregated data endpoints with date-range, groupBy, and metric params." },
+      { code: "E.16", title: "Build payment and billing endpoints", instruction: "Create checkout session, manage subscriptions, retrieve invoices." },
+      { code: "E.17", title: "Set up API documentation auto-generation", instruction: "Swagger UI or Redoc hosted at /docs, synced with OpenAPI spec." },
+      { code: "E.18", title: "Implement API key management endpoints", instruction: "Issue, list, revoke, and rotate API keys per user or organization." },
+      { code: "E.19", title: "Create public vs. private API boundary", instruction: "Define which endpoints are public, which require auth, which require scopes." },
+      { code: "E.20", title: "API endpoint testing and contract validation", instruction: "Postman/Newman collection runs in CI, schema validation on every response." },
+    ]
+  },
+  {
+    letter: "F",
+    name: "Frontend Development",
+    description: "Everything the user sees and touches. Pages, state, routing, API integration — the experience that defines the product.",
+    icon: "Monitor",
+    color: "cyan",
+    phases: [
+      { code: "F.01", title: "Initialize frontend project", instruction: "Scaffold with Vite/CRA/Next.js, configure TypeScript, ESLint, Prettier, and path aliases." },
+      { code: "F.02", title: "Set up folder structure and routing conventions", instruction: "Pages, components, hooks, services, store, types clearly separated." },
+      { code: "F.03", title: "Configure global state management", instruction: "Redux Toolkit, Zustand, or React Context with clear domain slices." },
+      { code: "F.04", title: "Set up API client/service layer", instruction: "Axios/fetch wrapper with interceptors for auth tokens, error handling, and retry." },
+      { code: "F.05", title: "Build authentication pages", instruction: "Login, register, forgot password, reset password, email verification landing." },
+      { code: "F.06", title: "Build dashboard home page", instruction: "Summary widgets, recent activity feed, quick-action shortcuts, live data updates." },
+      { code: "F.07", title: "Build user profile and settings pages", instruction: "Personal info, password change, avatar upload, notification preferences." },
+      { code: "F.08", title: "Build main feature pages", instruction: "Resource list with filters, detail/view page, create/edit form, delete confirmation." },
+      { code: "F.09", title: "Build admin panel pages", instruction: "User management, role assignment, feature flags, audit log viewer, system settings." },
+      { code: "F.10", title: "Implement client-side form validation", instruction: "Real-time field validation, schema-driven (Zod/Yup), accessible error messages." },
+      { code: "F.11", title: "Set up global error boundary and 404 page", instruction: "Catch unhandled React errors, show graceful fallback, report to Sentry." },
+      { code: "F.12", title: "Implement responsive design", instruction: "All pages tested at 320px, 768px, 1024px, 1440px with fluid layouts." },
+      { code: "F.13", title: "Set up internationalization (i18n)", instruction: "react-i18next or next-intl, translation file structure, locale detection." },
+      { code: "F.14", title: "Build onboarding flow", instruction: "Multi-step wizard with progress indicator, skip option, and completion tracking." },
+      { code: "F.15", title: "Implement infinite scroll or pagination on list pages", instruction: "React Query / SWR with cursor-based loading, scroll restoration." },
+      { code: "F.16", title: "Build search results and filter pages", instruction: "URL-synced filters, faceted search, highlighted match terms." },
+      { code: "F.17", title: "Set up analytics tracking", instruction: "Pageview events, custom user action events, funnel tracking with GA4/Mixpanel." },
+      { code: "F.18", title: "Implement dark mode / theme toggle", instruction: "CSS variables, system preference detection, persisted user preference." },
+      { code: "F.19", title: "Optimize bundle size", instruction: "Route-based code splitting, dynamic imports, tree shaking audit, bundle analyzer run." },
+      { code: "F.20", title: "Frontend accessibility (a11y) audit", instruction: "axe-core scan, keyboard nav on all flows, ARIA labels, color contrast pass." },
+    ]
+  },
+  {
+    letter: "G",
+    name: "Git & Version Control",
+    description: "The discipline that keeps teams from stepping on each other. Branching rules, commit hygiene, automated repo management.",
+    icon: "GitBranch",
+    color: "purple",
+    phases: [
+      { code: "G.01", title: "Initialize repository and set default branch", instruction: "Create repo, set main as default, push initial commit with README and LICENSE." },
+      { code: "G.02", title: "Define branching strategy", instruction: "Git Flow, trunk-based, or GitHub Flow with clear rules for feature, fix, and release branches." },
+      { code: "G.03", title: "Set up .gitignore and .gitattributes", instruction: "Cover all languages, IDEs, OS files, and enforce LF line endings." },
+      { code: "G.04", title: "Create initial commit with project scaffolding", instruction: "Lock files included, no secrets, no generated build artifacts." },
+      { code: "G.05", title: "Configure branch protection rules", instruction: "Require PR reviews, passing CI, no force-push on main and staging." },
+      { code: "G.06", title: "Set up pull request / merge request templates", instruction: "Checklist for tests, docs, breaking changes, and screenshots." },
+      { code: "G.07", title: "Define commit message convention", instruction: "Conventional Commits spec (feat/fix/chore/docs) enforced via commitlint." },
+      { code: "G.08", title: "Set up code owners file", instruction: "CODEOWNERS maps critical directories to required reviewers." },
+      { code: "G.09", title: "Create changelog and versioning strategy", instruction: "semantic-release or standard-version auto-generates CHANGELOG.md from commits." },
+      { code: "G.10", title: "Set up Git hooks", instruction: "pre-commit (lint-staged), pre-push (test run), commit-msg (commitlint) via Husky." },
+      { code: "G.11", title: "Configure automated branch cleanup", instruction: "Delete merged branches automatically, stale branch alerts after 30 days." },
+      { code: "G.12", title: "Set up dependency update automation", instruction: "Dependabot or Renovate with auto-merge for patch updates and security fixes." },
+      { code: "G.13", title: "Define release tagging strategy", instruction: "SemVer tags (v1.2.3), signed tags for production, GitHub Releases with release notes." },
+      { code: "G.14", title: "Set up monorepo configuration if applicable", instruction: "Turborepo or Nx with shared packages, caching, and task pipelines." },
+      { code: "G.15", title: "Create contribution guidelines", instruction: "CONTRIBUTING.md with setup instructions, coding standards, and PR process." },
+      { code: "G.16", title: "Set up code review checklist", instruction: "Required checks: logic, tests, security, performance, a11y, docs." },
+      { code: "G.17", title: "Configure merge queue or auto-merge rules", instruction: "Merge only after CI passes, no conflicts, required approvals received." },
+      { code: "G.18", title: "Set up stale branch and PR notifications", instruction: "Automated comments and Slack alerts for PRs idle more than 7 days." },
+      { code: "G.19", title: "Create Git alias and developer tooling documentation", instruction: "Onboarding checklist for new engineers to get up to speed fast." },
+      { code: "G.20", title: "Audit repository permissions and access control", instruction: "Least-privilege roles for all collaborators, rotate deploy keys." },
+    ]
+  },
+  {
+    letter: "H",
+    name: "Hosting & Infrastructure",
+    description: "Where the code lives and breathes. Cloud, servers, DNS, SSL, and auto-scaling — the platform that keeps the product alive.",
+    icon: "Cloud",
+    color: "rose",
+    phases: [
+      { code: "H.01", title: "Choose cloud provider", instruction: "AWS, GCP, or Azure based on cost, compliance, team familiarity, and service requirements." },
+      { code: "H.02", title: "Set up cloud account and IAM roles", instruction: "Root account hardened, MFA enforced, least-privilege service accounts created." },
+      { code: "H.03", title: "Provision virtual machines or container clusters", instruction: "ECS/EKS/GKE configured with node pools and resource limits." },
+      { code: "H.04", title: "Configure managed database service", instruction: "RDS/Cloud SQL with automated backups, encryption at rest, and private access." },
+      { code: "H.05", title: "Set up object storage", instruction: "S3/GCS buckets with versioning, lifecycle policies, and public-access blocked by default." },
+      { code: "H.06", title: "Configure CDN for static assets", instruction: "CloudFront/Cloudflare with cache rules, origin shield, and custom domain." },
+      { code: "H.07", title: "Set up DNS and domain management", instruction: "A records, CNAMEs, MX records, TTL configuration via Route53/Cloudflare." },
+      { code: "H.08", title: "Configure SSL/TLS certificates", instruction: "ACM/Let's Encrypt auto-renewal, certificate pinning for mobile if applicable." },
+      { code: "H.09", title: "Set up load balancer", instruction: "ALB/NLB with target groups, sticky sessions where required, and access log shipping." },
+      { code: "H.10", title: "Configure auto-scaling groups", instruction: "Scale-out and scale-in policies based on CPU, memory, and request rate metrics." },
+      { code: "H.11", title: "Set up VPC and subnet configuration", instruction: "Public, private, and isolated subnets across multiple availability zones." },
+      { code: "H.12", title: "Configure firewall and security groups", instruction: "Deny-all default, allow only required ports, separate rules per tier." },
+      { code: "H.13", title: "Set up managed cache service", instruction: "ElastiCache Redis in cluster mode with replication, TLS, and auth token." },
+      { code: "H.14", title: "Configure managed queue service", instruction: "SQS/Cloud Pub-Sub with dead-letter queues, visibility timeout, and message retention." },
+      { code: "H.15", title: "Set up serverless functions if applicable", instruction: "Lambda/Cloud Functions with VPC access, concurrency limits, cold start mitigation." },
+      { code: "H.16", title: "Configure infrastructure monitoring dashboards", instruction: "CloudWatch/Cloud Monitoring with custom metrics for all services." },
+      { code: "H.17", title: "Set up cost alerts and budget controls", instruction: "Daily/monthly cost thresholds with email and Slack alerts before breach." },
+      { code: "H.18", title: "Implement backup and snapshot policies", instruction: "Automated nightly snapshots, weekly cross-region copy, monthly restore drill." },
+      { code: "H.19", title: "Set up multi-AZ or multi-region failover", instruction: "Active-passive or active-active with automated failover and DNS health checks." },
+      { code: "H.20", title: "Infrastructure security audit and hardening", instruction: "CIS benchmark scan, unused resource cleanup, access log review." },
+    ]
+  },
+  {
+    letter: "I",
+    name: "Integration & Third-party Services",
+    description: "No product is an island. Every external dependency wired in, tested, and handled gracefully when it fails.",
+    icon: "Plug",
+    color: "indigo",
+    phases: [
+      { code: "I.01", title: "Identify all third-party services needed", instruction: "Map each to a category (auth/email/payment/analytics) and assess vendor lock-in risk." },
+      { code: "I.02", title: "Set up OAuth provider integrations", instruction: "Google, GitHub, Apple Sign-In with scope definition and token exchange flows." },
+      { code: "I.03", title: "Integrate payment gateway", instruction: "Stripe/Razorpay SDK, configure webhooks, set up test and live mode keys." },
+      { code: "I.04", title: "Integrate email service provider", instruction: "SendGrid/SES/Mailgun with domain authentication (SPF/DKIM/DMARC) verified." },
+      { code: "I.05", title: "Integrate SMS provider", instruction: "Twilio/AWS SNS with number provisioning, opt-out handling, and delivery receipt tracking." },
+      { code: "I.06", title: "Integrate push notification service", instruction: "FCM for Android, APNs for iOS, with device token registration and topic management." },
+      { code: "I.07", title: "Set up analytics integration", instruction: "GA4/Mixpanel/PostHog with event schema documentation and identity stitching." },
+      { code: "I.08", title: "Integrate error tracking service", instruction: "Sentry with release tracking, environment tagging, and user context attachment." },
+      { code: "I.09", title: "Integrate feature flag service", instruction: "LaunchDarkly/Unleash with user targeting, kill-switch flags, and rollout percentages." },
+      { code: "I.10", title: "Set up customer support integration", instruction: "Intercom/Zendesk widget with user identity verification and conversation context." },
+      { code: "I.11", title: "Integrate calendar/scheduling service", instruction: "Google Calendar API or Calendly for booking flows with availability sync." },
+      { code: "I.12", title: "Set up cloud storage integration", instruction: "S3/Google Drive/Dropbox picker, upload progress, and shared link generation." },
+      { code: "I.13", title: "Integrate maps/geolocation service", instruction: "Google Maps/Mapbox for address autocomplete, geocoding, and map display." },
+      { code: "I.14", title: "Set up CRM integration", instruction: "HubSpot/Salesforce contact sync with field mapping, deduplication, and bi-directional updates." },
+      { code: "I.15", title: "Integrate AI/ML service", instruction: "OpenAI/Anthropic Claude API with prompt management, streaming, token budgeting, and fallback." },
+      { code: "I.16", title: "Set up webhook management service", instruction: "ngrok for dev, production webhook routing with retry UI and delivery logs." },
+      { code: "I.17", title: "Integrate video/conferencing service", instruction: "Twilio Video/Daily.co/Zoom API with room creation, token generation, recording." },
+      { code: "I.18", title: "Set up e-signature integration", instruction: "DocuSign/HelloSign with envelope creation, status webhooks, and PDF retrieval." },
+      { code: "I.19", title: "Integrate accounting service", instruction: "QuickBooks/Xero/Zoho Books with invoice sync, payment recording, and account mapping." },
+      { code: "I.20", title: "Third-party integration testing and fallback handling", instruction: "Mock all external calls in tests, circuit breaker for each integration." },
+    ]
+  },
+  {
+    letter: "J",
+    name: "Jobs & Background Processing",
+    description: "Work that happens outside the request cycle — email sending, report generation, scheduled cleanups — queued and monitored.",
+    icon: "Clock",
+    color: "teal",
+    phases: [
+      { code: "J.01", title: "Set up background job framework", instruction: "Bull/BullMQ (Node), Celery (Python), Sidekiq (Ruby) with Redis as broker." },
+      { code: "J.02", title: "Define job queues and priorities", instruction: "High (transactional email), medium (reports), low (cleanup) with separate workers." },
+      { code: "J.03", title: "Build email sending job", instruction: "Template resolution, recipient list, attachment handling, delivery status tracking." },
+      { code: "J.04", title: "Build notification dispatch job", instruction: "Fan-out to all channels (push/SMS/in-app) with per-channel preference checks." },
+      { code: "J.05", title: "Build report generation job", instruction: "Query aggregation, chart rendering, PDF/XLSX packaging, and delivery to requester." },
+      { code: "J.06", title: "Build data export job", instruction: "Stream large datasets to CSV/JSON, upload to storage, send download link via email." },
+      { code: "J.07", title: "Build scheduled cleanup job", instruction: "Purge expired tokens, soft-deleted records past retention period, orphaned uploads." },
+      { code: "J.08", title: "Build scheduled report delivery job", instruction: "Cron-based weekly/monthly report generation and email dispatch per subscription." },
+      { code: "J.09", title: "Build bulk import processing job", instruction: "Parse CSV/XLSX, validate rows, insert in batches, report errors per row." },
+      { code: "J.10", title: "Build image processing job", instruction: "Resize to thumbnails, convert to WebP, strip EXIF metadata, upload variants to storage." },
+      { code: "J.11", title: "Build webhook retry job", instruction: "Exponential backoff (1s/5s/30s/5m), max 5 attempts, dead-letter after final failure." },
+      { code: "J.12", title: "Build data sync job", instruction: "Bi-directional sync with third-party CRM/accounting service on a scheduled interval." },
+      { code: "J.13", title: "Build subscription renewal and billing job", instruction: "Process upcoming renewals, charge cards, send receipts, handle failures." },
+      { code: "J.14", title: "Build cache invalidation job", instruction: "Selectively bust cache keys when underlying data changes via event-driven triggers." },
+      { code: "J.15", title: "Build search index update job", instruction: "Sync database changes to Elasticsearch/Typesense/Algolia with delta updates." },
+      { code: "J.16", title: "Build audit log archiving job", instruction: "Move logs older than 90 days from hot DB to S3 cold storage in compressed JSON." },
+      { code: "J.17", title: "Set up dead letter queue and failed job handling", instruction: "Persist failed jobs, admin UI to inspect, requeue, or discard." },
+      { code: "J.18", title: "Build job monitoring and alerting", instruction: "Dashboard for queue depth, processing rate, failure rate, and average latency." },
+      { code: "J.19", title: "Implement job concurrency and throttling", instruction: "Max workers per queue, rate limits per external API, backpressure handling." },
+      { code: "J.20", title: "Job performance and stress testing", instruction: "Flood queues with synthetic jobs, measure throughput, identify bottlenecks." },
+    ]
+  },
+  {
+    letter: "K",
+    name: "Keys & Configuration Management",
+    description: "Secrets, credentials, environment configs — managed, rotated, audited, and never hardcoded. The layer that keeps you safe.",
+    icon: "Key",
+    color: "amber",
+    phases: [
+      { code: "K.01", title: "Define all required environment variables", instruction: "Catalogue every key, its purpose, its format, and which services consume it." },
+      { code: "K.02", title: "Set up secrets manager", instruction: "AWS Secrets Manager, HashiCorp Vault, or GCP Secret Manager with fine-grained access." },
+      { code: "K.03", title: "Create .env.example with all keys documented", instruction: "No real values, descriptive comments, defaults where safe." },
+      { code: "K.04", title: "Configure environment-specific config files", instruction: "Separate dev/staging/prod overrides with validation on startup." },
+      { code: "K.05", title: "Set up API key generation and rotation strategy", instruction: "Cryptographically random keys, expiry policy, rotation runbook." },
+      { code: "K.06", title: "Implement database credential rotation", instruction: "Automated rotation via Secrets Manager with zero-downtime connection re-use." },
+      { code: "K.07", title: "Configure JWT secret management", instruction: "RS256 key pair, scheduled rotation, public key endpoint for verification." },
+      { code: "K.08", title: "Set up encryption keys for sensitive data at rest", instruction: "AES-256 keys in KMS, envelope encryption pattern per field." },
+      { code: "K.09", title: "Manage third-party API keys and OAuth credentials", instruction: "Per-service storage, never in code or logs, alert on expiry." },
+      { code: "K.10", title: "Implement config validation on startup", instruction: "Fail fast if required env variables are missing or malformed before app boots." },
+      { code: "K.11", title: "Set up feature flag configuration store", instruction: "LaunchDarkly/Unleash or database-backed flags with admin UI toggle." },
+      { code: "K.12", title: "Configure runtime config for frontend", instruction: "VITE_/NEXT_PUBLIC_ prefix conventions, injected at build or runtime." },
+      { code: "K.13", title: "Manage TLS certificates and PKI keys", instruction: "Stored in secrets manager, auto-renewed, expiry monitoring in place." },
+      { code: "K.14", title: "Set up SSH key management for servers", instruction: "Per-engineer keys, no shared keys, rotation on personnel change." },
+      { code: "K.15", title: "Implement audit trail for config changes", instruction: "Log every read and write of secrets with actor, timestamp, and key name." },
+      { code: "K.16", title: "Document all configuration dependencies", instruction: "Which app consumes which key, which IAM role grants access to each secret." },
+      { code: "K.17", title: "Set up config drift detection", instruction: "Alert when a deployed service's config diverges from expected values in secrets manager." },
+      { code: "K.18", title: "Create emergency key revocation procedure", instruction: "Documented runbook to revoke and re-issue any credential within 15 minutes." },
+      { code: "K.19", title: "Implement config versioning", instruction: "Version-pin configs per deployment, roll back config independently of code." },
+      { code: "K.20", title: "Config security review", instruction: "Third-party audit of secrets hygiene, scanning for exposed keys in logs, code, and storage." },
+    ]
+  },
+  {
+    letter: "L",
+    name: "Logging & Monitoring",
+    description: "You cannot fix what you cannot see. Structured logs, metrics, traces, and alerts that tell you the system's truth.",
+    icon: "Activity",
+    color: "blue",
+    phases: [
+      { code: "L.01", title: "Set up structured logging framework", instruction: "Winston/Pino (Node) or structlog (Python) with JSON output in production." },
+      { code: "L.02", title: "Define log levels and format standards", instruction: "ERROR/WARN/INFO/DEBUG with mandatory fields: timestamp, level, service, traceId." },
+      { code: "L.03", title: "Configure centralized log aggregation", instruction: "ELK Stack, CloudWatch Logs, or Datadog Log Management with retention policies." },
+      { code: "L.04", title: "Set up application performance monitoring", instruction: "Datadog APM or New Relic with auto-instrumentation for latency and throughput." },
+      { code: "L.05", title: "Configure error tracking", instruction: "Sentry with source maps, release tracking, and email/Slack alerts on new issues." },
+      { code: "L.06", title: "Set up uptime monitoring", instruction: "Pingdom/BetterUptime/Checkly pinging all public endpoints every 60 seconds with SMS escalation." },
+      { code: "L.07", title: "Build custom metrics dashboards", instruction: "Grafana/Datadog boards for request rate, error rate, latency p95/p99, queue depth." },
+      { code: "L.08", title: "Set up infrastructure-level monitoring", instruction: "CPU, memory, disk, network I/O, and swap usage per node with alert thresholds." },
+      { code: "L.09", title: "Configure database query performance logging", instruction: "Slow query threshold, explain plan capture for queries over 100ms." },
+      { code: "L.10", title: "Implement distributed tracing", instruction: "OpenTelemetry spans across services with correlation IDs propagated through headers." },
+      { code: "L.11", title: "Set up alert rules", instruction: "Error rate >1%, p99 latency >2s, queue depth >1000, disk >80% — routed to on-call via PagerDuty." },
+      { code: "L.12", title: "Configure on-call escalation policies", instruction: "Primary/secondary rotation, escalation after 5 minutes with no acknowledge." },
+      { code: "L.13", title: "Build audit log viewer in admin panel", instruction: "Searchable by user, action type, resource, and date range with CSV export." },
+      { code: "L.14", title: "Set up log retention and archiving policy", instruction: "Hot 30 days, warm 90 days, cold S3 archive 1 year, auto-delete after 2 years." },
+      { code: "L.15", title: "Implement security event logging", instruction: "Failed logins, permission denials, config changes, and suspicious request patterns." },
+      { code: "L.16", title: "Configure network traffic monitoring", instruction: "VPC flow logs, WAF request logs, DDoS detection baseline." },
+      { code: "L.17", title: "Set up synthetic monitoring", instruction: "Playwright/Checkly scripts running the top 5 user journeys every 5 minutes from 3 regions." },
+      { code: "L.18", title: "Build SLA dashboard and reporting", instruction: "Uptime percentage, MTTD, MTTR, incident count tracked monthly." },
+      { code: "L.19", title: "Implement anomaly detection", instruction: "ML-based baseline for traffic and error rates, alert on statistical deviations." },
+      { code: "L.20", title: "Logging compliance review", instruction: "Verify no PII in logs, GDPR/HIPAA data residency for log storage confirmed and documented." },
+    ]
+  },
+  {
+    letter: "M",
+    name: "Middleware & Request Handling",
+    description: "The pipeline every request passes through. Authentication, validation, rate limiting — enforced once, applied everywhere.",
+    icon: "GitFork",
+    color: "amber",
+    phases: [
+      { code: "M.01", title: "Build global request logging middleware", instruction: "Log method, path, status, duration, and correlation ID on every request." },
+      { code: "M.02", title: "Implement CORS configuration middleware", instruction: "Allowed origins per environment, preflight caching, credentials handling." },
+      { code: "M.03", title: "Build authentication guard middleware", instruction: "Verify JWT/session on protected routes, attach user context to request object." },
+      { code: "M.04", title: "Implement authorization middleware", instruction: "Role-based access checks per route, resource-level ownership verification." },
+      { code: "M.05", title: "Build request validation middleware", instruction: "Validate body, query params, and path params against schema before reaching controller." },
+      { code: "M.06", title: "Implement rate limiting middleware", instruction: "Sliding window counter in Redis, per-user and per-IP limits with 429 response." },
+      { code: "M.07", title: "Build request sanitization middleware", instruction: "Strip XSS patterns, escape SQL special chars, normalize Unicode input." },
+      { code: "M.08", title: "Implement compression middleware", instruction: "Brotli/gzip on response body for content above 1KB, exclude already-compressed types." },
+      { code: "M.09", title: "Build API versioning middleware", instruction: "Parse version from URL or Accept header, route to correct handler version." },
+      { code: "M.10", title: "Implement IP whitelisting/blacklisting middleware", instruction: "Configurable allow/deny lists loaded from database or config service." },
+      { code: "M.11", title: "Build request timeout middleware", instruction: "Abort requests exceeding 30 seconds, return 504 with trace ID for debugging." },
+      { code: "M.12", title: "Implement idempotency key middleware", instruction: "Cache POST responses by Idempotency-Key header for 24 hours, replay on retry." },
+      { code: "M.13", title: "Build file upload middleware", instruction: "Busboy/multer integration, size limit enforcement, MIME type validation pre-processing." },
+      { code: "M.14", title: "Implement cache-control headers middleware", instruction: "Set Cache-Control, ETag, and Last-Modified headers per route type." },
+      { code: "M.15", title: "Build error formatting middleware", instruction: "Catch all thrown errors, normalize to standard {code, message, details} JSON format." },
+      { code: "M.16", title: "Implement localization middleware", instruction: "Detect Accept-Language header, set locale context, fall back to default language." },
+      { code: "M.17", title: "Build webhook signature verification middleware", instruction: "HMAC-SHA256 signature check with timing-safe comparison." },
+      { code: "M.18", title: "Implement feature flag evaluation middleware", instruction: "Resolve flags for the current user and attach to request context." },
+      { code: "M.19", title: "Build request metering middleware", instruction: "Count and log API usage per user/org for billing and quota enforcement." },
+      { code: "M.20", title: "Middleware unit and integration testing", instruction: "Each middleware tested in isolation and in the full chain order." },
+    ]
+  },
+  {
+    letter: "N",
+    name: "Notifications & Communication",
+    description: "How the product speaks to its users. In-app, email, SMS, push — delivered reliably, respected by preferences.",
+    icon: "Bell",
+    color: "emerald",
+    phases: [
+      { code: "N.01", title: "Design notification system architecture", instruction: "Event-driven dispatch, preference layer, channel adapters, delivery tracking." },
+      { code: "N.02", title: "Build in-app notification creation logic", instruction: "Trigger conditions, severity levels, recipient resolution, and read/unread tracking." },
+      { code: "N.03", title: "Build email notification templates", instruction: "HTML (responsive, dark mode) plus plain text fallback, branded header and footer." },
+      { code: "N.04", title: "Implement transactional email sending service", instruction: "Queue-backed, with retry, bounce handling, and open/click tracking." },
+      { code: "N.05", title: "Build SMS notification sending service", instruction: "OTP, alerts, and reminders with opt-out STOP handling and delivery receipts." },
+      { code: "N.06", title: "Implement push notification sending service", instruction: "Device token management, topic subscriptions, rich notification payloads." },
+      { code: "N.07", title: "Build notification preference management", instruction: "Per-user settings for channel (email/SMS/push) and event type." },
+      { code: "N.08", title: "Implement delivery status tracking", instruction: "Sent/delivered/failed/opened states stored per notification, queryable in admin." },
+      { code: "N.09", title: "Build notification center UI", instruction: "Bell icon with unread badge, dropdown list, mark-as-read, mark-all-read, link to source." },
+      { code: "N.10", title: "Implement real-time notification delivery", instruction: "WebSocket push to active sessions for instant in-app alerts without polling." },
+      { code: "N.11", title: "Build digest notification system", instruction: "Batch multiple events into a single daily/weekly summary email per user preference." },
+      { code: "N.12", title: "Implement notification grouping and batching", instruction: "Group same-type events (5 comments) into one notification to avoid flood." },
+      { code: "N.13", title: "Build admin broadcast notification tool", instruction: "Send announcement to all users or segments with preview and schedule." },
+      { code: "N.14", title: "Implement notification unsubscribe/opt-out", instruction: "One-click unsubscribe links, GDPR-compliant opt-out with confirmation." },
+      { code: "N.15", title: "Build notification audit log", instruction: "Full history of every notification sent, to whom, via which channel, and outcome." },
+      { code: "N.16", title: "Set up notification failure and retry handling", instruction: "Failed sends retry 3 times with backoff, dead-letter for manual review." },
+      { code: "N.17", title: "Implement multi-language notification templates", instruction: "Locale-resolved template selection with fallback to default language." },
+      { code: "N.18", title: "Build notification analytics", instruction: "Delivery rate, open rate, click-through rate, and opt-out rate per notification type." },
+      { code: "N.19", title: "Implement deep link support in push notifications", instruction: "Direct the user to the exact in-app screen from the notification tap." },
+      { code: "N.20", title: "Notification system load testing and deliverability audit", instruction: "SPF/DKIM/DMARC check, inbox placement test, queue stress test." },
+    ]
+  },
+  {
+    letter: "O",
+    name: "Optimization & Performance",
+    description: "Fast is a feature. Measure first, optimize with evidence — caching, bundling, indexing, and lazy loading for every user.",
+    icon: "Gauge",
+    color: "red",
+    phases: [
+      { code: "O.01", title: "Establish performance baseline", instruction: "Run Lighthouse, WebPageTest, and k6 to record starting metrics before any optimization." },
+      { code: "O.02", title: "Implement frontend asset minification and bundling", instruction: "CSS/JS minified, tree-shaken, and hashed for cache busting." },
+      { code: "O.03", title: "Set up image optimization pipeline", instruction: "WebP/AVIF conversion, responsive srcset, lazy loading, blur placeholder." },
+      { code: "O.04", title: "Configure HTTP/2 and Brotli compression", instruction: "Server push for critical assets, Brotli over gzip for better compression ratios." },
+      { code: "O.05", title: "Implement Redis caching for hot data", instruction: "Cache user sessions, permission sets, and frequently queried aggregations." },
+      { code: "O.06", title: "Set up database query caching layer", instruction: "Cache repeated read queries with TTL invalidation tied to mutation events." },
+      { code: "O.07", title: "Optimize database indexes", instruction: "EXPLAIN ANALYZE every query over 50ms, add composite indexes, remove unused ones." },
+      { code: "O.08", title: "Implement API response pagination and field selection", instruction: "Never return full records when a list view needs only 3 fields." },
+      { code: "O.09", title: "Set up CDN caching for static and semi-dynamic content", instruction: "Cache-control headers tuned per resource type and update frequency." },
+      { code: "O.10", title: "Implement frontend code splitting and lazy routing", instruction: "Route-level dynamic imports so only the needed chunk loads per page." },
+      { code: "O.11", title: "Optimize third-party script loading", instruction: "Async/defer all non-critical scripts, load analytics and chat widgets after interaction." },
+      { code: "O.12", title: "Implement virtual scrolling for large lists", instruction: "react-virtual or tanstack-virtual to render only visible rows in long tables." },
+      { code: "O.13", title: "Set up SSR or SSG where applicable", instruction: "Next.js SSR for SEO-critical pages, static generation for marketing pages." },
+      { code: "O.14", title: "Optimize connection pooling", instruction: "PgBouncer in transaction mode, tune pool size per service to max DB connections." },
+      { code: "O.15", title: "Reduce cold start times for serverless", instruction: "Provisioned concurrency for critical Lambda functions, warm-up pings." },
+      { code: "O.16", title: "Profile and optimize memory usage", instruction: "Heap profiling in production, fix memory leaks, right-size container resource limits." },
+      { code: "O.17", title: "Implement service worker and offline caching", instruction: "Cache API responses and shell app for offline-capable experience." },
+      { code: "O.18", title: "Optimize WebSocket message payload size", instruction: "Binary frames with MessagePack or Protobuf instead of verbose JSON." },
+      { code: "O.19", title: "Implement persisted GraphQL queries if applicable", instruction: "Replace query strings with hash IDs to reduce request payload size." },
+      { code: "O.20", title: "Performance regression testing", instruction: "Integrate Lighthouse CI in PR pipeline, fail builds that regress Core Web Vitals." },
+    ]
+  },
+  {
+    letter: "P",
+    name: "Payment & Billing Systems",
+    description: "Revenue is sacred. Every checkout, invoice, refund, and retry handled with precision, auditability, and zero revenue leakage.",
+    icon: "CreditCard",
+    color: "blue",
+    phases: [
+      { code: "P.01", title: "Define pricing model", instruction: "Subscription, one-time, usage-based, or hybrid; document plan tiers and feature entitlements." },
+      { code: "P.02", title: "Set up payment gateway account and sandbox", instruction: "Stripe/Razorpay test mode with test cards and webhook simulation." },
+      { code: "P.03", title: "Integrate payment gateway SDK", instruction: "Server-side charge/subscription creation, client-side Elements/Drop-in UI integration." },
+      { code: "P.04", title: "Build checkout flow UI", instruction: "Plan selection, payment method entry, order summary, and confirmation page." },
+      { code: "P.05", title: "Implement subscription plan management", instruction: "Create, upgrade, downgrade, pause, cancel with immediate and end-of-period options." },
+      { code: "P.06", title: "Build invoice generation system", instruction: "Auto-generate on payment, PDF rendering, line-item breakdown, and email delivery." },
+      { code: "P.07", title: "Implement payment method management", instruction: "Add/remove cards, set default, 3DS authentication, saved payment methods." },
+      { code: "P.08", title: "Build billing portal / customer self-service", instruction: "View invoices, update card, manage subscription, download receipts." },
+      { code: "P.09", title: "Implement proration logic", instruction: "Calculate credits and charges when users switch plans mid-cycle, test edge cases." },
+      { code: "P.10", title: "Build payment failure and retry handling", instruction: "Smart retry schedule (1d/3d/7d), email alerts, grace period before suspension." },
+      { code: "P.11", title: "Implement dunning management flow", instruction: "Escalating email sequence for failed payments before account cancellation." },
+      { code: "P.12", title: "Build coupon and discount code system", instruction: "Percentage/fixed discounts, expiry, max uses, single-use codes, stackability rules." },
+      { code: "P.13", title: "Implement refund processing", instruction: "Full and partial refunds via API and admin UI with reason capture and audit log." },
+      { code: "P.14", title: "Build revenue reporting and MRR dashboard", instruction: "MRR, ARR, churn rate, LTV, and net revenue retention tracked daily." },
+      { code: "P.15", title: "Implement tax calculation and collection", instruction: "Stripe Tax or TaxJar for automatic jurisdictional tax rates on invoices." },
+      { code: "P.16", title: "Set up payment webhook receiver", instruction: "Stripe event processing (invoice.paid, payment_intent.failed) with idempotency." },
+      { code: "P.17", title: "Implement billing audit trail", instruction: "Immutable log of every billing event, plan change, charge, credit, and refund." },
+      { code: "P.18", title: "Build payment dispute/chargeback handling", instruction: "Internal workflow for responding to disputes with evidence collection." },
+      { code: "P.19", title: "Implement multi-currency support", instruction: "Display and charge in user's currency, handle FX conversion and rounding." },
+      { code: "P.20", title: "Payment security audit and PCI compliance review", instruction: "No card data touching our servers, SCA enforcement, compliance docs." },
+    ]
+  },
+  {
+    letter: "Q",
+    name: "Quality Assurance",
+    description: "Ship with confidence. Manual, automated, exploratory, and load testing — every scenario covered before it reaches a real user.",
+    icon: "CheckCircle",
+    color: "purple",
+    phases: [
+      { code: "Q.01", title: "Define QA strategy and coverage targets", instruction: "80% unit, 70% integration, 100% of critical user journeys covered by e2e." },
+      { code: "Q.02", title: "Set up QA environment", instruction: "Production-parity infrastructure with anonymized production data snapshot loaded." },
+      { code: "Q.03", title: "Create manual test cases for all core user flows", instruction: "Written in Given/When/Then format, stored in TestRail/Notion." },
+      { code: "Q.04", title: "Build automated regression test suite", instruction: "All previously fixed bugs have a test that would have caught them." },
+      { code: "Q.05", title: "Conduct exploratory testing sessions", instruction: "Unscripted 2-hour sessions per feature, bugs logged with reproduction steps." },
+      { code: "Q.06", title: "Perform cross-browser compatibility testing", instruction: "Chrome, Firefox, Safari, Edge all pass on latest and n-1 versions." },
+      { code: "Q.07", title: "Perform cross-device and responsive testing", instruction: "iPhone, Android, tablet, desktop at multiple resolutions verified." },
+      { code: "Q.08", title: "Conduct performance and load testing", instruction: "500 concurrent users sustained for 10 minutes with p99 latency under target." },
+      { code: "Q.09", title: "Perform security penetration testing", instruction: "OWASP Top 10 manually tested, automated scan with OWASP ZAP or Burp Suite." },
+      { code: "Q.10", title: "Conduct accessibility audit", instruction: "WCAG 2.1 AA compliance verified with automated (axe) and manual screen reader testing." },
+      { code: "Q.11", title: "Test all third-party integration touchpoints", instruction: "Simulate provider outages, verify graceful degradation and user-facing messages." },
+      { code: "Q.12", title: "Perform payment flow end-to-end testing", instruction: "Every test card scenario (success, decline, 3DS, insufficient funds) verified." },
+      { code: "Q.13", title: "Conduct user acceptance testing (UAT)", instruction: "5+ real users complete core tasks with no assistance, feedback documented." },
+      { code: "Q.14", title: "Test notification delivery across all channels", instruction: "Email inbox, SMS received, push delivered for all trigger events." },
+      { code: "Q.15", title: "Conduct API contract testing", instruction: "Consumer-driven contracts verified with Pact or OpenAPI schema validation in CI." },
+      { code: "Q.16", title: "Test all error states and edge cases", instruction: "Empty states, network failures, timeout scenarios, concurrent write conflicts." },
+      { code: "Q.17", title: "Test data export and import functionality", instruction: "Verify CSV/XLSX integrity, encoding issues, large file handling." },
+      { code: "Q.18", title: "Conduct localization and i18n testing", instruction: "All supported locales render correctly, dates/currencies/numbers formatted right." },
+      { code: "Q.19", title: "Verify all logging and monitoring captures", instruction: "Induce errors and confirm they appear in Sentry and the log aggregator." },
+      { code: "Q.20", title: "QA sign-off, bug triage, and release readiness report", instruction: "P0/P1 count is zero, P2 list acknowledged, go/no-go documented." },
+    ]
+  },
+  {
+    letter: "R",
+    name: "Routing & Navigation",
+    description: "How users move through the product. URL structure, guards, deep links, and SEO-friendly paths — the map of the application.",
+    icon: "Compass",
+    color: "amber",
+    phases: [
+      { code: "R.01", title: "Define application URL structure", instruction: "Noun-based, human-readable paths documented in a routing manifest before coding." },
+      { code: "R.02", title: "Set up client-side router", instruction: "React Router v6 or Next.js App Router with layout hierarchy and route grouping." },
+      { code: "R.03", title: "Implement protected/authenticated route guards", instruction: "Redirect unauthenticated users to login, preserve intended destination." },
+      { code: "R.04", title: "Implement role-based route access control", instruction: "Block routes by user role, show 403 page with contact admin link." },
+      { code: "R.05", title: "Build public and private route separation", instruction: "Clear split between marketing pages (public) and app pages (authenticated)." },
+      { code: "R.06", title: "Set up dynamic route parameters", instruction: "/users/:userId/settings with type validation on param before data fetch." },
+      { code: "R.07", title: "Implement query string handling", instruction: "Serialize/deserialize filter/sort/page state to URL, restore on back navigation." },
+      { code: "R.08", title: "Build breadcrumb navigation logic", instruction: "Auto-computed from route hierarchy, custom labels for dynamic segments." },
+      { code: "R.09", title: "Implement deep linking support", instruction: "Every meaningful app state is bookmarkable and shareable via URL." },
+      { code: "R.10", title: "Set up redirect rules", instruction: "Post-login redirect to intended URL, legacy URL redirects, www-to-apex redirect." },
+      { code: "R.11", title: "Build 404 and error page routing", instruction: "Catch-all route for 404, error boundary route for 500, both with navigation out." },
+      { code: "R.12", title: "Implement nested routing for dashboards", instruction: "Sub-tabs rendered in content area without full-page reload." },
+      { code: "R.13", title: "Set up server-side routing", instruction: "Backend route groups per domain (auth/, admin/, api/v1/) with middleware attachment." },
+      { code: "R.14", title: "Implement API versioning routing", instruction: "/api/v1 and /api/v2 with deprecation warnings on old version responses." },
+      { code: "R.15", title: "Build route-level code splitting", instruction: "Every page route is a lazy import, split at the router level." },
+      { code: "R.16", title: "Implement scroll restoration on navigation", instruction: "Restore scroll position on back navigation, scroll to top on new route." },
+      { code: "R.17", title: "Set up canonical URL and SEO-friendly routing", instruction: "Canonical tags, hreflang, clean URL slugs for public-facing pages." },
+      { code: "R.18", title: "Implement SPA history management", instruction: "PushState routing, hash fallback for environments that need it, history.block for forms." },
+      { code: "R.19", title: "Build sitemap generation", instruction: "Auto-generated XML sitemap from routes, submitted to Google Search Console." },
+      { code: "R.20", title: "Routing integration tests", instruction: "Verify every route resolves, redirects fire correctly, and guards reject unauthorized access." },
+    ]
+  },
+  {
+    letter: "S",
+    name: "Security & Authentication",
+    description: "The non-negotiable layer. Identity, access, encryption, and hardening — built in from the start, never bolted on after.",
+    icon: "Shield",
+    color: "emerald",
+    phases: [
+      { code: "S.01", title: "Define authentication strategy", instruction: "JWT with refresh rotation, session-based, or OAuth-only; document the chosen flow." },
+      { code: "S.02", title: "Implement user registration with email verification", instruction: "Unique email check, verification token, 24h expiry, resend flow." },
+      { code: "S.03", title: "Build login with secure password hashing", instruction: "Bcrypt cost factor 12 or argon2id, timing-safe comparison, no plaintext ever." },
+      { code: "S.04", title: "Implement refresh token rotation", instruction: "Short-lived access tokens (15m), long-lived refresh tokens (7d), single-use rotation." },
+      { code: "S.05", title: "Build forgot password and reset password flow", instruction: "Cryptographically random reset token, 1h expiry, invalidated after use." },
+      { code: "S.06", title: "Implement MFA/TOTP", instruction: "QR code enrollment, TOTP verification at login, backup recovery codes, MFA bypass for support." },
+      { code: "S.07", title: "Build social OAuth login", instruction: "Google/GitHub strategy with account linking for existing email users." },
+      { code: "S.08", title: "Implement session management and invalidation", instruction: "Server-side session store, logout revokes all sessions or single device." },
+      { code: "S.09", title: "Set up CORS and CSRF protection", instruction: "Strict origin allowlist, SameSite cookie attributes, CSRF token for non-idempotent forms." },
+      { code: "S.10", title: "Implement role-based access control (RBAC)", instruction: "Roles (admin/member/viewer) mapped to permissions, checked at service layer." },
+      { code: "S.11", title: "Build IP rate limiting and brute force protection", instruction: "Lockout after 5 failed logins, CAPTCHA after 3 attempts." },
+      { code: "S.12", title: "Implement input sanitization", instruction: "DOMPurify on frontend, parameterized queries on backend, no raw SQL string interpolation." },
+      { code: "S.13", title: "Set up HTTPS enforcement and HSTS", instruction: "Redirect all HTTP to HTTPS, set max-age=31536000 includeSubDomains preload." },
+      { code: "S.14", title: "Implement data encryption at rest and in transit", instruction: "TLS 1.3 in transit, AES-256 for PII fields at rest via KMS." },
+      { code: "S.15", title: "Build account lockout and suspicious login detection", instruction: "New device detection, impossible travel alerts, account recovery flow." },
+      { code: "S.16", title: "Set up security headers", instruction: "CSP, X-Frame-Options DENY, X-Content-Type-Options nosniff, Referrer-Policy strict-origin." },
+      { code: "S.17", title: "Implement API key authentication", instruction: "Scoped keys for external integrations, key prefix for identification, hash stored." },
+      { code: "S.18", title: "Build security audit log", instruction: "Every sensitive action (login, logout, role change, data delete) immutably logged with actor." },
+      { code: "S.19", title: "Conduct OWASP Top 10 vulnerability assessment", instruction: "Injection, XSS, IDOR, SSRF, and misconfiguration all tested and addressed." },
+      { code: "S.20", title: "Security penetration test, remediation, and sign-off", instruction: "Third-party pen test, all critical/high findings fixed, report filed." },
+    ]
+  },
+  {
+    letter: "T",
+    name: "Testing Strategy",
+    description: "Tests are documentation that executes. Unit, integration, e2e, load, visual — every layer of the pyramid built and enforced.",
+    icon: "CheckSquare",
+    color: "teal",
+    phases: [
+      { code: "T.01", title: "Define testing pyramid", instruction: "70% unit, 20% integration, 10% e2e — and agree on coverage minimums before sprint 1." },
+      { code: "T.02", title: "Set up testing framework", instruction: "Jest/Vitest for JS, Pytest for Python, with parallel test runner configured." },
+      { code: "T.03", title: "Configure test runner and coverage reporting", instruction: "Istanbul/V8 coverage, thresholds enforced in CI, HTML report per run." },
+      { code: "T.04", title: "Write unit tests for all utility functions", instruction: "Pure functions, helpers, and formatters at 100% branch coverage." },
+      { code: "T.05", title: "Write unit tests for all service layer methods", instruction: "Mock repositories, test business logic, all branches and error paths." },
+      { code: "T.06", title: "Write unit tests for all components", instruction: "React Testing Library, user-event, test user interactions not implementation details." },
+      { code: "T.07", title: "Write integration tests for all API endpoints", instruction: "Supertest/httpx against real DB in test container, test auth and error cases." },
+      { code: "T.08", title: "Write integration tests for database operations", instruction: "Test migrations, transactions, cascades, and constraint enforcement." },
+      { code: "T.09", title: "Write e2e tests for authentication flows", instruction: "Register, verify email, login, MFA, password reset in full browser." },
+      { code: "T.10", title: "Write e2e tests for core user journeys", instruction: "Top 5 most important flows covered by Playwright/Cypress tests." },
+      { code: "T.11", title: "Write e2e tests for payment flows", instruction: "Stripe test mode checkout, plan upgrade, cancellation, and invoice download." },
+      { code: "T.12", title: "Write tests for background jobs", instruction: "Enqueue job in test, process it, assert side effects (email sent, DB updated)." },
+      { code: "T.13", title: "Write tests for notification delivery", instruction: "Assert email/SMS/push triggered with correct content for each event type." },
+      { code: "T.14", title: "Implement snapshot testing", instruction: "Critical UI components snapshot-tested, reviewed on diff in PRs." },
+      { code: "T.15", title: "Set up visual regression testing", instruction: "Percy or Chromatic captures screenshots on every PR, flags pixel-level changes." },
+      { code: "T.16", title: "Write load and stress tests", instruction: "k6 or Locust scripts simulating peak traffic, ramping up to 2x expected concurrent users." },
+      { code: "T.17", title: "Write security tests", instruction: "Test auth bypass attempts, SQL injection payloads, XSS strings in all input fields." },
+      { code: "T.18", title: "Configure test coverage thresholds", instruction: "CI fails if unit coverage drops below 75%, integration below 60%." },
+      { code: "T.19", title: "Set up test parallelization", instruction: "Shard tests across 4 workers in CI, run e2e in parallel across 3 browser instances." },
+      { code: "T.20", title: "Test reporting and flakiness tracking", instruction: "JUnit XML to CI report, flaky test tracker, auto-quarantine after 3 fails." },
+    ]
+  },
+  {
+    letter: "U",
+    name: "UI/UX Design System",
+    description: "The visual language of the product. Tokens, typography, spacing, and patterns that make the interface consistent and beautiful.",
+    icon: "Palette",
+    color: "pink",
+    phases: [
+      { code: "U.01", title: "Define brand identity", instruction: "Primary/secondary color, typography personality, motion language, and visual tone documented." },
+      { code: "U.02", title: "Create design tokens", instruction: "CSS custom properties for color, spacing, radius, shadow, and typography exported from Figma." },
+      { code: "U.03", title: "Build base typography scale", instruction: "Display/heading/body/label/caption sizes, weights, and line-heights in a clear type ramp." },
+      { code: "U.04", title: "Define spacing and layout grid system", instruction: "4px or 8px base unit, named spacing tokens (xs/sm/md/lg/xl/2xl)." },
+      { code: "U.05", title: "Create color palette with accessibility checks", instruction: "All text/background pairings pass WCAG AA (4.5:1), AAA for body text." },
+      { code: "U.06", title: "Design icon set and illustration style", instruction: "Choose an icon library, create custom icons for brand moments." },
+      { code: "U.07", title: "Create wireframes for all key screens", instruction: "Low-fidelity wireframes reviewed with stakeholders before hi-fi design begins." },
+      { code: "U.08", title: "Build high-fidelity mockups for all screens", instruction: "Figma designs for every page, including all states (loading, empty, error)." },
+      { code: "U.09", title: "Conduct design review and stakeholder approval", instruction: "Design walkthrough session, feedback captured, revisions made, sign-off given." },
+      { code: "U.10", title: "Build interactive prototype for usability testing", instruction: "Clickable Figma prototype covering all 5 core user journeys." },
+      { code: "U.11", title: "Conduct usability testing sessions", instruction: "5 participants complete tasks unassisted, time-on-task and error rates recorded." },
+      { code: "U.12", title: "Implement design system in code", instruction: "Tailwind config, CSS tokens, and base component styles aligned with Figma designs." },
+      { code: "U.13", title: "Create design-to-dev handoff documentation", instruction: "Spacing specs, redlines, asset export guide, and interaction notes per component." },
+      { code: "U.14", title: "Build dark mode design tokens", instruction: "Separate token set for dark surfaces, text, and borders with semantic naming." },
+      { code: "U.15", title: "Define animation and transition style guide", instruction: "Easing curves, duration scale (100ms/200ms/300ms), motion purpose rules." },
+      { code: "U.16", title: "Design responsive breakpoint system", instruction: "320/768/1024/1280/1536px breakpoints with layout shift documentation per page." },
+      { code: "U.17", title: "Create email design template system", instruction: "Master Figma email template, component blocks, dark mode email variant." },
+      { code: "U.18", title: "Design onboarding and empty state screens", instruction: "Illustrated empty states per section, first-run wizard screens, celebrations." },
+      { code: "U.19", title: "Create accessibility design guidelines", instruction: "Focus indicators, minimum touch targets (44px), motion-reduced variant designs." },
+      { code: "U.20", title: "Design system documentation and Storybook publishing", instruction: "Every component documented with usage guidelines, do/don't examples." },
+    ]
+  },
+  {
+    letter: "V",
+    name: "Validation & Error Handling",
+    description: "Bad data in, good error out. Every input validated, every failure handled gracefully — users always know what went wrong.",
+    icon: "AlertOctagon",
+    color: "amber",
+    phases: [
+      { code: "V.01", title: "Define validation strategy", instruction: "Server-side authoritative, client-side for UX enhancement, never trust the client alone." },
+      { code: "V.02", title: "Set up validation library", instruction: "Zod (TypeScript), Yup (JS), Joi (Node), or class-validator (NestJS) with shared schemas." },
+      { code: "V.03", title: "Write validation schemas for all request DTOs", instruction: "Type, format, length, range, and business rule constraints per field." },
+      { code: "V.04", title: "Implement frontend form validation with real-time feedback", instruction: "Validate on blur, submit, and re-validate after backend error." },
+      { code: "V.05", title: "Build global error handler", instruction: "Catch unhandled exceptions, log with full context, return 500 without leaking internals." },
+      { code: "V.06", title: "Define error code taxonomy", instruction: "Machine-readable error codes (USER_NOT_FOUND, PLAN_LIMIT_EXCEEDED) for all known error states." },
+      { code: "V.07", title: "Build standardized API error response format", instruction: "{code, message, details[], traceId} consistently across every endpoint." },
+      { code: "V.08", title: "Implement HTTP status standard", instruction: "400 bad request, 401 unauthenticated, 403 forbidden, 422 validation, 429 rate limited." },
+      { code: "V.09", title: "Build user-facing error message system", instruction: "Human-readable messages per error code, localized, never expose stack traces." },
+      { code: "V.10", title: "Implement field-level validation error display", instruction: "Error message pinned below the field, field highlighted with aria-invalid." },
+      { code: "V.11", title: "Build retry logic for transient failures", instruction: "Automatic retry on 503/504 with exponential backoff and jitter." },
+      { code: "V.12", title: "Implement circuit breaker pattern", instruction: "Trip after 5 failures in 60s, half-open probe after cooldown, fallback response." },
+      { code: "V.13", title: "Handle file upload validation", instruction: "Max size check, MIME type sniffing (not just extension), virus scan integration." },
+      { code: "V.14", title: "Implement business rule validation layer", instruction: "Plan limits, ownership checks, state machine transitions enforced at service layer." },
+      { code: "V.15", title: "Build duplicate detection and conflict resolution", instruction: "Unique constraint errors caught and translated to user-friendly messages." },
+      { code: "V.16", title: "Handle timezone and date validation", instruction: "Store UTC, validate date ranges, handle DST edge cases in scheduling." },
+      { code: "V.17", title: "Implement async validation", instruction: "Username availability, email uniqueness checked via debounced API call before submission." },
+      { code: "V.18", title: "Build validation for imported/bulk data", instruction: "Row-level error report returned after bulk import with row number and reason." },
+      { code: "V.19", title: "Create validation error reporting for admin", instruction: "Dashboard showing top validation failures to identify UX improvements." },
+      { code: "V.20", title: "Validation testing for edge cases", instruction: "Null, empty string, max length +1, special chars, emoji, Unicode RTL in all fields." },
+    ]
+  },
+  {
+    letter: "W",
+    name: "WebSockets & Real-time Features",
+    description: "Instant experiences. Live updates, presence, chat, collaboration — delivered over persistent connections that survive network hiccups.",
+    icon: "Radio",
+    color: "blue",
+    phases: [
+      { code: "W.01", title: "Define real-time feature requirements", instruction: "List every feature that needs sub-second updates and its acceptable latency budget." },
+      { code: "W.02", title: "Choose WebSocket library/protocol", instruction: "Socket.io for ease, native ws for performance, or SSE for one-directional updates." },
+      { code: "W.03", title: "Set up WebSocket server and connection management", instruction: "Namespaces/rooms, connection registry, disconnect cleanup." },
+      { code: "W.04", title: "Implement authentication for WebSocket connections", instruction: "JWT handshake on connect, reject unauthenticated connections." },
+      { code: "W.05", title: "Build real-time notification delivery", instruction: "Push in-app notification payloads to active user sessions on event trigger." },
+      { code: "W.06", title: "Implement live data dashboard updates", instruction: "Push updated metrics/stats to dashboard subscribers without polling." },
+      { code: "W.07", title: "Build collaborative editing / presence features", instruction: "Show who is viewing/editing a resource, conflict-free updates (CRDT/OT)." },
+      { code: "W.08", title: "Implement chat or messaging feature", instruction: "Room creation, message history loading, real-time delivery, read receipts." },
+      { code: "W.09", title: "Build real-time activity feed", instruction: "Broadcast user actions (item created, comment added) to subscribed viewers instantly." },
+      { code: "W.10", title: "Implement live status updates", instruction: "Order status, task progress, file upload progress pushed to the initiating client." },
+      { code: "W.11", title: "Build WebSocket room/channel management", instruction: "Join/leave rooms dynamically, room permissions, message scoping." },
+      { code: "W.12", title: "Implement reconnection and fallback", instruction: "Exponential backoff reconnect, SSE or polling fallback on WebSocket failure." },
+      { code: "W.13", title: "Handle offline message queuing", instruction: "Buffer missed events while disconnected, replay on reconnect in correct order." },
+      { code: "W.14", title: "Build typing indicators and read receipts", instruction: "Debounced typing events, seen timestamps synced across devices." },
+      { code: "W.15", title: "Implement real-time validation feedback", instruction: "Server-side validation results pushed back to the form field as the user types." },
+      { code: "W.16", title: "Set up WebSocket load balancing", instruction: "Redis adapter (Socket.io) or Pub-Sub fan-out for multi-instance deployments." },
+      { code: "W.17", title: "Implement WebSocket rate limiting", instruction: "Max messages per second per connection, ban on abuse detection." },
+      { code: "W.18", title: "Build WebSocket monitoring", instruction: "Active connection count, messages/sec, room sizes, disconnect rate tracked in dashboard." },
+      { code: "W.19", title: "Implement WebSocket heartbeat and keepalive", instruction: "Ping/pong every 30 seconds, close stale connections after 90-second silence." },
+      { code: "W.20", title: "WebSocket load testing", instruction: "10,000 concurrent connections sustained, message broadcast latency measured under load." },
+    ]
+  },
+  {
+    letter: "X",
+    name: "Cross-platform & Compatibility",
+    description: "Works for everyone, everywhere. Every browser, device, screen size, assistive technology — no user left behind.",
+    icon: "Smartphone",
+    color: "amber",
+    phases: [
+      { code: "X.01", title: "Define supported browsers and OS matrix", instruction: "Document minimum supported versions, update policy, and exception process." },
+      { code: "X.02", title: "Set up BrowserStack or Sauce Labs", instruction: "Automated cross-browser test runs on every release candidate." },
+      { code: "X.03", title: "Test and fix on Chrome (latest and n-1)", instruction: "Primary browser, ensure all features work with no console errors." },
+      { code: "X.04", title: "Test and fix on Firefox (latest and n-1)", instruction: "CSS grid, flexbox, and font rendering differences addressed." },
+      { code: "X.05", title: "Test and fix on Safari (latest and n-1)", instruction: "WebKit quirks, date input differences, scroll behavior, PWA support." },
+      { code: "X.06", title: "Test and fix on Edge (latest and n-1)", instruction: "Chromium-based, focus on Windows-specific rendering and touch support." },
+      { code: "X.07", title: "Test on iOS Safari", instruction: "iPhone 12+, safe area insets, viewport resize on keyboard show, touch target sizing." },
+      { code: "X.08", title: "Test on Android Chrome", instruction: "Samsung Galaxy S21+, keyboard behavior, back button handling in SPA, bottom nav clearance." },
+      { code: "X.09", title: "Test responsive layouts", instruction: "320px, 375px, 768px, 1024px, 1280px, 1440px, 1920px verified for every page." },
+      { code: "X.10", title: "Implement progressive enhancement", instruction: "Core functionality works without JS, enhanced experience with JS enabled." },
+      { code: "X.11", title: "Set up polyfills for older browser support", instruction: "core-js, whatwg-fetch, IntersectionObserver polyfill via browserslist." },
+      { code: "X.12", title: "Test with screen readers", instruction: "NVDA+Firefox (Windows), VoiceOver+Safari (Mac/iOS), TalkBack+Chrome (Android)." },
+      { code: "X.13", title: "Implement touch gesture support", instruction: "Swipe-to-dismiss, pull-to-refresh, pinch-to-zoom where contextually appropriate." },
+      { code: "X.14", title: "Test print styles and print layouts", instruction: "@print CSS for key content pages, hide non-essential chrome elements." },
+      { code: "X.15", title: "Ensure keyboard-only navigation works", instruction: "Tab order logical, all interactive elements reachable, focus visible at all times." },
+      { code: "X.16", title: "Test with slow/unstable network", instruction: "Chrome DevTools 3G throttle, verify loaders appear, no missing error states." },
+      { code: "X.17", title: "Verify correct behavior without JavaScript", instruction: "Progressive enhancement fallbacks, form submit works noscript." },
+      { code: "X.18", title: "Implement mobile app deep linking", instruction: "Universal Links (iOS) and App Links (Android) for email/notification CTAs." },
+      { code: "X.19", title: "Test on different screen sizes", instruction: "320px (small phone), 768px (tablet portrait), 1920px (desktop), 4K (hi-DPI)." },
+      { code: "X.20", title: "Cross-platform sign-off and compatibility documentation", instruction: "Test matrix filled, exceptions documented, support SLA defined." },
+    ]
+  },
+  {
+    letter: "Y",
+    name: "YAML & DevOps Configuration",
+    description: "Infrastructure and pipelines as code. Docker, Kubernetes, Terraform, CI/CD — everything repeatable and automated.",
+    icon: "FileCode",
+    color: "emerald",
+    phases: [
+      { code: "Y.01", title: "Write Docker Compose file for local development", instruction: "All services (app, db, cache, queue) running with one command." },
+      { code: "Y.02", title: "Write production Dockerfile per service", instruction: "Multi-stage build, non-root user, minimal base image, .dockerignore configured." },
+      { code: "Y.03", title: "Create Kubernetes manifests", instruction: "Deployment, Service, Ingress, ConfigMap, Secret, HPA for each service." },
+      { code: "Y.04", title: "Write CI pipeline YAML", instruction: "Lint, type-check, test, build, and image push triggered on every push to PR branches." },
+      { code: "Y.05", title: "Write CD pipeline YAML for staging", instruction: "Auto-deploy on merge to develop branch, run smoke tests post-deploy." },
+      { code: "Y.06", title: "Write CD pipeline YAML for production", instruction: "Manual approval gate, deploy with zero downtime, post-deploy health check." },
+      { code: "Y.07", title: "Create Helm chart for application", instruction: "values.yaml per environment, templated manifests, chart versioning aligned to app." },
+      { code: "Y.08", title: "Write Terraform/Pulumi scripts", instruction: "All cloud resources provisioned as code, state in remote backend (S3/Terraform Cloud)." },
+      { code: "Y.09", title: "Configure environment-specific values files", instruction: "Dev/staging/prod overrides for image tags, replica counts, and resource limits." },
+      { code: "Y.10", title: "Set up secrets injection in CI/CD pipeline", instruction: "Pull from Secrets Manager at runtime, never bake secrets into images." },
+      { code: "Y.11", title: "Create pipeline for automated database migrations", instruction: "Migrations run before new app version starts, with rollback on failure." },
+      { code: "Y.12", title: "Write build and test pipeline for PR validation", instruction: "Runs on every commit to a PR, blocks merge on failure." },
+      { code: "Y.13", title: "Configure pipeline for Docker image building and pushing", instruction: "Image tagged with commit SHA and semantic version." },
+      { code: "Y.14", title: "Create infrastructure provisioning pipeline", instruction: "Plan on PR, apply on merge to main with manual approval for prod changes." },
+      { code: "Y.15", title: "Set up automated dependency vulnerability scanning", instruction: "Trivy or Snyk scans images and packages in CI, fails on critical CVEs." },
+      { code: "Y.16", title: "Configure SAST/DAST scanning in pipeline", instruction: "CodeQL or Semgrep static analysis on every PR, OWASP ZAP dynamic scan." },
+      { code: "Y.17", title: "Write smoke test pipeline post-deployment", instruction: "Automated health check and top-3 journey test run after every deploy." },
+      { code: "Y.18", title: "Create performance benchmarking pipeline", instruction: "k6 load test runs nightly on staging, results posted to Slack." },
+      { code: "Y.19", title: "Configure pipeline failure notifications", instruction: "Slack alert on job failure with link to failing step and commit author tagged." },
+      { code: "Y.20", title: "DevOps pipeline documentation and runbook", instruction: "README per pipeline explaining trigger, inputs, steps, and failure recovery." },
+    ]
+  },
+  {
+    letter: "Z",
+    name: "Zero-Downtime Deployment & Release",
+    description: "The final mile. Blue-green, canary, feature flags, rollback plans, and post-deploy verification — ship with confidence.",
+    icon: "Rocket",
+    color: "blue",
+    phases: [
+      { code: "Z.01", title: "Define deployment strategy", instruction: "Blue-green for zero downtime, canary for risk reduction, rolling for resource efficiency." },
+      { code: "Z.02", title: "Set up blue-green deployment infrastructure", instruction: "Two identical environments, load balancer traffic switch in under 30 seconds." },
+      { code: "Z.03", title: "Implement database migration compatibility", instruction: "All migrations backward-compatible for 1 version so both app versions can run." },
+      { code: "Z.04", title: "Configure health check endpoints for LB probes", instruction: "/health/ready returns 200 only when app and all dependencies are up." },
+      { code: "Z.05", title: "Set up canary release with traffic splitting", instruction: "5% canary then 25% then 100% with automatic error-rate-based halt." },
+      { code: "Z.06", title: "Implement feature flags for safe feature rollout", instruction: "New features hidden behind flags, enabled per-user or per-percentage." },
+      { code: "Z.07", title: "Create rollback procedure and scripts", instruction: "One-command rollback to previous image version and migration rollback script ready." },
+      { code: "Z.08", title: "Set up deployment approval gates for production", instruction: "Required approval from engineering lead and QA lead before prod deploy." },
+      { code: "Z.09", title: "Implement deployment freeze calendar", instruction: "No deploys on Fridays, major holidays, or peak business periods unless emergency." },
+      { code: "Z.10", title: "Create pre-deployment checklist", instruction: "Database migration dry run, staging smoke test pass, monitoring dashboard reviewed." },
+      { code: "Z.11", title: "Build post-deployment smoke test suite", instruction: "Automated test verifying login, core feature, and payment work within 2 minutes." },
+      { code: "Z.12", title: "Set up deployment notifications", instruction: "Slack alert with version, deployer, link to diff, and post-deploy status from smoke tests." },
+      { code: "Z.13", title: "Implement automated rollback on health check failure", instruction: "If error rate spikes over 5% within 10 min of deploy, auto-rollback." },
+      { code: "Z.14", title: "Create runbook for common production incidents", instruction: "Documented steps for DB failover, traffic spike, deploy failure, security event." },
+      { code: "Z.15", title: "Set up on-call rotation and escalation policy", instruction: "PagerDuty schedule, primary/secondary, escalation after 5-minute no-ack." },
+      { code: "Z.16", title: "Build change management and release notes process", instruction: "CHANGELOG.md auto-generated, release notes sent to stakeholders." },
+      { code: "Z.17", title: "Implement database connection draining on deploy", instruction: "Graceful connection handoff, in-flight queries complete before pod termination." },
+      { code: "Z.18", title: "Create disaster recovery drill and test plan", instruction: "Quarterly DR drill, recovery time measured and compared against RTO target." },
+      { code: "Z.19", title: "Build deployment metrics dashboard", instruction: "Deployment frequency, lead time, MTTR, and change failure rate tracked weekly." },
+      { code: "Z.20", title: "Final production readiness review and go-live checklist", instruction: "Security, performance, monitoring, backup, and legal all signed off." },
+    ]
+  }
+];
+
+// Verify count
+let totalPhases = 0;
+for (const d of DOMAINS_DATA) {
+  totalPhases += d.phases.length;
+}
+console.log(`Parsed ${DOMAINS_DATA.length} domains and ${totalPhases} total phases.`);
+
+// 1. Generate JSON
+const jsonOutput = {
+  title: "Master Build Prompt — 26 Letters × 20 Phases (520 Total Phases)",
+  totalDomains: DOMAINS_DATA.length,
+  totalPhases: totalPhases,
+  generatedAt: new Date().toISOString(),
+  domains: DOMAINS_DATA
+};
+
+fs.mkdirSync(path.join(process.cwd(), "public", "data"), { recursive: true });
+fs.writeFileSync(
+  path.join(process.cwd(), "public", "data", "master-build-prompt-520.json"),
+  JSON.stringify(jsonOutput, null, 2),
+  "utf-8"
+);
+console.log("Wrote public/data/master-build-prompt-520.json");
+
+// 2. Generate TypeScript file
+const tsContent = `/**
+ * MASTER BUILD PROMPT: 26 Letters × 20 Phases — Complete Software Development Lifecycle (520 Total Phases)
+ * Canonical dataset and query utilities for the VYRON SDLC blueprint & Copilot reasoning engine.
+ * Strictly ZERO SQL.
+ */
+
+export interface MasterBuildPhase {
+  code: string; // e.g. "A.01"
+  domainLetter: string; // "A"
+  domainName: string; // "Architecture & System Design"
+  title: string;
+  instruction: string;
+  category: string;
+}
+
+export interface MasterBuildDomain {
+  letter: string;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  phaseCount: number;
+  phases: MasterBuildPhase[];
+}
+
+export type PhaseStatus = "PENDING" | "IN_PROGRESS" | "VERIFIED" | "BLOCKED" | "NOT_APPLICABLE";
+
+export interface ProjectPhaseRecord {
+  code: string;
+  status: PhaseStatus;
+  updatedAt: string;
+  notes?: string;
+  verifiedBy?: string;
+}
+
+export const MASTER_BUILD_DOMAINS: MasterBuildDomain[] = ${JSON.stringify(
+  DOMAINS_DATA.map(d => ({
+    letter: d.letter,
+    name: d.name,
+    description: d.description,
+    icon: d.icon,
+    color: d.color,
+    phaseCount: d.phases.length,
+    phases: d.phases.map(p => ({
+      code: p.code,
+      domainLetter: d.letter,
+      domainName: d.name,
+      title: p.title,
+      instruction: p.instruction,
+      category: d.name,
+    }))
+  })),
+  null,
+  2
+)};
+
+export const ALL_MASTER_BUILD_PHASES: MasterBuildPhase[] = MASTER_BUILD_DOMAINS.flatMap(
+  (d) => d.phases
+);
+
+/**
+ * Get domain details by letter (e.g. 'A' through 'Z')
+ */
+export function getMasterDomain(letter: string): MasterBuildDomain | undefined {
+  const norm = letter.trim().toUpperCase();
+  return MASTER_BUILD_DOMAINS.find((d) => d.letter === norm);
+}
+
+/**
+ * Get specific phase by code (e.g. 'A.01', 'S.06', 'Z.20')
+ */
+export function getMasterPhase(code: string): MasterBuildPhase | undefined {
+  const norm = code.trim().toUpperCase();
+  return ALL_MASTER_BUILD_PHASES.find((p) => p.code === norm);
+}
+
+/**
+ * Search across all 520 phases by keyword
+ */
+export function searchMasterPhases(query: string): MasterBuildPhase[] {
+  if (!query || query.trim().length === 0) return ALL_MASTER_BUILD_PHASES;
+  const q = query.toLowerCase().trim();
+  return ALL_MASTER_BUILD_PHASES.filter(
+    (p) =>
+      p.code.toLowerCase().includes(q) ||
+      p.title.toLowerCase().includes(q) ||
+      p.instruction.toLowerCase().includes(q) ||
+      p.domainName.toLowerCase().includes(q)
+  );
+}
+
+/**
+ * Calculate progress statistics given a project's phase records map
+ */
+export function calculateMasterBuildProgress(records: Record<string, ProjectPhaseRecord>) {
+  const total = ALL_MASTER_BUILD_PHASES.length;
+  let verified = 0;
+  let inProgress = 0;
+  let blocked = 0;
+  let pending = 0;
+
+  for (const phase of ALL_MASTER_BUILD_PHASES) {
+    const rec = records[phase.code];
+    if (!rec || rec.status === "PENDING") {
+      pending++;
+    } else if (rec.status === "VERIFIED") {
+      verified++;
+    } else if (rec.status === "IN_PROGRESS") {
+      inProgress++;
+    } else if (rec.status === "BLOCKED") {
+      blocked++;
+    }
+  }
+
+  const completionPct = total > 0 ? Math.round((verified / total) * 100) : 0;
+
+  return {
+    total,
+    verified,
+    inProgress,
+    blocked,
+    pending,
+    completionPct,
+  };
+}
+`;
+
+fs.writeFileSync(
+  path.join(process.cwd(), "src", "data", "masterBuildPrompt.ts"),
+  tsContent,
+  "utf-8"
+);
+console.log("Wrote src/data/masterBuildPrompt.ts");
+
+// 3. Generate Docs Markdown
+let mdDoc = `# Master Build Prompt — Complete Software Development Lifecycle (520 Phases)
+
+> **26 Letters × 20 Phases = 520 Total Actionable Phases**  
+> Every phase is an unambiguous, actionable engineering instruction covering all layers of the modern software lifecycle.
+
+| Letter | Domain | Phases | Focus |
+|:---:|:---|:---:|:---|
+`;
+
+for (const d of DOMAINS_DATA) {
+  mdDoc += `| **${d.letter}** | [${d.name}](#letter-${d.letter.toLowerCase()}---${d.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}) | 20 | ${d.description} |\n`;
+}
+
+mdDoc += `\n---\n\n`;
+
+for (const d of DOMAINS_DATA) {
+  mdDoc += `## Letter ${d.letter} — ${d.name}\n\n`;
+  mdDoc += `*${d.description}*\n\n`;
+  mdDoc += `| Code | Phase / Milestone | Actionable Engineering Instruction |\n`;
+  mdDoc += `|:---|:---|:---|\n`;
+  for (const p of d.phases) {
+    mdDoc += `| \`${p.code}\` | **${p.title}** | ${p.instruction} |\n`;
+  }
+  mdDoc += `\n`;
+}
+
+fs.mkdirSync(path.join(process.cwd(), "docs"), { recursive: true });
+fs.writeFileSync(
+  path.join(process.cwd(), "docs", "MASTER_BUILD_PROMPT_520_SDLC.md"),
+  mdDoc,
+  "utf-8"
+);
+console.log("Wrote docs/MASTER_BUILD_PROMPT_520_SDLC.md");

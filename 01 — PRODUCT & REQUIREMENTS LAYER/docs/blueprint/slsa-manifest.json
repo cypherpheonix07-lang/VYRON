@@ -1,0 +1,27 @@
+{
+  "_type": "https://in-toto.io/Statement/v0.1",
+  "predicateType": "https://slsa.dev/provenance/v0.2",
+  "subject": [
+    {
+      "name": "vyron-canonical-blueprint",
+      "digest": {
+        "sha256": "32e65f61c686e75f4b839020ee329c6adfb34ef69f901a2a436d3f7d007b27e2"
+      }
+    }
+  ],
+  "builder": {
+    "id": "urn:vyron:builder:autonomous-execution-agent"
+  },
+  "buildType": "https://vyron.dev/blueprint-compiler/v3",
+  "invocation": {
+    "parameters": {
+      "commit": "70d077e1ecbddd0d040af99015682232086ac376",
+      "timestamp": "2026-10-14T08:59:44.689Z"
+    }
+  },
+  "materials": [
+    {
+      "uri": "git+https://github.com/cypherpheonix07-lang/VYRON.git@70d077e1ecbddd0d040af99015682232086ac376"
+    }
+  ]
+}

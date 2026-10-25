@@ -11,12 +11,25 @@ export const layerMeta = {
   category: "QUALITY",
   description: "Enterprise acceptance test harnesses, automated gate verification, and certification passports",
   sources: [
-  "src/services/intelligence/reproducibleAcceptancePassport.ts"
-],
+    "src/services/intelligence/reproducibleAcceptancePassport.ts"
+  ],
   scripts: [
-  "test-acceptance-gates.mjs",
-  "generate-final-acceptance-report.mjs"
-],
+    "test-acceptance-gates.mjs",
+    "generate-final-acceptance-report.mjs",
+    "test-ather-conversation-suite.mjs",
+    "test-auth-deployment-audit.mjs",
+    "test-e2e-auth-and-recent-changes.mjs",
+    "test-fleet-command-hub-scenarios.mjs",
+    "test-vyron-complete-journey.mjs",
+    "test-workspace-exit-flow.mjs",
+    "verify-github-qualification.mjs",
+    "vyron-generate-master-report.mjs",
+    "vyron-phase-1-system-analysis.mjs",
+    "vyron-phase-2-invariants-audit.mjs",
+    "vyron-phase-3-workstream-matrix.mjs",
+    "vyron-phase-4-canonical-lifecycle.mjs",
+    "vyron-phase-5-verification-suite.mjs"
+  ],
   invariants: [
     "Zero-Fiction Architecture Law",
     "Zero Raw SQL Mandate",
