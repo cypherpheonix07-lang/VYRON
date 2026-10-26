@@ -19,7 +19,7 @@ export interface ActiveProjectContextValue {
   availability: ProjectAvailability;
   availableProjects: CanonicalProject[];
   generationId: number;
-  setActiveProject: (id: string, options?: { navigateToProject?: boolean }) => void;
+  setActiveProject: (id: string | null, options?: { navigateToProject?: boolean }) => void;
   refresh: () => Promise<void>;
 }
 

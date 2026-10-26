@@ -15,14 +15,14 @@
  * Run with: npx tsx scripts/testing/test-command-center-experience.mjs
  */
 
-import { projectRegistry } from "../../src/services/project/projectRegistry";
-import { getProject } from "../../src/lib/mock-data";
+import { projectRegistry } from "../../../src/services/project/projectRegistry";
+import { getProject } from "../../../src/lib/mock-data";
 import {
   OPERATION_REGISTRY,
   getOperationDefinition,
   listSupportedOperations,
-} from "../../src/services/runs/operationRegistry";
-import { runService } from "../../src/services/runs/runService";
+} from "../../../src/services/runs/operationRegistry";
+import { runService } from "../../../src/services/runs/runService";
 
 let totalAssertions = 0;
 let passedAssertions = 0;

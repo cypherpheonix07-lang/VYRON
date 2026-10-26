@@ -195,7 +195,7 @@ function Dashboard() {
     try {
       await deleteProject(projectToDelete.id);
       if (activeProjectId === projectToDelete.id) {
-        setActiveProject("none");
+        setActiveProject(null);
       }
       toast.success(`Project "${projectToDelete.name}" deleted successfully.`);
       setProjectToDelete(null);

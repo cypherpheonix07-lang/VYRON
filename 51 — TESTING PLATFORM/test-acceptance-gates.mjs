@@ -55,7 +55,7 @@ async function httpGet(urlPath) {
     : null;
   const port = process.env.TEST_PORT || process.env.PORT || envPort || 8080;
   return new Promise((resolve) => {
-    const req = http.get(`http://localhost:${port}${urlPath}`, (res) => {
+    const req = http.get(`http://127.0.0.1:${port}${urlPath}`, (res) => {
       let data = "";
       res.on("data", (chunk) => (data += chunk));
       res.on("end", () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
