@@ -34,7 +34,6 @@ import {
   ArrowRight,
   Code2,
   Plug,
-  Square,
 } from "lucide-react";
 import { useCopilot } from "@/state/copilot/useCopilot";
 import { aiRouter } from "@/services/ai/aiRouter";
@@ -58,7 +57,6 @@ import {
   CopilotToolDef,
   ToolCategory,
 } from "@/services/copilot/copilotToolRegistry";
-import { workspaceChangeRegistry } from "@/services/workspace/workspaceChangeRegistry";
 import {
   copilotAgentOrchestrator,
   SpecialistAgentType,
@@ -105,57 +103,7 @@ export function CopilotDrawer() {
     clearMessages,
   } = useCopilot();
 
-  const [inputText, setInputText] = useState(() => {
-    try {
-      return localStorage.getItem("ather_drawer_draft") || "";
-    } catch {
-      return "";
-    }
-  });
-
-  useEffect(() => {
-    try {
-      if (inputText) {
-        localStorage.setItem("ather_drawer_draft", inputText);
-      } else {
-        localStorage.removeItem("ather_drawer_draft");
-      }
-    } catch {
-      // ignore storage errors
-    }
-  }, [inputText]);
-
-  // Register uncommitted copilot draft with workspaceChangeRegistry
-  useEffect(() => {
-    const sectionId = "ather-chat-draft";
-    const unregister = workspaceChangeRegistry.register({
-      sectionId,
-      sectionName: "ATHER AI Copilot Chat Draft",
-      isDirty: () => inputText.trim().length > 0,
-      save: async () => {
-        try {
-          if (inputText.trim().length > 0) {
-            localStorage.setItem("ather_drawer_draft", inputText);
-          }
-        } catch {
-          // ignore
-        }
-      },
-      discard: () => {
-        setInputText("");
-        try {
-          localStorage.removeItem("ather_drawer_draft");
-        } catch {
-          // ignore
-        }
-      },
-    });
-
-    return () => {
-      unregister();
-    };
-  }, [inputText]);
-
+  const [inputText, setInputText] = useState("");
   const [liveContext, setLiveContext] = useState<CopilotLiveContext | null>(null);
   const [activePlan, setActivePlan] = useState<DynamicExecutionPlan | null>(
     () => session.activePlan || null,
@@ -454,7 +402,7 @@ export function CopilotDrawer() {
               <div>
                 <div className="flex items-center gap-2">
                   <h3 className="text-sm font-black tracking-tight text-foreground">
-                    {mode === "DEMO" ? "ATHER Demo Chatbot" : "ATHER Chatbot"}
+                    {mode === "DEMO" ? "ATHER Demo Copilot" : "ATHER Intelligence Copilot"}
                   </h3>
                   <Badge
                     variant="outline"
@@ -584,7 +532,7 @@ export function CopilotDrawer() {
                     ) : (
                       <>
                         <Sparkles className="size-3 text-primary" />
-                        <span>{msg.metadata?.model || "ATHER Chatbot"}</span>
+                        <span>{msg.metadata?.model || "Brahma AI"}</span>
                       </>
                     )}
                     <span>•</span>
@@ -839,20 +787,21 @@ export function CopilotDrawer() {
                 <Button
                   type="button"
                   size="sm"
+                  variant="destructive"
                   onClick={() => {
                     setLoading(false);
-                    addAssistantMessage("Generation halted upon user request. Pending operations disarmed.");
+                    toast.info("Generation halted upon user request");
                   }}
-                  className="h-8 px-3 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground font-bold shadow-md shadow-destructive/20 gap-1"
+                  className="h-8 px-3.5 rounded-xl bg-destructive text-destructive-foreground font-bold shadow-md shadow-destructive/20 gap-1"
                 >
-                  <Square className="size-3 fill-current" />
-                  <span className="text-[11px]">Stop</span>
+                  <X className="size-3.5" />
+                  <span>Stop</span>
                 </Button>
               ) : (
                 <Button
                   type="submit"
                   size="sm"
-                  disabled={!inputText.trim()}
+                  disabled={!inputText.trim() || isLoading}
                   className="h-8 px-3.5 rounded-xl bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20"
                 >
                   <Send className="size-3.5" />

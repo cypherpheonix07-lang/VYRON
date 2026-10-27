@@ -5,9 +5,9 @@
  * Strictly ZERO Raw SQL & Zero-Fiction Architecture Law enforced.
  */
 
-import { supabase } from "../../lib/supabaseClient.ts";
-import { authService } from "../authService.ts";
-import { projects as seedProjects, type Project as MockProject } from "../../lib/mock-data.ts";
+import { supabase } from "@/lib/supabaseClient";
+import { authService } from "@/services/authService";
+import { projects as seedProjects, type Project as MockProject } from "@/lib/mock-data";
 
 export type ProjectOrigin = "native" | "github";
 export type ProjectAvailability =
@@ -45,7 +45,6 @@ export interface CanonicalProject {
   owner_id?: string | undefined;
   health_score?: number | undefined; // compatibility
   revision?: string | undefined;
-  version?: string | undefined;
 }
 
 const LOCAL_STORAGE_PROJECTS_KEY = "vyron_canonical_projects_v1";
@@ -120,11 +119,10 @@ class ProjectRegistry {
         this.activeProjectId = storedActive;
         return;
       }
-      // J07, H12: Zero silent auto-selection of sample/seed projects; preserve null active state
-      this.activeProjectId = null;
-      return;
     }
-    this.activeProjectId = null;
+    // Default to first seed project if available
+    const first = Array.from(this.localProjects.values())[0];
+    this.activeProjectId = first?.id || null;
   }
 
   public getGenerationId(): number {
@@ -141,7 +139,7 @@ class ProjectRegistry {
   }
 
   public getProjectById(id: string): CanonicalProject | null {
-    if (!id || id === "all" || id === "none") return null;
+    if (!id || id === "all") return null;
     return this.localProjects.get(id) || null;
   }
 
@@ -150,34 +148,11 @@ class ProjectRegistry {
   }
 
   public getActiveProject(): CanonicalProject | null {
-    if (!this.activeProjectId || this.activeProjectId === "none") return null;
+    if (!this.activeProjectId) return null;
     return this.getProjectById(this.activeProjectId);
   }
 
-  public clearActiveProject(): void {
-    this.bumpGeneration();
-    this.activeProjectId = null;
-    if (typeof window !== "undefined") {
-      try {
-        localStorage.setItem(ACTIVE_PROJECT_KEY, "none");
-        window.dispatchEvent(
-          new CustomEvent("vyron:project_changed", {
-            detail: { projectId: null, project: null },
-          })
-        );
-      } catch {
-        // ignore
-      }
-    }
-    this.notifyListeners(null);
-  }
-
-  public setActiveProjectId(id: string | null): CanonicalProject | null {
-    if (!id || id === "none") {
-      this.clearActiveProject();
-      return null;
-    }
-
+  public setActiveProjectId(id: string): CanonicalProject | null {
     this.bumpGeneration();
     const project = this.getProjectById(id);
     this.activeProjectId = id;
@@ -197,6 +172,25 @@ class ProjectRegistry {
 
     this.notifyListeners(project);
     return project;
+  }
+
+  public clearActiveProject(): void {
+    this.bumpGeneration();
+    this.activeProjectId = null;
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem(ACTIVE_PROJECT_KEY);
+        localStorage.setItem(ACTIVE_PROJECT_KEY, "none");
+        window.dispatchEvent(
+          new CustomEvent("vyron:project_changed", {
+            detail: { projectId: null, project: null },
+          })
+        );
+      } catch {
+        // ignore
+      }
+    }
+    this.notifyListeners(null);
   }
 
   public registerProject(project: CanonicalProject): CanonicalProject {
@@ -244,7 +238,7 @@ class ProjectRegistry {
       repoUrl: payload.repoUrl ?? (payload.repo_full_name ? `github.com/${payload.repo_full_name}` : undefined),
       repo_full_name: payload.repo_full_name ?? null,
       default_branch: payload.default_branch ?? "main",
-      teamSize: payload.teamSize ?? 1,
+      teamSize: payload.teamSize ?? 4,
       deadline: payload.deadline ?? new Date(Date.now() + 86400000 * 30).toISOString().split("T")[0] ?? "2026-12-31",
       lastUpdated: new Date().toISOString(),
       lastAnalysis: new Date().toISOString(),
@@ -256,19 +250,16 @@ class ProjectRegistry {
     return this.registerProject(newProject);
   }
 
-  public clearUserScope(): void {
-    this.bumpGeneration();
-    this.activeProjectId = null;
-    this.localProjects.clear();
-    if (typeof window !== "undefined") {
-      try {
-        localStorage.removeItem(ACTIVE_PROJECT_KEY);
-        localStorage.removeItem(LOCAL_STORAGE_PROJECTS_KEY);
-      } catch {
-        // ignore
+  public deleteProject(id: string): boolean {
+    const existed = this.localProjects.delete(id);
+    if (existed) {
+      if (this.activeProjectId === id) {
+        this.clearActiveProject();
       }
+      this.bumpGeneration();
+      this.saveToStorage();
     }
-    this.notifyListeners(null);
+    return existed;
   }
 
   public updateProject(id: string, updates: Partial<CanonicalProject>): CanonicalProject | null {
@@ -290,17 +281,6 @@ class ProjectRegistry {
     }
 
     return updated;
-  }
-
-  public deleteProject(id: string): boolean {
-    const existed = this.localProjects.delete(id);
-    if (existed) {
-      this.saveToStorage();
-      if (this.activeProjectId === id) {
-        this.clearActiveProject();
-      }
-    }
-    return existed;
   }
 
   /**
@@ -385,4 +365,3 @@ class ProjectRegistry {
 }
 
 export const projectRegistry = ProjectRegistry.getInstance();
-

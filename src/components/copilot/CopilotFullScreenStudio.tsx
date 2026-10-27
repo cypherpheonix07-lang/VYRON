@@ -40,8 +40,6 @@ import {
   GitFork,
   ArrowRight,
   Plug,
-  Square,
-  Paperclip,
 } from "lucide-react";
 import { useCopilot } from "@/state/copilot/useCopilot";
 import {
@@ -138,10 +136,6 @@ export function CopilotFullScreenStudio() {
   const [isContextLensOpen, setIsContextLensOpen] = useState(false);
   const [isTimeMachineOpen, setIsTimeMachineOpen] = useState(false);
   const [selectedPassport, setSelectedPassport] = useState<any>(null);
-  const [attachments, setAttachments] = useState<
-    Array<{ name: string; content: string; type?: string }>
-  >([]);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     return copilotStore.subscribe((s) => {
@@ -149,13 +143,6 @@ export function CopilotFullScreenStudio() {
       setIsTimeMachineOpen(s.isTimeMachineOpen);
       if (s.selectedPassportForLens) {
         setSelectedPassport(s.selectedPassportForLens);
-      } else {
-        const latestWithPassport = [...s.normalSession.messages, ...s.demoSession.messages]
-          .reverse()
-          .find((m) => m.metadata?.contextPassport);
-        if (latestWithPassport?.metadata?.contextPassport) {
-          setSelectedPassport(latestWithPassport.metadata.contextPassport);
-        }
       }
     });
   }, []);
@@ -164,30 +151,6 @@ export function CopilotFullScreenStudio() {
   const [activePlan, setActivePlan] = useState<DynamicExecutionPlan | null>(
     () => session.activePlan || null,
   );
-
-  useEffect(() => {
-    if (session.activePlan) {
-      setActivePlan(session.activePlan);
-    }
-  }, [session.activePlan]);
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-    Array.from(files).forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const content = event.target?.result as string;
-        setAttachments((prev) => [
-          ...prev,
-          { name: file.name, content, type: file.type || "text/plain" },
-        ]);
-        toast.success(`Attached document: ${file.name}`);
-      };
-      reader.readAsText(file);
-    });
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
   const [isPlanning, setIsPlanning] = useState(false);
   const [isExecutingPlan, setIsExecutingPlan] = useState(false);
   const [actionHistory, setActionHistory] = useState<ActionInvocation[]>([]);
@@ -248,15 +211,6 @@ export function CopilotFullScreenStudio() {
   }, []);
 
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("ather_chat_draft");
-      if (saved) setInputText(saved);
-    } catch {
-      // ignore
-    }
-  }, []);
-
-  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
@@ -286,22 +240,11 @@ export function CopilotFullScreenStudio() {
     const text = (promptOverride || inputText).trim();
     if (!text || isLoading) return;
 
-    if (!promptOverride) {
-      setInputText("");
-      try {
-        localStorage.removeItem("ather_chat_draft");
-      } catch {
-        // ignore
-      }
-    }
-
-    const attachedDocs = attachments.length > 0 ? [...attachments] : undefined;
-    setAttachments([]);
+    if (!promptOverride) setInputText("");
 
     await copilotDispatcher.dispatch(text, {
       mode,
       modelOverride: activeModel,
-      attachments: attachedDocs,
       onPlanCreated: (plan) => {
         setActivePlan(plan);
         setActiveInspectorTab("plan");
@@ -403,63 +346,71 @@ export function CopilotFullScreenStudio() {
     }
   };
 
-  const dynamicSuggestedActions: CopilotAction[] = [
+  // Dynamic suggested actions based on active project state and system model
+  const dynamicSuggestedActions = [
     {
       id: "act-drift",
       label: "Audit Architecture Drift",
       actionType: "DETECT_ARCHITECTURE_DRIFT",
+      description: "Compare declared architecture blueprint against live AST realities",
     },
     {
       id: "act-impact",
       label: "Analyze Change Blast Radius",
       actionType: "ANALYZE_CHANGE_IMPACT",
+      description: "Inspect direct and transitive dependencies affected by changes",
     },
     {
       id: "act-mission",
       label: "Launch Pre-Release Mission",
       actionType: "START_ENGINEERING_MISSION",
+      description: "Coordinate bounded specialist agents to verify release readiness",
     },
   ];
 
-  const handleExecuteSuggestedAction = async (action: CopilotAction) => {
+  const handleExecuteSuggestedAction = async (action: {
+    id: string;
+    label: string;
+    actionType: string;
+  }) => {
     toast.loading(`Executing action: ${action.label}...`, { id: "exec-action" });
     try {
-      const type = action.actionType;
-      const params: Record<string, unknown> = { ...(action.payload || {}) };
+      let type: ActionType = "RUN_ANALYSIS";
+      let params: Record<string, unknown> = {};
 
-      if (type === "DETECT_ARCHITECTURE_DRIFT" && !params["projectId"]) {
-        params["projectId"] = liveContext?.project.id || "proj-brahma";
-        params["saveSnapshot"] = true;
-      } else if (type === "ANALYZE_CHANGE_IMPACT" && !params["changedFile"]) {
-        params["changedFile"] = "src/services/settlementEngine.ts";
-      } else if (type === "START_ENGINEERING_MISSION" && !params["title"]) {
-        params["title"] = "Pre-Release Verification Mission";
-        params["objective"] = "Audit drift, security findings, and release gates";
-      } else if (type === "EVALUATE_ENGINEERING_POLICIES" && !params["releaseCandidate"]) {
-        params["releaseCandidate"] = "rc-2.0";
-      } else if (type === "COMPARE_TIME_MACHINE_SNAPSHOTS" && !params["baseSnapshotId"]) {
-        params["baseSnapshotId"] = "snap-baseline";
-        params["targetSnapshotId"] = "snap-regression";
-      } else if (type === "RUN_SIMULATION_SCENARIO" && !params["scenarioId"]) {
-        params["scenarioId"] = "SCENARIO_01_DRIFT";
-      } else if (type === "VALIDATE_DATASET" && !params["datasetId"]) {
-        params["datasetId"] = liveContext?.dataset.id || "ieee_fraud_benchmark";
-      } else if (type === "TEST_CONNECTOR" && !params["connectorId"]) {
-        params["connectorId"] = "github";
-      } else if (type === "INSPECT_STAGE" && !params["stageId"]) {
-        params["stageId"] = 5;
-      } else if (type === "INJECT_DEMO_ANOMALY" && !params["count"]) {
-        params["count"] = 5;
-      } else if (type === "SWITCH_DEMO_SCENARIO" && !params["scenarioId"]) {
-        params["scenarioId"] = "brazilian_ecommerce";
-      } else if (type === "INVESTIGATE_ANOMALY" && !params["anomalyId"]) {
-        params["anomalyId"] = "anom_high_iqr";
-      } else if (type === "RUN_ANALYSIS" && !params["speedMultiplier"]) {
-        params["speedMultiplier"] = 1.5;
+      if (action.actionType === "DETECT_ARCHITECTURE_DRIFT") {
+        type = "DETECT_ARCHITECTURE_DRIFT";
+        params = { projectId: liveContext?.project.id || "proj-brahma", saveSnapshot: true };
+      } else if (action.actionType === "ANALYZE_CHANGE_IMPACT") {
+        type = "ANALYZE_CHANGE_IMPACT";
+        params = { changedFile: "src/services/settlementEngine.ts" };
+      } else if (action.actionType === "START_ENGINEERING_MISSION") {
+        type = "START_ENGINEERING_MISSION";
+        params = {
+          title: "Pre-Release Verification Mission",
+          objective: "Audit drift, security findings, and release gates",
+        };
+      } else if (action.actionType === "EVALUATE_ENGINEERING_POLICIES") {
+        type = "EVALUATE_ENGINEERING_POLICIES";
+        params = { releaseCandidate: "rc-2.0" };
+      } else if (action.actionType === "COMPARE_TIME_MACHINE_SNAPSHOTS") {
+        type = "COMPARE_TIME_MACHINE_SNAPSHOTS";
+        params = { baseSnapshotId: "snap-baseline", targetSnapshotId: "snap-regression" };
+      } else if (action.actionType === "RUN_SIMULATION_SCENARIO") {
+        type = "RUN_SIMULATION_SCENARIO";
+        params = { scenarioId: "SCENARIO_01_DRIFT" };
+      } else if (action.actionType === "RESET_DEMO") {
+        type = "RESET_DEMO";
+      } else if (action.actionType === "VALIDATE_DATASET") {
+        type = "VALIDATE_DATASET";
+        params = { datasetId: liveContext?.dataset.id || "ieee_fraud_benchmark" };
+      } else {
+        type = "RUN_ANALYSIS";
+        params = { speedMultiplier: 1.5 };
       }
 
       const res = await copilotActionEngine.dispatchAction(
-        type as import("@/services/copilot/copilotActionEngine").ActionType,
+        type,
         action.label,
         `Action dispatched from Copilot conversation`,
         params,
@@ -591,7 +542,7 @@ export function CopilotFullScreenStudio() {
                 <h2 className="text-base font-black tracking-tight text-foreground">
                   {mode === "DEMO"
                     ? "ATHER Demo Copilot Studio"
-                    : "ATHER Cognitive Intelligence Studio"}
+                    : "ATHER Chatbot — Cognitive Intelligence Studio"}
                 </h2>
                 <Badge
                   variant="outline"
@@ -707,26 +658,6 @@ export function CopilotFullScreenStudio() {
             <ProactiveInsightsBanner maxItems={1} />
           </div>
 
-          {/* Compact Context Indicator (Workstream F) */}
-          <div className="flex items-center justify-between px-3.5 py-1.5 bg-secondary/30 border-b border-border/30 text-[11px] font-mono text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <span className="font-bold text-foreground">VYRON</span>
-              <span>·</span>
-              <span className="text-primary font-semibold">
-                {liveContext?.project?.name || "Active Project"}
-              </span>
-              <span>·</span>
-              <span>Finding SEC-014 (Active Lens)</span>
-            </div>
-            <button
-              onClick={() => copilotStore.setContextLensOpen(true)}
-              className="text-[10px] text-primary hover:underline cursor-pointer flex items-center gap-1"
-            >
-              <Radar className="size-2.5" />
-              <span>Inspect Context</span>
-            </button>
-          </div>
-
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             {messages.map((msg) => (
@@ -749,8 +680,16 @@ export function CopilotFullScreenStudio() {
                   ) : (
                     <>
                       <Sparkles className="size-3 text-primary" />
-                      <span className="font-semibold text-foreground">ATHER Chatbot</span>
+                      <span>{msg.metadata?.model || "Vyron AI"}</span>
                     </>
+                  )}
+                  {msg.metadata?.intent && (
+                    <Badge
+                      variant="outline"
+                      className="text-[9px] font-mono border-primary/30 text-primary"
+                    >
+                      {msg.metadata.intent}
+                    </Badge>
                   )}
                   <span>•</span>
                   <span>
@@ -905,92 +844,16 @@ export function CopilotFullScreenStudio() {
             />
           </div>
 
-          {/* Ask / Plan / Act Quick Mode Chips (Workstream K) */}
-          <div className="flex items-center justify-between px-3 pt-2 pb-1 bg-card/70 border-t border-border/40 text-[11px] font-mono">
-            <div className="flex items-center gap-1.5">
-              <span className="text-muted-foreground font-bold">Intent:</span>
-              {(["Ask", "Plan", "Act"] as const).map((m) => (
-                <button
-                  key={m}
-                  type="button"
-                  onClick={() => {
-                    if (m === "Ask") handleStudioModeSelect("CHAT");
-                    else if (m === "Plan") handleStudioModeSelect("MISSION");
-                    else handleStudioModeSelect("SIMULATION");
-                  }}
-                  className={cn(
-                    "px-2.5 py-0.5 rounded-md text-[10px] font-bold transition-colors cursor-pointer",
-                    (m === "Ask" && studioMode === "CHAT") ||
-                      (m === "Plan" && studioMode === "MISSION") ||
-                      (m === "Act" && studioMode === "SIMULATION")
-                      ? "bg-primary text-primary-foreground shadow-sm"
-                      : "bg-secondary/60 hover:bg-secondary text-muted-foreground hover:text-foreground border border-border/40",
-                  )}
-                >
-                  {m}
-                </button>
-              ))}
-            </div>
-            <span className="text-[10px] text-muted-foreground hidden sm:inline">
-              Draft auto-saved
-            </span>
-          </div>
-
-          {/* Attached documents preview */}
-          {attachments.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 px-3 pt-2 bg-card/70 border-t border-border/40">
-              {attachments.map((att, idx) => (
-                <span
-                  key={idx}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-primary/10 border border-primary/30 text-[10px] font-mono text-primary shadow-sm"
-                >
-                  <Paperclip className="size-3" />
-                  <span className="max-w-[140px] truncate">{att.name}</span>
-                  <button
-                    type="button"
-                    onClick={() => setAttachments((prev) => prev.filter((_, i) => i !== idx))}
-                    className="hover:text-destructive cursor-pointer transition-colors"
-                  >
-                    <X className="size-3" />
-                  </button>
-                </span>
-              ))}
-            </div>
-          )}
-
           {/* Input Box */}
-          <form onSubmit={handleSend} className="p-3 pt-1.5 bg-card/70 flex items-center gap-2">
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileUpload}
-              multiple
-              accept=".csv,.json,.txt,.md,.log,.pdf"
-              className="hidden"
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isLoading}
-              title="Attach document or dataset (CSV, JSON, TXT, Log)"
-              className="size-9 rounded-xl text-muted-foreground hover:text-foreground hover:bg-secondary/80 shrink-0 cursor-pointer"
-            >
-              <Paperclip className="size-4" />
-            </Button>
+          <form
+            onSubmit={handleSend}
+            className="p-3 border-t border-border/40 bg-card/70 flex items-center gap-2"
+          >
             <input
               type="text"
-              placeholder={`Ask ATHER in ${studioMode} mode... (Enter to send)`}
+              placeholder={`Ask ATHER in ${studioMode} mode...`}
               value={inputText}
-              onChange={(e) => {
-                setInputText(e.target.value);
-                try {
-                  localStorage.setItem("ather_chat_draft", e.target.value);
-                } catch {
-                  // ignore
-                }
-              }}
+              onChange={(e) => setInputText(e.target.value)}
               disabled={isLoading}
               className="flex-1 px-4 py-2.5 text-xs rounded-xl bg-secondary/60 border border-border/60 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary font-sans"
             />
@@ -1000,23 +863,20 @@ export function CopilotFullScreenStudio() {
                 size="sm"
                 variant="destructive"
                 onClick={() => {
-                  copilotDispatcher.stop(mode);
                   copilotDispatcher.dispatch("stop");
                   copilotStore.setLoading(mode, false);
-                  toast.info("Stopped active generation.");
                 }}
-                className="h-9 px-3 rounded-xl bg-destructive hover:bg-destructive/90 text-destructive-foreground font-bold flex items-center gap-1 shadow-md cursor-pointer"
-                title="Stop generation"
+                className="h-9 px-4 rounded-xl bg-destructive text-destructive-foreground font-bold shadow-md shadow-destructive/20 gap-1"
               >
-                <Square className="size-3.5 fill-current" />
-                <span className="hidden sm:inline">Stop</span>
+                <X className="size-4" />
+                <span>Stop</span>
               </Button>
             ) : (
               <Button
                 type="submit"
                 size="sm"
-                disabled={!inputText.trim() && attachments.length === 0}
-                className="h-9 px-4 rounded-xl bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20 cursor-pointer"
+                disabled={!inputText.trim() || isLoading}
+                className="h-9 px-4 rounded-xl bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20"
               >
                 <Send className="size-4" />
               </Button>

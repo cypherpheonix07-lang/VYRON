@@ -165,7 +165,6 @@ function RegisterPage() {
   ]);
 
   const handleOAuthRegister = async (provider: "google" | "github" | "gitlab") => {
-    if (oauthLoading || loading) return;
     setOauthLoading(provider);
     const providerLabel = provider === "google" ? "Google" : provider === "github" ? "GitHub" : "GitLab";
     toast.loading(`Redirecting to ${providerLabel}...`, {
@@ -271,7 +270,8 @@ function RegisterPage() {
       const result = await authService.signUp(email, password, {
         data: {
           full_name: fullName,
-          role: selectedRole.toLowerCase(),
+          role: selectedRole === "Working Professional" ? "professional" : selectedRole.toLowerCase(),
+          designation: selectedRole === "Working Professional" ? "professional" : selectedRole.toLowerCase(),
           organization,
           team_size: teamSize,
           technical_level: technicalLevel,
@@ -283,25 +283,10 @@ function RegisterPage() {
       });
 
       if (!result.ok) {
-        if (result.error?.code === "email_exists") {
-          toast.error(result.error.message, {
-            action: {
-              label: "Sign in",
-              onClick: () => navigate({ to: "/login" }),
-            },
-            duration: 8000,
-          });
-        } else {
-          toast.error(result.error?.message ?? "Signup failed.");
-        }
-      } else if (result.data?.session) {
-        sessionStorage.removeItem(SIGNUP_DRAFT_KEY);
-        toast.success("Account created successfully!");
-        await refresh();
-        navigate({ to: "/onboarding", replace: true });
+        toast.error(result.error?.message ?? "Signup failed.");
       } else {
-        toast.success("Account created! A confirmation code or email has been sent.");
-        setStep(5); // Go to verification step
+        toast.success("Account created! A confirmation code has been sent.");
+        setStep(5); // Go to verification
         setCountdown(30);
       }
     } catch (err) {

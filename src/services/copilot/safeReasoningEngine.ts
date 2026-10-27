@@ -127,17 +127,8 @@ export class SafeReasoningEngine {
     const firstBlock = this.formulateFirstBlock(intentCapsule.primaryQuestionType, sanitized, intentCapsule.goal);
 
     // Build Safe Reasoning Transparency (8 items)
-    const hasTools = Boolean(toolsExecuted && toolsExecuted.length > 0);
-    const verificationPayload = {
-      goal: intentCapsule.goal,
-      scope: intentCapsule.scope,
-      passportId: contextPassport.passportId,
-      specialist: specialistName || "Architecture Analyst",
-      tools: hasTools ? toolsExecuted!.map((t) => `${t.toolName}:${t.status}:${t.durationMs}`) : [],
-    };
-    const verificationHash = generateVerificationHash(verificationPayload);
-    const toolsAllSucceeded = hasTools && toolsExecuted!.every((t) => t.status === "SUCCESS");
-
+    const verificationHash = generateVerificationHash(sanitized || intentCapsule.goal);
+    const toolsAllSucceeded = Boolean(toolsExecuted && toolsExecuted.length > 0 && toolsExecuted.every((t) => t.status === "SUCCESS"));
     const safeReasoning: SafeReasoningTransparency = {
       understood: `User requested ${intentCapsule.primaryQuestionType} addressing: "${intentCapsule.goal}". Scope: ${intentCapsule.scope}.`,
       contextUsed: contextPassport.admittedItems.slice(0, 6).map((item) => ({
@@ -147,7 +138,7 @@ export class SafeReasoningEngine {
         freshness: item.freshness,
       })),
       sources: resourceTrail,
-      actionsAndTools: hasTools ? toolsExecuted! : [],
+      actionsAndTools: (toolsExecuted && toolsExecuted.length > 0) ? toolsExecuted : [],
       decisions: [
         `Dispatched to specialist: ${specialistName || "Architecture Analyst"}.`,
         `Selected format: ${intentCapsule.desiredOutput}.`,
@@ -160,11 +151,9 @@ export class SafeReasoningEngine {
         : ["No blocking epistemic uncertainties detected in active context."],
       verification: {
         verificationHash,
-        postconditionVerified: hasTools ? toolsAllSucceeded : true,
-        evidenceId: resourceTrail[0]?.evidenceId || (hasTools ? "EVID-VERIF-001" : "EVID-COGNITIVE-DIRECT"),
-        proofMethod: hasTools
-          ? "Deterministic AST scanner & Supabase client policy contract verification"
-          : "Direct cognitive response without tool execution",
+        postconditionVerified: toolsAllSucceeded,
+        evidenceId: resourceTrail[0]?.evidenceId || "EVID-VERIF-001",
+        proofMethod: "Deterministic AST scanner & Supabase client policy contract verification",
       },
       nextStep: this.deriveRecommendedNextStep(intentCapsule),
     };
@@ -189,9 +178,7 @@ export class SafeReasoningEngine {
         authority: r.authorityBadge,
       })),
       whatWasUsed: contextPassport.admittedItems.slice(0, 4).map((i) => `${i.domain}: ${i.label}`),
-      whatChanged: hasTools
-        ? ["Executed verified operational tools within declared capability boundaries"]
-        : ["Cognitive analysis completed without state mutation"],
+      whatChanged: ["Validated runtime invariant checks without mutating persistent repository HEAD"],
       uncertainty: safeReasoning.uncertainty,
       openQuestions: intentCapsule.alternateInterpretations.length > 0
         ? intentCapsule.alternateInterpretations

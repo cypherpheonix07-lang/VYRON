@@ -1,4 +1,4 @@
-import { Link, useNavigate, useLocation } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Bell,
   ChevronRight,
@@ -48,7 +48,6 @@ import {
   BarChart3,
   CheckSquare,
   Cpu,
-  ArrowRightFromLine,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode, useRef } from "react";
 import { toast } from "sonner";
@@ -81,15 +80,13 @@ import { DemoModeToggle } from "@/components/ui/DemoModeToggle";
 import { DemoBanner } from "@/components/demo/DemoBanner";
 import { CopilotDrawer } from "@/components/copilot/CopilotDrawer";
 import { CopilotFloatingButton } from "@/components/copilot/CopilotFloatingButton";
+import { WorkspaceExitButton } from "@/components/workspace/WorkspaceExitButton";
 import { authService } from "@/services/authService";
 import { notifications as mockNotifications, projects as mockProjects } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 import { useProjects } from "@/hooks/useProjects";
 import { useActiveProject } from "@/hooks/useActiveProject";
 import { copilotRealtimeListener } from "@/services/copilot/copilotRealtimeListener";
-import { WorkspaceExitButton } from "@/components/workspace/WorkspaceExitButton";
-import { WorkspaceExitDialog } from "@/components/workspace/WorkspaceExitDialog";
-import { workspaceExitCoordinator } from "@/services/workspace/workspaceExitCoordinator";
 
 const labelMap: Record<string, string> = {
   app: "Dashboard",
@@ -122,20 +119,6 @@ const labelMap: Record<string, string> = {
   impact: "Change Impact",
   simulation: "Simulation Lab",
   workpulse: "WorkPulse",
-  "security-center": "Security Posture",
-  cicd: "CI/CD Orchestration",
-  data: "Data Platform",
-  "api-gateway": "API Gateway",
-  eval: "AI Benchmarks",
-  infra: "Cloud & Infrastructure",
-  collab: "Team Collaboration",
-  testing: "Testing Platform",
-  obs: "Observability",
-  status: "System Sentinel",
-  "tech-radar": "Technology Radar",
-  patterns: "Architecture Patterns",
-  forensics: "Threat Matrix",
-  pipelines: "Deployment Pipelines",
   deployments: "Deployment Platforms",
 };
 
@@ -154,7 +137,7 @@ export interface NavDomain {
   adminOnly?: boolean;
 }
 
-// 20 Core Engineering Domains (11 Existing Domains + 9 New Strategic Domains, with 5 Expanded Subsections)
+// 10 Core Engineering Domains (HOME / DISCOVER / INTELLIGENCE / ENGINEERING / ANALYSIS / RELEASE / SIMULATION / AI / INTEGRATIONS / GOVERNANCE)
 export const NAV_DOMAINS: NavDomain[] = [
   {
     id: "home",
@@ -164,7 +147,6 @@ export const NAV_DOMAINS: NavDomain[] = [
       { to: "/app", label: "Command Center", icon: LayoutDashboard, exact: true },
       { to: "/app/activity", label: "Activity Stream", icon: Activity, exact: true },
       { to: "/app/notifications", label: "System Alerts", icon: Bell, exact: true },
-      { to: "/app/status", label: "System Health & Sentinel", icon: Activity, exact: false },
     ],
   },
   {
@@ -175,7 +157,6 @@ export const NAV_DOMAINS: NavDomain[] = [
       { to: "/discover", label: "Project Reality Map", icon: Sparkles, exact: false },
       { to: "/app/search", label: "Global Discovery Search", icon: Search, exact: false },
       { to: "/app/github", label: "Repository Discovery", icon: Github, exact: false },
-      { to: "/app/tech-radar", label: "Technology Stack Radar", icon: Compass, exact: false },
     ],
   },
   {
@@ -186,7 +167,6 @@ export const NAV_DOMAINS: NavDomain[] = [
       { to: "/app/drift", label: "Architecture Drift", icon: Compass, exact: false },
       { to: "/app/impact", label: "Causal Change Impact", icon: GitPullRequest, exact: false },
       { to: "/app/missions", label: "Decisions & Missions", icon: Target, exact: false },
-      { to: "/app/recommendations", label: "Recommendations", icon: Sparkles, exact: false },
     ],
   },
   {
@@ -197,7 +177,6 @@ export const NAV_DOMAINS: NavDomain[] = [
       { to: "/app/projects", label: "Project Workspaces", icon: FolderKanban, exact: true },
       { to: "/app/projects/new", label: "New Project Blueprint", icon: PlusCircle, exact: true },
       { to: "/app/studio/templates", label: "Project Templates", icon: Layers, exact: false },
-      { to: "/app/patterns", label: "Architecture Patterns", icon: Layers, exact: false },
     ],
   },
   {
@@ -208,7 +187,6 @@ export const NAV_DOMAINS: NavDomain[] = [
       { to: "/app/analysis", label: "12-Stage Forensics", icon: Activity, exact: false },
       { to: "/app/reports", label: "Reports & Findings", icon: FileBarChart2, exact: true },
       { to: "/app/preview", label: "Engineering Theater", icon: Eye, exact: true },
-      { to: "/app/forensics", label: "Threat Matrix & CVEs", icon: ShieldAlert, exact: false },
     ],
   },
   {
@@ -218,19 +196,6 @@ export const NAV_DOMAINS: NavDomain[] = [
     items: [
       { to: "/app/release", label: "Release Gates & Twin", icon: ShieldCheck, exact: false },
       { to: "/app/exports", label: "Artifact & Export Center", icon: Download, exact: true },
-      { to: "/app/release/pipelines", label: "Deployment Pipelines", icon: ShieldCheck, exact: false },
-    ],
-  },
-  {
-    id: "deployments",
-    label: "DEPLOYMENT PLATFORMS",
-    icon: Server,
-    items: [
-      { to: "/app/deployments", label: "Deployment Overview", icon: LayoutDashboard, exact: true },
-      { to: "/app/deployments?tab=platforms", label: "Connected Platforms", icon: Cable, exact: false },
-      { to: "/app/deployments?tab=environments", label: "Environments & Runtimes", icon: Cpu, exact: false },
-      { to: "/app/deployments?tab=logs", label: "Build & Deploy Logs", icon: Terminal, exact: false },
-      { to: "/app/release/pipelines", label: "Pipeline Canaries", icon: ShieldCheck, exact: false },
     ],
   },
   {
@@ -247,7 +212,7 @@ export const NAV_DOMAINS: NavDomain[] = [
     icon: Bot,
     items: [
       { to: "/app/aether", label: "ATHER Cognitive Center", icon: Cpu, exact: false },
-      { to: "/app/chat", label: "ATHER Chatbot Studio", icon: Bot, exact: false },
+      { to: "/app/chat", label: "ATHER Copilot Studio", icon: Bot, exact: false },
       { to: "/app/studio", label: "Autonomous AI Studio", icon: Sparkles, exact: false },
       { to: "/app/admin/models", label: "AI Model Governance", icon: Brain, exact: false },
     ],
@@ -277,6 +242,26 @@ export const NAV_DOMAINS: NavDomain[] = [
     ],
   },
   {
+    id: "platform",
+    label: "PLATFORM",
+    icon: Server,
+    adminOnly: true,
+    items: [
+      { to: "/app/settings", label: "Platform Health & Settings", icon: Settings, exact: true },
+      { to: "/app/admin/usage", label: "SLO & Telemetry", icon: BarChart3, exact: false },
+    ],
+  },
+  {
+    id: "admin",
+    label: "ADMIN",
+    icon: ShieldCheck,
+    adminOnly: true,
+    items: [
+      { to: "/app/admin", label: "Admin Console", icon: ShieldCheck, exact: true },
+      { to: "/app/admin/audit", label: "Audit & Evidence Ledger", icon: ShieldAlert, exact: false },
+    ],
+  },
+  {
     id: "system-flow",
     label: "SYSTEM FLOW",
     icon: Workflow,
@@ -284,95 +269,12 @@ export const NAV_DOMAINS: NavDomain[] = [
       { to: "/app/system-flow", label: "Live System Flow & Sentinel", icon: Workflow, exact: true },
     ],
   },
-  // --- 9 BRAND-NEW ENTERPRISE DOMAINS (Reaching 20 Total) ---
   {
-    id: "security",
-    label: "SECURITY",
-    icon: ShieldAlert,
-    items: [
-      { to: "/app/security-center", label: "Security Posture & Secrets", icon: ShieldAlert, exact: false },
-      { to: "/app/forensics", label: "Vulnerability Threat Matrix", icon: ShieldAlert, exact: false },
-      { to: "/app/admin/audit", label: "Audit & Compliance Ledger", icon: CheckCircle2, exact: false },
-    ],
-  },
-  {
-    id: "cicd",
-    label: "CI/CD",
-    icon: GitPullRequest,
-    items: [
-      { to: "/app/cicd", label: "Pipeline & Build Mesh", icon: GitPullRequest, exact: false },
-      { to: "/app/release/pipelines", label: "Deployment Canaries", icon: ShieldCheck, exact: false },
-      { to: "/app/exports", label: "Build Artifact Depot", icon: Download, exact: false },
-    ],
-  },
-  {
-    id: "data",
-    label: "DATA PLATFORM",
-    icon: Database,
-    items: [
-      { to: "/app/data", label: "Data Ingestion & Vectors", icon: Database, exact: false },
-      { to: "/app/datasets", label: "Kaggle & Data Lakes", icon: Database, exact: false },
-      { to: "/app/admin/schema", label: "Schema Migrations", icon: Layers, exact: false },
-    ],
-  },
-  {
-    id: "apigateway",
-    label: "API GATEWAY",
+    id: "deployments",
+    label: "DEPLOYMENT PLATFORMS",
     icon: Server,
     items: [
-      { to: "/app/api-gateway", label: "Gateway & Service Mesh", icon: Server, exact: false },
-      { to: "/app/connectors", label: "MCP Connectors Hub", icon: Cable, exact: false },
-      { to: "/app/integrations", label: "Contract & Rate Limiting", icon: ShieldCheck, exact: false },
-    ],
-  },
-  {
-    id: "evaluation",
-    label: "AI BENCHMARKS",
-    icon: BarChart3,
-    items: [
-      { to: "/app/eval", label: "Model Leaderboard & Evals", icon: BarChart3, exact: false },
-      { to: "/app/admin/models", label: "Model Registry & Benchmarks", icon: Brain, exact: false },
-      { to: "/app/recommendations", label: "Prompt Regression Suite", icon: Sparkles, exact: false },
-    ],
-  },
-  {
-    id: "infra",
-    label: "CLOUD & INFRA",
-    icon: Cpu,
-    items: [
-      { to: "/app/infra", label: "Cluster Mesh & FinOps", icon: Cpu, exact: false },
-      { to: "/app/status", label: "Node & Mesh Health", icon: Activity, exact: false },
-      { to: "/app/settings", label: "IaC & Quota Governance", icon: Settings, exact: false },
-    ],
-  },
-  {
-    id: "collab",
-    label: "COLLABORATION",
-    icon: Users,
-    items: [
-      { to: "/app/collab", label: "Architecture Peer Reviews", icon: Users, exact: false },
-      { to: "/app/team", label: "Team Spaces & RBAC", icon: Users, exact: false },
-      { to: "/app/activity", label: "Engineering RFC Stream", icon: Activity, exact: false },
-    ],
-  },
-  {
-    id: "testing",
-    label: "TESTING PLATFORM",
-    icon: CheckSquare,
-    items: [
-      { to: "/app/testing", label: "Verification Gates & Chaos", icon: CheckSquare, exact: false },
-      { to: "/app/simulation", label: "Simulation Lab Twin", icon: FlaskConical, exact: false },
-      { to: "/app/preview", label: "Synthetic Journey Theater", icon: Eye, exact: false },
-    ],
-  },
-  {
-    id: "observability",
-    label: "OBSERVABILITY",
-    icon: Activity,
-    items: [
-      { to: "/app/obs", label: "Distributed Tracing & Logs", icon: Activity, exact: false },
-      { to: "/app/admin/usage", label: "SLO & Metric Sentinel", icon: BarChart3, exact: false },
-      { to: "/app/notifications", label: "Incident Alert Dispatch", icon: Bell, exact: false },
+      { to: "/app/deployments", label: "Deployment Platforms", icon: Server, exact: true },
     ],
   },
 ];
@@ -411,9 +313,9 @@ const navGroups = [
       { to: "/app/github", label: "GitHub Mirror", icon: Github, exact: false },
       { to: "/app/integrations", label: "Integrations", icon: Cable, exact: true },
       { to: "/app/team", label: "Team Space", icon: Users, exact: true },
-      { to: "/app/deployments", label: "Deployment Platforms", icon: Server, exact: false },
       { to: "/app/activity", label: "Activity Feed", icon: Activity, exact: true },
       { to: "/app/exports", label: "Export Center", icon: Download, exact: true },
+      { to: "/app/deployments", label: "Deployment Platforms", icon: Server, exact: true },
     ],
   },
 ] as const;
@@ -434,7 +336,7 @@ function NavList({
     projectId: activeProjectId,
     availableProjects,
   } = useActiveProject();
-  const { pathname } = useLocation();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   // Contextual Mode Detection
   const isSimulationRoute = pathname === "/app/simulation";
@@ -469,7 +371,6 @@ function NavList({
       ai: false,
       integrations: false,
       governance: false,
-      deployments: true,
     };
   });
 
@@ -854,7 +755,7 @@ function NotificationBell() {
 }
 
 function Breadcrumbs() {
-  const { pathname } = useLocation();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { projects: liveProjects } = useProjects();
   const availableProjects = liveProjects.length > 0 ? liveProjects : mockProjects;
   const crumbs = useMemo(() => {
@@ -897,7 +798,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     setActiveProject,
   } = useActiveProject();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   // UI state for search dropdown
   const [searchQuery, setSearchQuery] = useState("");
@@ -1626,15 +1527,11 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </Link>
               </Button>
 
+              {/* Workspace Exit Button */}
+              <WorkspaceExitButton />
+
               {/* DEMO MODE SWITCH & TOGGLE */}
               <DemoModeToggle />
-
-              {/* WORKSPACE EXIT ACTION */}
-              <WorkspaceExitButton
-                projectId={activeProjectId}
-                projectName={activeProjectData?.name}
-                className="hidden sm:inline-flex"
-              />
 
               {/* Keyboard info indicator */}
               <Button
@@ -1738,30 +1635,6 @@ export function AppShell({ children }: { children: ReactNode }) {
                     </DropdownMenuItem>
                   ) : null}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => {
-                      workspaceExitCoordinator.requestExit({
-                        projectId: activeProjectId,
-                        projectName: activeProjectData?.name,
-                        navigate: (to) => {
-                          if (to.includes("?")) {
-                            const [path, qs] = to.split("?");
-                            const searchObj: Record<string, string> = {};
-                            if (qs) {
-                              new URLSearchParams(qs).forEach((v, k) => {
-                                searchObj[k] = v;
-                              });
-                            }
-                            navigate({ to: (path || "/app") as never, search: searchObj as never });
-                          } else {
-                            navigate({ to: to as never });
-                          }
-                        },
-                      });
-                    }}
-                  >
-                    <ArrowRightFromLine className="size-4 mr-2" aria-hidden /> Exit workspace
-                  </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
                       logout();
@@ -1983,9 +1856,6 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Dual-Mode AI Copilot Floating Pill and Drawer */}
       <CopilotFloatingButton />
       <CopilotDrawer />
-
-      {/* Global Workspace Exit Guard Dialog */}
-      <WorkspaceExitDialog />
     </div>
   );
 }

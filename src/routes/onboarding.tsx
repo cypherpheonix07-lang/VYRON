@@ -25,7 +25,8 @@ import { AuthLayout } from "@/components/auth/auth-components";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { useAuth, type Role } from "@/lib/auth";
+import { useAuth, type Role, appRoleToDbRole, resolvePostLoginRoute } from "@/lib/auth";
+import { setDesignation } from "@/lib/db/profiles";
 import { supabase } from "@/lib/supabaseClient";
 import { experienceProfileService, type PersonaType } from "@/services/persona/experienceProfileService";
 
@@ -159,6 +160,7 @@ function OnboardingPage() {
     setLoading(true);
     try {
       const milestoneDate = calculateTargetDate();
+      const dbRole = appRoleToDbRole(selectedRole);
 
       const experienceProfile = experienceProfileService.createDefaultProfile(
         personaType,
@@ -191,11 +193,13 @@ function OnboardingPage() {
         );
         window.dispatchEvent(new Event("storage"));
       } else {
-        // Real user database update
+        // Real user database update via profiles
+        await setDesignation(user.id, dbRole);
         const { error: profileErr } = await supabase
           .from("profiles")
           .update({
-            role: selectedRole.toLowerCase(),
+            role: dbRole,
+            designation: dbRole,
             goals: selectedGoals,
             proficiency,
             milestone_deadline: milestoneDate,
@@ -204,14 +208,17 @@ function OnboardingPage() {
           })
           .eq("id", user.id);
 
-        if (profileErr) throw profileErr;
+        if (profileErr) {
+          console.warn("[onboarding] Profile update notice:", profileErr.message);
+        }
         await refresh();
       }
 
       toast.success("Workspace personalized successfully!", {
-        description: `Experience profile configured for ${personaType} (${selectedRole}).`,
+        description: `Experience profile configured for ${selectedRole}.`,
       });
-      navigate({ to: "/app" });
+      const destRoute = resolvePostLoginRoute(selectedRole);
+      navigate({ to: destRoute as any });
     } catch (err) {
       toast.error((err as Error).message || "Failed to save onboarding setup.");
     } finally {
@@ -269,22 +276,18 @@ function OnboardingPage() {
           <div className="space-y-5">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-foreground">1. Choose Primary Persona Context</label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 {[
-                  { id: "STUDENT", label: "Student", desc: "Course & Capstone" },
-                  { id: "TEACHER", label: "Teacher / Educator", desc: "Curriculum & Rubrics" },
-                  { id: "WORKING_PROFESSIONAL", label: "Working Pro", desc: "Production & Scale" },
-                  { id: "OTHER", label: "Other / Specialist", desc: "Exploration" },
+                  { id: "STUDENT", role: "Student" as Role, label: "Student", desc: "Course & Capstone" },
+                  { id: "TEACHER", role: "Faculty" as Role, label: "Faculty / Educator", desc: "Curriculum & Rubrics" },
+                  { id: "WORKING_PROFESSIONAL", role: "Working Professional" as Role, label: "Working Professional", desc: "Production & Scale" },
                 ].map((p) => (
                   <button
                     key={p.id}
                     type="button"
                     onClick={() => {
                       setPersonaType(p.id as PersonaType);
-                      if (p.id === "STUDENT") setSelectedRole("Student");
-                      else if (p.id === "TEACHER") setSelectedRole("Faculty");
-                      else if (p.id === "WORKING_PROFESSIONAL") setSelectedRole("Startup");
-                      else setSelectedRole("Student");
+                      setSelectedRole(p.role);
                     }}
                     className={`rounded-lg border p-2.5 text-left transition-all ${
                       personaType === p.id
@@ -386,7 +389,7 @@ function OnboardingPage() {
             <div className="space-y-1">
               <label className="text-xs font-semibold text-foreground">2. Select Role Preset</label>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {(["Student", "Faculty", "Startup", "Admin", "Reviewer"] as Role[]).map((r) => (
+                {(["Student", "Faculty", "Working Professional"] as Role[]).map((r) => (
                   <div
                     key={r}
                     onClick={() => setSelectedRole(r)}

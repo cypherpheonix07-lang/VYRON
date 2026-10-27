@@ -1,12 +1,6 @@
-/**
- * VYRON — Unified Command Center & Engineering Intelligence Overview
- * Zero SQL: all database interactions enforce query builder compliance.
- */
 import { Link, createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useActiveProject } from "@/hooks/useActiveProject";
 import { runService } from "@/services/runs/runService";
-import { useAuth } from "@/lib/auth";
-import { WorkspaceExitButton } from "@/components/workspace/WorkspaceExitButton";
 import {
   Activity,
   FileBarChart2,
@@ -36,29 +30,12 @@ import {
   Binary,
   Radio,
   Zap,
-  ArrowRight,
-  Clock,
-  Trash2,
-  Loader2,
-  Info,
-  ChevronDown,
-  ChevronUp,
 } from "lucide-react";
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { useAppMode } from "@/state/mode/useAppMode";
 import { SimulatorControls } from "@/components/demo/SimulatorControls";
 import { AnomalyTimeline } from "@/components/demo/AnomalyTimeline";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 import {
   EmptyState,
@@ -112,33 +89,8 @@ import { AtlasSystemExplorer } from "@/components/dashboard/AtlasSystemExplorer"
 import { CopilotPartnerCard } from "@/components/dashboard/CopilotPartnerCard";
 import { EvidenceExplorer } from "@/components/dashboard/EvidenceExplorer";
 import { TimeMachineComparator } from "@/components/dashboard/TimeMachineComparator";
-import { workspaceExitCoordinator } from "@/services/workspace/workspaceExitCoordinator";
-
-export interface DashboardSearch {
-  attemptId?: string | undefined;
-  exitOutcome?: "saved" | "discarded" | "clean" | undefined;
-  sections?: string | undefined;
-  projectName?: string | undefined;
-  projectId?: string | undefined;
-  ts?: string | undefined;
-}
 
 export const Route = createFileRoute("/app/")({
-  validateSearch: (search: Record<string, unknown>): DashboardSearch => {
-    return {
-      attemptId: typeof search["attemptId"] === "string" ? search["attemptId"] : undefined,
-      exitOutcome:
-        search["exitOutcome"] === "saved" ||
-        search["exitOutcome"] === "discarded" ||
-        search["exitOutcome"] === "clean"
-          ? search["exitOutcome"]
-          : undefined,
-      sections: typeof search["sections"] === "string" ? search["sections"] : undefined,
-      projectName: typeof search["projectName"] === "string" ? search["projectName"] : undefined,
-      projectId: typeof search["projectId"] === "string" ? search["projectId"] : undefined,
-      ts: typeof search["ts"] === "string" ? search["ts"] : undefined,
-    };
-  },
   head: () => ({
     meta: [
       { title: "Dashboard — VYRON" },
@@ -168,12 +120,9 @@ type ViewState = "loaded" | "loading" | "empty" | "error";
 
 function Dashboard() {
   const navigate = useNavigate();
-  const search = Route.useSearch();
-  const { user } = useAuth();
   const { mode } = useAppMode();
   const [state, setState] = useState<ViewState>("loaded");
   const [showTimeMachine, setShowTimeMachine] = useState(false);
-  const [showSavedProjects, setShowSavedProjects] = useState(false);
 
   const { selectEntity } = useCommandCenter();
   const {
@@ -185,66 +134,38 @@ function Dashboard() {
   } = useActiveProject();
 
   const { projects: liveProjects } = useProjects();
-  const { deleteProject } = useProjects();
-  const [projectToDelete, setProjectToDelete] = useState<{ id: string; name: string } | null>(null);
-  const [isDeletingProject, setIsDeletingProject] = useState(false);
-
-  const handleConfirmDeleteProject = async () => {
-    if (!projectToDelete) return;
-    setIsDeletingProject(true);
-    try {
-      await deleteProject(projectToDelete.id);
-      if (activeProjectId === projectToDelete.id) {
-        setActiveProject(null);
-      }
-      toast.success(`Project "${projectToDelete.name}" deleted successfully.`);
-      setProjectToDelete(null);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      toast.error(`Failed to delete project: ${msg}`);
-    } finally {
-      setIsDeletingProject(false);
-    }
-  };
-
   const displayProjects = useMemo(() => {
-    if (!liveProjects || liveProjects.length === 0) {
-      return mode === "DEMO" ? mockProjects : [];
-    }
-    return liveProjects.map((lp) => {
-      const hScore = lp.health_score ?? (lp as unknown as { healthScore?: number }).healthScore ?? 0;
-      return {
-        id: lp.id,
-        name: lp.name,
-        description: lp.description || "",
-        domain: lp.domain || "General",
-        status:
-          (lp.status as "Analyzed" | "Analyzing" | "Draft" | "Needs Review" | "At Risk") ||
-          "Draft",
-        healthScore: hScore,
-        securityScore: (lp as unknown as { securityScore?: number }).securityScore ?? 0,
-        businessImpactScore: (lp as unknown as { businessImpactScore?: number }).businessImpactScore ?? 0,
-        requirementClarity: (lp as unknown as { requirementClarity?: number }).requirementClarity ?? 0,
-        deliveryRisk: (hScore > 80
-          ? "Low"
-          : hScore > 60
-            ? "Medium"
-            : "High") as "Low" | "Medium" | "High" | "Critical",
-        riskScore: hScore > 0 ? Math.max(0, 100 - hScore) : 0,
-        repoConnected: !!lp.repo_full_name,
-        teamSize: (lp as unknown as { teamSize?: number }).teamSize ?? 1,
-        deadline: (lp as unknown as { deadline?: string }).deadline || "2026-12-31",
-        lastUpdated: lp.created_at || new Date().toISOString(),
-        lastAnalysis: (lp as unknown as { lastAnalysis?: string }).lastAnalysis || lp.created_at || new Date().toISOString(),
-      };
-    });
-  }, [liveProjects, mode]);
+    if (!liveProjects || liveProjects.length === 0) return mode === "DEMO" ? mockProjects : [];
+    return liveProjects.map((lp) => ({
+      id: lp.id,
+      name: lp.name,
+      description: lp.description || "",
+      domain: lp.domain || "General",
+      status:
+        (lp.status as "Analyzed" | "Analyzing" | "Draft" | "Needs Review" | "At Risk") ||
+        "Analyzed",
+      healthScore: lp.health_score ?? 75,
+      securityScore: 80,
+      businessImpactScore: 78,
+      requirementClarity: 85,
+      deliveryRisk: (lp.health_score && lp.health_score > 80
+        ? "Low"
+        : lp.health_score && lp.health_score > 60
+          ? "Medium"
+          : "High") as "Low" | "Medium" | "High" | "Critical",
+      riskScore: lp.health_score ? 100 - lp.health_score : 25,
+      repoConnected: !!lp.repo_full_name,
+      teamSize: 5,
+      deadline: "2026-10-30",
+      lastUpdated: lp.created_at || new Date().toISOString(),
+      lastAnalysis: lp.created_at || new Date().toISOString(),
+    }));
+  }, [liveProjects]);
 
   const avgHealth = useMemo(() => {
-    if (displayProjects.length === 0) return 0;
     return Math.round(
-      displayProjects.reduce((acc, p) => acc + (p.healthScore || 0), 0) /
-        displayProjects.length,
+      displayProjects.reduce((acc, p) => acc + (p.healthScore || 70), 0) /
+        Math.max(displayProjects.length, 1),
     );
   }, [displayProjects]);
 
@@ -262,426 +183,8 @@ function Dashboard() {
   );
   const graphData = useMemo(() => engineeringKnowledgeGraph.exportGraphData(), []);
 
-  // DELIBERATE NO-PROJECT-SELECTED EMPTY DASHBOARD (PHASE T: T01–T20)
-  // When cataloged projects exist, the full Command Center is rendered with the exit outcome notice
-  const confirmedRecord = workspaceExitCoordinator.verifyExitOutcome({
-    attemptId: search.attemptId,
-    exitOutcome: search.exitOutcome,
-  });
-
-  const exitOutcome = confirmedRecord?.outcome;
-  const sectionsList = confirmedRecord?.sections || (search.sections ? search.sections.split(",").filter(Boolean) : []);
-  const outcomeProject = confirmedRecord?.projectName || search.projectName;
-  const exitTime = confirmedRecord?.timestamp
-    ? new Date(confirmedRecord.timestamp).toLocaleTimeString()
-    : search.ts
-      ? new Date(search.ts).toLocaleTimeString()
-      : undefined;
-
-  if (!activeProject && displayProjects.length === 0) {
-
-    return (
-      <div className="space-y-6 max-w-6xl mx-auto py-2">
-        {/* Page Header for Empty Dashboard (T04, T05) */}
-        <PageHeader
-          title="Engineering intelligence overview"
-          description="Workspace is currently closed. No project selected."
-          actions={
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowSavedProjects((prev) => !prev)}
-                className="text-xs gap-1.5 h-8"
-              >
-                <FolderKanban className="size-3.5" />
-                {showSavedProjects ? "Hide Projects" : "Open Project"}
-              </Button>
-              <Button asChild size="sm" className="text-xs bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 h-8">
-                <Link to="/app/projects/new">
-                  <PlusCircle className="size-3.5" />
-                  New Project
-                </Link>
-              </Button>
-            </div>
-          }
-        />
-
-        {/* AUTHORITATIVE EXIT OUTCOME NOTICE (T16, Domain I) */}
-        {exitOutcome ? (
-          <Card className="surface border border-border/80 bg-zinc-950/90 shadow-xl rounded-2xl overflow-hidden animate-in fade-in duration-300">
-            <div
-              className={`h-1.5 w-full ${
-                exitOutcome === "saved"
-                  ? "bg-emerald-500"
-                  : exitOutcome === "discarded"
-                    ? "bg-amber-500"
-                    : "bg-primary"
-              }`}
-            />
-            <CardContent className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-start gap-3.5 min-w-0">
-                <span
-                  className={`grid size-10 shrink-0 place-items-center rounded-xl border ${
-                    exitOutcome === "saved"
-                      ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/25"
-                      : exitOutcome === "discarded"
-                        ? "bg-amber-500/15 text-amber-400 border-amber-500/25"
-                        : "bg-primary/15 text-primary border-primary/25"
-                  }`}
-                >
-                  {exitOutcome === "saved" ? (
-                    <CheckCircle2 className="size-5" />
-                  ) : exitOutcome === "discarded" ? (
-                    <Trash2 className="size-5" />
-                  ) : (
-                    <ShieldCheck className="size-5" />
-                  )}
-                </span>
-                <div className="space-y-1 min-w-0">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="text-sm font-bold text-foreground">
-                      {exitOutcome === "saved"
-                        ? "Workspace safely exited — verified changes saved"
-                        : exitOutcome === "discarded"
-                          ? "Workspace exited — unsaved changes discarded"
-                          : "Workspace closed cleanly"}
-                    </h3>
-                    {outcomeProject && (
-                      <Badge variant="outline" className="text-[10px] font-mono border-primary/30 text-primary">
-                        {outcomeProject}
-                      </Badge>
-                    )}
-                    {exitTime && (
-                      <span className="text-[11px] text-muted-foreground font-mono flex items-center gap-1">
-                        <Clock className="size-3" />
-                        {exitTime}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    {exitOutcome === "saved"
-                      ? `All modified records${outcomeProject ? ` for ${outcomeProject}` : ""} were committed to project storage before leaving.`
-                      : exitOutcome === "discarded"
-                        ? `Only uncommitted edits were discarded. Previously saved records and conversations for ${outcomeProject || "your project"} remain completely intact.`
-                        : "Workspace closed cleanly with zero pending mutations or background tasks."}
-                  </p>
-                  {sectionsList.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                      <span className="text-[10px] uppercase font-mono text-muted-foreground">Synchronized Sections:</span>
-                      {sectionsList.map((sec) => (
-                        <Badge key={sec} variant="secondary" className="text-[10px] bg-zinc-900 border border-border/60">
-                          {sec}
-                        </Badge>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  if (confirmedRecord?.attemptId) {
-                    workspaceExitCoordinator.consumeExitOutcome(confirmedRecord.attemptId);
-                  }
-                  navigate({ to: "/app" });
-                }}
-                className="text-xs text-muted-foreground hover:text-foreground shrink-0 self-end sm:self-center"
-              >
-                Dismiss
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
-          /* NEUTRAL DIRECT-ACCESS WELCOME NOTICE (T17, Domain I) */
-          <div className="rounded-2xl border border-border/60 bg-gradient-to-r from-card/80 via-card/50 to-primary/5 p-5 shadow-sm space-y-2">
-            <div className="flex items-center gap-2.5 text-primary">
-              <Compass className="size-5" />
-              <h2 className="text-sm font-semibold tracking-tight text-foreground">
-                No active project open
-              </h2>
-              {search.exitOutcome && (
-                <Badge variant="outline" className="text-[10px] font-mono border-amber-500/30 text-amber-400 ml-auto">
-                  Direct URL View — Unverified
-                </Badge>
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground leading-relaxed max-w-2xl">
-              You are viewing the dashboard with no active project selected. Choose a project below to inspect its architecture, run verified analysis gates, or synthesize new blueprints.
-            </p>
-          </div>
-        )}
-
-        {/* PRIMARY ACTION CALLOUTS (T06, T07, T20) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card className="surface border border-border/80 bg-zinc-950/60 p-5 rounded-2xl space-y-3 hover:border-primary/40 transition-colors">
-            <div className="size-10 rounded-xl bg-primary/10 border border-primary/20 grid place-items-center text-primary">
-              <PlusCircle className="size-5" />
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-sm font-bold text-foreground">Create New Project</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Initialize an architecture blueprint from requirements or domain specification with zero synthetic data.
-              </p>
-            </div>
-            <Button asChild size="sm" className="w-full text-xs font-semibold bg-primary hover:bg-primary/90 text-primary-foreground">
-              <Link to="/app/projects/new">
-                Start New Project <ArrowRight className="size-3.5 ml-1.5" />
-              </Link>
-            </Button>
-          </Card>
-
-          <Card className={cn(
-            "surface border border-border/80 bg-zinc-950/60 p-5 rounded-2xl space-y-3 transition-colors",
-            showSavedProjects ? "border-violet-500/50 bg-violet-950/15" : "hover:border-violet-500/40"
-          )}>
-            <div className="size-10 rounded-xl bg-violet-500/10 border border-violet-500/20 grid place-items-center text-violet-400">
-              <FolderKanban className="size-5" />
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-sm font-bold text-foreground">Open Existing Project</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Browse all authorized workspaces. Previously saved records, findings, and conversation history are fully preserved.
-              </p>
-            </div>
-            <Button
-              type="button"
-              variant={showSavedProjects ? "secondary" : "outline"}
-              size="sm"
-              onClick={() => setShowSavedProjects((prev) => !prev)}
-              className="w-full text-xs font-semibold border-violet-500/30 text-violet-300 hover:bg-violet-500/10 flex items-center justify-between"
-            >
-              <span>{showSavedProjects ? "Hide Saved Projects" : "Open Existing Project"}</span>
-              {showSavedProjects ? <ChevronUp className="size-3.5 ml-1.5" /> : <ChevronDown className="size-3.5 ml-1.5" />}
-            </Button>
-          </Card>
-
-          <Card className="surface border border-border/80 bg-zinc-950/60 p-5 rounded-2xl space-y-3 hover:border-emerald-500/40 transition-colors">
-            <div className="size-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 grid place-items-center text-emerald-400">
-              <GitBranch className="size-5" />
-            </div>
-            <div className="space-y-1">
-              <h3 className="text-sm font-bold text-foreground">Connect Git Repository</h3>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Link GitHub or GitLab to run repository analysis, detect architecture drift, and enforce release gates.
-              </p>
-            </div>
-            <Button asChild variant="outline" size="sm" className="w-full text-xs font-semibold border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/10">
-              <Link to="/app/github">
-                Connect Repository <ArrowRight className="size-3.5 ml-1.5" />
-              </Link>
-            </Button>
-          </Card>
-        </div>
-
-        {/* SAVED PROJECTS RE-ENTRY DIRECTORY (H04, B16, U13, U14, U16) — Displayed ONLY after explicit Open Existing Project interaction */}
-        {showSavedProjects && (
-          <div className="space-y-3 pt-2 animate-in fade-in duration-200">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FolderKanban className="size-4 text-primary" />
-                <h3 className="text-sm font-bold text-foreground">
-                  Your Saved Projects ({availableProjects.length})
-                </h3>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button asChild variant="ghost" size="sm" className="text-xs text-muted-foreground hover:text-foreground">
-                  <Link to="/app/projects">View all in directory &rarr;</Link>
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowSavedProjects(false)}
-                  className="text-xs text-muted-foreground hover:text-foreground h-7 px-2"
-                >
-                  <X className="size-3.5 mr-1" /> Close
-                </Button>
-              </div>
-            </div>
-
-            {availableProjects.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                {availableProjects.map((proj) => (
-                  <div
-                    key={proj.id}
-                    className="group rounded-xl border border-border/70 bg-card/40 hover:bg-card/70 p-4 transition-all hover:border-primary/40 space-y-3 flex flex-col justify-between"
-                  >
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between gap-2">
-                        <h4 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors truncate">
-                          {proj.name}
-                        </h4>
-                        <Badge variant="outline" className="text-[10px] font-mono shrink-0">
-                          {proj.origin}
-                        </Badge>
-                      </div>
-                      <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                        {proj.description || `Architecture workspace for ${proj.name}`}
-                      </p>
-                      <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-mono pt-1">
-                        <span>{proj.domain}</span>
-                        <span>&bull;</span>
-                        <StatusBadge status={proj.status} />
-                      </div>
-                    </div>
-
-                    <div className="pt-2 border-t border-border/40 flex items-center justify-between gap-2">
-                      <span className="text-[10px] font-mono text-muted-foreground">
-                        Updated {proj.lastUpdated ? new Date(proj.lastUpdated).toLocaleDateString() : "Recently"}
-                      </span>
-                      <div className="flex items-center gap-1.5">
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setProjectToDelete({ id: proj.id, name: proj.name });
-                          }}
-                          className="text-xs h-7 px-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 gap-1"
-                          title={`Delete ${proj.name}`}
-                          aria-label={`Delete ${proj.name}`}
-                        >
-                          <Trash2 className="size-3 text-destructive/80 hover:text-destructive" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => setActiveProject(proj.id, { navigateToProject: true })}
-                          className="text-xs h-7 px-2.5 font-medium border-border hover:border-primary hover:bg-primary/10 hover:text-primary gap-1"
-                        >
-                          Open Workspace <ArrowRight className="size-3" />
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="p-8 rounded-2xl border border-dashed border-border bg-card/20 text-center space-y-2">
-                <FolderKanban className="size-8 text-muted-foreground mx-auto" />
-                <h4 className="text-sm font-bold text-foreground">No projects in storage</h4>
-                <p className="text-xs text-muted-foreground max-w-sm mx-auto">
-                  No architecture projects have been created yet. Create a new project to get started.
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* AUTHENTICATION & SESSION RETENTION FOOTER (E15, T09) */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-xl border border-border/60 bg-zinc-950/40 text-xs text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <Info className="size-4 text-primary shrink-0" />
-            <span>
-              Signed in as <strong className="text-foreground">{user?.email || "developer@vyron.ai"}</strong>. Your authenticated session remains active across workspace exits.
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button asChild variant="ghost" size="sm" className="h-7 text-xs">
-              <Link to="/app/settings">Account Settings</Link>
-            </Button>
-            <Button asChild variant="ghost" size="sm" className="h-7 text-xs">
-              <Link to="/help">Help & Docs</Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
-      {/* AUTHORITATIVE EXIT OUTCOME NOTICE (Command Center Banner) */}
-      {exitOutcome && (
-        <Card className="surface mb-4 border border-border/80 bg-zinc-950/90 shadow-xl rounded-2xl overflow-hidden animate-in fade-in duration-300">
-          <div
-            className={`h-1.5 w-full ${
-              exitOutcome === "saved"
-                ? "bg-emerald-500"
-                : exitOutcome === "discarded"
-                  ? "bg-amber-500"
-                  : "bg-primary"
-            }`}
-          />
-          <CardContent className="p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex items-start gap-3.5 min-w-0">
-              <span
-                className={`grid size-10 shrink-0 place-items-center rounded-xl border ${
-                  exitOutcome === "saved"
-                    ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/25"
-                    : exitOutcome === "discarded"
-                      ? "bg-amber-500/15 text-amber-400 border-amber-500/25"
-                      : "bg-primary/15 text-primary border-primary/25"
-                }`}
-              >
-                {exitOutcome === "saved" ? (
-                  <CheckCircle2 className="size-5" />
-                ) : exitOutcome === "discarded" ? (
-                  <Trash2 className="size-5" />
-                ) : (
-                  <ShieldCheck className="size-5" />
-                )}
-              </span>
-              <div className="space-y-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-sm font-bold text-foreground">
-                    {exitOutcome === "saved"
-                      ? "Workspace safely exited — verified changes saved"
-                      : exitOutcome === "discarded"
-                        ? "Workspace exited — unsaved changes discarded"
-                        : "Workspace closed cleanly"}
-                  </h3>
-                  {outcomeProject && (
-                    <Badge variant="outline" className="text-[10px] font-mono border-primary/30 text-primary">
-                      {outcomeProject}
-                    </Badge>
-                  )}
-                  {exitTime && (
-                    <span className="text-[11px] text-muted-foreground font-mono flex items-center gap-1">
-                      <Clock className="size-3" />
-                      {exitTime}
-                    </span>
-                  )}
-                </div>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  {exitOutcome === "saved"
-                    ? `All modified records${outcomeProject ? ` for ${outcomeProject}` : ""} were committed to project storage before leaving.`
-                    : exitOutcome === "discarded"
-                      ? `Only uncommitted edits were discarded. Previously saved records and conversations for ${outcomeProject || "your project"} remain completely intact.`
-                      : "Workspace closed cleanly with zero pending mutations or background tasks."}
-                </p>
-                {sectionsList.length > 0 && (
-                  <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                    <span className="text-[10px] uppercase font-mono text-muted-foreground">Synchronized Sections:</span>
-                    {sectionsList.map((sec) => (
-                      <Badge key={sec} variant="secondary" className="text-[10px] bg-zinc-900 border border-border/60">
-                        {sec}
-                      </Badge>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                if (confirmedRecord?.attemptId) {
-                  workspaceExitCoordinator.consumeExitOutcome(confirmedRecord.attemptId);
-                }
-                navigate({ to: "/app" });
-              }}
-              className="text-xs text-muted-foreground hover:text-foreground shrink-0 self-end sm:self-center"
-            >
-              Dismiss
-            </Button>
-          </CardContent>
-        </Card>
-      )}
-
       <PageHeader
         title="Engineering intelligence overview"
         description="Portfolio-wide health, security posture and delivery risk, recalculated on every analysis run."
@@ -695,16 +198,6 @@ function Dashboard() {
                 <TabsTrigger value="error">Error</TabsTrigger>
               </TabsList>
             </Tabs>
-
-            {/* EXIT WORKSPACE ACTION */}
-            {activeProject && (
-              <WorkspaceExitButton
-                projectId={activeProject.id}
-                projectName={activeProject.name}
-                variant="outline"
-                className="border-border text-xs"
-              />
-            )}
 
             {/* CONTEXT-SENSITIVE RUN ANALYSIS BUTTON (WORKSTREAM I & K) */}
             <Button
@@ -855,17 +348,6 @@ function Dashboard() {
                   View Lifecycle
                 </Link>
               </Button>
-
-              <Button
-                size="sm"
-                variant="outline"
-                className="text-xs border-destructive/40 bg-destructive/5 hover:bg-destructive/15 text-destructive gap-1.5 h-8 font-semibold shadow-sm"
-                onClick={() => setProjectToDelete({ id: activeProject.id, name: activeProject.name })}
-                title={`Delete ${activeProject.name}`}
-              >
-                <Trash2 className="size-3.5" />
-                Delete Project
-              </Button>
             </div>
           </div>
 
@@ -900,146 +382,49 @@ function Dashboard() {
           </div>
         </div>
       ) : (
-        <div className="p-5 rounded-xl border border-primary/30 bg-gradient-to-r from-primary/10 via-card/80 to-card/60 backdrop-blur-md shadow-lg space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-primary/20 text-primary font-bold border border-primary/30">
-                  PORTFOLIO COMMAND CENTER
-                </span>
-                <Badge variant="outline" className="text-[10px] uppercase font-mono px-1.5 py-0">
-                  {displayProjects.length} Projects In Fleet
-                </Badge>
-              </div>
-              <h2 className="text-lg sm:text-xl font-bold tracking-tight text-foreground">
-                Fleet Architecture Command Hub
-              </h2>
-              <p className="text-xs text-muted-foreground line-clamp-1 max-w-2xl">
-                Global engineering intelligence cockpit. Select any project workspace below to activate deep telemetry and live analysis.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Button asChild size="sm" className="text-xs bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5 h-8">
+        <div className="p-5 rounded-xl border border-dashed border-border bg-card/40 space-y-4">
+          <div className="text-center space-y-2">
+            <FolderKanban className="size-6 text-muted-foreground mx-auto" />
+            <h3 className="text-sm font-semibold">No active project open</h3>
+            <p className="text-xs text-muted-foreground max-w-md mx-auto">
+              Choose an existing project from the selector above, create a new native blueprint, or connect a GitHub repository.
+            </p>
+            <div className="flex items-center justify-center gap-2 pt-1">
+              <Button asChild size="sm" variant="default" className="text-xs">
                 <Link to="/app/projects/new">
-                  <PlusCircle className="size-3.5" />
-                  New Project
+                  <PlusCircle className="size-3.5 mr-1.5" />
+                  Create New Project
                 </Link>
               </Button>
-              <Button asChild variant="outline" size="sm" className="text-xs border-border gap-1.5 h-8">
+              <Button asChild size="sm" variant="outline" className="text-xs">
                 <Link to="/app/github">
-                  <GitBranch className="size-3.5" />
+                  <GitBranch className="size-3.5 mr-1.5" />
                   Connect GitHub
                 </Link>
               </Button>
             </div>
           </div>
 
-          {/* QUICK PROJECT SELECTION GRID */}
-          {displayProjects.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-2 border-t border-border/40">
-              {displayProjects.slice(0, 6).map((proj) => (
-                <div
-                  key={proj.id}
-                  className="p-3 rounded-lg border border-border/60 bg-zinc-950/50 hover:bg-zinc-900/80 transition-all space-y-2 flex flex-col justify-between"
-                >
-                  <div className="space-y-1">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-semibold text-xs text-foreground truncate">{proj.name}</span>
-                      <StatusBadge status={proj.status} />
-                    </div>
-                    <p className="text-[11px] text-muted-foreground line-clamp-1">{proj.description || "Enterprise architecture workspace"}</p>
-                  </div>
-                  <div className="flex items-center justify-between pt-1 border-t border-border/30 text-[10px] font-mono">
-                    <span className="text-muted-foreground">Health: <strong className="text-foreground">{proj.healthScore}/100</strong></span>
-                    <div className="flex items-center gap-1.5">
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setProjectToDelete({ id: proj.id, name: proj.name });
-                        }}
-                        className="h-6 w-6 p-0 text-muted-foreground hover:text-rose-400 hover:bg-rose-500/10 rounded transition-colors"
-                        title={`Delete ${proj.name}`}
-                        aria-label={`Delete ${proj.name}`}
-                      >
-                        <Trash2 className="size-3 text-rose-400/80 hover:text-rose-400" />
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => setActiveProject(proj.id, { navigateToProject: true })}
-                        className="h-6 px-2 text-[10px] text-primary hover:bg-primary/10 gap-1"
-                      >
-                        Open Workspace <ArrowRight className="size-2.5" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="p-6 rounded-lg border border-dashed border-border/60 bg-zinc-950/40 text-center space-y-2">
-              <FolderKanban className="size-6 text-muted-foreground mx-auto" />
-              <h4 className="text-xs font-bold text-foreground">No Projects In Storage</h4>
-              <p className="text-[11px] text-muted-foreground max-w-sm mx-auto">
-                No active project selected. Create a new architecture project or connect a GitHub repository.
-              </p>
+          {availableProjects.length > 0 && (
+            <div className="pt-3 border-t border-border/40">
+              <h4 className="text-xs font-semibold text-foreground mb-2">Your Saved Projects</h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                {availableProjects.map((proj) => (
+                  <button
+                    key={proj.id}
+                    type="button"
+                    onClick={() => setActiveProject(proj.id)}
+                    className="flex items-center justify-between p-2.5 rounded-lg border border-border/60 bg-secondary/20 hover:bg-secondary/40 text-left text-xs transition-colors"
+                  >
+                    <span className="font-medium text-foreground truncate">{proj.name}</span>
+                    <Badge variant="outline" className="text-[9px] uppercase font-mono ml-2 shrink-0">
+                      {proj.status}
+                    </Badge>
+                  </button>
+                ))}
+              </div>
             </div>
           )}
-
-          {/* CONFIRM PROJECT DELETION DIALOG */}
-          <AlertDialog open={!!projectToDelete} onOpenChange={(open) => !open && !isDeletingProject && setProjectToDelete(null)}>
-            <AlertDialogContent className="border-border bg-zinc-950 text-foreground max-w-md shadow-2xl">
-              <AlertDialogHeader>
-                <AlertDialogTitle className="flex items-center gap-2 text-rose-400 text-sm font-bold">
-                  <AlertTriangle className="size-4 shrink-0 text-rose-400" />
-                  Delete Project from Command Hub
-                </AlertDialogTitle>
-                <AlertDialogDescription className="text-xs text-muted-foreground space-y-2.5 pt-1">
-                  <p>
-                    Are you sure you want to delete <strong className="text-foreground">{projectToDelete?.name}</strong>?
-                  </p>
-                  <div className="p-2.5 rounded bg-zinc-900/90 border border-border/80 text-[11px] text-zinc-300 space-y-1">
-                    <p className="font-semibold text-rose-300">Consequences of Deletion:</p>
-                    <p>
-                      This operation permanently removes this project record, local analysis runs, and telemetry findings from your internal VYRON workspace.
-                    </p>
-                  </div>
-                  <p className="text-[11px] text-emerald-400 font-medium bg-emerald-500/10 border border-emerald-500/20 p-2 rounded">
-                    🛡️ Zero Remote Mutation: Your remote GitHub repository, branches, commits, and external files will NOT be deleted or altered.
-                  </p>
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter className="gap-2 pt-2">
-                <AlertDialogCancel
-                  disabled={isDeletingProject}
-                  onClick={() => setProjectToDelete(null)}
-                  className="text-xs h-8 border-border bg-zinc-900 hover:bg-zinc-800"
-                >
-                  Cancel
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  disabled={isDeletingProject}
-                  onClick={handleConfirmDeleteProject}
-                  className="text-xs h-8 bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold gap-1.5"
-                >
-                  {isDeletingProject ? (
-                    <>
-                      <Loader2 className="size-3 animate-spin" />
-                      Deleting...
-                    </>
-                  ) : (
-                    <>
-                      <Trash2 className="size-3" />
-                      Delete Project
-                    </>
-                  )}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
         </div>
       )}
 
@@ -1257,7 +642,6 @@ function Dashboard() {
                       <TableHead className="hidden md:table-cell">Security</TableHead>
                       <TableHead>Delivery risk</TableHead>
                       <TableHead className="hidden lg:table-cell">Updated</TableHead>
-                      <TableHead className="text-right">Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -1319,18 +703,6 @@ function Dashboard() {
                             day: "2-digit",
                             month: "short",
                           })}
-                        </TableCell>
-                        <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => setProjectToDelete({ id: p.id, name: p.name })}
-                            className="h-7 w-7 p-0 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                            title={`Delete ${p.name}`}
-                            aria-label={`Delete ${p.name}`}
-                          >
-                            <Trash2 className="size-3 text-destructive/80 hover:text-destructive" />
-                          </Button>
                         </TableCell>
                       </TableRow>
                     ))}
@@ -1503,73 +875,6 @@ function Dashboard() {
           </SectionCard>
         </div>
       ) : null}
-
-      {/* DELETE PROJECT CONFIRMATION DIALOG (SECTION C) */}
-      <AlertDialog
-        open={!!projectToDelete}
-        onOpenChange={(open) => {
-          if (!open && !isDeletingProject) {
-            setProjectToDelete(null);
-          }
-        }}
-      >
-        <AlertDialogContent className="bg-zinc-950 border border-border sm:max-w-md">
-          <AlertDialogHeader>
-            <div className="flex items-center gap-2 text-destructive">
-              <AlertTriangle className="size-5 shrink-0" />
-              <AlertDialogTitle className="text-base font-bold">
-                Delete Architecture Project?
-              </AlertDialogTitle>
-            </div>
-            <AlertDialogDescription className="text-xs text-muted-foreground space-y-2 pt-1 leading-relaxed">
-              <p>
-                Are you sure you want to delete{" "}
-                <strong className="text-foreground font-semibold">
-                  "{projectToDelete?.name}"
-                </strong>
-                ?
-              </p>
-              <div className="rounded-lg bg-zinc-900/80 p-2.5 border border-border/60 text-[11px] space-y-1">
-                <p className="font-semibold text-zinc-300">Consequences of deletion:</p>
-                <ul className="list-disc pl-4 space-y-0.5 text-zinc-400">
-                  <li>Project architecture blueprint and entity topology will be removed.</li>
-                  <li>Analysis runs, health metrics, and assessment history will be detached.</li>
-                  <li>If currently active, your workspace will return to the unselected portfolio view.</li>
-                </ul>
-              </div>
-              <div className="rounded-lg bg-emerald-950/20 p-2.5 border border-emerald-800/30 text-[11px] text-emerald-400/90">
-                <strong>Zero-Remote-Mutation Policy:</strong> External GitHub repositories, branches, commits, and files are completely untouched and will never be modified or deleted.
-              </div>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter className="gap-2 sm:gap-0">
-            <AlertDialogCancel
-              disabled={isDeletingProject}
-              onClick={() => setProjectToDelete(null)}
-              className="text-xs h-8"
-            >
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              disabled={isDeletingProject}
-              onClick={handleConfirmDeleteProject}
-              className="text-xs h-8 bg-destructive text-destructive-foreground hover:bg-destructive/90 font-semibold gap-1.5"
-            >
-              {isDeletingProject ? (
-                <>
-                  <Loader2 className="size-3.5 animate-spin" />
-                  Deleting Project...
-                </>
-              ) : (
-                <>
-                  <Trash2 className="size-3.5" />
-                  Confirm Delete
-                </>
-              )}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
 
       {/* PHASE 17: UNIVERSAL DETAIL DRAWER */}
       <UniversalDetailDrawer />

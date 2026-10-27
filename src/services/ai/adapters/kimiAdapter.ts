@@ -14,63 +14,11 @@ export class KimiAdapter implements AIAdapter {
   private fallbackAdapter = new MockAIAdapter();
 
   public isAvailable(): boolean {
-    // Zero secret leakage: Private provider keys are never exposed in browser bundles.
-    if (typeof window !== "undefined") {
-      return false; // Browser relies on authenticated server endpoints or simulated deterministic fallback
-    }
-    const serverKey = typeof process !== "undefined" ? process.env?.["MOONSHOT_API_KEY"] : undefined;
-    return Boolean(serverKey && serverKey.length > 5);
+    const apiKey = typeof process !== "undefined" ? process.env?.["MOONSHOT_API_KEY"] : undefined;
+    return Boolean(apiKey && apiKey.length > 5);
   }
 
   public async complete(request: AICompletionRequest): Promise<AICompletionResponse> {
-    const startTime = Date.now();
-
-    // In browser, attempt server-side gateway if online, otherwise use explicit simulation
-    if (typeof window !== "undefined") {
-      try {
-        const res = await fetch("/api/ai/gateway", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            task: request.taskType || "long_context_rag",
-            providerOverride: "moonshot",
-            modelOverride: "moonshot-v1-128k",
-            systemPrompt: request.systemPrompt,
-            messages: request.messages,
-            temperature: request.temperature ?? 0.3,
-            maxTokens: request.maxTokens ?? 2048,
-          }),
-        });
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data.ok && data.text) {
-            const durationMs = Date.now() - startTime;
-            return {
-              model: "KIMI_K3",
-              provider: "MOONSHOT",
-              text: data.text,
-              usage: data.usage || { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
-              durationMs: data.latencyMs || durationMs,
-              verificationHash:
-                data.sha256 || generateVerificationHash(`KIMI_K3:${data.text}:${durationMs}`),
-              rawResponse: data,
-            };
-          }
-        }
-      } catch {
-        // Fall through to deterministic simulation
-      }
-
-      const mockRes = await this.fallbackAdapter.complete(request);
-      return {
-        ...mockRes,
-        model: "KIMI_K3",
-        provider: "MOONSHOT",
-        text: `[Moonshot Kimi K3 MoE Simulation Engine]\n\n${mockRes.text}`,
-      };
-    }
-
     const apiKey = typeof process !== "undefined" ? process.env?.["MOONSHOT_API_KEY"] : undefined;
 
     if (!apiKey || apiKey === "mock_key") {
@@ -79,10 +27,11 @@ export class KimiAdapter implements AIAdapter {
         ...mockRes,
         model: "KIMI_K3",
         provider: "MOONSHOT",
-        text: `[Moonshot Kimi K3 MoE Offline Runner]\n\n${mockRes.text}`,
+        text: `[Moonshot Kimi K3 MoE Long-Context Engine]\n\n${mockRes.text}`,
       };
     }
 
+    const startTime = Date.now();
     try {
       const response = await fetch("https://api.moonshot.cn/v1/chat/completions", {
         method: "POST",

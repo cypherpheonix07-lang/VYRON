@@ -10,8 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as DevelopersRouteImport } from './routes/developers'
 import { Route as DiscoverRouteImport } from './routes/discover'
@@ -26,6 +28,8 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ShowcaseRouteImport } from './routes/showcase'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
+import { Route as AdminCommandCentreRouteImport } from './routes/admin.command-centre'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppActivityRouteImport } from './routes/app.activity'
 import { Route as AppAdminRouteImport } from './routes/app.admin'
@@ -71,6 +75,10 @@ import { Route as AppTestingRouteImport } from './routes/app.testing'
 import { Route as AppWorkpulseRouteImport } from './routes/app.workpulse'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthGithubCallbackRouteImport } from './routes/auth.github-callback'
+import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
+import { Route as DashboardFacultyRouteImport } from './routes/dashboard.faculty'
+import { Route as DashboardProfessionalRouteImport } from './routes/dashboard.professional'
+import { Route as DashboardStudentRouteImport } from './routes/dashboard.student'
 import { Route as GithubCallbackRouteImport } from './routes/github.callback'
 import { Route as AppAdminIndexRouteImport } from './routes/app.admin.index'
 import { Route as AppAdminAuditRouteImport } from './routes/app.admin.audit'
@@ -137,6 +145,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
@@ -145,6 +158,11 @@ const AppRoute = AppRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoRoute = DemoRouteImport.update({
@@ -216,6 +234,16 @@ const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
   path: '/verify-email',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminCommandCentreRoute = AdminCommandCentreRouteImport.update({
+  id: '/command-centre',
+  path: '/command-centre',
+  getParentRoute: () => AdminRoute,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
   id: '/',
@@ -441,6 +469,26 @@ const AuthGithubCallbackRoute = AuthGithubCallbackRouteImport.update({
   id: '/github-callback',
   path: '/github-callback',
   getParentRoute: () => AuthRoute,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardFacultyRoute = DashboardFacultyRouteImport.update({
+  id: '/faculty',
+  path: '/faculty',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardProfessionalRoute = DashboardProfessionalRouteImport.update({
+  id: '/professional',
+  path: '/professional',
+  getParentRoute: () => DashboardRoute,
+} as any)
+const DashboardStudentRoute = DashboardStudentRouteImport.update({
+  id: '/student',
+  path: '/student',
+  getParentRoute: () => DashboardRoute,
 } as any)
 const GithubCallbackRoute = GithubCallbackRouteImport.update({
   id: '/callback',
@@ -749,8 +797,10 @@ const AppStudioIdVersionsRoute = AppStudioIdVersionsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
   '/demo': typeof DemoRoute
   '/developers': typeof DevelopersRoute
   '/discover': typeof DiscoverRoute
@@ -765,6 +815,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/showcase': typeof ShowcaseRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/admin/command-centre': typeof AdminCommandCentreRoute
   '/app/activity': typeof AppActivityRoute
   '/app/admin': typeof AppAdminRouteWithChildren
   '/app/aether': typeof AppAetherRoute
@@ -809,8 +860,13 @@ export interface FileRoutesByFullPath {
   '/app/workpulse': typeof AppWorkpulseRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
+  '/dashboard/faculty': typeof DashboardFacultyRoute
+  '/dashboard/professional': typeof DashboardProfessionalRoute
+  '/dashboard/student': typeof DashboardStudentRoute
   '/github/callback': typeof GithubCallbackRoute
+  '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/app/admin/audit': typeof AppAdminAuditRoute
   '/app/admin/models': typeof AppAdminModelsRoute
   '/app/admin/queue': typeof AppAdminQueueRoute
@@ -888,6 +944,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/showcase': typeof ShowcaseRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/admin/command-centre': typeof AdminCommandCentreRoute
   '/app/activity': typeof AppActivityRoute
   '/app/aether': typeof AppAetherRoute
   '/app/analysis': typeof AppAnalysisRoute
@@ -931,8 +988,13 @@ export interface FileRoutesByTo {
   '/app/workpulse': typeof AppWorkpulseRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
+  '/dashboard/faculty': typeof DashboardFacultyRoute
+  '/dashboard/professional': typeof DashboardProfessionalRoute
+  '/dashboard/student': typeof DashboardStudentRoute
   '/github/callback': typeof GithubCallbackRoute
+  '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
+  '/dashboard': typeof DashboardIndexRoute
   '/app/admin/audit': typeof AppAdminAuditRoute
   '/app/admin/models': typeof AppAdminModelsRoute
   '/app/admin/queue': typeof AppAdminQueueRoute
@@ -994,8 +1056,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/dashboard': typeof DashboardRouteWithChildren
   '/demo': typeof DemoRoute
   '/developers': typeof DevelopersRoute
   '/discover': typeof DiscoverRoute
@@ -1010,6 +1074,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/showcase': typeof ShowcaseRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/admin/command-centre': typeof AdminCommandCentreRoute
   '/app/activity': typeof AppActivityRoute
   '/app/admin': typeof AppAdminRouteWithChildren
   '/app/aether': typeof AppAetherRoute
@@ -1054,8 +1119,13 @@ export interface FileRoutesById {
   '/app/workpulse': typeof AppWorkpulseRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
+  '/dashboard/faculty': typeof DashboardFacultyRoute
+  '/dashboard/professional': typeof DashboardProfessionalRoute
+  '/dashboard/student': typeof DashboardStudentRoute
   '/github/callback': typeof GithubCallbackRoute
+  '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
+  '/dashboard/': typeof DashboardIndexRoute
   '/app/admin/audit': typeof AppAdminAuditRoute
   '/app/admin/models': typeof AppAdminModelsRoute
   '/app/admin/queue': typeof AppAdminQueueRoute
@@ -1120,8 +1190,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/app'
     | '/auth'
+    | '/dashboard'
     | '/demo'
     | '/developers'
     | '/discover'
@@ -1136,6 +1208,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/showcase'
     | '/verify-email'
+    | '/admin/command-centre'
     | '/app/activity'
     | '/app/admin'
     | '/app/aether'
@@ -1180,8 +1253,13 @@ export interface FileRouteTypes {
     | '/app/workpulse'
     | '/auth/callback'
     | '/auth/github-callback'
+    | '/dashboard/faculty'
+    | '/dashboard/professional'
+    | '/dashboard/student'
     | '/github/callback'
+    | '/admin/'
     | '/app/'
+    | '/dashboard/'
     | '/app/admin/audit'
     | '/app/admin/models'
     | '/app/admin/queue'
@@ -1259,6 +1337,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/showcase'
     | '/verify-email'
+    | '/admin/command-centre'
     | '/app/activity'
     | '/app/aether'
     | '/app/analysis'
@@ -1302,8 +1381,13 @@ export interface FileRouteTypes {
     | '/app/workpulse'
     | '/auth/callback'
     | '/auth/github-callback'
+    | '/dashboard/faculty'
+    | '/dashboard/professional'
+    | '/dashboard/student'
     | '/github/callback'
+    | '/admin'
     | '/app'
+    | '/dashboard'
     | '/app/admin/audit'
     | '/app/admin/models'
     | '/app/admin/queue'
@@ -1364,8 +1448,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/app'
     | '/auth'
+    | '/dashboard'
     | '/demo'
     | '/developers'
     | '/discover'
@@ -1380,6 +1466,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/showcase'
     | '/verify-email'
+    | '/admin/command-centre'
     | '/app/activity'
     | '/app/admin'
     | '/app/aether'
@@ -1424,8 +1511,13 @@ export interface FileRouteTypes {
     | '/app/workpulse'
     | '/auth/callback'
     | '/auth/github-callback'
+    | '/dashboard/faculty'
+    | '/dashboard/professional'
+    | '/dashboard/student'
     | '/github/callback'
+    | '/admin/'
     | '/app/'
+    | '/dashboard/'
     | '/app/admin/audit'
     | '/app/admin/models'
     | '/app/admin/queue'
@@ -1489,8 +1581,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
+  DashboardRoute: typeof DashboardRouteWithChildren
   DemoRoute: typeof DemoRoute
   DevelopersRoute: typeof DevelopersRoute
   DiscoverRoute: typeof DiscoverRoute
@@ -1516,6 +1610,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
@@ -1528,6 +1629,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo': {
@@ -1627,6 +1735,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/verify-email'
       preLoaderRoute: typeof VerifyEmailRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/command-centre': {
+      id: '/admin/command-centre'
+      path: '/command-centre'
+      fullPath: '/admin/command-centre'
+      preLoaderRoute: typeof AdminCommandCentreRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/app/': {
       id: '/app/'
@@ -1942,6 +2064,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/github-callback'
       preLoaderRoute: typeof AuthGithubCallbackRouteImport
       parentRoute: typeof AuthRoute
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/faculty': {
+      id: '/dashboard/faculty'
+      path: '/faculty'
+      fullPath: '/dashboard/faculty'
+      preLoaderRoute: typeof DashboardFacultyRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/professional': {
+      id: '/dashboard/professional'
+      path: '/professional'
+      fullPath: '/dashboard/professional'
+      preLoaderRoute: typeof DashboardProfessionalRouteImport
+      parentRoute: typeof DashboardRoute
+    }
+    '/dashboard/student': {
+      id: '/dashboard/student'
+      path: '/student'
+      fullPath: '/dashboard/student'
+      preLoaderRoute: typeof DashboardStudentRouteImport
+      parentRoute: typeof DashboardRoute
     }
     '/github/callback': {
       id: '/github/callback'
@@ -2366,6 +2516,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteChildren {
+  AdminCommandCentreRoute: typeof AdminCommandCentreRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminCommandCentreRoute: AdminCommandCentreRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
 interface AppAdminRouteChildren {
   AppAdminAuditRoute: typeof AppAdminAuditRoute
   AppAdminModelsRoute: typeof AppAdminModelsRoute
@@ -2659,6 +2821,24 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
+interface DashboardRouteChildren {
+  DashboardFacultyRoute: typeof DashboardFacultyRoute
+  DashboardProfessionalRoute: typeof DashboardProfessionalRoute
+  DashboardStudentRoute: typeof DashboardStudentRoute
+  DashboardIndexRoute: typeof DashboardIndexRoute
+}
+
+const DashboardRouteChildren: DashboardRouteChildren = {
+  DashboardFacultyRoute: DashboardFacultyRoute,
+  DashboardProfessionalRoute: DashboardProfessionalRoute,
+  DashboardStudentRoute: DashboardStudentRoute,
+  DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteWithChildren = DashboardRoute._addFileChildren(
+  DashboardRouteChildren,
+)
+
 interface GithubRouteChildren {
   GithubCallbackRoute: typeof GithubCallbackRoute
 }
@@ -2672,8 +2852,10 @@ const GithubRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRouteWithChildren,
   AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
+  DashboardRoute: DashboardRouteWithChildren,
   DemoRoute: DemoRoute,
   DevelopersRoute: DevelopersRoute,
   DiscoverRoute: DiscoverRoute,

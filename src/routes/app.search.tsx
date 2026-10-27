@@ -9,29 +9,25 @@ import {
   Layers,
   ChevronRight,
   ArrowRight,
-  Clock,
-  ShieldCheck,
-  Activity,
-  Bot,
 } from "lucide-react";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PageHeader, SectionCard } from "@/components/brahma/primitives";
+import { BrahmaLogo } from "@/components/brahma/logo";
+
 import { projectRegistry } from "@/services/project/projectRegistry";
-import { useActiveProject } from "@/hooks/useActiveProject";
 import { architectureDriftEngine } from "@/services/intelligence/driftEngine";
 import { realityMapService } from "@/services/discovery/realityMapService";
-import { authService } from "@/services/authService";
 
 export const Route = createFileRoute("/app/search")({
   head: () => ({
     meta: [
-      { title: "Global Search — PROJECT BRAHMA" },
+      { title: "Search Results — VYRON" },
       {
         name: "description",
-        content: "Platform search utility finding items across live requirements, projects, and architecture findings.",
+        content: "Platform search utility finding items across requirements and codebase logs.",
       },
     ],
   }),
@@ -43,182 +39,106 @@ export const Route = createFileRoute("/app/search")({
   component: SearchResultsPage,
 });
 
-interface SearchItem {
-  category: string;
-  title: string;
-  subtitle: string;
-  href: string;
-  badge: string;
-  icon: React.ComponentType<{ className?: string }>;
-}
-
 function SearchResultsPage() {
   const { q } = Route.useSearch();
   const navigate = useNavigate();
-  const { project } = useActiveProject();
 
   const [query, setQuery] = useState(q);
   const [activeCategory, setActiveCategory] = useState("All");
-  const [executionTimeMs, setExecutionTimeMs] = useState(0);
+  const [executionTimeMs, setExecutionTimeMs] = useState<number>(0);
 
-  // Dynamic Grounded Search Index (E01-E05)
-  const searchIndex = useMemo<SearchItem[]>(() => {
-    const items: SearchItem[] = [];
-    const isDemo = authService.getStoredSession()?.mode === "DEMO";
-
-    // 1. Live Projects from canonical registry
+  const searchIndex = useMemo(() => {
+    const t0 = performance.now();
     const liveProjects = projectRegistry.getAllProjects();
-    for (const proj of liveProjects) {
-      items.push({
-        category: "Projects",
-        title: proj.name,
-        subtitle: proj.description || `Canonical Project ${proj.slug} (Health: ${proj.healthScore}%)`,
-        href: `/app/projects`,
-        badge: proj.slug || proj.id,
-        icon: FolderKanban,
-      });
+    const dynamicItems = liveProjects.map((p) => ({
+      category: "Projects",
+      title: p.name,
+      subtitle: p.description || `Autonomous AI architecture project for ${p.name}`,
+      href: `/app/projects/${p.id}`,
+      badge: p.slug || p.id,
+      icon: FolderKanban,
+    }));
+
+    try {
+      const activeProj = liveProjects[0];
+      if (activeProj) {
+        const drift = architectureDriftEngine.evaluateDrift();
+        if (drift?.findings) {
+          drift.findings.forEach((f: any) => {
+            dynamicItems.push({
+              category: "Drift",
+              title: f.title || f.componentName || "Drift Finding",
+              subtitle: f.description || "Architectural divergence detected",
+              href: "/app/drift",
+              badge: "Drift",
+              icon: Layers,
+            });
+          });
+        }
+        const reality = realityMapService.getProjectSnapshot(activeProj.id);
+        if (reality?.entities) {
+          reality.entities.forEach((e: any) => {
+            dynamicItems.push({
+              category: "RealityMap",
+              title: e.name || e.id,
+              subtitle: `Reality Map node: ${e.type || "Component"}`,
+              href: "/app/reality-map",
+              badge: "Reality",
+              icon: Layers,
+            });
+          });
+        }
+      }
+    } catch {
+      // best-effort
     }
 
-    // 2. Live Architecture Drift Findings
-    const driftReport = architectureDriftEngine.evaluateDrift();
-    for (const finding of driftReport.findings) {
-      items.push({
-        category: "Drift",
-        title: `${finding.id}: ${finding.title} (${finding.type})`,
-        subtitle: finding.remediation || finding.evidence,
-        href: `/app/drift`,
-        badge: finding.severity,
-        icon: Layers,
-      });
-    }
+    setExecutionTimeMs(performance.now() - t0);
+    return dynamicItems;
+  }, []);
 
-    // 3. Reality Map Entities for the active project
-    const snapshot = realityMapService.getProjectSnapshot(project?.id || "brahma-core");
-    for (const ent of snapshot.entities) {
-      items.push({
-        category: ent.type === "requirement" ? "Requirements" : ent.type === "test" ? "Tests" : "Components",
-        title: ent.name,
-        subtitle: `${ent.description} [${ent.sourcePath || "declared"}]`,
-        href: `/discover?tab=reality-map`,
-        badge: ent.status,
-        icon: ent.type === "requirement" ? Sparkles : ent.type === "test" ? ShieldCheck : Layers,
-      });
-    }
-
-    // 4. Canonical Platform Workspaces & Tools
-    items.push(
-      {
-        category: "Platform",
-        title: "12-Stage Forensic Pipeline",
-        subtitle: "Deep AST and security pipeline evaluation.",
-        href: "/app/analysis",
-        badge: "Analysis",
-        icon: Activity,
-      },
-      {
-        category: "Platform",
-        title: "Release Gates & Twin",
-        subtitle: "21-Family gate verification, rehearsal, and reversible rollback.",
-        href: "/app/release",
-        badge: "Release",
-        icon: ShieldCheck,
-      },
-      {
-        category: "Platform",
-        title: "Artifact & Export Center",
-        subtitle: "Download system blueprints, OpenAPI documentation, and audit records.",
-        href: "/app/exports",
-        badge: "Exports",
-        icon: FileBarChart2,
-      },
-      {
-        category: "Platform",
-        title: "ATHER Copilot & Cognitive Center",
-        subtitle: "Natural language dual-stream AI assistant.",
-        href: "/app/chat",
-        badge: "AI Core",
-        icon: Bot,
-      },
-    );
-
-    // 5. Demo fixtures only if mode is explicitly DEMO
-    if (isDemo) {
-      items.push(
-        {
-          category: "Templates",
-          title: "E-Commerce Gateway Blueprint",
-          subtitle: "Acquirer settlement & merchant panel stack.",
-          href: "/app/studio/templates",
-          badge: "Demo Template",
-          icon: Sparkles,
-        },
-        {
-          category: "Datasets",
-          title: "IEEE-CIS Fraud & Transaction Drift Benchmark",
-          subtitle: "Kaggle benchmark partition with 12,480 live transactions.",
-          href: "/app/datasets",
-          badge: "Demo Dataset",
-          icon: Layers,
-        },
-      );
-    }
-
-    return items;
-  }, [project?.id]);
-
-  // Filtered Results (E05, E08, E10)
   const results = useMemo(() => {
-    if (!q.trim()) {
-      return [];
-    }
+    const t0 = performance.now();
+    if (!q.trim()) return [];
     const lowerQuery = q.toLowerCase();
     const matches = searchIndex.filter(
       (item) =>
         item.title.toLowerCase().includes(lowerQuery) ||
         item.subtitle.toLowerCase().includes(lowerQuery) ||
-        item.category.toLowerCase().includes(lowerQuery) ||
-        item.badge.toLowerCase().includes(lowerQuery),
+        item.category.toLowerCase().includes(lowerQuery),
     );
-    return activeCategory === "All" ? matches : matches.filter((item) => item.category === activeCategory);
-  }, [q, activeCategory, searchIndex]);
-
-  // Measure search latency in side effect to maintain render purity
-  useEffect(() => {
-    if (!q.trim()) {
-      setExecutionTimeMs(0);
-      return;
-    }
-    const t0 = performance.now();
-    const lowerQuery = q.toLowerCase();
-    searchIndex.filter(
-      (item) =>
-        item.title.toLowerCase().includes(lowerQuery) ||
-        item.subtitle.toLowerCase().includes(lowerQuery) ||
-        item.category.toLowerCase().includes(lowerQuery) ||
-        item.badge.toLowerCase().includes(lowerQuery),
-    );
-    const t1 = performance.now();
-    setExecutionTimeMs(Math.round((t1 - t0) * 10) / 10);
+    const filtered = activeCategory === "All" ? matches : matches.filter((item) => item.category === activeCategory);
+    setExecutionTimeMs(performance.now() - t0);
+    return filtered;
   }, [q, activeCategory, searchIndex]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    (navigate as unknown as (opts: { to: string; search: { q: string } }) => void)({
-      to: "/app/search",
-      search: { q: query },
-    });
+    navigate({ to: "/app/search", search: { q: query } });
   };
 
-  const categories = useMemo(() => {
-    const set = new Set(searchIndex.map((i) => i.category));
-    return ["All", ...Array.from(set)];
-  }, [searchIndex]);
+  const categories = [
+    "All",
+    "Projects",
+    "Missions",
+    "Drift",
+    "Impact",
+    "Decisions",
+    "Simulation",
+    "Datasets",
+    "Requirements",
+    "Vulnerabilities",
+    "Reports",
+    "Plugins",
+    "Members",
+    "Templates",
+  ];
 
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Global Discovery Search"
-        description="Search across authenticated projects, live architecture invariants, AST drift findings, and platform services."
+        title="Global Search"
+        description="Browse assets across all active workspaces and compliance records."
       />
 
       <form onSubmit={handleSearchSubmit} className="flex gap-2 max-w-xl">
@@ -230,8 +150,8 @@ function SearchResultsPage() {
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Type keywords, entity IDs, or project names..."
-            className="pl-9 h-9 text-xs bg-background/50 border-border"
+            placeholder="Type search parameters..."
+            className="pl-9 h-9 text-xs"
           />
         </div>
         <Button type="submit" size="sm" className="bg-primary text-primary-foreground text-xs h-9">
@@ -240,34 +160,27 @@ function SearchResultsPage() {
       </form>
 
       {q.trim() !== "" && (
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap gap-1.5">
-            {categories.map((cat) => (
-              <Button
-                key={cat}
-                variant={activeCategory === cat ? "default" : "outline"}
-                size="sm"
-                className="h-7 text-[10px] font-semibold"
-                onClick={() => setActiveCategory(cat)}
-              >
-                {cat}
-              </Button>
-            ))}
-          </div>
-
-          <div className="flex items-center gap-2 text-[11px] text-muted-foreground font-mono">
-            <Clock className="size-3 text-primary" />
-            <span>Indexed in {executionTimeMs}ms</span>
-          </div>
+        <div className="flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <Button
+              key={cat}
+              variant={activeCategory === cat ? "default" : "outline"}
+              size="sm"
+              className="h-7 text-[10px] font-semibold"
+              onClick={() => setActiveCategory(cat)}
+            >
+              {cat}
+            </Button>
+          ))}
         </div>
       )}
 
       <SectionCard
-        title={q.trim() === "" ? "Search Results" : `Matches for "${q}"`}
+        title={q.trim() === "" ? "Search results" : `Matches for "${q}"`}
         description={
           q.trim() === ""
-            ? "Enter a query above to lookup live workspace elements."
-            : `Found ${results.length} authenticated entries across ${searchIndex.length} total indexed resources.`
+            ? "Enter a query above to lookup elements."
+            : `Found ${results.length} matching entries.`
         }
       >
         {q.trim() === "" ? (
@@ -279,25 +192,26 @@ function SearchResultsPage() {
           <div className="p-16 text-center space-y-3">
             <Search className="size-10 text-muted-foreground/30 mx-auto" />
             <h4 className="text-xs font-semibold text-foreground">
-              No live matches for &lsquo;{q}&rsquo;
+              No matches for &lsquo;{q}&rsquo;
             </h4>
             <p className="text-[10px] text-muted-foreground max-w-xs mx-auto leading-relaxed">
-              Zero-Fiction Law: No synthetic results are fabricated. Check your spelling or active category filters.
+              Verify terms spelling, check category filters, or explore suggested platform sections
+              below.
             </p>
             <div className="flex justify-center gap-2 pt-2">
               <Button size="sm" variant="outline" className="text-[10px]" asChild>
                 <Link to="/app">Dashboard</Link>
               </Button>
               <Button size="sm" variant="outline" className="text-[10px]" asChild>
-                <Link to="/discover" search={{ q: "", category: "", tab: "reality-map" }}>Reality Map</Link>
+                <Link to="/app/studio">AI Studio</Link>
               </Button>
             </div>
           </div>
         ) : (
           <div className="divide-y divide-border/60">
-            {results.map((item, idx) => (
+            {results.map((item) => (
               <Link
-                key={`${item.title}-${idx}`}
+                key={item.title}
                 to={item.href as never}
                 className="py-4 flex items-center justify-between gap-4 group hover:bg-secondary/[0.04] transition-colors rounded-lg px-2 -mx-2"
               >

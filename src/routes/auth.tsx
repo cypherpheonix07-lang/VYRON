@@ -217,11 +217,10 @@ function UnifiedAuthPage() {
 
   const handleOAuth = async (provider: "google" | "github" | "gitlab") => {
     setLoading(true);
-    const providerLabel = provider === "google" ? "Google" : provider === "github" ? "GitHub" : "GitLab";
     try {
       const res = await authService.signInWithOAuth(provider);
       if (!res.ok) {
-        toast.error(res.error?.message || `Failed to initiate ${providerLabel} OAuth.`);
+        toast.error(res.error?.message || `Failed to initiate ${provider} OAuth.`);
       }
     } catch (err) {
       toast.error("OAuth initiation error");
@@ -419,37 +418,34 @@ function UnifiedAuthPage() {
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs h-9 font-medium flex items-center justify-center gap-1.5"
+                    aria-label="Sign in with Google"
+                    className="text-xs h-8.5 font-medium flex items-center justify-center gap-1.5"
                     onClick={() => handleOAuth("google")}
                     disabled={loading}
-                    aria-label="Sign in with Google"
                   >
-                    <Chrome className="size-3.5 text-red-400" />
-                    <span>Google</span>
+                    <Chrome className="size-3.5" /> Google
                   </Button>
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs h-9 font-medium flex items-center justify-center gap-1.5"
+                    aria-label="Sign in with GitHub"
+                    className="text-xs h-8.5 font-medium flex items-center justify-center gap-1.5"
                     onClick={() => handleOAuth("github")}
                     disabled={loading}
-                    aria-label="Sign in with GitHub"
                   >
-                    <Github className="size-3.5 text-slate-300" />
-                    <span>GitHub</span>
+                    <Github className="size-3.5" /> GitHub
                   </Button>
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs h-9 font-medium flex items-center justify-center gap-1.5"
+                    aria-label="Sign in with GitLab"
+                    className="text-xs h-8.5 font-medium flex items-center justify-center gap-1.5"
                     onClick={() => handleOAuth("gitlab")}
                     disabled={loading}
-                    aria-label="Sign in with GitLab"
                   >
-                    <Gitlab className="size-3.5 text-orange-400" />
-                    <span>GitLab</span>
+                    <Gitlab className="size-3.5" /> GitLab
                   </Button>
                 </div>
 
@@ -591,37 +587,34 @@ function UnifiedAuthPage() {
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs h-9 font-medium flex items-center justify-center gap-1.5"
+                    aria-label="Sign up with Google"
+                    className="text-xs h-8.5 font-medium flex items-center justify-center gap-1.5"
                     onClick={() => handleOAuth("google")}
                     disabled={loading}
-                    aria-label="Sign up with Google"
                   >
-                    <Chrome className="size-3.5 text-red-400" />
-                    <span>Google</span>
+                    <Chrome className="size-3.5" /> Google
                   </Button>
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs h-9 font-medium flex items-center justify-center gap-1.5"
+                    aria-label="Sign up with GitHub"
+                    className="text-xs h-8.5 font-medium flex items-center justify-center gap-1.5"
                     onClick={() => handleOAuth("github")}
                     disabled={loading}
-                    aria-label="Sign up with GitHub"
                   >
-                    <Github className="size-3.5 text-slate-300" />
-                    <span>GitHub</span>
+                    <Github className="size-3.5" /> GitHub
                   </Button>
                   <Button
                     type="button"
                     variant="outline"
                     size="sm"
-                    className="text-xs h-9 font-medium flex items-center justify-center gap-1.5"
+                    aria-label="Sign up with GitLab"
+                    className="text-xs h-8.5 font-medium flex items-center justify-center gap-1.5"
                     onClick={() => handleOAuth("gitlab")}
                     disabled={loading}
-                    aria-label="Sign up with GitLab"
                   >
-                    <Gitlab className="size-3.5 text-orange-400" />
-                    <span>GitLab</span>
+                    <Gitlab className="size-3.5" /> GitLab
                   </Button>
                 </div>
               </TabsContent>

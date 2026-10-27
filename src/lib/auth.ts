@@ -2,7 +2,13 @@ import { useCallback, useEffect, useState, useMemo } from "react";
 import { supabase } from "./supabase";
 import { authService, type DemoUser } from "../services/authService";
 
-export type Role = "Student" | "Faculty" | "Startup" | "Admin" | "Reviewer";
+export type Role =
+  | "Student"
+  | "Faculty"
+  | "Working Professional"
+  | "Admin"
+  | "Startup"
+  | "Reviewer";
 
 export const studioFeatures = {
   auth: true,
@@ -41,12 +47,16 @@ const DEMO_KEY = "brahma.demo_user";
 // Helper to convert lowercase DB roles to PascalCase frontend roles
 export function dbRoleToAppRole(dbRole: string | null | undefined): Role {
   if (!dbRole) return "Student";
-  const normalized = dbRole.toLowerCase();
+  const normalized = dbRole.toLowerCase().trim();
   switch (normalized) {
     case "student":
       return "Student";
     case "faculty":
       return "Faculty";
+    case "professional":
+    case "working professional":
+    case "working_professional":
+      return "Working Professional";
     case "startup":
       return "Startup";
     case "admin":
@@ -58,9 +68,34 @@ export function dbRoleToAppRole(dbRole: string | null | undefined): Role {
   }
 }
 
+import type { Designation } from "./db/types";
+
 // Helper to convert PascalCase frontend roles to lowercase DB roles
-export function appRoleToDbRole(appRole: Role): string {
-  return appRole.toLowerCase();
+export function appRoleToDbRole(appRole: Role): Designation {
+  if (appRole === "Working Professional" || appRole === "Startup") return "professional";
+  if (appRole === "Faculty" || appRole === "Reviewer") return "faculty";
+  if (appRole === "Admin") return "admin";
+  return "student";
+}
+
+/**
+ * Resolves the destination workspace route based on verified profile designation.
+ * Strictly enforces Zero-Fiction Authorization:
+ *  - Student -> /dashboard/student
+ *  - Faculty -> /dashboard/faculty
+ *  - Working Professional -> /dashboard/professional
+ *  - Admin -> /admin/command-centre
+ */
+export function resolvePostLoginRoute(role?: Role | string | null): string {
+  if (!role) return "/dashboard/student";
+  const r = typeof role === "string" ? role.toLowerCase().trim() : "";
+  if (r === "admin" || r.includes("admin")) return "/admin/command-centre";
+  if (r === "student" || r.includes("student")) return "/dashboard/student";
+  if (r === "faculty" || r.includes("faculty")) return "/dashboard/faculty";
+  if (r === "professional" || r.includes("professional") || r === "startup" || r.includes("startup")) {
+    return "/dashboard/professional";
+  }
+  return "/app";
 }
 
 /**
@@ -74,13 +109,11 @@ export async function ensureProfile(
 ): Promise<void> {
   if (authService.isDemoMode()) return;
 
-  if (import.meta.env["VITE_ENABLE_REMOTE_PROFILE_RPC"] === "true") {
-    try {
-      const { error: rpcError } = await supabase.rpc("ensure_profile");
-      if (!rpcError) return;
-    } catch {
-      // RPC may not exist in database yet, proceed to direct check
-    }
+  try {
+    const { error: rpcError } = await supabase.rpc("ensure_profile");
+    if (!rpcError) return;
+  } catch {
+    // RPC may not exist in database yet, proceed to direct check
   }
 
   try {

@@ -4,7 +4,7 @@ import { useState, type FormEvent, useEffect } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { useAuth } from "../lib/auth";
+import { useAuth, resolvePostLoginRoute } from "../lib/auth";
 import { authService } from "../services/authService";
 import { cn } from "../lib/utils";
 import {
@@ -109,7 +109,8 @@ function LoginPage() {
       if (!user.onboarded) {
         navigate({ to: "/onboarding", replace: true });
       } else {
-        navigate({ to: (safeRedirect || "/app") as "/app", replace: true });
+        const dest = safeRedirect || resolvePostLoginRoute(user.role);
+        navigate({ to: dest as any, replace: true });
       }
     }
   }, [ready, user, navigate]);
@@ -230,7 +231,6 @@ function LoginPage() {
 
   // OAuth Sign In
   const handleOAuthLogin = async (provider: "google" | "github" | "gitlab") => {
-    if (oauthLoading || loading) return;
     setOauthLoading(provider);
     setFormError(null);
     const providerLabel = provider === "google" ? "Google" : provider === "github" ? "GitHub" : "GitLab";

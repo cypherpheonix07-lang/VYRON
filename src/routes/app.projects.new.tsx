@@ -4,7 +4,7 @@
  */
 
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { AlertTriangle, RefreshCw, CheckCircle2 } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
@@ -16,8 +16,6 @@ import { ProjectControlPlaneShell } from "@/components/projectControlPlane/Proje
 import { Button } from "@/components/ui/button";
 import { ProjectLifecycleStage } from "@/types/aiProjectControlPlane";
 import { projectRegistry } from "@/services/project/projectRegistry";
-import { activityService } from "@/services/activityService";
-import { workspaceChangeRegistry } from "@/services/workspace/workspaceChangeRegistry";
 
 interface NewProjectSearch {
   stage?: ProjectLifecycleStage | undefined;
@@ -85,10 +83,6 @@ export const Route = createFileRoute("/app/projects/new")({
   component: NewProjectPage,
 });
 
-function generateFallbackProjectId(): string {
-  return `proj-${Date.now()}`;
-}
-
 function NewProjectPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
@@ -98,37 +92,6 @@ function NewProjectPage() {
   const [generationError, setGenerationError] = useState<string | null>(null);
   const [lastPayload, setLastPayload] = useState<WizardPayload | null>(null);
 
-  // Register section with workspace change registry for exit protection
-  useEffect(() => {
-    const sectionId = "new-project-wizard";
-    const unregister = workspaceChangeRegistry.register({
-      sectionId,
-      sectionName: "Project Provisioning Wizard Draft",
-      isDirty: () => {
-        try {
-          const raw = localStorage.getItem("brahma_project_wizard_draft_v2");
-          return !!raw && raw.length > 2;
-        } catch {
-          return false;
-        }
-      },
-      save: async () => {
-        // Draft is automatically persisted in local storage
-      },
-      discard: () => {
-        try {
-          localStorage.removeItem("brahma_project_wizard_draft_v2");
-        } catch {
-          // ignore
-        }
-      },
-    });
-
-    return () => {
-      unregister();
-    };
-  }, []);
-
   // 4.2 Generate Project Handler
   const handleGenerate = async (payload: WizardPayload) => {
     setGenerationError(null);
@@ -137,9 +100,9 @@ function NewProjectPage() {
 
     try {
       const userRes = await authService.getUser();
-      const userId = userRes.data?.id || (typeof window !== "undefined" ? authService.getStoredSession()?.user?.id : null) || null;
+      const userId = userRes.data?.id || "";
 
-      // Prepare complete database upsert row with unassessed initial baseline (Zero-Fiction)
+      // Prepare complete database upsert row
       const projectRow = {
         owner_id: userId,
         name: payload.name,
@@ -176,49 +139,50 @@ function NewProjectPage() {
       };
 
       // 1. Insert/Upsert project row in Supabase
-      let createdId: string | null = null;
-      try {
-        const { data: newProj, error: insertErr } = await supabase
+      const { data: newProj, error: insertErr } = await supabase
+        .from("projects")
+        .insert(projectRow)
+        .select()
+        .single();
+
+      if (insertErr) {
+        // Fallback: If some extended columns haven't had DDL applied yet in user's DB,
+        // retry with core verified columns while keeping payload safe
+        const fallbackRow = {
+          owner_id: userId,
+          name: payload.name,
+          description: payload.description,
+          domain: payload.domain,
+          domain_secondary: payload.domain_secondary,
+          target_users: payload.target_users,
+          platforms: payload.platforms,
+          feature_toggles: payload.feature_toggles,
+          compliance_pack: payload.compliance_pack,
+          gate_strictness: payload.gate_strictness,
+          kpi_targets: payload.kpi_targets,
+          budget_cap_usd: payload.budget_cap_usd,
+          health_score: 0,
+          status: "draft",
+          wizard_step: 0,
+          draft_state: null,
+        };
+
+        const { data: fallbackProj, error: fallbackErr } = await supabase
           .from("projects")
-          .insert(projectRow)
+          .insert(fallbackRow)
           .select()
           .single();
 
-        if (insertErr) {
-          // Fallback: If some extended columns haven't had DDL applied yet in user's DB,
-          // retry with core verified columns (name, description, owner_id, health_score, status)
-          const coreRow = {
-            owner_id: userId,
-            name: payload.name,
-            description: payload.description,
-            health_score: 0,
-            status: "draft",
-          };
-
-          const { data: fallbackProj, error: fallbackErr } = await supabase
-            .from("projects")
-            .insert(coreRow)
-            .select()
-            .single();
-
-          if (fallbackErr) {
-            console.warn("[ProjectGenerator] Remote project insert fallback failed:", fallbackErr.message);
-          } else if (fallbackProj) {
-            createdId = fallbackProj.id;
-          }
-        } else if (newProj) {
-          createdId = newProj.id;
+        if (fallbackErr) {
+          throw new Error(
+            `Failed to provision project: ${insertErr.message} (Fallback: ${fallbackErr.message})`,
+          );
         }
-      } catch (dbErr) {
-        console.warn("[ProjectGenerator] Remote project insertion failed, using local registration:", dbErr);
+
+        return onSuccessfulGeneration(fallbackProj.id, payload);
       }
 
-      if (!createdId) {
-        // Deterministic local project ID if remote DB is unreachable or rejects schema
-        createdId = generateFallbackProjectId();
-      }
-
-      return onSuccessfulGeneration(createdId, payload);
+      return onSuccessfulGeneration(newProj.id, payload);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error("[ProjectGenerator] Error generating project:", msg);
@@ -247,14 +211,14 @@ function NewProjectPage() {
       deliveryRisk: "Low",
     });
 
-    // 4.3 Write Telemetry Event via activityService with circuit-breaker protection
+    // 4.3 Write Telemetry Event to activity_events
     try {
       const userRes = await authService.getUser();
-      await activityService.emitActivity({
-        projectId,
-        actorId: userRes.data?.id || null,
-        actorName: userRes.data?.email ? userRes.data.email.split("@")[0] : "System Operator",
-        eventType: "integration_connect",
+      await supabase.from("activity_events").insert({
+        project_id: projectId,
+        actor_id: userRes.data?.id || null,
+        actor_name: userRes.data?.email ? userRes.data.email.split("@")[0] : "System Operator",
+        event_type: "system",
         severity: "info",
         title: "Project Generated via Wizard v2",
         description: `Project "${payload.name}" provisioned across ${payload.platforms.join(", ")} with ${payload.gate_strictness} release gate strictness.`,
@@ -267,7 +231,6 @@ function NewProjectPage() {
           target_users_count: payload.target_users.length,
           timestamp: new Date().toISOString(),
         },
-        provenanceSha: null,
       });
     } catch {
       // Telemetry best-effort
