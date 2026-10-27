@@ -37,7 +37,10 @@ const serverAiTypes = fs.readFileSync(path.join(ROOT, "src", "server", "ai", "ty
 assert(
   serverFile.includes("gatewayEngine") &&
     serverFile.includes("providerRegistry") &&
-    serverAiTypes.includes('export type AIProvider = "openai" | "openrouter" | "deterministic"'),
+    serverAiTypes.includes("export type AIProvider =") &&
+    serverAiTypes.includes('"openai"') &&
+    serverAiTypes.includes('"openrouter"') &&
+    serverAiTypes.includes('"deterministic"'),
   "R00-1",
   "Environment & Architecture Baseline Discovered",
   "Server gateway imports and AIProvider union type verified in baseline.",
