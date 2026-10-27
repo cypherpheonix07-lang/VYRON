@@ -21,21 +21,7 @@ import {
   User,
   FileEdit,
   ArrowRight,
-  Trash2,
-  AlertTriangle,
-  Loader2,
 } from "lucide-react";
-import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { useMemo, useState } from "react";
 import { useDemoMode } from "@/contexts/DemoModeContext";
 
@@ -155,24 +141,7 @@ function ProjectsPage() {
   const [health, setHealth] = useState("all");
 
   const { isDemoMode } = useDemoMode();
-  const { projects: dbProjects, loading: dbLoading, draftCount, error: dbError, refetch, deleteProject } = useProjects();
-  const [projectToDelete, setProjectToDelete] = useState<{ id: string; name: string } | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const handleConfirmDelete = async () => {
-    if (!projectToDelete) return;
-    setIsDeleting(true);
-    try {
-      await deleteProject(projectToDelete.id);
-      toast.success(`Project "${projectToDelete.name}" deleted successfully.`);
-      setProjectToDelete(null);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err);
-      toast.error(`Failed to delete project: ${msg}`);
-    } finally {
-      setIsDeleting(false);
-    }
-  };
+  const { projects: dbProjects, loading: dbLoading, draftCount, error: dbError, refetch } = useProjects();
 
   // Only explicit demo mode may add sample projects.
   const unifiedProjects = useMemo<DisplayProject[]>(() => {
@@ -448,20 +417,7 @@ function ProjectsPage() {
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setProjectToDelete({ id: p.id, name: p.name });
-                            }}
-                            className="h-6 w-6 p-0 text-muted-foreground hover:text-rose-400 hover:bg-rose-500/10 rounded transition-colors"
-                            title={`Delete ${p.name}`}
-                            aria-label={`Delete ${p.name}`}
-                          >
-                            <Trash2 className="size-3 text-rose-400/80 hover:text-rose-400" />
-                          </Button>
+                        <div className="flex flex-col items-end gap-1 shrink-0">
                           <StatusBadge status={p.status} />
                           {p.gateStrictness && (
                             <span
@@ -573,7 +529,6 @@ function ProjectsPage() {
                     <TableHead>Health (Target)</TableHead>
                     <TableHead>Delivery Risk</TableHead>
                     <TableHead className="hidden lg:table-cell">Repository</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -690,21 +645,6 @@ function ProjectsPage() {
                         <TableCell className="hidden max-w-[180px] truncate text-xs text-muted-foreground lg:table-cell">
                           {p.repoConnected ? p.repoUrl : "Not connected"}
                         </TableCell>
-                        <TableCell className="text-right">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setProjectToDelete({ id: p.id, name: p.name });
-                            }}
-                            className="h-6 w-6 p-0 text-muted-foreground hover:text-rose-400 hover:bg-rose-500/10 rounded transition-colors"
-                            title={`Delete ${p.name}`}
-                            aria-label={`Delete ${p.name}`}
-                          >
-                            <Trash2 className="size-3 text-rose-400/80 hover:text-rose-400" />
-                          </Button>
-                        </TableCell>
                       </TableRow>
                     );
                   })}
@@ -714,58 +654,6 @@ function ProjectsPage() {
           </Card>
         )
       ) : null}
-
-      {/* CONFIRM PROJECT DELETION DIALOG */}
-      <AlertDialog open={!!projectToDelete} onOpenChange={(open) => !open && !isDeleting && setProjectToDelete(null)}>
-        <AlertDialogContent className="border-border bg-zinc-950 text-foreground max-w-md shadow-2xl">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 text-rose-400 text-sm font-bold">
-              <AlertTriangle className="size-4 shrink-0 text-rose-400" />
-              Delete Project from Workspace
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-xs text-muted-foreground space-y-2.5 pt-1">
-              <p>
-                Are you sure you want to delete <strong className="text-foreground">{projectToDelete?.name}</strong>?
-              </p>
-              <div className="p-2.5 rounded bg-zinc-900/90 border border-border/80 text-[11px] text-zinc-300 space-y-1">
-                <p className="font-semibold text-rose-300">Consequences of Deletion:</p>
-                <p>
-                  This operation permanently removes this project record, local analysis runs, and telemetry findings from your internal VYRON workspace.
-                </p>
-              </div>
-              <p className="text-[11px] text-emerald-400 font-medium bg-emerald-500/10 border border-emerald-500/20 p-2 rounded">
-                🛡️ Zero Remote Mutation: Your remote GitHub repository, branches, commits, and external files will NOT be deleted or altered.
-              </p>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter className="gap-2 pt-2">
-            <AlertDialogCancel
-              disabled={isDeleting}
-              onClick={() => setProjectToDelete(null)}
-              className="text-xs h-8 border-border bg-zinc-900 hover:bg-zinc-800"
-            >
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction
-              disabled={isDeleting}
-              onClick={handleConfirmDelete}
-              className="text-xs h-8 bg-destructive hover:bg-destructive/90 text-destructive-foreground font-semibold gap-1.5"
-            >
-              {isDeleting ? (
-                <>
-                  <Loader2 className="size-3 animate-spin" />
-                  Deleting...
-                </>
-              ) : (
-                <>
-                  <Trash2 className="size-3" />
-                  Delete Project
-                </>
-              )}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </>
   );
 }

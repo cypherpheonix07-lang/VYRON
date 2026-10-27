@@ -8,8 +8,7 @@ export function DemoModeToggle({ className }: { className?: string }) {
   const { isDemoMode, setDemoMode } = useDemoMode();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.currentTarget.blur();
+  const handleClick = () => {
     setConfirmOpen(true);
   };
 

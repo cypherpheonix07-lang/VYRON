@@ -223,22 +223,18 @@ export function useWebsiteGeneration(projectId?: string) {
         setPreviewHtml(html);
         updateStage(4, "completed", "Sandboxed runtime ready for interaction");
 
-        // Persist to Supabase if supported
-        try {
-          await supabase
-            .from("website_projects")
-            .update({
-              frontend_blueprint: feBlueprint,
-              backend_blueprint: beBlueprint,
-              mock_data: mockData,
-              status: "previewing",
-              generation_step: 4,
-              updated_at: new Date().toISOString(),
-            })
-            .eq("id", current.id);
-        } catch (dbErr) {
-          console.warn("[useWebsiteGeneration] Remote website_projects sync note:", dbErr);
-        }
+        // Persist to Supabase and update local state
+        await supabase
+          .from("website_projects")
+          .update({
+            frontend_blueprint: feBlueprint,
+            backend_blueprint: beBlueprint,
+            mock_data: mockData,
+            status: "previewing",
+            generation_step: 4,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", current.id);
 
         setProject((prev) =>
           prev

@@ -167,7 +167,6 @@ export interface CopilotMessage {
         stageGate?: import("@/services/copilot/stageGateEngine").StageGateTransition | undefined;
         checkpoint?: import("@/services/copilot/stageGateEngine").ResumableMissionCheckpoint | undefined;
         atherReceipt?: import("@/services/ather/types").HowThisAnswerWasProduced | undefined;
-        attachments?: Array<{ name: string; content: string; type?: string }> | undefined;
       }
     | undefined;
 }
@@ -381,17 +380,8 @@ class CopilotStore {
     this.setDrawerOpen(!this.state.isDrawerOpen);
   }
 
-  public openDrawer() {
+  public openDrawer(): void {
     this.setDrawerOpen(true);
-  }
-
-  public sendMessage(mode: AppMode | "CHAT", text: string) {
-    this.setDrawerOpen(true);
-    const appMode: AppMode = mode === "CHAT" ? "NORMAL" : mode;
-    this.addMessage(appMode, {
-      sender: "USER",
-      text,
-    });
   }
 
   public setContextLensOpen(isOpen: boolean, passport?: import("@/services/copilot/contextMesh").ContextPassport | null) {
@@ -537,6 +527,20 @@ class CopilotStore {
 
     this.emit();
     return fullMsg;
+  }
+
+  public sendMessage(first: string, second?: string): void {
+    let mode: AppMode = "NORMAL";
+    let text = first;
+    if (second !== undefined) {
+      text = second;
+      if (first === "DEMO") mode = "DEMO";
+      else mode = "NORMAL";
+    }
+    this.addMessage(mode, {
+      sender: "USER",
+      text,
+    });
   }
 
   public clearMessages(mode: AppMode) {

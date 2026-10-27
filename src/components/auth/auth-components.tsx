@@ -1058,37 +1058,25 @@ export function RoleCardGrid({
     {
       id: "Student",
       label: "Student",
-      desc: "For final-year engineering projects & thesis blueprints.",
+      desc: "For learning progress, capstone engineering projects, tasks & milestones.",
       icon: User,
     },
     {
       id: "Faculty",
       label: "Faculty",
-      desc: "For reviewing students, rubric scoring, and template controls.",
+      desc: "For academic supervision, review queues, rubric evaluations & approvals.",
       icon: Award,
     },
     {
-      id: "Startup",
-      label: "Startup / Founder",
-      desc: "For MVP scoping, compliance prep, and investor reviews.",
+      id: "Working Professional",
+      label: "Working Professional",
+      desc: "For production architecture, team engineering, deliverables & CI/CD.",
       icon: Flame,
-    },
-    {
-      id: "Reviewer",
-      label: "External Reviewer",
-      desc: "For blind peer reviews, external grading, and rubric validation.",
-      icon: Laptop,
-    },
-    {
-      id: "Admin",
-      label: "Administrator",
-      desc: "Full workspace configuration, logs, and billing controls.",
-      icon: Lock,
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
       {cards.map((card) => {
         const Icon = card.icon;
         const isSel = selected === card.id;

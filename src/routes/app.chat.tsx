@@ -9,11 +9,11 @@ import { CopilotFullScreenStudio } from "@/components/copilot/CopilotFullScreenS
 export const Route = createFileRoute("/app/chat")({
   head: () => ({
     meta: [
-      { title: "ATHER Chatbot Studio — VYRON" },
+      { title: "Brahma Intelligence Copilot Studio — PROJECT BRAHMA" },
       {
         name: "description",
         content:
-          "Conversational command center for ATHER Chatbot: live project intelligence, natural dialogue, grounded evidence, and real-time execution governance.",
+          "Full-screen command center for Brahma AI Copilot: conversational intelligence, multi-agent orchestration, and real-time execution governance.",
       },
     ],
   }),

@@ -4,7 +4,7 @@
  * ZERO SQL.
  */
 
-export type AIProvider = "openai" | "openrouter" | "deterministic" | "moonshot";
+export type AIProvider = "openai" | "openrouter" | "moonshot" | "deterministic";
 
 export type TaskCategory =
   | "lightweight_chat"

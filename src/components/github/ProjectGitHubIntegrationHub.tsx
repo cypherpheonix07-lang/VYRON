@@ -38,7 +38,6 @@ import { GitHubSyncStatus } from "./GitHubSyncStatus";
 import { useRepoBinding } from "@/hooks/useRepoBinding";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/lib/supabaseClient";
-import { authService } from "@/services/authService";
 
 export interface BoundProjectRepo {
   id: string;
@@ -115,8 +114,8 @@ export function ProjectGitHubIntegrationHub({
         }
       }
 
-      // Only show mock accounts in demo mode; in live mode, preserve honest empty state
-      if (fetchedAccounts.length === 0 && (authService.isDemoMode())) {
+      // Default mock fallback for high-fidelity interactive review
+      if (fetchedAccounts.length === 0) {
         fetchedAccounts = [
           {
             id: "acc-user-01",

@@ -70,7 +70,7 @@ export const Route = createFileRoute("/app/exit")({
 
 function WorkspaceExitPage() {
   const { user } = useAuth();
-  const search = Route.useSearch();
+  const search = Route.useSearch() as unknown as ExitSearch;
 
   const projectId = search.projectId || "brahma-core";
   const projectName = search.projectName || (search.projectId ? `Project ${search.projectId}` : "Active Project");
@@ -169,7 +169,7 @@ function WorkspaceExitPage() {
                   Synchronized Sections ({sectionsList.length}):
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {sectionsList.map((sec) => (
+                  {sectionsList.map((sec: string) => (
                     <Badge
                       key={sec}
                       variant="secondary"

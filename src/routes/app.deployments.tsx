@@ -140,7 +140,7 @@ const PLATFORM_INVENTORY: DeploymentPlatform[] = [
 ];
 
 function DeploymentPlatformsPage() {
-  const search = useSearch({ from: "/app/deployments" });
+  const search = Route.useSearch() as { tab?: string };
   const [activeTab, setActiveTab] = useState<string>(search.tab || "overview");
   const [selectedPlatform, setSelectedPlatform] = useState<DeploymentPlatform | null>(null);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -227,7 +227,7 @@ function DeploymentPlatformsPage() {
             size="sm"
             className="text-xs font-semibold gap-1.5 h-9 bg-primary hover:bg-primary/90 text-primary-foreground"
           >
-            <Link to="/app/release/pipelines">
+            <Link to={"/app/release/pipelines" as any}>
               <Zap className="size-3.5" />
               View Pipelines
             </Link>

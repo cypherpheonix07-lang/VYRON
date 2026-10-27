@@ -6,7 +6,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { useLocation, useNavigate } from "@tanstack/react-router";
+import { useRouterState, useNavigate } from "@tanstack/react-router";
 import {
   projectRegistry,
   type CanonicalProject,
@@ -19,15 +19,14 @@ export interface ActiveProjectContextValue {
   availability: ProjectAvailability;
   availableProjects: CanonicalProject[];
   generationId: number;
-  setActiveProject: (id: string | null, options?: { navigateToProject?: boolean }) => void;
+  setActiveProject: (id: string, options?: { navigateToProject?: boolean }) => void;
   refresh: () => Promise<void>;
 }
 
 export function useActiveProject(): ActiveProjectContextValue {
   const navigate = useNavigate();
-  const location = useLocation();
-  const pathname = location?.pathname || "";
-  const searchStr = location?.searchStr || "";
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const searchStr = useRouterState({ select: (s) => s.location.searchStr });
 
   // 1. Resolve project ID from route param hierarchy (B04)
   // Priority 1: Route param /app/projects/:id
@@ -108,16 +107,9 @@ export function useActiveProject(): ActiveProjectContextValue {
   }, [isResolving, currentProject, resolvedTargetId]);
 
   const setActiveProject = useCallback(
-    (id: string | null, options?: { navigateToProject?: boolean }) => {
+    (id: string, options?: { navigateToProject?: boolean }) => {
       if (id === "all") {
         navigate({ to: "/app/projects" });
-        return;
-      }
-
-      if (!id || id === "none") {
-        projectRegistry.clearActiveProject();
-        setCurrentProject(null);
-        setGenerationId(projectRegistry.getGenerationId());
         return;
       }
 

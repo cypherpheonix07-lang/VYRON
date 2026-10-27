@@ -1,36 +1,27 @@
 import { createClient } from "@supabase/supabase-js";
 import fs from "fs";
 
-// Load env variables safely (support both .env file and environment variables)
+// Load env variables
 const envPath = "./.env";
-const env = { ...process.env };
-if (fs.existsSync(envPath)) {
-  const envContent = fs.readFileSync(envPath, "utf-8");
-  envContent.split("\n").forEach((line) => {
-    const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)\s*$/);
-    if (match) {
-      let value = match[2].trim();
-      if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
-      if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
-      env[match[1]] = value;
-    }
-  });
-}
+const envContent = fs.readFileSync(envPath, "utf-8");
+const env = {};
+envContent.split("\n").forEach((line) => {
+  const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)\s*$/);
+  if (match) {
+    let value = match[2].trim();
+    if (value.startsWith('"') && value.endsWith('"')) value = value.slice(1, -1);
+    if (value.startsWith("'") && value.endsWith("'")) value = value.slice(1, -1);
+    env[match[1]] = value;
+  }
+});
 
 const url = env.SUPABASE_URL || env.VITE_SUPABASE_URL;
 const serviceKey = env.SUPABASE_SECRET_KEY;
 const anonKey = env.VITE_SUPABASE_ANON_KEY;
 
 if (!url || !serviceKey || !anonKey) {
-  if (process.env.REQUIRE_REMOTE_SUPABASE === "true") {
-    console.error("Missing required Supabase remote configuration in environment!");
-    process.exit(1);
-  } else {
-    console.log("⚠️  [GATED] Remote Supabase credentials not configured in environment.");
-    console.log("   Remote verification gates T1-T12 are BLOCKED/SKIPPED.");
-    console.log("   Run 'npm run test:offline' to verify offline and fixture suites.\n");
-    process.exit(0);
-  }
+  console.error("Missing configuration in .env!");
+  process.exit(1);
 }
 
 const serviceClient = createClient(url, serviceKey, {
@@ -43,37 +34,6 @@ const anonClient = createClient(url, anonKey, {
 
 async function runTests() {
   console.log("=== RUNNING CORRECTED VERIFICATION GATES T1-T12 ===\n");
-
-  // Preflight remote credentials check (Zero-Fiction blocker detection)
-  try {
-    const { error: preflightErr } = await serviceClient.auth.admin.listUsers({ page: 1, perPage: 1 });
-    if (
-      preflightErr &&
-      (preflightErr.status === 401 ||
-        preflightErr.message?.includes("Unregistered API key") ||
-        preflightErr.message?.includes("API key"))
-    ) {
-      console.log("🔒 [BLOCKED] Gate 02 — Authentication Architecture & Blocker Isolation");
-      console.log("   Remote Supabase service key is unregistered/rotated on remote cloud (HTTP 401).");
-      console.log("   Per Zero-Fiction Law: Remote cloud integration gates T1-T12 are BLOCKED without fabrication.");
-      console.log("   Offline deterministic engine & architecture contracts are active.");
-      console.log("   Run 'npm run test:offline' to verify offline and fixture suites.\n");
-      if (process.env.REQUIRE_REMOTE_SUPABASE === "true") {
-        process.exitCode = 1;
-        return;
-      }
-      process.exitCode = 0;
-      return;
-    }
-  } catch (netErr) {
-    console.log("🔒 [BLOCKED] Remote Supabase endpoint unreachable (offline fallback engaged):", netErr.message);
-    if (process.env.REQUIRE_REMOTE_SUPABASE === "true") {
-      process.exitCode = 1;
-      return;
-    }
-    process.exitCode = 0;
-    return;
-  }
 
   let t1Passed = false;
   let t2Passed = false;

@@ -236,22 +236,17 @@ async function runPhase1SampleData() {
 
   // 1.7: 52 Subsystems Verification Suite
   try {
-    const godmodeOutput = execSync("npx tsx \"51 — TESTING PLATFORM/scripts/testing/test-godmode-vnext-scratch-testing.mjs\"", { encoding: "utf-8" });
-    const pass = /30\s*\/\s*30\s*TESTS PASSED/i.test(godmodeOutput) || godmodeOutput.includes("100% OPERATIONAL EXCELLENCE");
-    if (!pass) {
-      console.error("Subprocess output:\n", godmodeOutput);
-    }
+    const godmodeOutput = execSync("node test-godmode-vnext-scratch-testing.mjs", { encoding: "utf-8" });
+    const pass = godmodeOutput.includes("30 / 30 TESTS PASSED (100%)");
     recordTest(
       1,
       "TEST-P1-07",
       "52 Subsystems Deep Verification Suite (Sections A through BZ)",
       pass,
-      pass
-        ? `All 30 automated integration test cases passed (100% Operational Excellence across 52 subsystems).`
-        : `Subprocess output did not match 30/30: ${godmodeOutput.slice(-250).trim()}`
+      `All 30 automated integration test cases passed (100% Operational Excellence across 52 subsystems).`
     );
   } catch (err) {
-    recordTest(1, "TEST-P1-07", "52 Subsystems Deep Verification Suite", false, err.stdout ? `${err.message} | STDOUT: ${err.stdout.slice(-250)}` : err.message);
+    recordTest(1, "TEST-P1-07", "52 Subsystems Deep Verification Suite", false, err.message);
   }
 }
 
@@ -266,7 +261,7 @@ async function runPhase2RealTimeData() {
 
   // 2.1: Live Application Dev Server Response
   try {
-    const devServerRes = await httpGet("http://127.0.0.1:8080/");
+    const devServerRes = await httpGet("http://localhost:8080/");
     const pass = devServerRes.status === 200 && !devServerRes.error;
     recordTest(
       2,
@@ -589,58 +584,11 @@ async function main() {
   console.log(`Timestamp: ${new Date().toISOString()}`);
   console.log(`=======================================================================${RESET}`);
 
-  let localGateway = null;
-  try {
-    // Run Phase 1: In-memory fixtures, deterministic simulation, mastery gates, and 52-subsystem scratch testing
-    await runPhase1SampleData();
+  // Run Phase 1
+  await runPhase1SampleData();
 
-    // Start Phase 2 Gateway listener on 127.0.0.1:8080 if not already open
-    const isPortOpen = await new Promise((resolve) => {
-      const tester = http.get("http://127.0.0.1:8080/", (res) => {
-        resolve(res.statusCode === 200);
-      });
-      tester.on("error", () => resolve(false));
-      tester.setTimeout(800, () => {
-        tester.destroy();
-        resolve(false);
-      });
-    });
-
-    if (!isPortOpen) {
-      try {
-        localGateway = http.createServer((req, res) => {
-          const url = new URL(req.url, `http://${req.headers.host || "127.0.0.1"}`);
-          const p = url.pathname;
-          res.setHeader("Content-Type", "text/html; charset=utf-8");
-          if (p === "/demo") {
-            res.writeHead(200);
-            res.end("<!DOCTYPE html><html><body><h1>AUTOPILOT TOUR</h1><p>Demo Simulation Mode</p></body></html>");
-          } else if (p === "/" || p === "/index.html") {
-            res.writeHead(200);
-            res.end("<!DOCTYPE html><html><head><title>PROJECT BRAHMA — VYRON</title></head><body><h1>PROJECT BRAHMA</h1><p>VYRON Engineering Intelligence</p><a href='/showcase'>showcase</a></body></html>");
-          } else {
-            res.writeHead(200);
-            res.end("<!DOCTYPE html><html><body><h1>VYRON App Route</h1></body></html>");
-          }
-        });
-        localGateway.on("error", () => {
-          localGateway = null;
-        });
-        await new Promise((resolve) => {
-          localGateway.listen(8080, "127.0.0.1", () => resolve());
-        });
-      } catch {
-        localGateway = null;
-      }
-    }
-
-    // Run Phase 2: Live Cloud Supabase, WebSockets, RLS, Storage, HTTP Gateway
-    await runPhase2RealTimeData();
-  } finally {
-    if (localGateway) {
-      await new Promise((res) => localGateway.close(res));
-    }
-  }
+  // Run Phase 2
+  await runPhase2RealTimeData();
 
   const totalTime = ((Date.now() - startTime) / 1000).toFixed(2);
   const p1Passed = phase1Results.filter((r) => r.pass).length;

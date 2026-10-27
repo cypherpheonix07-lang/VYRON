@@ -1,37 +1,11 @@
 import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
-let aiModulesPromise: Promise<{
-  gatewayEngine: any;
-  modelRegistry: any;
-  modelRouter: any;
-  openAiServerAdapter: any;
-  openRouterServerAdapter: any;
-  moonshotServerAdapter: any;
-  providerRegistry: any;
-}> | null = null;
-
-async function getAiModules() {
-  if (!aiModulesPromise) {
-    aiModulesPromise = Promise.all([
-      import("./server/ai/gatewayEngine.ts"),
-      import("./server/ai/modelRegistry.ts"),
-      import("./server/ai/modelRouter.ts"),
-      import("./server/ai/adapters/openAiServerAdapter.ts"),
-      import("./server/ai/adapters/openRouterServerAdapter.ts"),
-      import("./server/ai/adapters/moonshotServerAdapter.ts"),
-      import("./server/ai/providerRegistry.ts"),
-    ]).then(([gw, mr, rt, oai, or, ms, pr]) => ({
-      gatewayEngine: gw.gatewayEngine,
-      modelRegistry: mr.modelRegistry,
-      modelRouter: rt.modelRouter,
-      openAiServerAdapter: oai.openAiServerAdapter,
-      openRouterServerAdapter: or.openRouterServerAdapter,
-      moonshotServerAdapter: ms.moonshotServerAdapter,
-      providerRegistry: pr.providerRegistry,
-    }));
-  }
-  return aiModulesPromise;
-}
+import { gatewayEngine } from "./server/ai/gatewayEngine";
+import { modelRegistry } from "./server/ai/modelRegistry";
+import { modelRouter } from "./server/ai/modelRouter";
+import { openAiServerAdapter } from "./server/ai/adapters/openAiServerAdapter";
+import { openRouterServerAdapter } from "./server/ai/adapters/openRouterServerAdapter";
+import { providerRegistry } from "./server/ai/providerRegistry";
 
 function renderFallbackErrorHtml(): string {
   return `<!doctype html>
@@ -81,13 +55,7 @@ async function getServerEntry(): Promise<ServerEntry> {
 
 // h3 swallows in-handler throws into a normal 500 Response with body
 // {"unhandled":true,"message":"HTTPError"} — try/catch alone never fires for those.
-async function normalizeCatastrophicSsrResponse(
-  response: Response,
-  request?: Request,
-): Promise<Response> {
-  if (request?.signal?.aborted) {
-    return new Response(null, { status: 499, statusText: "Client Closed Request" });
-  }
+async function normalizeCatastrophicSsrResponse(response: Response): Promise<Response> {
   if (response.status < 500) return response;
   const contentType = response.headers.get("content-type") ?? "";
   if (!contentType.includes("application/json")) return response;
@@ -95,16 +63,7 @@ async function normalizeCatastrophicSsrResponse(
   const body = await response.clone().text();
   if (!isH3SwallowedErrorBody(body)) return response;
 
-  if (request?.signal?.aborted) {
-    return new Response(null, { status: 499, statusText: "Client Closed Request" });
-  }
-
-  const captured = consumeLastCapturedError();
-  if (captured) {
-    console.error(captured);
-  } else if (!request?.signal?.aborted) {
-    console.warn(`[SSR] h3 unhandled response: ${body}`);
-  }
+  console.error(consumeLastCapturedError() ?? new Error(`h3 swallowed SSR error: ${body}`));
   return new Response(renderFallbackErrorHtml(), {
     status: 500,
     headers: { "content-type": "text/html; charset=utf-8" },
@@ -170,23 +129,9 @@ async function handleAiServerRoutes(request: Request): Promise<Response | null> 
     });
   }
 
-  if (!path.startsWith("/api/ai")) {
-    return null;
-  }
-
-  if (request.method === "OPTIONS") {
+  if (request.method === "OPTIONS" && path.startsWith("/api/ai")) {
     return new Response(null, { status: 204, headers: jsonHeaders });
   }
-
-  const {
-    gatewayEngine,
-    modelRegistry,
-    modelRouter,
-    openAiServerAdapter,
-    openRouterServerAdapter,
-    moonshotServerAdapter,
-    providerRegistry,
-  } = await getAiModules();
 
   if (path === "/api/ai/health") {
     const health = await gatewayEngine.getHealth();
@@ -293,9 +238,6 @@ async function handleAiServerRoutes(request: Request): Promise<Response | null> 
       } else if (provider === "openrouter") {
         const result = await openRouterServerAdapter.healthCheck();
         return new Response(JSON.stringify(result), { status: 200, headers: jsonHeaders });
-      } else if (provider === "moonshot") {
-        const result = await moonshotServerAdapter.healthCheck();
-        return new Response(JSON.stringify(result), { status: 200, headers: jsonHeaders });
       } else {
         return new Response(JSON.stringify({ error: "Unknown provider" }), {
           status: 400,
@@ -360,17 +302,8 @@ export default {
 
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response, request);
-    } catch (error: any) {
-      if (
-        request.signal?.aborted ||
-        error?.name === "AbortError" ||
-        error?.code === "ECONNRESET" ||
-        error?.message === "aborted" ||
-        (typeof error?.message === "string" && error.message.includes("aborted"))
-      ) {
-        return new Response(null, { status: 499, statusText: "Client Closed Request" });
-      }
+      return await normalizeCatastrophicSsrResponse(response);
+    } catch (error) {
       console.error(error);
       return new Response(renderFallbackErrorHtml(), {
         status: 500,

@@ -30,9 +30,8 @@ import {
   Undo2,
   Wand2,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import { workspaceChangeRegistry } from "@/services/workspace/workspaceChangeRegistry";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -110,42 +109,6 @@ function StudioEditorPage() {
 
   // Selected code changes approve state
   const [hasDiff, setHasDiff] = useState(false);
-
-  // Register with workspace change registry
-  useEffect(() => {
-    const sectionId = `studio-editor-${id}`;
-    const unregister = workspaceChangeRegistry.register({
-      sectionId,
-      sectionName: "Code Studio IDE & Copilot",
-      isDirty: () => hasDiff || chatInput.trim().length > 0,
-      save: async () => {
-        if (hasDiff) {
-          setHasDiff(false);
-          toast.success("AI edits merged into file tree.");
-        }
-        if (chatInput.trim().length > 0) {
-          try {
-            localStorage.setItem(`vyron_studio_copilot_draft_${id}`, chatInput);
-          } catch {
-            // ignore
-          }
-        }
-      },
-      discard: () => {
-        setHasDiff(false);
-        setChatInput("");
-        try {
-          localStorage.removeItem(`vyron_studio_copilot_draft_${id}`);
-        } catch {
-          // ignore
-        }
-      },
-    });
-
-    return () => {
-      unregister();
-    };
-  }, [id, hasDiff, chatInput]);
 
   const handleSelectFile = (file: (typeof mockFiles)[0]) => {
     setActiveFile(file);

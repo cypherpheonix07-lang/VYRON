@@ -290,8 +290,8 @@ async function testG5() {
 async function testG6() {
   try {
     const testSecretPayload = {
-      api_key: "sk-proj-1234567890abcdef1234567890abcdef",
-      github_token: "ghp_1234567890abcdefghijklmnopqrstuvwxyz",
+      api_key: "sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      github_token: "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
       nested: { config: "ENV_SECRET=supersecretpassword123" },
     };
 

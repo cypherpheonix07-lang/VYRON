@@ -14,7 +14,6 @@ import {
   type OperationDefinition,
 } from "./operationRegistry";
 import { projectRegistry } from "@/services/project/projectRegistry";
-import { activityService } from "@/services/activityService";
 
 export type RunStatus =
   | "queued"
@@ -355,13 +354,11 @@ class RunService {
     this.saveToStorage();
     this.notify(finalRun);
 
-    // Protected Telemetry persistence with circuit breaker to avoid 404 console errors
+    // Best-effort Telemetry persistence to activity_events
     try {
-      await activityService.emitActivity({
-        projectId: finalRun.projectId,
-        actorId: null,
-        actorName: "VYRON Engine Runner",
-        eventType: "scan_completion",
+      await supabase.from("activity_events").insert({
+        project_id: finalRun.projectId,
+        event_type: "run_completed",
         severity: "info",
         title: `Run Succeeded: ${finalRun.operationName}`,
         description: `Run ${finalRun.runId} completed with verification hash ${verificationHash.slice(0, 16)}...`,
@@ -371,7 +368,6 @@ class RunService {
           durationMs,
           verificationHash,
         },
-        provenanceSha: verificationHash && verificationHash.length === 64 ? verificationHash : null,
       });
     } catch {
       // Telemetry best-effort

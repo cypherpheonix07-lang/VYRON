@@ -389,6 +389,7 @@ export const BlueprintReleaseConvergenceView: React.FC<{ projectId: string }> = 
                 minZoom={0.3}
                 maxZoom={2.2}
                 onNodeClick={(_, node) => handleSelectNode(node.id)}
+                proOptions={{ hideAttribution: true }}
               >
                 <Background color="hsl(217, 32%, 18%)" gap={24} />
                 <Controls className="!bg-card !border-border !fill-foreground" />

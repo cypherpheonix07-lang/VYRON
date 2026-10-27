@@ -16,7 +16,6 @@ import {
 import { openAiServerAdapter } from "./adapters/openAiServerAdapter";
 import { openRouterServerAdapter } from "./adapters/openRouterServerAdapter";
 import { deterministicServerAdapter } from "./adapters/deterministicServerAdapter";
-import { moonshotServerAdapter } from "./adapters/moonshotServerAdapter";
 import { modelRouter } from "./modelRouter";
 import { semanticCache } from "./semanticCache";
 
@@ -183,8 +182,6 @@ export class GatewayEngine {
           finalResponse = await openAiServerAdapter.complete(stepRequest);
         } else if (step.provider === "openrouter") {
           finalResponse = await openRouterServerAdapter.complete(stepRequest);
-        } else if (step.provider === "moonshot") {
-          finalResponse = await moonshotServerAdapter.complete(stepRequest);
         } else {
           finalResponse = await deterministicServerAdapter.complete(stepRequest);
         }

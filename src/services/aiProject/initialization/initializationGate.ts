@@ -6,7 +6,6 @@
 
 import { supabase } from "../../../lib/supabaseClient.ts";
 import { authService } from "../../authService.ts";
-import { activityService } from "../../activityService.ts";
 import type { ProjectEngineeringState } from "../../../types/aiProjectControlPlane.ts";
 import { copilotMemory } from "../../copilot/copilotMemory.ts";
 
@@ -155,13 +154,13 @@ export class InitializationGate {
         createdProjectId = fallbackProj.id;
       }
 
-      // 2. Log Telemetry to activity_events table via activityService with circuit breaker
+      // 2. Log Telemetry to activity_events
       try {
-        await activityService.emitActivity({
-          projectId: createdProjectId,
-          actorId: userId,
-          actorName: userRes.data?.email ? userRes.data.email.split("@")[0] : "System Architect",
-          eventType: "integration_connect",
+        await supabase.from("activity_events").insert({
+          project_id: createdProjectId,
+          actor_id: userId,
+          actor_name: userRes.data?.email ? userRes.data.email.split("@")[0] : "System Architect",
+          event_type: "system",
           severity: "info",
           title: "AI Project Control Plane Initialized",
           description: `Project "${state.name}" provisioned from canonical blueprint v${state.version} with 14 verified engineering stages.`,
@@ -171,7 +170,6 @@ export class InitializationGate {
             architecture: state.architecture.selectedAlternativeId,
             timestamp: new Date().toISOString(),
           },
-          provenanceSha: null,
         });
       } catch {
         // Best-effort telemetry

@@ -28,18 +28,15 @@ export function CopilotFloatingButton() {
   return (
     <button
       type="button"
-      onClick={(e) => {
-        e.currentTarget.blur();
-        setDrawerOpen(!isDrawerOpen);
-      }}
+      onClick={() => setDrawerOpen(!isDrawerOpen)}
       className={cn(
         "fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-full font-bold text-xs shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 border cursor-pointer",
         mode === "DEMO"
           ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white border-amber-400/40 shadow-[0_0_25px_rgba(245,158,11,0.4)]"
           : "bg-gradient-to-r from-primary via-indigo-600 to-violet-700 text-white border-white/20 shadow-[0_0_25px_rgba(124,58,237,0.4)]",
       )}
-      title="Open ATHER Chatbot (Cmd+Shift+K)"
-      aria-label="Open ATHER Chatbot (Cmd+Shift+K)"
+      title="Open ATHER Copilot (Cmd+Shift+K)"
+      aria-label="Open ATHER Copilot (Cmd+Shift+K)"
     >
       <div className="relative flex items-center justify-center">
         {isRunning ? (
@@ -60,7 +57,7 @@ export function CopilotFloatingButton() {
           )}
         />
       </div>
-      <span className="font-semibold">{mode === "DEMO" ? "ATHER Demo Chatbot" : "ATHER Chatbot"}</span>
+      <span className="font-semibold">{mode === "DEMO" ? "ATHER Demo" : "ATHER Copilot"}</span>
       <span className="text-[9px] px-1.5 py-0.5 rounded bg-black/25 text-white/80 font-mono hidden sm:inline-block">
         ⌘⇧K
       </span>

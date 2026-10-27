@@ -39,7 +39,7 @@ export async function decryptToken(hexString, secret) {
 
 async function test() {
   const secret = "brahma-default-key-sec-2026";
-  const token = "ghp_MockGitHubToken1234567890abcdefABCDEF";
+  const token = "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
   const encrypted = await encryptToken(token, secret);
   console.log("Encrypted bytea:", encrypted.slice(0, 30) + "...");
   const decrypted = await decryptToken(encrypted, secret);

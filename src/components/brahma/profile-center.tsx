@@ -313,7 +313,7 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
     async function fetchProfile() {
       if (!targetUserId) return;
       try {
-        if ((readOnly || previewAsTeammate) && import.meta.env["VITE_ENABLE_REMOTE_PROFILE_RPC"] === "true") {
+        if (readOnly || previewAsTeammate) {
           // STRICT SERVER-SIDE PRIVACY RPC
           const { data, error } = await supabase.rpc("get_public_profile", {
             target_user_id: targetUserId,
@@ -328,31 +328,30 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
               publications: data.publications || [],
               visibility: data.visibility || prev.visibility,
             }));
-            return;
           }
-        }
-        
-        // Direct load for owner or standard read
-        const { data } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", targetUserId)
-          .maybeSingle();
-        if (data) {
-          setProfile((prev) => ({
-            ...prev,
-            ...data,
-            handle: data.handle || prev.handle,
-            pronouns: data.pronouns || prev.pronouns,
-            bio: data.bio || prev.bio,
-            location_city: data.location_city || prev.location_city,
-            location_country: data.location_country || prev.location_country,
-            academic: data.academic || prev.academic,
-            professional: data.professional || prev.professional,
-            engineering: data.engineering || prev.engineering,
-            publications: data.publications || prev.publications,
-            visibility: data.visibility || prev.visibility,
-          }));
+        } else {
+          // Direct load for owner
+          const { data } = await supabase
+            .from("profiles")
+            .select("*")
+            .eq("id", targetUserId)
+            .maybeSingle();
+          if (data) {
+            setProfile((prev) => ({
+              ...prev,
+              ...data,
+              handle: data.handle || prev.handle,
+              pronouns: data.pronouns || prev.pronouns,
+              bio: data.bio || prev.bio,
+              location_city: data.location_city || prev.location_city,
+              location_country: data.location_country || prev.location_country,
+              academic: data.academic || prev.academic,
+              professional: data.professional || prev.professional,
+              engineering: data.engineering || prev.engineering,
+              publications: data.publications || prev.publications,
+              visibility: data.visibility || prev.visibility,
+            }));
+          }
         }
       } catch (err) {
         console.warn("Failed to load profile, using verified defaults:", err);
@@ -389,9 +388,7 @@ export function ProfileCenterShell({ initialUserId, readOnly = false }: ProfileC
           })
           .eq("id", user.id);
 
-        if (import.meta.env["VITE_ENABLE_REMOTE_PROFILE_RPC"] === "true") {
-          await supabase.rpc("profile_completeness_recompute", { p_user_id: user.id });
-        }
+        await supabase.rpc("profile_completeness_recompute", { p_user_id: user.id });
       }
 
       setHasUnsavedChanges(false);

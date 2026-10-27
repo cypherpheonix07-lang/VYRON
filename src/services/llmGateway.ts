@@ -8,7 +8,7 @@
  * ZERO DIRECT CLIENT CALLS TO EXTERNAL LLM HOSTS.
  */
 
-import { supabase } from "../lib/supabaseClient.ts";
+import { supabase } from "../lib/supabaseClient";
 
 // ─── Interfaces & Response Contracts ─────────────────────────────────────────
 

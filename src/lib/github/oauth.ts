@@ -31,11 +31,8 @@ const GITHUB_PROJECT_KEY = "brahma_github_oauth_project_id";
  * persisting it to sessionStorage for CSRF validation, and redirecting.
  * Declares required scopes: repo, read:user, read:org
  */
-export function initiateGitHubOAuth(projectId?: string): boolean {
-  const clientId = import.meta.env["VITE_GITHUB_CLIENT_ID"];
-  if (!clientId || clientId === "Iv1.8821941brahma") {
-    return false;
-  }
+export function initiateGitHubOAuth(projectId?: string): void {
+  const clientId = import.meta.env["VITE_GITHUB_CLIENT_ID"] || "Iv1.8821941brahma";
   const state = crypto.randomUUID();
 
   if (typeof window !== "undefined") {
@@ -53,9 +50,7 @@ export function initiateGitHubOAuth(projectId?: string): boolean {
     )}&redirect_uri=${encodeURIComponent(redirectUri)}`;
 
     window.location.href = authUrl;
-    return true;
   }
-  return false;
 }
 
 /**

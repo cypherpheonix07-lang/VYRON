@@ -44,7 +44,7 @@ export interface GitHubRepoItem {
   topics: string[];
   clone_url: string;
   ssh_url: string;
-  owner?: { login: string; avatar_url?: string } | null;
+  owner?: { login: string; id?: number; avatar_url?: string } | null;
 }
 
 export interface GitHubCommitItem {
@@ -126,53 +126,29 @@ class GitHubService {
     percentRemaining: 100,
   };
 
-  private static readonly STORAGE_KEY = "vyron_github_token";
-
   constructor() {
+    // Check if token stored in memory/session
     this.hydrateToken();
   }
 
-  public async hydrateToken(): Promise<string | null> {
-    if (this.token) return this.token;
+  private async hydrateToken(): Promise<string | null> {
     try {
-      // 1. Check local storage for directly configured PAT
-      if (typeof window !== "undefined") {
-        const stored = localStorage.getItem(GitHubService.STORAGE_KEY);
-        if (stored?.trim()) {
-          this.token = stored.trim();
-          return this.token;
-        }
-      }
-
-      // 2. Check Supabase Auth session for provider token
       const res = await authService.getSession();
       const session = res.data;
       if (session?.provider_token) {
         this.token = session.provider_token;
-        if (typeof window !== "undefined") {
-          localStorage.setItem(GitHubService.STORAGE_KEY, this.token);
-        }
         return this.token;
       }
-
-      // 3. Check Supabase github_tokens table (with silent graceful fallback if table not yet created)
+      // Check database tokens table
       if (session?.user?.id) {
-        try {
-          const { data, error } = await supabase
-            .from("github_tokens")
-            .select("access_token")
-            .eq("user_id", session.user.id)
-            .maybeSingle();
-
-          if (!error && data?.access_token) {
-            this.token = data.access_token;
-            if (typeof window !== "undefined" && this.token) {
-              localStorage.setItem(GitHubService.STORAGE_KEY, this.token);
-            }
-            return this.token;
-          }
-        } catch {
-          // Table does not exist on remote schema - gracefully ignored
+        const { data } = await supabase
+          .from("github_tokens")
+          .select("access_token")
+          .eq("user_id", session.user.id)
+          .maybeSingle();
+        if (data?.access_token) {
+          this.token = data.access_token;
+          return this.token;
         }
       }
     } catch (e) {
@@ -181,79 +157,8 @@ class GitHubService {
     return this.token;
   }
 
-  public hasToken(): boolean {
-    if (this.token) return true;
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem(GitHubService.STORAGE_KEY);
-      if (stored?.trim()) {
-        this.token = stored.trim();
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public setToken(token: string | null) {
-    this.token = token ? token.trim() : null;
-    if (typeof window !== "undefined") {
-      if (this.token) {
-        localStorage.setItem(GitHubService.STORAGE_KEY, this.token);
-      } else {
-        localStorage.removeItem(GitHubService.STORAGE_KEY);
-      }
-    }
-    this.clearCache();
-  }
-
-  public async saveToken(token: string): Promise<{ ok: boolean; error?: string; user?: GitHubUserProfile }> {
-    const cleanToken = token.trim();
-    if (!cleanToken) return { ok: false, error: "GitHub token cannot be empty." };
-
-    try {
-      const res = await fetch("https://api.github.com/user", {
-        headers: {
-          Accept: "application/vnd.github.v3+json",
-          Authorization: `Bearer ${cleanToken}`,
-        },
-      });
-
-      if (!res.ok) {
-        if (res.status === 401) {
-          return { ok: false, error: "Invalid GitHub token. Please verify token permissions (repo, read:user)." };
-        }
-        return { ok: false, error: `GitHub API error: ${res.statusText} (${res.status})` };
-      }
-
-      const userData = (await res.json()) as GitHubUserProfile;
-      this.setToken(cleanToken);
-
-      // Attempt storing in Supabase if session exists
-      try {
-        const sessionRes = await authService.getSession();
-        if (sessionRes.ok && sessionRes.data?.user?.id) {
-          await supabase.from("github_tokens").upsert({
-            user_id: sessionRes.data.user.id,
-            access_token: cleanToken,
-            token_type: "bearer",
-            github_username: userData.login,
-            github_user_id: userData.id,
-            scopes: res.headers.get("x-oauth-scopes") || "repo,read:user",
-            updated_at: new Date().toISOString(),
-          });
-        }
-      } catch {
-        // Table may not exist yet; token is safely saved in localStorage
-      }
-
-      return { ok: true, user: userData };
-    } catch (err: unknown) {
-      return { ok: false, error: err instanceof Error ? err.message : String(err) };
-    }
-  }
-
-  public disconnect() {
-    this.setToken(null);
-    this.clearCache();
+  public setToken(token: string) {
+    this.token = token;
   }
 
   public getToken(): string | null {
@@ -394,9 +299,7 @@ class GitHubService {
   // ─── 7 DATA LAYERS ────────────────────────────────────────────────────────
 
   // LAYER 1: USER PROFILE (TTL: 1 hour)
-  public async fetchUserProfile(forceRefresh = false): Promise<GitHubUserProfile | null> {
-    const token = await this.hydrateToken();
-    if (!token) return null;
+  public async fetchUserProfile(forceRefresh = false): Promise<GitHubUserProfile> {
     return this.resilientFetch<GitHubUserProfile>("/user", 3600, forceRefresh);
   }
 
@@ -407,66 +310,11 @@ class GitHubService {
     sort: "updated" | "stars" | "pushed" = "updated",
     forceRefresh = false,
   ): Promise<GitHubRepoItem[]> {
-    const token = await this.hydrateToken();
-    if (!token) return [];
     return this.resilientFetch<GitHubRepoItem[]>(
       `/user/repos?per_page=${perPage}&page=${page}&sort=${sort}`,
       300,
       forceRefresh,
     );
-  }
-
-  // LAYER 2B: COMPLETE MULTI-PAGE REPOSITORY ENUMERATION (TTL: 5 mins)
-  // Enumerates all accessible repositories across all paginated API pages until exhausted
-  public async fetchAllUserRepositories(
-    sort: "updated" | "stars" | "pushed" = "updated",
-    forceRefresh = false,
-    maxPages = 30,
-    onProgress?: (totalSoFar: number, currentPage: number) => void,
-  ): Promise<GitHubRepoItem[]> {
-    const token = await this.hydrateToken();
-    if (!token) return [];
-
-    const perPage = 100;
-    let page = 1;
-    const allRepos: GitHubRepoItem[] = [];
-    const seenIds = new Set<number>();
-
-    while (page <= maxPages) {
-      try {
-        const batch = await this.fetchRepositories(page, perPage, sort, forceRefresh);
-        if (!batch || !Array.isArray(batch) || batch.length === 0) {
-          break;
-        }
-
-        for (const repo of batch) {
-          if (!seenIds.has(repo.id)) {
-            seenIds.add(repo.id);
-            allRepos.push(repo);
-          }
-        }
-
-        if (onProgress) {
-          onProgress(allRepos.length, page);
-        }
-
-        // If returned items count is less than perPage, this is the last available page
-        if (batch.length < perPage) {
-          break;
-        }
-
-        page++;
-      } catch (err) {
-        // If first page fails, throw; if subsequent page fails, preserve accumulated pages with warning
-        if (page === 1) {
-          throw err;
-        }
-        console.warn(`[GitHubService] Multi-page pagination reached page ${page} with warning:`, err);
-        break;
-      }
-    }
-
-    return allRepos;
   }
 
   // LAYER 3: REPOSITORY FILE TREE (TTL: 30 mins)
@@ -498,56 +346,27 @@ class GitHubService {
     );
   }
 
-  // LAYER 3B: REPOSITORY README (TTL: 30 mins)
+  // Fetch repository README (TTL: 30 mins)
   public async fetchRepoReadme(
     owner: string,
     repo: string,
-    ref?: string,
+    ref: string = "main",
     forceRefresh = false,
   ): Promise<{ text: string; size: number; path: string } | null> {
     try {
-      const endpoint = ref
-        ? `/repos/${owner}/${repo}/readme?ref=${encodeURIComponent(ref)}`
-        : `/repos/${owner}/${repo}/readme`;
-
-      const res = await this.resilientFetch<{
-        name: string;
-        path: string;
-        size: number;
-        content: string;
-        encoding: string;
-      }>(endpoint, 1800, forceRefresh);
-
-      if (!res?.content) return null;
-
-      let decoded = "";
-      if (res.encoding === "base64") {
-        try {
-          const cleanBase64 = res.content.replace(/\s/g, "");
-          if (typeof window !== "undefined" && typeof window.atob === "function") {
-            const binary = window.atob(cleanBase64);
-            const bytes = new Uint8Array(binary.length);
-            for (let i = 0; i < binary.length; i++) {
-              bytes[i] = binary.charCodeAt(i);
-            }
-            decoded = new TextDecoder().decode(bytes);
-          } else {
-            decoded = Buffer.from(cleanBase64, "base64").toString("utf-8");
-          }
-        } catch {
-          decoded = res.content;
-        }
-      } else {
-        decoded = res.content;
+      const res = await this.resilientFetch<{ content?: string; encoding?: string; size?: number; path?: string }>(
+        `/repos/${owner}/${repo}/readme?ref=${ref}`,
+        1800,
+        forceRefresh,
+      );
+      if (res?.content && res.encoding === "base64") {
+        const text = typeof atob !== "undefined"
+          ? atob(res.content.replace(/\s/g, ""))
+          : Buffer.from(res.content, "base64").toString("utf-8");
+        return { text, size: res.size ?? text.length, path: res.path ?? "README.md" };
       }
-
-      return {
-        text: decoded,
-        size: res.size,
-        path: res.path,
-      };
+      return null;
     } catch {
-      // Missing README or network error handled gracefully
       return null;
     }
   }
@@ -581,8 +400,6 @@ class GitHubService {
 
   // LAYER 6: ORGANIZATIONS (TTL: 1 hour)
   public async fetchOrganizations(forceRefresh = false): Promise<GitHubOrgItem[]> {
-    const token = await this.hydrateToken();
-    if (!token) return [];
     return this.resilientFetch<GitHubOrgItem[]>("/user/orgs", 3600, forceRefresh);
   }
 
@@ -592,8 +409,6 @@ class GitHubService {
     perPage: number = 30,
     forceRefresh = false,
   ): Promise<GitHubEventItem[]> {
-    const token = await this.hydrateToken();
-    if (!token && !username) return [];
     return this.resilientFetch<GitHubEventItem[]>(
       `/users/${username}/events?per_page=${perPage}`,
       120,
