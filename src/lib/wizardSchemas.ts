@@ -34,7 +34,7 @@ export const step2Schema = z.object({
   domain: z.string().min(1, "Primary domain selection is required"),
   domain_secondary: z.array(z.string()).max(3, "Maximum 3 secondary domains allowed"),
   scale: z.enum(["prototype", "production", "enterprise"], {
-    errorMap: () => ({ message: "Scale must be prototype, production, or enterprise" }),
+    message: "Scale must be prototype, production, or enterprise",
   }),
 });
 
@@ -82,8 +82,8 @@ export const step4Schema = z.object({
  * { feature_toggles: record(boolean), ai_tasks: record(boolean) }
  */
 export const step5Schema = z.object({
-  feature_toggles: z.record(z.boolean()),
-  ai_tasks: z.record(z.boolean()),
+  feature_toggles: z.record(z.string(), z.boolean()),
+  ai_tasks: z.record(z.string(), z.boolean()),
 });
 
 /**
@@ -165,7 +165,9 @@ export function validateStep(
   step: number,
   payload: Partial<WizardPayload>,
 ): { isValid: boolean; errors: Record<string, string> } {
-  let result: z.SafeParseReturnType<unknown, unknown>;
+  let result:
+    | { success: true; data: unknown }
+    | { success: false; error: z.ZodError };
 
   switch (step) {
     case 1:
@@ -226,19 +228,18 @@ export function validateStep(
       break;
   }
 
-  if (result.success) {
-    return { isValid: true, errors: {} };
-  }
-
-  const errors: Record<string, string> = {};
-  for (const issue of result.error.issues) {
-    const key = issue.path[0] ? String(issue.path[0]) : "global";
-    if (!errors[key]) {
-      errors[key] = issue.message;
+  if (!result.success) {
+    const errors: Record<string, string> = {};
+    for (const issue of result.error.issues) {
+      const key = issue.path[0] ? String(issue.path[0]) : "global";
+      if (!errors[key]) {
+        errors[key] = issue.message;
+      }
     }
+    return { isValid: false, errors };
   }
 
-  return { isValid: false, errors };
+  return { isValid: true, errors: {} };
 }
 
 /**

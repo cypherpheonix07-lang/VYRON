@@ -49,11 +49,24 @@ function isErrorLike(value: unknown): value is Error {
   return value instanceof Error;
 }
 
+const isAbortedClientError = (err: unknown): boolean => {
+  if (!err) return false;
+  const anyErr = err as { code?: unknown; message?: unknown; stack?: unknown };
+  if (anyErr.code === "ECONNRESET" || anyErr.message === "aborted") return true;
+  if (typeof anyErr.message === "string" && anyErr.message.includes("aborted")) return true;
+  if (typeof anyErr.stack === "string" && anyErr.stack.includes("abortIncoming")) return true;
+  return false;
+};
+
 // Wrap console.error so errors logged by any layer — including h3's internal
 // unhandled-error logging, which this file cannot hook directly — are both
 // recorded for consumeLastCapturedError and expanded before serialization.
 const originalConsoleError = console.error.bind(console);
 console.error = (...args: unknown[]) => {
+  if (args.some(isAbortedClientError)) {
+    // Normal client disconnection/aborted socket on navigation or refresh — suppress
+    return;
+  }
   const expanded = args.map((arg) => {
     if (!isErrorLike(arg)) return arg;
     record(arg);
@@ -63,10 +76,23 @@ console.error = (...args: unknown[]) => {
 };
 
 if (typeof globalThis.addEventListener === "function") {
-  globalThis.addEventListener("error", (event) => record((event as ErrorEvent).error ?? event));
-  globalThis.addEventListener("unhandledrejection", (event) =>
-    record((event as PromiseRejectionEvent).reason),
-  );
+  globalThis.addEventListener("error", (event) => {
+    const err = (event as ErrorEvent).error ?? event;
+    if (!isAbortedClientError(err)) record(err);
+  });
+  globalThis.addEventListener("unhandledrejection", (event) => {
+    const reason = (event as PromiseRejectionEvent).reason;
+    if (!isAbortedClientError(reason)) record(reason);
+  });
+}
+
+if (typeof process !== "undefined" && typeof process.on === "function") {
+  process.on("unhandledRejection", (reason: unknown) => {
+    if (isAbortedClientError(reason)) return;
+  });
+  process.on("uncaughtException", (error: unknown) => {
+    if (isAbortedClientError(error)) return;
+  });
 }
 
 export function consumeLastCapturedError(): unknown {
