@@ -19,7 +19,7 @@ export interface ActiveProjectContextValue {
   availability: ProjectAvailability;
   availableProjects: CanonicalProject[];
   generationId: number;
-  setActiveProject: (id: string, options?: { navigateToProject?: boolean }) => void;
+  setActiveProject: (id: string | null, options?: { navigateToProject?: boolean }) => void;
   refresh: () => Promise<void>;
 }
 
@@ -107,7 +107,14 @@ export function useActiveProject(): ActiveProjectContextValue {
   }, [isResolving, currentProject, resolvedTargetId]);
 
   const setActiveProject = useCallback(
-    (id: string, options?: { navigateToProject?: boolean }) => {
+    (id: string | null, options?: { navigateToProject?: boolean }) => {
+      if (id === null || id === "none") {
+        projectRegistry.clearActiveProject();
+        setCurrentProject(null);
+        setGenerationId(projectRegistry.getGenerationId());
+        return;
+      }
+
       if (id === "all") {
         navigate({ to: "/app/projects" });
         return;

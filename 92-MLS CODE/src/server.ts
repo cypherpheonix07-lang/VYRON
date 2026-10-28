@@ -55,7 +55,13 @@ async function getServerEntry(): Promise<ServerEntry> {
 
 // h3 swallows in-handler throws into a normal 500 Response with body
 // {"unhandled":true,"message":"HTTPError"} — try/catch alone never fires for those.
-async function normalizeCatastrophicSsrResponse(response: Response): Promise<Response> {
+async function normalizeCatastrophicSsrResponse(
+  response: Response,
+  request?: Request,
+): Promise<Response> {
+  if (request?.signal?.aborted) {
+    return new Response(null, { status: 499, statusText: "Client Closed Request" });
+  }
   if (response.status < 500) return response;
   const contentType = response.headers.get("content-type") ?? "";
   if (!contentType.includes("application/json")) return response;
@@ -63,7 +69,16 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   const body = await response.clone().text();
   if (!isH3SwallowedErrorBody(body)) return response;
 
-  console.error(consumeLastCapturedError() ?? new Error(`h3 swallowed SSR error: ${body}`));
+  if (request?.signal?.aborted) {
+    return new Response(null, { status: 499, statusText: "Client Closed Request" });
+  }
+
+  const captured = consumeLastCapturedError();
+  if (captured) {
+    console.error(captured);
+  } else if (!request?.signal?.aborted) {
+    console.warn(`[SSR] h3 unhandled response: ${body}`);
+  }
   return new Response(renderFallbackErrorHtml(), {
     status: 500,
     headers: { "content-type": "text/html; charset=utf-8" },
@@ -296,14 +311,26 @@ async function handleAiServerRoutes(request: Request): Promise<Response | null> 
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    if (request.signal?.aborted) {
+      return new Response(null, { status: 499, statusText: "Client Closed Request" });
+    }
     try {
       const aiResponse = await handleAiServerRoutes(request);
       if (aiResponse) return aiResponse;
 
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
-      return await normalizeCatastrophicSsrResponse(response);
-    } catch (error) {
+      return await normalizeCatastrophicSsrResponse(response, request);
+    } catch (error: any) {
+      if (
+        request.signal?.aborted ||
+        error?.name === "AbortError" ||
+        error?.code === "ECONNRESET" ||
+        error?.message === "aborted" ||
+        (typeof error?.message === "string" && error.message.includes("aborted"))
+      ) {
+        return new Response(null, { status: 499, statusText: "Client Closed Request" });
+      }
       console.error(error);
       return new Response(renderFallbackErrorHtml(), {
         status: 500,

@@ -9,7 +9,11 @@
     "data": "37 — AUDIT & FORENSICS/data",
     "vyron-engine": "07 — BACKEND SERVICE MESH/vyron-engine",
     "supabase": "12 — DATABASE PLATFORM/supabase",
-    "scripts": "51 — TESTING PLATFORM/scripts"
+    "scripts": "51 — TESTING PLATFORM/scripts",
+    "infra": "60 — INFRASTRUCTURE AS CODE/infra",
+    "tests": "51 — TESTING PLATFORM/tests",
+    "walkthroughs": "01 — PRODUCT & REQUIREMENTS LAYER/docs/walkthroughs",
+    "reports": "37 — AUDIT & FORENSICS/data/reports"
   },
   "layers": [
     {
@@ -686,7 +690,20 @@
       ],
       "scripts": [
         "test-acceptance-gates.mjs",
-        "generate-final-acceptance-report.mjs"
+        "generate-final-acceptance-report.mjs",
+        "test-ather-conversation-suite.mjs",
+        "test-auth-deployment-audit.mjs",
+        "test-e2e-auth-and-recent-changes.mjs",
+        "test-fleet-command-hub-scenarios.mjs",
+        "test-vyron-complete-journey.mjs",
+        "test-workspace-exit-flow.mjs",
+        "verify-github-qualification.mjs",
+        "vyron-generate-master-report.mjs",
+        "vyron-phase-1-system-analysis.mjs",
+        "vyron-phase-2-invariants-audit.mjs",
+        "vyron-phase-3-workstream-matrix.mjs",
+        "vyron-phase-4-canonical-lifecycle.mjs",
+        "vyron-phase-5-verification-suite.mjs"
       ]
     },
     {
@@ -1322,5 +1339,6 @@
     }
   ],
   "totalLayers": 90,
-  "totalCopilotStages": 26
+  "totalCopilotStages": 26,
+  "lastUpdated": "2026-10-25T13:10:59.123Z"
 }
