@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   Briefcase,
   Building,
@@ -89,7 +89,7 @@ function ProfessionalDashboardPage() {
   }, [ready, user, navigate]);
 
   // Load professional data from Supabase
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
     try {
@@ -129,13 +129,13 @@ function ProfessionalDashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     if (user?.id) {
       loadData();
     }
-  }, [user?.id]);
+  }, [user?.id, loadData]);
 
   // Listen for live form update events
   useEffect(() => {
@@ -158,7 +158,7 @@ function ProfessionalDashboardPage() {
 
     window.addEventListener("vyron:form-updated", handleFormUpdated);
     return () => window.removeEventListener("vyron:form-updated", handleFormUpdated);
-  }, [activeForm]);
+  }, [activeForm, loadData]);
 
   const handleAddSkill = (e: React.FormEvent) => {
     e.preventDefault();

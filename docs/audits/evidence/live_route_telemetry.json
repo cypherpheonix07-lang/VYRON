@@ -1,0 +1,62 @@
+{
+  "timestamp": "2026-10-29T14:34:10+05:30",
+  "testedBy": "Antigravity Principal Systems Architect",
+  "results": [
+    {
+      "endpoint": "http://localhost:8080/",
+      "status": 200,
+      "latencyMs": 1279,
+      "payloadBytes": 66160,
+      "title": "VYRON - From raw idea to validated software blueprint"
+    },
+    {
+      "endpoint": "http://localhost:8080/dashboard/student",
+      "status": 200,
+      "latencyMs": 1270,
+      "payloadBytes": 28042,
+      "title": "Student Academic Workspace — VYRON"
+    },
+    {
+      "endpoint": "http://localhost:8080/dashboard/faculty",
+      "status": 200,
+      "latencyMs": 230,
+      "payloadBytes": 28072,
+      "title": "Faculty Command Workspace — VYRON"
+    },
+    {
+      "endpoint": "http://localhost:8080/dashboard/professional",
+      "status": 200,
+      "latencyMs": 224,
+      "payloadBytes": 28514,
+      "title": "Working Professional Workspace — VYRON"
+    },
+    {
+      "endpoint": "http://localhost:8080/admin/command-centre",
+      "status": 200,
+      "latencyMs": 97,
+      "payloadBytes": 4715,
+      "title": "Admin Command Centre — Control Plane | VYRON"
+    },
+    {
+      "endpoint": "http://localhost:8080/app",
+      "status": 200,
+      "latencyMs": 892,
+      "payloadBytes": 5476,
+      "title": "Dashboard — VYRON"
+    },
+    {
+      "endpoint": "http://127.0.0.1:8000/health",
+      "status": 200,
+      "latencyMs": 17,
+      "payloadBytes": 477,
+      "title": "healthy"
+    },
+    {
+      "endpoint": "http://127.0.0.1:8000/api/v1/tools/health/summary",
+      "status": 200,
+      "latencyMs": 15,
+      "payloadBytes": 288,
+      "title": "SUCCESS"
+    }
+  ]
+}

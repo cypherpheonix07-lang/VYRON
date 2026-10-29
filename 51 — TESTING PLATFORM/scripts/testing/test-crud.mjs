@@ -1,17 +1,27 @@
 import { createClient } from "@supabase/supabase-js";
 import fs from "fs";
 
-const envContent = fs.readFileSync("./.env", "utf-8");
-const env = {};
-envContent.split("\n").forEach((line) => {
-  const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)\s*$/);
-  if (match) {
-    let val = match[2].trim().replace(/^['"]|['"]$/g, "");
-    env[match[1]] = val;
-  }
-});
+const envPath = fs.existsSync("./.env")
+  ? "./.env"
+  : fs.existsSync("./.env.example")
+    ? "./.env.example"
+    : null;
 
-const sb = createClient(env.SUPABASE_URL, env.SUPABASE_SECRET_KEY);
+const env = {};
+if (envPath) {
+  const envContent = fs.readFileSync(envPath, "utf-8");
+  envContent.split("\n").forEach((line) => {
+    const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)\s*$/);
+    if (match) {
+      let val = match[2].trim().replace(/^['"]|['"]$/g, "");
+      env[match[1]] = val;
+    }
+  });
+}
+
+const sbUrl = env.SUPABASE_URL || process.env.SUPABASE_URL || "https://placeholder.supabase.co";
+const sbKey = env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SECRET_KEY || "placeholder-key";
+const sb = createClient(sbUrl, sbKey);
 
 async function testCrud() {
   const testTool = {

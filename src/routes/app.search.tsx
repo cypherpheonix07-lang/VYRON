@@ -45,10 +45,8 @@ function SearchResultsPage() {
 
   const [query, setQuery] = useState(q);
   const [activeCategory, setActiveCategory] = useState("All");
-  const [executionTimeMs, setExecutionTimeMs] = useState<number>(0);
 
   const searchIndex = useMemo(() => {
-    const t0 = performance.now();
     const liveProjects = projectRegistry.getAllProjects();
     const dynamicItems = liveProjects.map((p) => ({
       category: "Projects",
@@ -93,12 +91,10 @@ function SearchResultsPage() {
       // best-effort
     }
 
-    setExecutionTimeMs(performance.now() - t0);
     return dynamicItems;
   }, []);
 
   const results = useMemo(() => {
-    const t0 = performance.now();
     if (!q.trim()) return [];
     const lowerQuery = q.toLowerCase();
     const matches = searchIndex.filter(
@@ -107,9 +103,7 @@ function SearchResultsPage() {
         item.subtitle.toLowerCase().includes(lowerQuery) ||
         item.category.toLowerCase().includes(lowerQuery),
     );
-    const filtered = activeCategory === "All" ? matches : matches.filter((item) => item.category === activeCategory);
-    setExecutionTimeMs(performance.now() - t0);
-    return filtered;
+    return activeCategory === "All" ? matches : matches.filter((item) => item.category === activeCategory);
   }, [q, activeCategory, searchIndex]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {

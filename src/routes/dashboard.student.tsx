@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   GraduationCap,
   BookOpen,
@@ -78,7 +78,7 @@ function StudentDashboardPage() {
   }, [ready, user, navigate]);
 
   // Load student data from Supabase
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
     try {
@@ -110,13 +110,13 @@ function StudentDashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     if (user?.id) {
       loadData();
     }
-  }, [user?.id]);
+  }, [user?.id, loadData]);
 
   // Listen for live form update events
   useEffect(() => {
@@ -139,7 +139,7 @@ function StudentDashboardPage() {
 
     window.addEventListener("vyron:form-updated", handleFormUpdated);
     return () => window.removeEventListener("vyron:form-updated", handleFormUpdated);
-  }, [activeForm]);
+  }, [activeForm, loadData]);
 
   const handleAddCourse = (e: React.FormEvent) => {
     e.preventDefault();

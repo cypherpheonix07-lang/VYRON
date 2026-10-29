@@ -11,8 +11,15 @@ dist/
 .temp/
 
 # Environment files
+.env
 .env.local
 .env.*.local
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
 
 # Browser test profiles & logs
 .chrome-realtime-agent-profile/

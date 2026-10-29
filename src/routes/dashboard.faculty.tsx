@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   BookOpen,
   Award,
@@ -83,7 +83,7 @@ function FacultyDashboardPage() {
   }, [ready, user, navigate]);
 
   // Load faculty data from Supabase
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     if (!user) return;
     setLoading(true);
     try {
@@ -115,13 +115,13 @@ function FacultyDashboardPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     if (user?.id) {
       loadData();
     }
-  }, [user?.id]);
+  }, [user?.id, loadData]);
 
   // Listen for live form update events
   useEffect(() => {
@@ -144,7 +144,7 @@ function FacultyDashboardPage() {
 
     window.addEventListener("vyron:form-updated", handleFormUpdated);
     return () => window.removeEventListener("vyron:form-updated", handleFormUpdated);
-  }, [activeForm]);
+  }, [activeForm, loadData]);
 
   const handleAddResearchArea = (e: React.FormEvent) => {
     e.preventDefault();

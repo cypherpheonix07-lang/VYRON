@@ -236,7 +236,7 @@ async function runPhase1SampleData() {
 
   // 1.7: 52 Subsystems Verification Suite
   try {
-    const godmodeOutput = execSync("node test-godmode-vnext-scratch-testing.mjs", { encoding: "utf-8" });
+    const godmodeOutput = execSync('npx tsx "51 — TESTING PLATFORM/scripts/testing/test-godmode-vnext-scratch-testing.mjs"', { encoding: "utf-8" });
     const pass = godmodeOutput.includes("30 / 30 TESTS PASSED (100%)");
     recordTest(
       1,

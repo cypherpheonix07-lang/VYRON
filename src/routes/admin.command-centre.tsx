@@ -829,7 +829,9 @@ function AdminCommandCentrePage() {
                         )}
                       </div>
                       <span className="text-[10px] text-zinc-500 shrink-0 font-mono">
-                        {new Date(log.created_at || log.timestamp || Date.now()).toLocaleString()}
+                        {log.created_at || log.timestamp
+                          ? new Date((log.created_at || log.timestamp) as string).toLocaleString()
+                          : "Just now"}
                       </span>
                     </div>
                   ))

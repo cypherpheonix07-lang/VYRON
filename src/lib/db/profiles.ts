@@ -4,10 +4,27 @@
  */
 
 import { supabase } from "@/lib/supabaseClient";
-import type { UserProfileRow, Designation } from "./types";
+import { isValidUuid, type UserProfileRow, type Designation } from "./types";
 
 export async function getProfile(userId: string): Promise<UserProfileRow | null> {
   if (!userId) return null;
+
+  if (!isValidUuid(userId)) {
+    const { data: sessionData } = await supabase.auth.getSession();
+    const u = sessionData?.session?.user;
+    if (u && u.id === userId) {
+      return {
+        id: u.id,
+        email: u.email || "",
+        full_name: (u.user_metadata?.["full_name"] as string) || (u.user_metadata?.["name"] as string) || u.email?.split("@")[0] || "User",
+        designation: (u.user_metadata?.["designation"] as Designation) || "student",
+        avatar_url: (u.user_metadata?.["avatar_url"] as string) || null,
+        created_at: u.created_at,
+        onboarded: Boolean(u.user_metadata?.["onboarded"] ?? u.user_metadata?.["designation"]),
+      };
+    }
+    return null;
+  }
 
   try {
     const { data, error } = await supabase

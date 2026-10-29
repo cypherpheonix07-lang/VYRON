@@ -79,7 +79,11 @@ async function runAcceptanceGates() {
   }
 
   // Gate 02 — Authentication works or exact blocker is documented
-  const envContent = fs.readFileSync("./.env", "utf-8");
+  const envContent = fs.existsSync("./.env")
+    ? fs.readFileSync("./.env", "utf-8")
+    : fs.existsSync("./.env.example")
+      ? fs.readFileSync("./.env.example", "utf-8")
+      : "";
   if (envContent.includes("SUPABASE_URL")) {
     recordGate(2, "Authentication Architecture & Blocker Isolation", "BLOCKED",
       `Client-side auth contract verified; remote cloud Supabase project API key is paused/rotated (offline fallback engaged)`);

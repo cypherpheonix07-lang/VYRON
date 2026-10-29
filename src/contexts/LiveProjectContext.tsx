@@ -79,10 +79,12 @@ export function LiveProjectProvider({ id, children }: { id: string; children: Re
       // Leave the auth callback before calling getUser (avoids auth lock contention).
       queueMicrotask(() => { if (active) void load(); });
     });
+    const genRef = generation;
+    const refRef = refreshRef;
     return () => {
       active = false;
-      generation.current++;
-      refreshRef.current = () => {};
+      genRef.current++;
+      refRef.current = () => {};
       window.clearInterval(timer);
       window.removeEventListener("focus", onFocus);
       document.removeEventListener("visibilitychange", onVisibility);

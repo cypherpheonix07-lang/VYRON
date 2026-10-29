@@ -118,6 +118,22 @@
   - `/dashboard/professional`: 335ms — Title: "Working Professional Workspace — VYRON"
   - `/admin/command-centre`: 199ms — Title: "Admin Command Centre — Control Plane | VYRON"
   - `/app` (User Command Centre): 198ms — Title: "Dashboard — VYRON"
+  - `/app/github` (Repository & Vibe Control): 210ms — Title: "GitHub & Repo Control — VYRON"
+
+### Live Browser Subagent Execution Evidence
+- **Browser Subagent Session**: `role_routes_test`
+- **Video Recording**: `role_routes_test_1793260434124.webp`
+- **Captured Visual Artifacts**:
+  1. Student Academic Workspace: `student_dashboard_1793260530720.png`
+  2. Student Edit Profile Flow: `student_edit_profile_1793260572967.png`
+  3. Faculty Supervision Workspace: `faculty_dashboard_1793260771508.png`
+  4. Faculty Configure Rubrics: `faculty_configure_rubrics_1793260886277.png`
+  5. Working Professional Workspace: `professional_dashboard_1793261044314.png`
+  6. Professional Release Surfaces: `professional_release_surfaces_1793261189140.png`
+  7. Admin Command Centre Telemetry: `admin_command_centre_1793261700487.png`
+  8. Admin User Directory & Role Assignment: `admin_user_directory_1793261980859.png`
+  9. GitHub Control & Vibe Discovery: `github_app_page_1793262298880.png`
+- **Observed Console Diagnostics**: Zero unhandled JavaScript errors; zero hydration failures. PostgREST UUID 22P02 query warning eliminated via `isValidUuid` guard.
 
 ---
 
@@ -187,6 +203,8 @@
 | **BUG-003** | High | Backend Runtime | Missing Python dependencies (`asyncpg`, `psutil`, `celery`) | **VERIFIED FIXED** |
 | **BUG-004** | Medium | Testing Harness | Recursive self-import in `scripts/audit-master-sdlc-520.mjs` | **VERIFIED FIXED** |
 | **BUG-005** | Medium | Git Environment | Stale `.git/index.lock` preventing forward atomic commits | **VERIFIED FIXED** |
+| **BUG-006** | Medium | Supabase / Types | PostgREST UUID 22P02 syntax error on non-UUID identifiers | **VERIFIED FIXED** |
+| **BUG-007** | High | Backend Testing | Python `test_endpoints.py` incompatibility with `unittest` runner | **VERIFIED FIXED** |
 
 ---
 
@@ -282,12 +300,62 @@
 
 ---
 
+### BUG-006 — PostgREST UUID Type Syntax Error (22P02) on Non-UUID Identifiers
+- **HOW to reproduce**: Load `/dashboard/student`, `/dashboard/faculty`, or `/dashboard/professional` when active user identity is non-UUID format (e.g., demo account `demo-student-01` or seed fixtures).
+- **WHEN it happens**: During initial data retrieval in `getProfile`, `getStudentData`, `getFacultyData`, `getProfessionalData`, or `getUserForms`.
+- **WHERE it happens**:
+  - `src/lib/db/types.ts`
+  - `src/lib/db/profiles.ts:13`
+  - `src/lib/db/students.ts:15`
+  - `src/lib/db/faculty.ts:15`
+  - `src/lib/db/professionals.ts:15`
+  - `src/lib/db/forms.ts:187`
+- **ERROR evidence**:
+  - `Console Warning: [getProfile] Query warning: invalid input syntax for type uuid: "demo-student-01"` (PostgreSQL error 22P02).
+- **ROOT CAUSE**: Supabase client sends raw user IDs to PostgreSQL tables where `id`, `user_id`, or `created_by` columns are typed as `uuid`. Querying non-UUID strings causes PostgREST to return HTTP 400 with SQL state 22P02.
+- **AFFECTED AREAS**: Student, Faculty, and Professional dashboards during demo, onboarding, or unauthenticated review sessions.
+- **FIX**: Implemented and exported `isValidUuid(id)` helper in `src/lib/db/types.ts`. Guarded all remote PostgREST queries with `if (isValidUuid(userId))`, allowing valid UUIDs to query live Supabase tables while immediately falling back to localStorage cache and structured mock baselines for non-UUID test identities without generating console errors.
+- **TEST**: Live browser subagent navigated `/dashboard/student`, `/dashboard/faculty`, `/dashboard/professional`, and `/admin/command-centre`. Zero unhandled exceptions or 400 Bad Request query warnings observed.
+- **DATA verification**: Verified live UUIDs query Supabase normally while local mock sessions resolve without database schema errors.
+- **REGRESSION**: Both real authenticated Supabase users and demo tour identities work seamlessly with clean DevTools console.
+- **EVIDENCE**: Browser recording `role_routes_test_1793260434124.webp` and screenshots.
+- **VERDICT**: **Verified Fixed**.
+
+---
+
+### BUG-007 — Python Backend Test Suite Incompatibility with Standard `unittest` Runner
+- **HOW to reproduce**: Run `python -m unittest discover -s tests -v` in `07 — BACKEND SERVICE MESH/vyron-engine`.
+- **WHEN it happens**: During automated backend test discovery in restricted environments where `pytest` is not pre-installed.
+- **WHERE it happens**: `07 — BACKEND SERVICE MESH/vyron-engine/tests/test_endpoints.py`.
+- **ERROR evidence**:
+  - `Ran 0 tests in 0.000s, NO TESTS RAN` (Exit code 1).
+- **ROOT CAUSE**: Test functions were declared as standalone functions (`def test_health(): ...`) rather than test methods on a `unittest.TestCase` subclass, preventing Python's standard library test runner from discovering and executing them.
+- **AFFECTED AREAS**: Backend verification pipeline, continuous integration, offline test runners.
+- **FIX**: Refactored `test_endpoints.py` to wrap all 7 test cases (`test_health`, `test_analyze_requirements_validation`, `test_evaluate`, `test_generate_report_pdf`, `test_tool_health_summary`, `test_tool_recheck_ssrf_blocked_localhost`, `test_tool_recheck_ssrf_blocked_cloud_metadata`) inside `class VyronEndpointTests(unittest.TestCase)` using `starlette.testclient.TestClient(app)`.
+- **TEST**: `..\..\.venv\Scripts\python.exe -m unittest discover -s tests -v` ran and passed all 7 tests in 1.257s with `OK`.
+- **DATA verification**: Verified that both valid requests and SSRF injection blocks (`169.254.169.254`, `127.0.0.1`) execute properly.
+- **REGRESSION**: Works identically across standard library `unittest` and `pytest`.
+- **EVIDENCE**: Task 435 output (7/7 tests passed in 1.257s).
+- **VERDICT**: **Verified Fixed**.
+
+---
+
 ## 12. Affected Files, Functions, Routes, Tables, Policies, Dependencies
 ### Modified & Verified Source Files
 - `src/lib/wizardSchemas.ts`: Zod v4 validation schemas
 - `src/lib/github/oauth.ts`: `initiateGitHubOAuth` return type
 - `src/services/githubService.ts`: `GitHubRepoItem` interface
 - `src/routes/app.index.tsx`: `setActiveProject(null)` project detachment handler
+- `src/lib/db/types.ts`: Exported `isValidUuid` helper
+- `src/lib/db/profiles.ts`: Guarded `getProfile` with `isValidUuid`
+- `src/lib/db/students.ts`: Guarded `getStudentData` with `isValidUuid`
+- `src/lib/db/faculty.ts`: Guarded `getFacultyData` with `isValidUuid`
+- `src/lib/db/professionals.ts`: Guarded `getProfessionalData` with `isValidUuid`
+- `src/lib/db/forms.ts`: Guarded `getUserForms` with `isValidUuid`
+- `07 — BACKEND SERVICE MESH/vyron-engine/tests/test_endpoints.py`: Refactored to `unittest.TestCase`
+- `51 — TESTING PLATFORM/scripts/testing/run-two-phase-verification.mjs`: `tsx` execution path
+- `51 — TESTING PLATFORM/scripts/testing/test-acceptance-gates.mjs`: Added `.env` existence fallback
+- `51 — TESTING PLATFORM/test-acceptance-gates.mjs`: Added `.env` existence fallback
 - `scripts/audit-master-sdlc-520.mjs`: Master 520-checkpoint SDLC audit engine
 - `51 — TESTING PLATFORM/scripts/audit-master-sdlc-520.mjs`: Platform audit proxy
 - `scripts/test-live-routes.mjs`: Real runtime HTTP probing harness
@@ -529,24 +597,34 @@ All 26 sections × 20 phases = 520 checkpoints audited:
 
 ### Exact Commands for Complete Reproduction
 ```bash
-# 1. Typecheck the entire TypeScript codebase
+# 1. Verification gates (12/12 gates)
+npm test
+
+# 2. Auth & profile verification gate (4/4 gates)
+npm run verify
+
+# 3. ESLint verification (0 errors, 0 warnings)
+npm run lint
+
+# 4. Typecheck the entire TypeScript codebase (0 errors)
 npm run typecheck
 
-# 2. Run the full offline test suite across all acceptance journeys
+# 5. Run the full offline test suite across all acceptance journeys
 npm run test:offline
 
-# 3. Run the 520-checkpoint master SDLC audit
+# 6. Run the 520-checkpoint master SDLC audit
 npm run audit:520
 
-# 4. Start the Python FastAPI backend
+# 7. Start the Python FastAPI backend
 & ".\.venv\Scripts\python.exe" -m uvicorn main:app --app-dir "07 — BACKEND SERVICE MESH/vyron-engine" --host 127.0.0.1 --port 8000
 
-# 5. Start the Vite development server
+# 8. Start the Vite development server
 npm run dev
 
-# 6. Verify all live routes and API health in parallel
+# 9. Verify all live routes and API health in parallel
 node scripts/test-live-routes.mjs
 
-# 7. Execute production build
+# 10. Execute production build
 npm run build
 ```
+

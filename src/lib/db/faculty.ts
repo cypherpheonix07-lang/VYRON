@@ -4,7 +4,7 @@
  */
 
 import { supabase } from "@/lib/supabaseClient";
-import type { FacultyDataRow } from "./types";
+import { isValidUuid, type FacultyDataRow } from "./types";
 
 const LOCAL_FACULTY_CACHE = "vyron_faculty_data_";
 
@@ -12,29 +12,31 @@ export async function getFacultyData(userId: string): Promise<FacultyDataRow | n
   if (!userId) return null;
 
   try {
-    const { data, error } = await supabase
-      .from("faculty_data")
-      .select("*")
-      .eq("user_id", userId)
-      .maybeSingle();
+    if (isValidUuid(userId)) {
+      const { data, error } = await supabase
+        .from("faculty_data")
+        .select("*")
+        .eq("user_id", userId)
+        .maybeSingle();
 
-    if (!error && data) {
-      return {
-        faculty_id: data.faculty_id || data.id,
-        user_id: data.user_id,
-        institution: data.institution || "School of Computer Science & Engineering",
-        department: data.department || "Software Architecture & Security Systems",
-        designation_title: data.designation_title || "Associate Professor & Research Chair",
-        subjects_taught: Array.isArray(data.subjects_taught)
-          ? data.subjects_taught
-          : ["Advanced Operating Systems", "Formal Verification", "System Synthesis"],
-        research_areas: Array.isArray(data.research_areas)
-          ? data.research_areas
-          : ["Autonomous System Verification", "Deterministic Execution Engines", "Distributed Ledgers"],
-        publications_count: data.publications_count ?? 18,
-        created_at: data.created_at || new Date().toISOString(),
-        updated_at: data.updated_at || null,
-      };
+      if (!error && data) {
+        return {
+          faculty_id: data.faculty_id || data.id,
+          user_id: data.user_id,
+          institution: data.institution || "School of Computer Science & Engineering",
+          department: data.department || "Software Architecture & Security Systems",
+          designation_title: data.designation_title || "Associate Professor & Research Chair",
+          subjects_taught: Array.isArray(data.subjects_taught)
+            ? data.subjects_taught
+            : ["Advanced Operating Systems", "Formal Verification", "System Synthesis"],
+          research_areas: Array.isArray(data.research_areas)
+            ? data.research_areas
+            : ["Autonomous System Verification", "Deterministic Execution Engines", "Distributed Ledgers"],
+          publications_count: data.publications_count ?? 18,
+          created_at: data.created_at || new Date().toISOString(),
+          updated_at: data.updated_at || null,
+        };
+      }
     }
 
     if (typeof window !== "undefined") {

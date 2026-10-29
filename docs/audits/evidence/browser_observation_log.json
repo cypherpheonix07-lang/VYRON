@@ -1,0 +1,47 @@
+{
+  "sessionName": "role_routes_test",
+  "recordingVideo": "role_routes_test_1793260434124.webp",
+  "instrumentation": "Playwright / Chrome DevTools Protocol persistent capture",
+  "testedRoutes": [
+    {
+      "route": "/dashboard/student",
+      "heading": "Student Academic Workspace",
+      "interaction": "Clicked Edit Profile button, rendered inline university and GPA inputs",
+      "screenshot": "student_dashboard_1793260530720.png",
+      "uncaughtExceptions": 0,
+      "queryWarnings": 0
+    },
+    {
+      "route": "/dashboard/faculty",
+      "heading": "Faculty Command Workspace",
+      "interaction": "Clicked Configure Rubrics, opened rubric criteria configuration dialog",
+      "screenshot": "faculty_dashboard_1793260771508.png",
+      "uncaughtExceptions": 0,
+      "queryWarnings": 0
+    },
+    {
+      "route": "/dashboard/professional",
+      "heading": "Working Professional Workspace",
+      "interaction": "Clicked View Release Surfaces, navigated smoothly to /app",
+      "screenshot": "professional_dashboard_1793261044314.png",
+      "uncaughtExceptions": 0,
+      "queryWarnings": 0
+    },
+    {
+      "route": "/admin/command-centre",
+      "heading": "Admin Command Centre — Control Plane",
+      "interaction": "Clicked User Directory tab, rendered user table with 18 records and role filters",
+      "screenshot": "admin_command_centre_1793261700487.png",
+      "uncaughtExceptions": 0,
+      "queryWarnings": 0
+    },
+    {
+      "route": "/app/github",
+      "heading": "GitHub & Repo Control",
+      "interaction": "Verified enrolled repository cypherpheonix07-lang/VYRON with 100% health score",
+      "screenshot": "github_app_page_1793262298880.png",
+      "uncaughtExceptions": 0,
+      "queryWarnings": 0
+    }
+  ]
+}

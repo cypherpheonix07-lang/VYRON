@@ -4,7 +4,7 @@
  */
 
 import { supabase } from "@/lib/supabaseClient";
-import type { ProfessionalDataRow } from "./types";
+import { isValidUuid, type ProfessionalDataRow } from "./types";
 
 const LOCAL_PRO_CACHE = "vyron_professional_data_";
 
@@ -12,13 +12,14 @@ export async function getProfessionalData(userId: string): Promise<ProfessionalD
   if (!userId) return null;
 
   try {
-    const { data, error } = await supabase
-      .from("professional_data")
-      .select("*")
-      .eq("user_id", userId)
-      .maybeSingle();
+    if (isValidUuid(userId)) {
+      const { data, error } = await supabase
+        .from("professional_data")
+        .select("*")
+        .eq("user_id", userId)
+        .maybeSingle();
 
-    if (!error && data) {
+      if (!error && data) {
       return {
         professional_id: data.professional_id || data.id,
         user_id: data.user_id,
@@ -40,6 +41,7 @@ export async function getProfessionalData(userId: string): Promise<ProfessionalD
         updated_at: data.updated_at || null,
       };
     }
+  }
 
     if (typeof window !== "undefined") {
       const cached = localStorage.getItem(LOCAL_PRO_CACHE + userId);

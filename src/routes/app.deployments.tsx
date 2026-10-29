@@ -150,7 +150,7 @@ function DeploymentPlatformsPage() {
     if (search.tab && search.tab !== activeTab) {
       setActiveTab(search.tab);
     }
-  }, [search.tab]);
+  }, [search.tab, activeTab]);
 
   const filteredPlatforms = useMemo(() => {
     if (!searchFilter.trim()) return PLATFORM_INVENTORY;

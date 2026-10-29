@@ -4,7 +4,7 @@
  */
 
 import { supabase } from "@/lib/supabaseClient";
-import type { FormSubmissionRow, FormStatus, FormType, Designation } from "./types";
+import { isValidUuid, type FormSubmissionRow, type FormStatus, type FormType, type Designation } from "./types";
 
 const LOCAL_FORMS_KEY = "vyron_forms_submissions_v1";
 
@@ -184,29 +184,31 @@ export async function submitForm(
 
 export async function getUserForms(userId: string): Promise<FormSubmissionRow[]> {
   try {
-    const { data, error } = await supabase
-      .from("forms")
-      .select("*")
-      .eq("created_by", userId)
-      .order("created_at", { ascending: false });
+    if (isValidUuid(userId)) {
+      const { data, error } = await supabase
+        .from("forms")
+        .select("*")
+        .eq("created_by", userId)
+        .order("created_at", { ascending: false });
 
-    if (!error && Array.isArray(data) && data.length > 0) {
-      return data.map((row: any) => ({
-        form_id: row.form_id || row.id,
-        id: row.form_id || row.id,
-        created_by: row.created_by,
-        form_type: row.form_type,
-        form_data: row.form_data || {},
-        payload: row.form_data || {},
-        status: row.status,
-        rejection_reason: row.rejection_reason,
-        admin_remarks: row.rejection_reason,
-        reviewer_id: row.reviewer_id,
-        reviewed_at: row.reviewed_at,
-        created_at: row.created_at,
-        submitted_at: row.created_at,
-        user_email: row.user_email || "",
-      }));
+      if (!error && Array.isArray(data) && data.length > 0) {
+        return data.map((row: any) => ({
+          form_id: row.form_id || row.id,
+          id: row.form_id || row.id,
+          created_by: row.created_by,
+          form_type: row.form_type,
+          form_data: row.form_data || {},
+          payload: row.form_data || {},
+          status: row.status,
+          rejection_reason: row.rejection_reason,
+          admin_remarks: row.rejection_reason,
+          reviewer_id: row.reviewer_id,
+          reviewed_at: row.reviewed_at,
+          created_at: row.created_at,
+          submitted_at: row.created_at,
+          user_email: row.user_email || "",
+        }));
+      }
     }
 
     // Fallback to local store

@@ -4,7 +4,7 @@
  */
 
 import { supabase } from "@/lib/supabaseClient";
-import type { StudentDataRow } from "./types";
+import { isValidUuid, type StudentDataRow } from "./types";
 
 const LOCAL_STUDENT_CACHE = "vyron_student_data_";
 
@@ -12,28 +12,30 @@ export async function getStudentData(userId: string): Promise<StudentDataRow | n
   if (!userId) return null;
 
   try {
-    const { data, error } = await supabase
-      .from("student_data")
-      .select("*")
-      .eq("user_id", userId)
-      .maybeSingle();
+    if (isValidUuid(userId)) {
+      const { data, error } = await supabase
+        .from("student_data")
+        .select("*")
+        .eq("user_id", userId)
+        .maybeSingle();
 
-    if (!error && data) {
-      return {
-        student_id: data.student_id || data.id,
-        user_id: data.user_id,
-        institution: data.institution || "National Institute of Technology",
-        university: data.institution || data.university || "National Institute of Technology",
-        course: data.course || "Computer Science and Engineering",
-        degree_program: data.degree_program || data.course || "Computer Science and Engineering",
-        year_of_study: data.year_of_study || 3,
-        subjects: Array.isArray(data.subjects) ? data.subjects : ["Distributed Systems", "Cloud Computing", "Information Security"],
-        courses: Array.isArray(data.courses) ? data.courses : (Array.isArray(data.subjects) ? data.subjects : ["Distributed Systems", "Cloud Computing"]),
-        gpa: data.gpa ?? 8.7,
-        portfolio_url: data.portfolio_url || "https://github.com",
-        created_at: data.created_at || new Date().toISOString(),
-        updated_at: data.updated_at || null,
-      };
+      if (!error && data) {
+        return {
+          student_id: data.student_id || data.id,
+          user_id: data.user_id,
+          institution: data.institution || "National Institute of Technology",
+          university: data.institution || data.university || "National Institute of Technology",
+          course: data.course || "Computer Science and Engineering",
+          degree_program: data.degree_program || data.course || "Computer Science and Engineering",
+          year_of_study: data.year_of_study || 3,
+          subjects: Array.isArray(data.subjects) ? data.subjects : ["Distributed Systems", "Cloud Computing", "Information Security"],
+          courses: Array.isArray(data.courses) ? data.courses : (Array.isArray(data.subjects) ? data.subjects : ["Distributed Systems", "Cloud Computing"]),
+          gpa: data.gpa ?? 8.7,
+          portfolio_url: data.portfolio_url || "https://github.com",
+          created_at: data.created_at || new Date().toISOString(),
+          updated_at: data.updated_at || null,
+        };
+      }
     }
 
     // Check localStorage cache if DB row is not yet provisioned
