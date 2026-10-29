@@ -8,11 +8,11 @@ function renderFallbackErrorHtml(): string {
     <title>VYRON — Loading Error</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
-  <body style="font-family:system-ui;background:oklch(0.19 0.032 264);color:oklch(0.94 0.012 264);display:grid;place-items:center;min-height:100vh;margin:0">
-    <div style="max-width:28rem;text-align:center;padding:2rem;background:oklch(0.23 0.028 264);border:1px solid oklch(0.32 0.020 264);border-radius:0.75rem">
-      <h1 style="color:oklch(0.79 0.13 205)">This page didn't load</h1>
-      <p style="color:oklch(0.70 0.018 264)">An SSR error occurred. Please try refreshing or go to the dashboard.</p>
-      <a href="/app" style="display:inline-block;padding:0.5rem 1rem;background:oklch(0.79 0.13 205);color:oklch(0.19 0.032 264);font-weight:600;border-radius:0.5rem;text-decoration:none">Go to Dashboard</a>
+  <body style="font-family:system-ui;background:oklch(0.17 0.028 308.9);color:oklch(0.955 0.000 89.9);display:grid;place-items:center;min-height:100vh;margin:0">
+    <div style="max-width:28rem;text-align:center;padding:2rem;background:oklch(0.21 0.026 308.9);border:1px solid oklch(0.30 0.025 308.9);border-radius:0.75rem">
+      <h1 style="color:oklch(0.707 0.096 338.3)">This page didn't load</h1>
+      <p style="color:oklch(0.785 0.051 339.0)">An SSR error occurred. Please try refreshing or go to the dashboard.</p>
+      <a href="/app" style="display:inline-block;padding:0.5rem 1rem;background:oklch(0.707 0.096 338.3);color:oklch(0.17 0.028 308.9);font-weight:600;border-radius:0.5rem;text-decoration:none">Go to Dashboard</a>
     </div>
   </body>
 </html>`;
