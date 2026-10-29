@@ -409,14 +409,14 @@ function NavList({
     <nav className="flex flex-col gap-3 px-2" aria-label="Main navigation">
       {/* 1. Contextual Simulation Mode Indicator */}
       {isSimulationRoute && !collapsed && (
-        <div className="mx-1 mb-1 rounded-lg border border-cyan-500/40 bg-cyan-950/40 p-2.5 shadow-sm">
+        <div className="mx-1 mb-1 rounded-lg border border-primary/40 bg-primary/10 p-2.5 shadow-sm">
           <div className="flex items-center gap-2">
-            <FlaskConical className="h-4 w-4 text-cyan-400 animate-pulse shrink-0" />
+            <FlaskConical className="h-4 w-4 text-primary animate-pulse shrink-0" />
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider">
+              <p className="text-[10px] font-bold text-primary uppercase tracking-wider">
                 Simulation Twin Active
               </p>
-              <p className="text-[9px] text-cyan-200/70 truncate">
+              <p className="text-[9px] text-muted-foreground truncate">
                 Hypothetical what-if state isolated
               </p>
             </div>
@@ -670,8 +670,8 @@ function NotificationBell() {
           <Bell className="size-4" aria-hidden />
           {unreadCount > 0 && (
             <span className="absolute right-1.5 top-1.5 flex size-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-cyan-400 opacity-75"></span>
-              <span className="relative inline-flex size-2 rounded-full bg-cyan-500"></span>
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex size-2 rounded-full bg-primary"></span>
             </span>
           )}
         </Button>
@@ -714,7 +714,7 @@ function NotificationBell() {
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-1.5 min-w-0">
-                    {n.unread && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-cyan-400" />}
+                    {n.unread && <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />}
                     <p
                       className={cn(
                         "text-xs truncate text-foreground",
@@ -1300,7 +1300,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen w-full bg-background text-foreground selection:bg-cyan-500/20">
+    <div className="flex min-h-screen w-full bg-background text-foreground selection:bg-primary/25">
       {/* SIDEBAR FOR DESKTOP */}
       <aside
         className={cn(
@@ -1502,7 +1502,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Button
                 asChild
                 size="sm"
-                className="h-8 gap-1.5 bg-gradient-to-r from-primary via-indigo-500 to-purple-600 hover:from-primary/90 hover:to-indigo-500 text-white font-bold text-xs shadow-md shadow-primary/25 border border-white/20"
+                className="h-8 gap-1.5 bg-gradient-to-r from-primary via-[oklch(0.570_0.098_286.4)] to-[oklch(0.490_0.119_308.9)] hover:from-primary/90 hover:to-[oklch(0.570_0.098_286.4)] text-white font-bold text-xs shadow-md shadow-primary/25 border border-white/20"
               >
                 <Link to="/app/analysis">
                   <Play className="size-3.5 fill-current text-white" />

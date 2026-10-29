@@ -422,8 +422,8 @@ function ProjectsPage() {
                       {/* Header row with domain icon, name, and badges */}
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-start gap-2.5 min-w-0">
-                          <div className="size-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center shrink-0 mt-0.5">
-                            <DomainIcon className="size-4 text-cyan-400" />
+                          <div className="size-8 rounded-lg bg-primary/10 border border-primary/25 flex items-center justify-center shrink-0 mt-0.5">
+                            <DomainIcon className="size-4 text-primary" />
                           </div>
                           <div className="min-w-0">
                             {isDraft ? (
@@ -538,7 +538,7 @@ function ProjectsPage() {
                         <div className="space-y-0.5">
                           <div className="text-[11px] font-semibold text-foreground flex items-center gap-1.5">
                             <span>{isDemoMode ? "Health" : "Stored value"} {p.healthScore}</span>
-                            <span className="text-[9px] text-cyan-400 font-mono">
+                            <span className="text-[9px] text-primary font-mono">
                               (Target &ge;{p.kpiTargets?.health_min ?? 80}%)
                             </span>
                           </div>
