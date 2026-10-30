@@ -60,7 +60,7 @@ async function httpGet(urlPath) {
       res.on("data", (chunk) => (data += chunk));
       res.on("end", () => resolve({ status: res.statusCode, headers: res.headers, body: data }));
     });
-    req.on("error", (err) => resolve({ error: err.message }));
+    req.on("error", (err) => resolve({ error: err.message || err.code || "Connection error" }));
     req.setTimeout(15000, () => {
       req.destroy();
       resolve({ error: "Timeout after 15000ms" });

@@ -1502,7 +1502,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Button
                 asChild
                 size="sm"
-                className="h-8 gap-1.5 bg-gradient-to-r from-primary via-[oklch(0.570_0.098_286.4)] to-[oklch(0.490_0.119_308.9)] hover:from-primary/90 hover:to-[oklch(0.570_0.098_286.4)] text-white font-bold text-xs shadow-md shadow-primary/25 border border-white/20"
+                className="h-8 gap-1.5 bg-gradient-to-r from-primary via-accent to-[oklch(0.489_0.066_151.3)] hover:opacity-95 text-zinc-950 font-bold text-xs shadow-md shadow-primary/25 border border-white/20"
               >
                 <Link to="/app/analysis">
                   <Play className="size-3.5 fill-current text-white" />

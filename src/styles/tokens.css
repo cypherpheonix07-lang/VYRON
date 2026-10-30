@@ -1,48 +1,48 @@
 :root {
-  /* ═══ OKLCH COLOR SYSTEM — V2 LIVE CONTRACT (FIGMA PALETTE) ═══ */
-  /* #744B93: oklch(0.490 0.119 308.9) - Royal Amethyst
-     #C889B5: oklch(0.707 0.096 338.3) - Orchid Rose Mauve
-     #F0F0F0: oklch(0.955 0.000 89.9)  - Crisp Platinum Off-White
-     #FCE5CC: oklch(0.934 0.042 69.6)  - Warm Peach Cream
-     #D0ADC4: oklch(0.785 0.051 339.0) - Dusty Lilac Silk
-     #736EAE: oklch(0.570 0.098 286.4) - Slate Iris Indigo */
+  /* ═══ OKLCH COLOR SYSTEM — V2 LIVE CONTRACT (FIGMA 6-COLOR PALETTE) ═══ */
+  /* 1. #436B4D: oklch(0.489 0.066 151.3) - Deep Forest Moss
+     2. #D1C8F4: oklch(0.854 0.061 294.4) - Soft Periwinkle Lavender
+     3. #99D9EA: oklch(0.848 0.069 216.1) - Powder Sky Cyan
+     4. #DFCDD2: oklch(0.864 0.021 358.8) - Crisp Rose Opal Off-White
+     5. #D9BFC0: oklch(0.827 0.030 15.1)  - Dusty Blushed Quartz
+     6. #C1D1D1: oklch(0.849 0.017 196.8) - Pale Sage Mist */
 
   /* Background surfaces */
-  --surface-base: oklch(0.17 0.028 308.9);
-  --surface-raised: oklch(0.21 0.026 308.9);
-  --surface-overlay: oklch(0.25 0.024 308.9);
-  --surface-sunken: oklch(0.13 0.030 308.9);
-  --surface-glass: oklch(0.21 0.026 308.9 / 0.72);
+  --surface-base: oklch(0.16 0.025 151.3);
+  --surface-raised: oklch(0.20 0.024 151.3);
+  --surface-overlay: oklch(0.24 0.022 151.3);
+  --surface-sunken: oklch(0.12 0.026 151.3);
+  --surface-glass: oklch(0.20 0.024 151.3 / 0.72);
 
   /* Brand tokens */
-  --color-primary: oklch(0.707 0.096 338.3);
-  --color-primary-dim: oklch(0.58 0.08 338.3);
-  --color-accent: oklch(0.570 0.098 286.4);
-  --color-accent-dim: oklch(0.46 0.08 286.4);
+  --color-primary: oklch(0.854 0.061 294.4); /* #D1C8F4: Lavender */
+  --color-primary-dim: oklch(0.72 0.05 294.4);
+  --color-accent: oklch(0.848 0.069 216.1); /* #99D9EA: Sky Cyan */
+  --color-accent-dim: oklch(0.70 0.05 216.1);
 
   /* Semantic tokens */
-  --color-success: oklch(0.72 0.17 145);
-  --color-warning: oklch(0.934 0.042 69.6);
+  --color-success: oklch(0.489 0.066 151.3); /* #436B4D: Deep Forest Moss */
+  --color-warning: oklch(0.827 0.030 15.1); /* #D9BFC0: Dusty Quartz */
   --color-danger: oklch(0.62 0.22 25);
-  --color-info: oklch(0.570 0.098 286.4);
+  --color-info: oklch(0.848 0.069 216.1); /* #99D9EA: Sky Cyan */
 
   /* Gate status tokens */
-  --gate-pass: oklch(0.72 0.17 145);
+  --gate-pass: oklch(0.489 0.066 151.3);
   --gate-fail: oklch(0.62 0.22 25);
   --gate-pending: oklch(0.55 0 0);
-  --gate-running: oklch(0.707 0.096 338.3);
+  --gate-running: oklch(0.854 0.061 294.4);
 
   /* Text tokens */
-  --text-primary: oklch(0.955 0.000 89.9);
-  --text-secondary: oklch(0.785 0.051 339.0);
-  --text-tertiary: oklch(0.58 0.03 308.9);
-  --text-disabled: oklch(0.38 0.015 308.9);
-  --text-gradient: linear-gradient(135deg, oklch(0.707 0.096 338.3), oklch(0.570 0.098 286.4));
+  --text-primary: oklch(0.864 0.021 358.8); /* #DFCDD2: Crisp Rose Opal */
+  --text-secondary: oklch(0.827 0.030 15.1); /* #D9BFC0: Dusty Blushed Quartz */
+  --text-tertiary: oklch(0.65 0.018 196.8); /* Derived from #C1D1D1 */
+  --text-disabled: oklch(0.40 0.015 151.3);
+  --text-gradient: linear-gradient(135deg, oklch(0.854 0.061 294.4), oklch(0.848 0.069 216.1));
 
   /* Border tokens */
-  --border-default: oklch(0.30 0.025 308.9);
-  --border-strong: oklch(0.40 0.035 308.9);
-  --border-focus: oklch(0.707 0.096 338.3);
+  --border-default: oklch(0.30 0.020 196.8); /* Derived from #C1D1D1 */
+  --border-strong: oklch(0.40 0.025 196.8);
+  --border-focus: oklch(0.854 0.061 294.4);
 
   /* ═══ TYPOGRAPHY ═══ */
   --font-sans: "Inter", "Geist", system-ui, sans-serif;
@@ -87,27 +87,27 @@
   --motion-slow: 400ms ease-out;
 
   /* ═══ GRID BACKDROP ═══ */
-  --grid-backdrop: url("data:image/svg+xml,%3Csvg width='56' height='56' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M56 0H0v56' fill='none' stroke='oklch(0.30 0.025 308.9)' stroke-width='0.5'/%3E%3C/svg%3E");
+  --grid-backdrop: url("data:image/svg+xml,%3Csvg width='56' height='56' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M56 0H0v56' fill='none' stroke='oklch(0.28 0.020 196.8)' stroke-width='0.5'/%3E%3C/svg%3E");
 
   /* ═══ SHADOWS ═══ */
   --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.3);
   --shadow-md: 0 4px 12px oklch(0 0 0 / 0.4);
   --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.5);
-  --shadow-glow: 0 0 20px oklch(0.707 0.096 338.3 / 0.25);
+  --shadow-glow: 0 0 20px oklch(0.854 0.061 294.4 / 0.25);
 }
 
 /* ═══ LIGHT THEME OVERRIDES ═══ */
 .light {
-  --surface-base: oklch(0.955 0.000 89.9);
+  --surface-base: oklch(0.864 0.021 358.8); /* #DFCDD2 */
   --surface-raised: oklch(1 0 0);
-  --surface-overlay: oklch(0.92 0.015 339.0);
-  --surface-sunken: oklch(0.89 0.020 339.0);
-  --surface-glass: oklch(0.98 0.005 339.0 / 0.85);
-  --text-primary: oklch(0.22 0.040 308.9);
-  --text-secondary: oklch(0.48 0.035 308.9);
-  --text-tertiary: oklch(0.60 0.025 308.9);
-  --border-default: oklch(0.85 0.020 339.0);
-  --border-strong: oklch(0.75 0.030 308.9);
+  --surface-overlay: oklch(0.849 0.017 196.8); /* #C1D1D1 */
+  --surface-sunken: oklch(0.80 0.020 196.8);
+  --surface-glass: oklch(0.864 0.021 358.8 / 0.85);
+  --text-primary: oklch(0.20 0.035 151.3);
+  --text-secondary: oklch(0.42 0.030 151.3);
+  --text-tertiary: oklch(0.55 0.020 151.3);
+  --border-default: oklch(0.78 0.020 196.8);
+  --border-strong: oklch(0.68 0.025 151.3);
   --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.08);
   --shadow-md: 0 4px 12px oklch(0 0 0 / 0.12);
   --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.16);
