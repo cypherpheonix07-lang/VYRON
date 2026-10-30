@@ -727,7 +727,7 @@ function Dashboard() {
                   navigate({ to: "/app/analysis" });
                 }
               }}
-              className="font-bold text-xs bg-gradient-to-r from-primary via-indigo-500 to-purple-600 hover:from-primary/90 hover:to-indigo-500 text-white shadow-md shadow-primary/20 border border-white/20"
+              className="font-bold text-xs bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white shadow-md shadow-primary/20 border border-white/20"
             >
               <Play className="size-3.5 fill-current text-white mr-1.5" />
               RUN ANALYSIS

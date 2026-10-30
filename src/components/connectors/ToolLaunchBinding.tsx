@@ -151,7 +151,7 @@ export const ToolLaunchBinding: React.FC<ToolLaunchBindingProps> = ({
         <Button
           size="sm"
           onClick={() => setIsOpen(true)}
-          className={`h-7 text-xs font-semibold gap-1.5 bg-gradient-to-r from-primary to-indigo-600 hover:from-primary/90 hover:to-indigo-500 text-white ${className || ""}`}
+          className={`h-7 text-xs font-semibold gap-1.5 bg-gradient-to-r from-indigo-600 to-indigo-600 hover:from-indigo-500 hover:to-indigo-500 text-white ${className || ""}`}
         >
           <Sparkles className="size-3" />
           <span>Launch &amp; Sign In</span>
@@ -260,7 +260,7 @@ export const ToolLaunchBinding: React.FC<ToolLaunchBindingProps> = ({
                     <Button
                       onClick={handleConnectProvider}
                       disabled={sessionStatus === "CONNECTING"}
-                      className="flex-1 text-xs font-bold h-8 bg-primary hover:bg-primary/90 text-white gap-1.5"
+                      className="flex-1 text-xs font-bold h-8 bg-primary hover:bg-primary/90 text-primary-foreground gap-1.5"
                     >
                       {sessionStatus === "CONNECTING" ? (
                         <RefreshCw className="size-3 animate-spin" />

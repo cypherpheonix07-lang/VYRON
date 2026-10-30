@@ -157,7 +157,7 @@ export function AnalysisDashboardView() {
             <Button
               size="lg"
               onClick={handleQuickRun}
-              className="w-full sm:w-auto font-black text-sm px-6 py-6 rounded-xl bg-gradient-to-r from-primary via-indigo-500 to-purple-600 text-white shadow-xl shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2.5 border border-white/20"
+              className="w-full sm:w-auto font-black text-sm px-6 py-6 rounded-xl bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 text-white shadow-xl shadow-primary/25 hover:shadow-primary/40 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2.5 border border-white/20"
             >
               {isCompleted ? (
                 <>

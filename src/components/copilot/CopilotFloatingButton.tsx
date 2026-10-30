@@ -33,7 +33,7 @@ export function CopilotFloatingButton() {
         "fixed bottom-6 right-6 z-50 flex items-center gap-2.5 px-4 py-3 rounded-full font-bold text-xs shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95 border cursor-pointer",
         mode === "DEMO"
           ? "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white border-amber-400/40 shadow-[0_0_25px_rgba(245,158,11,0.4)]"
-          : "bg-gradient-to-r from-primary via-accent to-[oklch(0.489_0.066_151.3)] text-zinc-950 font-bold border-white/30 shadow-[0_0_25px_oklch(0.854_0.061_294.4/0.4)]",
+          : "bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 text-white font-bold border-white/30 shadow-[0_0_25px_oklch(0.4_0.06_294.4/0.4)]",
       )}
       title="Open ATHER Copilot (Cmd+Shift+K)"
       aria-label="Open ATHER Copilot (Cmd+Shift+K)"
