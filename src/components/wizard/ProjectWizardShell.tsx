@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
+import { isValidUuid } from "@/lib/db/types";
 import type { WizardPayload, DraftState } from "@/types/wizard";
 import { validateStep } from "@/lib/wizardSchemas";
 import { Step1Identity } from "./Step1Identity";
@@ -176,9 +177,9 @@ export const ProjectWizardShell: React.FC<WizardShellProps> = ({
       localStorage.setItem(DRAFT_LOCAL_KEY, JSON.stringify(draftObj));
       setSavedAt(draftObj.saved_at);
 
-      // Also persist to Supabase if session active
+      // Also persist to Supabase if session active and valid UUID
       const { data: userSession } = await supabase.auth.getSession();
-      if (userSession?.session?.user?.id) {
+      if (userSession?.session?.user?.id && isValidUuid(userSession.session.user.id)) {
         await supabase
           .from("projects")
           .update({ draft_state: draftObj, updated_at: new Date().toISOString() })
@@ -228,7 +229,7 @@ export const ProjectWizardShell: React.FC<WizardShellProps> = ({
     try {
       localStorage.removeItem(DRAFT_LOCAL_KEY);
       const { data: userSession } = await supabase.auth.getSession();
-      if (userSession?.session?.user?.id) {
+      if (userSession?.session?.user?.id && isValidUuid(userSession.session.user.id)) {
         await supabase
           .from("projects")
           .update({ draft_state: null })

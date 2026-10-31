@@ -335,6 +335,7 @@ export async function generateReportPdf(
 // ==============================================================================
 import { supabase } from "./supabaseClient";
 import { DEMO_MODE } from "./constants";
+import { isValidUuid } from "./db/types";
 
 export interface AuthEventRecord {
   id: string;
@@ -452,7 +453,7 @@ export async function logAuthEvent(payload: {
 // 2. Fetch Auth & Sign-in Events
 export async function fetchSignInEvents(userId?: string): Promise<AuthEventRecord[]> {
   try {
-    if (userId && !DEMO_MODE) {
+    if (userId && !DEMO_MODE && isValidUuid(userId)) {
       const { data, error } = await supabase
         .from("auth_events")
         .select("*")
@@ -554,7 +555,7 @@ export async function fetchSignInEvents(userId?: string): Promise<AuthEventRecor
 // 3. User Integrations & GitHub Repo Helpers
 export async function fetchUserIntegrations(userId?: string): Promise<UserIntegrationRecord[]> {
   try {
-    if (userId && !DEMO_MODE) {
+    if (userId && !DEMO_MODE && isValidUuid(userId)) {
       const { data, error } = await supabase
         .from("user_integrations")
         .select(
@@ -602,7 +603,7 @@ export async function disconnectUserIntegration(
   userId?: string,
 ): Promise<boolean> {
   try {
-    if (userId && !DEMO_MODE) {
+    if (userId && !DEMO_MODE && isValidUuid(userId)) {
       await supabase
         .from("user_integrations")
         .delete()

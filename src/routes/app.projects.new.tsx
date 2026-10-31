@@ -16,6 +16,7 @@ import { ProjectControlPlaneShell } from "@/components/projectControlPlane/Proje
 import { Button } from "@/components/ui/button";
 import { ProjectLifecycleStage } from "@/types/aiProjectControlPlane";
 import { projectRegistry } from "@/services/project/projectRegistry";
+import { isValidUuid } from "@/lib/db/types";
 
 interface NewProjectSearch {
   stage?: ProjectLifecycleStage | undefined;
@@ -52,7 +53,8 @@ export const Route = createFileRoute("/app/projects/new")({
       let existingDraft: DraftState | null = null;
       try {
         const userRes = await authService.getUser();
-        if (userRes.data?.id) {
+        const isUserDemo = Boolean((userRes.data as unknown as { isDemo?: boolean })?.isDemo);
+        if (userRes.data?.id && isValidUuid(userRes.data.id) && !isUserDemo) {
           const { data } = await supabase
             .from("projects")
             .select("draft_state")
@@ -101,6 +103,15 @@ function NewProjectPage() {
     try {
       const userRes = await authService.getUser();
       const userId = userRes.data?.id || "";
+      const isUserDemo = Boolean((userRes.data as unknown as { isDemo?: boolean })?.isDemo);
+      const isDemo = authService.isDemoMode() || isUserDemo || !isValidUuid(userId);
+
+      if (isDemo) {
+        const syntheticProjectId = `proj-demo-${crypto.randomUUID().slice(0, 8)}`;
+        await onSuccessfulGeneration(syntheticProjectId, payload);
+        toast.success("Demo Project generated successfully!");
+        return;
+      }
 
       // Prepare complete database upsert row
       const projectRow = {

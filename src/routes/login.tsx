@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import { useAuth, resolvePostLoginRoute } from "../lib/auth";
 import { authService } from "../services/authService";
+import { modeStore } from "../state/mode/modeStore";
 import { cn } from "../lib/utils";
 import {
   AuthLayout,
@@ -279,7 +280,18 @@ function LoginPage() {
         },
       };
       localStorage.setItem("brahma_demo_session", JSON.stringify(localDemoSession));
+      sessionStorage.setItem(
+        "brahma_demo_session",
+        JSON.stringify({
+          isDemo: true,
+          demoProjectId: "demo-project-brahma-showcase",
+          demoDomain: "fintech",
+          activatedAt: Date.now(),
+          demoSessionId: crypto.randomUUID(),
+        }),
+      );
       localStorage.setItem("brahma_demo_mode", "true");
+      modeStore.setMode("DEMO");
       toast.success(`Welcome to DEMO Workspace (${role})`);
       await refresh();
       window.location.href = "/app";

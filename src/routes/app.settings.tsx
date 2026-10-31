@@ -54,6 +54,7 @@ import { SessionDiagnosticsPanel } from "@/components/brahma/session-diagnostics
 import { SecretHealthDashboard } from "@/components/settings/SecretHealthDashboard";
 import { LLMSpendMonitor } from "@/components/settings/LLMSpendMonitor";
 import { supabase } from "@/lib/supabaseClient";
+import { isValidUuid } from "@/lib/db/types";
 
 export const Route = createFileRoute("/app/settings")({
   head: () => ({
@@ -151,7 +152,7 @@ function SettingsPage() {
   // Load User Preferences from DB
   useEffect(() => {
     async function loadSettings() {
-      if (!user?.id) return;
+      if (!user?.id || !isValidUuid(user.id)) return;
       try {
         const { data } = await supabase
           .from("user_settings")

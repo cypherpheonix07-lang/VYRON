@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { authService } from "./authService";
+import { isValidUuid } from "@/lib/db/types";
 import { toast } from "sonner";
 
 export interface GitHubUserProfile {
@@ -156,7 +157,7 @@ class GitHubService {
       }
 
       // 3. Check Supabase github_tokens table (with silent graceful fallback if table not yet created)
-      if (session?.user?.id) {
+      if (session?.user?.id && isValidUuid(session.user.id)) {
         try {
           const { data, error } = await supabase
             .from("github_tokens")

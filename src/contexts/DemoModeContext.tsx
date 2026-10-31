@@ -54,15 +54,30 @@ export function DemoModeProvider({ children }: { children: ReactNode }) {
   }>(() => {
     if (typeof window !== "undefined") {
       try {
-        const stored = sessionStorage.getItem(STORAGE_KEY);
+        const stored = sessionStorage.getItem(STORAGE_KEY) || localStorage.getItem(STORAGE_KEY);
         if (stored) {
           const parsed = JSON.parse(stored);
+          const isDemoFlag = Boolean(parsed.isDemo || parsed.user?.isDemo);
+          if (isDemoFlag) {
+            return {
+              isDemo: true,
+              demoProjectId: parsed.demoProjectId || "demo-project-brahma-showcase",
+              demoDomain: parsed.demoDomain || "fintech",
+              activatedAt: parsed.activatedAt || Date.now(),
+              demoSessionId: parsed.demoSessionId || crypto.randomUUID(),
+            };
+          }
+        }
+        if (
+          localStorage.getItem("brahma_demo_mode") === "true" ||
+          localStorage.getItem("brahma_app_mode") === "DEMO"
+        ) {
           return {
-            isDemo: Boolean(parsed.isDemo),
-            demoProjectId: parsed.demoProjectId || "demo-project-brahma-showcase",
-            demoDomain: parsed.demoDomain || "fintech",
-            activatedAt: parsed.activatedAt || Date.now(),
-            demoSessionId: parsed.demoSessionId || crypto.randomUUID(),
+            isDemo: true,
+            demoProjectId: "demo-project-brahma-showcase",
+            demoDomain: "fintech",
+            activatedAt: Date.now(),
+            demoSessionId: crypto.randomUUID(),
           };
         }
       } catch {
@@ -123,9 +138,12 @@ export function DemoModeProvider({ children }: { children: ReactNode }) {
     if (typeof window !== "undefined") {
       if (newSession.isDemo) {
         sessionStorage.setItem(STORAGE_KEY, JSON.stringify(newSession));
+        localStorage.setItem("brahma_demo_mode", "true");
         window.dispatchEvent(new CustomEvent("brahma:demo:activated", { detail: newSession }));
       } else {
         sessionStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem("brahma_demo_mode");
         window.dispatchEvent(new CustomEvent("brahma:demo:deactivated"));
       }
     }

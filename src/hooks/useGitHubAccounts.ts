@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { useAuth } from "@/lib/auth";
+import { isValidUuid } from "@/lib/db/types";
 import type { GitHubAccountItem } from "@/components/github/GitHubAccountSelector";
 
 export function useGitHubAccounts() {
@@ -10,7 +11,7 @@ export function useGitHubAccounts() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchAccounts = useCallback(async () => {
-    if (!user?.id) {
+    if (!user?.id || !isValidUuid(user.id)) {
       setAccounts([]);
       setIsLoading(false);
       return;

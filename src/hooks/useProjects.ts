@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import { authService } from "@/services/authService";
 import { useDemoMode } from "@/contexts/DemoModeContext";
+import { modeStore } from "@/state/mode/modeStore";
+import { isValidUuid } from "@/lib/db/types";
 import { DEMO_PROJECTS } from "@/data/demoSeedData";
 
 export interface Project {
@@ -35,7 +37,8 @@ export interface Project {
 }
 
 export function useProjects() {
-  const { isDemoMode } = useDemoMode();
+  const { isDemoMode: contextDemoMode } = useDemoMode();
+  const isDemoMode = contextDemoMode || authService.isDemoMode() || modeStore.getState().mode === "DEMO";
   const [projects, setProjects] = useState<Project[]>([]);
   const [draftCount, setDraftCount] = useState<number>(0);
   const [loading, setLoading] = useState(true);
@@ -72,7 +75,8 @@ export function useProjects() {
 
       // Query active draft count for current user
       const userRes = await authService.getUser();
-      if (userRes.data?.id) {
+      const isUserDemo = Boolean((userRes.data as unknown as { isDemo?: boolean })?.isDemo);
+      if (userRes.data?.id && isValidUuid(userRes.data.id) && !isUserDemo) {
         let count: number | null = 0;
         try {
           const { count: c } = await supabase
@@ -94,6 +98,14 @@ export function useProjects() {
         }
 
         if (request === requestVersion.current) setDraftCount(Math.max(count ?? 0, localCount));
+      } else {
+        let localCount = 0;
+        try {
+          if (localStorage.getItem("brahma_project_wizard_draft_v2")) localCount = 1;
+        } catch {
+          // ignore localStorage access error
+        }
+        if (request === requestVersion.current) setDraftCount(localCount);
       }
     } catch (e: unknown) {
       const errObj = e as { message?: string; details?: string; hint?: string } | null;

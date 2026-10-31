@@ -38,6 +38,7 @@ import { GitHubSyncStatus } from "./GitHubSyncStatus";
 import { useRepoBinding } from "@/hooks/useRepoBinding";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/lib/supabaseClient";
+import { isValidUuid } from "@/lib/db/types";
 
 export interface BoundProjectRepo {
   id: string;
@@ -88,7 +89,7 @@ export function ProjectGitHubIntegrationHub({
     try {
       // Load accounts from github_accounts table
       let fetchedAccounts: GitHubAccountItem[] = [];
-      if (user?.id) {
+      if (user?.id && isValidUuid(user.id)) {
         const { data: accData, error: accErr } = await supabase
           .from("github_accounts")
           .select("id, github_login, account_type, avatar_url")
