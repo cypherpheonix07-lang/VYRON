@@ -4,6 +4,40 @@
  * Strictly ZERO Raw SQL.
  */
 
+// Canonical 30-Stage Lifecycle Candidate (Phases 01-30)
+export type Canonical30StageId =
+  | "01_INTENT"
+  | "02_PROBLEM"
+  | "03_REQUIREMENTS"
+  | "04_SCOPE"
+  | "05_CAPABILITY"
+  | "06_ARCHITECTURE"
+  | "07_TECHNOLOGY"
+  | "08_DATA"
+  | "09_AI_DESIGN"
+  | "10_SECURITY"
+  | "11_RELIABILITY"
+  | "12_IMPLEMENTATION"
+  | "13_TESTING"
+  | "14_BLUEPRINT"
+  | "15_OBSERVABILITY"
+  | "16_OPERATIONS"
+  | "17_PERFORMANCE"
+  | "18_COLLABORATION"
+  | "19_DOCUMENTATION"
+  | "20_DELIVERY"
+  | "21_DOMAIN_VALIDATION"
+  | "22_SUPPLY_CHAIN"
+  | "23_PRIVACY_DATA_LIFECYCLE"
+  | "24_AI_GOVERNANCE"
+  | "25_DISASTER_RECOVERY"
+  | "26_ACCESSIBILITY"
+  | "27_COST_GOVERNANCE"
+  | "28_MIGRATION"
+  | "29_CAPACITY_SCALABILITY"
+  | "30_CONTINUOUS_IMPROVEMENT";
+
+// Operational Project Lifecycle Stage Registry (26 Consolidated Workstreams A-Z)
 export type ProjectLifecycleStage =
   | "01_INTENT"
   | "02_PROBLEM"
