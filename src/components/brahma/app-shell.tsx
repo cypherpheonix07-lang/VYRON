@@ -48,6 +48,7 @@ import {
   BarChart3,
   CheckSquare,
   Cpu,
+  FileCode,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode, useRef } from "react";
 import { toast } from "sonner";
@@ -137,7 +138,7 @@ export interface NavDomain {
   adminOnly?: boolean;
 }
 
-// 10 Core Engineering Domains (HOME / DISCOVER / INTELLIGENCE / ENGINEERING / ANALYSIS / RELEASE / SIMULATION / AI / INTEGRATIONS / GOVERNANCE)
+// 12 Core Engineering Domains (HOME / DISCOVER / INTELLIGENCE / ENGINEERING / ANALYSIS / RELEASE / SIMULATION / AI / INTEGRATIONS / GOVERNANCE / SYSTEM FLOW / DEPLOYMENT PLATFORMS)
 export const NAV_DOMAINS: NavDomain[] = [
   {
     id: "home",
@@ -147,6 +148,7 @@ export const NAV_DOMAINS: NavDomain[] = [
       { to: "/app", label: "Command Center", icon: LayoutDashboard, exact: true },
       { to: "/app/activity", label: "Activity Stream", icon: Activity, exact: true },
       { to: "/app/notifications", label: "System Alerts", icon: Bell, exact: true },
+      { to: "/app/workpulse", label: "Workspace Pulse", icon: Activity, exact: true },
     ],
   },
   {
@@ -154,8 +156,8 @@ export const NAV_DOMAINS: NavDomain[] = [
     label: "DISCOVER",
     icon: Compass,
     items: [
-      { to: "/discover", label: "Project Reality Map", icon: Sparkles, exact: false },
-      { to: "/app/search", label: "Global Discovery Search", icon: Search, exact: false },
+      { to: "/app/reality-map", label: "Project Reality Map", icon: Sparkles, exact: false },
+      { to: "/discover", label: "Global Discovery Search", icon: Search, exact: false },
       { to: "/app/github", label: "Repository Discovery", icon: Github, exact: false },
     ],
   },
@@ -164,6 +166,7 @@ export const NAV_DOMAINS: NavDomain[] = [
     label: "INTELLIGENCE",
     icon: Brain,
     items: [
+      { to: "/app/intelligence", label: "Intelligence & Knowledge Graph", icon: Brain, exact: false },
       { to: "/app/drift", label: "Architecture Drift", icon: Compass, exact: false },
       { to: "/app/impact", label: "Causal Change Impact", icon: GitPullRequest, exact: false },
       { to: "/app/missions", label: "Decisions & Missions", icon: Target, exact: false },
@@ -177,6 +180,8 @@ export const NAV_DOMAINS: NavDomain[] = [
       { to: "/app/projects", label: "Project Workspaces", icon: FolderKanban, exact: true },
       { to: "/app/projects/new", label: "New Project Blueprint", icon: PlusCircle, exact: true },
       { to: "/app/studio/templates", label: "Project Templates", icon: Layers, exact: false },
+      { to: "/app/testing", label: "Testing Platform", icon: CheckSquare, exact: false },
+      { to: "/app/tech-radar", label: "Tech Radar", icon: Target, exact: false },
     ],
   },
   {
@@ -186,6 +191,8 @@ export const NAV_DOMAINS: NavDomain[] = [
     items: [
       { to: "/app/analysis", label: "12-Stage Forensics", icon: Activity, exact: false },
       { to: "/app/reports", label: "Reports & Findings", icon: FileBarChart2, exact: true },
+      { to: "/app/security-center", label: "Security & Posture Review", icon: ShieldCheck, exact: false },
+      { to: "/app/forensics", label: "Deep Code Forensics", icon: FileCode, exact: false },
       { to: "/app/preview", label: "Engineering Theater", icon: Eye, exact: true },
     ],
   },
@@ -196,6 +203,7 @@ export const NAV_DOMAINS: NavDomain[] = [
     items: [
       { to: "/app/release", label: "Release Gates & Twin", icon: ShieldCheck, exact: false },
       { to: "/app/exports", label: "Artifact & Export Center", icon: Download, exact: true },
+      { to: "/app/cicd", label: "Automated CI/CD", icon: Workflow, exact: false },
     ],
   },
   {
@@ -204,6 +212,7 @@ export const NAV_DOMAINS: NavDomain[] = [
     icon: FlaskConical,
     items: [
       { to: "/app/simulation", label: "Simulation Twin Lab", icon: FlaskConical, exact: false },
+      { to: "/app/eval", label: "Digital Twin & Benchmarks", icon: Activity, exact: false },
     ],
   },
   {
@@ -222,11 +231,12 @@ export const NAV_DOMAINS: NavDomain[] = [
     label: "INTEGRATIONS",
     icon: Cable,
     items: [
+      { to: "/app/integrations", label: "Ecosystem Control Plane", icon: Cable, exact: true },
       { to: "/app/github", label: "GitHub Mirror & App", icon: Github, exact: false },
       { to: "/app/connectors", label: "MCP Connectors", icon: Cable, exact: false },
       { to: "/app/plugins", label: "Plugin Center", icon: Puzzle, exact: false },
+      { to: "/app/api-gateway", label: "Enterprise API Gateway", icon: Server, exact: false },
       { to: "/app/datasets", label: "Kaggle & Data Sources", icon: Database, exact: false },
-      { to: "/app/integrations", label: "Ecosystem Control Plane", icon: Cable, exact: true },
     ],
   },
   {
@@ -234,31 +244,12 @@ export const NAV_DOMAINS: NavDomain[] = [
     label: "GOVERNANCE",
     icon: ShieldAlert,
     items: [
-      { to: "/app/admin/audit", label: "Audit & Evidence Ledger", icon: ShieldAlert, exact: false },
+      { to: "/app/policies", label: "Policy-As-Code Governance", icon: Lock, exact: false },
       { to: "/app/team", label: "Team & Policy Access", icon: Users, exact: true },
-      { to: "/app/settings", label: "Platform Health & Settings", icon: Settings, exact: true },
-      { to: "/app/admin/usage", label: "SLO & Telemetry", icon: BarChart3, exact: false },
-      { to: "/app/admin", label: "Admin Console", icon: ShieldCheck, exact: true },
-    ],
-  },
-  {
-    id: "platform",
-    label: "PLATFORM",
-    icon: Server,
-    adminOnly: true,
-    items: [
-      { to: "/app/settings", label: "Platform Health & Settings", icon: Settings, exact: true },
-      { to: "/app/admin/usage", label: "SLO & Telemetry", icon: BarChart3, exact: false },
-    ],
-  },
-  {
-    id: "admin",
-    label: "ADMIN",
-    icon: ShieldCheck,
-    adminOnly: true,
-    items: [
-      { to: "/app/admin", label: "Admin Console", icon: ShieldCheck, exact: true },
       { to: "/app/admin/audit", label: "Audit & Evidence Ledger", icon: ShieldAlert, exact: false },
+      { to: "/app/settings", label: "Platform Health & Settings", icon: Settings, exact: true },
+      { to: "/app/admin/usage", label: "SLO & Telemetry", icon: BarChart3, exact: false },
+      { to: "/app/admin", label: "Admin Console", icon: ShieldCheck, exact: true },
     ],
   },
   {
@@ -267,6 +258,8 @@ export const NAV_DOMAINS: NavDomain[] = [
     icon: Workflow,
     items: [
       { to: "/app/system-flow", label: "Live System Flow & Sentinel", icon: Workflow, exact: true },
+      { to: "/app/monitoring", label: "Sentinel Health & Monitoring", icon: Activity, exact: false },
+      { to: "/app/workpulse", label: "WorkPulse Telemetry", icon: Activity, exact: true },
     ],
   },
   {
@@ -275,6 +268,7 @@ export const NAV_DOMAINS: NavDomain[] = [
     icon: Server,
     items: [
       { to: "/app/deployments", label: "Deployment Platforms", icon: Server, exact: true },
+      { to: "/app/infra", label: "Cloud Infrastructure Fabric", icon: Server, exact: false },
     ],
   },
 ];

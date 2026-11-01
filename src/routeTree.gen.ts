@@ -53,13 +53,17 @@ import { Route as AppGithubRouteImport } from './routes/app.github'
 import { Route as AppImpactRouteImport } from './routes/app.impact'
 import { Route as AppInfraRouteImport } from './routes/app.infra'
 import { Route as AppIntegrationsRouteImport } from './routes/app.integrations'
+import { Route as AppIntelligenceRouteImport } from './routes/app.intelligence'
 import { Route as AppMissionsRouteImport } from './routes/app.missions'
+import { Route as AppMonitoringRouteImport } from './routes/app.monitoring'
 import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
 import { Route as AppObsRouteImport } from './routes/app.obs'
 import { Route as AppPatternsRouteImport } from './routes/app.patterns'
 import { Route as AppPluginsRouteImport } from './routes/app.plugins'
+import { Route as AppPoliciesRouteImport } from './routes/app.policies'
 import { Route as AppPreviewRouteImport } from './routes/app.preview'
 import { Route as AppProfileRouteImport } from './routes/app.profile'
+import { Route as AppRealityMapRouteImport } from './routes/app.reality-map'
 import { Route as AppRecommendationsRouteImport } from './routes/app.recommendations'
 import { Route as AppReleaseRouteImport } from './routes/app.release'
 import { Route as AppReportsRouteImport } from './routes/app.reports'
@@ -360,9 +364,19 @@ const AppIntegrationsRoute = AppIntegrationsRouteImport.update({
   path: '/integrations',
   getParentRoute: () => AppRoute,
 } as any)
+const AppIntelligenceRoute = AppIntelligenceRouteImport.update({
+  id: '/intelligence',
+  path: '/intelligence',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppMissionsRoute = AppMissionsRouteImport.update({
   id: '/missions',
   path: '/missions',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMonitoringRoute = AppMonitoringRouteImport.update({
+  id: '/monitoring',
+  path: '/monitoring',
   getParentRoute: () => AppRoute,
 } as any)
 const AppNotificationsRoute = AppNotificationsRouteImport.update({
@@ -385,6 +399,11 @@ const AppPluginsRoute = AppPluginsRouteImport.update({
   path: '/plugins',
   getParentRoute: () => AppRoute,
 } as any)
+const AppPoliciesRoute = AppPoliciesRouteImport.update({
+  id: '/policies',
+  path: '/policies',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppPreviewRoute = AppPreviewRouteImport.update({
   id: '/preview',
   path: '/preview',
@@ -393,6 +412,11 @@ const AppPreviewRoute = AppPreviewRouteImport.update({
 const AppProfileRoute = AppProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRealityMapRoute = AppRealityMapRouteImport.update({
+  id: '/reality-map',
+  path: '/reality-map',
   getParentRoute: () => AppRoute,
 } as any)
 const AppRecommendationsRoute = AppRecommendationsRouteImport.update({
@@ -838,13 +862,17 @@ export interface FileRoutesByFullPath {
   '/app/impact': typeof AppImpactRoute
   '/app/infra': typeof AppInfraRoute
   '/app/integrations': typeof AppIntegrationsRoute
+  '/app/intelligence': typeof AppIntelligenceRoute
   '/app/missions': typeof AppMissionsRoute
+  '/app/monitoring': typeof AppMonitoringRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/obs': typeof AppObsRoute
   '/app/patterns': typeof AppPatternsRoute
   '/app/plugins': typeof AppPluginsRoute
+  '/app/policies': typeof AppPoliciesRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/reality-map': typeof AppRealityMapRoute
   '/app/recommendations': typeof AppRecommendationsRoute
   '/app/release': typeof AppReleaseRouteWithChildren
   '/app/reports': typeof AppReportsRouteWithChildren
@@ -966,13 +994,17 @@ export interface FileRoutesByTo {
   '/app/impact': typeof AppImpactRoute
   '/app/infra': typeof AppInfraRoute
   '/app/integrations': typeof AppIntegrationsRoute
+  '/app/intelligence': typeof AppIntelligenceRoute
   '/app/missions': typeof AppMissionsRoute
+  '/app/monitoring': typeof AppMonitoringRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/obs': typeof AppObsRoute
   '/app/patterns': typeof AppPatternsRoute
   '/app/plugins': typeof AppPluginsRoute
+  '/app/policies': typeof AppPoliciesRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/reality-map': typeof AppRealityMapRoute
   '/app/recommendations': typeof AppRecommendationsRoute
   '/app/release': typeof AppReleaseRouteWithChildren
   '/app/reports': typeof AppReportsRouteWithChildren
@@ -1097,13 +1129,17 @@ export interface FileRoutesById {
   '/app/impact': typeof AppImpactRoute
   '/app/infra': typeof AppInfraRoute
   '/app/integrations': typeof AppIntegrationsRoute
+  '/app/intelligence': typeof AppIntelligenceRoute
   '/app/missions': typeof AppMissionsRoute
+  '/app/monitoring': typeof AppMonitoringRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/obs': typeof AppObsRoute
   '/app/patterns': typeof AppPatternsRoute
   '/app/plugins': typeof AppPluginsRoute
+  '/app/policies': typeof AppPoliciesRoute
   '/app/preview': typeof AppPreviewRoute
   '/app/profile': typeof AppProfileRoute
+  '/app/reality-map': typeof AppRealityMapRoute
   '/app/recommendations': typeof AppRecommendationsRoute
   '/app/release': typeof AppReleaseRouteWithChildren
   '/app/reports': typeof AppReportsRouteWithChildren
@@ -1231,13 +1267,17 @@ export interface FileRouteTypes {
     | '/app/impact'
     | '/app/infra'
     | '/app/integrations'
+    | '/app/intelligence'
     | '/app/missions'
+    | '/app/monitoring'
     | '/app/notifications'
     | '/app/obs'
     | '/app/patterns'
     | '/app/plugins'
+    | '/app/policies'
     | '/app/preview'
     | '/app/profile'
+    | '/app/reality-map'
     | '/app/recommendations'
     | '/app/release'
     | '/app/reports'
@@ -1359,13 +1399,17 @@ export interface FileRouteTypes {
     | '/app/impact'
     | '/app/infra'
     | '/app/integrations'
+    | '/app/intelligence'
     | '/app/missions'
+    | '/app/monitoring'
     | '/app/notifications'
     | '/app/obs'
     | '/app/patterns'
     | '/app/plugins'
+    | '/app/policies'
     | '/app/preview'
     | '/app/profile'
+    | '/app/reality-map'
     | '/app/recommendations'
     | '/app/release'
     | '/app/reports'
@@ -1489,13 +1533,17 @@ export interface FileRouteTypes {
     | '/app/impact'
     | '/app/infra'
     | '/app/integrations'
+    | '/app/intelligence'
     | '/app/missions'
+    | '/app/monitoring'
     | '/app/notifications'
     | '/app/obs'
     | '/app/patterns'
     | '/app/plugins'
+    | '/app/policies'
     | '/app/preview'
     | '/app/profile'
+    | '/app/reality-map'
     | '/app/recommendations'
     | '/app/release'
     | '/app/reports'
@@ -1911,11 +1959,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIntegrationsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/intelligence': {
+      id: '/app/intelligence'
+      path: '/intelligence'
+      fullPath: '/app/intelligence'
+      preLoaderRoute: typeof AppIntelligenceRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/missions': {
       id: '/app/missions'
       path: '/missions'
       fullPath: '/app/missions'
       preLoaderRoute: typeof AppMissionsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/monitoring': {
+      id: '/app/monitoring'
+      path: '/monitoring'
+      fullPath: '/app/monitoring'
+      preLoaderRoute: typeof AppMonitoringRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/notifications': {
@@ -1946,6 +2008,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppPluginsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/policies': {
+      id: '/app/policies'
+      path: '/policies'
+      fullPath: '/app/policies'
+      preLoaderRoute: typeof AppPoliciesRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/preview': {
       id: '/app/preview'
       path: '/preview'
@@ -1958,6 +2027,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/app/profile'
       preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/reality-map': {
+      id: '/app/reality-map'
+      path: '/reality-map'
+      fullPath: '/app/reality-map'
+      preLoaderRoute: typeof AppRealityMapRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/recommendations': {
@@ -2720,13 +2796,17 @@ interface AppRouteChildren {
   AppImpactRoute: typeof AppImpactRoute
   AppInfraRoute: typeof AppInfraRoute
   AppIntegrationsRoute: typeof AppIntegrationsRoute
+  AppIntelligenceRoute: typeof AppIntelligenceRoute
   AppMissionsRoute: typeof AppMissionsRoute
+  AppMonitoringRoute: typeof AppMonitoringRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppObsRoute: typeof AppObsRoute
   AppPatternsRoute: typeof AppPatternsRoute
   AppPluginsRoute: typeof AppPluginsRoute
+  AppPoliciesRoute: typeof AppPoliciesRoute
   AppPreviewRoute: typeof AppPreviewRoute
   AppProfileRoute: typeof AppProfileRoute
+  AppRealityMapRoute: typeof AppRealityMapRoute
   AppRecommendationsRoute: typeof AppRecommendationsRoute
   AppReleaseRoute: typeof AppReleaseRouteWithChildren
   AppReportsRoute: typeof AppReportsRouteWithChildren
@@ -2775,13 +2855,17 @@ const AppRouteChildren: AppRouteChildren = {
   AppImpactRoute: AppImpactRoute,
   AppInfraRoute: AppInfraRoute,
   AppIntegrationsRoute: AppIntegrationsRoute,
+  AppIntelligenceRoute: AppIntelligenceRoute,
   AppMissionsRoute: AppMissionsRoute,
+  AppMonitoringRoute: AppMonitoringRoute,
   AppNotificationsRoute: AppNotificationsRoute,
   AppObsRoute: AppObsRoute,
   AppPatternsRoute: AppPatternsRoute,
   AppPluginsRoute: AppPluginsRoute,
+  AppPoliciesRoute: AppPoliciesRoute,
   AppPreviewRoute: AppPreviewRoute,
   AppProfileRoute: AppProfileRoute,
+  AppRealityMapRoute: AppRealityMapRoute,
   AppRecommendationsRoute: AppRecommendationsRoute,
   AppReleaseRoute: AppReleaseRouteWithChildren,
   AppReportsRoute: AppReportsRouteWithChildren,
