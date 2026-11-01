@@ -1,0 +1,28 @@
+req_id,module_id,module_name,domain,requirement_statement,source_citation,implementing_component,test_verification_target,status
+REQ-S01-01,S01,Authentication & Session Management,A,Form inputs labeled and accessible; aria-live alerts for auth errors,Input C Appx A S01-A,src/components/auth/AuthForm.tsx,test-auth-deployment-audit.mjs,VERIFIED
+REQ-S01-02,S01,Authentication & Session Management,B,Hard-block unauthenticated access to /app/* and /dashboard/*,Input C Appx A S01-B,src/components/auth/ProtectedRoute.tsx,test-acceptance-gates.mjs Gate 2,VERIFIED
+REQ-S01-03,S01,Authentication & Session Management,G,Session token refresh and redirect on expired session,Input C Appx A S01-G,src/contexts/AuthContext.tsx,verify-step1-8.mjs Step 1,VERIFIED
+REQ-S01-04,S01,Authentication & Session Management,S,Strict PKCE OAuth flow with UUID validation preventing 400 Bad Request,Input A & CR-10,src/hooks/useProjects.ts,commit 3eab4e6,VERIFIED
+REQ-S02-01,S02,Landing Page & Onboarding Flow,C,Hero showcase with interactive demo toggle without hydration mismatch,Input C Appx A S02-C,src/routes/index.tsx,test-acceptance-gates.mjs Gate 5,VERIFIED
+REQ-S02-02,S02,Landing Page & Onboarding Flow,B,3-step onboarding flow initializes profile and workspace,Input C Appx A S02-B,src/routes/onboarding.tsx,test-vyron-complete-journey.mjs,VERIFIED
+REQ-S03-01,S03,App Shell Navigation & Routing,A,Accessible app shell with role-gated navigation and breadcrumbs,Input C Appx A S03-A,src/components/brahma/app-shell.tsx,test-acceptance-gates.mjs Gate 5,VERIFIED
+REQ-S03-02,S03,App Shell Navigation & Routing,N,TanStack Router handles deep linking without infinite redirection loops,Input C Appx A S03-N,src/router.tsx,test-acceptance-gates.mjs Gate 5,VERIFIED
+REQ-S04-01,S04,Requirement Intelligence Engine,B,Deterministic AST parsing of software requirements and design constraints,Input C Appx A S04-B,src/services/requirementService.ts,verify-interactive-command-center.mjs,VERIFIED
+REQ-S04-02,S04,Requirement Intelligence Engine,E,Untrusted user input sanitized before AST generation,Input C Appx A S04-E,src/components/requirements/,test-acceptance-gates.mjs Gate 7,VERIFIED
+REQ-S05-01,S05,Architecture Generator Canvas,C,Interactive React Flow canvas with custom nodes and edges,Input C Appx A S05-C,src/components/architecture/Canvas.tsx,verify-nextgen-command-center.mjs,VERIFIED
+REQ-S05-02,S05,Architecture Generator Canvas,D,Bi-directional synchronization between requirement AST and canvas state,Input C Appx A S05-D,src/stores/architectureStore.ts,test-acceptance-gates.mjs Gate 4,VERIFIED
+REQ-S06-01,S06,Business KPI Mapper,B,Deterministic mapping of technical architecture nodes to business ROI,Input C Appx A S06-B,src/services/kpiService.ts,verify-interactive-command-center.mjs,VERIFIED
+REQ-S07-01,S07,Code Health Engine,B,Code smell classification and technical debt score calculation,Input C Appx A S07-B,src/services/codeHealthService.ts,test-acceptance-gates.mjs Gate 10,VERIFIED
+REQ-S08-01,S08,Security Reviewer Scanner,S,CVE and CWE vulnerability classification with zero client-leaked secrets,Input C Appx A S08-S,src/services/securityReviewService.ts,test-acceptance-gates.mjs Gate 3,VERIFIED
+REQ-S09-01,S09,Delivery Risk Predictor,B,Sprint velocity risk modeling and bottleneck detection,Input C Appx A S09-B,src/services/riskPredictorService.ts,verify-interactive-command-center.mjs,VERIFIED
+REQ-S10-01,S10,PDF Report Generator,O,Executive architectural summary export with deterministic rendering,Input C Appx A S10-O,src/services/pdfReportService.ts,verify-step1-8.mjs Step 6,VERIFIED
+REQ-S11-01,S11,Engineering Dashboard & Metrics,C,WorkPulse fleet telemetry command center with live status indicators,Input C Appx A S11-C,src/routes/app.index.tsx,verify-interactive-command-center.mjs,VERIFIED
+REQ-S12-01,S12,Supabase Auth Integration Layer,S,Client SDK authentication provider with session refresh and token isolation,Input C Appx A S12-S,src/lib/supabaseClient.ts,test-acceptance-gates.mjs Gate 2,VERIFIED
+REQ-S13-01,S13,Supabase Database PostgreSQL Layer,Q,Parameterized PostgREST queries with Zero Raw SQL Mandate,Input C Appx A S13-Q,src/lib/db/types.ts,test-acceptance-gates.mjs Gate 10,VERIFIED
+REQ-S14-01,S14,Supabase Storage Buckets,I,Storage client abstraction with pre-signed asset URL handling,Input C Appx A S14-I,src/services/storageService.ts,test-acceptance-gates.mjs Gate 14,VERIFIED
+REQ-S15-01,S15,AI Pipeline State Machine,B,ATHER Copilot with 4-level thinking depth and governed tool calling,Input C Appx A S15-B,src/components/copilot/CopilotProvider.tsx,verify-nextgen-copilot.mjs,VERIFIED
+REQ-S16-01,S16,UI Component Library,V,Design token color system with verified contrast and zero raw hex styles,Input C Appx A S16-V,src/components/ui/,commit e56edea,VERIFIED
+REQ-S17-01,S17,Data Visualization Engine,C,Recharts and React Flow visualization components with responsive reflow,Input C Appx A S17-C,src/components/analytics/,test-acceptance-gates.mjs Gate 6,VERIFIED
+REQ-S18-01,S18,Mock Scenario Engine,M,5 deterministic offline scenarios (Fintech, Health, Ecommerce, AI, Migration),Input C Appx A S18-M,src/mocks/scenarios/,test-fleet-command-hub-scenarios.mjs,VERIFIED
+REQ-S19-01,S19,TypeScript Type System & API Layer,T,Exhaustive TypeScript types with zero `any` assertions across public APIs,Input C Appx A S19-T,src/types/,npm run typecheck,VERIFIED
+REQ-S20-01,S20,Build System & CI Optimization,P,Vite 8 bundler with Nitro SSR producing clean production artifacts,Input C Appx A S20-P,vite.config.ts,npm run build,VERIFIED

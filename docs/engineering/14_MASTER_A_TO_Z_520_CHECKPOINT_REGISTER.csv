@@ -1,0 +1,521 @@
+﻿section_id,section_name,domain,original_project_brahma_v1_target,specification_status
+S01,Authentication & Session Management,A,"Auth form fields have labels; errors announced via `aria-live=""assertive""`; OAuth buttons have visible text",UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,B,All `/app/*` and `/dashboard/*` routes are hard-blocked without valid session,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,C,"`AuthForm` renders: email field, password field, Google OAuth button, GitHub OAuth button",UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,D,Auth state flows into `AuthContext` and is readable by every downstream module,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,E,Invalid credentials → friendly error; expired JWT → silent refresh or re-login; network failure → toast,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,F,Email format enforced; password min-length enforced; empty submit blocked,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,G,`<ProtectedRoute>` wraps all guarded routes; redirect destination = `/login?next=<path>`,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,H,"`signInWithPassword()` payload shape: `{ email, password }`; response: `{ user, session, error }`",UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,I,"Auth state drives: nav avatar, user menu, role-gated sidebar items, profile panel",UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,J,"Supabase Auth response schema: `{ user: User \| null, session: Session \| null, error: AuthError \| null }`",UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,K,Tab order: Email → Password → Submit → OAuth Google → OAuth GitHub; Enter submits,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,L,Submit button shows spinner and is disabled while auth call is pending,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,M,"Seed 3 mock users: `admin@vyron.dev`, `engineer@vyron.dev`, `viewer@vyron.dev`",UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,N,Post-login redirect to `/dashboard`; post-logout redirect to `/`; invalid route → 404 page,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,O,Authenticated user email in nav header; session expiry time visible (if session timer feature present),UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,P,Auth call resolves < 2 s on local Supabase; zero CLS on session load,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,Q,`supabase.auth.getSession()` returns `{ session }` with valid `access_token`; `getUser()` returns user,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,R,"Auth form usable and correctly laid out at 320 px, 768 px, 1440 px",UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,S,PKCE flow for OAuth; `access_token` never appears in URL hash; not stored in `localStorage` plaintext,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,T,"`User`, `Session`, `AuthError` types from `@supabase/supabase-js`; no `any` cast in auth hooks",UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,U,"Simulate: click Login, click Google OAuth, click GitHub OAuth, click Logout, click Forgot Password",UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,V,"Login card uses design-token classes (e.g. `bg-card`, `text-primary`) — no raw hex values",UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,W,`onAuthStateChange` listener active; session silent-refresh fires when token near expiry,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,X,"`useAuth()` hook returns valid user in `RequirementsModule`, `Dashboard`, `ArchitectureModule`",UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,Y,`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` present in `.env.local` and `.env.example`,UNVERIFIED_IN_REPOSITORY
+S01,Authentication & Session Management,Z,Unauthenticated root `/` renders hero CTA and Login button — not a blank page or error screen,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,A,`<main>` landmark present; heading hierarchy H1→H2→H3; skip-to-content link,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,B,New user must complete all 3 onboarding steps before `/app/*` routes are accessible,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,C,"Hero section, feature cards, pricing section render without hydration mismatch",UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,D,"Sign-up form data flows to Supabase `profiles` table as `{ id, email, full_name, org, role }`",UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,E,Duplicate email sign-up → Supabase error surfaced; network timeout → retry CTA shown,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,F,Name: required min 2 chars; email: format enforced; password: min 8 chars; org: required,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,G,Incomplete onboarding → `/app/*` redirects to `/onboarding/step-{current}`,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,H,`supabase.auth.signUp()` followed by `supabase.from('profiles').insert()` chain validated,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,I,Onboarding completion triggers Dashboard first-load with empty-state scenario selected,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,J,"Profile schema: `{ id: uuid, email: string, full_name: string, org: string, role: string, created_at: timestamptz }`",UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,K,Keyboard-navigable onboarding stepper; each step reachable without mouse,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,L,Feature card images load progressively; testimonials have a skeleton before hydration,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,M,Pre-seeded mock org `CodeSapiens Demo` selectable in org picker during onboarding,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,N,Onboarding Step 1 → Step 2 → Step 3 transitions work; back navigation preserves form data,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,O,Pricing tier comparison table renders correct feature flags and pricing values,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,P,Landing page LCP < 2.5 s; no render-blocking scripts above the fold,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,Q,`profiles` insert succeeds; RLS policy allows user to write exactly their own row,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,R,Hero CTA stacks vertically on mobile; side-by-side on desktop; pricing table scrolls on tablet,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,S,No PII in query params during sign-up; redirect URL matches `VITE_SUPABASE_AUTH_REDIRECT_URL`,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,T,"`OnboardingStep`, `ProfileInsert`, `SignUpFormData` interfaces typed strictly",UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,U,Click hero CTA → scrolls to sign-up; complete all 3 steps; submit final step,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,V,VYRON brand colors applied via design tokens; hero gradient uses `--brand-*` CSS vars,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,W,Optional: real-time echo from Supabase confirms profile row created (if `onAuthStateChange` used),UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,X,Session established during sign-up carries into all app modules on first load,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,Y,OAuth redirect URL in Supabase dashboard matches `VITE_SUPABASE_AUTH_REDIRECT_URL`,UNVERIFIED_IN_REPOSITORY
+S02,Landing Page & Onboarding Flow,Z,"New user with incomplete profile → landing shows onboarding resume CTA, not a broken shell",UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",A,"Sidebar nav uses `role=""navigation""`; active item has `aria-current=""page""`; skip-to-main link present",UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",B,Admin role sees all 8 module links; Engineer role sees subset; Viewer role sees read-only modules only,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",C,Shell renders: Header + Sidebar + `<main>` content area + Footer with correct z-index stacking,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",D,Active route state propagates to sidebar highlight and breadcrumb simultaneously,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",E,"Navigating to `/404-nonexistent` renders custom 404 page, not a blank screen",UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",F,Sidebar search input (if present) filters nav items correctly; empty query shows all items,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",G,Every route under `/app/*` is wrapped in `<ProtectedRoute>`; unauthenticated users redirect,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",H,"If shell loads user preferences from Supabase on mount, request payload and response validated",UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",I,Route transitions do not reset state in `RequirementsModule` or `ArchitectureModule`,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",J,"Router config type: `{ path: string, Component: React.ComponentType, guard: boolean, roles: Role[] }[]`",UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",K,Sidebar collapse toggleable with keyboard; each nav item reachable via Tab and activated via Enter,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",L,Lazy-loaded pages show `<Suspense>` fallback skeleton during module load,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",M,Mock user context drives sidebar role-filtered rendering in offline scenario mode,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",N,React Router v6 `<Routes>` resolves all 20 section paths without 404,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",O,Breadcrumb reflects full path hierarchy for nested routes (e.g. Dashboard → Requirements → Detail),UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",P,Route transition < 200 ms; shell components do not re-render when only the page content changes,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",Q,User preferences fetched from Supabase on layout mount if feature is present,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",R,Sidebar collapses to hamburger icon ≤ 768 px; drawer opens and closes correctly on mobile,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",S,Shell verifies auth session on mount via `getSession()`; redirects immediately if session is null,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",T,"`RouteConfig`, `RoleGuard`, `BreadcrumbItem` interfaces typed; `useParams` typed per route",UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",U,Click every sidebar nav item; collapse sidebar; open mobile drawer; navigate with browser back button,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",V,Active nav item visually distinct from inactive via token class (not only color),UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",W,Not applicable — shell is static layout (no Realtime subscriptions expected here),UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",X,"Context providers in shell (Auth, Project, Theme) are accessible by all nested module components",UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",Y,`VITE_APP_BASE_PATH` applied to all React Router `basename` and `<Link>` hrefs if env var is set,UNVERIFIED_IN_REPOSITORY
+S03,"App Shell, Navigation & Routing",Z,"New user with no active project — sidebar shows ""Set up your first project"" prompt, not empty list",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,A,Requirement cards are `<article>` elements; status badges have text labels not only color,UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,B,"AI parser categorizes SRS into: Functional, Non-Functional, Constraint, and Assumption types",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,C,"Requirement list renders with priority badges, status chips, edit icon, and delete control",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,D,Parsed requirements propagate as seed input to Architecture Generator and Risk Predictor,UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,E,"Empty SRS upload, 0-byte file, XSS payload in SRS text, non-English SRS document",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,F,"Manual add form: Title (required), Description, Type (enum), Priority (enum), Status (enum)",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,G,"Only authenticated org members can create, edit, or delete requirements (RLS enforced)",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,H,"AI parse API call: request body includes `{ srs_text: string, org_id: string }`; response is `Requirement[]`",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,I,"Requirements exported as seed data to Architecture Generator on ""View Architecture"" CTA click",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,J,"Requirement schema: `{ id, title, type, priority, status, tags: string[], created_by, org_id }`",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,K,Requirement cards keyboard navigable; inline edit activates on Enter; delete triggers confirm dialog,UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,L,AI parse loading state shows progress indicator for 3–10 s duration; cancel option present,UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,M,All 5 mock scenarios have pre-loaded requirement sets with realistic functional and non-functional reqs,UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,N,"""View Architecture"" CTA navigates to `/app/architecture` with requirement context in route state",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,O,Requirement list sortable by Priority and Status; filterable by Type; count shown in header,UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,P,Virtual scroll handles 100+ requirements without DOM node overflow or layout freeze,UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,Q,`supabase.from('requirements').select()/.insert()/.update()/.delete()` all tested and typed,UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,R,Requirement table header sticky on scroll; table scrolls horizontally on viewports < 768 px,UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,S,User can only read or write requirements belonging to their own org (RLS policy validated),UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,T,"`Requirement`, `RequirementType`, `Priority`, `RequirementStatus` enums and interfaces strict",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,U,"Drag to reorder, click to expand detail panel, bulk select with checkbox, delete selected",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,V,"Priority badges: `critical=red-600`, `high=orange-500`, `medium=yellow-500`, `low=gray-400`",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,W,"If team member adds requirement while current user views list, new item appears without reload",UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,X,Requirement data available in `/app/reports` module as section input for PDF export,UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,Y,AI parsing endpoint URL from `VITE_REQUIREMENT_AI_URL` env var — never hardcoded,UNVERIFIED_IN_REPOSITORY
+S04,Requirement Intelligence Engine,Z,"Zero requirements state shows ""Add Your First Requirement"" card with manual add and SRS upload CTAs",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),A,"Canvas container has `role=""application""` with keyboard instructions for screen-reader users",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),B,"Architecture generation produces node types: Service, Database, API Gateway, Client, Queue",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),C,React Flow canvas renders with stable node positions; no flicker on mount or zoom,UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),D,Node selection updates side-panel detail view reactively without canvas re-render,UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),E,Empty requirement set → minimal stub architecture; circular dependency → warning displayed,UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),F,Node label inline edit form; new edge creation via drag-from-handle UI,UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),G,Canvas state and export controls inaccessible without valid auth session,UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),H,"Architecture generation API: request body `{ requirements: Requirement[], org_id: string }`; response `{ nodes, edges }`",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),I,Architecture nodes carry `requirementIds[]` linking back to S04 requirement records,UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),J,"Architecture JSON: `{ id, nodes: FlowNode[], edges: FlowEdge[], metadata: { version, org_id } }`",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),K,Canvas keyboard shortcuts: Ctrl+Scroll = zoom; Space+drag = pan; Tab = cycle node selection,UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),L,"""Generating architecture…"" overlay with animated progress bar shown during generation",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),M,All 5 mock scenarios have distinct pre-defined architecture graphs with ≥ 6 nodes each,UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),N,"""View Code Health"" CTA in node detail panel navigates to S07 with selected node as context",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),O,"Node type visually coded: Service=blue, Database=green, API=orange, Client=purple, Queue=yellow",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),P,React Flow renders 50 nodes at 60 fps; fit-to-screen runs in < 100 ms,UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),Q,"Architecture saved to Supabase `architectures` table; version history rows appended, not overwritten",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),R,"On viewports < 768 px, canvas shows static read-only diagram; interactive canvas on desktop only",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),S,"Exported PNG/JSON does not embed auth tokens, API keys, or internal org metadata",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),T,"`Node<ArchitectureNodeData>`, `Edge<ArchitectureEdgeData>`, `ArchitectureGraph` types strict",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),U,"Drag nodes, create edges, delete nodes, use Ctrl+Z undo, click ""Fit View"", export PNG",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),V,"Edge types visually distinct: Data Flow = solid, Dependency = dashed, API Call = dotted (with legend)",UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),W,Real-time collaborative canvas updates if multi-user Realtime subscription is implemented,UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),X,Architecture node list available in S08 Security Reviewer for vulnerability-to-component mapping,UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),Y,React Flow version pinned in `package.json`; license checked if React Flow Pro features used,UNVERIFIED_IN_REPOSITORY
+S05,Architecture Generator (React Flow Canvas),Z,"Empty canvas state renders ""Generate Architecture from Requirements"" button prominently",UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,A,KPI cards use descriptive headings; chart axes labeled with units; trend arrows have ARIA labels,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,B,Every engineering decision must link to ≥ 1 business KPI; unmapped decisions flagged,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,C,KPI mapping table or canvas renders all metric categories without error,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,D,KPI scores update reactively when Code Health score or Risk score changes upstream,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,E,KPI with 0 linked decisions; all KPIs at 0 value; KPI score overflowing 100,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,F,Manual KPI override form: numeric value field with min/max validation; % sign auto-appended,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,G,KPI edit and delete requires `manager` or `admin` role; `viewer` role sees read-only,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,H,KPI aggregation function (computed field or RPC) validated for correct formula,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,I,KPI data feeds Engineering Dashboard charts in S11,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,J,"KPI schema: `{ id, name, category, current_value, target_value, unit, linked_requirement_ids[], org_id }`",UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,K,KPI table columns sortable via keyboard; each KPI row expandable with Enter key,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,L,KPI re-computation loading spinner shown during upstream score recalculation,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,M,"All 5 mock scenarios have pre-mapped KPI sets: velocity, quality, security, delivery, cost",UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,N,"""Drill Down"" on a KPI card navigates to the module driving that KPI (e.g. Code Health for Quality KPI)",UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,O,KPI delta displayed as `+5.2%` or `-3.1%` with colored trend arrow and RAG badge,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,P,KPI recalculation for 50 KPIs completes in < 1 s; table renders without layout shift,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,Q,"`supabase.from('kpis').select()` with `.eq('org_id', user.org_id)` RLS compliant",UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,R,KPI summary cards stack 1-column on mobile; 3-column grid on desktop,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,S,KPI write operations gated by RLS policy checking `user.org_id` and `user.role`,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,T,"`KPI`, `KPICategory`, `KPIMapping`, `KPIDelta` TypeScript interfaces strict; no `any`",UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,U,Click KPI card for drill-down; hover for tooltip; click column header to sort; export KPI CSV,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,V,KPI health: green token if at/above target; amber if 10–20% below; red if >20% below target,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,W,Realtime subscription updates dashboard KPI widget when another session writes a new score,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,X,KPI summary section included as a data source in PDF Report Generator (S10),UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,Y,KPI category definitions loaded from `src/config/kpiCategories.ts` — not hardcoded inline,UNVERIFIED_IN_REPOSITORY
+S06,Business KPI Mapper,Z,"No KPIs mapped yet — shows ""Map Your First KPI"" onboarding card with setup guide link",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,A,Health score gauge is not color-only; severity badges include text labels; progress percent announced,UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,B,"Health score 0–100 computed from: cyclomatic complexity, duplication %, test coverage %, tech debt hours",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,C,"Score gauge, issue list, file breakdown table, and metrics summary panel all render without error",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,D,Health score flows to Engineering Dashboard (S11) and is read by Risk Predictor (S09),UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,E,"Binary file upload, 0-byte file, 50 MB+ archive, unsupported language — each handled with clear error",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,F,"Code upload form: file picker (ZIP/TAR only), repo URL input (HTTPS), branch name input",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,G,Analysis results readable only by members of the owning org (RLS policy on `code_health_reports`),UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,H,"Analysis API call: request includes `{ storage_path: string, org_id: string }`; streams progress if SSE",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,I,Health issues link to Architecture Generator — click issue → Architecture node highlighted,UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,J,"Report schema: `{ id, score, issues: Issue[], metrics: { loc, complexity, duplication, coverage, debt_hours }, created_at }`",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,K,"Issue list keyboard navigable; sort by severity with keyboard; ""Jump to file"" shortcut if viewer present",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,L,Progress bar shows `X / Y files analyzed` during scan; cancel button active during analysis,UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,M,"5 mock scenarios have pre-generated scores: E-Commerce=87, Healthcare=72, FinTech=54, IoT=68, VYRON=91",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,N,"Issue detail row expands on click; ""View in Repo"" opens external link; ""Mark Resolved"" updates DB",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,O,"Metrics displayed: LOC, avg cyclomatic complexity, duplication %, test coverage %, debt hours",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,P,Virtual-scrolled issue list handles 500 issues without DOM node overflow or input lag,UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,Q,"Historical reports queryable: `supabase.from('code_health_reports').select().eq('org_id', id).order('created_at')`",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,R,File breakdown table scrolls horizontally on mobile; score gauge visible above fold on all viewports,UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,S,Uploaded code files stored in private `code-files` Supabase Storage bucket; no public URL generated,UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,T,"`HealthReport`, `Issue`, `Severity`, `CodeMetrics`, `AnalysisStatus` interfaces strict; no `any`",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,U,"Upload ZIP file; enter repo URL; click ""Re-Analyze""; filter issues by severity; export issues CSV",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,V,"Severity: `critical=red-700`, `high=orange-600`, `medium=yellow-500`, `low=gray-400` — token classes",UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,W,If SSE streaming used: real-time issue discovery populates list as scan progresses,UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,X,Health score (`number`) accessible in S09 Risk Predictor as `technicalRisk` signal input,UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,Y,Analysis engine endpoint from `VITE_CODE_ANALYSIS_URL`; never hardcoded; presence checked at startup,UNVERIFIED_IN_REPOSITORY
+S07,Code Health Engine,Z,"No analysis run yet — shows ""Run Your First Code Analysis"" CTA with upload and URL-input instructions",UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),A,"Critical CVE items use `role=""alert""`; severity labels are text, not color-only",UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),B,"CVSS severity mapping: Critical ≥9.0, High 7.0–8.9, Medium 4.0–6.9, Low 0.1–3.9",UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),C,"Vulnerability list, CVE detail panel, dependency tree, and fix guidance section render without error",UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),D,CVE count and highest severity feed into S09 Risk Predictor's `securityRisk` signal,UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),E,"No vulnerabilities found → ""All clear"" state; CVE API rate limit → queued retry with notice",UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),F,"Manual CVE entry form: package name, version, CVE ID, CVSS score — all validated",UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),G,Security reports read-only to all org members; only `admin` can mark a CVE as resolved (RLS),UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),H,NVD API call: `GET /cves/2.0?keywordSearch={package}&cvssV3Severity={level}`; response parsed,UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),I,CVE findings annotate Architecture Generator nodes (Security Reviewer tags affected services),UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),J,"CVE schema: `{ cve_id, package, version, cvss_score, severity, description, published_date, fix_version }`",UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),K,CVE list filterable and sortable by severity via keyboard; Tab-navigable filter chips,UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),L,"Scan progress: ""Scanning 47 / 120 dependencies…"" with cancel button; estimated time shown",UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),M,"5 mock scenarios have pre-loaded CVE sets: FinTech has 3 Critical, IoT has 5 High",UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),N,"""View Fix Guidance"" links to external CVE advisory URL; ""Mark Resolved"" writes to DB",UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),O,CVSS score displayed as number (e.g. 9.1) + severity badge + CVSS bar chart per CVE,UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),P,Security report renders 200 CVEs in virtual-scrolled list without input lag,UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),Q,Reports saved: `supabase.from('security_reports').insert()` with org-scoped RLS,UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),R,CVE detail panel stacks below list on mobile; side-by-side on ≥ 1024 px,UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),S,CVE API key stored as Supabase Edge Function secret or `VITE_CVE_API_KEY` — never in client bundle,UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),T,"`CVEEntry`, `CVSSScore`, `SecurityReport`, `DependencyNode` TypeScript interfaces strict",UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),U,"Enter package name to scan; filter by Critical; click CVE for detail; click ""Export Report""",UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),V,Critical CVE uses `text-red-700 bg-red-50` token pair; not distinguished by color alone,UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),W,Optional: webhook or Supabase Function triggers re-scan when new critical CVE published,UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),X,Security score (critical CVE count + CVSS aggregate) sent to S06 KPI Mapper as Security KPI,UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),Y,`VITE_CVE_API_KEY` and `VITE_NVD_BASE_URL` in `.env.local` and `.env.example`,UNVERIFIED_IN_REPOSITORY
+S08,Security Reviewer (CVE/CWE Scanner),Z,"No scan run → ""Start Security Scan"" CTA with explanation of what is scanned and why",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,A,Risk matrix cells have text alternatives; RAG status not distinguished by color alone,UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,B,"Risk score aggregates 4 signals: requirement coverage gap, code health score, CVE severity count, KPI delta",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,C,"Risk score gauge, risk matrix heatmap, mitigation action cards all render without error",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,D,"Risk score updates automatically when any upstream module (S04, S07, S08, S06) publishes new scores",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,E,All signals at zero (new project); all signals at maximum (everything red) — both handled gracefully,UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,F,"Manual risk override form: numeric score input, justification text, role-gated approval required",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,G,Risk assessment edit requires `admin` role; read access open to all org members (RLS),UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,H,"Risk engine compute function: inputs `{ healthScore, cveCount, requirementGap, kpiDelta }`; output `{ overall, components }`",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,I,"Risk predictor reads from: S04 (requirements gap), S07 (health score), S08 (CVE count), S06 (KPI delta)",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,J,"Risk schema: `{ id, overall, components: { technical, security, delivery, business }, computed_at, org_id }`",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,K,Risk matrix cells keyboard navigable; tooltip on focus shows cell-level risk description,UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,L,"""Recalculating risk…"" overlay shown when upstream data changes trigger recompute",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,M,"5 mock scenarios have distinct risk profiles: E-Commerce=Low, Healthcare=Medium, FinTech=High, IoT=Critical",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,N,"Mitigation card ""Go to module"" CTA navigates to the relevant section (e.g. ""Fix CVEs"" → S08)",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,O,Overall risk displayed as 0–100 gauge with RAG label and recommended action summary,UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,P,Risk computation for 4-signal model completes < 500 ms; gauge animation < 300 ms,UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,Q,"Risk assessment persisted; historical trend queryable by date range: `.order('computed_at', { ascending: false })`",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,R,Risk matrix table condensed on mobile; gauge and summary stack vertically,UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,S,Risk thresholds (e.g. escalate if >80) stored in `src/config/riskConfig.ts` — not hardcoded,UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,T,"`RiskScore`, `RiskComponent`, `RiskLevel`, `MitigationAction` TypeScript interfaces strict",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,U,"Drag risk threshold slider; click mitigation card; click ""Export Risk Report""; click ""Override Score""",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,V,"RAG token classes: `score<30 → green`, `30–60 → amber`, `60–80 → orange`, `>80 → red`",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,W,Realtime subscription updates risk gauge if new CVE scan completes in another browser tab,UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,X,Risk summary included in PDF Report Generator (S10) as a dedicated risk section,UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,Y,"Risk weight config (`technicalWeight`, `securityWeight`, etc.) from `riskConfig.ts` or env-driven",UNVERIFIED_IN_REPOSITORY
+S09,Delivery Risk Predictor,Z,"No signal data available → risk predictor shows ""Insufficient data"" message with per-signal checklist",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,A,PDF includes bookmarks per section; chart alt-text included in export metadata,UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,B,"Report must include: exec summary, requirements, architecture, code health, security, risk, KPIs — all present",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,C,Report preview panel renders all sections correctly in browser before PDF generation,UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,D,Report builder pulls live data from all 8 modules at time of export — not cached snapshots,UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,E,Empty module data in report; 100-page report; PDF generation timeout (> 30 s),UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,F,"Report config form: module inclusion toggles (checkbox per section), date range picker, format selector",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,G,Generated reports stored with org-level RLS; only org members can retrieve their reports,UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,H,"PDF generation: library call input `{ config: ReportConfig, data: ReportData }`, output `Blob`",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,I,"Report aggregates data from: S04 Requirements, S05 Architecture, S07 Code Health, S08 Security, S09 Risk, S06 KPIs",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,J,"Report data model: `{ title, org, generated_at, sections: { id, title, content: ReportSection }[] }`",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,K,"Module section toggle checkboxes keyboard navigable; ""Select All"" / ""Deselect All"" keyboard accessible",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,L,"""Generating PDF…"" progress bar with estimated page count; cancel aborts generation",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,M,5 mock scenario pre-generated PDF reports downloadable from `reports/mock/` Supabase Storage path,UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,N,"""Download"" saves PDF to user device; ""Copy Share Link"" generates signed Supabase Storage URL (1 h expiry)",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,O,"PDF output matches browser preview: fonts, tables, charts, page breaks, VYRON cover page branding",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,P,Standard 20-page report generates in < 30 s; download link available immediately after upload,UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,Q,"Report metadata saved: `{ org_id, title, storage_path, size_bytes, created_by, created_at }`",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,R,Report preview panel scrollable on all viewports; module selection panel stacks above on mobile,UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,S,PDF generated server-side or via Supabase Edge Function — generation logic not in client bundle,UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,T,"`ReportConfig`, `ReportSection`, `ExportFormat`, `ReportMetadata` TypeScript interfaces strict",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,U,"Toggle section inclusion; click ""Generate""; watch progress; click ""Download""; click ""Copy Share Link""",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,V,"VYRON letterhead, brand gradient cover, section dividers match design system token colors",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,W,Report generation via Supabase Edge Function if async; webhook triggers download-ready notification,UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,X,"Report generator accessible from Engineering Dashboard (S11) ""Export Report"" quick-action button",UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,Y,PDF library version (jsPDF / Puppeteer-based edge function) pinned in `package.json` or `deno.json`,UNVERIFIED_IN_REPOSITORY
+S10,PDF Report Generator,Z,"No sections selected → ""Select at least one section"" validation message; generate button disabled",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,A,"Metric widgets use `aria-live=""polite""` for real-time updates; chart data tables as accessible fallback",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,B,"Dashboard shows: overall health score, risk level, open CVE count, requirement coverage %, KPI summary",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,C,"All widget cards, metric counters, activity feed, and quick-action buttons render without errors",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,D,Dashboard receives aggregated data from all 8 modules; data updates reactively,UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,E,All modules at zero (new project) — dashboard renders gracefully with empty state per widget,UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,F,Date range filter for activity feed and metric trend charts; filter applied via DB query,UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,G,Dashboard route protected; invalid session → immediate redirect to `/login`,UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,H,"Dashboard aggregation: Supabase RPC or DB view returns `{ health, risk, cve_count, req_coverage, kpis }`",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,I,All 8 module scores visually summarized on one screen; each widget links to its module,UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,J,"Dashboard data schema: `{ health_score, risk_score, open_cves, req_coverage, kpi_summary, recent_activity[] }`",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,K,Widget keyboard navigation; chart data points reachable by Tab; quick-action buttons focus-visible,UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,L,Dashboard skeleton loader shows for all widgets while aggregation query is in flight,UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,M,"Mock scenario dashboard pre-populated with scores, charts, and recent activity for all 5 scenarios",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,N,"Quick-action buttons: ""Add Requirement"", ""Run Analysis"", ""Export Report"", ""View Risk"" — all route correctly",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,O,"Metric values formatted correctly: health score as `/100`, CVEs as integer, coverage as ` %  `, dates as relative",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,P,Dashboard initial render < 1.5 s; metric widgets progressive-load with skeleton → data transition,UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,Q,Supabase RPC `get_dashboard_metrics(org_id)` or DB view returns all fields in one round trip,UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,R,"Dashboard grid: 1-column on mobile, 2-column on tablet, 3–4-column grid on desktop",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,S,Dashboard queries use `.select()` with explicit field list — no `select('*')` that over-fetches columns,UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,T,"`DashboardMetrics`, `WidgetConfig`, `ActivityEntry`, `QuickAction` TypeScript interfaces strict",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,U,"Click widget for drill-down; change date range; click ""Refresh""; click all 4 quick-action buttons",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,V,Health / risk status widgets use consistent RAG token classes across all dashboard cards,UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,W,Supabase Realtime subscription on `code_health_reports` and `risk_assessments` updates widgets live,UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,X,"Dashboard ""Export Report"" action links to S10 PDF Report Generator with all modules pre-selected",UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,Y,Dashboard refresh interval configurable via `VITE_DASHBOARD_REFRESH_MS` env var (default 30000),UNVERIFIED_IN_REPOSITORY
+S11,Engineering Dashboard & Metrics,Z,"New org, no data — dashboard shows ""Complete Setup"" wizard card; no broken widgets or `NaN` values",UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,A,Not applicable — infrastructure layer (no UI rendering),UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,B,Supabase client initialized exactly once at app root; singleton pattern enforced (no duplicate clients),UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,C,`AuthProvider` renders `children` without introducing extra DOM nodes or causing re-render cascade,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,D,"`onAuthStateChange` listener correctly propagates `SIGNED_IN`, `SIGNED_OUT`, `TOKEN_REFRESHED` events",UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,E,Network failure during `getSession()` → auth state defaults to `null` gracefully; app shows login,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,F,Not applicable — no form components in this layer,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,G,`useRequireAuth()` hook redirects unauthenticated callers to `/login?next={pathname}`,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,H,"`createClient(SUPABASE_URL, SUPABASE_ANON_KEY)` called with env vars — no hardcoded values",UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,I,`useAuth()` hook return value accessible by all 8 module hooks and components,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,J,"Types from `@supabase/supabase-js`: `SupabaseClient`, `User`, `Session`, `AuthChangeEvent` all imported",UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,K,Not applicable — no keyboard interactions in this layer,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,L,App renders loading indicator while `getSession()` is resolving on initial mount,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,M,Mock auth client available in test environment; `vi.mock('../lib/supabase')` pattern works,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,N,Post-auth redirect uses `next` query param from login URL; defaults to `/dashboard` if absent,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,O,"Auth errors surfaced as human-readable messages: `""Invalid credentials""` not raw Supabase code",UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,P,Supabase client instantiation is synchronous and < 5 ms; no blocking calls at module level,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,Q,Session stored via Supabase default storage adapter (localStorage); confirm storage key prefix,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,R,Not applicable — no responsive UI in this layer,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,S,Supabase URL and anon key only from `import.meta.env`; service role key never in client-side code,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,T,All Supabase types from `supabase gen types typescript`; `Database` type imported in query hooks,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,U,"Test flows: login, logout, OAuth link, OAuth unlink, password reset, email change",UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,V,Not applicable — no visual components,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,W,`onAuthStateChange` subscription stored and cleaned up in `useEffect` return function,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,X,Auth context shared correctly across React Router lazy-loaded route boundaries,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,Y,`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` documented in `.env.example` with descriptions,UNVERIFIED_IN_REPOSITORY
+S12,Supabase Auth Integration Layer,Z,No session on app load → app shows login page immediately without infinite spinner or blank screen,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,A,Not applicable — infrastructure layer,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,B,Every table in the project has RLS enabled; no policy-less public tables exist,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,C,Query results correctly typed and rendered — no `any` cast between Supabase result and component props,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,D,DB write → Supabase Realtime channel → UI update chain works end-to-end,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,E,Query returning 0 rows handled gracefully; query error (network / permission) surfaces clean error state,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,F,Not applicable — no form components,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,G,No org member can read or write rows belonging to another org — RLS `auth.uid()` checks verified,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,H,"All Supabase client queries use correct `.select()`, `.eq()`, `.order()`, `.limit()` chain",UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,I,All 8 module tables have FK relationships correctly defined: `requirements.org_id → profiles.id` etc.,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,J,TypeScript generated types match DB schema: `Database['public']['Tables']['requirements']['Row']`,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,K,Not applicable,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,L,"All custom query hooks expose `{ data, loading, error }` pattern; loading state used in all callers",UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,M,`supabase/seed.sql` seeds all 5 mock project scenarios for development and testing,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,N,Not applicable,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,O,Paginated results render correctly: cursor-based pagination preferred over offset for large tables,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,P,"No N+1 queries: related data fetched with `.select('*, requirements(*)')` join, not sequential calls",UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,Q,"Full CRUD tested per table: `requirements`, `architectures`, `code_health_reports`, `security_reports`, `risk_assessments`, `kpis`, `profiles`, `reports`",UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,R,Not applicable,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,S,Supabase service role key (`SUPABASE_SERVICE_ROLE_KEY`) never appears in any `src/` file — grep confirmed,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,T,`Database` type used throughout; `supabase.from<Database['public']['Tables']['requirements']['Row']>('requirements')` pattern,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,U,Not applicable,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,V,Not applicable,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,W,"Supabase Realtime subscriptions: `.channel('requirements').on('postgres_changes', …).subscribe()` tested and cleaned up",UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,X,Cross-table queries (e.g. requirements joined with architectures) execute correctly with RLS on both tables,UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,Y,"Supabase project URL, anon key, and DB password in separate `.env` files per environment (dev/staging/prod)",UNVERIFIED_IN_REPOSITORY
+S13,Supabase Database (PostgreSQL) Layer,Z,Empty table queries return `[]` not `null`; all callers handle empty array without crashing,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,A,File upload dropzone is keyboard-accessible; upload progress announced via `aria-live` region,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,B,File type restrictions enforced: SRS accepts PDF/DOCX only; code-files accepts ZIP/TAR; reports accepts PDF,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,C,"File upload progress bar renders with percent; uploaded file list renders file name, size, upload date",UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,D,Uploaded file path stored in the corresponding DB row; component fetches signed URL from stored path,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,E,"0-byte file, 50 MB+ file, corrupted ZIP, wrong MIME type — each rejected with specific error message",UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,F,File picker form: accepts filter applied via `accept` attribute; size limit shown; multi-file support tested,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,G,Storage bucket policies: all buckets are private; access only via signed URL (no public URL),UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,H,"`supabase.storage.from('srs-uploads').upload(path, file)` → `{ path, id, fullPath }`; `createSignedUrl(path, 3600)`",UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,I,SRS file upload → triggers Requirement Intelligence parse (S04); code upload → triggers Health Engine scan (S07),UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,J,"Storage result type: `{ path: string, id: string, fullPath: string }` — validated against TypeScript types",UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,K,"File list keyboard navigable; ""Delete"" button triggers confirm dialog; download via keyboard accessible",UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,L,"Upload progress bar reflects actual byte-level progress from Supabase upload stream, not just a spinner",UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,M,Mock scenario files pre-seeded at `mock-scenarios/` bucket path; accessible as signed URL in dev mode,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,N,Not applicable — storage is an infrastructure layer with no route transitions,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,O,"File list shows: original filename, file size in KB/MB, upload timestamp, download and delete controls",UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,P,Large file upload (10 MB ZIP) is non-blocking — other UI interactions remain responsive during upload,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,Q,"Storage metadata saved to DB: `{ filename, size_bytes, mime_type, storage_path, bucket, org_id, uploaded_by }`",UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,R,Upload dropzone full-width on mobile; drag-and-drop disabled on touch devices (tap-to-browse only),UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,S,All 4 buckets configured as private in Supabase dashboard; public URL generation returns error for all,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,T,"`StorageUploadResult`, `SignedUrlResult`, `StorageFile`, `BucketName` TypeScript types strict",UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,U,Drag-and-drop file; click browse; observe progress; see file in list; click download; click delete,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,V,Upload success state shows green checkmark icon; error state shows red icon with error text,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,W,Not applicable — Storage does not use Realtime subscriptions,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,X,SRS file URL stored in `requirements.source_url`; code file URL in `code_health_reports.source_url`,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,Y,Supabase Storage URL derived from `VITE_SUPABASE_URL` — not a separate hardcoded Storage endpoint,UNVERIFIED_IN_REPOSITORY
+S14,Supabase Storage Buckets,Z,"Empty bucket — shows ""No files uploaded"" with drag-and-drop target and browse button prominently",UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",A,N/A — non-visual infrastructure layer,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",B,"Global AI state holds: `jobQueue: AIJob[]`, `activeJobId`, `streamingOutput`, `tokenBudget: TokenBudget`, `pipelineStatus: PipelineStatus`, `inferenceCache: Map<string, AIResponse>`",UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",C,All 8 module components consume pipeline state via `useAIPipeline()` hook; no stale reads after streaming completes,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",D,SSE chunk appended to `streamingOutput` buffer at 50 ms debounce; no blocking re-renders during rapid chunk delivery,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",E,Duplicate job submission (same module triggered twice); network disconnect mid-stream; `tokenBudget.remaining === 0`,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",F,N/A,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",G,AI job submission requires valid `authSession.user.id`; anonymous submissions rejected before Edge Function call,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",H,"N/A — HTTP calls handled in inference service layer, not in store",UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",I,`pipelineStatus` update drives loading overlay in all 8 modules; `complete` status triggers downstream state cascade,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",J,"`AIPipelineState`: `{ jobs, activeJobId, streamingOutput, tokenBudget: { total, used, remaining, resetAt }, pipelineStatus, inferenceCache, moduleScores }`",UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",K,N/A,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",L,`pipelineStatus` state machine: `idle → queued → running → streaming → complete / failed`; each transition logged and UI-reflected,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",M,Mock mode: all 5 scenarios have pre-computed `AIResponse` fixtures; `pipelineStatus` defaults to `complete`; `streamingOutput` populated instantly,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",N,Pipeline state preserved across route transitions; navigating S04 → S05 mid-inference does not abort the active job,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",O,N/A,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",P,Streaming buffer: debounce 50 ms; no more than 1 React re-render per chunk batch; verified via React DevTools profiler,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",Q,"Completed jobs written to Supabase `ai_job_queue`; token usage written to `ai_usage_log` with `{ org_id, tokens_used, model, action }`",UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",R,N/A,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",S,"AI API key (Anthropic/OpenAI) stored exclusively in Supabase Edge Function secrets — never in client state, localStorage, or env vars accessible to the browser",UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",T,"`AIJob`, `AIPipelineState`, `StreamChunk`, `TokenBudget`, `InferenceCache`, `PipelineStatus` interfaces strict; no `any`",UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",U,Trigger requirement parse; observe streaming buffer fill; abort mid-stream; switch modules mid-inference; exhaust token budget,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",V,N/A,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",W,Supabase Realtime channel `ai-pipeline-{org_id}` broadcasts job status changes; all open tabs receive live pipeline state,UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",X,"`streamingOutput` consumed by active module (S04, S05, S06 etc.); `moduleScores` readable by S11 Dashboard in same render cycle",UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",Y,"`VITE_AI_PROVIDER` (`anthropic` \| `openai`), `VITE_AI_MODEL` (e.g. `claude-sonnet-4-6`), `VITE_ENABLE_AI_CACHE` configure the engine",UNVERIFIED_IN_REPOSITORY
+S15,"AI Pipeline State Machine, Token Budget & Streaming Orchestration Engine State Management",Z,Zero inference jobs run → all modules show empty state; `tokenBudget.remaining` rendered as `—` not `undefined` or `NaN`,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),A,"All interactive shadcn/ui components pass WCAG 2.1 AA: Button, Input, Dialog, Dropdown, Combobox",UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),B,"Component variants enforce correct semantic intent: `variant=""destructive""` → red; `variant=""outline""` → bordered",UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),C,"Button, Input, Select, Textarea, Dialog, Sheet, Table, Badge, Card, Tabs all render without console errors",UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),D,Controlled inputs sync value to parent state; uncontrolled inputs do not cause `defaultValue` warnings,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),E,"Disabled state, loading state (`disabled + spinner`), and error state (`border-red`) tested for all inputs",UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),F,"All form input components (Input, Select, Checkbox, Radio, Textarea, Switch) validate via `react-hook-form`",UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),G,Not applicable,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),H,Not applicable,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),I,Each component used from a single import source (`src/components/ui/`) — no local duplicates in modules,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),J,Not applicable,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),K,"All interactive components keyboard operable: Tab to focus, Space/Enter to activate, Escape to close",UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),L,`Skeleton` component available for all primary content areas; consistent pulse animation,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),M,Not applicable,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),N,Not applicable,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),O,Components render at correct pixel dimensions; no overflow or clipping at default zoom,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),P,No layout shift on component mount; Dialog/Sheet animations use `will-change: transform`,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),Q,Not applicable,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),R,All components inherit Tailwind responsive modifiers correctly; no hardcoded pixel widths in `className`,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),S,Not applicable,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),T,All component prop interfaces typed with strict types; no `any` in `src/components/ui/*.tsx`,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),U,"All interactive elements respond correctly: click, hover, focus, blur, disabled-click (no action)",UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),V,"Tailwind config uses semantic CSS variable tokens: `text-foreground`, `bg-background`, `border-border` — no raw colors",UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),W,Not applicable,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),X,Components used consistently across all 8 modules — `grep` confirms no duplicate custom button implementations,UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),Y,"`tailwind.config.ts` `content` array covers `[""./src/**/*.{ts,tsx}""]`; unused class purging active in prod",UNVERIFIED_IN_REPOSITORY
+S16,UI Component Library (shadcn/ui + Tailwind CSS),Z,"Empty and null content handled in Table (""No rows""), Card (empty body), Badge (missing label) — no blank renders",UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),A,Chart axis labels present; legend items have text labels; data points have `aria-label` or table fallback,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),B,"Chart data correctly normalized before passing to Recharts (e.g. score /100, dates as ISO strings)",UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),C,"Line, Bar, Radar, Area, and RadialBar charts all render without React warnings or console errors",UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),D,Chart data prop updates cause chart to re-render with new data without full component remount,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),E,Empty `data=[]` renders placeholder text; single data point renders without distorted axis; 1000+ points performs,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),F,"Not applicable — charts are read-only, no form inputs",UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),G,Not applicable,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),H,Not applicable,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),I,Risk heatmap uses Recharts; Architecture diagram uses React Flow — both active simultaneously on dashboard,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),J,Recharts `dataKey` values must exactly match the field names in the typed `ChartDataPoint` interface,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),K,Chart tooltips accessible on keyboard focus; Recharts `tabIndex` on `<BarChart>` or `<LineChart>`,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),L,`<Skeleton>` placeholder renders while parent data fetch is in flight; replaced on data arrival,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),M,All 5 mock scenarios produce visually distinct and realistic chart shapes verified against known values,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),N,Not applicable — charts have no navigation,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),O,"Y-axis values formatted: scores as integers, coverage as `%`, dates as `MMM D`, currency as `$K`",UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),P,Charts render < 100 ms for standard dataset (≤ 50 points); `<ResponsiveContainer>` resizes without jank,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),Q,Not applicable,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),R,"All charts wrapped in `<ResponsiveContainer width=""100%"" height={300}>`; no fixed-width chart containers",UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),S,Not applicable,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),T,"`ChartDataPoint`, `ChartConfig`, `RechartsTooltipProps` interfaces typed; no `any` in chart components",UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),U,Hover tooltip shows value; click-to-filter on bar chart (if implemented); pinch zoom on time series (mobile),UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),V,Chart color palette uses CSS variables (`--chart-1` through `--chart-5`) for dark/light mode compatibility,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),W,Not applicable,UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),X,Recharts components in Dashboard (S11) and KPI Mapper (S06); React Flow in Architecture Generator (S05),UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),Y,Not applicable — chart libraries pinned in `package.json` (checked in S20),UNVERIFIED_IN_REPOSITORY
+S17,Data Visualization Engine (Recharts + React Flow),Z,"`data=[]` or `data=undefined` → chart renders ""No data available"" message, not a broken SVG element",UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,A,Scenario selector has accessible label; each scenario option has descriptive text not just an ID,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,B,"Each scenario produces distinct, realistic project profiles with non-zero scores across all 8 modules",UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,C,"Scenario selector UI renders list of exactly 5 scenarios with name, description, and industry tags",UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,D,Selecting a scenario dispatches a single action that hydrates all 8 module store slices simultaneously,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,E,Selecting scenario mid-session; switching between two scenarios; clearing to empty state — all handled,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,F,Scenario filter input (search by name or industry) functions correctly,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,G,Scenario data is still only accessible to authenticated users (auth gate preserved even for mock data),UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,H,Not applicable — mock data loaded from local JSON; no network call,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,I,"After scenario selection, all 8 modules render their scenario data immediately without additional fetches",UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,J,Each `*.json` file must conform to the `Scenario` TypeScript interface — validated at startup in dev mode,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,K,Scenario selector keyboard navigable; arrow keys cycle scenarios; Enter selects,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,L,Scenario data loads and hydrates store < 500 ms; brief loading toast shown during hydration,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,M,"5 scenarios: **E-Commerce Platform**, **Healthcare SaaS**, **FinTech API**, **IoT Platform**, **VYRON Self-Demo** — each with unique scores, requirements, CVEs, and architecture graphs",UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,N,Active scenario name persists in breadcrumb and header banner across all route navigations within session,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,O,"Scenario selector shows: scenario name, industry, mock health score, mock risk level",UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,P,All 5 scenario JSON files load from disk in < 500 ms total; no blocking on hydration,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,Q,Optional: `mock-scenarios/` Supabase Storage bucket accessible in dev mode for hosted JSON variants,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,R,"Scenario selector panel is responsive: full-width modal on mobile, side-panel on desktop",UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,S,"Mock scenario JSON files contain no real credentials, API keys, or real org data",UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,T,"`Scenario`, `ScenarioMetadata`, `ScenarioCatalog`, `ScenarioId` TypeScript types strict",UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,U,"Select E-Commerce scenario; switch to Healthcare; click ""Clear Scenario"" to return to empty state",UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,V,Active scenario shown in top nav with scenario name pill and industry color badge,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,W,"Not applicable — scenarios are static JSON, no Realtime",UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,X,"Scenario data simultaneously available in S04, S05, S06, S07, S08, S09, S10, S11",UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,Y,Scenario JSON files loadable with zero env vars — fully offline-capable for demo environments,UNVERIFIED_IN_REPOSITORY
+S18,Mock Scenario Engine,Z,No scenario selected → all 8 modules show their empty state CTAs; no broken UI or `undefined` errors,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,A,Not applicable — type system layer has no UI,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,B,All 8 business entities have TypeScript interfaces that exactly match their Supabase DB table schemas,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,C,Not applicable,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,D,Type-safe data flow from Supabase query → transformation function → component prop — no `as unknown` casts,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,E,"All API boundary functions handle `null`, `undefined`, and error types explicitly — no implicit `any`",UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,F,Form field types bound to Zod schemas (`z.object({…})`); `useForm<z.infer<typeof schema>>()` pattern,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,G,Auth-gated query functions return type narrowed: `Promise<Result>` only callable when `user !== null`,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,H,All API call functions: fully typed parameters + explicit return type annotation; no implicit `any` returns,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,I,Shared types in `src/types/shared.ts` used across all 8 modules — no duplicated interface definitions,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,J,All Supabase JSON column types validated with Zod `.parse()` before use; parse errors surfaced cleanly,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,K,Not applicable,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,L,"Async functions typed as `Promise<Result<T, E>>` or \`Promise<{ data: T",UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,M,Mock data objects declared as `satisfies Scenario` or typed against production interfaces — no type widening,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,N,Route param types: `useParams<{ projectId: string; reportId: string }>()` pattern used throughout,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,O,"Display utility functions typed: `formatScore(n: number): string`, `formatDate(s: string): string`",UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,P,`tsc --noEmit --strict` produces zero errors and zero warnings in CI; checked in < 30 s,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,Q,Supabase query builder return types inferred via `Database['public']['Tables'][T]['Row']` throughout,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,R,Not applicable,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,S,"Zero uses of `any` type in `src/` — confirmed via `grep -r "": any"" src/` returning empty",UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,T,"`tsconfig.json`: `""strict"": true`, `""noUncheckedIndexedAccess"": true`, `""exactOptionalPropertyTypes"": true`",UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,U,Not applicable,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,V,Not applicable,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,W,Supabase Realtime event payload types from `RealtimePostgresChangesPayload<TableRow>` — fully typed,UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,X,"Shared interfaces (`Requirement`, `HealthReport`, `RiskScore`) imported from single source — no duplication",UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,Y,"`tsconfig.json` path aliases: `""@/*"": [""./src/*""]` resolve correctly in Vite, TSC, and test runner",UNVERIFIED_IN_REPOSITORY
+S19,TypeScript Type System & API Layer,Z,All optional types (\`T,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",A,Lighthouse accessibility score ≥ 90 on deployed preview URL,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",B,Production bundle contains only code reachable from entry points — tree-shaking confirmed via analyzer,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",C,`npm run build` completes without error; `npm run preview` serves the built app correctly,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",D,All `VITE_*` env vars injected at build time via Vite `define`; verifiable in built output,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",E,Build with missing required env var; build with circular TypeScript import; build with `tsc` error — all fail fast,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",F,Not applicable,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",G,`VITE_SUPABASE_ANON_KEY` present in built bundle (expected); `SUPABASE_SERVICE_ROLE_KEY` absent,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",H,Not applicable,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",I,All React `lazy(() => import(…))` dynamic imports resolve in the production build — no chunk 404s,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",J,"`package.json` `dependencies` vs `devDependencies` separation correct; Vite, TS, ESLint in dev only",UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",K,Not applicable,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",L,"Code splitting produces logical named chunks: `auth`, `dashboard`, `requirements`, `architecture`, `reports`",UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",M,Mock scenario JSON tree-shaken from production bundle when `VITE_ENABLE_MOCK=false`,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",N,`vite.config.ts` `base` path matches deployment subdirectory if app is not served from root,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",O,Total gzipped JS bundle < 500 KB; CSS < 50 KB; verified via `rollup-plugin-visualizer` or `vite-bundle-analyzer`,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",P,`npm run build` completes < 60 s; `npm run dev` HMR reload < 300 ms for a typical module file change,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",Q,CI pipeline: `supabase db push` and `supabase gen types typescript` run before build step,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",R,Not applicable,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",S,"Source maps disabled in production build; if generated for error tracking, uploaded to Sentry only",UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",T,`tsc --noEmit` runs as a CI step before `vite build`; any TS error fails the pipeline,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",U,Not applicable,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",V,PurgeCSS / Tailwind JIT removes unused utility classes; production CSS contains only used tokens,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",W,Not applicable,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",X,Not applicable,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",Y,All `VITE_*` env vars documented in `.env.example` with descriptions; `.env.local` in `.gitignore`,UNVERIFIED_IN_REPOSITORY
+S20,"Build System, Bundle Optimization & CI/CD (Vite)",Z,Deployed app served to a clean-session browser renders default empty state correctly — no hardcoded data,UNVERIFIED_IN_REPOSITORY
