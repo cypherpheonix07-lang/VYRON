@@ -95,13 +95,50 @@ import { Route as AppAdminTemplatesRouteImport } from './routes/app.admin.templa
 import { Route as AppAdminUsageRouteImport } from './routes/app.admin.usage'
 import { Route as AppAdminUsersRouteImport } from './routes/app.admin.users'
 import { Route as AppAdminWorkbenchRouteImport } from './routes/app.admin.workbench'
+import { Route as AppAgentsIndexRouteImport } from './routes/app.agents.index'
+import { Route as AppAgentsSubpageRouteImport } from './routes/app.agents.$subpage'
+import { Route as AppArchitectureStudioIndexRouteImport } from './routes/app.architecture-studio.index'
+import { Route as AppArchitectureStudioSubpageRouteImport } from './routes/app.architecture-studio.$subpage'
 import { Route as AppBillingInvoicesRouteImport } from './routes/app.billing.invoices'
 import { Route as AppBillingPlansRouteImport } from './routes/app.billing.plans'
 import { Route as AppBillingUsageRouteImport } from './routes/app.billing.usage'
+import { Route as AppCodeQualityIndexRouteImport } from './routes/app.code-quality.index'
+import { Route as AppCodeQualitySubpageRouteImport } from './routes/app.code-quality.$subpage'
+import { Route as AppCollaborationIndexRouteImport } from './routes/app.collaboration.index'
+import { Route as AppCollaborationSubpageRouteImport } from './routes/app.collaboration.$subpage'
+import { Route as AppDataStorageIndexRouteImport } from './routes/app.data-storage.index'
+import { Route as AppDataStorageSubpageRouteImport } from './routes/app.data-storage.$subpage'
+import { Route as AppDeveloperExperienceIndexRouteImport } from './routes/app.developer-experience.index'
+import { Route as AppDeveloperExperienceSubpageRouteImport } from './routes/app.developer-experience.$subpage'
+import { Route as AppFinopsIndexRouteImport } from './routes/app.finops.index'
+import { Route as AppFinopsSubpageRouteImport } from './routes/app.finops.$subpage'
+import { Route as AppIncidentCommandIndexRouteImport } from './routes/app.incident-command.index'
+import { Route as AppIncidentCommandSubpageRouteImport } from './routes/app.incident-command.$subpage'
+import { Route as AppKnowledgeIndexRouteImport } from './routes/app.knowledge.index'
+import { Route as AppKnowledgeSubpageRouteImport } from './routes/app.knowledge.$subpage'
+import { Route as AppModelOpsIndexRouteImport } from './routes/app.model-ops.index'
+import { Route as AppModelOpsSubpageRouteImport } from './routes/app.model-ops.$subpage'
+import { Route as AppObservabilityIndexRouteImport } from './routes/app.observability.index'
+import { Route as AppObservabilitySubpageRouteImport } from './routes/app.observability.$subpage'
+import { Route as AppPipelinesIndexRouteImport } from './routes/app.pipelines.index'
+import { Route as AppPipelinesSubpageRouteImport } from './routes/app.pipelines.$subpage'
+import { Route as AppPlatformAdminIndexRouteImport } from './routes/app.platform-admin.index'
+import { Route as AppPlatformAdminSubpageRouteImport } from './routes/app.platform-admin.$subpage'
 import { Route as AppProjectsIndexRouteImport } from './routes/app.projects.index'
 import { Route as AppProjectsIdRouteImport } from './routes/app.projects.$id'
+import { Route as AppProjectsArchiveRecoveryRouteImport } from './routes/app.projects.archive-recovery'
+import { Route as AppProjectsCreateConfigureRouteImport } from './routes/app.projects.create-configure'
 import { Route as AppProjectsNewRouteImport } from './routes/app.projects.new'
+import { Route as AppProjectsProjectRegistryRouteImport } from './routes/app.projects.project-registry'
+import { Route as AppProjectsRepositoryMappingRouteImport } from './routes/app.projects.repository-mapping'
+import { Route as AppProjectsWorkspaceSessionsRouteImport } from './routes/app.projects.workspace-sessions'
+import { Route as AppQualityIndexRouteImport } from './routes/app.quality.index'
+import { Route as AppQualitySubpageRouteImport } from './routes/app.quality.$subpage'
 import { Route as AppReleasePipelinesRouteImport } from './routes/app.release.pipelines'
+import { Route as AppRequirementsIndexRouteImport } from './routes/app.requirements.index'
+import { Route as AppRequirementsSubpageRouteImport } from './routes/app.requirements.$subpage'
+import { Route as AppSecurityOperationsIndexRouteImport } from './routes/app.security-operations.index'
+import { Route as AppSecurityOperationsSubpageRouteImport } from './routes/app.security-operations.$subpage'
 import { Route as AppStudioIndexRouteImport } from './routes/app.studio.index'
 import { Route as AppStudioIdRouteImport } from './routes/app.studio.$id'
 import { Route as AppStudioCreateRouteImport } from './routes/app.studio.create'
@@ -109,6 +146,7 @@ import { Route as AppStudioCreateWebsiteRouteImport } from './routes/app.studio.
 import { Route as AppStudioImportRouteImport } from './routes/app.studio.import'
 import { Route as AppStudioTemplatesRouteImport } from './routes/app.studio.templates'
 import { Route as AppTeamIdRouteImport } from './routes/app.team.$id'
+import { Route as AppWorkpulseSubpageRouteImport } from './routes/app.workpulse.$subpage'
 import { Route as AppProjectsIdIndexRouteImport } from './routes/app.projects.$id.index'
 import { Route as AppProjectsIdActivityRouteImport } from './routes/app.projects.$id.activity'
 import { Route as AppProjectsIdAnalyticsRouteImport } from './routes/app.projects.$id.analytics'
@@ -575,6 +613,28 @@ const AppAdminWorkbenchRoute = AppAdminWorkbenchRouteImport.update({
   path: '/workbench',
   getParentRoute: () => AppAdminRoute,
 } as any)
+const AppAgentsIndexRoute = AppAgentsIndexRouteImport.update({
+  id: '/agents/',
+  path: '/agents/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppAgentsSubpageRoute = AppAgentsSubpageRouteImport.update({
+  id: '/agents/$subpage',
+  path: '/agents/$subpage',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppArchitectureStudioIndexRoute =
+  AppArchitectureStudioIndexRouteImport.update({
+    id: '/architecture-studio/',
+    path: '/architecture-studio/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppArchitectureStudioSubpageRoute =
+  AppArchitectureStudioSubpageRouteImport.update({
+    id: '/architecture-studio/$subpage',
+    path: '/architecture-studio/$subpage',
+    getParentRoute: () => AppRoute,
+  } as any)
 const AppBillingInvoicesRoute = AppBillingInvoicesRouteImport.update({
   id: '/invoices',
   path: '/invoices',
@@ -590,6 +650,119 @@ const AppBillingUsageRoute = AppBillingUsageRouteImport.update({
   path: '/usage',
   getParentRoute: () => AppBillingRoute,
 } as any)
+const AppCodeQualityIndexRoute = AppCodeQualityIndexRouteImport.update({
+  id: '/code-quality/',
+  path: '/code-quality/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCodeQualitySubpageRoute = AppCodeQualitySubpageRouteImport.update({
+  id: '/code-quality/$subpage',
+  path: '/code-quality/$subpage',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCollaborationIndexRoute = AppCollaborationIndexRouteImport.update({
+  id: '/collaboration/',
+  path: '/collaboration/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCollaborationSubpageRoute = AppCollaborationSubpageRouteImport.update({
+  id: '/collaboration/$subpage',
+  path: '/collaboration/$subpage',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDataStorageIndexRoute = AppDataStorageIndexRouteImport.update({
+  id: '/data-storage/',
+  path: '/data-storage/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDataStorageSubpageRoute = AppDataStorageSubpageRouteImport.update({
+  id: '/data-storage/$subpage',
+  path: '/data-storage/$subpage',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDeveloperExperienceIndexRoute =
+  AppDeveloperExperienceIndexRouteImport.update({
+    id: '/developer-experience/',
+    path: '/developer-experience/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppDeveloperExperienceSubpageRoute =
+  AppDeveloperExperienceSubpageRouteImport.update({
+    id: '/developer-experience/$subpage',
+    path: '/developer-experience/$subpage',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppFinopsIndexRoute = AppFinopsIndexRouteImport.update({
+  id: '/finops/',
+  path: '/finops/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppFinopsSubpageRoute = AppFinopsSubpageRouteImport.update({
+  id: '/finops/$subpage',
+  path: '/finops/$subpage',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppIncidentCommandIndexRoute = AppIncidentCommandIndexRouteImport.update({
+  id: '/incident-command/',
+  path: '/incident-command/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppIncidentCommandSubpageRoute =
+  AppIncidentCommandSubpageRouteImport.update({
+    id: '/incident-command/$subpage',
+    path: '/incident-command/$subpage',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppKnowledgeIndexRoute = AppKnowledgeIndexRouteImport.update({
+  id: '/knowledge/',
+  path: '/knowledge/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppKnowledgeSubpageRoute = AppKnowledgeSubpageRouteImport.update({
+  id: '/knowledge/$subpage',
+  path: '/knowledge/$subpage',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppModelOpsIndexRoute = AppModelOpsIndexRouteImport.update({
+  id: '/model-ops/',
+  path: '/model-ops/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppModelOpsSubpageRoute = AppModelOpsSubpageRouteImport.update({
+  id: '/model-ops/$subpage',
+  path: '/model-ops/$subpage',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppObservabilityIndexRoute = AppObservabilityIndexRouteImport.update({
+  id: '/observability/',
+  path: '/observability/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppObservabilitySubpageRoute = AppObservabilitySubpageRouteImport.update({
+  id: '/observability/$subpage',
+  path: '/observability/$subpage',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPipelinesIndexRoute = AppPipelinesIndexRouteImport.update({
+  id: '/pipelines/',
+  path: '/pipelines/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPipelinesSubpageRoute = AppPipelinesSubpageRouteImport.update({
+  id: '/pipelines/$subpage',
+  path: '/pipelines/$subpage',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPlatformAdminIndexRoute = AppPlatformAdminIndexRouteImport.update({
+  id: '/platform-admin/',
+  path: '/platform-admin/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppPlatformAdminSubpageRoute = AppPlatformAdminSubpageRouteImport.update({
+  id: '/platform-admin/$subpage',
+  path: '/platform-admin/$subpage',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppProjectsIndexRoute = AppProjectsIndexRouteImport.update({
   id: '/projects/',
   path: '/projects/',
@@ -600,9 +773,49 @@ const AppProjectsIdRoute = AppProjectsIdRouteImport.update({
   path: '/projects/$id',
   getParentRoute: () => AppRoute,
 } as any)
+const AppProjectsArchiveRecoveryRoute =
+  AppProjectsArchiveRecoveryRouteImport.update({
+    id: '/projects/archive-recovery',
+    path: '/projects/archive-recovery',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppProjectsCreateConfigureRoute =
+  AppProjectsCreateConfigureRouteImport.update({
+    id: '/projects/create-configure',
+    path: '/projects/create-configure',
+    getParentRoute: () => AppRoute,
+  } as any)
 const AppProjectsNewRoute = AppProjectsNewRouteImport.update({
   id: '/projects/new',
   path: '/projects/new',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProjectsProjectRegistryRoute =
+  AppProjectsProjectRegistryRouteImport.update({
+    id: '/projects/project-registry',
+    path: '/projects/project-registry',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppProjectsRepositoryMappingRoute =
+  AppProjectsRepositoryMappingRouteImport.update({
+    id: '/projects/repository-mapping',
+    path: '/projects/repository-mapping',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppProjectsWorkspaceSessionsRoute =
+  AppProjectsWorkspaceSessionsRouteImport.update({
+    id: '/projects/workspace-sessions',
+    path: '/projects/workspace-sessions',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppQualityIndexRoute = AppQualityIndexRouteImport.update({
+  id: '/quality/',
+  path: '/quality/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQualitySubpageRoute = AppQualitySubpageRouteImport.update({
+  id: '/quality/$subpage',
+  path: '/quality/$subpage',
   getParentRoute: () => AppRoute,
 } as any)
 const AppReleasePipelinesRoute = AppReleasePipelinesRouteImport.update({
@@ -610,6 +823,28 @@ const AppReleasePipelinesRoute = AppReleasePipelinesRouteImport.update({
   path: '/pipelines',
   getParentRoute: () => AppReleaseRoute,
 } as any)
+const AppRequirementsIndexRoute = AppRequirementsIndexRouteImport.update({
+  id: '/requirements/',
+  path: '/requirements/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppRequirementsSubpageRoute = AppRequirementsSubpageRouteImport.update({
+  id: '/requirements/$subpage',
+  path: '/requirements/$subpage',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSecurityOperationsIndexRoute =
+  AppSecurityOperationsIndexRouteImport.update({
+    id: '/security-operations/',
+    path: '/security-operations/',
+    getParentRoute: () => AppRoute,
+  } as any)
+const AppSecurityOperationsSubpageRoute =
+  AppSecurityOperationsSubpageRouteImport.update({
+    id: '/security-operations/$subpage',
+    path: '/security-operations/$subpage',
+    getParentRoute: () => AppRoute,
+  } as any)
 const AppStudioIndexRoute = AppStudioIndexRouteImport.update({
   id: '/studio/',
   path: '/studio/',
@@ -644,6 +879,11 @@ const AppTeamIdRoute = AppTeamIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => AppTeamRoute,
+} as any)
+const AppWorkpulseSubpageRoute = AppWorkpulseSubpageRouteImport.update({
+  id: '/$subpage',
+  path: '/$subpage',
+  getParentRoute: () => AppWorkpulseRoute,
 } as any)
 const AppProjectsIdIndexRoute = AppProjectsIdIndexRouteImport.update({
   id: '/',
@@ -892,7 +1132,7 @@ export interface FileRoutesByFullPath {
   '/app/team': typeof AppTeamRouteWithChildren
   '/app/tech-radar': typeof AppTechRadarRoute
   '/app/testing': typeof AppTestingRoute
-  '/app/workpulse': typeof AppWorkpulseRoute
+  '/app/workpulse': typeof AppWorkpulseRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
   '/dashboard/faculty': typeof DashboardFacultyRoute
@@ -911,20 +1151,58 @@ export interface FileRoutesByFullPath {
   '/app/admin/usage': typeof AppAdminUsageRoute
   '/app/admin/users': typeof AppAdminUsersRoute
   '/app/admin/workbench': typeof AppAdminWorkbenchRoute
+  '/app/agents/$subpage': typeof AppAgentsSubpageRoute
+  '/app/architecture-studio/$subpage': typeof AppArchitectureStudioSubpageRoute
   '/app/billing/invoices': typeof AppBillingInvoicesRoute
   '/app/billing/plans': typeof AppBillingPlansRoute
   '/app/billing/usage': typeof AppBillingUsageRoute
+  '/app/code-quality/$subpage': typeof AppCodeQualitySubpageRoute
+  '/app/collaboration/$subpage': typeof AppCollaborationSubpageRoute
+  '/app/data-storage/$subpage': typeof AppDataStorageSubpageRoute
+  '/app/developer-experience/$subpage': typeof AppDeveloperExperienceSubpageRoute
+  '/app/finops/$subpage': typeof AppFinopsSubpageRoute
+  '/app/incident-command/$subpage': typeof AppIncidentCommandSubpageRoute
+  '/app/knowledge/$subpage': typeof AppKnowledgeSubpageRoute
+  '/app/model-ops/$subpage': typeof AppModelOpsSubpageRoute
+  '/app/observability/$subpage': typeof AppObservabilitySubpageRoute
+  '/app/pipelines/$subpage': typeof AppPipelinesSubpageRoute
+  '/app/platform-admin/$subpage': typeof AppPlatformAdminSubpageRoute
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
+  '/app/projects/archive-recovery': typeof AppProjectsArchiveRecoveryRoute
+  '/app/projects/create-configure': typeof AppProjectsCreateConfigureRoute
   '/app/projects/new': typeof AppProjectsNewRoute
+  '/app/projects/project-registry': typeof AppProjectsProjectRegistryRoute
+  '/app/projects/repository-mapping': typeof AppProjectsRepositoryMappingRoute
+  '/app/projects/workspace-sessions': typeof AppProjectsWorkspaceSessionsRoute
+  '/app/quality/$subpage': typeof AppQualitySubpageRoute
   '/app/release/pipelines': typeof AppReleasePipelinesRoute
+  '/app/requirements/$subpage': typeof AppRequirementsSubpageRoute
+  '/app/security-operations/$subpage': typeof AppSecurityOperationsSubpageRoute
   '/app/studio/$id': typeof AppStudioIdRouteWithChildren
   '/app/studio/create': typeof AppStudioCreateRoute
   '/app/studio/create-website': typeof AppStudioCreateWebsiteRoute
   '/app/studio/import': typeof AppStudioImportRoute
   '/app/studio/templates': typeof AppStudioTemplatesRoute
   '/app/team/$id': typeof AppTeamIdRoute
+  '/app/workpulse/$subpage': typeof AppWorkpulseSubpageRoute
   '/app/admin/': typeof AppAdminIndexRoute
+  '/app/agents/': typeof AppAgentsIndexRoute
+  '/app/architecture-studio/': typeof AppArchitectureStudioIndexRoute
+  '/app/code-quality/': typeof AppCodeQualityIndexRoute
+  '/app/collaboration/': typeof AppCollaborationIndexRoute
+  '/app/data-storage/': typeof AppDataStorageIndexRoute
+  '/app/developer-experience/': typeof AppDeveloperExperienceIndexRoute
+  '/app/finops/': typeof AppFinopsIndexRoute
+  '/app/incident-command/': typeof AppIncidentCommandIndexRoute
+  '/app/knowledge/': typeof AppKnowledgeIndexRoute
+  '/app/model-ops/': typeof AppModelOpsIndexRoute
+  '/app/observability/': typeof AppObservabilityIndexRoute
+  '/app/pipelines/': typeof AppPipelinesIndexRoute
+  '/app/platform-admin/': typeof AppPlatformAdminIndexRoute
   '/app/projects/': typeof AppProjectsIndexRoute
+  '/app/quality/': typeof AppQualityIndexRoute
+  '/app/requirements/': typeof AppRequirementsIndexRoute
+  '/app/security-operations/': typeof AppSecurityOperationsIndexRoute
   '/app/studio/': typeof AppStudioIndexRoute
   '/app/projects/$id/activity': typeof AppProjectsIdActivityRoute
   '/app/projects/$id/analytics': typeof AppProjectsIdAnalyticsRoute
@@ -1025,7 +1303,7 @@ export interface FileRoutesByTo {
   '/app/team': typeof AppTeamRouteWithChildren
   '/app/tech-radar': typeof AppTechRadarRoute
   '/app/testing': typeof AppTestingRoute
-  '/app/workpulse': typeof AppWorkpulseRoute
+  '/app/workpulse': typeof AppWorkpulseRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
   '/dashboard/faculty': typeof DashboardFacultyRoute
@@ -1044,18 +1322,56 @@ export interface FileRoutesByTo {
   '/app/admin/usage': typeof AppAdminUsageRoute
   '/app/admin/users': typeof AppAdminUsersRoute
   '/app/admin/workbench': typeof AppAdminWorkbenchRoute
+  '/app/agents/$subpage': typeof AppAgentsSubpageRoute
+  '/app/architecture-studio/$subpage': typeof AppArchitectureStudioSubpageRoute
   '/app/billing/invoices': typeof AppBillingInvoicesRoute
   '/app/billing/plans': typeof AppBillingPlansRoute
   '/app/billing/usage': typeof AppBillingUsageRoute
+  '/app/code-quality/$subpage': typeof AppCodeQualitySubpageRoute
+  '/app/collaboration/$subpage': typeof AppCollaborationSubpageRoute
+  '/app/data-storage/$subpage': typeof AppDataStorageSubpageRoute
+  '/app/developer-experience/$subpage': typeof AppDeveloperExperienceSubpageRoute
+  '/app/finops/$subpage': typeof AppFinopsSubpageRoute
+  '/app/incident-command/$subpage': typeof AppIncidentCommandSubpageRoute
+  '/app/knowledge/$subpage': typeof AppKnowledgeSubpageRoute
+  '/app/model-ops/$subpage': typeof AppModelOpsSubpageRoute
+  '/app/observability/$subpage': typeof AppObservabilitySubpageRoute
+  '/app/pipelines/$subpage': typeof AppPipelinesSubpageRoute
+  '/app/platform-admin/$subpage': typeof AppPlatformAdminSubpageRoute
+  '/app/projects/archive-recovery': typeof AppProjectsArchiveRecoveryRoute
+  '/app/projects/create-configure': typeof AppProjectsCreateConfigureRoute
   '/app/projects/new': typeof AppProjectsNewRoute
+  '/app/projects/project-registry': typeof AppProjectsProjectRegistryRoute
+  '/app/projects/repository-mapping': typeof AppProjectsRepositoryMappingRoute
+  '/app/projects/workspace-sessions': typeof AppProjectsWorkspaceSessionsRoute
+  '/app/quality/$subpage': typeof AppQualitySubpageRoute
   '/app/release/pipelines': typeof AppReleasePipelinesRoute
+  '/app/requirements/$subpage': typeof AppRequirementsSubpageRoute
+  '/app/security-operations/$subpage': typeof AppSecurityOperationsSubpageRoute
   '/app/studio/create': typeof AppStudioCreateRoute
   '/app/studio/create-website': typeof AppStudioCreateWebsiteRoute
   '/app/studio/import': typeof AppStudioImportRoute
   '/app/studio/templates': typeof AppStudioTemplatesRoute
   '/app/team/$id': typeof AppTeamIdRoute
+  '/app/workpulse/$subpage': typeof AppWorkpulseSubpageRoute
   '/app/admin': typeof AppAdminIndexRoute
+  '/app/agents': typeof AppAgentsIndexRoute
+  '/app/architecture-studio': typeof AppArchitectureStudioIndexRoute
+  '/app/code-quality': typeof AppCodeQualityIndexRoute
+  '/app/collaboration': typeof AppCollaborationIndexRoute
+  '/app/data-storage': typeof AppDataStorageIndexRoute
+  '/app/developer-experience': typeof AppDeveloperExperienceIndexRoute
+  '/app/finops': typeof AppFinopsIndexRoute
+  '/app/incident-command': typeof AppIncidentCommandIndexRoute
+  '/app/knowledge': typeof AppKnowledgeIndexRoute
+  '/app/model-ops': typeof AppModelOpsIndexRoute
+  '/app/observability': typeof AppObservabilityIndexRoute
+  '/app/pipelines': typeof AppPipelinesIndexRoute
+  '/app/platform-admin': typeof AppPlatformAdminIndexRoute
   '/app/projects': typeof AppProjectsIndexRoute
+  '/app/quality': typeof AppQualityIndexRoute
+  '/app/requirements': typeof AppRequirementsIndexRoute
+  '/app/security-operations': typeof AppSecurityOperationsIndexRoute
   '/app/studio': typeof AppStudioIndexRoute
   '/app/projects/$id/activity': typeof AppProjectsIdActivityRoute
   '/app/projects/$id/analytics': typeof AppProjectsIdAnalyticsRoute
@@ -1161,7 +1477,7 @@ export interface FileRoutesById {
   '/app/team': typeof AppTeamRouteWithChildren
   '/app/tech-radar': typeof AppTechRadarRoute
   '/app/testing': typeof AppTestingRoute
-  '/app/workpulse': typeof AppWorkpulseRoute
+  '/app/workpulse': typeof AppWorkpulseRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
   '/dashboard/faculty': typeof DashboardFacultyRoute
@@ -1180,20 +1496,58 @@ export interface FileRoutesById {
   '/app/admin/usage': typeof AppAdminUsageRoute
   '/app/admin/users': typeof AppAdminUsersRoute
   '/app/admin/workbench': typeof AppAdminWorkbenchRoute
+  '/app/agents/$subpage': typeof AppAgentsSubpageRoute
+  '/app/architecture-studio/$subpage': typeof AppArchitectureStudioSubpageRoute
   '/app/billing/invoices': typeof AppBillingInvoicesRoute
   '/app/billing/plans': typeof AppBillingPlansRoute
   '/app/billing/usage': typeof AppBillingUsageRoute
+  '/app/code-quality/$subpage': typeof AppCodeQualitySubpageRoute
+  '/app/collaboration/$subpage': typeof AppCollaborationSubpageRoute
+  '/app/data-storage/$subpage': typeof AppDataStorageSubpageRoute
+  '/app/developer-experience/$subpage': typeof AppDeveloperExperienceSubpageRoute
+  '/app/finops/$subpage': typeof AppFinopsSubpageRoute
+  '/app/incident-command/$subpage': typeof AppIncidentCommandSubpageRoute
+  '/app/knowledge/$subpage': typeof AppKnowledgeSubpageRoute
+  '/app/model-ops/$subpage': typeof AppModelOpsSubpageRoute
+  '/app/observability/$subpage': typeof AppObservabilitySubpageRoute
+  '/app/pipelines/$subpage': typeof AppPipelinesSubpageRoute
+  '/app/platform-admin/$subpage': typeof AppPlatformAdminSubpageRoute
   '/app/projects/$id': typeof AppProjectsIdRouteWithChildren
+  '/app/projects/archive-recovery': typeof AppProjectsArchiveRecoveryRoute
+  '/app/projects/create-configure': typeof AppProjectsCreateConfigureRoute
   '/app/projects/new': typeof AppProjectsNewRoute
+  '/app/projects/project-registry': typeof AppProjectsProjectRegistryRoute
+  '/app/projects/repository-mapping': typeof AppProjectsRepositoryMappingRoute
+  '/app/projects/workspace-sessions': typeof AppProjectsWorkspaceSessionsRoute
+  '/app/quality/$subpage': typeof AppQualitySubpageRoute
   '/app/release/pipelines': typeof AppReleasePipelinesRoute
+  '/app/requirements/$subpage': typeof AppRequirementsSubpageRoute
+  '/app/security-operations/$subpage': typeof AppSecurityOperationsSubpageRoute
   '/app/studio/$id': typeof AppStudioIdRouteWithChildren
   '/app/studio/create': typeof AppStudioCreateRoute
   '/app/studio/create-website': typeof AppStudioCreateWebsiteRoute
   '/app/studio/import': typeof AppStudioImportRoute
   '/app/studio/templates': typeof AppStudioTemplatesRoute
   '/app/team/$id': typeof AppTeamIdRoute
+  '/app/workpulse/$subpage': typeof AppWorkpulseSubpageRoute
   '/app/admin/': typeof AppAdminIndexRoute
+  '/app/agents/': typeof AppAgentsIndexRoute
+  '/app/architecture-studio/': typeof AppArchitectureStudioIndexRoute
+  '/app/code-quality/': typeof AppCodeQualityIndexRoute
+  '/app/collaboration/': typeof AppCollaborationIndexRoute
+  '/app/data-storage/': typeof AppDataStorageIndexRoute
+  '/app/developer-experience/': typeof AppDeveloperExperienceIndexRoute
+  '/app/finops/': typeof AppFinopsIndexRoute
+  '/app/incident-command/': typeof AppIncidentCommandIndexRoute
+  '/app/knowledge/': typeof AppKnowledgeIndexRoute
+  '/app/model-ops/': typeof AppModelOpsIndexRoute
+  '/app/observability/': typeof AppObservabilityIndexRoute
+  '/app/pipelines/': typeof AppPipelinesIndexRoute
+  '/app/platform-admin/': typeof AppPlatformAdminIndexRoute
   '/app/projects/': typeof AppProjectsIndexRoute
+  '/app/quality/': typeof AppQualityIndexRoute
+  '/app/requirements/': typeof AppRequirementsIndexRoute
+  '/app/security-operations/': typeof AppSecurityOperationsIndexRoute
   '/app/studio/': typeof AppStudioIndexRoute
   '/app/projects/$id/activity': typeof AppProjectsIdActivityRoute
   '/app/projects/$id/analytics': typeof AppProjectsIdAnalyticsRoute
@@ -1319,20 +1673,58 @@ export interface FileRouteTypes {
     | '/app/admin/usage'
     | '/app/admin/users'
     | '/app/admin/workbench'
+    | '/app/agents/$subpage'
+    | '/app/architecture-studio/$subpage'
     | '/app/billing/invoices'
     | '/app/billing/plans'
     | '/app/billing/usage'
+    | '/app/code-quality/$subpage'
+    | '/app/collaboration/$subpage'
+    | '/app/data-storage/$subpage'
+    | '/app/developer-experience/$subpage'
+    | '/app/finops/$subpage'
+    | '/app/incident-command/$subpage'
+    | '/app/knowledge/$subpage'
+    | '/app/model-ops/$subpage'
+    | '/app/observability/$subpage'
+    | '/app/pipelines/$subpage'
+    | '/app/platform-admin/$subpage'
     | '/app/projects/$id'
+    | '/app/projects/archive-recovery'
+    | '/app/projects/create-configure'
     | '/app/projects/new'
+    | '/app/projects/project-registry'
+    | '/app/projects/repository-mapping'
+    | '/app/projects/workspace-sessions'
+    | '/app/quality/$subpage'
     | '/app/release/pipelines'
+    | '/app/requirements/$subpage'
+    | '/app/security-operations/$subpage'
     | '/app/studio/$id'
     | '/app/studio/create'
     | '/app/studio/create-website'
     | '/app/studio/import'
     | '/app/studio/templates'
     | '/app/team/$id'
+    | '/app/workpulse/$subpage'
     | '/app/admin/'
+    | '/app/agents/'
+    | '/app/architecture-studio/'
+    | '/app/code-quality/'
+    | '/app/collaboration/'
+    | '/app/data-storage/'
+    | '/app/developer-experience/'
+    | '/app/finops/'
+    | '/app/incident-command/'
+    | '/app/knowledge/'
+    | '/app/model-ops/'
+    | '/app/observability/'
+    | '/app/pipelines/'
+    | '/app/platform-admin/'
     | '/app/projects/'
+    | '/app/quality/'
+    | '/app/requirements/'
+    | '/app/security-operations/'
     | '/app/studio/'
     | '/app/projects/$id/activity'
     | '/app/projects/$id/analytics'
@@ -1452,18 +1844,56 @@ export interface FileRouteTypes {
     | '/app/admin/usage'
     | '/app/admin/users'
     | '/app/admin/workbench'
+    | '/app/agents/$subpage'
+    | '/app/architecture-studio/$subpage'
     | '/app/billing/invoices'
     | '/app/billing/plans'
     | '/app/billing/usage'
+    | '/app/code-quality/$subpage'
+    | '/app/collaboration/$subpage'
+    | '/app/data-storage/$subpage'
+    | '/app/developer-experience/$subpage'
+    | '/app/finops/$subpage'
+    | '/app/incident-command/$subpage'
+    | '/app/knowledge/$subpage'
+    | '/app/model-ops/$subpage'
+    | '/app/observability/$subpage'
+    | '/app/pipelines/$subpage'
+    | '/app/platform-admin/$subpage'
+    | '/app/projects/archive-recovery'
+    | '/app/projects/create-configure'
     | '/app/projects/new'
+    | '/app/projects/project-registry'
+    | '/app/projects/repository-mapping'
+    | '/app/projects/workspace-sessions'
+    | '/app/quality/$subpage'
     | '/app/release/pipelines'
+    | '/app/requirements/$subpage'
+    | '/app/security-operations/$subpage'
     | '/app/studio/create'
     | '/app/studio/create-website'
     | '/app/studio/import'
     | '/app/studio/templates'
     | '/app/team/$id'
+    | '/app/workpulse/$subpage'
     | '/app/admin'
+    | '/app/agents'
+    | '/app/architecture-studio'
+    | '/app/code-quality'
+    | '/app/collaboration'
+    | '/app/data-storage'
+    | '/app/developer-experience'
+    | '/app/finops'
+    | '/app/incident-command'
+    | '/app/knowledge'
+    | '/app/model-ops'
+    | '/app/observability'
+    | '/app/pipelines'
+    | '/app/platform-admin'
     | '/app/projects'
+    | '/app/quality'
+    | '/app/requirements'
+    | '/app/security-operations'
     | '/app/studio'
     | '/app/projects/$id/activity'
     | '/app/projects/$id/analytics'
@@ -1587,20 +2017,58 @@ export interface FileRouteTypes {
     | '/app/admin/usage'
     | '/app/admin/users'
     | '/app/admin/workbench'
+    | '/app/agents/$subpage'
+    | '/app/architecture-studio/$subpage'
     | '/app/billing/invoices'
     | '/app/billing/plans'
     | '/app/billing/usage'
+    | '/app/code-quality/$subpage'
+    | '/app/collaboration/$subpage'
+    | '/app/data-storage/$subpage'
+    | '/app/developer-experience/$subpage'
+    | '/app/finops/$subpage'
+    | '/app/incident-command/$subpage'
+    | '/app/knowledge/$subpage'
+    | '/app/model-ops/$subpage'
+    | '/app/observability/$subpage'
+    | '/app/pipelines/$subpage'
+    | '/app/platform-admin/$subpage'
     | '/app/projects/$id'
+    | '/app/projects/archive-recovery'
+    | '/app/projects/create-configure'
     | '/app/projects/new'
+    | '/app/projects/project-registry'
+    | '/app/projects/repository-mapping'
+    | '/app/projects/workspace-sessions'
+    | '/app/quality/$subpage'
     | '/app/release/pipelines'
+    | '/app/requirements/$subpage'
+    | '/app/security-operations/$subpage'
     | '/app/studio/$id'
     | '/app/studio/create'
     | '/app/studio/create-website'
     | '/app/studio/import'
     | '/app/studio/templates'
     | '/app/team/$id'
+    | '/app/workpulse/$subpage'
     | '/app/admin/'
+    | '/app/agents/'
+    | '/app/architecture-studio/'
+    | '/app/code-quality/'
+    | '/app/collaboration/'
+    | '/app/data-storage/'
+    | '/app/developer-experience/'
+    | '/app/finops/'
+    | '/app/incident-command/'
+    | '/app/knowledge/'
+    | '/app/model-ops/'
+    | '/app/observability/'
+    | '/app/pipelines/'
+    | '/app/platform-admin/'
     | '/app/projects/'
+    | '/app/quality/'
+    | '/app/requirements/'
+    | '/app/security-operations/'
     | '/app/studio/'
     | '/app/projects/$id/activity'
     | '/app/projects/$id/analytics'
@@ -2265,6 +2733,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAdminWorkbenchRouteImport
       parentRoute: typeof AppAdminRoute
     }
+    '/app/agents/': {
+      id: '/app/agents/'
+      path: '/agents'
+      fullPath: '/app/agents/'
+      preLoaderRoute: typeof AppAgentsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/agents/$subpage': {
+      id: '/app/agents/$subpage'
+      path: '/agents/$subpage'
+      fullPath: '/app/agents/$subpage'
+      preLoaderRoute: typeof AppAgentsSubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/architecture-studio/': {
+      id: '/app/architecture-studio/'
+      path: '/architecture-studio'
+      fullPath: '/app/architecture-studio/'
+      preLoaderRoute: typeof AppArchitectureStudioIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/architecture-studio/$subpage': {
+      id: '/app/architecture-studio/$subpage'
+      path: '/architecture-studio/$subpage'
+      fullPath: '/app/architecture-studio/$subpage'
+      preLoaderRoute: typeof AppArchitectureStudioSubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/billing/invoices': {
       id: '/app/billing/invoices'
       path: '/invoices'
@@ -2286,6 +2782,160 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppBillingUsageRouteImport
       parentRoute: typeof AppBillingRoute
     }
+    '/app/code-quality/': {
+      id: '/app/code-quality/'
+      path: '/code-quality'
+      fullPath: '/app/code-quality/'
+      preLoaderRoute: typeof AppCodeQualityIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/code-quality/$subpage': {
+      id: '/app/code-quality/$subpage'
+      path: '/code-quality/$subpage'
+      fullPath: '/app/code-quality/$subpage'
+      preLoaderRoute: typeof AppCodeQualitySubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/collaboration/': {
+      id: '/app/collaboration/'
+      path: '/collaboration'
+      fullPath: '/app/collaboration/'
+      preLoaderRoute: typeof AppCollaborationIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/collaboration/$subpage': {
+      id: '/app/collaboration/$subpage'
+      path: '/collaboration/$subpage'
+      fullPath: '/app/collaboration/$subpage'
+      preLoaderRoute: typeof AppCollaborationSubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/data-storage/': {
+      id: '/app/data-storage/'
+      path: '/data-storage'
+      fullPath: '/app/data-storage/'
+      preLoaderRoute: typeof AppDataStorageIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/data-storage/$subpage': {
+      id: '/app/data-storage/$subpage'
+      path: '/data-storage/$subpage'
+      fullPath: '/app/data-storage/$subpage'
+      preLoaderRoute: typeof AppDataStorageSubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/developer-experience/': {
+      id: '/app/developer-experience/'
+      path: '/developer-experience'
+      fullPath: '/app/developer-experience/'
+      preLoaderRoute: typeof AppDeveloperExperienceIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/developer-experience/$subpage': {
+      id: '/app/developer-experience/$subpage'
+      path: '/developer-experience/$subpage'
+      fullPath: '/app/developer-experience/$subpage'
+      preLoaderRoute: typeof AppDeveloperExperienceSubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/finops/': {
+      id: '/app/finops/'
+      path: '/finops'
+      fullPath: '/app/finops/'
+      preLoaderRoute: typeof AppFinopsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/finops/$subpage': {
+      id: '/app/finops/$subpage'
+      path: '/finops/$subpage'
+      fullPath: '/app/finops/$subpage'
+      preLoaderRoute: typeof AppFinopsSubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/incident-command/': {
+      id: '/app/incident-command/'
+      path: '/incident-command'
+      fullPath: '/app/incident-command/'
+      preLoaderRoute: typeof AppIncidentCommandIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/incident-command/$subpage': {
+      id: '/app/incident-command/$subpage'
+      path: '/incident-command/$subpage'
+      fullPath: '/app/incident-command/$subpage'
+      preLoaderRoute: typeof AppIncidentCommandSubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/knowledge/': {
+      id: '/app/knowledge/'
+      path: '/knowledge'
+      fullPath: '/app/knowledge/'
+      preLoaderRoute: typeof AppKnowledgeIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/knowledge/$subpage': {
+      id: '/app/knowledge/$subpage'
+      path: '/knowledge/$subpage'
+      fullPath: '/app/knowledge/$subpage'
+      preLoaderRoute: typeof AppKnowledgeSubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/model-ops/': {
+      id: '/app/model-ops/'
+      path: '/model-ops'
+      fullPath: '/app/model-ops/'
+      preLoaderRoute: typeof AppModelOpsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/model-ops/$subpage': {
+      id: '/app/model-ops/$subpage'
+      path: '/model-ops/$subpage'
+      fullPath: '/app/model-ops/$subpage'
+      preLoaderRoute: typeof AppModelOpsSubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/observability/': {
+      id: '/app/observability/'
+      path: '/observability'
+      fullPath: '/app/observability/'
+      preLoaderRoute: typeof AppObservabilityIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/observability/$subpage': {
+      id: '/app/observability/$subpage'
+      path: '/observability/$subpage'
+      fullPath: '/app/observability/$subpage'
+      preLoaderRoute: typeof AppObservabilitySubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/pipelines/': {
+      id: '/app/pipelines/'
+      path: '/pipelines'
+      fullPath: '/app/pipelines/'
+      preLoaderRoute: typeof AppPipelinesIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/pipelines/$subpage': {
+      id: '/app/pipelines/$subpage'
+      path: '/pipelines/$subpage'
+      fullPath: '/app/pipelines/$subpage'
+      preLoaderRoute: typeof AppPipelinesSubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/platform-admin/': {
+      id: '/app/platform-admin/'
+      path: '/platform-admin'
+      fullPath: '/app/platform-admin/'
+      preLoaderRoute: typeof AppPlatformAdminIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/platform-admin/$subpage': {
+      id: '/app/platform-admin/$subpage'
+      path: '/platform-admin/$subpage'
+      fullPath: '/app/platform-admin/$subpage'
+      preLoaderRoute: typeof AppPlatformAdminSubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/projects/': {
       id: '/app/projects/'
       path: '/projects'
@@ -2300,11 +2950,60 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppProjectsIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/projects/archive-recovery': {
+      id: '/app/projects/archive-recovery'
+      path: '/projects/archive-recovery'
+      fullPath: '/app/projects/archive-recovery'
+      preLoaderRoute: typeof AppProjectsArchiveRecoveryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/projects/create-configure': {
+      id: '/app/projects/create-configure'
+      path: '/projects/create-configure'
+      fullPath: '/app/projects/create-configure'
+      preLoaderRoute: typeof AppProjectsCreateConfigureRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/projects/new': {
       id: '/app/projects/new'
       path: '/projects/new'
       fullPath: '/app/projects/new'
       preLoaderRoute: typeof AppProjectsNewRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/projects/project-registry': {
+      id: '/app/projects/project-registry'
+      path: '/projects/project-registry'
+      fullPath: '/app/projects/project-registry'
+      preLoaderRoute: typeof AppProjectsProjectRegistryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/projects/repository-mapping': {
+      id: '/app/projects/repository-mapping'
+      path: '/projects/repository-mapping'
+      fullPath: '/app/projects/repository-mapping'
+      preLoaderRoute: typeof AppProjectsRepositoryMappingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/projects/workspace-sessions': {
+      id: '/app/projects/workspace-sessions'
+      path: '/projects/workspace-sessions'
+      fullPath: '/app/projects/workspace-sessions'
+      preLoaderRoute: typeof AppProjectsWorkspaceSessionsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/quality/': {
+      id: '/app/quality/'
+      path: '/quality'
+      fullPath: '/app/quality/'
+      preLoaderRoute: typeof AppQualityIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/quality/$subpage': {
+      id: '/app/quality/$subpage'
+      path: '/quality/$subpage'
+      fullPath: '/app/quality/$subpage'
+      preLoaderRoute: typeof AppQualitySubpageRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/release/pipelines': {
@@ -2313,6 +3012,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/release/pipelines'
       preLoaderRoute: typeof AppReleasePipelinesRouteImport
       parentRoute: typeof AppReleaseRoute
+    }
+    '/app/requirements/': {
+      id: '/app/requirements/'
+      path: '/requirements'
+      fullPath: '/app/requirements/'
+      preLoaderRoute: typeof AppRequirementsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/requirements/$subpage': {
+      id: '/app/requirements/$subpage'
+      path: '/requirements/$subpage'
+      fullPath: '/app/requirements/$subpage'
+      preLoaderRoute: typeof AppRequirementsSubpageRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/security-operations/': {
+      id: '/app/security-operations/'
+      path: '/security-operations'
+      fullPath: '/app/security-operations/'
+      preLoaderRoute: typeof AppSecurityOperationsIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/security-operations/$subpage': {
+      id: '/app/security-operations/$subpage'
+      path: '/security-operations/$subpage'
+      fullPath: '/app/security-operations/$subpage'
+      preLoaderRoute: typeof AppSecurityOperationsSubpageRouteImport
+      parentRoute: typeof AppRoute
     }
     '/app/studio/': {
       id: '/app/studio/'
@@ -2362,6 +3089,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/team/$id'
       preLoaderRoute: typeof AppTeamIdRouteImport
       parentRoute: typeof AppTeamRoute
+    }
+    '/app/workpulse/$subpage': {
+      id: '/app/workpulse/$subpage'
+      path: '/$subpage'
+      fullPath: '/app/workpulse/$subpage'
+      preLoaderRoute: typeof AppWorkpulseSubpageRouteImport
+      parentRoute: typeof AppWorkpulseRoute
     }
     '/app/projects/$id/': {
       id: '/app/projects/$id/'
@@ -2704,6 +3438,18 @@ const AppTeamRouteChildren: AppTeamRouteChildren = {
 const AppTeamRouteWithChildren =
   AppTeamRoute._addFileChildren(AppTeamRouteChildren)
 
+interface AppWorkpulseRouteChildren {
+  AppWorkpulseSubpageRoute: typeof AppWorkpulseSubpageRoute
+}
+
+const AppWorkpulseRouteChildren: AppWorkpulseRouteChildren = {
+  AppWorkpulseSubpageRoute: AppWorkpulseSubpageRoute,
+}
+
+const AppWorkpulseRouteWithChildren = AppWorkpulseRoute._addFileChildren(
+  AppWorkpulseRouteChildren,
+)
+
 interface AppProjectsIdRouteChildren {
   AppProjectsIdActivityRoute: typeof AppProjectsIdActivityRoute
   AppProjectsIdAnalyticsRoute: typeof AppProjectsIdAnalyticsRoute
@@ -2839,16 +3585,53 @@ interface AppRouteChildren {
   AppTeamRoute: typeof AppTeamRouteWithChildren
   AppTechRadarRoute: typeof AppTechRadarRoute
   AppTestingRoute: typeof AppTestingRoute
-  AppWorkpulseRoute: typeof AppWorkpulseRoute
+  AppWorkpulseRoute: typeof AppWorkpulseRouteWithChildren
   AppIndexRoute: typeof AppIndexRoute
+  AppAgentsSubpageRoute: typeof AppAgentsSubpageRoute
+  AppArchitectureStudioSubpageRoute: typeof AppArchitectureStudioSubpageRoute
+  AppCodeQualitySubpageRoute: typeof AppCodeQualitySubpageRoute
+  AppCollaborationSubpageRoute: typeof AppCollaborationSubpageRoute
+  AppDataStorageSubpageRoute: typeof AppDataStorageSubpageRoute
+  AppDeveloperExperienceSubpageRoute: typeof AppDeveloperExperienceSubpageRoute
+  AppFinopsSubpageRoute: typeof AppFinopsSubpageRoute
+  AppIncidentCommandSubpageRoute: typeof AppIncidentCommandSubpageRoute
+  AppKnowledgeSubpageRoute: typeof AppKnowledgeSubpageRoute
+  AppModelOpsSubpageRoute: typeof AppModelOpsSubpageRoute
+  AppObservabilitySubpageRoute: typeof AppObservabilitySubpageRoute
+  AppPipelinesSubpageRoute: typeof AppPipelinesSubpageRoute
+  AppPlatformAdminSubpageRoute: typeof AppPlatformAdminSubpageRoute
   AppProjectsIdRoute: typeof AppProjectsIdRouteWithChildren
+  AppProjectsArchiveRecoveryRoute: typeof AppProjectsArchiveRecoveryRoute
+  AppProjectsCreateConfigureRoute: typeof AppProjectsCreateConfigureRoute
   AppProjectsNewRoute: typeof AppProjectsNewRoute
+  AppProjectsProjectRegistryRoute: typeof AppProjectsProjectRegistryRoute
+  AppProjectsRepositoryMappingRoute: typeof AppProjectsRepositoryMappingRoute
+  AppProjectsWorkspaceSessionsRoute: typeof AppProjectsWorkspaceSessionsRoute
+  AppQualitySubpageRoute: typeof AppQualitySubpageRoute
+  AppRequirementsSubpageRoute: typeof AppRequirementsSubpageRoute
+  AppSecurityOperationsSubpageRoute: typeof AppSecurityOperationsSubpageRoute
   AppStudioIdRoute: typeof AppStudioIdRouteWithChildren
   AppStudioCreateRoute: typeof AppStudioCreateRoute
   AppStudioCreateWebsiteRoute: typeof AppStudioCreateWebsiteRoute
   AppStudioImportRoute: typeof AppStudioImportRoute
   AppStudioTemplatesRoute: typeof AppStudioTemplatesRoute
+  AppAgentsIndexRoute: typeof AppAgentsIndexRoute
+  AppArchitectureStudioIndexRoute: typeof AppArchitectureStudioIndexRoute
+  AppCodeQualityIndexRoute: typeof AppCodeQualityIndexRoute
+  AppCollaborationIndexRoute: typeof AppCollaborationIndexRoute
+  AppDataStorageIndexRoute: typeof AppDataStorageIndexRoute
+  AppDeveloperExperienceIndexRoute: typeof AppDeveloperExperienceIndexRoute
+  AppFinopsIndexRoute: typeof AppFinopsIndexRoute
+  AppIncidentCommandIndexRoute: typeof AppIncidentCommandIndexRoute
+  AppKnowledgeIndexRoute: typeof AppKnowledgeIndexRoute
+  AppModelOpsIndexRoute: typeof AppModelOpsIndexRoute
+  AppObservabilityIndexRoute: typeof AppObservabilityIndexRoute
+  AppPipelinesIndexRoute: typeof AppPipelinesIndexRoute
+  AppPlatformAdminIndexRoute: typeof AppPlatformAdminIndexRoute
   AppProjectsIndexRoute: typeof AppProjectsIndexRoute
+  AppQualityIndexRoute: typeof AppQualityIndexRoute
+  AppRequirementsIndexRoute: typeof AppRequirementsIndexRoute
+  AppSecurityOperationsIndexRoute: typeof AppSecurityOperationsIndexRoute
   AppStudioIndexRoute: typeof AppStudioIndexRoute
 }
 
@@ -2899,16 +3682,53 @@ const AppRouteChildren: AppRouteChildren = {
   AppTeamRoute: AppTeamRouteWithChildren,
   AppTechRadarRoute: AppTechRadarRoute,
   AppTestingRoute: AppTestingRoute,
-  AppWorkpulseRoute: AppWorkpulseRoute,
+  AppWorkpulseRoute: AppWorkpulseRouteWithChildren,
   AppIndexRoute: AppIndexRoute,
+  AppAgentsSubpageRoute: AppAgentsSubpageRoute,
+  AppArchitectureStudioSubpageRoute: AppArchitectureStudioSubpageRoute,
+  AppCodeQualitySubpageRoute: AppCodeQualitySubpageRoute,
+  AppCollaborationSubpageRoute: AppCollaborationSubpageRoute,
+  AppDataStorageSubpageRoute: AppDataStorageSubpageRoute,
+  AppDeveloperExperienceSubpageRoute: AppDeveloperExperienceSubpageRoute,
+  AppFinopsSubpageRoute: AppFinopsSubpageRoute,
+  AppIncidentCommandSubpageRoute: AppIncidentCommandSubpageRoute,
+  AppKnowledgeSubpageRoute: AppKnowledgeSubpageRoute,
+  AppModelOpsSubpageRoute: AppModelOpsSubpageRoute,
+  AppObservabilitySubpageRoute: AppObservabilitySubpageRoute,
+  AppPipelinesSubpageRoute: AppPipelinesSubpageRoute,
+  AppPlatformAdminSubpageRoute: AppPlatformAdminSubpageRoute,
   AppProjectsIdRoute: AppProjectsIdRouteWithChildren,
+  AppProjectsArchiveRecoveryRoute: AppProjectsArchiveRecoveryRoute,
+  AppProjectsCreateConfigureRoute: AppProjectsCreateConfigureRoute,
   AppProjectsNewRoute: AppProjectsNewRoute,
+  AppProjectsProjectRegistryRoute: AppProjectsProjectRegistryRoute,
+  AppProjectsRepositoryMappingRoute: AppProjectsRepositoryMappingRoute,
+  AppProjectsWorkspaceSessionsRoute: AppProjectsWorkspaceSessionsRoute,
+  AppQualitySubpageRoute: AppQualitySubpageRoute,
+  AppRequirementsSubpageRoute: AppRequirementsSubpageRoute,
+  AppSecurityOperationsSubpageRoute: AppSecurityOperationsSubpageRoute,
   AppStudioIdRoute: AppStudioIdRouteWithChildren,
   AppStudioCreateRoute: AppStudioCreateRoute,
   AppStudioCreateWebsiteRoute: AppStudioCreateWebsiteRoute,
   AppStudioImportRoute: AppStudioImportRoute,
   AppStudioTemplatesRoute: AppStudioTemplatesRoute,
+  AppAgentsIndexRoute: AppAgentsIndexRoute,
+  AppArchitectureStudioIndexRoute: AppArchitectureStudioIndexRoute,
+  AppCodeQualityIndexRoute: AppCodeQualityIndexRoute,
+  AppCollaborationIndexRoute: AppCollaborationIndexRoute,
+  AppDataStorageIndexRoute: AppDataStorageIndexRoute,
+  AppDeveloperExperienceIndexRoute: AppDeveloperExperienceIndexRoute,
+  AppFinopsIndexRoute: AppFinopsIndexRoute,
+  AppIncidentCommandIndexRoute: AppIncidentCommandIndexRoute,
+  AppKnowledgeIndexRoute: AppKnowledgeIndexRoute,
+  AppModelOpsIndexRoute: AppModelOpsIndexRoute,
+  AppObservabilityIndexRoute: AppObservabilityIndexRoute,
+  AppPipelinesIndexRoute: AppPipelinesIndexRoute,
+  AppPlatformAdminIndexRoute: AppPlatformAdminIndexRoute,
   AppProjectsIndexRoute: AppProjectsIndexRoute,
+  AppQualityIndexRoute: AppQualityIndexRoute,
+  AppRequirementsIndexRoute: AppRequirementsIndexRoute,
+  AppSecurityOperationsIndexRoute: AppSecurityOperationsIndexRoute,
   AppStudioIndexRoute: AppStudioIndexRoute,
 }
 

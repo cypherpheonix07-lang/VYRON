@@ -1,43 +1,26 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Activity, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Outlet, createFileRoute, useRouterState } from "@tanstack/react-router";
+import { SubpageWorkspace } from "@/components/subpages/SubpageWorkspace";
 
 export const Route = createFileRoute("/app/workpulse")({
   head: () => ({
     meta: [
-      { title: "Work Pulse Consolidated — VYRON" },
+      { title: "WorkPulse — Engineering Intelligence — VYRON" },
       {
         name: "description",
-        content:
-          "Work Pulse has been retired and consolidated into the Activity Stream and Command Center.",
+        content: "Project-backed activity, milestones, timeline, and productivity insights.",
       },
     ],
   }),
-  component: WorkPulseRetiredPage,
+  component: WorkPulseContainer,
 });
 
-function WorkPulseRetiredPage() {
-  const navigate = useNavigate();
+function WorkPulseContainer() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
-  return (
-    <div className="max-w-xl mx-auto py-16 px-4 text-center space-y-4">
-      <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto text-primary">
-        <Activity className="size-6" />
-      </div>
-      <h2 className="text-lg font-bold text-foreground">Work Pulse Has Been Consolidated</h2>
-      <p className="text-xs text-muted-foreground leading-relaxed">
-        Per the architecture change specification (N1.05), standalone Work Pulse has been removed
-        from top-level navigation. Its live telemetry and signal feeds are preserved directly in the
-        Activity Stream and Command Center.
-      </p>
-      <div className="pt-2">
-        <Button
-          onClick={() => navigate({ to: "/app/activity" })}
-          className="gap-2 text-xs"
-        >
-          Go to Activity Stream <ArrowRight className="size-3.5" />
-        </Button>
-      </div>
-    </div>
-  );
+  // If exactly /app/workpulse, render default activity overview
+  if (pathname === "/app/workpulse" || pathname === "/app/workpulse/") {
+    return <SubpageWorkspace slug="activity-overview" categoryGroup="N24" />;
+  }
+
+  return <Outlet />;
 }

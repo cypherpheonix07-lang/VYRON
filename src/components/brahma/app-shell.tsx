@@ -51,6 +51,8 @@ import {
   FileCode,
   Network,
   Globe,
+  BookOpen,
+  SlidersHorizontal,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode, useRef } from "react";
 import { toast } from "sonner";
@@ -288,6 +290,222 @@ export const NAV_DOMAINS: NavDomain[] = [
       { to: "/app/infra", label: "Cloud Infrastructure Fabric", icon: Server, exact: false },
     ],
   },
+  {
+    id: "projects-workspaces",
+    label: "13 — PROJECTS & WORKSPACES",
+    icon: FolderKanban,
+    items: [
+      { to: "/app/projects/project-registry", label: "Project Registry", icon: FolderKanban, exact: true },
+      { to: "/app/projects/create-configure", label: "Create & Configure", icon: PlusCircle, exact: true },
+      { to: "/app/projects/workspace-sessions", label: "Workspace Sessions", icon: Activity, exact: true },
+      { to: "/app/projects/repository-mapping", label: "Repository Mapping", icon: Github, exact: true },
+      { to: "/app/projects/archive-recovery", label: "Archive & Recovery", icon: Download, exact: true },
+    ],
+  },
+  {
+    id: "requirements-traceability",
+    label: "14 — REQUIREMENTS & TRACEABILITY",
+    icon: CheckSquare,
+    items: [
+      { to: "/app/requirements/srs-intake", label: "SRS Intake", icon: FileBarChart2, exact: true },
+      { to: "/app/requirements/requirement-registry", label: "Requirement Registry", icon: CheckSquare, exact: true },
+      { to: "/app/requirements/acceptance-criteria", label: "Acceptance Criteria", icon: ShieldCheck, exact: true },
+      { to: "/app/requirements/change-impact-links", label: "Change Impact Links", icon: GitPullRequest, exact: true },
+      { to: "/app/requirements/traceability-matrix", label: "Traceability Matrix", icon: Network, exact: true },
+    ],
+  },
+  {
+    id: "architecture-studio",
+    label: "15 — ARCHITECTURE STUDIO",
+    icon: Network,
+    items: [
+      { to: "/app/architecture-studio/blueprint-designer", label: "Blueprint Designer", icon: Sparkles, exact: true },
+      { to: "/app/architecture-studio/dependency-graph", label: "Dependency Graph", icon: Network, exact: true },
+      { to: "/app/architecture-studio/version-history", label: "Version History", icon: Layers, exact: true },
+      { to: "/app/architecture-studio/drift-monitor", label: "Drift Monitor", icon: Compass, exact: true },
+      { to: "/app/architecture-studio/digital-twin-viewer", label: "Digital Twin Viewer", icon: Eye, exact: true },
+    ],
+  },
+  {
+    id: "code-quality",
+    label: "16 — CODE QUALITY LAB",
+    icon: FileCode,
+    items: [
+      { to: "/app/code-quality/repository-analysis", label: "Repository Analysis", icon: FileCode, exact: true },
+      { to: "/app/code-quality/static-analysis", label: "Static Analysis", icon: CheckSquare, exact: true },
+      { to: "/app/code-quality/health-scores", label: "Health Scores", icon: Activity, exact: true },
+      { to: "/app/code-quality/technical-debt", label: "Technical Debt", icon: BarChart3, exact: true },
+      { to: "/app/code-quality/refactoring-plans", label: "Refactoring Plans", icon: Workflow, exact: true },
+    ],
+  },
+  {
+    id: "testing-quality",
+    label: "17 — TESTING & QUALITY",
+    icon: CheckSquare,
+    items: [
+      { to: "/app/quality/test-suite-explorer", label: "Test Suite Explorer", icon: CheckSquare, exact: true },
+      { to: "/app/quality/browser-e2e", label: "Browser E2E", icon: Globe, exact: true },
+      { to: "/app/quality/api-contract-tests", label: "API & Contract Tests", icon: Server, exact: true },
+      { to: "/app/quality/regression-matrix", label: "Regression Matrix", icon: Layers, exact: true },
+      { to: "/app/quality/coverage-evidence", label: "Coverage & Evidence", icon: ShieldCheck, exact: true },
+    ],
+  },
+  {
+    id: "security-operations",
+    label: "18 — SECURITY OPERATIONS",
+    icon: ShieldAlert,
+    items: [
+      { to: "/app/security-operations/vulnerability-intelligence", label: "Vulnerability Intelligence", icon: ShieldAlert, exact: true },
+      { to: "/app/security-operations/security-findings", label: "Security Findings", icon: AlertTriangle, exact: true },
+      { to: "/app/security-operations/secret-exposure-audit", label: "Secret Exposure Audit", icon: Lock, exact: true },
+      { to: "/app/security-operations/threat-modeling", label: "Threat Modeling", icon: Target, exact: true },
+      { to: "/app/security-operations/remediation-tracker", label: "Remediation Tracker", icon: CheckCircle2, exact: true },
+    ],
+  },
+  {
+    id: "data-storage",
+    label: "19 — DATA & STORAGE",
+    icon: Database,
+    items: [
+      { to: "/app/data-storage/data-sources", label: "Data Sources", icon: Database, exact: true },
+      { to: "/app/data-storage/schema-explorer", label: "Schema Explorer", icon: Layers, exact: true },
+      { to: "/app/data-storage/storage-browser", label: "Storage Browser", icon: FolderKanban, exact: true },
+      { to: "/app/data-storage/data-lineage", label: "Data Lineage", icon: Network, exact: true },
+      { to: "/app/data-storage/backup-recovery", label: "Backup & Recovery", icon: Download, exact: true },
+    ],
+  },
+  {
+    id: "observability",
+    label: "20 — OBSERVABILITY",
+    icon: Activity,
+    items: [
+      { to: "/app/observability/live-telemetry", label: "Live Telemetry", icon: Activity, exact: true },
+      { to: "/app/observability/logs-traces", label: "Logs & Traces", icon: Terminal, exact: true },
+      { to: "/app/observability/error-correlation", label: "Error Correlation", icon: AlertTriangle, exact: true },
+      { to: "/app/observability/performance-health", label: "Performance Health", icon: BarChart3, exact: true },
+      { to: "/app/observability/alert-rules", label: "Alert Rules", icon: Bell, exact: true },
+    ],
+  },
+  {
+    id: "incident-command",
+    label: "21 — INCIDENT COMMAND",
+    icon: AlertTriangle,
+    items: [
+      { to: "/app/incident-command/incident-queue", label: "Incident Queue", icon: AlertTriangle, exact: true },
+      { to: "/app/incident-command/root-cause-workbench", label: "Root-Cause Workbench", icon: Compass, exact: true },
+      { to: "/app/incident-command/recovery-playbooks", label: "Recovery Playbooks", icon: BookOpen, exact: true },
+      { to: "/app/incident-command/postmortems", label: "Postmortems", icon: FileBarChart2, exact: true },
+      { to: "/app/incident-command/reliability-runbooks", label: "Reliability Runbooks", icon: Workflow, exact: true },
+    ],
+  },
+  {
+    id: "agent-command-hub",
+    label: "22 — AGENT COMMAND HUB",
+    icon: Bot,
+    items: [
+      { to: "/app/agents/agent-registry", label: "Agent Registry", icon: Bot, exact: true },
+      { to: "/app/agents/orchestration-board", label: "Orchestration Board", icon: Cpu, exact: true },
+      { to: "/app/agents/tool-permissions", label: "Tool Permissions", icon: Lock, exact: true },
+      { to: "/app/agents/execution-history", label: "Execution History", icon: Activity, exact: true },
+      { to: "/app/agents/agent-evaluation-lab", label: "Agent Evaluation Lab", icon: FlaskConical, exact: true },
+    ],
+  },
+  {
+    id: "model-ops",
+    label: "23 — MODEL OPERATIONS",
+    icon: Brain,
+    items: [
+      { to: "/app/model-ops/model-registry", label: "Model Registry", icon: Brain, exact: true },
+      { to: "/app/model-ops/provider-routing", label: "Provider Routing", icon: Network, exact: true },
+      { to: "/app/model-ops/prompt-versions", label: "Prompt Versions", icon: Layers, exact: true },
+      { to: "/app/model-ops/token-cost-analytics", label: "Token & Cost Analytics", icon: BarChart3, exact: true },
+      { to: "/app/model-ops/safety-evaluations", label: "Safety Evaluations", icon: ShieldCheck, exact: true },
+    ],
+  },
+  {
+    id: "workpulse-nav",
+    label: "24 — WORKPULSE",
+    icon: Activity,
+    items: [
+      { to: "/app/workpulse/activity-overview", label: "Activity Overview", icon: Activity, exact: true },
+      { to: "/app/workpulse/tasks-milestones", label: "Tasks & Milestones", icon: Target, exact: true },
+      { to: "/app/workpulse/engineering-timeline", label: "Engineering Timeline", icon: Workflow, exact: true },
+      { to: "/app/workpulse/team-workload", label: "Team Workload", icon: Users, exact: true },
+      { to: "/app/workpulse/productivity-insights", label: "Productivity Insights", icon: Sparkles, exact: true },
+    ],
+  },
+  {
+    id: "collaboration",
+    label: "25 — COLLABORATION",
+    icon: Users,
+    items: [
+      { to: "/app/collaboration/team-spaces", label: "Team Spaces", icon: Users, exact: true },
+      { to: "/app/collaboration/code-design-reviews", label: "Code & Design Reviews", icon: Eye, exact: true },
+      { to: "/app/collaboration/approvals", label: "Approvals", icon: CheckCircle2, exact: true },
+      { to: "/app/collaboration/discussion-threads", label: "Discussion Threads", icon: Bot, exact: true },
+      { to: "/app/collaboration/handoffs", label: "Handoffs", icon: Download, exact: true },
+    ],
+  },
+  {
+    id: "knowledge-docs",
+    label: "26 — KNOWLEDGE & DOCS",
+    icon: BookOpen,
+    items: [
+      { to: "/app/knowledge/knowledge-base", label: "Knowledge Base", icon: BookOpen, exact: true },
+      { to: "/app/knowledge/architecture-decisions", label: "Architecture Decisions", icon: Layers, exact: true },
+      { to: "/app/knowledge/api-documentation", label: "API Documentation", icon: FileCode, exact: true },
+      { to: "/app/knowledge/operational-runbooks", label: "Operational Runbooks", icon: Workflow, exact: true },
+      { to: "/app/knowledge/semantic-search", label: "Semantic Search", icon: Search, exact: true },
+    ],
+  },
+  {
+    id: "finops-capacity",
+    label: "27 — FINOPS & CAPACITY",
+    icon: BarChart3,
+    items: [
+      { to: "/app/finops/cloud-spend", label: "Cloud Spend", icon: BarChart3, exact: true },
+      { to: "/app/finops/ai-token-usage", label: "AI Token Usage", icon: Brain, exact: true },
+      { to: "/app/finops/resource-forecasts", label: "Resource Forecasts", icon: Compass, exact: true },
+      { to: "/app/finops/budget-alerts", label: "Budget Alerts", icon: AlertTriangle, exact: true },
+      { to: "/app/finops/optimization-plans", label: "Optimization Plans", icon: Sparkles, exact: true },
+    ],
+  },
+  {
+    id: "pipeline-operations",
+    label: "28 — PIPELINE OPERATIONS",
+    icon: GitPullRequest,
+    items: [
+      { to: "/app/pipelines/build-pipelines", label: "Build Pipelines", icon: Workflow, exact: true },
+      { to: "/app/pipelines/automated-quality-gates", label: "Automated Quality Gates", icon: ShieldCheck, exact: true },
+      { to: "/app/pipelines/release-readiness", label: "Release Readiness", icon: Target, exact: true },
+      { to: "/app/pipelines/artifact-registry", label: "Artifact Registry", icon: Download, exact: true },
+      { to: "/app/pipelines/rollback-history", label: "Rollback History", icon: Layers, exact: true },
+    ],
+  },
+  {
+    id: "platform-admin",
+    label: "29 — PLATFORM ADMIN",
+    icon: Settings,
+    items: [
+      { to: "/app/platform-admin/organization-settings", label: "Organization Settings", icon: Settings, exact: true },
+      { to: "/app/platform-admin/feature-flags", label: "Feature Flags", icon: SlidersHorizontal, exact: true },
+      { to: "/app/platform-admin/integration-credentials", label: "Integration Credentials", icon: Lock, exact: true },
+      { to: "/app/platform-admin/audit-console", label: "Audit Console", icon: ShieldAlert, exact: true },
+      { to: "/app/platform-admin/access-policies", label: "Access Policies", icon: ShieldCheck, exact: true },
+    ],
+  },
+  {
+    id: "developer-experience",
+    label: "30 — DEVELOPER EXPERIENCE",
+    icon: Terminal,
+    items: [
+      { to: "/app/developer-experience/local-environments", label: "Local Environments", icon: Terminal, exact: true },
+      { to: "/app/developer-experience/cli-sdks", label: "CLI & SDKs", icon: FileCode, exact: true },
+      { to: "/app/developer-experience/project-templates", label: "Project Templates", icon: Layers, exact: true },
+      { to: "/app/developer-experience/developer-diagnostics", label: "Developer Diagnostics", icon: Activity, exact: true },
+      { to: "/app/developer-experience/extension-catalog", label: "Extension Catalog", icon: Puzzle, exact: true },
+    ],
+  },
 ];
 
 // Preserved grouped navigation alias for mobile bar & backward compatibility
@@ -363,29 +581,22 @@ function NavList({
           ? "PROJECT"
           : "GLOBAL";
 
+  // Search filter across 30 domains & 90 subpages
+  const [navSearch, setNavSearch] = useState("");
+
   // Collapsible Accordion Domains State with localStorage persistence
   const [expandedDomains, setExpandedDomains] = useState<Record<string, boolean>>(() => {
     try {
-      const stored = localStorage.getItem("vyron_nav_expanded");
+      const stored = localStorage.getItem("vyron_nav_expanded_v5");
       if (stored) return JSON.parse(stored);
     } catch {
       // ignore
     }
-    return {
-      systems: true,
-      home: true,
-      discover: true,
-      intelligence: true,
-      engineering: true,
-      analysis: true,
-      release: true,
-      simulation: true,
-      ai: true,
-      integrations: true,
-      governance: true,
-      "system-flow": true,
-      deployments: true,
-    };
+    const initial: Record<string, boolean> = {};
+    NAV_DOMAINS.forEach((d) => {
+      initial[d.id] = true;
+    });
+    return initial;
   });
 
   // Auto-expand domain containing current route
@@ -398,7 +609,7 @@ function NavList({
         if (prev[activeDomain.id]) return prev;
         const next = { ...prev, [activeDomain.id]: true };
         try {
-          localStorage.setItem("vyron_nav_expanded", JSON.stringify(next));
+          localStorage.setItem("vyron_nav_expanded_v5", JSON.stringify(next));
         } catch {
           // ignore
         }
@@ -411,13 +622,29 @@ function NavList({
     setExpandedDomains((prev) => {
       const next = { ...prev, [domainId]: !prev[domainId] };
       try {
-        localStorage.setItem("vyron_nav_expanded", JSON.stringify(next));
+        localStorage.setItem("vyron_nav_expanded_v5", JSON.stringify(next));
       } catch {
         // ignore
       }
       return next;
     });
   };
+
+  const filteredDomains = useMemo(() => {
+    if (!navSearch.trim()) return NAV_DOMAINS;
+    const q = navSearch.toLowerCase().trim();
+    return NAV_DOMAINS.map((domain) => {
+      const domainMatches = domain.label.toLowerCase().includes(q);
+      const matchingItems = domain.items.filter(
+        (item) => item.label.toLowerCase().includes(q) || item.to.toLowerCase().includes(q),
+      );
+      if (domainMatches) return domain;
+      if (matchingItems.length > 0) {
+        return { ...domain, items: matchingItems };
+      }
+      return null;
+    }).filter(Boolean) as NavDomain[];
+  }, [navSearch]);
 
   return (
     <nav className="flex flex-col gap-3 px-2" aria-label="Main navigation">
@@ -522,38 +749,61 @@ function NavList({
         </div>
       )}
 
-      {/* 3. Navigation Controls (Expand / Collapse All) */}
+      {/* 3. Search Filter & Navigation Controls */}
       {!collapsed && (
-        <div className="flex items-center justify-between px-2.5 pt-1 pb-0.5 text-[10px] text-muted-foreground border-b border-border/30 mb-1">
-          <span className="font-semibold uppercase tracking-wider text-[9px] text-muted-foreground/80">
-            Systems & Domains
-          </span>
-          <button
-            type="button"
-            onClick={() => {
-              const allOpen = NAV_DOMAINS.every((d) => expandedDomains[d.id]);
-              const next: Record<string, boolean> = {};
-              NAV_DOMAINS.forEach((d) => {
-                next[d.id] = !allOpen;
-              });
-              setExpandedDomains(next);
-              try {
-                localStorage.setItem("vyron_nav_expanded", JSON.stringify(next));
-              } catch {
-                // ignore
-              }
-            }}
-            className="hover:text-primary transition-colors text-[9px] font-mono hover:underline"
-          >
-            {NAV_DOMAINS.every((d) => expandedDomains[d.id]) ? "Collapse All" : "Expand All"}
-          </button>
+        <div className="space-y-1.5 px-1 mb-1">
+          <div className="relative">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60 pointer-events-none" />
+            <input
+              type="text"
+              value={navSearch}
+              onChange={(e) => setNavSearch(e.target.value)}
+              placeholder="Search 30 domains & 90 pages..."
+              className="w-full pl-8 pr-6 py-1 text-xs bg-muted/40 hover:bg-muted/60 focus:bg-background border border-border/40 focus:border-primary/50 rounded-lg placeholder:text-muted-foreground/60 text-foreground focus:outline-none transition-colors"
+            />
+            {navSearch && (
+              <button
+                type="button"
+                onClick={() => setNavSearch("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground hover:text-foreground font-mono"
+              >
+                ×
+              </button>
+            )}
+          </div>
+          <div className="flex items-center justify-between px-1.5 pt-0.5 text-[10px] text-muted-foreground border-b border-border/30 pb-1">
+            <span className="font-semibold uppercase tracking-wider text-[9px] text-muted-foreground/80 flex items-center gap-1.5">
+              <span>{filteredDomains.length} DOMAINS</span>
+              {navSearch && <span className="text-primary font-mono text-[9px]">(filtered)</span>}
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                const allOpen = NAV_DOMAINS.every((d) => expandedDomains[d.id]);
+                const next: Record<string, boolean> = {};
+                NAV_DOMAINS.forEach((d) => {
+                  next[d.id] = !allOpen;
+                });
+                setExpandedDomains(next);
+                try {
+                  localStorage.setItem("vyron_nav_expanded_v5", JSON.stringify(next));
+                } catch {
+                  // ignore
+                }
+              }}
+              className="hover:text-primary transition-colors text-[9px] font-mono hover:underline"
+            >
+              {NAV_DOMAINS.every((d) => expandedDomains[d.id]) ? "Collapse All" : "Expand All"}
+            </button>
+          </div>
         </div>
       )}
 
       {/* 4. Core Engineering Systems & Navigation Domains (Collapsible Accordions) */}
-      {NAV_DOMAINS.map((domain) => {
+      {filteredDomains.map((domain) => {
         if (domain.adminOnly && !isAdmin) return null;
-        const isExpanded = expandedDomains[domain.id] ?? false;
+        const isSearching = Boolean(navSearch.trim());
+        const isExpanded = isSearching ? true : (expandedDomains[domain.id] ?? true);
         const DomainIcon = domain.icon;
         const hasActiveChild = domain.items.some((item) =>
           item.exact
@@ -563,6 +813,14 @@ function NavList({
 
         return (
           <div key={domain.id} className="space-y-1">
+            {domain.id === "projects-workspaces" && !collapsed && (
+              <div className="pt-3 pb-1 px-1">
+                <div className="flex items-center gap-1.5 text-[9px] font-mono font-bold tracking-wider text-primary uppercase bg-primary/10 border border-primary/20 rounded-md px-2 py-1 shadow-sm">
+                  <Sparkles className="h-3 w-3 text-primary animate-pulse shrink-0" />
+                  <span className="truncate">EXPANDED PLATFORM (13–30 · 90 SUBPAGES)</span>
+                </div>
+              </div>
+            )}
             {!collapsed ? (
               <button
                 type="button"

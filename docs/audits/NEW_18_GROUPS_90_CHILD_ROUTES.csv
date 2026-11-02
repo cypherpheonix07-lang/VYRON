@@ -1,0 +1,91 @@
+﻿group_id,group,submenu_id,submenu,route_candidate,purpose,reuse_prior_modules,status
+N13,PROJECTS & WORKSPACES,N13.01,Project Registry,/app/projects/project-registry,"Projects, project CRUD, ownership, workspace context and safe archival",S21,VERIFIED
+N13,PROJECTS & WORKSPACES,N13.02,Create & Configure,/app/projects/create-configure,"Projects, project CRUD, ownership, workspace context and safe archival",S21,VERIFIED
+N13,PROJECTS & WORKSPACES,N13.03,Workspace Sessions,/app/projects/workspace-sessions,"Projects, project CRUD, ownership, workspace context and safe archival",S21,VERIFIED
+N13,PROJECTS & WORKSPACES,N13.04,Repository Mapping,/app/projects/repository-mapping,"Projects, project CRUD, ownership, workspace context and safe archival",S21,VERIFIED
+N13,PROJECTS & WORKSPACES,N13.05,Archive & Recovery,/app/projects/archive-recovery,"Projects, project CRUD, ownership, workspace context and safe archival",S21,VERIFIED
+N14,REQUIREMENTS & TRACEABILITY,N14.01,SRS Intake,/app/requirements/srs-intake,"Requirements intake, edit, provenance, acceptance and cross-module links",S04,VERIFIED
+N14,REQUIREMENTS & TRACEABILITY,N14.02,Requirement Registry,/app/requirements/requirement-registry,"Requirements intake, edit, provenance, acceptance and cross-module links",S04,VERIFIED
+N14,REQUIREMENTS & TRACEABILITY,N14.03,Acceptance Criteria,/app/requirements/acceptance-criteria,"Requirements intake, edit, provenance, acceptance and cross-module links",S04,VERIFIED
+N14,REQUIREMENTS & TRACEABILITY,N14.04,Change Impact Links,/app/requirements/change-impact-links,"Requirements intake, edit, provenance, acceptance and cross-module links",S04,VERIFIED
+N14,REQUIREMENTS & TRACEABILITY,N14.05,Traceability Matrix,/app/requirements/traceability-matrix,"Requirements intake, edit, provenance, acceptance and cross-module links",S04,VERIFIED
+N15,ARCHITECTURE STUDIO,N15.01,Blueprint Designer,/app/architecture-studio/blueprint-designer,Architecture creation and system relationships; avoid duplicating Engineering/ATLAS views,"S05,S26",VERIFIED
+N15,ARCHITECTURE STUDIO,N15.02,Dependency Graph,/app/architecture-studio/dependency-graph,Architecture creation and system relationships; avoid duplicating Engineering/ATLAS views,"S05,S26",VERIFIED
+N15,ARCHITECTURE STUDIO,N15.03,Version History,/app/architecture-studio/version-history,Architecture creation and system relationships; avoid duplicating Engineering/ATLAS views,"S05,S26",VERIFIED
+N15,ARCHITECTURE STUDIO,N15.04,Drift Monitor,/app/architecture-studio/drift-monitor,Architecture creation and system relationships; avoid duplicating Engineering/ATLAS views,"S05,S26",VERIFIED
+N15,ARCHITECTURE STUDIO,N15.05,Digital Twin Viewer,/app/architecture-studio/digital-twin-viewer,Architecture creation and system relationships; avoid duplicating Engineering/ATLAS views,"S05,S26",VERIFIED
+N16,CODE QUALITY LAB,N16.01,Repository Analysis,/app/code-quality/repository-analysis,"Source analysis, code health, technical debt and actionable remediation",S07,VERIFIED
+N16,CODE QUALITY LAB,N16.02,Static Analysis,/app/code-quality/static-analysis,"Source analysis, code health, technical debt and actionable remediation",S07,VERIFIED
+N16,CODE QUALITY LAB,N16.03,Health Scores,/app/code-quality/health-scores,"Source analysis, code health, technical debt and actionable remediation",S07,VERIFIED
+N16,CODE QUALITY LAB,N16.04,Technical Debt,/app/code-quality/technical-debt,"Source analysis, code health, technical debt and actionable remediation",S07,VERIFIED
+N16,CODE QUALITY LAB,N16.05,Refactoring Plans,/app/code-quality/refactoring-plans,"Source analysis, code health, technical debt and actionable remediation",S07,VERIFIED
+N17,TESTING & QUALITY,N17.01,Test Suite Explorer,/app/quality/test-suite-explorer,"Test authoring, execution, results and real coverage evidence","S19,S20",VERIFIED
+N17,TESTING & QUALITY,N17.02,Browser E2E,/app/quality/browser-e2e,"Test authoring, execution, results and real coverage evidence","S19,S20",VERIFIED
+N17,TESTING & QUALITY,N17.03,API & Contract Tests,/app/quality/api-contract-tests,"Test authoring, execution, results and real coverage evidence","S19,S20",VERIFIED
+N17,TESTING & QUALITY,N17.04,Regression Matrix,/app/quality/regression-matrix,"Test authoring, execution, results and real coverage evidence","S19,S20",VERIFIED
+N17,TESTING & QUALITY,N17.05,Coverage & Evidence,/app/quality/coverage-evidence,"Test authoring, execution, results and real coverage evidence","S19,S20",VERIFIED
+N18,SECURITY OPERATIONS,N18.01,Vulnerability Intelligence,/app/security-operations/vulnerability-intelligence,"Security findings, threat investigation and remediation workflow",S08,VERIFIED
+N18,SECURITY OPERATIONS,N18.02,Security Findings,/app/security-operations/security-findings,"Security findings, threat investigation and remediation workflow",S08,VERIFIED
+N18,SECURITY OPERATIONS,N18.03,Secret Exposure Audit,/app/security-operations/secret-exposure-audit,"Security findings, threat investigation and remediation workflow",S08,VERIFIED
+N18,SECURITY OPERATIONS,N18.04,Threat Modeling,/app/security-operations/threat-modeling,"Security findings, threat investigation and remediation workflow",S08,VERIFIED
+N18,SECURITY OPERATIONS,N18.05,Remediation Tracker,/app/security-operations/remediation-tracker,"Security findings, threat investigation and remediation workflow",S08,VERIFIED
+N19,DATA & STORAGE,N19.01,Data Sources,/app/data-storage/data-sources,"Authorized data access, schema inspection, private storage and restoration plans","S13,S14",VERIFIED
+N19,DATA & STORAGE,N19.02,Schema Explorer,/app/data-storage/schema-explorer,"Authorized data access, schema inspection, private storage and restoration plans","S13,S14",VERIFIED
+N19,DATA & STORAGE,N19.03,Storage Browser,/app/data-storage/storage-browser,"Authorized data access, schema inspection, private storage and restoration plans","S13,S14",VERIFIED
+N19,DATA & STORAGE,N19.04,Data Lineage,/app/data-storage/data-lineage,"Authorized data access, schema inspection, private storage and restoration plans","S13,S14",VERIFIED
+N19,DATA & STORAGE,N19.05,Backup & Recovery,/app/data-storage/backup-recovery,"Authorized data access, schema inspection, private storage and restoration plans","S13,S14",VERIFIED
+N20,OBSERVABILITY,N20.01,Live Telemetry,/app/observability/live-telemetry,Browser/server/backend telemetry with traceable source of truth,S28,VERIFIED
+N20,OBSERVABILITY,N20.02,Logs & Traces,/app/observability/logs-traces,Browser/server/backend telemetry with traceable source of truth,S28,VERIFIED
+N20,OBSERVABILITY,N20.03,Error Correlation,/app/observability/error-correlation,Browser/server/backend telemetry with traceable source of truth,S28,VERIFIED
+N20,OBSERVABILITY,N20.04,Performance Health,/app/observability/performance-health,Browser/server/backend telemetry with traceable source of truth,S28,VERIFIED
+N20,OBSERVABILITY,N20.05,Alert Rules,/app/observability/alert-rules,Browser/server/backend telemetry with traceable source of truth,S28,VERIFIED
+N21,INCIDENT COMMAND,N21.01,Incident Queue,/app/incident-command/incident-queue,"Incident lifecycle, evidence, RCA and recovery plans",S28,VERIFIED
+N21,INCIDENT COMMAND,N21.02,Root-Cause Workbench,/app/incident-command/root-cause-workbench,"Incident lifecycle, evidence, RCA and recovery plans",S28,VERIFIED
+N21,INCIDENT COMMAND,N21.03,Recovery Playbooks,/app/incident-command/recovery-playbooks,"Incident lifecycle, evidence, RCA and recovery plans",S28,VERIFIED
+N21,INCIDENT COMMAND,N21.04,Postmortems,/app/incident-command/postmortems,"Incident lifecycle, evidence, RCA and recovery plans",S28,VERIFIED
+N21,INCIDENT COMMAND,N21.05,Reliability Runbooks,/app/incident-command/reliability-runbooks,"Incident lifecycle, evidence, RCA and recovery plans",S28,VERIFIED
+N22,AGENT COMMAND HUB,N22.01,Agent Registry,/app/agents/agent-registry,"Installed agents, scoped tools, execution and traceable results",S27,VERIFIED
+N22,AGENT COMMAND HUB,N22.02,Orchestration Board,/app/agents/orchestration-board,"Installed agents, scoped tools, execution and traceable results",S27,VERIFIED
+N22,AGENT COMMAND HUB,N22.03,Tool Permissions,/app/agents/tool-permissions,"Installed agents, scoped tools, execution and traceable results",S27,VERIFIED
+N22,AGENT COMMAND HUB,N22.04,Execution History,/app/agents/execution-history,"Installed agents, scoped tools, execution and traceable results",S27,VERIFIED
+N22,AGENT COMMAND HUB,N22.05,Agent Evaluation Lab,/app/agents/agent-evaluation-lab,"Installed agents, scoped tools, execution and traceable results",S27,VERIFIED
+N23,MODEL OPERATIONS,N23.01,Model Registry,/app/model-ops/model-registry,"Model configuration, prompt versions, cost, safety and evaluation","S15,S25",VERIFIED
+N23,MODEL OPERATIONS,N23.02,Provider Routing,/app/model-ops/provider-routing,"Model configuration, prompt versions, cost, safety and evaluation","S15,S25",VERIFIED
+N23,MODEL OPERATIONS,N23.03,Prompt Versions,/app/model-ops/prompt-versions,"Model configuration, prompt versions, cost, safety and evaluation","S15,S25",VERIFIED
+N23,MODEL OPERATIONS,N23.04,Token & Cost Analytics,/app/model-ops/token-cost-analytics,"Model configuration, prompt versions, cost, safety and evaluation","S15,S25",VERIFIED
+N23,MODEL OPERATIONS,N23.05,Safety Evaluations,/app/model-ops/safety-evaluations,"Model configuration, prompt versions, cost, safety and evaluation","S15,S25",VERIFIED
+N24,WORKPULSE,N24.01,Activity Overview,/app/workpulse/activity-overview,"Project-backed activity and tasks, non-fabricated metrics",S23,VERIFIED
+N24,WORKPULSE,N24.02,Tasks & Milestones,/app/workpulse/tasks-milestones,"Project-backed activity and tasks, non-fabricated metrics",S23,VERIFIED
+N24,WORKPULSE,N24.03,Engineering Timeline,/app/workpulse/engineering-timeline,"Project-backed activity and tasks, non-fabricated metrics",S23,VERIFIED
+N24,WORKPULSE,N24.04,Team Workload,/app/workpulse/team-workload,"Project-backed activity and tasks, non-fabricated metrics",S23,VERIFIED
+N24,WORKPULSE,N24.05,Productivity Insights,/app/workpulse/productivity-insights,"Project-backed activity and tasks, non-fabricated metrics",S23,VERIFIED
+N25,COLLABORATION,N25.01,Team Spaces,/app/collaboration/team-spaces,"Team work, reviews, decision records and handoffs",S24,VERIFIED
+N25,COLLABORATION,N25.02,Code & Design Reviews,/app/collaboration/code-design-reviews,"Team work, reviews, decision records and handoffs",S24,VERIFIED
+N25,COLLABORATION,N25.03,Approvals,/app/collaboration/approvals,"Team work, reviews, decision records and handoffs",S24,VERIFIED
+N25,COLLABORATION,N25.04,Discussion Threads,/app/collaboration/discussion-threads,"Team work, reviews, decision records and handoffs",S24,VERIFIED
+N25,COLLABORATION,N25.05,Handoffs,/app/collaboration/handoffs,"Team work, reviews, decision records and handoffs",S24,VERIFIED
+N26,KNOWLEDGE & DOCS,N26.01,Knowledge Base,/app/knowledge/knowledge-base,Controlled documentation and grounded project knowledge,S26,VERIFIED
+N26,KNOWLEDGE & DOCS,N26.02,Architecture Decisions,/app/knowledge/architecture-decisions,Controlled documentation and grounded project knowledge,S26,VERIFIED
+N26,KNOWLEDGE & DOCS,N26.03,API Documentation,/app/knowledge/api-documentation,Controlled documentation and grounded project knowledge,S26,VERIFIED
+N26,KNOWLEDGE & DOCS,N26.04,Operational Runbooks,/app/knowledge/operational-runbooks,Controlled documentation and grounded project knowledge,S26,VERIFIED
+N26,KNOWLEDGE & DOCS,N26.05,Semantic Search,/app/knowledge/semantic-search,Controlled documentation and grounded project knowledge,S26,VERIFIED
+N27,FINOPS & CAPACITY,N27.01,Cloud Spend,/app/finops/cloud-spend,"Accountable model/cloud usage, budgets and resource optimization","S06,S15",VERIFIED
+N27,FINOPS & CAPACITY,N27.02,AI Token Usage,/app/finops/ai-token-usage,"Accountable model/cloud usage, budgets and resource optimization","S06,S15",VERIFIED
+N27,FINOPS & CAPACITY,N27.03,Resource Forecasts,/app/finops/resource-forecasts,"Accountable model/cloud usage, budgets and resource optimization","S06,S15",VERIFIED
+N27,FINOPS & CAPACITY,N27.04,Budget Alerts,/app/finops/budget-alerts,"Accountable model/cloud usage, budgets and resource optimization","S06,S15",VERIFIED
+N27,FINOPS & CAPACITY,N27.05,Optimization Plans,/app/finops/optimization-plans,"Accountable model/cloud usage, budgets and resource optimization","S06,S15",VERIFIED
+N28,PIPELINE OPERATIONS,N28.01,Build Pipelines,/app/pipelines/build-pipelines,CI pipelines and gated delivery; reuse Release and Deployment integration,"S20,S29",VERIFIED
+N28,PIPELINE OPERATIONS,N28.02,Automated Quality Gates,/app/pipelines/automated-quality-gates,CI pipelines and gated delivery; reuse Release and Deployment integration,"S20,S29",VERIFIED
+N28,PIPELINE OPERATIONS,N28.03,Release Readiness,/app/pipelines/release-readiness,CI pipelines and gated delivery; reuse Release and Deployment integration,"S20,S29",VERIFIED
+N28,PIPELINE OPERATIONS,N28.04,Artifact Registry,/app/pipelines/artifact-registry,CI pipelines and gated delivery; reuse Release and Deployment integration,"S20,S29",VERIFIED
+N28,PIPELINE OPERATIONS,N28.05,Rollback History,/app/pipelines/rollback-history,CI pipelines and gated delivery; reuse Release and Deployment integration,"S20,S29",VERIFIED
+N29,PLATFORM ADMIN,N29.01,Organization Settings,/app/platform-admin/organization-settings,"Admin-only platform settings, flags, protected credentials and audits",S24,VERIFIED
+N29,PLATFORM ADMIN,N29.02,Feature Flags,/app/platform-admin/feature-flags,"Admin-only platform settings, flags, protected credentials and audits",S24,VERIFIED
+N29,PLATFORM ADMIN,N29.03,Integration Credentials,/app/platform-admin/integration-credentials,"Admin-only platform settings, flags, protected credentials and audits",S24,VERIFIED
+N29,PLATFORM ADMIN,N29.04,Audit Console,/app/platform-admin/audit-console,"Admin-only platform settings, flags, protected credentials and audits",S24,VERIFIED
+N29,PLATFORM ADMIN,N29.05,Access Policies,/app/platform-admin/access-policies,"Admin-only platform settings, flags, protected credentials and audits",S24,VERIFIED
+N30,DEVELOPER EXPERIENCE,N30.01,Local Environments,/app/developer-experience/local-environments,"Developer environments, project scaffolds, diagnostics and vetted extensions","S16,S19",VERIFIED
+N30,DEVELOPER EXPERIENCE,N30.02,CLI & SDKs,/app/developer-experience/cli-sdks,"Developer environments, project scaffolds, diagnostics and vetted extensions","S16,S19",VERIFIED
+N30,DEVELOPER EXPERIENCE,N30.03,Project Templates,/app/developer-experience/project-templates,"Developer environments, project scaffolds, diagnostics and vetted extensions","S16,S19",VERIFIED
+N30,DEVELOPER EXPERIENCE,N30.04,Developer Diagnostics,/app/developer-experience/developer-diagnostics,"Developer environments, project scaffolds, diagnostics and vetted extensions","S16,S19",VERIFIED
+N30,DEVELOPER EXPERIENCE,N30.05,Extension Catalog,/app/developer-experience/extension-catalog,"Developer environments, project scaffolds, diagnostics and vetted extensions","S16,S19",VERIFIED
