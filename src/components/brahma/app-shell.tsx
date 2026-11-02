@@ -813,14 +813,6 @@ function NavList({
 
         return (
           <div key={domain.id} className="space-y-1">
-            {domain.id === "projects-workspaces" && !collapsed && (
-              <div className="pt-3 pb-1 px-1">
-                <div className="flex items-center gap-1.5 text-[9px] font-mono font-bold tracking-wider text-primary uppercase bg-primary/10 border border-primary/20 rounded-md px-2 py-1 shadow-sm">
-                  <Sparkles className="h-3 w-3 text-primary animate-pulse shrink-0" />
-                  <span className="truncate">EXPANDED PLATFORM (13–30 · 90 SUBPAGES)</span>
-                </div>
-              </div>
-            )}
             {!collapsed ? (
               <button
                 type="button"
