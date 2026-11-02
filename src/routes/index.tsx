@@ -225,7 +225,7 @@ function Nav() {
 
 function Landing() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background/85 backdrop-blur-[2px]">
       <Nav />
 
       {/* Hero */}

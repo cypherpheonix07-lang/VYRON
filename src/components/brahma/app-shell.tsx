@@ -1342,11 +1342,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen w-full bg-background text-foreground selection:bg-primary/25">
+    <div className="flex min-h-screen w-full bg-background/85 backdrop-blur-[2px] text-foreground selection:bg-primary/25">
       {/* SIDEBAR FOR DESKTOP */}
       <aside
         className={cn(
-          "sticky top-0 hidden h-screen shrink-0 border-r border-sidebar-border bg-sidebar transition-[width] duration-200 lg:block",
+          "sticky top-0 hidden h-screen shrink-0 border-r border-sidebar-border bg-sidebar/90 backdrop-blur-md transition-[width] duration-200 lg:block",
           collapsed ? "w-[72px]" : "w-64",
         )}
       >
@@ -1571,6 +1571,18 @@ export function AppShell({ children }: { children: ReactNode }) {
 
               {/* Workspace Exit Button */}
               <WorkspaceExitButton />
+
+              {/* NEON SYNCHROTRON ACCELERATOR STATUS */}
+              <div
+                className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-cyan-500/40 bg-cyan-950/30 text-[10px] font-mono text-cyan-300 shadow-[0_0_12px_rgba(0,243,255,0.2)] select-none"
+                title="Neon Synchrotron Particle Accelerator is online with dynamic relativistic orbits"
+              >
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                </span>
+                <span>COLLIDER 13.6 TeV</span>
+              </div>
 
               {/* DEMO MODE SWITCH & TOGGLE */}
               <DemoModeToggle />
