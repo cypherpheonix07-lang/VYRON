@@ -1572,16 +1572,18 @@ export function AppShell({ children }: { children: ReactNode }) {
               {/* Workspace Exit Button */}
               <WorkspaceExitButton />
 
-              {/* NEON SYNCHROTRON ACCELERATOR STATUS */}
+              {/* FIGMA NEON SPECTRUM STATUS */}
               <div
-                className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-cyan-500/40 bg-cyan-950/30 text-[10px] font-mono text-cyan-300 shadow-[0_0_12px_rgba(0,243,255,0.2)] select-none"
-                title="Neon Synchrotron Particle Accelerator is online with dynamic relativistic orbits"
+                className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-sky-500/40 bg-sky-950/30 text-[10px] font-mono text-sky-300 shadow-[0_0_12px_rgba(0,180,216,0.2)] select-none"
+                title="Figma Design Tokens Spectrum: Neon Blue variations, Crimson Red, Dark Green, and Solar Gold"
               >
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
-                </span>
-                <span>COLLIDER 13.6 TeV</span>
+                <div className="flex items-center gap-1">
+                  <span className="size-1.5 rounded-full bg-cyan-400" title="Neon Blue" />
+                  <span className="size-1.5 rounded-full bg-rose-500" title="Crimson Red" />
+                  <span className="size-1.5 rounded-full bg-emerald-500" title="Dark Green" />
+                  <span className="size-1.5 rounded-full bg-amber-400" title="Solar Gold" />
+                </div>
+                <span className="text-[9px] font-semibold tracking-wider text-sky-200">FIGMA SPECTRUM</span>
               </div>
 
               {/* DEMO MODE SWITCH & TOGGLE */}

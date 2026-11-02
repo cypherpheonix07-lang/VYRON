@@ -13,7 +13,7 @@ import { Compass, Command } from "lucide-react";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { DemoModeProvider } from "@/contexts/DemoModeContext";
-import { NeonParticleAcceleratorBackground } from "@/components/effects/NeonParticleAcceleratorBackground";
+import { FigmaNeonSpectrumBackground } from "@/components/effects/FigmaNeonSpectrumBackground";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 
@@ -192,7 +192,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <DemoModeProvider>
         <TooltipProvider delayDuration={150}>
-          <NeonParticleAcceleratorBackground />
+          <FigmaNeonSpectrumBackground />
           {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
           <Outlet />
           <Toaster position="top-right" richColors />
