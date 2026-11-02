@@ -44,6 +44,53 @@
   --border-strong: oklch(0.40 0.025 196.8);
   --border-focus: oklch(0.854 0.061 294.4);
 
+  /* ═══ VYRON PREMIUM AUTHENTICATION DESIGN SYSTEM TOKENS ═══ */
+  --vyron-bg: #070C0B;
+  --vyron-surface: #101A18;
+  --vyron-elevated: #162321;
+  --vyron-border: #2A3A35;
+  --vyron-text: #F3F7F5;
+  --vyron-muted: #BAC8C0;
+  --vyron-focus: #79D9F7;
+  --vyron-success: #78E0B8;
+  --vyron-warning: #FACC75;
+  --vyron-error: #FC9E9E;
+
+  /* Sign-In: Midnight Coral */
+  --auth-signin-bg: #070C0B;
+  --auth-signin-surface: #101A18;
+  --auth-signin-elevated: #15201E;
+  --auth-signin-accent: #FF9A8B;
+  --auth-signin-btn-text: #1A1011;
+
+  /* Sign-Up: Indigo Aurora */
+  --auth-signup-bg: #0D1020;
+  --auth-signup-surface: #171A31;
+  --auth-signup-elevated: #1F2342;
+  --auth-signup-accent: #A8A4FF;
+  --auth-signup-accent-sub: #79D9F7;
+  --auth-signup-btn-text: #0D1020;
+
+  /* Suspended Identity Flow (Hanging Threads) */
+  --thread-anchor: #2A3A35;
+  --thread-line: rgba(255, 255, 255, 0.15);
+  --thread-1-identity: #79D9F7;
+  --thread-2-account: #BCA8FF;
+  --thread-3-workspace: #78E0B8;
+
+  /* Workspace Role Accents */
+  --role-student: #6DD5FA;
+  --role-faculty: #C4B5FD;
+  --role-professional: #FACC75;
+  --role-admin: #FC9E9E;
+
+  /* Product Showcase: Graphite Ocean */
+  --showcase-bg: #090F18;
+  --showcase-surface: #101A18;
+  --showcase-accent-cyan: #65DFE8;
+  --showcase-accent-coral: #FF9B91;
+  --showcase-text: #EEF4FF;
+
   /* ═══ TYPOGRAPHY ═══ */
   --font-sans: "Inter", "Geist", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;

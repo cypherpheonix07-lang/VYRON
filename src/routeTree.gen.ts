@@ -27,7 +27,9 @@ import { Route as PreviewRouteImport } from './routes/preview'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as ShowcaseRouteImport } from './routes/showcase'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
+import { Route as WorkspaceRouteImport } from './routes/workspace'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as AdminCommandCentreRouteImport } from './routes/admin.command-centre'
 import { Route as AppIndexRouteImport } from './routes/app.index'
@@ -273,9 +275,19 @@ const ShowcaseRoute = ShowcaseRouteImport.update({
   path: '/showcase',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VerifyEmailRoute = VerifyEmailRouteImport.update({
   id: '/verify-email',
   path: '/verify-email',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorkspaceRoute = WorkspaceRouteImport.update({
+  id: '/workspace',
+  path: '/workspace',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -1084,7 +1096,9 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/showcase': typeof ShowcaseRoute
+  '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/workspace': typeof WorkspaceRoute
   '/admin/command-centre': typeof AdminCommandCentreRoute
   '/app/activity': typeof AppActivityRoute
   '/app/admin': typeof AppAdminRouteWithChildren
@@ -1256,7 +1270,9 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/showcase': typeof ShowcaseRoute
+  '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/workspace': typeof WorkspaceRoute
   '/admin/command-centre': typeof AdminCommandCentreRoute
   '/app/activity': typeof AppActivityRoute
   '/app/aether': typeof AppAetherRoute
@@ -1429,7 +1445,9 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/reset-password': typeof ResetPasswordRoute
   '/showcase': typeof ShowcaseRoute
+  '/signup': typeof SignupRoute
   '/verify-email': typeof VerifyEmailRoute
+  '/workspace': typeof WorkspaceRoute
   '/admin/command-centre': typeof AdminCommandCentreRoute
   '/app/activity': typeof AppActivityRoute
   '/app/admin': typeof AppAdminRouteWithChildren
@@ -1606,7 +1624,9 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/showcase'
+    | '/signup'
     | '/verify-email'
+    | '/workspace'
     | '/admin/command-centre'
     | '/app/activity'
     | '/app/admin'
@@ -1778,7 +1798,9 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/showcase'
+    | '/signup'
     | '/verify-email'
+    | '/workspace'
     | '/admin/command-centre'
     | '/app/activity'
     | '/app/aether'
@@ -1950,7 +1972,9 @@ export interface FileRouteTypes {
     | '/register'
     | '/reset-password'
     | '/showcase'
+    | '/signup'
     | '/verify-email'
+    | '/workspace'
     | '/admin/command-centre'
     | '/app/activity'
     | '/app/admin'
@@ -2126,7 +2150,9 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   ShowcaseRoute: typeof ShowcaseRoute
+  SignupRoute: typeof SignupRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
+  WorkspaceRoute: typeof WorkspaceRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -2257,11 +2283,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ShowcaseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/verify-email': {
       id: '/verify-email'
       path: '/verify-email'
       fullPath: '/verify-email'
       preLoaderRoute: typeof VerifyEmailRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/workspace': {
+      id: '/workspace'
+      path: '/workspace'
+      fullPath: '/workspace'
+      preLoaderRoute: typeof WorkspaceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -3794,7 +3834,9 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   ShowcaseRoute: ShowcaseRoute,
+  SignupRoute: SignupRoute,
   VerifyEmailRoute: VerifyEmailRoute,
+  WorkspaceRoute: WorkspaceRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
