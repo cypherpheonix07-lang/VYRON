@@ -97,6 +97,11 @@ const LAYER_COLORS: Record<BlueprintSemanticLayer, string> = {
 };
 
 export const BlueprintReleaseConvergenceView: React.FC<{ projectId: string }> = ({ projectId }) => {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const [nodes, setNodes] = useState<BlueprintGraphNode[]>([]);
   const [edges, setEdges] = useState<BlueprintGraphEdge[]>([]);
   const [gates, setGates] = useState<ReleaseGateDefinition[]>([]);
@@ -382,26 +387,32 @@ export const BlueprintReleaseConvergenceView: React.FC<{ projectId: string }> = 
 
             {/* ReactFlow Canvas */}
             <div className="h-[560px] w-full bg-zinc-950/90 relative">
-              <ReactFlow
-                nodes={flowNodes}
-                edges={flowEdges}
-                fitView
-                minZoom={0.3}
-                maxZoom={2.2}
-                onNodeClick={(_, node) => handleSelectNode(node.id)}
-                proOptions={{ hideAttribution: true }}
-              >
-                <Background color="hsl(217, 32%, 18%)" gap={24} />
-                <Controls className="!bg-card !border-border !fill-foreground" />
-                <MiniMap
-                  className="!hidden sm:!block !bg-card"
-                  maskColor="rgba(0,0,0,0.6)"
-                  nodeColor={(n) => {
-                    const realNode = nodes.find((item) => item.id === n.id);
-                    return realNode ? LAYER_COLORS[realNode.layer] || "#3b82f6" : "#3b82f6";
-                  }}
-                />
-              </ReactFlow>
+              {mounted ? (
+                <ReactFlow
+                  nodes={flowNodes}
+                  edges={flowEdges}
+                  fitView
+                  minZoom={0.3}
+                  maxZoom={2.2}
+                  onNodeClick={(_, node) => handleSelectNode(node.id)}
+                  proOptions={{ hideAttribution: true }}
+                >
+                  <Background color="hsl(217, 32%, 18%)" gap={24} />
+                  <Controls className="!bg-card !border-border !fill-foreground" />
+                  <MiniMap
+                    className="!hidden sm:!block !bg-card"
+                    maskColor="rgba(0,0,0,0.6)"
+                    nodeColor={(n) => {
+                      const realNode = nodes.find((item) => item.id === n.id);
+                      return realNode ? LAYER_COLORS[realNode.layer] || "#3b82f6" : "#3b82f6";
+                    }}
+                  />
+                </ReactFlow>
+              ) : (
+                <div className="h-full w-full flex items-center justify-center text-xs text-muted-foreground">
+                  Initializing convergence graph...
+                </div>
+              )}
 
               {/* Counterfactual Simulation Quick Action Bar */}
               {selectedNode && (

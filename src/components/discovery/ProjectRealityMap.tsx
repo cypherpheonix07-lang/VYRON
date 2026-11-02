@@ -89,6 +89,11 @@ export function ProjectRealityMap() {
   const { project } = useActiveProject();
   const navigate = useNavigate();
 
+  const [mounted, setMounted] = useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const [activeView, setActiveView] = useState<"graph" | "table">("graph");
   const [selectedEntityId, setSelectedEntityId] = useState<string | null>("ent-comp-copilot");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
@@ -343,24 +348,30 @@ export function ProjectRealityMap() {
         <div className="lg:col-span-8 space-y-4">
           {activeView === "graph" ? (
             <div className="h-[520px] w-full overflow-hidden rounded-xl border border-border bg-background/70 relative">
-              <ReactFlow
-                nodes={nodes}
-                edges={edges}
-                fitView
-                minZoom={0.3}
-                maxZoom={2}
-                onNodeClick={(_, node) => {
-                  setSelectedEntityId(node.id);
-                }}
-              >
-                <Background color="var(--border)" gap={24} />
-                <Controls className="!bg-card !border-border" showInteractive={false} />
-                <MiniMap
-                  className="!hidden sm:!block !bg-card"
-                  maskColor="color-mix(in oklab, var(--background) 70%, transparent)"
-                  nodeColor={() => "var(--primary)"}
-                />
-              </ReactFlow>
+              {mounted ? (
+                <ReactFlow
+                  nodes={nodes}
+                  edges={edges}
+                  fitView
+                  minZoom={0.3}
+                  maxZoom={2}
+                  onNodeClick={(_, node) => {
+                    setSelectedEntityId(node.id);
+                  }}
+                >
+                  <Background color="var(--border)" gap={24} />
+                  <Controls className="!bg-card !border-border" showInteractive={false} />
+                  <MiniMap
+                    className="!hidden sm:!block !bg-card"
+                    maskColor="color-mix(in oklab, var(--background) 70%, transparent)"
+                    nodeColor={() => "var(--primary)"}
+                  />
+                </ReactFlow>
+              ) : (
+                <div className="h-full w-full flex items-center justify-center text-xs text-muted-foreground">
+                  Initializing topology canvas...
+                </div>
+              )}
 
               {/* Truth Legend Overlay (D07) */}
               <div className="absolute bottom-3 left-3 bg-card/90 backdrop-blur-md border border-border/80 rounded-lg p-2.5 text-[10px] space-y-1.5 pointer-events-none shadow-lg">

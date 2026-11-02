@@ -49,6 +49,8 @@ import {
   CheckSquare,
   Cpu,
   FileCode,
+  Network,
+  Globe,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode, useRef } from "react";
 import { toast } from "sonner";
@@ -121,6 +123,7 @@ const labelMap: Record<string, string> = {
   simulation: "Simulation Lab",
   workpulse: "WorkPulse",
   deployments: "Deployment Platforms",
+  systems: "18 Core Systems",
 };
 
 export interface NavItem {
@@ -138,8 +141,22 @@ export interface NavDomain {
   adminOnly?: boolean;
 }
 
-// 12 Core Engineering Domains (HOME / DISCOVER / INTELLIGENCE / ENGINEERING / ANALYSIS / RELEASE / SIMULATION / AI / INTEGRATIONS / GOVERNANCE / SYSTEM FLOW / DEPLOYMENT PLATFORMS)
+// 18 Core Engineering Systems & 12 Navigation Domains
 export const NAV_DOMAINS: NavDomain[] = [
+  {
+    id: "systems",
+    label: "18 BRAHMA SYSTEMS",
+    icon: Layers,
+    items: [
+      { to: "/app/systems", label: "18-System Control Plane", icon: Network, exact: true },
+      { to: "/app/reality-map", label: "Project Reality Map", icon: Sparkles, exact: false },
+      { to: "/app/aether", label: "ATHER Cognitive Center", icon: Cpu, exact: false },
+      { to: "/app/forensics", label: "Lizard AST Forensics", icon: FileCode, exact: false },
+      { to: "/app/security-center", label: "Bandit AST Security", icon: ShieldAlert, exact: false },
+      { to: "/app/connectors", label: "MCP Connectors Hub", icon: Cable, exact: false },
+      { to: "/app/system-flow", label: "Celery Flow & Sentinel", icon: Workflow, exact: false },
+    ],
+  },
   {
     id: "home",
     label: "HOME",
@@ -355,16 +372,19 @@ function NavList({
       // ignore
     }
     return {
+      systems: true,
       home: true,
       discover: true,
       intelligence: true,
       engineering: true,
       analysis: true,
-      release: false,
-      simulation: false,
-      ai: false,
-      integrations: false,
-      governance: false,
+      release: true,
+      simulation: true,
+      ai: true,
+      integrations: true,
+      governance: true,
+      "system-flow": true,
+      deployments: true,
     };
   });
 
@@ -502,7 +522,35 @@ function NavList({
         </div>
       )}
 
-      {/* 3. 11 Core Engineering Domains (Collapsible Accordions) */}
+      {/* 3. Navigation Controls (Expand / Collapse All) */}
+      {!collapsed && (
+        <div className="flex items-center justify-between px-2.5 pt-1 pb-0.5 text-[10px] text-muted-foreground border-b border-border/30 mb-1">
+          <span className="font-semibold uppercase tracking-wider text-[9px] text-muted-foreground/80">
+            Systems & Domains
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              const allOpen = NAV_DOMAINS.every((d) => expandedDomains[d.id]);
+              const next: Record<string, boolean> = {};
+              NAV_DOMAINS.forEach((d) => {
+                next[d.id] = !allOpen;
+              });
+              setExpandedDomains(next);
+              try {
+                localStorage.setItem("vyron_nav_expanded", JSON.stringify(next));
+              } catch {
+                // ignore
+              }
+            }}
+            className="hover:text-primary transition-colors text-[9px] font-mono hover:underline"
+          >
+            {NAV_DOMAINS.every((d) => expandedDomains[d.id]) ? "Collapse All" : "Expand All"}
+          </button>
+        </div>
+      )}
+
+      {/* 4. Core Engineering Systems & Navigation Domains (Collapsible Accordions) */}
       {NAV_DOMAINS.map((domain) => {
         if (domain.adminOnly && !isAdmin) return null;
         const isExpanded = expandedDomains[domain.id] ?? false;

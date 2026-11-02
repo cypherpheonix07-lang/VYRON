@@ -73,6 +73,7 @@ import { Route as AppSettingsRouteImport } from './routes/app.settings'
 import { Route as AppSimulationRouteImport } from './routes/app.simulation'
 import { Route as AppStatusRouteImport } from './routes/app.status'
 import { Route as AppSystemFlowRouteImport } from './routes/app.system-flow'
+import { Route as AppSystemsRouteImport } from './routes/app.systems'
 import { Route as AppTeamRouteImport } from './routes/app.team'
 import { Route as AppTechRadarRouteImport } from './routes/app.tech-radar'
 import { Route as AppTestingRouteImport } from './routes/app.testing'
@@ -462,6 +463,11 @@ const AppStatusRoute = AppStatusRouteImport.update({
 const AppSystemFlowRoute = AppSystemFlowRouteImport.update({
   id: '/system-flow',
   path: '/system-flow',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSystemsRoute = AppSystemsRouteImport.update({
+  id: '/systems',
+  path: '/systems',
   getParentRoute: () => AppRoute,
 } as any)
 const AppTeamRoute = AppTeamRouteImport.update({
@@ -882,6 +888,7 @@ export interface FileRoutesByFullPath {
   '/app/simulation': typeof AppSimulationRoute
   '/app/status': typeof AppStatusRoute
   '/app/system-flow': typeof AppSystemFlowRoute
+  '/app/systems': typeof AppSystemsRoute
   '/app/team': typeof AppTeamRouteWithChildren
   '/app/tech-radar': typeof AppTechRadarRoute
   '/app/testing': typeof AppTestingRoute
@@ -1014,6 +1021,7 @@ export interface FileRoutesByTo {
   '/app/simulation': typeof AppSimulationRoute
   '/app/status': typeof AppStatusRoute
   '/app/system-flow': typeof AppSystemFlowRoute
+  '/app/systems': typeof AppSystemsRoute
   '/app/team': typeof AppTeamRouteWithChildren
   '/app/tech-radar': typeof AppTechRadarRoute
   '/app/testing': typeof AppTestingRoute
@@ -1149,6 +1157,7 @@ export interface FileRoutesById {
   '/app/simulation': typeof AppSimulationRoute
   '/app/status': typeof AppStatusRoute
   '/app/system-flow': typeof AppSystemFlowRoute
+  '/app/systems': typeof AppSystemsRoute
   '/app/team': typeof AppTeamRouteWithChildren
   '/app/tech-radar': typeof AppTechRadarRoute
   '/app/testing': typeof AppTestingRoute
@@ -1287,6 +1296,7 @@ export interface FileRouteTypes {
     | '/app/simulation'
     | '/app/status'
     | '/app/system-flow'
+    | '/app/systems'
     | '/app/team'
     | '/app/tech-radar'
     | '/app/testing'
@@ -1419,6 +1429,7 @@ export interface FileRouteTypes {
     | '/app/simulation'
     | '/app/status'
     | '/app/system-flow'
+    | '/app/systems'
     | '/app/team'
     | '/app/tech-radar'
     | '/app/testing'
@@ -1553,6 +1564,7 @@ export interface FileRouteTypes {
     | '/app/simulation'
     | '/app/status'
     | '/app/system-flow'
+    | '/app/systems'
     | '/app/team'
     | '/app/tech-radar'
     | '/app/testing'
@@ -2097,6 +2109,13 @@ declare module '@tanstack/react-router' {
       path: '/system-flow'
       fullPath: '/app/system-flow'
       preLoaderRoute: typeof AppSystemFlowRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/systems': {
+      id: '/app/systems'
+      path: '/systems'
+      fullPath: '/app/systems'
+      preLoaderRoute: typeof AppSystemsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/team': {
@@ -2816,6 +2835,7 @@ interface AppRouteChildren {
   AppSimulationRoute: typeof AppSimulationRoute
   AppStatusRoute: typeof AppStatusRoute
   AppSystemFlowRoute: typeof AppSystemFlowRoute
+  AppSystemsRoute: typeof AppSystemsRoute
   AppTeamRoute: typeof AppTeamRouteWithChildren
   AppTechRadarRoute: typeof AppTechRadarRoute
   AppTestingRoute: typeof AppTestingRoute
@@ -2875,6 +2895,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppSimulationRoute: AppSimulationRoute,
   AppStatusRoute: AppStatusRoute,
   AppSystemFlowRoute: AppSystemFlowRoute,
+  AppSystemsRoute: AppSystemsRoute,
   AppTeamRoute: AppTeamRouteWithChildren,
   AppTechRadarRoute: AppTechRadarRoute,
   AppTestingRoute: AppTestingRoute,

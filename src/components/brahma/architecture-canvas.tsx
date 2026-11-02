@@ -1,6 +1,6 @@
 import { Background, Controls, MiniMap, ReactFlow, type Edge, type Node } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -27,6 +27,10 @@ export function ArchitectureCanvas({
   onSelect: (node: BlueprintNode) => void;
   selectedId?: string | undefined;
 }) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const nodes: Node[] = useMemo(
     () =>
       blueprintNodes.map((n) => ({
@@ -65,26 +69,32 @@ export function ArchitectureCanvas({
 
   return (
     <div className="h-[420px] w-full overflow-hidden rounded-xl border border-border bg-background/60 sm:h-[520px]">
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        fitView
-        minZoom={0.3}
-        maxZoom={2}
-        proOptions={{ hideAttribution: true }}
-        onNodeClick={(_, node) => {
-          const found = blueprintNodes.find((n) => n.id === node.id);
-          if (found) onSelect(found);
-        }}
-      >
-        <Background color="var(--border)" gap={22} />
-        <Controls className="!bg-card !border-border" showInteractive={false} />
-        <MiniMap
-          className="!hidden sm:!block !bg-card"
-          maskColor="color-mix(in oklab, var(--background) 70%, transparent)"
-          nodeColor={() => "var(--primary)"}
-        />
-      </ReactFlow>
+      {mounted ? (
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          fitView
+          minZoom={0.3}
+          maxZoom={2}
+          proOptions={{ hideAttribution: true }}
+          onNodeClick={(_, node) => {
+            const found = blueprintNodes.find((n) => n.id === node.id);
+            if (found) onSelect(found);
+          }}
+        >
+          <Background color="var(--border)" gap={22} />
+          <Controls className="!bg-card !border-border" showInteractive={false} />
+          <MiniMap
+            className="!hidden sm:!block !bg-card"
+            maskColor="color-mix(in oklab, var(--background) 70%, transparent)"
+            nodeColor={() => "var(--primary)"}
+          />
+        </ReactFlow>
+      ) : (
+        <div className="h-full w-full flex items-center justify-center text-xs text-muted-foreground">
+          Initializing blueprint canvas...
+        </div>
+      )}
     </div>
   );
 }
