@@ -55,6 +55,25 @@ export function IndigoAuroraSignUp({
   // State
   const [loading, setLoading] = useState(false);
   const [stageError, setStageError] = useState<string | null>(null);
+  const [oauthLoading, setOauthLoading] = useState<string | null>(null);
+
+  const handleOAuth = async (provider: "google" | "github" | "gitlab") => {
+    setOauthLoading(provider);
+    try {
+      let res;
+      if (provider === "google") res = await authService.signInWithGoogle();
+      else if (provider === "github") res = await authService.signInWithGithub();
+      else res = await authService.signInWithGitlab();
+
+      if (!res.ok) {
+        setStageError(res.error?.message || `OAuth sign-up with ${provider} failed.`);
+      }
+    } catch (err) {
+      setStageError(err instanceof Error ? err.message : `Failed to connect with ${provider}.`);
+    } finally {
+      setOauthLoading(null);
+    }
+  };
 
   // Calculate password strength
   const getPasswordStrength = (pwd: string) => {
@@ -335,6 +354,83 @@ export function IndigoAuroraSignUp({
             <span>Continue to Role & Workspace</span>
             <ArrowRight className="size-3.5" />
           </Button>
+
+          {/* OAuth Providers Divider */}
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-[#2A3555]" />
+            </div>
+            <div className="relative flex justify-center text-[10px] uppercase">
+              <span className="bg-[#0D1020] px-2 text-muted-foreground font-mono">
+                Or register with
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={Boolean(oauthLoading)}
+              onClick={() => handleOAuth("google")}
+              aria-label="Sign up with Google"
+              className="text-xs border-[#2A3555] bg-[#070A18]/60 hover:bg-[#161D3A] text-[#F3F7F5] flex items-center justify-center gap-1.5 px-2"
+            >
+              {oauthLoading === "google" ? (
+                <Loader2 className="size-3.5 animate-spin" />
+              ) : (
+                <svg className="size-3.5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.6l3.1-3.1C17.3 1.7 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.4 8.9 5 12 5z" />
+                  <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.7-.2-2.3H12v4.6h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.9z" />
+                  <path fill="#FBBC05" d="M5.3 14.7c-.2-.7-.4-1.6-.4-2.7s.1-2 .4-2.7L1.6 6.4C.6 8.4 0 10.6 0 13s.6 4.6 1.6 6.6l3.7-2.9z" />
+                  <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.4-6.7-5.3L1.6 16C3.5 19.8 7.4 23 12 23z" />
+                </svg>
+              )}
+              <span>Google</span>
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={Boolean(oauthLoading)}
+              onClick={() => handleOAuth("github")}
+              aria-label="Sign up with GitHub"
+              className="text-xs border-[#2A3555] bg-[#070A18]/60 hover:bg-[#161D3A] text-[#F3F7F5] flex items-center justify-center gap-1.5 px-2"
+            >
+              {oauthLoading === "github" ? (
+                <Loader2 className="size-3.5 animate-spin" />
+              ) : (
+                <svg className="size-3.5 fill-current shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                </svg>
+              )}
+              <span>GitHub</span>
+            </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={Boolean(oauthLoading)}
+              onClick={() => handleOAuth("gitlab")}
+              aria-label="Sign up with GitLab"
+              className="text-xs border-[#2A3555] bg-[#070A18]/60 hover:bg-[#161D3A] text-[#F3F7F5] flex items-center justify-center gap-1.5 px-2"
+            >
+              {oauthLoading === "gitlab" ? (
+                <Loader2 className="size-3.5 animate-spin" />
+              ) : (
+                <svg className="size-3.5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="#E24329" d="m23.6 9.6-1.5-4.5c-.2-.5-.8-.8-1.3-.5l-2.4 1.8L12 .3l-6.4 6.1-2.4-1.8c-.5-.3-1.1-.1-1.3.5L.4 9.6c-.2.6 0 1.2.5 1.6l11.1 8.2 11.1-8.2c.5-.4.7-1 .5-1.6z" />
+                  <path fill="#FC6D26" d="M12 19.4 5.6 6.4h12.8L12 19.4z" />
+                  <path fill="#FCA326" d="M12 19.4 5.6 6.4.4 9.6c-.2.6 0 1.2.5 1.6l11.1 8.2z" />
+                  <path fill="#FCA326" d="M12 19.4 18.4 6.4 23.6 9.6c.2.6 0 1.2-.5 1.6l-11.1 8.2z" />
+                </svg>
+              )}
+              <span>GitLab</span>
+            </Button>
+          </div>
 
           <div className="pt-2 text-center text-xs text-[#BAC8C0]">
             <span>Already have an account? </span>
