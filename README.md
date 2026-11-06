@@ -1,48 +1,88 @@
+<!-- VYRON NEXUS / GitHub-native glassmorphism · conceptual faux-3D illustrations -->
 <div align="center">
 
-<br/>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/readme/hero-glass-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="docs/readme/hero-glass-light.svg" />
+  <img src="docs/readme/hero-glass-dark.svg" width="100%" alt="VYRON futuristic three-dimensional glass engineering workspace with conceptual architecture, requirements, and risk panels" />
+</picture>
 
-```
-██╗   ██╗██╗   ██╗██████╗  ██████╗ ███╗   ██╗
-██║   ██║╚██╗ ██╔╝██╔══██╗██╔═══██╗████╗  ██║
-██║   ██║ ╚████╔╝ ██████╔╝██║   ██║██╔██╗ ██║
-╚██╗ ██╔╝  ╚██╔╝  ██╔══██╗██║   ██║██║╚██╗██║
- ╚████╔╝    ██║   ██║  ██║╚██████╔╝██║ ╚████║
-  ╚═══╝     ╚═╝   ╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝
-```
+<br />
 
-### **Enterprise Cognitive Engineering Intelligence, Architecture Governance & Delivery Risk SaaS**
+[![Project status](https://img.shields.io/badge/STATUS-ACTIVE_DEVELOPMENT-44E5F6?style=for-the-badge&labelColor=0A1427)](https://github.com/cypherpheonix07-lang/VYRON)
+[![Acceptance status](https://img.shields.io/badge/ACCEPTANCE-24_PASS_%2F_1_BLOCKED-F59E0B?style=for-the-badge&labelColor=0A1427)](acceptance-gates-report.json)
+[![Architecture](https://img.shields.io/badge/ARCHITECTURE-90_DOCUMENTED_DOMAINS-A9A4FF?style=for-the-badge&labelColor=0A1427)](docs/architecture/90_DOMAIN_FOLDER_MAP.md)
+[![Stack](https://img.shields.io/badge/STACK-REACT_19_%2B_TANSTACK-77F4CE?style=for-the-badge&labelColor=0A1427)](package.json)
 
-_Autonomous AST forensics, epistemic copilot orchestration, architecture drift analysis & real-time release risk governance._
+<br />
 
-<br/>
+[**◈ Overview**](#-what-is-vyron) &nbsp;·&nbsp; [**⬡ Capabilities**](#-glass-capability-deck) &nbsp;·&nbsp; [**⌘ Architecture**](#-system-architecture) &nbsp;·&nbsp; [**⚙ Installation**](#-getting-started) &nbsp;·&nbsp; [**◎ Verification**](#-verification--acceptance-suites)
 
-[![](https://img.shields.io/badge/STATUS-PRODUCTION_READY-22D3EE?style=for-the-badge&labelColor=0B1220)](https://github.com/cypherpheonix07-lang/VYRON)
-[![](https://img.shields.io/badge/VERSION-v2.6.0--GODMODE-6366F1?style=for-the-badge&labelColor=0B1220)](https://github.com/cypherpheonix07-lang/VYRON)
-[![](https://img.shields.io/badge/ACCEPTANCE_GATES-25%2F25_CONVERGED-22C55E?style=for-the-badge&labelColor=0B1220)](test-acceptance-gates.mjs)
-[![](https://img.shields.io/badge/LOVABLE-SYNCED-FF3366?style=for-the-badge&labelColor=0B1220)](https://lovable.dev)
-[![](https://img.shields.io/badge/LICENSE-MIT-10B981?style=for-the-badge&labelColor=0B1220)](LICENSE)
-
-<br/>
-
-[![React 19](https://img.shields.io/badge/React_19-20232A?style=flat-square&logo=react&logoColor=61DAFB)](https://react.dev)
-[![TypeScript 5](https://img.shields.io/badge/TypeScript_5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
-[![TanStack Start](https://img.shields.io/badge/TanStack_Start-FF4154?style=flat-square&logo=react-router&logoColor=white)](https://tanstack.com/start)
-[![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS_4-0F172A?style=flat-square&logo=tailwindcss&logoColor=38BDF8)](https://tailwindcss.com)
-[![Vite 8](https://img.shields.io/badge/Vite_8-646CFF?style=flat-square&logo=vite&logoColor=FFD62E)](https://vitejs.dev)
-[![Nitro Cloudflare](https://img.shields.io/badge/Nitro-Cloudflare_Worker-F38020?style=flat-square&logo=cloudflare&logoColor=white)](https://nitro.unjs.io)
-[![Supabase](https://img.shields.io/badge/Supabase-Client_SDK-3ECF8E?style=flat-square&logo=supabase&logoColor=white)](https://supabase.com)
-[![Zero Raw SQL](https://img.shields.io/badge/SQL-Zero_Raw_SQL_Mandate-8B5CF6?style=flat-square)](docs/audits/SUPABASE_AND_SECURITY_VERIFICATION.md)
-
-<br/>
-
-[**🚀 Launch App (Port 8080)**](http://localhost:8080/app) &nbsp;·&nbsp; [**🔐 Auth & Workspace**](http://localhost:8080/auth) &nbsp;·&nbsp; [**🏛️ 90-Platform Map**](docs/architecture/90_DOMAIN_FOLDER_MAP.md) &nbsp;·&nbsp; [**📋 520 Checkpoint Audit**](docs/audits/MASTER_A_TO_Z_520_CHECKPOINT_AUDIT.md) &nbsp;·&nbsp; [**🧪 Acceptance Gates**](test-acceptance-gates.mjs)
-
-<br/>
+<sub>VYRON × BRAHMA × ATHER — ENGINEERING DECISIONS, CONNECTED TO EVIDENCE</sub>
 
 </div>
 
 ---
+
+## ✨ Glass Capability Deck
+
+<p align="center">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/readme/capability-glass-dark.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="docs/readme/capability-glass-light.svg" />
+  <img src="docs/readme/capability-glass-dark.svg" width="100%" alt="Glass capability cards for requirements, blueprint, AST intelligence, and governance" />
+</picture>
+</p>
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+### 🧠 Requirements + Blueprint
+**Convert intent into inspectable system design.**
+
+- SRS ingestion and requirement classification
+- Service boundaries, C4-style system views
+- Requirement-to-implementation traceability
+
+</td>
+<td width="50%" valign="top">
+
+### 🧬 ATLAS / AST Intelligence
+**Make engineering drift visible.**
+
+- TypeScript and JavaScript dependency evidence
+- Architecture boundary comparisons
+- Repository and code-health investigations
+
+</td>
+</tr>
+<tr>
+<td width="50%" valign="top">
+
+### 🪄 ATHER Cognitive Copilot
+**Assist decisions with explicit provenance.**
+
+- Specialist analysis and context-aware workflows
+- Evidence / inference / simulation distinctions
+- Human-governed recommendations and tool actions
+
+</td>
+<td width="50%" valign="top">
+
+### 🛡️ Delivery Governance
+**Link risk to action without hiding blockers.**
+
+- Security, quality and technical-debt signals
+- Business-impact and release-risk context
+- Versioned audits, validation and remediation
+
+</td>
+</tr>
+</table>
+
+> [!IMPORTANT]
+> **The illustrations above are conceptual, not interactive 3D or live telemetry.** GitHub READMEs sanitize scripts and custom styles; these SVG assets emulate depth, transparency and neon glass while remaining portable. For actual interactive 3D, the web application needs its own renderer.
 
 ## 🧭 What is VYRON?
 
@@ -50,48 +90,69 @@ Modern software engineering teams face severe tool fragmentation: architectural 
 
 **VYRON collapses that fragmented lifecycle into a unified Cognitive Engineering Intelligence platform.**
 
-Feed VYRON an SRS document, software requirements, or connect a GitHub repository. VYRON immediately parses the system AST, extracts structured requirements, validates microservice boundaries on an interactive graph canvas, runs continuous architectural drift analysis, predicts delivery risk, and maps every technical defect to business impact.
+Feed VYRON an SRS document, software requirements, or connect a GitHub repository. VYRON is designed to connect structured requirements, source-backed AST inspection, architecture views, risk analysis and business-impact reporting. Individual capabilities depend on configured integrations and the selected project workflow.
 
+### 🪐 System Architecture
+
+```mermaid
+flowchart TB
+  subgraph IN["01 · Ingestion / Sources"]
+    R["Project ideas + requirements"] 
+    S["SRS / specification documents"]
+    G["GitHub repositories + source AST"]
+  end
+  subgraph INT["02 · Engineering Intelligence"]
+    B["BRAHMA · Requirements + blueprints"]
+    A["ATLAS · Architecture drift + AST"]
+    C["ATHER · Governed AI copilot"]
+    D["Digital twin / simulation workflows"]
+  end
+  subgraph GOV["03 · Evidence + Governance"]
+    E["Evidence ledger / traceability"]
+    K["Security + business-impact mapping"]
+    L["Delivery-risk and release decisions"]
+  end
+  subgraph OUT["04 · Engineering Outputs"]
+    UI["Project dashboard + graph canvas"]
+    REP["Reviewable reports + audit history"]
+  end
+  R --> B
+  S --> B
+  G --> A
+  B --> E
+  A --> E
+  C --> E
+  D --> E
+  E --> K --> L
+  E --> UI
+  L --> REP
+  classDef intelligence fill:#23365E,color:#D8F9FF,stroke:#4EE1F1,stroke-width:2px;
+  classDef governance fill:#3C305D,color:#F4E9FF,stroke:#A9A4FF,stroke-width:2px;
+  class B,A,C,D intelligence;
+  class E,K,L governance;
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                             INGESTION LAYER                                 │
-│       Raw Idea  ·  SRS Document  ·  GitHub Repo  ·  Kaggle NASA/NIST        │
-└──────────────────────────────────────┬──────────────────────────────────────┘
-                                       │
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    VYRON COGNITIVE INTELLIGENCE FABRIC                      │
-│                                                                             │
-│  ┌───────────────────────┐  ┌───────────────────────┐  ┌─────────────────┐  │
-│  │   ATLAS Drift Engine  │  │ Epistemic Truth Engine│  │ Copilot GodMode │  │
-│  │  AST DAG Graph & C4   │  │ 12-State Zero-Fiction │  │  20 Campaigns   │  │
-│  └───────────────────────┘  └───────────────────────┘  └─────────────────┘  │
-│  ┌───────────────────────┐  ┌───────────────────────┐  ┌─────────────────┐  │
-│  │ 30 SDLC Nav Domains   │  │ Digital Twin Sandbox  │  │ Delivery Risk   │  │
-│  │     90 Subpages       │  │ Pristine Reset Lab    │  │ Business Impact │  │
-│  └───────────────────────┘  └───────────────────────┘  └─────────────────┘  │
-└──────────────────────────────────────┬──────────────────────────────────────┘
-                                       │
-                                       ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                             DELIVERY LAYER                                  │
-│  Interactive Blueprint · AST Drift Ledger · Audit Reports · Executive View  │
-│                   Localhost Port 8080 · Edge Worker Ready                   │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+
+<sub>Logical capability relationships; this is not a claim that each module is a separately deployed microservice.</sub>
+
 
 ---
 
 ## 🏛️ Core Architectural Pillars
 
+<details>
+<summary><strong>🪟 Open technical capability details</strong></summary>
+
+The expandable section below provides the detailed engine and governance design behind the visual cards.
+
+
 ### 1. 🏗️ ATLAS Architecture Drift Engine
 - **AST Boundary Verification**: Parses TypeScript/JavaScript AST trees to continuously compute dependency call graphs against canonical architecture models.
-- **Drift Tolerance (< 5%)**: Flags unauthorized cross-layer calls, circular dependencies, and unmapped boundary edges with deterministic mathematical proof.
+- **Drift Analysis**: Flags cross-layer calls, dependency cycles, and unmapped boundary edges through source-informed checks. Any tolerance percentage must be validated against the active scanner configuration.
 - **Interactive Graph Canvas**: Renders real-time node-based architecture diagrams powered by `@xyflow/react` with inspector drawers for endpoints, models, and data contracts.
 
 ### 2. 🤖 Copilot God Mode Ω× Cognitive Fabric
-- **20-Campaign Autonomous Benchmark**: Formally certified against 20 rigorous cognitive campaigns (intent resolution, AST verification, memory court arbitration, and tamper-proof replay).
-- **Epistemic Truth Engine**: Implements 12 distinct epistemic knowledge states (`UNVERIFIED_CLAIM`, `EMPIRICAL_TEST_PROOF`, `SIMULATION_RESULT`, `AUTHORITATIVE_SPEC`, etc.), strictly preventing hallucinations and synthetic assumptions from being promoted to facts.
+- **20-Campaign Benchmark Design**: The repository documents a 20-campaign evaluation suite (intent resolution, AST verification, memory court arbitration, and tamper-proof replay).
+- **Epistemic Truth Engine**: Implements 12 distinct epistemic knowledge states (`UNVERIFIED_CLAIM`, `EMPIRICAL_TEST_PROOF`, `SIMULATION_RESULT`, `AUTHORITATIVE_SPEC`, etc.), intended to keep simulations and unsupported assumptions distinguishable from verified evidence.
 - **Governed Tool Cards with Purged `<think>` Chains**: All automated specialist agent actions purge private chain-of-thought telemetry and assemble cryptographically verifiable Governed Tool Cards.
 - **Dual-Mode Session Isolation**: Seamless bidirectional partitioning between **Normal Engineering Mode** (strict AST rules and governance) and **Demo Simulation Mode** (reviewer commentary and deterministic scenarios).
 
@@ -99,7 +160,7 @@ Feed VYRON an SRS document, software requirements, or connect a GitHub repositor
 - **Figma-Informed Visual Hierarchy**: Implements the Midnight Coral (`#FF9A8B`) and Indigo Aurora (`#A8A4FF`) color design systems with suspended-thread visual depth.
 - **Multi-Provider OAuth Parity**: Equal, first-class support for **Google**, **GitHub**, and **GitLab** OAuth providers with decoupled repository token management.
 - **3-Stage Progressive Onboarding**: Progressive wizard for Identity, Role Selection (`student`, `faculty`, `startup`, `admin`, `reviewer`), and Workspace Provisioning.
-- **Resilient Offline Fallback**: Safely isolates remote cloud credential rotation (e.g. Supabase paused keys) and falls back to deterministic local sessions without throwing unhandled exceptions.
+- **Local/Demo Fallback**: Enables deterministic demonstration paths when remote credentials are unavailable. Demo sessions must not be treated as production authentication.
 
 ### 4. 🌐 30 Navigation Domains & 90 Deep Subpages
 - **Complete Enterprise Coverage**: 30 structured navigation domains housing 90 specialized subpages covering every discipline from requirements parsing and CI/CD pipelines to FinOps and Business Continuity.
@@ -111,12 +172,18 @@ Feed VYRON an SRS document, software requirements, or connect a GitHub repositor
 - **Pristine Baseline Reset**: Instant one-click rollback restores baseline AST states with zero leakage into the live project environment.
 
 ### 6. 🛡️ Data Governance & Security
-- **The Zero Raw SQL Mandate**: 100% of database interactions strictly use Supabase client SDK query builders or parameterized ORM calls; zero raw string SQL interpolation.
+- **The Zero Raw SQL Mandate**: Database operations should use Supabase query builders or parameterized ORM calls rather than interpolated raw SQL; re-run audits to verify current compliance.
 - **Evidence Fabric**: Every finding, risk score, and proposal is cryptographically sealed with HMAC SHA-256 provenance hashes.
 
 ---
 
+</details>
+
 ## 📁 90-Platform Root Architecture
+
+> [!NOTE]
+> **90 numbered directories are architectural domains**, not verification that 90 separate services are running. The [full domain map](docs/architecture/90_DOMAIN_FOLDER_MAP.md) documents their intended responsibility.
+
 
 VYRON's repository is organized into 90 discrete, numbered architectural domains ensuring clear separation of concerns:
 
@@ -150,6 +217,10 @@ VYRON/
 
 ## ⚡ Non-Negotiable Core Invariants
 
+<details>
+<summary><strong>🔐 Expand governance, security and provenance rules</strong></summary>
+
+
 | Invariant Law | Specification | Enforcement Mechanism |
 | :--- | :--- | :--- |
 | **The Zero-Fiction Architecture Law** | Never fabricate endpoints, synthesize green test badges, or claim ungrounded telemetry passes. External blockers must be reported truthfully. | Verified across 25 Acceptance Gates; Gate 02 isolated truthfully when keys rotate. |
@@ -160,7 +231,9 @@ VYRON/
 
 ---
 
-## 🛠️ Technology Stack
+</details>
+
+## 🧩 Technology Stack
 
 ```
 Layer                   Technology                             Version / Details
@@ -181,7 +254,7 @@ Testing & Gates         Node.js Test Runner + tsx              25 Acceptance Gat
 
 ---
 
-## 🚀 Getting Started
+## ⚙️ Getting Started
 
 ### Prerequisites
 
@@ -269,18 +342,22 @@ npm run verify:advancement
 
 ### Verification Scorecard
 
+> [!WARNING]
+> This section summarizes repository-authored verification claims, not a fresh CI run. The checked-in `acceptance-gates-report.json` dated November 6, 2026 records **24 PASS, 1 BLOCKED**; Gate 02 concerns remote Supabase credentials. A green frontend test does not prove cloud authentication availability.
+
+
 ```
 =======================================================================
    VYRON / ATHER — GOD MODE vNext BENCHMARK SUMMARY
 =======================================================================
-✅ Acceptance Gates (Gate 01–25) : 24 PASSED, 0 FAILED, 1 ISOLATED
-✅ Copilot God Mode Campaigns    : 26/26 ASSERTIONS PASSED (100%)
-✅ Unified Auth Audit (AUTH-04)  : 7/7 CHECKS PASSED (100%)
-✅ Live E2E Route Probes         : 10/10 TESTS PASSED (100%)
-✅ Continuation Mission Gates    : 8/8 PASSED (100%)
-✅ Next-Gen Copilot Architecture : 20/20 PHASES PASSED (100%)
-✅ Zero Raw SQL Verification     : 0 VIOLATIONS ACROSS ENTIRE CODEBASE
-✅ Production Build (Nitro)      : 3,605 MODULES COMPILED CLEANLY
+🟠 Acceptance Gates (Gate 01–25) : 24 PASSED, 0 FAILED, 1 BLOCKED
+📄 Copilot benchmark (reported)    : 26/26 ASSERTIONS PASSED (100%)
+📄 Unified Auth audit (reported)  : 7/7 CHECKS PASSED (100%)
+📄 E2E probes (reported)         : 10/10 TESTS PASSED (100%)
+📄 Continuation mission (reported)    : 8/8 PASSED (100%)
+📄 Copilot architecture (reported) : 20/20 PHASES PASSED (100%)
+📄 Zero Raw SQL verification (reported)     : 0 VIOLATIONS ACROSS ENTIRE CODEBASE
+📄 Production build (reported)      : 3,605 MODULES COMPILED CLEANLY
 =======================================================================
 ```
 
@@ -308,6 +385,10 @@ npm run verify:advancement
 
 ## 📚 Documentation & Audit Vault
 
+<details>
+<summary><strong>📚 Expand technical documentation and audit references</strong></summary>
+
+
 Comprehensive engineering reports are versioned in `docs/`:
 
 - [docs/agent/UNDERSTANDING_AND_REQUIREMENTS_ANALYSIS.md](docs/agent/UNDERSTANDING_AND_REQUIREMENTS_ANALYSIS.md) — Master Understand-First Report
@@ -320,6 +401,8 @@ Comprehensive engineering reports are versioned in `docs/`:
 - [docs/audits/ATHER_ATLAS_TEST_RESULTS.md](docs/audits/ATHER_ATLAS_TEST_RESULTS.md) — ATLAS Drift & Copilot Test Report
 
 ---
+
+</details>
 
 ## 🤝 Contributing
 
@@ -345,7 +428,7 @@ Contributions are welcomed via standard GitHub pull requests:
 
 ## 📄 License
 
-Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for details.
+The README declares **MIT** as its intended license, but a root `LICENSE` file was not present when this documentation was updated. Add the actual license text before relying on that designation.
 
 ---
 
