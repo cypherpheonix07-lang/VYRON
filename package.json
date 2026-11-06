@@ -26,6 +26,7 @@
     "verify:all": "npx tsx \"51 — TESTING PLATFORM/scripts/testing/test-godmode-vnext-scratch-testing.mjs\"",
     "verify:two-phase": "npx tsx \"51 — TESTING PLATFORM/scripts/testing/run-two-phase-verification.mjs\"",
     "test:ather": "node test-ather-conversation-suite.mjs",
+    "verify:readme": "node scripts/verify-readme.mjs",
     "audit:520": "node scripts/audit-master-sdlc-520.mjs"
   },
   "dependencies": {
