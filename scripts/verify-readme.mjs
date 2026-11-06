@@ -85,15 +85,23 @@ try {
   pkg = {};
 }
 
-// VR-02: Brand Identity & Cognitive Platform Positioning
-runGate("VR-02", "Brand Identity & Cognitive Platform Positioning", () => {
+// VR-02: Brand Identity & GitHub-Native Glass Visuals
+runGate("VR-02", "VYRON Branding, Glass SVG Assets & Accessible Image Fallbacks", () => {
   const hasVyron = readmeContent.includes("VYRON");
-  const hasAscii = readmeContent.includes("██╗   ██╗██╗   ██╗██████╗");
   const hasDesc = readmeContent.includes("Cognitive Engineering Intelligence");
-  if (!hasVyron || !hasAscii || !hasDesc) {
-    return { pass: false, error: "Missing VYRON ASCII banner or Cognitive Engineering Intelligence description" };
+  const hasHero = readmeContent.includes("hero-glass-dark.svg") && readmeContent.includes("hero-glass-light.svg");
+  const hasCapability = readmeContent.includes("capability-glass-dark.svg") && readmeContent.includes("capability-glass-light.svg");
+  const hasPicture = readmeContent.includes("<picture>") && readmeContent.includes("</picture>");
+  const hasImageAlt = /<img[^>]*alt="[^"]+"[^>]*>/s.test(readmeContent);
+  const assets = [
+    "docs/readme/hero-glass-dark.svg", "docs/readme/hero-glass-light.svg",
+    "docs/readme/capability-glass-dark.svg", "docs/readme/capability-glass-light.svg"
+  ];
+  const absent = assets.filter(asset => !fs.existsSync(path.resolve(projectRoot, asset)));
+  if (!hasVyron || !hasDesc || !hasHero || !hasCapability || !hasPicture || !hasImageAlt || absent.length) {
+    return { pass: false, error: `Brand identity or GitHub-compatible glass assets incomplete. Missing: ${absent.join(", ") || "metadata/alt text"}` };
   }
-  return { pass: true, detail: "Authoritative VYRON branding, ASCII typography, and cognitive SaaS description verified." };
+  return { pass: true, detail: "Verified accessible dark/light SVG hero and capability artwork with picture fallbacks." };
 });
 
 // VR-03: Modern Tech Stack Alignment with package.json
@@ -205,6 +213,36 @@ runGate("VR-09", "Physical Verification of All Relative Markdown Links", () => {
   return { pass: true, detail: `All ${localLinks.length} local relative markdown links exist and resolve to valid disk files.` };
 });
 
+// VR-11: Saved Acceptance Gate Status Must Match README
+runGate("VR-11", "Saved Acceptance Gate Verdict Reconciliation", () => {
+  const reportPath = path.join(projectRoot, "acceptance-gates-report.json");
+  if (!fs.existsSync(reportPath)) return { pass: false, error: "Missing saved acceptance report" };
+  const gates = JSON.parse(fs.readFileSync(reportPath, "utf-8"));
+  if (!Array.isArray(gates) || !gates.length) return { pass: false, error: "Invalid acceptance report" };
+  const pass = gates.filter(x => x.verdict === "PASS").length;
+  const blocked = gates.filter(x => x.verdict === "BLOCKED").length;
+  const failed = gates.filter(x => x.verdict === "FAIL").length;
+  const hasNumbers = readmeContent.includes(`${pass} PASS`) &&
+    readmeContent.includes(`${blocked} BLOCKED`);
+  const falselyGreen = readmeContent.includes("25%2F25_CONVERGED") || readmeContent.includes("25/25 CONVERGED");
+  if (!hasNumbers || falselyGreen) {
+    return { pass: false, error: `README gate counts do not match saved report: ${pass} PASS, ${blocked} BLOCKED, ${failed} FAIL` };
+  }
+  return { pass: true, detail: `Saved report matched: ${pass} PASS, ${blocked} BLOCKED, ${failed} FAIL (not a fresh test run)` };
+});
+
+// VR-12: License & Deep-Dive Documentation
+runGate("VR-12", "License and Recent Engineering Report", () => {
+  const files = ["LICENSE", "docs/readme/RECENT_ENGINEERING_CHANGES.md"];
+  const missing = files.filter(p => !fs.existsSync(path.join(projectRoot, p)));
+  if (missing.length || !readmeContent.includes("RECENT_ENGINEERING_CHANGES.md")) {
+    return { pass: false, error: `Missing license, change report, or README deep-dive link: ${missing.join(", ")}` };
+  }
+  const text = fs.readFileSync(path.join(projectRoot, "LICENSE"), "utf-8");
+  if (!text.startsWith("MIT License")) return { pass: false, error: "LICENSE does not declare MIT license" };
+  return { pass: true, detail: "Source-grounded review linked and MIT LICENSE file present." };
+});
+
 // VR-10: Route Directory & Access Tier Specifications
 runGate("VR-10", "Route Directory & Access Tier Specifications", () => {
   const expectedRoutes = [
@@ -227,7 +265,7 @@ runGate("VR-10", "Route Directory & Access Tier Specifications", () => {
 });
 
 console.log("\n=======================================================================");
-console.log(`TOTAL GATES EVALUATED : 10`);
+console.log(`TOTAL GATES EVALUATED : ${passed + failed}`);
 console.log(`PASSED                : ${passed}`);
 console.log(`FAILED                : ${failed}`);
 console.log("=======================================================================\n");
@@ -235,6 +273,6 @@ console.log("===================================================================
 if (failed > 0) {
   process.exit(1);
 } else {
-  console.log(`${GREEN}🎉 README.md VERIFICATION FULLY CERTIFIED WITH 100% PASS RATE!${RESET}\n`);
+  console.log(`${GREEN}🎉 README STRUCTURE CHECKS PASSED (NOT PRODUCTION CERTIFICATION)${RESET}\n`);
   process.exit(0);
 }
