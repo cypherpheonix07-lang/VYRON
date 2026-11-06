@@ -137,6 +137,145 @@ flowchart TB
 
 ---
 
+## 🛰️ November 2026 — Engineering Evolution & Source Evidence
+
+> [!IMPORTANT]
+> **This is a source-reviewed change log, not a claim of new production certification.** The latest reviewed source commits are dated November 2–6, 2026. A file, route, demo control, or historical audit does not by itself prove a live external integration.
+
+<div align="center">
+
+| 🧩 90 Domains | 🧭 30 Navigation Categories | 🪟 90 Added Subpages | 🧪 25 Saved Acceptance Gates |
+|:---:|:---:|:---:|:---:|
+| Numbered root architecture folders | Product navigation taxonomy | N13–N30, five each | **24 PASS · 1 BLOCKED** |
+
+</div>
+
+These are **different architectural counts**. The 90 numbered root directories describe responsibilities; the 30 navigation categories describe the UI information architecture; the 90 added subpages are route-backed feature surfaces, many containing deterministic fixtures.
+
+### 🔎 Recent Commit Timeline
+
+| Date (UTC) | Change | Source evidence | Consequence |
+|:---|:---|:---|:---|
+| Nov 2 | Navigation expansion | [Commit `19436364`](https://github.com/cypherpheonix07-lang/VYRON/commit/19436364e93f9e51c710a7079a3deb4ac5d3c174) | 30-category shell, registry and dynamic subpage route definitions |
+| Nov 2 | Figma Neon Spectrum | [Commit `32455c76`](https://github.com/cypherpheonix07-lang/VYRON/commit/32455c7632c76d197e6b23f05867c955b2deb9f9) | CSS gradient visual system replaces old particle background |
+| Nov 2 | Premium identity flow | [Commit `adc8804b`](https://github.com/cypherpheonix07-lang/VYRON/commit/adc8804bcbe6f35b2680e99e4d5d5158c702df18) | Midnight Coral sign-in, Indigo Aurora onboarding, workspace selection |
+| Nov 4 | Auth/copilot corrections | [Commit `a845e310`](https://github.com/cypherpheonix07-lang/VYRON/commit/a845e3100abf9d95722024bc425c2bc739d2cbca) | Provider controls, accessibility fixes and safer copilot handling |
+| Nov 6 | Docs and license | [Commit `cdf3bd00`](https://github.com/cypherpheonix07-lang/VYRON/commit/cdf3bd00f4c1ad0a1521fa17425f8b53020abbde) | MIT LICENSE plus README verification script |
+| Nov 6 | GitHub-native glass design | [Commit `8f73342b`](https://github.com/cypherpheonix07-lang/VYRON/commit/8f73342b73321ff5d85da9f094ad8d86c22290a0) | Responsive static 3D-style SVG illustrations and Mermaid diagram |
+
+**[Read the full source-grounded engineering investigation](docs/readme/RECENT_ENGINEERING_CHANGES.md)** — commit deltas, blast radius, implementation evidence, limitations and remediation priorities.
+
+### 🌌 Architecture: from intent to release evidence
+
+```mermaid
+flowchart LR
+  subgraph ORIGIN["Input & intent"]
+    SPEC["Brief / SRS"]
+    REPO["Source repository"]
+  end
+  subgraph CORE["VYRON engineering fabric"]
+    REQ["BRAHMA requirements"]
+    GRAPH["Architecture / dependency graph"]
+    AST["ATLAS AST / drift checks"]
+    COP["ATHER governed copilot"]
+  end
+  subgraph TRUST["Verification boundary"]
+    PROOF["Evidence links"]
+    RISK["Risk + impact"]
+    REVIEW{"Human / release gate"}
+  end
+  SPEC --> REQ --> GRAPH
+  REPO --> AST --> GRAPH
+  GRAPH --> PROOF
+  COP --> PROOF
+  PROOF --> RISK --> REVIEW
+  REVIEW -->|Approved| REPORT["Report / decision"]
+  REVIEW -->|Blocked| FIX["Remediation / re-test"]
+  FIX --> PROOF
+  classDef brain fill:#20365B,color:#E9FAFF,stroke:#50DDF2,stroke-width:2px;
+  classDef check fill:#43355E,color:#F5EDFF,stroke:#A8A4FF,stroke-width:2px;
+  class REQ,GRAPH,AST,COP brain;
+  class PROOF,RISK,REVIEW check;
+```
+
+### 🧬 Capability Maturity Matrix
+
+| Surface | Confirmed in source | Requires separate proof |
+|:---|:---|:---|
+| Navigation and project workspaces | Registry, route files, UI shell and filtering logic | Live functionality of every page's advertised operations |
+| Identity and onboarding | 3-stage signup, role selection, OAuth initiation and demo access | Real end-to-end OAuth, remote Supabase session and RLS validation |
+| ATLAS / ATHER | AST and copilot-related code, proof-card types, checked-in benchmark reports | Current scan accuracy, integrity-key trust boundaries and provider-connected operation |
+| Blueprint and code health | React Flow and analysis-facing components | End-to-end analysis for arbitrary external repositories |
+| Digital twin and demonstrations | Simulation-oriented interfaces and reset methods | Strong isolation from production systems; not established by UI alone |
+| Security / delivery risk | Finding types, scoreboards, historical audits | Fresh production security assessment and independently reproduced risk calibration |
+| GitHub README visuals | Four tracked dark/light SVG graphics, Mermaid source | Real WebGL / interactive 3D (not supported inside GitHub READMEs) |
+
+> [!WARNING]
+> Some registered subpages display **deterministic example records**. In `SubpageWorkspace.tsx`, the refresh action updates a local timestamp and primary/export actions can show completion-like toasts. These screens must not be interpreted as verified data synchronization, actual report export, or a successfully executed backend job.
+
+### 🪟 Visual language and accessibility
+
+| Design layer | Source token / treatment | Purpose |
+|---|---|---|
+| Midnight Coral | `#FF9A8B` | Sign-in emphasis and identity states |
+| Indigo Aurora | `#A8A4FF` | Registration / step transitions |
+| Cyan / Azure / Cobalt | Figma spectrum OKLCH values | Graphs, highlights, focus and neon gradient surfaces |
+| Forest Moss / Quantum Mint | Figma spectrum tokens | Supporting status and atmospheric depth |
+| Solar Gold / Crimson | Figma spectrum tokens | Attention, contrast and atmospheric palette |
+| Suspended identity threads | Transform/opacity-oriented motions | Controlled visual transition between authentication stages |
+| README glass visuals | SVG with layered translucent planes | GitHub-safe faux 3D in light/dark color schemes |
+
+See [color specification](docs/design/VYRON_COLOR_SYSTEM.md), [motion specification](docs/design/SUSPENDED_THREAD_MOTION_SPEC.md), and [Figma spectrum source](src/styles/figma-spectrum-tokens.ts). Respect user reduced-motion preferences in the **application**; README artwork is static.
+
+### 🔐 Boundary and provenance contracts
+
+```text
+Untrusted documents / repositories
+             │
+             ▼
+Parsing and source classification
+             │
+             ▼
+Requirement / source / AST records
+             │
+             ▼
+Evidence-backed recommendations
+             │
+        ┌────┴────┐
+        ▼         ▼
+   PROVEN      ASSUMED / SIMULATED
+        │         │
+        ▼         ▼
+ Review gate   No fact promotion
+        │
+        ▼
+Approved / deferred / blocked action
+```
+
+A displayed hash or a saved test verdict is not independently sufficient proof of tamper resistance. Private key custody, verification logic, tenant isolation and replay integrity need their own operational validation. Demo mode must never authorize production mutations.
+
+### 🛠️ Reproducibility and known blockers
+
+- **Install:** `npm ci` with the tracked `package-lock.json` is the preferred deterministic npm path. The repository also contains `bun.lock` and `pnpm-lock.yaml`; do not mix lockfiles without a deliberate dependency policy.
+- **Runtime:** Vite configuration targets port `8080`; local-only `http://localhost:8080/app` links are **not public live demo URLs**.
+- **Authentication:** the November 6 saved Gate 02 verdict is **BLOCKED** due to remote Supabase credentials. Local demo behavior is not production sign-in.
+- **Verification:** `npm run typecheck`, `npm run lint`, `npm run build`, `npm run verify:readme`, and `node test-acceptance-gates.mjs` cover different concerns. Run them locally or in CI to get fresh results.
+- **Governance:** prefer source-backed claims over scorecard marketing; do not reclassify blocks as passing tests.
+- **Licensing:** the root [MIT LICENSE](LICENSE) is now present.
+
+### 🧭 Next engineering priorities
+
+| Tier | Priority | Acceptance criterion |
+|:---|:---|:---|
+| P0 | Restore cloud identity integration | Real OAuth provider callback, session, role and RLS checks rerun; Gate 02 only passes on evidence |
+| P0 | Disambiguate demo UI actions | Every simulated refresh, export and orchestration action clearly marked as demonstration |
+| P1 | Harden documentation validator | Glass hero, asset references, saved verdict and license checked automatically |
+| P1 | Reconcile package managers and CI | Canonical lockfile, reproducible dependency install and branch test checks |
+| P2 | Extend source-to-evidence coverage | Real repository analyses, reproducible traceability fixtures and meaningful report exports |
+| P2 | Document security assurance | Key custody, evidence verification, role checks and deployment threat model |
+
+---
+
 ## 🏛️ Core Architectural Pillars
 
 <details>
@@ -158,22 +297,22 @@ The expandable section below provides the detailed engine and governance design 
 
 ### 3. 🔐 Enterprise Authentication & Workspace Shell
 - **Figma-Informed Visual Hierarchy**: Implements the Midnight Coral (`#FF9A8B`) and Indigo Aurora (`#A8A4FF`) color design systems with suspended-thread visual depth.
-- **Multi-Provider OAuth Parity**: Equal, first-class support for **Google**, **GitHub**, and **GitLab** OAuth providers with decoupled repository token management.
+- **Multi-Provider OAuth Controls**: UI and service methods exist for **Google**, **GitHub**, and **GitLab**. Successful external sign-in depends on provider configuration and live Supabase credentials; the latest remote auth acceptance gate is blocked.
 - **3-Stage Progressive Onboarding**: Progressive wizard for Identity, Role Selection (`student`, `faculty`, `startup`, `admin`, `reviewer`), and Workspace Provisioning.
 - **Local/Demo Fallback**: Enables deterministic demonstration paths when remote credentials are unavailable. Demo sessions must not be treated as production authentication.
 
 ### 4. 🌐 30 Navigation Domains & 90 Deep Subpages
-- **Complete Enterprise Coverage**: 30 structured navigation domains housing 90 specialized subpages covering every discipline from requirements parsing and CI/CD pipelines to FinOps and Business Continuity.
-- **Instant Search Filter**: Built-in sub-5ms client-side fuzzy navigation filter in the left sidebar, fully searchable with `Ctrl+K`.
+- **Broad Navigation Coverage**: 30 structured navigation categories and 90 newly added specialized subpage definitions spanning requirements, DevOps, security, FinOps and incident management. Some workspaces contain demonstration fixtures rather than connected operational backends.
+- **Sidebar Search**: Source-confirmed client-side domain/subpage filtering and a keyboard-oriented navigation interface. No universally guaranteed latency is implied.
 - **Zero-Banner Clean Shell**: Clean, high-density layout without deprecated promotional dividers or clutter.
 
 ### 5. 🧪 Digital Twin Simulation Lab
-- **Counterfactual Testing**: Run "what-if" architectural transformations, dependency upgrades, or database schema mutations in an isolated air-gapped twin.
+- **Counterfactual UI Workflows**: Simulation-focused scenarios for architectural and dependency changes. The documentation does not independently establish a fully air-gapped infrastructure boundary.
 - **Pristine Baseline Reset**: Instant one-click rollback restores baseline AST states with zero leakage into the live project environment.
 
 ### 6. 🛡️ Data Governance & Security
 - **The Zero Raw SQL Mandate**: Database operations should use Supabase query builders or parameterized ORM calls rather than interpolated raw SQL; re-run audits to verify current compliance.
-- **Evidence Fabric**: Every finding, risk score, and proposal is cryptographically sealed with HMAC SHA-256 provenance hashes.
+- **Evidence Fabric**: The repository contains source-level evidence and digest-related constructs. Claims about universal cryptographic sealing and key custody require focused verification.
 
 ---
 
@@ -264,7 +403,7 @@ Testing & Gates         Node.js Test Runner + tsx              25 Acceptance Gat
 | **npm** | `v10.x` or `v12.x` | `npm -v` |
 | **Git** | `v2.40+` | `git --version` |
 
-> ℹ️ **Package Manager Note:** While `pnpm` can run on the system, VYRON is canonically managed through `npm` and `package-lock.json` to prevent dual-lockfile drift and maintain Lovable compatibility.
+> ℹ️ **Package Manager Note:** Use `npm` with `package-lock.json` for the documented path. The repository also tracks `bun.lock` and `pnpm-lock.yaml`; coordinate any package-manager change to avoid lockfile divergence.
 
 ### 1. Clone & Install
 
@@ -273,8 +412,8 @@ Testing & Gates         Node.js Test Runner + tsx              25 Acceptance Gat
 git clone https://github.com/cypherpheonix07-lang/VYRON.git
 cd VYRON
 
-# Install dependencies (strictly using package-lock.json)
-npm install
+# Install from the tracked npm lockfile
+npm ci
 ```
 
 ### 2. Configure Environment
@@ -291,7 +430,8 @@ VITE_SUPABASE_URL=https://your-project-id.supabase.co
 VITE_SUPABASE_ANON_KEY=sb_publishable_your_anon_key
 ```
 
-> 🛡️ **Offline Resiliency:** If remote Supabase keys are not configured or rotated, VYRON automatically activates its authenticated offline fallback mode so all navigation, AST tools, and UI modules work out of the box.
+> [!CAUTION]
+> **Demo/offline sessions are not real authentication.** Remote Supabase availability is explicitly blocked in the latest saved Gate 02 report. Never use a demo fallback as authorization for production operations.
 
 ### 3. Build & Patch Edge Artifacts
 
@@ -342,6 +482,8 @@ npm run verify:advancement
 
 ### Verification Scorecard
 
+For a detailed interpretation of saved tests and limitations, see the [recent engineering source review](docs/readme/RECENT_ENGINEERING_CHANGES.md).
+
 > [!WARNING]
 > This section summarizes repository-authored verification claims, not a fresh CI run. The checked-in `acceptance-gates-report.json` dated November 6, 2026 records **24 PASS, 1 BLOCKED**; Gate 02 concerns remote Supabase credentials. A green frontend test does not prove cloud authentication availability.
 
@@ -391,6 +533,8 @@ npm run verify:advancement
 
 Comprehensive engineering reports are versioned in `docs/`:
 
+- [docs/readme/RECENT_ENGINEERING_CHANGES.md](docs/readme/RECENT_ENGINEERING_CHANGES.md) — Deep source-based November change analysis, evidence classifications and next engineering actions
+
 - [docs/agent/UNDERSTANDING_AND_REQUIREMENTS_ANALYSIS.md](docs/agent/UNDERSTANDING_AND_REQUIREMENTS_ANALYSIS.md) — Master Understand-First Report
 - [docs/agent/ENHANCED_AI_AGENT_EXECUTION_PROMPT.md](docs/agent/ENHANCED_AI_AGENT_EXECUTION_PROMPT.md) — Grounded Autonomous Execution Directive
 - [docs/agent/AGENT_RESPONSIBILITY_MATRIX.md](docs/agent/AGENT_RESPONSIBILITY_MATRIX.md) — 11 Specialist Roles & CANNOT Rules
@@ -428,7 +572,7 @@ Contributions are welcomed via standard GitHub pull requests:
 
 ## 📄 License
 
-The README declares **MIT** as its intended license, but a root `LICENSE` file was not present when this documentation was updated. Add the actual license text before relying on that designation.
+Distributed under the **MIT License**. The full license text is available in the repository root: [`LICENSE`](LICENSE).
 
 ---
 
