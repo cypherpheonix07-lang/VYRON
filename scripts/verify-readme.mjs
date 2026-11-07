@@ -111,7 +111,7 @@ runGate("VR-03", "Modern Tech Stack Alignment with package.json", () => {
     { label: "React 19", inReadme: readmeContent.includes("React 19") || readmeContent.includes("React_19"), inPkg: Boolean(deps["react"]?.includes("19")) },
     { label: "TanStack Start", inReadme: readmeContent.includes("TanStack Start") || readmeContent.includes("TanStack_Start"), inPkg: Boolean(deps["@tanstack/react-start"]) },
     { label: "TanStack Router", inReadme: readmeContent.includes("TanStack Router"), inPkg: Boolean(deps["@tanstack/react-router"]) },
-    { label: "Tailwind CSS 4", inReadme: readmeContent.includes("Tailwind CSS 4") || readmeContent.includes("Tailwind_CSS_4"), inPkg: Boolean(deps["tailwindcss"]?.includes("4")) },
+    { label: "Tailwind CSS 4", inReadme: readmeContent.includes("Tailwind CSS 4") || readmeContent.includes("Tailwind_CSS_4") || readmeContent.includes("Tailwind CSS v4"), inPkg: Boolean(deps["tailwindcss"]?.includes("4")) },
     { label: "Vite 8", inReadme: readmeContent.includes("Vite 8") || readmeContent.includes("Vite_8"), inPkg: Boolean(deps["@lovable.dev/vite-tanstack-config"]) },
     { label: "Supabase Client SDK", inReadme: readmeContent.includes("Supabase") && readmeContent.includes("Client SDK"), inPkg: Boolean(deps["@supabase/supabase-js"]) },
     { label: "@xyflow/react Canvas", inReadme: readmeContent.includes("@xyflow/react") || readmeContent.includes("React Flow"), inPkg: Boolean(deps["@xyflow/react"]) },
