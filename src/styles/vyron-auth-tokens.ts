@@ -17,32 +17,32 @@ export const VYRON_GLOBAL_TOKENS = {
 } as const;
 
 export const SIGN_IN_TOKENS = {
-  themeName: "Midnight",
+  themeName: "Dark Navy",
   bg: "#0A1A2F",
   surface: "#1F1F1F",
   elevated: "#262626",
-  accent: "#38BDF8",
-  accentHover: "#7DD3FC",
-  accentGlow: "rgba(56, 189, 248, 0.25)",
-  primaryText: "#F8FAFC",
-  secondaryText: "#94A3B8",
-  btnForeground: "#0A1A2F",
-  border: "#2D3748",
+  accent: "#00D4FF",
+  accentHover: "#38BDF8",
+  accentGlow: "rgba(0, 212, 255, 0.25)",
+  primaryText: "#FFFFFF",
+  secondaryText: "#CBD5E1",
+  btnForeground: "#020024", /* Dark navy text on cyan: 11.54:1 contrast */
+  border: "color-mix(in srgb, #FFFFFF 17%, #0A1A2F)",
 } as const;
 
 export const SIGN_UP_TOKENS = {
-  themeName: "Pastel Breeze / Emerald Dark",
+  themeName: "Emerald Dark",
   bg: "#040404",
   surface: "#1F1F1F",
   elevated: "#282828",
   accent: "#00C896",
   accentHover: "#05E2AA",
   accentGlow: "rgba(0, 200, 150, 0.25)",
-  supportingAccent: "#86EFAC",
-  primaryText: "#F0FDF4",
-  secondaryText: "#86EFAC",
+  supportingAccent: "#00D4FF",
+  primaryText: "#FFFFFF",
+  secondaryText: "#CBD5E1",
   btnForeground: "#040404", /* Crucial contrast invariant: 9.47:1 */
-  border: "#243530",
+  border: "color-mix(in srgb, #FFFFFF 17%, #040404)",
 } as const;
 
 export const SUSPENDED_THREAD_TOKENS = {
@@ -50,9 +50,9 @@ export const SUSPENDED_THREAD_TOKENS = {
   thread1: {
     id: "identity",
     title: "1. IDENTIFY",
-    subtitle: "Midnight Credentials & SSO",
-    accent: "#38BDF8",
-    glow: "rgba(56, 189, 248, 0.25)",
+    subtitle: "Dark Navy Credentials & SSO",
+    accent: "#00D4FF",
+    glow: "rgba(0, 212, 255, 0.25)",
   },
   thread2: {
     id: "authenticate",
@@ -64,7 +64,7 @@ export const SUSPENDED_THREAD_TOKENS = {
   thread3: {
     id: "workspace",
     title: "3. ENTER WORKSPACE",
-    subtitle: "Velvet Role Entitlements",
+    subtitle: "Royal Smoke Role Entitlements",
     accent: "#6A0DAD",
     glow: "rgba(106, 13, 173, 0.35)",
   },
@@ -122,86 +122,91 @@ export const SHOWCASE_TOKENS = {
   border: "#1C2B38",
 } as const;
 
-export const VYRON_MULTI_PALETTES = {
-  midnight: {
-    id: "midnight",
-    name: "Midnight",
-    identity: "Sleek, professional, technical, sophisticated",
+export type VyronTheme =
+  | "royal-smoke"
+  | "navy"
+  | "obsidian-glow"
+  | "neon-dusk"
+  | "emerald-dark";
+
+export const VYRON_FIVE_THEMES: Record<
+  VyronTheme,
+  {
+    id: VyronTheme;
+    name: string;
+    identity: string;
+    bg: string;
+    surface: string;
+    primary: string;
+    primaryForeground: string;
+    focus: string;
+    gradient: string;
+  }
+> = {
+  navy: {
+    id: "navy",
+    name: "Dark & Elegant Navy",
+    identity: "Global application foundation, engineering dashboards, workspace shell",
     bg: "#0A1A2F",
     surface: "#1F1F1F",
-    elevated: "#262626",
-    primary: "#38BDF8",
-    primaryForeground: "#0A1A2F",
-    border: "#2D3748",
-    focus: "#22D3EE",
-    contrastRatio: "14.88:1",
+    primary: "#00D4FF",
+    primaryForeground: "#020024",
+    focus: "#00D4FF",
+    gradient: "linear-gradient(180deg, #1F1F1F 0%, #0A1A2F 100%)",
   },
-  emeraldDark: {
-    id: "emerald-dark",
-    name: "Pastel Breeze / Emerald Dark",
-    identity: "Calm, trustworthy, refreshing, human-centered",
-    bg: "#040404",
-    surface: "#1F1F1F",
-    elevated: "#282828",
-    primary: "#00C896",
-    primaryForeground: "#040404", // Crucial contrast invariant 9.47:1
-    border: "#243530",
-    focus: "#34D399",
-    contrastRatio: "9.47:1",
-  },
-  warmBreeze: {
-    id: "warm-breeze",
-    name: "Warm Breeze",
-    identity: "Approachable, editorial, premium, warm",
-    bg: "#EACEAA",
-    surface: "#D39858",
-    elevated: "#F5E5CF",
-    primary: "#85431E",
-    primaryForeground: "#EACEAA",
-    textPrimary: "#34150F", // Espresso on cream: 11.04:1
-    border: "#85431E",
-    focus: "#85431E",
-    contrastRatio: "11.04:1",
-  },
-  royalSmoke: {
+  "royal-smoke": {
     id: "royal-smoke",
-    name: "Velvet / Royal Smoke",
-    identity: "Intelligent, luxurious, creative, advanced",
+    name: "Royal Smoke",
+    identity: "AI, ATHER Copilot, intelligence dashboards, model ops",
     bg: "#1C1C1C",
-    surface: "#242424",
-    elevated: "#2E2E2E",
+    surface: "#1F1F1F",
     primary: "#6A0DAD",
     primaryForeground: "#FFFFFF",
-    border: "#4A1D7A",
-    focus: "#C084FC",
-    contrastRatio: "9.24:1",
+    focus: "#00D4FF",
+    gradient: "linear-gradient(180deg, #6A0DAD 0%, #1C1C1C 100%)",
   },
-  obsidianGlow: {
+  "obsidian-glow": {
     id: "obsidian-glow",
-    name: "Velvet / Obsidian Glow",
-    identity: "Cinematic, experimental, advanced computation",
+    name: "Obsidian Glow",
+    identity: "ATLAS, system architecture, agent orchestration, simulations, digital twins",
     bg: "#050505",
-    surface: "#14141E",
-    elevated: "#1F1E33",
+    surface: "#1C1C1C",
     primary: "#3A0CA3",
     primaryForeground: "#FFFFFF",
-    border: "#2E1065",
-    focus: "#818CF8",
-    contrastRatio: "11.92:1",
+    focus: "#00D4FF",
+    gradient: "linear-gradient(180deg, #3A0CA3 0%, #050505 100%)",
   },
-  neonDusk: {
+  "neon-dusk": {
     id: "neon-dusk",
-    name: "Ocean Blue / Neon Dusk",
-    identity: "Technical, futuristic, high-precision, operational",
+    name: "Neon Dusk",
+    identity: "Integrations, deployment platforms, observability, release pipelines, system flow",
     bg: "#020024",
-    surface: "#0B0A33",
-    elevated: "#14124A",
+    surface: "#0A1A2F",
     primary: "#00D4FF",
-    primaryForeground: "#020024", // Crucial contrast invariant 11.54:1
-    border: "#1E1B6B",
-    focus: "#38BDF8",
-    contrastRatio: "11.54:1",
+    primaryForeground: "#020024",
+    focus: "#00D4FF",
+    gradient: "linear-gradient(180deg, #00D4FF 0%, #020024 100%)",
   },
+  "emerald-dark": {
+    id: "emerald-dark",
+    name: "Emerald Dark",
+    identity: "Sign-up, onboarding, WorkPulse, collaboration, workspace setup",
+    bg: "#040404",
+    surface: "#1F1F1F",
+    primary: "#00C896",
+    primaryForeground: "#040404",
+    focus: "#00C896",
+    gradient: "linear-gradient(180deg, #00C896 0%, #040404 100%)",
+  },
+};
+
+export const VYRON_MULTI_PALETTES = {
+  navy: VYRON_FIVE_THEMES.navy,
+  midnight: VYRON_FIVE_THEMES.navy, // Alias
+  emeraldDark: VYRON_FIVE_THEMES["emerald-dark"],
+  royalSmoke: VYRON_FIVE_THEMES["royal-smoke"],
+  obsidianGlow: VYRON_FIVE_THEMES["obsidian-glow"],
+  neonDusk: VYRON_FIVE_THEMES["neon-dusk"],
 } as const;
 
 export type VyronThemeId = keyof typeof VYRON_MULTI_PALETTES;

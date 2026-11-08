@@ -2,6 +2,7 @@
 @source "../src";
 @import "./styles/tokens.css";
 @import "tw-animate-css";
+@import "./styles/vyron-palette.config.css";
 
 @custom-variant dark (&:is(.dark *));
 

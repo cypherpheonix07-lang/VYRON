@@ -17,6 +17,8 @@ import { UseCaseSection } from "@/components/showcase/UseCaseSection";
 import { TechnologyMatrixSection } from "@/components/showcase/TechnologyMatrixSection";
 import { DifferentiationSection } from "@/components/showcase/DifferentiationSection";
 import { ShowcaseFooter } from "@/components/showcase/ShowcaseFooter";
+import { VyronFiveThemeShowcaseGrid } from "@/components/showcase/VyronPaletteGradientCard";
+import type { VyronTheme } from "@/styles/vyron-auth-tokens";
 
 export const Route = createFileRoute("/showcase")({
   head: () => ({
@@ -47,6 +49,18 @@ export const Route = createFileRoute("/showcase")({
 
 function ShowcasePage() {
   const [activeSection, setActiveSection] = useState<string>("showcase");
+  const [activePalette, setActivePalette] = useState<VyronTheme>("navy");
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("vyron_palette_theme") as VyronTheme | null;
+      if (stored && ["navy", "royal-smoke", "obsidian-glow", "neon-dusk", "emerald-dark"].includes(stored)) {
+        setActivePalette(stored);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
   // Scrollspy tracking for the 5 canonical sections (Requirement 051, 555-562)
   useEffect(() => {
@@ -106,15 +120,38 @@ function ShowcasePage() {
       <ShowcaseNav activeSection={activeSection} onNavigate={handleNavigate} />
 
       <main className="flex-1">
-        {/* 1. HERO / AI TOOL SHOWCASE (#showcase) — Chapter 1: Introduction (Midnight) */}
-        <div data-vyron-theme="midnight">
+        {/* 1. HERO / AI TOOL SHOWCASE (#showcase) — Chapter 1: Introduction (Dark Navy) */}
+        <div data-vyron-theme="navy">
           <ShowcaseHero />
         </div>
 
         {/* 2. WHY BRAHMA EXISTS (The Governance Gap) — Chapter 1 Continuation */}
-        <div data-vyron-theme="midnight">
+        <div data-vyron-theme="navy">
           <WhyBrahmaSection />
         </div>
+
+        {/* 2B. FIVE-PALETTE DESIGN SYSTEM PRESETS (PROJECT BRAHMA PART L) */}
+        <section className="py-14 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-border/40">
+          <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
+            <span className="text-[10px] font-mono font-bold tracking-widest text-primary uppercase bg-primary/10 border border-primary/20 px-3 py-1 rounded-full">
+              Five-Palette Design System
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+              Harmonized Multi-Identity Architecture
+            </h2>
+            <p className="text-xs sm:text-sm text-muted-foreground">
+              Royal Smoke · Dark Navy · Obsidian Glow · Neon Dusk · Emerald Dark — Five cohesive palettes engineered for cognitive clarity, zero eye-strain, and mathematical WCAG 2.2 AA contrast compliance.
+            </p>
+          </div>
+          <VyronFiveThemeShowcaseGrid
+            currentTheme={activePalette}
+            onSelectTheme={(t) => {
+              setActivePalette(t);
+              document.documentElement.setAttribute("data-vyron-theme", t);
+              localStorage.setItem("vyron_palette_theme", t);
+            }}
+          />
+        </section>
 
         {/* 3. FEATURE UNIVERSE (#features - 17 Capability Families) — Chapter 2: Engineering Capabilities */}
         <div data-vyron-theme="neon-dusk">
@@ -152,7 +189,7 @@ function ShowcasePage() {
         </div>
 
         {/* 10. SECURITY, GOVERNANCE & PROVENANCE (Zero Trust & Cryptography) — Chapter 1 Governance */}
-        <div data-vyron-theme="midnight">
+        <div data-vyron-theme="navy">
           <SecurityGovernanceSection />
         </div>
 
@@ -166,8 +203,8 @@ function ShowcasePage() {
           <DemoSimulationSection />
         </div>
 
-        {/* 13. USE CASES & AUDIENCE (Practical Engineering Value) — Chapter 5: Learning & Guidance */}
-        <div data-vyron-theme="warm-breeze">
+        {/* 13. USE CASES & AUDIENCE (Practical Engineering Value) — Chapter 5: Guidance & Operations */}
+        <div data-vyron-theme="emerald-dark">
           <UseCaseSection />
         </div>
 
@@ -177,7 +214,7 @@ function ShowcasePage() {
         </div>
 
         {/* 15. PRODUCT DIFFERENTIATION (Comparative Engineering Matrix) — Chapter 7: Call to Action Transition */}
-        <div data-vyron-theme="midnight">
+        <div data-vyron-theme="navy">
           <DifferentiationSection />
         </div>
       </main>

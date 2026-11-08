@@ -456,3 +456,34 @@ export function useTheme() {
 
   return { theme, setTheme, toggle };
 }
+
+// ---------- Five-Palette Theme Management (Project Brahma) ----------
+
+import { type VyronTheme, VYRON_FIVE_THEMES } from "@/styles/vyron-auth-tokens";
+
+const PALETTE_THEME_KEY = "vyron_palette_theme";
+
+export function applyVyronTheme(theme: VyronTheme) {
+  if (typeof document === "undefined") return;
+  document.documentElement.setAttribute("data-vyron-theme", theme);
+}
+
+export function useVyronTheme() {
+  const [vyronTheme, setVyronThemeState] = useState<VyronTheme>("navy");
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem(PALETTE_THEME_KEY) as VyronTheme | null;
+    const validThemes: VyronTheme[] = ["navy", "royal-smoke", "obsidian-glow", "neon-dusk", "emerald-dark"];
+    const initial = stored && validThemes.includes(stored) ? stored : (stored === ("midnight" as any) ? "navy" : "navy");
+    setVyronThemeState(initial);
+    applyVyronTheme(initial);
+  }, []);
+
+  const setVyronTheme = useCallback((next: VyronTheme) => {
+    setVyronThemeState(next);
+    window.localStorage.setItem(PALETTE_THEME_KEY, next);
+    applyVyronTheme(next);
+  }, []);
+
+  return { vyronTheme, setVyronTheme, themes: VYRON_FIVE_THEMES };
+}

@@ -1395,7 +1395,7 @@ function Dashboard() {
               }
             >
               {mountedDeferred ? (
-                <div data-vyron-theme="midnight">
+                <div data-vyron-theme="navy">
                   <LiveSignalRadarField />
                 </div>
               ) : (
@@ -1477,7 +1477,7 @@ function Dashboard() {
               }
             >
               {mountedDeferred ? (
-                <div data-vyron-theme="midnight">
+                <div data-vyron-theme="navy">
                   <TrustComplianceSurface />
                 </div>
               ) : (
@@ -1557,7 +1557,7 @@ function Dashboard() {
             }
           >
             {mountedDeferred ? (
-              <div data-vyron-theme="warm-breeze">
+              <div data-vyron-theme="emerald-dark">
                 <EvidenceExplorer />
               </div>
             ) : (
