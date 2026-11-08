@@ -106,50 +106,80 @@ function ShowcasePage() {
       <ShowcaseNav activeSection={activeSection} onNavigate={handleNavigate} />
 
       <main className="flex-1">
-        {/* 1. HERO / AI TOOL SHOWCASE (#showcase) */}
-        <ShowcaseHero />
+        {/* 1. HERO / AI TOOL SHOWCASE (#showcase) — Chapter 1: Introduction (Midnight) */}
+        <div data-vyron-theme="midnight">
+          <ShowcaseHero />
+        </div>
 
-        {/* 2. WHY BRAHMA EXISTS (The Governance Gap) */}
-        <WhyBrahmaSection />
+        {/* 2. WHY BRAHMA EXISTS (The Governance Gap) — Chapter 1 Continuation */}
+        <div data-vyron-theme="midnight">
+          <WhyBrahmaSection />
+        </div>
 
-        {/* 3. FEATURE UNIVERSE (#features - 17 Capability Families) */}
-        <FeatureUniverseSection />
+        {/* 3. FEATURE UNIVERSE (#features - 17 Capability Families) — Chapter 2: Engineering Capabilities */}
+        <div data-vyron-theme="neon-dusk">
+          <FeatureUniverseSection />
+        </div>
 
-        {/* 4. GITHUB MIRROR STORY (#github - Pipeline & Scenarios) */}
-        <GitHubMirrorSection />
+        {/* 4. GITHUB MIRROR STORY (#github - Pipeline & Scenarios) — Chapter 2 Continuation */}
+        <div data-vyron-theme="neon-dusk">
+          <GitHubMirrorSection />
+        </div>
 
-        {/* 5. HOW IT WORKS (#how-it-works - 10-Phase Lifecycle) */}
-        <HowItWorksSection />
+        {/* 5. HOW IT WORKS (#how-it-works - 10-Phase Lifecycle) — Chapter 3: System Architecture & AI Intelligence */}
+        <div data-vyron-theme="obsidian-glow">
+          <HowItWorksSection />
+        </div>
 
-        {/* 6. INTERACTIVE ARCHITECTURE GRAPH (18-Node Canvas) */}
-        <ArchitectureDiagramSection />
+        {/* 6. INTERACTIVE ARCHITECTURE GRAPH (18-Node Canvas) — Chapter 3 Continuation */}
+        <div data-vyron-theme="obsidian-glow">
+          <ArchitectureDiagramSection />
+        </div>
 
-        {/* 7. COPILOT FLAGSHIP SHOWCASE (Release Scenario Runner) */}
-        <CopilotShowcaseSection />
+        {/* 7. COPILOT FLAGSHIP SHOWCASE (Release Scenario Runner) — Chapter 3: Velvet Intelligence */}
+        <div data-vyron-theme="royal-smoke">
+          <CopilotShowcaseSection />
+        </div>
 
-        {/* 8. MULTI-AGENT INTELLIGENCE (7 Specialist Roles) */}
-        <MultiAgentSection />
+        {/* 8. MULTI-AGENT INTELLIGENCE (7 Specialist Roles) — Chapter 3 Continuation */}
+        <div data-vyron-theme="royal-smoke">
+          <MultiAgentSection />
+        </div>
 
-        {/* 9. PLUGINS & CONNECTORS (MCP Extensibility) */}
-        <PluginsConnectorsSection />
+        {/* 9. PLUGINS & CONNECTORS (MCP Extensibility) — Chapter 6: Integrations */}
+        <div data-vyron-theme="neon-dusk">
+          <PluginsConnectorsSection />
+        </div>
 
-        {/* 10. SECURITY, GOVERNANCE & PROVENANCE (Zero Trust & Cryptography) */}
-        <SecurityGovernanceSection />
+        {/* 10. SECURITY, GOVERNANCE & PROVENANCE (Zero Trust & Cryptography) — Chapter 1 Governance */}
+        <div data-vyron-theme="midnight">
+          <SecurityGovernanceSection />
+        </div>
 
-        {/* 11. REALTIME PIPELINE (WebSocket Telemetry Stream) */}
-        <RealtimeSection />
+        {/* 11. REALTIME PIPELINE (WebSocket Telemetry Stream) — Chapter 6: Telemetry */}
+        <div data-vyron-theme="neon-dusk">
+          <RealtimeSection />
+        </div>
 
-        {/* 12. DEMO SIMULATION LAB (Isolated Sandbox) */}
-        <DemoSimulationSection />
+        {/* 12. DEMO SIMULATION LAB (Isolated Sandbox) — Chapter 4: Collaboration & Productivity */}
+        <div data-vyron-theme="emerald-dark">
+          <DemoSimulationSection />
+        </div>
 
-        {/* 13. USE CASES & AUDIENCE (Practical Engineering Value) */}
-        <UseCaseSection />
+        {/* 13. USE CASES & AUDIENCE (Practical Engineering Value) — Chapter 5: Learning & Guidance */}
+        <div data-vyron-theme="warm-breeze">
+          <UseCaseSection />
+        </div>
 
-        {/* 14. LAYERED TECHNOLOGY MATRIX (#technology - 8 Tiers) */}
-        <TechnologyMatrixSection />
+        {/* 14. LAYERED TECHNOLOGY MATRIX (#technology - 8 Tiers) — Chapter 6: Infrastructure */}
+        <div data-vyron-theme="neon-dusk">
+          <TechnologyMatrixSection />
+        </div>
 
-        {/* 15. PRODUCT DIFFERENTIATION (Comparative Engineering Matrix) */}
-        <DifferentiationSection />
+        {/* 15. PRODUCT DIFFERENTIATION (Comparative Engineering Matrix) — Chapter 7: Call to Action Transition */}
+        <div data-vyron-theme="midnight">
+          <DifferentiationSection />
+        </div>
       </main>
 
       {/* 16. FOOTER & CALL TO ACTION */}
