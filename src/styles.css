@@ -2,7 +2,6 @@
 @source "../src";
 @import "./styles/tokens.css";
 @import "tw-animate-css";
-@import "./styles/vyron-palette.config.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -44,6 +43,7 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -54,93 +54,94 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
-/* Dark is the default theme (applied on <html class="dark">) */
-/* Figma 6-Color Palette Architecture:
-   1. #436B4D: oklch(0.489 0.066 151.3) - Deep Forest Moss (Accent / Success / Dark Brand anchor)
-   2. #D1C8F4: oklch(0.854 0.061 294.4) - Soft Periwinkle Lavender (Primary Brand Highlight & Focus Ring)
-   3. #99D9EA: oklch(0.848 0.069 216.1) - Powder Sky Cyan (Secondary Brand Highlight / Info / Active State)
-   4. #DFCDD2: oklch(0.864 0.021 358.8) - Crisp Rose Opal Off-White (Primary Foreground Text & Light Mode Base)
-   5. #D9BFC0: oklch(0.827 0.030 15.1)  - Dusty Blushed Quartz (Muted Text & Warm Highlight / Warning)
-   6. #C1D1D1: oklch(0.849 0.017 196.8) - Pale Sage Mist (Borders, Secondary Surfaces & Subtle Elements)
-*/
-:root {
+/* Unified Semantic Bridge:
+   Maps all shadcn/ui & Tailwind v4 semantic tokens directly to --vyron-* tokens
+   from src/styles/tokens.css across :root, .dark, and any [data-vyron-theme] scope.
+   1. Royal Smoke:          #6A0DAD & #1C1C1C
+   2. Dark & Elegant Navy:  #0A1A2F & #1F1F1F
+   3. Obsidian Glow:        #3A0CA3 & #050505
+   4. Neon Dusk:            #00D4FF & #020024
+   5. Emerald Dark:         #00C896 & #040404 */
+:root,
+.dark,
+[data-vyron-theme] {
   --radius: 0.75rem;
-  /* Deep rich dark surface anchored in forest-moss/slate undertones */
-  --background: oklch(0.16 0.025 151.3);
-  --foreground: oklch(0.864 0.021 358.8); /* #DFCDD2: Crisp Rose Opal */
-  --card: oklch(0.20 0.024 151.3);
-  --card-foreground: oklch(0.864 0.021 358.8);
-  --popover: oklch(0.19 0.024 151.3);
-  --popover-foreground: oklch(0.864 0.021 358.8);
-  --primary: oklch(0.854 0.061 294.4); /* #D1C8F4: Soft Periwinkle Lavender */
-  --primary-foreground: oklch(0.16 0.025 151.3);
-  --secondary: oklch(0.26 0.025 196.8); /* Tinted by #C1D1D1: Pale Sage Mist */
-  --secondary-foreground: oklch(0.864 0.021 358.8);
-  --muted: oklch(0.23 0.020 151.3);
-  --muted-foreground: oklch(0.827 0.030 15.1); /* #D9BFC0: Dusty Blushed Quartz */
-  --accent: oklch(0.848 0.069 216.1); /* #99D9EA: Powder Sky Cyan */
-  --accent-foreground: oklch(0.16 0.025 151.3);
+  --background: var(--vyron-bg);
+  --foreground: var(--vyron-text);
+  --card: var(--vyron-surface);
+  --card-foreground: var(--vyron-text);
+  --popover: var(--vyron-elevated);
+  --popover-foreground: var(--vyron-text);
+  --primary: var(--vyron-primary);
+  --primary-foreground: var(--vyron-primary-foreground);
+  --secondary: var(--vyron-secondary);
+  --secondary-foreground: var(--vyron-secondary-foreground);
+  --muted: var(--vyron-elevated);
+  --muted-foreground: var(--vyron-muted);
+  --accent: var(--vyron-accent);
+  --accent-foreground: var(--vyron-accent-foreground);
   --destructive: oklch(0.62 0.21 25);
   --destructive-foreground: oklch(0.98 0.005 250);
-  --border: oklch(0.30 0.020 196.8); /* Derived from #C1D1D1 */
-  --input: oklch(0.27 0.020 196.8);
-  --ring: oklch(0.854 0.061 294.4); /* #D1C8F4 */
-  --success: oklch(0.489 0.066 151.3); /* #436B4D: Deep Forest Moss */
-  --warning: oklch(0.827 0.030 15.1); /* #D9BFC0: Dusty Blushed Quartz */
+  --border: var(--vyron-border);
+  --input: var(--vyron-elevated);
+  --ring: var(--vyron-focus);
+  --success: var(--vyron-success); /* #00C896 */
+  --warning: var(--vyron-warning);
   --critical: oklch(0.62 0.21 25);
-  --info: oklch(0.848 0.069 216.1); /* #99D9EA: Powder Sky Cyan */
-  --chart-1: oklch(0.854 0.061 294.4); /* #D1C8F4 */
-  --chart-2: oklch(0.848 0.069 216.1); /* #99D9EA */
-  --chart-3: oklch(0.489 0.066 151.3); /* #436B4D */
-  --chart-4: oklch(0.827 0.030 15.1);  /* #D9BFC0 */
-  --chart-5: oklch(0.849 0.017 196.8); /* #C1D1D1 */
-  --chart-6: oklch(0.864 0.021 358.8); /* #DFCDD2 */
-  --sidebar: oklch(0.14 0.022 151.3);
-  --sidebar-foreground: oklch(0.864 0.021 358.8);
-  --sidebar-primary: oklch(0.854 0.061 294.4);
-  --sidebar-primary-foreground: oklch(0.16 0.025 151.3);
-  --sidebar-accent: oklch(0.22 0.025 151.3);
-  --sidebar-accent-foreground: oklch(0.864 0.021 358.8);
-  --sidebar-border: oklch(0.26 0.018 196.8);
-  --sidebar-ring: oklch(0.854 0.061 294.4);
+  --info: #00D4FF;
+  --chart-1: #6A0DAD; /* Royal Purple */
+  --chart-2: #00D4FF; /* Neon Cyan */
+  --chart-3: #00C896; /* Emerald Green */
+  --chart-4: #3A0CA3; /* Deep Indigo */
+  --chart-5: #0A1A2F; /* Deep Navy */
+  --chart-6: #1F1F1F; /* Dark Charcoal */
+  --sidebar: var(--vyron-sunken);
+  --sidebar-foreground: var(--vyron-text);
+  --sidebar-primary: var(--vyron-primary);
+  --sidebar-primary-foreground: var(--vyron-primary-foreground);
+  --sidebar-accent: var(--vyron-surface);
+  --sidebar-accent-foreground: var(--vyron-text);
+  --sidebar-border: var(--vyron-border);
+  --sidebar-ring: var(--vyron-focus);
   --gradient-hero: radial-gradient(
     120% 100% at 50% 0%,
-    color-mix(in oklab, var(--primary) 24%, transparent) 0%,
-    color-mix(in oklab, var(--accent) 18%, transparent) 35%,
-    color-mix(in oklab, oklch(0.489 0.066 151.3) 15%, transparent) 60%,
-    transparent 75%
+    color-mix(in oklab, var(--primary) 30%, transparent) 0%,
+    color-mix(in oklab, var(--accent) 22%, transparent) 38%,
+    color-mix(in oklab, #3A0CA3 18%, transparent) 62%,
+    transparent 78%
   );
   --shadow-glow:
-    0 0 0 1px color-mix(in oklab, var(--primary) 25%, transparent),
-    0 18px 50px -22px color-mix(in oklab, var(--primary) 45%, transparent);
+    0 0 0 1px color-mix(in oklab, var(--primary) 30%, transparent),
+    0 18px 50px -22px color-mix(in oklab, var(--primary) 50%, transparent);
   --shadow-panel:
-    0 1px 0 0 color-mix(in oklab, white 6%, transparent) inset, 0 24px 60px -32px oklch(0 0 0 / 0.7);
+    0 1px 0 0 color-mix(in oklab, white 6%, transparent) inset,
+    0 24px 60px -32px oklch(0 0 0 / 0.8);
 }
 
 .light {
-  --background: oklch(0.864 0.021 358.8); /* #DFCDD2 */
-  --foreground: oklch(0.20 0.035 151.3);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.20 0.035 151.3);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.20 0.035 151.3);
-  --primary: oklch(0.489 0.066 151.3); /* #436B4D */
-  --primary-foreground: oklch(0.99 0 0);
-  --secondary: oklch(0.849 0.017 196.8); /* #C1D1D1 */
-  --secondary-foreground: oklch(0.20 0.035 151.3);
-  --muted: oklch(0.827 0.030 15.1); /* #D9BFC0 */
-  --muted-foreground: oklch(0.42 0.030 151.3);
-  --accent: oklch(0.854 0.061 294.4); /* #D1C8F4 */
-  --accent-foreground: oklch(0.20 0.035 151.3);
-  --border: oklch(0.78 0.020 196.8);
-  --input: oklch(0.78 0.020 196.8);
-  --ring: oklch(0.489 0.066 151.3);
-  --sidebar: oklch(0.849 0.017 196.8);
-  --sidebar-foreground: oklch(0.20 0.035 151.3);
-  --sidebar-accent: oklch(0.827 0.030 15.1);
-  --sidebar-accent-foreground: oklch(0.20 0.035 151.3);
-  --sidebar-border: oklch(0.78 0.020 196.8);
-  --shadow-panel: 0 10px 30px -20px oklch(0.20 0.035 151.3 / 0.25);
+  --background: var(--vyron-bg);
+  --foreground: var(--vyron-text);
+  --card: var(--vyron-surface);
+  --card-foreground: var(--vyron-text);
+  --popover: var(--vyron-surface);
+  --popover-foreground: var(--vyron-text);
+  --primary: #6A0DAD;
+  --primary-foreground: #FFFFFF;
+  --secondary: #E2E8F0;
+  --secondary-foreground: #0A1A2F;
+  --muted: #F1F5F9;
+  --muted-foreground: #475569;
+  --accent: #3A0CA3;
+  --accent-foreground: #FFFFFF;
+  --border: #CBD5E1;
+  --input: #E2E8F0;
+  --ring: #6A0DAD;
+  --sidebar: #F1F5F9;
+  --sidebar-foreground: #0A1A2F;
+  --sidebar-accent: #E2E8F0;
+  --sidebar-accent-foreground: #0A1A2F;
+  --sidebar-border: #CBD5E1;
+  --shadow-panel: 0 10px 30px -20px oklch(0.20 0.035 260 / 0.2);
 }
 
 @utility surface {
@@ -201,7 +202,7 @@
 
 /* ================= REPORT STUDIO PRINT & PAPER STYLES ================= */
 .report-paper-container {
-  background-color: oklch(0.14 0.025 264);
+  background-color: #0A1A2F;
   min-height: 100vh;
 }
 

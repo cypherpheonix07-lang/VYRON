@@ -84,7 +84,7 @@ export function GraphiteOceanShowcase() {
           <span
             className="text-transparent bg-clip-text"
             style={{
-              backgroundImage: `linear-gradient(135deg, ${SHOWCASE_TOKENS.cyanAccent}, #99D9EA, ${SHOWCASE_TOKENS.coralDetail})`,
+              backgroundImage: `linear-gradient(135deg, ${SHOWCASE_TOKENS.cyanAccent}, #00D4FF, ${SHOWCASE_TOKENS.coralDetail})`,
             }}
           >
             from idea to deployment.

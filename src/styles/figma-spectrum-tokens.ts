@@ -28,7 +28,7 @@ export const FIGMA_SPECTRUM_TOKENS = {
     },
     // 3. Dark Green Variations
     darkGreen: {
-      forestMoss: "oklch(0.35 0.08 155)",   // #064e3b - Figma #436B4D anchor
+      forestMoss: "oklch(0.35 0.08 155)",   // #00C896 Emerald anchor
       emeraldDepth: "oklch(0.22 0.06 150)", // #022c22
       quantumMint: "oklch(0.82 0.18 155)",  // #00ff88
     },

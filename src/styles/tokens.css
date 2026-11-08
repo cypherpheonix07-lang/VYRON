@@ -1,95 +1,129 @@
 :root {
-  /* ═══ OKLCH COLOR SYSTEM — V2 LIVE CONTRACT (FIGMA 6-COLOR PALETTE) ═══ */
-  /* 1. #436B4D: oklch(0.489 0.066 151.3) - Deep Forest Moss
-     2. #D1C8F4: oklch(0.854 0.061 294.4) - Soft Periwinkle Lavender
-     3. #99D9EA: oklch(0.848 0.069 216.1) - Powder Sky Cyan
-     4. #DFCDD2: oklch(0.864 0.021 358.8) - Crisp Rose Opal Off-White
-     5. #D9BFC0: oklch(0.827 0.030 15.1)  - Dusty Blushed Quartz
-     6. #C1D1D1: oklch(0.849 0.017 196.8) - Pale Sage Mist */
+  /* ═══ VYRON UNIFIED 5-PALETTE DARK ARCHITECTURE (V3 LIVE CONTRACT) ═══ */
+  /* 01 Royal Smoke:          #6A0DAD (Royal Purple)   | #1C1C1C (Dark Charcoal)
+     02 Dark & Elegant Navy:  #0A1A2F (Deep Navy)      | #1F1F1F (Elevated Charcoal)
+     03 Obsidian Glow:        #3A0CA3 (Deep Indigo)    | #050505 (Obsidian Black)
+     04 Neon Dusk:            #00D4FF (Electric Cyan)  | #020024 (Midnight Blue-Black)
+     05 Emerald Dark:         #00C896 (Emerald Green)  | #040404 (Rich Black) */
 
-  /* Background surfaces */
-  --surface-base: oklch(0.16 0.025 151.3);
-  --surface-raised: oklch(0.20 0.024 151.3);
-  --surface-overlay: oklch(0.24 0.022 151.3);
-  --surface-sunken: oklch(0.12 0.026 151.3);
-  --surface-glass: oklch(0.20 0.024 151.3 / 0.72);
+  /* Core Palette Primitives */
+  --palette-royal-purple: #6A0DAD;
+  --palette-charcoal-1c: #1C1C1C;
+  --palette-charcoal-1f: #1F1F1F;
+  --palette-deep-navy: #0A1A2F;
+  --palette-deep-indigo: #3A0CA3;
+  --palette-obsidian: #050505;
+  --palette-neon-cyan: #00D4FF;
+  --palette-midnight: #020024;
+  --palette-emerald: #00C896;
+  --palette-rich-black: #040404;
+
+  /* Signature 180deg Vertical Gradients */
+  --gradient-royal-smoke: linear-gradient(180deg, #6A0DAD 0%, #1C1C1C 100%);
+  --gradient-royal-smoke-reverse: linear-gradient(180deg, #1C1C1C 0%, #6A0DAD 100%);
+  --gradient-dark-navy: linear-gradient(180deg, #1F1F1F 0%, #0A1A2F 100%);
+  --gradient-dark-navy-reverse: linear-gradient(180deg, #0A1A2F 0%, #1F1F1F 100%);
+  --gradient-obsidian-glow: linear-gradient(180deg, #3A0CA3 0%, #050505 100%);
+  --gradient-obsidian-glow-reverse: linear-gradient(180deg, #050505 0%, #3A0CA3 100%);
+  --gradient-neon-dusk: linear-gradient(180deg, #00D4FF 0%, #020024 100%);
+  --gradient-neon-dusk-reverse: linear-gradient(180deg, #020024 0%, #00D4FF 100%);
+  --gradient-emerald-dark: linear-gradient(180deg, #1F1F1F 0%, #040404 100%);
+  --gradient-emerald-glow: linear-gradient(180deg, #00C896 0%, #040404 100%);
+  --gradient-emerald-glow-reverse: linear-gradient(180deg, #040404 0%, #00C896 100%);
+
+  /* ═══ DEFAULT VYRON THEME TOKENS (ROYAL SMOKE + OBSIDIAN + NEON DUSK) ═══ */
+  --vyron-bg: #050505;
+  --vyron-surface: #1C1C1C;
+  --vyron-elevated: #1F1F1F;
+  --vyron-sunken: #040404;
+  --vyron-border: #26293E;
+  --vyron-text: #F8FAFC;
+  --vyron-muted: #94A3B8;
+  --vyron-primary: #6A0DAD;
+  --vyron-primary-foreground: #FFFFFF;
+  --vyron-secondary: #0A1A2F;
+  --vyron-secondary-foreground: #F8FAFC;
+  --vyron-accent: #00D4FF;
+  --vyron-accent-foreground: #020024;
+  --vyron-focus: #00D4FF;
+  --vyron-success: #00C896;
+  --vyron-warning: #FACC75;
+  --vyron-error: #F87171;
+  --vyron-glow: rgba(106, 13, 173, 0.35);
+  --vyron-gradient: var(--gradient-royal-smoke);
+
+  /* Background surfaces (dynamically linked to active --vyron-* theme) */
+  --surface-base: var(--vyron-bg);
+  --surface-raised: var(--vyron-surface);
+  --surface-overlay: var(--vyron-elevated);
+  --surface-sunken: var(--vyron-sunken);
+  --surface-glass: color-mix(in oklab, var(--vyron-surface) 72%, transparent);
 
   /* Brand tokens */
-  --color-primary: oklch(0.854 0.061 294.4); /* #D1C8F4: Lavender */
-  --color-primary-dim: oklch(0.72 0.05 294.4);
-  --color-accent: oklch(0.848 0.069 216.1); /* #99D9EA: Sky Cyan */
-  --color-accent-dim: oklch(0.70 0.05 216.1);
+  --color-primary: var(--vyron-primary);
+  --color-primary-dim: color-mix(in oklab, var(--vyron-primary) 78%, #050505);
+  --color-accent: var(--vyron-accent);
+  --color-accent-dim: color-mix(in oklab, var(--vyron-accent) 78%, #020024);
 
   /* Semantic tokens */
-  --color-success: oklch(0.489 0.066 151.3); /* #436B4D: Deep Forest Moss */
-  --color-warning: oklch(0.827 0.030 15.1); /* #D9BFC0: Dusty Quartz */
+  --color-success: var(--vyron-success); /* #00C896: Emerald */
+  --color-warning: var(--vyron-warning);
   --color-danger: oklch(0.62 0.22 25);
-  --color-info: oklch(0.848 0.069 216.1); /* #99D9EA: Sky Cyan */
+  --color-info: var(--vyron-accent);     /* #00D4FF: Neon Cyan */
 
   /* Gate status tokens */
-  --gate-pass: oklch(0.489 0.066 151.3);
+  --gate-pass: #00C896;
   --gate-fail: oklch(0.62 0.22 25);
   --gate-pending: oklch(0.55 0 0);
-  --gate-running: oklch(0.854 0.061 294.4);
+  --gate-running: #00D4FF;
 
   /* Text tokens */
-  --text-primary: oklch(0.864 0.021 358.8); /* #DFCDD2: Crisp Rose Opal */
-  --text-secondary: oklch(0.827 0.030 15.1); /* #D9BFC0: Dusty Blushed Quartz */
-  --text-tertiary: oklch(0.65 0.018 196.8); /* Derived from #C1D1D1 */
-  --text-disabled: oklch(0.40 0.015 151.3);
-  --text-gradient: linear-gradient(135deg, oklch(0.854 0.061 294.4), oklch(0.848 0.069 216.1));
+  --text-primary: var(--vyron-text);
+  --text-secondary: var(--vyron-muted);
+  --text-tertiary: color-mix(in oklab, var(--vyron-muted) 72%, var(--vyron-bg));
+  --text-disabled: color-mix(in oklab, var(--vyron-muted) 42%, var(--vyron-bg));
+  --text-gradient: linear-gradient(135deg, var(--vyron-primary) 0%, var(--vyron-accent) 100%);
 
   /* Border tokens */
-  --border-default: oklch(0.30 0.020 196.8); /* Derived from #C1D1D1 */
-  --border-strong: oklch(0.40 0.025 196.8);
-  --border-focus: oklch(0.854 0.061 294.4);
+  --border-default: var(--vyron-border);
+  --border-strong: color-mix(in oklab, var(--vyron-border) 75%, var(--vyron-text));
+  --border-focus: var(--vyron-focus);
 
   /* ═══ VYRON PREMIUM AUTHENTICATION DESIGN SYSTEM TOKENS ═══ */
-  --vyron-bg: #070C0B;
-  --vyron-surface: #101A18;
-  --vyron-elevated: #162321;
-  --vyron-border: #2A3A35;
-  --vyron-text: #F3F7F5;
-  --vyron-muted: #BAC8C0;
-  --vyron-focus: #79D9F7;
-  --vyron-success: #78E0B8;
-  --vyron-warning: #FACC75;
-  --vyron-error: #FC9E9E;
+  /* Sign-In: Obsidian & Royal Smoke */
+  --auth-signin-bg: #050505;
+  --auth-signin-surface: #1C1C1C;
+  --auth-signin-elevated: #1F1F1F;
+  --auth-signin-accent: #6A0DAD;
+  --auth-signin-btn-text: #FFFFFF;
 
-  /* Sign-In: Midnight Coral */
-  --auth-signin-bg: #070C0B;
-  --auth-signin-surface: #101A18;
-  --auth-signin-elevated: #15201E;
-  --auth-signin-accent: #FF9A8B;
-  --auth-signin-btn-text: #1A1011;
-
-  /* Sign-Up: Indigo Aurora */
-  --auth-signup-bg: #0D1020;
-  --auth-signup-surface: #171A31;
-  --auth-signup-elevated: #1F2342;
-  --auth-signup-accent: #A8A4FF;
-  --auth-signup-accent-sub: #79D9F7;
-  --auth-signup-btn-text: #0D1020;
+  /* Sign-Up: Neon Dusk & Obsidian Glow */
+  --auth-signup-bg: #020024;
+  --auth-signup-surface: #0A1A2F;
+  --auth-signup-elevated: #1F1F1F;
+  --auth-signup-accent: #3A0CA3;
+  --auth-signup-accent-sub: #00D4FF;
+  --auth-signup-btn-text: #FFFFFF;
 
   /* Suspended Identity Flow (Hanging Threads) */
-  --thread-anchor: #2A3A35;
+  --thread-anchor: #1F1F1F;
   --thread-line: rgba(255, 255, 255, 0.15);
-  --thread-1-identity: #79D9F7;
-  --thread-2-account: #BCA8FF;
-  --thread-3-workspace: #78E0B8;
+  --thread-1-identity: #00D4FF;
+  --thread-2-account: #6A0DAD;
+  --thread-3-workspace: #00C896;
 
   /* Workspace Role Accents */
-  --role-student: #6DD5FA;
-  --role-faculty: #C4B5FD;
-  --role-professional: #FACC75;
-  --role-admin: #FC9E9E;
+  --role-student: #00D4FF;
+  --role-faculty: #6A0DAD;
+  --role-professional: #00C896;
+  --role-admin: #3A0CA3;
 
-  /* Product Showcase: Graphite Ocean */
-  --showcase-bg: #090F18;
-  --showcase-surface: #101A18;
-  --showcase-accent-cyan: #65DFE8;
-  --showcase-accent-coral: #FF9B91;
-  --showcase-text: #EEF4FF;
+  /* Product Showcase: Dark & Elegant Navy / Emerald */
+  --showcase-bg: #040404;
+  --showcase-surface: #0A1A2F;
+  --showcase-accent-cyan: #00D4FF;
+  --showcase-accent-coral: #00C896;
+  --showcase-text: #F8FAFC;
 
   /* ═══ TYPOGRAPHY ═══ */
   --font-sans: "Inter", "Geist", system-ui, sans-serif;
@@ -134,113 +168,173 @@
   --motion-slow: 400ms ease-out;
 
   /* ═══ GRID BACKDROP ═══ */
-  --grid-backdrop: url("data:image/svg+xml,%3Csvg width='56' height='56' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M56 0H0v56' fill='none' stroke='oklch(0.28 0.020 196.8)' stroke-width='0.5'/%3E%3C/svg%3E");
+  --grid-backdrop: url("data:image/svg+xml,%3Csvg width='56' height='56' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M56 0H0v56' fill='none' stroke='rgba(0,212,255,0.12)' stroke-width='0.5'/%3E%3C/svg%3E");
 
   /* ═══ SHADOWS ═══ */
-  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.3);
-  --shadow-md: 0 4px 12px oklch(0 0 0 / 0.4);
-  --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.5);
-  --shadow-glow: 0 0 20px oklch(0.854 0.061 294.4 / 0.25);
+  --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.45);
+  --shadow-md: 0 4px 12px oklch(0 0 0 / 0.55);
+  --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.7);
+  --shadow-glow: 0 0 24px var(--vyron-glow);
 }
 
 /* ═══ 6 MULTI-PALETTE THEME PROFILES (PROJECT BRAHMA) ═══ */
 
-/* PALETTE 01 — MIDNIGHT */
-[data-vyron-theme="midnight"], :root[data-vyron-theme="midnight"] {
+/* PALETTE 01 — DARK & ELEGANT NAVY (MIDNIGHT: #1F1F1F & #0A1A2F) */
+[data-vyron-theme="midnight"],
+:root[data-vyron-theme="midnight"],
+[data-vyron-theme="dark-navy"],
+:root[data-vyron-theme="dark-navy"],
+[data-vyron-theme="navy"],
+:root[data-vyron-theme="navy"] {
   --vyron-bg: #0A1A2F;
   --vyron-surface: #1F1F1F;
   --vyron-elevated: #262626;
+  --vyron-sunken: #06101E;
   --vyron-border: #2D3748;
   --vyron-text: #F8FAFC;
   --vyron-muted: #94A3B8;
-  --vyron-primary: #38BDF8;
+  --vyron-primary: #00D4FF;
   --vyron-primary-foreground: #0A1A2F;
-  --vyron-focus: #22D3EE;
-  --vyron-glow: rgba(56, 189, 248, 0.25);
+  --vyron-secondary: #1F1F1F;
+  --vyron-secondary-foreground: #F8FAFC;
+  --vyron-accent: #00C896;
+  --vyron-accent-foreground: #040404;
+  --vyron-focus: #00D4FF;
+  --vyron-glow: rgba(0, 212, 255, 0.25);
+  --vyron-gradient: linear-gradient(180deg, #1F1F1F 0%, #0A1A2F 100%);
 }
 
-/* PALETTE 02 — PASTEL BREEZE / EMERALD DARK */
-[data-vyron-theme="emerald-dark"], :root[data-vyron-theme="emerald-dark"] {
+/* PALETTE 02 — DARK & ELEGANT EMERALD (#040404, #1F1F1F & #00C896) */
+[data-vyron-theme="emerald-dark"],
+:root[data-vyron-theme="emerald-dark"] {
   --vyron-bg: #040404;
   --vyron-surface: #1F1F1F;
   --vyron-elevated: #282828;
-  --vyron-border: #243530;
+  --vyron-sunken: #020202;
+  --vyron-border: #1B3B32;
   --vyron-text: #F0FDF4;
   --vyron-muted: #86EFAC;
   --vyron-primary: #00C896;
   --vyron-primary-foreground: #040404; /* Contrast: 9.47:1 */
-  --vyron-focus: #34D399;
-  --vyron-glow: rgba(0, 200, 150, 0.25);
+  --vyron-secondary: #1F1F1F;
+  --vyron-secondary-foreground: #F0FDF4;
+  --vyron-accent: #00C896;
+  --vyron-accent-foreground: #040404;
+  --vyron-focus: #00C896;
+  --vyron-glow: rgba(0, 200, 150, 0.28);
+  --vyron-gradient: linear-gradient(180deg, #00C896 0%, #040404 100%);
 }
 
 /* PALETTE 03 — WARM BREEZE */
-[data-vyron-theme="warm-breeze"], :root[data-vyron-theme="warm-breeze"] {
+[data-vyron-theme="warm-breeze"],
+:root[data-vyron-theme="warm-breeze"] {
   --vyron-bg: #EACEAA;
   --vyron-surface: #D39858;
   --vyron-elevated: #F5E5CF;
+  --vyron-sunken: #DFC099;
   --vyron-border: #85431E;
   --vyron-text: #34150F; /* Contrast: 11.04:1 on cream */
   --vyron-muted: #5C2719;
   --vyron-primary: #85431E;
   --vyron-primary-foreground: #EACEAA; /* Contrast: 5.84:1 */
+  --vyron-secondary: #D39858;
+  --vyron-secondary-foreground: #34150F;
+  --vyron-accent: #85431E;
+  --vyron-accent-foreground: #EACEAA;
   --vyron-focus: #85431E;
   --vyron-glow: rgba(133, 67, 30, 0.25);
+  --vyron-gradient: linear-gradient(180deg, #EACEAA 0%, #D39858 100%);
 }
 
-/* PALETTE 04 — VELVET / ROYAL SMOKE */
-[data-vyron-theme="royal-smoke"], :root[data-vyron-theme="royal-smoke"] {
+/* PALETTE 04 — ROYAL SMOKE (#6A0DAD & #1C1C1C) */
+[data-vyron-theme="royal-smoke"],
+:root[data-vyron-theme="royal-smoke"] {
   --vyron-bg: #1C1C1C;
   --vyron-surface: #242424;
   --vyron-elevated: #2E2E2E;
+  --vyron-sunken: #121212;
   --vyron-border: #4A1D7A;
   --vyron-text: #F8FAFC;
   --vyron-muted: #D8B4FE;
   --vyron-primary: #6A0DAD;
   --vyron-primary-foreground: #FFFFFF; /* Contrast: 9.24:1 */
-  --vyron-focus: #C084FC;
-  --vyron-glow: rgba(106, 13, 173, 0.35);
+  --vyron-secondary: #3A0CA3;
+  --vyron-secondary-foreground: #FFFFFF;
+  --vyron-accent: #00D4FF;
+  --vyron-accent-foreground: #020024;
+  --vyron-focus: #6A0DAD;
+  --vyron-glow: rgba(106, 13, 173, 0.38);
+  --vyron-gradient: linear-gradient(180deg, #6A0DAD 0%, #1C1C1C 100%);
 }
 
-/* PALETTE 05 — VELVET / OBSIDIAN GLOW */
-[data-vyron-theme="obsidian-glow"], :root[data-vyron-theme="obsidian-glow"] {
+/* PALETTE 05 — OBSIDIAN GLOW (#3A0CA3 & #050505) */
+[data-vyron-theme="obsidian-glow"],
+:root[data-vyron-theme="obsidian-glow"] {
   --vyron-bg: #050505;
-  --vyron-surface: #14141E;
-  --vyron-elevated: #1F1E33;
+  --vyron-surface: #1C1C1C;
+  --vyron-elevated: #1F1F1F;
+  --vyron-sunken: #020024;
   --vyron-border: #2E1065;
   --vyron-text: #F5F3FF;
   --vyron-muted: #C4B5FD;
   --vyron-primary: #3A0CA3;
   --vyron-primary-foreground: #FFFFFF; /* Contrast: 11.92:1 */
-  --vyron-focus: #818CF8;
-  --vyron-glow: rgba(58, 12, 163, 0.35);
+  --vyron-secondary: #6A0DAD;
+  --vyron-secondary-foreground: #FFFFFF;
+  --vyron-accent: #00D4FF;
+  --vyron-accent-foreground: #020024;
+  --vyron-focus: #3A0CA3;
+  --vyron-glow: rgba(58, 12, 163, 0.4);
+  --vyron-gradient: linear-gradient(180deg, #3A0CA3 0%, #050505 100%);
 }
 
-/* PALETTE 06 — OCEAN BLUE / NEON DUSK */
-[data-vyron-theme="neon-dusk"], :root[data-vyron-theme="neon-dusk"] {
+/* PALETTE 06 — NEON DUSK (#00D4FF & #020024) */
+[data-vyron-theme="neon-dusk"],
+:root[data-vyron-theme="neon-dusk"] {
   --vyron-bg: #020024;
-  --vyron-surface: #0B0A33;
-  --vyron-elevated: #14124A;
-  --vyron-border: #1E1B6B;
+  --vyron-surface: #0A1A2F;
+  --vyron-elevated: #1F1F1F;
+  --vyron-sunken: #010014;
+  --vyron-border: #1E295B;
   --vyron-text: #F0F9FF;
   --vyron-muted: #7DD3FC;
   --vyron-primary: #00D4FF;
   --vyron-primary-foreground: #020024; /* Contrast: 11.54:1 */
-  --vyron-focus: #38BDF8;
-  --vyron-glow: rgba(0, 212, 255, 0.3);
+  --vyron-secondary: #3A0CA3;
+  --vyron-secondary-foreground: #FFFFFF;
+  --vyron-accent: #00C896;
+  --vyron-accent-foreground: #040404;
+  --vyron-focus: #00D4FF;
+  --vyron-glow: rgba(0, 212, 255, 0.35);
+  --vyron-gradient: linear-gradient(180deg, #00D4FF 0%, #020024 100%);
 }
 
 /* ═══ LIGHT THEME OVERRIDES ═══ */
 .light {
-  --surface-base: oklch(0.864 0.021 358.8); /* #DFCDD2 */
-  --surface-raised: oklch(1 0 0);
-  --surface-overlay: oklch(0.849 0.017 196.8); /* #C1D1D1 */
-  --surface-sunken: oklch(0.80 0.020 196.8);
-  --surface-glass: oklch(0.864 0.021 358.8 / 0.85);
-  --text-primary: oklch(0.20 0.035 151.3);
-  --text-secondary: oklch(0.42 0.030 151.3);
-  --text-tertiary: oklch(0.55 0.020 151.3);
-  --border-default: oklch(0.78 0.020 196.8);
-  --border-strong: oklch(0.68 0.025 151.3);
+  --vyron-bg: #F8FAFC;
+  --vyron-surface: #FFFFFF;
+  --vyron-elevated: #F1F5F9;
+  --vyron-sunken: #E2E8F0;
+  --vyron-border: #CBD5E1;
+  --vyron-text: #0A1A2F;
+  --vyron-muted: #475569;
+  --vyron-primary: #6A0DAD;
+  --vyron-primary-foreground: #FFFFFF;
+  --vyron-secondary: #E2E8F0;
+  --vyron-secondary-foreground: #0A1A2F;
+  --vyron-accent: #3A0CA3;
+  --vyron-accent-foreground: #FFFFFF;
+  --vyron-focus: #6A0DAD;
+  --surface-base: var(--vyron-bg);
+  --surface-raised: var(--vyron-surface);
+  --surface-overlay: var(--vyron-elevated);
+  --surface-sunken: var(--vyron-sunken);
+  --surface-glass: rgba(255, 255, 255, 0.85);
+  --text-primary: var(--vyron-text);
+  --text-secondary: var(--vyron-muted);
+  --text-tertiary: #64748B;
+  --border-default: var(--vyron-border);
+  --border-strong: #94A3B8;
   --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.08);
   --shadow-md: 0 4px 12px oklch(0 0 0 / 0.12);
   --shadow-lg: 0 12px 32px oklch(0 0 0 / 0.16);
