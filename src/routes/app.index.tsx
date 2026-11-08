@@ -44,7 +44,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { toast } from "sonner";
 import { useAppMode } from "@/state/mode/useAppMode";
 import { SimulatorControls } from "@/components/demo/SimulatorControls";
@@ -174,6 +174,15 @@ function Dashboard() {
   const [state, setState] = useState<ViewState>("loaded");
   const [showTimeMachine, setShowTimeMachine] = useState(false);
   const [showSavedProjects, setShowSavedProjects] = useState(false);
+  const [mountedDeferred, setMountedDeferred] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const timeoutId = setTimeout(() => {
+      setMountedDeferred(true);
+    }, 40);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const { selectEntity } = useCommandCenter();
   const {
@@ -1385,7 +1394,13 @@ function Dashboard() {
                 </Button>
               }
             >
-              <LiveSignalRadarField />
+              {mountedDeferred ? (
+                <div data-vyron-theme="midnight">
+                  <LiveSignalRadarField />
+                </div>
+              ) : (
+                <LoadingSkeleton className="h-64 rounded-xl" />
+              )}
             </SectionCard>
 
             {/* SECTION 4: RELEASE READINESS & GOVERNANCE GATES */}
@@ -1398,7 +1413,13 @@ function Dashboard() {
                 </Button>
               }
             >
-              <ReleaseControlSurface />
+              {mountedDeferred ? (
+                <div data-vyron-theme="neon-dusk">
+                  <ReleaseControlSurface />
+                </div>
+              ) : (
+                <LoadingSkeleton className="h-64 rounded-xl" />
+              )}
             </SectionCard>
           </div>
 
@@ -1414,7 +1435,13 @@ function Dashboard() {
                 </Button>
               }
             >
-              <LivingArchitectureCanvas />
+              {mountedDeferred ? (
+                <div data-vyron-theme="obsidian-glow">
+                  <LivingArchitectureCanvas />
+                </div>
+              ) : (
+                <LoadingSkeleton className="h-64 rounded-xl" />
+              )}
             </SectionCard>
 
             {/* SECTION 6: ARCHITECTURE DRIFT */}
@@ -1427,7 +1454,13 @@ function Dashboard() {
                 </Button>
               }
             >
-              <DriftInvestigationSurface />
+              {mountedDeferred ? (
+                <div data-vyron-theme="obsidian-glow">
+                  <DriftInvestigationSurface />
+                </div>
+              ) : (
+                <LoadingSkeleton className="h-64 rounded-xl" />
+              )}
             </SectionCard>
           </div>
 
@@ -1443,7 +1476,13 @@ function Dashboard() {
                 </Button>
               }
             >
-              <TrustComplianceSurface />
+              {mountedDeferred ? (
+                <div data-vyron-theme="midnight">
+                  <TrustComplianceSurface />
+                </div>
+              ) : (
+                <LoadingSkeleton className="h-64 rounded-xl" />
+              )}
             </SectionCard>
 
             {/* SECTION 8: RUNTIME & SUBSYSTEM TELEMETRY */}
@@ -1456,7 +1495,13 @@ function Dashboard() {
                 </Button>
               }
             >
-              <RuntimeIntelligenceCockpit />
+              {mountedDeferred ? (
+                <div data-vyron-theme="neon-dusk">
+                  <RuntimeIntelligenceCockpit />
+                </div>
+              ) : (
+                <LoadingSkeleton className="h-64 rounded-xl" />
+              )}
             </SectionCard>
           </div>
 
@@ -1472,7 +1517,13 @@ function Dashboard() {
                 </Button>
               }
             >
-              <AtlasSystemExplorer />
+              {mountedDeferred ? (
+                <div data-vyron-theme="obsidian-glow">
+                  <AtlasSystemExplorer />
+                </div>
+              ) : (
+                <LoadingSkeleton className="h-64 rounded-xl" />
+              )}
             </SectionCard>
 
             {/* SECTION 10: COPILOT ENGINEERING PARTNER */}
@@ -1485,7 +1536,13 @@ function Dashboard() {
                 </Button>
               }
             >
-              <CopilotPartnerCard />
+              {mountedDeferred ? (
+                <div data-vyron-theme="royal-smoke">
+                  <CopilotPartnerCard />
+                </div>
+              ) : (
+                <LoadingSkeleton className="h-64 rounded-xl" />
+              )}
             </SectionCard>
           </div>
 
@@ -1499,7 +1556,13 @@ function Dashboard() {
               </Button>
             }
           >
-            <EvidenceExplorer />
+            {mountedDeferred ? (
+              <div data-vyron-theme="warm-breeze">
+                <EvidenceExplorer />
+              </div>
+            ) : (
+              <LoadingSkeleton className="h-64 rounded-xl" />
+            )}
           </SectionCard>
         </div>
       ) : null}

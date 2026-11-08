@@ -53,6 +53,7 @@ import {
   Globe,
   BookOpen,
   SlidersHorizontal,
+  Palette,
 } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode, useRef } from "react";
 import { toast } from "sonner";
@@ -1118,9 +1119,19 @@ export function AppShell({ children }: { children: ReactNode }) {
     }
   }, [ready, user, pathname, navigate]);
 
-  // Global Copilot Realtime Event Listener Initialization
+  // Global Copilot Realtime Event Listener & Palette Theme Initialization
   useEffect(() => {
     copilotRealtimeListener.initialize();
+    try {
+      const savedPalette = localStorage.getItem("vyron_palette_theme");
+      if (savedPalette) {
+        document.documentElement.setAttribute("data-vyron-theme", savedPalette);
+      } else {
+        document.documentElement.setAttribute("data-vyron-theme", "midnight");
+      }
+    } catch {
+      // ignore
+    }
   }, []);
 
   // Global keyboard listeners for Cmd+K and ? and sequences
@@ -1866,6 +1877,93 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Button>
 
               <NotificationBell />
+
+              {/* MULTI-PALETTE THEME SELECTOR (PROJECT BRAHMA) */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 gap-1.5 px-2 text-xs font-mono text-muted-foreground hover:text-foreground"
+                    title="Switch Multi-Palette Visual Identity"
+                  >
+                    <Palette className="size-3.5 text-primary" />
+                    <span className="hidden lg:inline text-[11px] font-semibold">Palette</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-zinc-950 border-border">
+                  <DropdownMenuLabel className="text-[10px] uppercase font-mono tracking-wider text-muted-foreground">
+                    Multi-Palette Identity
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => {
+                      document.documentElement.setAttribute("data-vyron-theme", "midnight");
+                      localStorage.setItem("vyron_palette_theme", "midnight");
+                      toast.success("Switched to Midnight palette");
+                    }}
+                    className="flex items-center gap-2 text-xs cursor-pointer"
+                  >
+                    <span className="size-2.5 rounded-full bg-[#38BDF8]" />
+                    <span>Midnight (Technical Navy)</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      document.documentElement.setAttribute("data-vyron-theme", "emerald-dark");
+                      localStorage.setItem("vyron_palette_theme", "emerald-dark");
+                      toast.success("Switched to Emerald Dark palette");
+                    }}
+                    className="flex items-center gap-2 text-xs cursor-pointer"
+                  >
+                    <span className="size-2.5 rounded-full bg-[#00C896]" />
+                    <span>Pastel Breeze / Emerald</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      document.documentElement.setAttribute("data-vyron-theme", "warm-breeze");
+                      localStorage.setItem("vyron_palette_theme", "warm-breeze");
+                      toast.success("Switched to Warm Breeze palette");
+                    }}
+                    className="flex items-center gap-2 text-xs cursor-pointer"
+                  >
+                    <span className="size-2.5 rounded-full bg-[#D39858]" />
+                    <span>Warm Breeze (Editorial Cream)</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      document.documentElement.setAttribute("data-vyron-theme", "royal-smoke");
+                      localStorage.setItem("vyron_palette_theme", "royal-smoke");
+                      toast.success("Switched to Royal Smoke palette");
+                    }}
+                    className="flex items-center gap-2 text-xs cursor-pointer"
+                  >
+                    <span className="size-2.5 rounded-full bg-[#6A0DAD]" />
+                    <span>Velvet / Royal Smoke</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      document.documentElement.setAttribute("data-vyron-theme", "obsidian-glow");
+                      localStorage.setItem("vyron_palette_theme", "obsidian-glow");
+                      toast.success("Switched to Obsidian Glow palette");
+                    }}
+                    className="flex items-center gap-2 text-xs cursor-pointer"
+                  >
+                    <span className="size-2.5 rounded-full bg-[#3A0CA3]" />
+                    <span>Velvet / Obsidian Glow</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      document.documentElement.setAttribute("data-vyron-theme", "neon-dusk");
+                      localStorage.setItem("vyron_palette_theme", "neon-dusk");
+                      toast.success("Switched to Neon Dusk palette");
+                    }}
+                    className="flex items-center gap-2 text-xs cursor-pointer"
+                  >
+                    <span className="size-2.5 rounded-full bg-[#00D4FF]" />
+                    <span>Ocean Blue / Neon Dusk</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
               <Button
                 variant="ghost"

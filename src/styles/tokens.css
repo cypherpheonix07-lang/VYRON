@@ -143,6 +143,92 @@
   --shadow-glow: 0 0 20px oklch(0.854 0.061 294.4 / 0.25);
 }
 
+/* ═══ 6 MULTI-PALETTE THEME PROFILES (PROJECT BRAHMA) ═══ */
+
+/* PALETTE 01 — MIDNIGHT */
+[data-vyron-theme="midnight"], :root[data-vyron-theme="midnight"] {
+  --vyron-bg: #0A1A2F;
+  --vyron-surface: #1F1F1F;
+  --vyron-elevated: #262626;
+  --vyron-border: #2D3748;
+  --vyron-text: #F8FAFC;
+  --vyron-muted: #94A3B8;
+  --vyron-primary: #38BDF8;
+  --vyron-primary-foreground: #0A1A2F;
+  --vyron-focus: #22D3EE;
+  --vyron-glow: rgba(56, 189, 248, 0.25);
+}
+
+/* PALETTE 02 — PASTEL BREEZE / EMERALD DARK */
+[data-vyron-theme="emerald-dark"], :root[data-vyron-theme="emerald-dark"] {
+  --vyron-bg: #040404;
+  --vyron-surface: #1F1F1F;
+  --vyron-elevated: #282828;
+  --vyron-border: #243530;
+  --vyron-text: #F0FDF4;
+  --vyron-muted: #86EFAC;
+  --vyron-primary: #00C896;
+  --vyron-primary-foreground: #040404; /* Contrast: 9.47:1 */
+  --vyron-focus: #34D399;
+  --vyron-glow: rgba(0, 200, 150, 0.25);
+}
+
+/* PALETTE 03 — WARM BREEZE */
+[data-vyron-theme="warm-breeze"], :root[data-vyron-theme="warm-breeze"] {
+  --vyron-bg: #EACEAA;
+  --vyron-surface: #D39858;
+  --vyron-elevated: #F5E5CF;
+  --vyron-border: #85431E;
+  --vyron-text: #34150F; /* Contrast: 11.04:1 on cream */
+  --vyron-muted: #5C2719;
+  --vyron-primary: #85431E;
+  --vyron-primary-foreground: #EACEAA; /* Contrast: 5.84:1 */
+  --vyron-focus: #85431E;
+  --vyron-glow: rgba(133, 67, 30, 0.25);
+}
+
+/* PALETTE 04 — VELVET / ROYAL SMOKE */
+[data-vyron-theme="royal-smoke"], :root[data-vyron-theme="royal-smoke"] {
+  --vyron-bg: #1C1C1C;
+  --vyron-surface: #242424;
+  --vyron-elevated: #2E2E2E;
+  --vyron-border: #4A1D7A;
+  --vyron-text: #F8FAFC;
+  --vyron-muted: #D8B4FE;
+  --vyron-primary: #6A0DAD;
+  --vyron-primary-foreground: #FFFFFF; /* Contrast: 9.24:1 */
+  --vyron-focus: #C084FC;
+  --vyron-glow: rgba(106, 13, 173, 0.35);
+}
+
+/* PALETTE 05 — VELVET / OBSIDIAN GLOW */
+[data-vyron-theme="obsidian-glow"], :root[data-vyron-theme="obsidian-glow"] {
+  --vyron-bg: #050505;
+  --vyron-surface: #14141E;
+  --vyron-elevated: #1F1E33;
+  --vyron-border: #2E1065;
+  --vyron-text: #F5F3FF;
+  --vyron-muted: #C4B5FD;
+  --vyron-primary: #3A0CA3;
+  --vyron-primary-foreground: #FFFFFF; /* Contrast: 11.92:1 */
+  --vyron-focus: #818CF8;
+  --vyron-glow: rgba(58, 12, 163, 0.35);
+}
+
+/* PALETTE 06 — OCEAN BLUE / NEON DUSK */
+[data-vyron-theme="neon-dusk"], :root[data-vyron-theme="neon-dusk"] {
+  --vyron-bg: #020024;
+  --vyron-surface: #0B0A33;
+  --vyron-elevated: #14124A;
+  --vyron-border: #1E1B6B;
+  --vyron-text: #F0F9FF;
+  --vyron-muted: #7DD3FC;
+  --vyron-primary: #00D4FF;
+  --vyron-primary-foreground: #020024; /* Contrast: 11.54:1 */
+  --vyron-focus: #38BDF8;
+  --vyron-glow: rgba(0, 212, 255, 0.3);
+}
+
 /* ═══ LIGHT THEME OVERRIDES ═══ */
 .light {
   --surface-base: oklch(0.864 0.021 358.8); /* #DFCDD2 */
