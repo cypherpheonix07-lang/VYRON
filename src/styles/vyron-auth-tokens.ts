@@ -17,56 +17,56 @@ export const VYRON_GLOBAL_TOKENS = {
 } as const;
 
 export const SIGN_IN_TOKENS = {
-  themeName: "Dark Navy",
-  bg: "#0A1A2F",
-  surface: "#1F1F1F",
-  elevated: "#262626",
-  accent: "#00D4FF",
-  accentHover: "#38BDF8",
-  accentGlow: "rgba(0, 212, 255, 0.25)",
-  primaryText: "#FFFFFF",
+  themeName: "Royal Smoke",
+  bg: "#050505",
+  surface: "rgba(28, 28, 28, 0.45)",
+  elevated: "#1C1C1C",
+  accent: "#6A0DAD",
+  accentHover: "#7E12CF",
+  accentGlow: "rgba(106, 13, 173, 0.35)",
+  primaryText: "#F8FAFC",
   secondaryText: "#CBD5E1",
-  btnForeground: "#020024", /* Dark navy text on cyan: 11.54:1 contrast */
-  border: "color-mix(in srgb, #FFFFFF 17%, #0A1A2F)",
+  btnForeground: "#FFFFFF",
+  border: "rgba(255, 255, 255, 0.10)",
 } as const;
 
 export const SIGN_UP_TOKENS = {
-  themeName: "Emerald Dark",
-  bg: "#040404",
-  surface: "#1F1F1F",
-  elevated: "#282828",
-  accent: "#00C896",
-  accentHover: "#05E2AA",
-  accentGlow: "rgba(0, 200, 150, 0.25)",
-  supportingAccent: "#00D4FF",
-  primaryText: "#FFFFFF",
+  themeName: "Obsidian Glow",
+  bg: "#050505",
+  surface: "rgba(20, 20, 30, 0.45)",
+  elevated: "#14141E",
+  accent: "#3A0CA3",
+  accentHover: "#4C14CE",
+  accentGlow: "rgba(58, 12, 163, 0.35)",
+  supportingAccent: "#6A0DAD",
+  primaryText: "#F8FAFC",
   secondaryText: "#CBD5E1",
-  btnForeground: "#040404", /* Crucial contrast invariant: 9.47:1 */
-  border: "color-mix(in srgb, #FFFFFF 17%, #040404)",
+  btnForeground: "#FFFFFF",
+  border: "rgba(255, 255, 255, 0.10)",
 } as const;
 
 export const SUSPENDED_THREAD_TOKENS = {
-  anchorLine: "rgba(255, 255, 255, 0.15)",
+  anchorLine: "rgba(255, 255, 255, 0.12)",
   thread1: {
     id: "identity",
     title: "1. IDENTIFY",
-    subtitle: "Dark Navy Credentials & SSO",
-    accent: "#00D4FF",
-    glow: "rgba(0, 212, 255, 0.25)",
+    subtitle: "Royal Smoke Credentials & SSO",
+    accent: "#6A0DAD",
+    glow: "rgba(106, 13, 173, 0.35)",
   },
   thread2: {
     id: "authenticate",
     title: "2. AUTHENTICATE",
-    subtitle: "Emerald Dark Verification",
-    accent: "#00C896",
-    glow: "rgba(0, 200, 150, 0.25)",
+    subtitle: "Obsidian Glow Verification",
+    accent: "#3A0CA3",
+    glow: "rgba(58, 12, 163, 0.35)",
   },
   thread3: {
     id: "workspace",
     title: "3. ENTER WORKSPACE",
-    subtitle: "Royal Smoke Role Entitlements",
-    accent: "#6A0DAD",
-    glow: "rgba(106, 13, 173, 0.35)",
+    subtitle: "Velvet Role Entitlements",
+    accent: "#4A1478",
+    glow: "rgba(74, 20, 120, 0.35)",
   },
 } as const;
 
@@ -111,15 +111,15 @@ export const WORKSPACE_ROLE_TOKENS = {
 } as const;
 
 export const SHOWCASE_TOKENS = {
-  themeName: "Graphite Ocean",
-  bg: "#090F18",
-  surface: "#101A18",
-  elevated: "#142120",
-  cyanAccent: "#65DFE8",
-  coralDetail: "#FF9B91",
-  primaryText: "#EEF4FF",
-  secondaryText: "#A0B2C6",
-  border: "#1C2B38",
+  themeName: "Obsidian & Royal Smoke",
+  bg: "#050505",
+  surface: "rgba(28, 28, 28, 0.50)",
+  elevated: "#1C1C1C",
+  cyanAccent: "#3A0CA3",
+  coralDetail: "#6A0DAD",
+  primaryText: "#F8FAFC",
+  secondaryText: "#CBD5E1",
+  border: "rgba(255, 255, 255, 0.10)",
 } as const;
 
 export type VyronTheme =

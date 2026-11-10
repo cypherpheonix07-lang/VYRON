@@ -52,71 +52,173 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Map hardcoded dark zinc utility classes to Royal Smoke & Obsidian Glow foundation */
+  --color-zinc-950: var(--vyron-bg-base);
+  --color-zinc-900: var(--vyron-bg-elevated);
+  --color-zinc-800: var(--vyron-bg-overlay);
 }
 
-/* Unified Semantic Bridge:
-   Maps all shadcn/ui & Tailwind v4 semantic tokens directly to --vyron-* tokens
-   from src/styles/tokens.css across :root, .dark, and any [data-vyron-theme] scope.
-   1. Royal Smoke:          #6A0DAD & #1C1C1C
-   2. Dark & Elegant Navy:  #0A1A2F & #1F1F1F
-   3. Obsidian Glow:        #3A0CA3 & #050505
-   4. Neon Dusk:            #00D4FF & #020024
-   5. Emerald Dark:         #00C896 & #040404 */
-:root,
-.dark,
-[data-vyron-theme] {
+:root {
   --radius: 0.75rem;
-  --background: var(--vyron-bg);
-  --foreground: var(--vyron-text);
-  --card: var(--vyron-surface);
-  --card-foreground: var(--vyron-text);
-  --popover: var(--vyron-elevated);
-  --popover-foreground: var(--vyron-text);
-  --primary: var(--vyron-primary);
-  --primary-foreground: var(--vyron-primary-foreground);
-  --secondary: var(--vyron-secondary);
-  --secondary-foreground: var(--vyron-secondary-foreground);
-  --muted: var(--vyron-elevated);
-  --muted-foreground: var(--vyron-muted);
-  --accent: var(--vyron-accent);
-  --accent-foreground: var(--vyron-accent-foreground);
+  --background: var(--vyron-bg-base);
+  --foreground: var(--vyron-text-primary);
+  --card: var(--vyron-glass-bg);
+  --card-foreground: var(--vyron-text-primary);
+  --popover: rgba(24, 24, 28, 0.85);
+  --popover-foreground: var(--vyron-text-primary);
+  --primary: var(--vyron-neon-purple);
+  --primary-foreground: #FFFFFF;
+  --secondary: var(--vyron-neon-indigo);
+  --secondary-foreground: #FFFFFF;
+  --muted: var(--vyron-bg-overlay);
+  --muted-foreground: var(--vyron-text-secondary);
+  --accent: var(--vyron-neon-indigo);
+  --accent-foreground: #FFFFFF;
   --destructive: oklch(0.62 0.21 25);
   --destructive-foreground: oklch(0.98 0.005 250);
-  --border: var(--vyron-border);
-  --input: var(--vyron-elevated);
-  --ring: var(--vyron-focus);
-  --success: var(--vyron-success); /* #00C896 */
-  --warning: var(--vyron-warning);
+  --border: var(--vyron-glass-border);
+  --input: rgba(255, 255, 255, 0.08);
+  --ring: var(--vyron-neon-purple);
+  --success: #00C896;
+  --warning: #FACC75;
   --critical: oklch(0.62 0.21 25);
-  --info: #00D4FF;
+  --info: var(--vyron-neon-indigo);
   --chart-1: #6A0DAD; /* Royal Purple */
-  --chart-2: #00D4FF; /* Neon Cyan */
-  --chart-3: #00C896; /* Emerald Green */
-  --chart-4: #3A0CA3; /* Deep Indigo */
-  --chart-5: #0A1A2F; /* Deep Navy */
-  --chart-6: #1F1F1F; /* Dark Charcoal */
-  --sidebar: var(--vyron-sunken);
-  --sidebar-foreground: var(--vyron-text);
-  --sidebar-primary: var(--vyron-primary);
-  --sidebar-primary-foreground: var(--vyron-primary-foreground);
-  --sidebar-accent: var(--vyron-surface);
-  --sidebar-accent-foreground: var(--vyron-text);
-  --sidebar-border: var(--vyron-border);
-  --sidebar-ring: var(--vyron-focus);
-  --gradient-hero: radial-gradient(
-    120% 100% at 50% 0%,
-    color-mix(in oklab, var(--primary) 30%, transparent) 0%,
-    color-mix(in oklab, var(--accent) 22%, transparent) 38%,
-    color-mix(in oklab, #3A0CA3 18%, transparent) 62%,
-    transparent 78%
-  );
-  --shadow-glow:
-    0 0 0 1px color-mix(in oklab, var(--primary) 30%, transparent),
-    0 18px 50px -22px color-mix(in oklab, var(--primary) 50%, transparent);
-  --shadow-panel:
-    0 1px 0 0 color-mix(in oklab, white 6%, transparent) inset,
-    0 24px 60px -32px oklch(0 0 0 / 0.8);
+  --chart-2: #3A0CA3; /* Deep Indigo */
+  --chart-3: #4A1478; /* Mid Purple */
+  --chart-4: #1F0A57; /* Mid Indigo */
+  --chart-5: #00D4FF; /* Neon Cyan */
+  --chart-6: #00C896; /* Emerald */
+  --sidebar: rgba(5, 5, 5, 0.78);
+  --sidebar-foreground: var(--vyron-text-primary);
+  --sidebar-primary: var(--vyron-neon-purple);
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: rgba(106, 13, 173, 0.18);
+  --sidebar-border: var(--vyron-glass-border);
+  --sidebar-ring: var(--vyron-neon-purple);
+  --gradient-hero: var(--vyron-ng-ambient);
+  --shadow-glow: var(--vyron-glass-shadow);
+  --shadow-panel: var(--vyron-ng-shadow);
 }
+
+/* VYRON NEONGLASS MERGE V1 — STYLES BEGIN */
+/* Selectors deliberately target the existing dark shell and the two
+   requested palettes; other existing themes and .light are preserved. */
+:root.dark:not([data-vyron-theme]),
+:root.dark[data-vyron-theme="royal-smoke"],
+:root.dark[data-vyron-theme="obsidian-glow"] {
+  --vyron-bg: var(--vyron-ng-obsidian);
+  --vyron-surface: var(--vyron-ng-charcoal);
+  --vyron-elevated: #242029;
+  --vyron-sunken: #0D0811;
+  --vyron-border: var(--vyron-ng-glass-border);
+  --vyron-text: var(--vyron-ng-text);
+  --vyron-muted: var(--vyron-ng-muted);
+  --vyron-primary: var(--vyron-ng-royal);
+  --vyron-primary-foreground: #FFFFFF;
+  --vyron-secondary: var(--vyron-ng-violet-mid);
+  --vyron-secondary-foreground: #FFFFFF;
+  --vyron-accent: var(--vyron-ng-violet);
+  --vyron-accent-foreground: #FFFFFF;
+  --vyron-focus: var(--vyron-ng-focus);
+  --vyron-glow: rgba(106, 13, 173, .35);
+  --vyron-gradient: var(--vyron-ng-royal-gradient);
+
+  /* Tailwind v4 and shadcn component bridge. */
+  --background: var(--vyron-ng-obsidian);
+  --foreground: var(--vyron-ng-text);
+  --card: var(--vyron-ng-glass-background);
+  --card-foreground: var(--vyron-ng-text);
+  --popover: var(--vyron-ng-glass-strong);
+  --popover-foreground: var(--vyron-ng-text);
+  --primary: var(--vyron-ng-royal);
+  --primary-foreground: #FFFFFF;
+  --secondary: var(--vyron-ng-violet-mid);
+  --secondary-foreground: #FFFFFF;
+  --muted: #242029;
+  --muted-foreground: var(--vyron-ng-muted);
+  --accent: var(--vyron-ng-violet);
+  --accent-foreground: #FFFFFF;
+  --border: var(--vyron-ng-glass-border);
+  --input: rgba(255, 255, 255, .18);
+  --ring: var(--vyron-ng-focus);
+  --sidebar: rgba(14, 9, 21, .94);
+  --sidebar-foreground: var(--vyron-ng-text);
+  --sidebar-primary: var(--vyron-ng-royal);
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: rgba(106, 13, 173, .18);
+  --sidebar-accent-foreground: var(--vyron-ng-text);
+  --sidebar-border: var(--vyron-ng-glass-border);
+  --sidebar-ring: var(--vyron-ng-focus);
+  --gradient-hero: var(--vyron-ng-ambient);
+  --shadow-glow: var(--vyron-ng-shadow);
+  --shadow-panel: var(--vyron-ng-shadow);
+}
+
+/* Obsidian mode emphasizes indigo; Royal Smoke remains the default. */
+:root.dark[data-vyron-theme="obsidian-glow"] {
+  --vyron-primary: var(--vyron-ng-violet);
+  --primary: var(--vyron-ng-violet);
+  --vyron-secondary: var(--vyron-ng-royal);
+  --secondary: var(--vyron-ng-royal);
+  --vyron-gradient: var(--vyron-ng-obsidian-gradient);
+  --gradient-hero: var(--vyron-ng-obsidian-gradient);
+}
+
+/* Preserve the global app background component but replace its multicolor
+   red/gold/cyan/green layers with the two requested purple families. */
+:root.dark:not([data-vyron-theme]) [data-theme="figma-neon-spectrum"],
+:root.dark[data-vyron-theme="royal-smoke"] [data-theme="figma-neon-spectrum"],
+:root.dark[data-vyron-theme="obsidian-glow"] [data-theme="figma-neon-spectrum"] {
+  background: var(--vyron-ng-ambient);
+}
+:root.dark:not([data-vyron-theme]) [data-theme="figma-neon-spectrum"] > div,
+:root.dark[data-vyron-theme="royal-smoke"] [data-theme="figma-neon-spectrum"] > div,
+:root.dark[data-vyron-theme="obsidian-glow"] [data-theme="figma-neon-spectrum"] > div {
+  display: none;
+}
+
+/* Reuse the existing .surface utility, without glass-blurring printed paper. */
+:root.dark:not([data-vyron-theme]) .surface,
+:root.dark[data-vyron-theme="royal-smoke"] .surface,
+:root.dark[data-vyron-theme="obsidian-glow"] .surface,
+.vyron-neonglass-panel {
+  background: var(--vyron-ng-glass-background);
+  border: 1px solid var(--vyron-ng-glass-border);
+  box-shadow: var(--vyron-ng-shadow);
+  -webkit-backdrop-filter: blur(var(--vyron-ng-blur));
+  backdrop-filter: blur(var(--vyron-ng-blur));
+}
+.vyron-neonglass-panel-strong {
+  background: var(--vyron-ng-glass-strong);
+  border: 1px solid var(--vyron-ng-glass-border);
+  box-shadow: var(--vyron-ng-shadow);
+}
+.vyron-ng-gradient-royal { background-image: var(--vyron-ng-royal-gradient); }
+.vyron-ng-gradient-obsidian { background-image: var(--vyron-ng-obsidian-gradient); }
+
+@media (prefers-reduced-transparency: reduce) {
+  .vyron-neonglass-panel, .surface {
+    background-color: #1C1C1C;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vyron-neonglass-panel { transition: none; animation: none; }
+}
+@media print {
+  .vyron-neonglass-panel,
+  .vyron-neonglass-panel-strong,
+  .surface {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+  .report-paper-page { background-color: #FFFFFF !important; color: #0F172A !important; }
+}
+/* VYRON NEONGLASS MERGE V1 — STYLES END */
 
 .light {
   --background: var(--vyron-bg);
@@ -128,7 +230,7 @@
   --primary: #6A0DAD;
   --primary-foreground: #FFFFFF;
   --secondary: #E2E8F0;
-  --secondary-foreground: #0A1A2F;
+  --secondary-foreground: #050505;
   --muted: #F1F5F9;
   --muted-foreground: #475569;
   --accent: #3A0CA3;
@@ -137,22 +239,56 @@
   --input: #E2E8F0;
   --ring: #6A0DAD;
   --sidebar: #F1F5F9;
-  --sidebar-foreground: #0A1A2F;
+  --sidebar-foreground: #050505;
   --sidebar-accent: #E2E8F0;
-  --sidebar-accent-foreground: #0A1A2F;
+  --sidebar-accent-foreground: #050505;
   --sidebar-border: #CBD5E1;
-  --shadow-panel: 0 10px 30px -20px oklch(0.20 0.035 260 / 0.2);
+  --shadow-panel: 0 10px 30px -20px rgba(0, 0, 0, 0.15);
 }
 
+/* Neon Glassmorphism Surface Utilities */
 @utility surface {
-  background: color-mix(in oklab, var(--card) 82%, transparent);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-panel);
-  backdrop-filter: blur(10px);
+  background: var(--vyron-glass-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--vyron-glass-border);
+  box-shadow: var(--vyron-glass-shadow);
+}
+
+@utility glass-card {
+  background: var(--vyron-glass-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--vyron-glass-border);
+  box-shadow: var(--vyron-glass-shadow);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@utility glass-card-hover {
+  background: var(--vyron-glass-bg);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--vyron-glass-border);
+  box-shadow: var(--vyron-glass-shadow);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    border-color: rgba(106, 13, 173, 0.45);
+    box-shadow: 0 12px 35px rgba(58, 12, 163, 0.30), 0 0 28px rgba(106, 13, 173, 0.24);
+    transform: translateY(-1px);
+  }
+}
+
+@utility glass-panel {
+  background: var(--vyron-glass-bg-strong);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--vyron-glass-border);
+  box-shadow: var(--vyron-glass-shadow);
 }
 
 @utility text-gradient {
-  background: linear-gradient(100deg, var(--primary), var(--accent));
+  background: linear-gradient(135deg, var(--vyron-neon-purple), var(--vyron-neon-indigo));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -162,12 +298,12 @@
   background-image:
     linear-gradient(
       to right,
-      color-mix(in oklab, var(--border) 60%, transparent) 1px,
+      rgba(106, 13, 173, 0.12) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      color-mix(in oklab, var(--border) 60%, transparent) 1px,
+      rgba(106, 13, 173, 0.12) 1px,
       transparent 1px
     );
   background-size: 56px 56px;

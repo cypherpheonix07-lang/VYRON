@@ -93,24 +93,24 @@ export function WorkspaceSelectionModal({
   return (
     <div
       className={cn(
-        "w-full max-w-xl mx-auto rounded-2xl border border-[#2A3A35] bg-[#101A18]/95 p-6 sm:p-8 backdrop-blur-xl shadow-2xl relative",
+        "w-full max-w-xl mx-auto rounded-2xl border border-white/10 bg-[#050505]/90 p-6 sm:p-8 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(106,13,173,0.15)] relative",
         className,
       )}
     >
-      {/* Top Accent Emerald Activation Bar */}
-      <div className="absolute top-0 left-8 right-8 h-1 rounded-b bg-gradient-to-r from-transparent via-[#78E0B8] to-transparent" />
+      {/* Top Accent Royal Purple Activation Bar */}
+      <div className="absolute top-0 left-8 right-8 h-1 rounded-b bg-gradient-to-r from-transparent via-[#6A0DAD] to-transparent" />
 
       <div className="mb-6 space-y-1">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-mono font-bold tracking-wider px-2 py-0.5 rounded border uppercase text-[#78E0B8] border-[#78E0B8]/40 bg-[#78E0B8]/10">
+          <span className="text-[10px] font-mono font-bold tracking-wider px-2 py-0.5 rounded border uppercase text-[#6A0DAD] border-[#6A0DAD]/40 bg-[#6A0DAD]/10">
             Workspace Activation
           </span>
           <span className="text-[10px] text-muted-foreground font-mono">Role Context Switcher</span>
         </div>
-        <h2 className="text-2xl font-bold tracking-tight text-[#F3F7F5]">
+        <h2 className="text-2xl font-bold tracking-tight text-foreground">
           Select Operational Context
         </h2>
-        <p className="text-xs text-[#BAC8C0]">
+        <p className="text-xs text-muted-foreground">
           Choose your workspace destination. Tailors available AST forensics and engineering systems.
         </p>
       </div>
@@ -130,10 +130,10 @@ export function WorkspaceSelectionModal({
               className={cn(
                 "p-3.5 rounded-xl border text-left transition-all relative flex flex-col justify-between group",
                 isSelected
-                  ? "bg-[#162321] shadow-lg ring-1"
+                  ? "bg-[#3A0CA3]/25 shadow-lg ring-1 border-[#3A0CA3]"
                   : opt.permitted
-                    ? "bg-[#070C0B]/60 border-[#2A3A35] hover:border-white/20 hover:bg-[#162321]/60"
-                    : "opacity-40 cursor-not-allowed bg-[#070C0B]/30 border-white/5",
+                    ? "bg-[#1C1C1C]/40 border-white/10 hover:border-white/20 hover:bg-[#1C1C1C]/60"
+                    : "opacity-40 cursor-not-allowed bg-black/20 border-white/5",
               )}
               style={{
                 borderColor: isSelected ? opt.accent : undefined,
@@ -150,7 +150,7 @@ export function WorkspaceSelectionModal({
                   </div>
                   {isSelected ? (
                     <span
-                      className="size-4 rounded-full flex items-center justify-center text-[#1A1011]"
+                      className="size-4 rounded-full flex items-center justify-center text-white"
                       style={{ backgroundColor: opt.accent }}
                     >
                       <Check className="size-3 stroke-[3]" />
@@ -189,7 +189,7 @@ export function WorkspaceSelectionModal({
       </div>
 
       {/* Action Footer */}
-      <div className="flex items-center justify-between gap-3 pt-2 border-t border-[#2A3A35]">
+      <div className="flex items-center justify-between gap-3 pt-2 border-t border-white/10">
         <div className="text-[11px] text-muted-foreground">
           Destination:{" "}
           <span className="font-mono text-foreground">{resolvePostLoginRoute(selectedRole)}</span>
@@ -201,9 +201,9 @@ export function WorkspaceSelectionModal({
           disabled={loading}
           className="text-xs font-semibold py-2 px-4 flex items-center gap-2"
           style={{
-            backgroundColor: "#78E0B8",
-            color: "#070C0B",
-            boxShadow: "0 4px 16px -2px rgba(120, 224, 184, 0.25)",
+            backgroundColor: "#6A0DAD",
+            color: "#FFFFFF",
+            boxShadow: "0 4px 16px -2px rgba(106, 13, 173, 0.4)",
           }}
         >
           {loading ? (

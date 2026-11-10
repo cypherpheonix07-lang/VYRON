@@ -45,15 +45,15 @@ export function PremiumAuthShell({ initialMode = "signin" }: PremiumAuthShellPro
   };
 
   return (
-    <div className="relative min-h-screen w-screen bg-[#070C0B] text-[#F3F7F5] flex flex-col font-sans overflow-x-hidden">
-      {/* Background Subtle Gradient Glow */}
+    <div className="relative min-h-screen w-screen bg-[#050505] text-[#F8FAFC] flex flex-col font-sans overflow-x-hidden selection:bg-purple-600/30 selection:text-white">
+      {/* Background Subtle Gradient Glow (Royal Smoke & Obsidian Glow) */}
       <div
-        className="pointer-events-none fixed inset-0 opacity-20"
+        className="pointer-events-none fixed inset-0 opacity-30 transition-all duration-700"
         style={{
           backgroundImage:
             activeMode === "signup"
-              ? "radial-gradient(circle at 20% 20%, rgba(168, 164, 255, 0.15) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(121, 217, 247, 0.1) 0%, transparent 50%)"
-              : "radial-gradient(circle at 20% 20%, rgba(255, 154, 139, 0.12) 0%, transparent 40%), radial-gradient(circle at 80% 80%, rgba(120, 224, 184, 0.08) 0%, transparent 50%)",
+              ? "radial-gradient(circle at 25% 25%, rgba(58, 12, 163, 0.28) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(31, 10, 87, 0.22) 0%, transparent 55%)"
+              : "radial-gradient(circle at 25% 25%, rgba(106, 13, 173, 0.28) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(74, 20, 120, 0.20) 0%, transparent 55%)",
         }}
         aria-hidden="true"
       />

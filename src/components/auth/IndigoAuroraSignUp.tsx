@@ -239,9 +239,9 @@ export function IndigoAuroraSignUp({
         </div>
 
         {/* Visual Progress Bar */}
-        <div className="w-full h-1 bg-[#10132B] rounded-full overflow-hidden flex">
+        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden flex">
           <div
-            className="h-full bg-gradient-to-r from-[#79D9F7] via-[#A8A4FF] to-[#78E0B8] transition-all duration-300"
+            className="h-full bg-gradient-to-r from-[#3A0CA3] via-[#6A0DAD] to-[#4A1478] transition-all duration-300"
             style={{ width: currentStage === 1 ? "33%" : currentStage === 2 ? "66%" : "100%" }}
           />
         </div>
@@ -276,14 +276,14 @@ export function IndigoAuroraSignUp({
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Dr. Samantha Vance"
-                className="pl-9 bg-[#0D1020] border-[#2A3555] text-xs text-[#F3F7F5] focus-visible:ring-1 focus-visible:ring-[#A8A4FF]"
+                className="pl-9 bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-1 focus-visible:ring-[#3A0CA3]"
                 required
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="signup-email" className="text-xs font-medium text-[#BAC8C0]">
+            <Label htmlFor="signup-email" className="text-xs font-medium text-muted-foreground">
               Academic / Work Email
             </Label>
             <div className="relative">
@@ -294,14 +294,14 @@ export function IndigoAuroraSignUp({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="vance@engineering.mit.edu"
-                className="pl-9 bg-[#0D1020] border-[#2A3555] text-xs text-[#F3F7F5] focus-visible:ring-1 focus-visible:ring-[#A8A4FF]"
+                className="pl-9 bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-1 focus-visible:ring-[#3A0CA3]"
                 required
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="signup-password" className="text-xs font-medium text-[#BAC8C0]">
+            <Label htmlFor="signup-password" className="text-xs font-medium text-muted-foreground">
               Security Password
             </Label>
             <div className="relative">
@@ -312,7 +312,7 @@ export function IndigoAuroraSignUp({
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                className="pl-9 bg-[#0D1020] border-[#2A3555] text-xs text-[#F3F7F5] focus-visible:ring-1 focus-visible:ring-[#A8A4FF]"
+                className="pl-9 bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-1 focus-visible:ring-[#3A0CA3]"
                 required
               />
             </div>
@@ -358,10 +358,10 @@ export function IndigoAuroraSignUp({
           {/* OAuth Providers Divider */}
           <div className="relative my-4">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#2A3555]" />
+              <div className="w-full border-t border-white/10" />
             </div>
             <div className="relative flex justify-center text-[10px] uppercase">
-              <span className="bg-[#0D1020] px-2 text-muted-foreground font-mono">
+              <span className="bg-[#1C1C1C]/90 px-2 text-muted-foreground font-mono">
                 Or register with
               </span>
             </div>
@@ -375,7 +375,7 @@ export function IndigoAuroraSignUp({
               disabled={Boolean(oauthLoading)}
               onClick={() => handleOAuth("google")}
               aria-label="Sign up with Google"
-              className="text-xs border-[#2A3555] bg-[#070A18]/60 hover:bg-[#161D3A] text-[#F3F7F5] flex items-center justify-center gap-1.5 px-2"
+              className="text-xs border-white/10 bg-[#1C1C1C]/40 hover:bg-[#1C1C1C]/80 text-foreground flex items-center justify-center gap-1.5 px-2"
             >
               {oauthLoading === "google" ? (
                 <Loader2 className="size-3.5 animate-spin" />
@@ -397,7 +397,7 @@ export function IndigoAuroraSignUp({
               disabled={Boolean(oauthLoading)}
               onClick={() => handleOAuth("github")}
               aria-label="Sign up with GitHub"
-              className="text-xs border-[#2A3555] bg-[#070A18]/60 hover:bg-[#161D3A] text-[#F3F7F5] flex items-center justify-center gap-1.5 px-2"
+              className="text-xs border-white/10 bg-[#1C1C1C]/40 hover:bg-[#1C1C1C]/80 text-foreground flex items-center justify-center gap-1.5 px-2"
             >
               {oauthLoading === "github" ? (
                 <Loader2 className="size-3.5 animate-spin" />
@@ -416,7 +416,7 @@ export function IndigoAuroraSignUp({
               disabled={Boolean(oauthLoading)}
               onClick={() => handleOAuth("gitlab")}
               aria-label="Sign up with GitLab"
-              className="text-xs border-[#2A3555] bg-[#070A18]/60 hover:bg-[#161D3A] text-[#F3F7F5] flex items-center justify-center gap-1.5 px-2"
+              className="text-xs border-white/10 bg-[#1C1C1C]/40 hover:bg-[#1C1C1C]/80 text-foreground flex items-center justify-center gap-1.5 px-2"
             >
               {oauthLoading === "gitlab" ? (
                 <Loader2 className="size-3.5 animate-spin" />
@@ -469,8 +469,8 @@ export function IndigoAuroraSignUp({
                   className={cn(
                     "p-3 rounded-xl border text-left transition-all relative flex flex-col justify-between",
                     isSelected
-                      ? "bg-[#1F2342] border-[#A8A4FF] shadow-md ring-1 ring-[#A8A4FF]"
-                      : "bg-[#0D1020]/60 border-[#2A3555] hover:border-white/20",
+                      ? "bg-[#3A0CA3]/25 border-[#3A0CA3] shadow-[0_0_15px_rgba(58,12,163,0.3)] ring-1 ring-[#3A0CA3]"
+                      : "bg-white/[0.03] border-white/10 hover:border-white/20",
                   )}
                 >
                   <div>
@@ -481,7 +481,7 @@ export function IndigoAuroraSignUp({
                       >
                         <Icon className="size-4" />
                       </div>
-                      {isSelected && <Check className="size-3.5 text-[#A8A4FF]" />}
+                      {isSelected && <Check className="size-3.5 text-[#3A0CA3]" />}
                     </div>
                     <div className="text-xs font-bold text-foreground">{r.title}</div>
                     <p className="text-[10px] text-muted-foreground/80 line-clamp-2 mt-0.5">
@@ -494,7 +494,7 @@ export function IndigoAuroraSignUp({
           </div>
 
           <div className="space-y-1.5 pt-1">
-            <Label htmlFor="signup-org" className="text-xs font-medium text-[#BAC8C0]">
+            <Label htmlFor="signup-org" className="text-xs font-medium text-muted-foreground">
               Organization / Institution
             </Label>
             <div className="relative">
@@ -504,14 +504,14 @@ export function IndigoAuroraSignUp({
                 value={organization}
                 onChange={(e) => setOrganization(e.target.value)}
                 placeholder="Massachusetts Institute of Technology"
-                className="pl-9 bg-[#0D1020] border-[#2A3555] text-xs text-[#F3F7F5]"
+                className="pl-9 bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-[#3A0CA3]"
                 required
               />
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="signup-workspace" className="text-xs font-medium text-[#BAC8C0]">
+            <Label htmlFor="signup-workspace" className="text-xs font-medium text-muted-foreground">
               Workspace Identifier (Optional)
             </Label>
             <Input
@@ -519,7 +519,7 @@ export function IndigoAuroraSignUp({
               value={workspaceName}
               onChange={(e) => setWorkspaceName(e.target.value)}
               placeholder="vance-engineering-lab"
-              className="bg-[#0D1020] border-[#2A3555] text-xs text-[#F3F7F5]"
+              className="bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-[#3A0CA3]"
             />
           </div>
 
@@ -529,7 +529,7 @@ export function IndigoAuroraSignUp({
               variant="outline"
               size="sm"
               onClick={() => setCurrentStage(1)}
-              className="border-[#2A3555] bg-[#0D1020] text-xs text-muted-foreground hover:text-foreground"
+              className="border-white/10 bg-white/5 text-xs text-muted-foreground hover:text-foreground hover:bg-white/10"
             >
               <ArrowLeft className="size-3.5 mr-1" />
               Back
@@ -554,15 +554,15 @@ export function IndigoAuroraSignUp({
       {currentStage === 3 && (
         <form onSubmit={handleFinalLaunch} className="space-y-4">
           <div className="space-y-1">
-            <h2 className="text-xl font-bold text-[#F3F7F5]">Personalization & Launch</h2>
-            <p className="text-xs text-[#BAC8C0]">
+            <h2 className="text-xl font-bold text-foreground">Personalization & Launch</h2>
+            <p className="text-xs text-muted-foreground">
               Review your configuration and initialize your engineering intelligence workspace.
             </p>
           </div>
 
           {/* Primary Focus Selection */}
           <div className="space-y-1.5">
-            <Label className="text-xs font-medium text-[#BAC8C0]">Primary Platform Interest</Label>
+            <Label className="text-xs font-medium text-muted-foreground">Primary Platform Interest</Label>
             <div className="grid grid-cols-2 gap-2 text-xs">
               {[
                 "12-Stage Forensics & AST",
@@ -577,8 +577,8 @@ export function IndigoAuroraSignUp({
                   className={cn(
                     "p-2.5 rounded-lg border text-left transition-colors",
                     primaryFocus === focus
-                      ? "border-[#A8A4FF] bg-[#1F2342] text-foreground font-semibold"
-                      : "border-[#2A3555] bg-[#0D1020]/60 text-muted-foreground hover:text-foreground",
+                      ? "border-[#3A0CA3] bg-[#3A0CA3]/25 text-foreground font-semibold shadow-[0_0_12px_rgba(58,12,163,0.3)]"
+                      : "border-white/10 bg-white/[0.03] text-muted-foreground hover:text-foreground hover:border-white/20",
                   )}
                 >
                   <span className="text-[11px] leading-tight block">{focus}</span>
@@ -588,14 +588,14 @@ export function IndigoAuroraSignUp({
           </div>
 
           {/* Summary Confirmation Card */}
-          <div className="rounded-xl border border-[#2A3555] bg-[#0D1020] p-3 text-xs space-y-2">
+          <div className="rounded-xl border border-white/10 bg-[#1C1C1C]/40 backdrop-blur-xl p-3 text-xs space-y-2">
             <div className="flex items-center justify-between text-muted-foreground">
               <span>Account Identity</span>
               <span className="text-foreground font-mono font-medium">{fullName}</span>
             </div>
             <div className="flex items-center justify-between text-muted-foreground">
               <span>Selected Role</span>
-              <span className="text-[#A8A4FF] font-medium">{selectedRole}</span>
+              <span className="text-[#6A0DAD] font-medium">{selectedRole}</span>
             </div>
             <div className="flex items-center justify-between text-muted-foreground">
               <span>Organization</span>
@@ -610,7 +610,7 @@ export function IndigoAuroraSignUp({
               size="sm"
               disabled={loading}
               onClick={() => setCurrentStage(2)}
-              className="border-[#2A3555] bg-[#0D1020] text-xs text-muted-foreground hover:text-foreground"
+              className="border-white/10 bg-white/5 text-xs text-muted-foreground hover:text-foreground hover:bg-white/10"
             >
               <ArrowLeft className="size-3.5 mr-1" />
               Back

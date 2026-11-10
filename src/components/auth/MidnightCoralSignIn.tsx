@@ -228,7 +228,7 @@ export function MidnightCoralSignIn({
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email Input */}
           <div className="space-y-1.5">
-            <Label htmlFor="signin-email" className="text-xs font-medium text-[#BAC8C0]">
+            <Label htmlFor="signin-email" className="text-xs font-medium text-muted-foreground">
               Work / Academic Email
             </Label>
             <div className="relative">
@@ -240,7 +240,7 @@ export function MidnightCoralSignIn({
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="developer@institution.edu"
                 disabled={loading}
-                className="pl-9 bg-[#070C0B] border-[#2A3A35] text-xs text-[#F3F7F5] focus-visible:ring-1 focus-visible:ring-[#FF9A8B]"
+                className="pl-9 bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-1 focus-visible:ring-[#6A0DAD]"
                 required
               />
             </div>
@@ -249,13 +249,13 @@ export function MidnightCoralSignIn({
           {/* Password Input */}
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <Label htmlFor="signin-password" className="text-xs font-medium text-[#BAC8C0]">
+              <Label htmlFor="signin-password" className="text-xs font-medium text-muted-foreground">
                 Password
               </Label>
               <button
                 type="button"
                 onClick={() => setShowForgotPassword(true)}
-                className="text-[11px] font-medium text-[#FF9A8B] hover:underline"
+                className="text-[11px] font-medium text-[#6A0DAD] hover:underline"
               >
                 Forgot password?
               </button>
@@ -269,7 +269,7 @@ export function MidnightCoralSignIn({
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
                 disabled={loading}
-                className="pl-9 pr-9 bg-[#070C0B] border-[#2A3A35] text-xs text-[#F3F7F5] focus-visible:ring-1 focus-visible:ring-[#FF9A8B]"
+                className="pl-9 pr-9 bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-1 focus-visible:ring-[#6A0DAD]"
                 required
               />
               <button
@@ -307,10 +307,10 @@ export function MidnightCoralSignIn({
           {/* OAuth Providers Divider */}
           <div className="relative my-4">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-[#2A3A35]" />
+              <div className="w-full border-t border-white/10" />
             </div>
             <div className="relative flex justify-center text-[10px] uppercase">
-              <span className="bg-[#101A18] px-2 text-muted-foreground font-mono">
+              <span className="bg-[#1C1C1C]/90 px-2 text-muted-foreground font-mono">
                 Or authenticate with
               </span>
             </div>

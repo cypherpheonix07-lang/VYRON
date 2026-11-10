@@ -90,7 +90,7 @@ export function DashboardLayout({
   return (
     <div className="min-h-screen bg-zinc-950 text-foreground flex flex-col selection:bg-cyan-500/30">
       {/* Top Universal App Bar */}
-      <header className="sticky top-0 z-40 border-b border-border/40 bg-zinc-950/80 backdrop-blur-md">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-[#050505]/75 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
           {/* Left Brand & Breadcrumbs */}
           <div className="flex items-center gap-3">

@@ -851,10 +851,10 @@ function NavList({
                       onClick={onNavigate}
                       title={collapsed ? item.label : undefined}
                       className={cn(
-                        "relative flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors",
+                        "relative flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all duration-200",
                         active
-                          ? "bg-primary/12 text-primary font-semibold shadow-[inset_0_0_0_1px_color-mix(in_oklab,var(--primary)_20%,transparent)]"
-                          : "text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-foreground",
+                          ? "bg-[#6A0DAD]/20 text-white font-semibold shadow-[0_0_18px_rgba(106,13,173,0.35),inset_0_0_0_1px_rgba(106,13,173,0.5)]"
+                          : "text-sidebar-foreground/75 hover:bg-white/[0.04] hover:text-white hover:shadow-[inset_0_0_0_1px_rgba(58,12,163,0.35)]",
                       )}
                     >
                       <item.icon className="size-4 shrink-0" aria-hidden />
@@ -1608,11 +1608,11 @@ export function AppShell({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="flex min-h-screen w-full bg-background/85 backdrop-blur-[2px] text-foreground selection:bg-primary/25">
+    <div className="flex min-h-screen w-full bg-transparent text-foreground selection:bg-primary/25">
       {/* SIDEBAR FOR DESKTOP */}
       <aside
         className={cn(
-          "sticky top-0 hidden h-screen shrink-0 border-r border-sidebar-border bg-sidebar/90 backdrop-blur-md transition-[width] duration-200 lg:block",
+          "sticky top-0 hidden h-screen shrink-0 border-r border-white/10 bg-[#050505]/75 backdrop-blur-xl shadow-[4px_0_24px_rgba(58,12,163,0.15)] transition-[width] duration-200 lg:block",
           collapsed ? "w-[72px]" : "w-64",
         )}
       >
@@ -1624,7 +1624,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <DemoBanner />
 
         {/* HEADER */}
-        <header className="sticky top-0 z-30 border-b border-border/60 bg-background/85 backdrop-blur">
+        <header className="sticky top-0 z-30 border-b border-white/10 bg-[#050505]/65 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
           <div className="flex items-center gap-2 px-3 py-2.5 sm:px-5">
             {/* MOBILE SHEET TRIGGER */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -1640,7 +1640,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               </SheetTrigger>
               <SheetContent
                 side="left"
-                className="w-72 bg-sidebar p-0 border-r border-sidebar-border"
+                className="w-72 bg-[#050505]/90 backdrop-blur-2xl p-0 border-r border-white/10 shadow-[4px_0_30px_rgba(58,12,163,0.25)]"
               >
                 <SheetTitle className="sr-only">Navigation</SheetTitle>
                 <SidebarBody onNavigate={() => setMobileOpen(false)} />
