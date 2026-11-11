@@ -24,9 +24,9 @@ export const SIGN_IN_TOKENS = {
   accent: "#0F969C",
   accentHover: "#0C7075",
   accentGlow: "rgba(15, 150, 156, 0.35)",
-  primaryText: "#F8FAFC",
-  secondaryText: "#E2E8F0",
-  btnForeground: "#FFFFFF",
+  primaryText: "#E2E8F0",
+  secondaryText: "#94A3B8",
+  btnForeground: "#EDEDED",
   border: "rgba(109, 165, 192, 0.28)",
 } as const;
 
@@ -39,14 +39,14 @@ export const SIGN_UP_TOKENS = {
   accentHover: "#0F969C",
   accentGlow: "rgba(12, 112, 117, 0.35)",
   supportingAccent: "#6DA5C0",
-  primaryText: "#F8FAFC",
-  secondaryText: "#E2E8F0",
-  btnForeground: "#FFFFFF",
+  primaryText: "#E2E8F0",
+  secondaryText: "#94A3B8",
+  btnForeground: "#EDEDED",
   border: "rgba(109, 165, 192, 0.28)",
 } as const;
 
 export const SUSPENDED_THREAD_TOKENS = {
-  anchorLine: "rgba(248, 250, 252, 0.15)",
+  anchorLine: "rgba(226, 232, 240, 0.15)",
   thread1: {
     id: "identity",
     title: "1. IDENTIFY",
@@ -150,7 +150,7 @@ export const VYRON_FIVE_THEMES: Record<
     bg: "#0F172A",
     surface: "rgba(51, 65, 85, 0.54)",
     primary: "#64748B",
-    primaryForeground: "#FFFFFF",
+    primaryForeground: "#EDEDED",
     focus: "#94A3B8",
     gradient: "linear-gradient(180deg, #64748B 0%, #334155 50%, #0F172A 100%)",
   },
@@ -173,7 +173,7 @@ export const VYRON_FIVE_THEMES: Record<
     surface: "rgba(26, 26, 26, 0.62)",
     primary: "#D9D9D9",
     primaryForeground: "#0B0B0B",
-    focus: "#FFFFFF",
+    focus: "#EDEDED",
     gradient: "linear-gradient(180deg, #333333 0%, #1A1A1A 50%, #0B0B0B 100%)",
   },
   "neon-dusk": {
@@ -183,7 +183,7 @@ export const VYRON_FIVE_THEMES: Record<
     bg: "#05161A",
     surface: "rgba(7, 46, 51, 0.58)",
     primary: "#0F969C",
-    primaryForeground: "#FFFFFF",
+    primaryForeground: "#EDEDED",
     focus: "#0F969C",
     gradient: "linear-gradient(180deg, #0F969C 0%, #072E33 50%, #05161A 100%)",
   },

@@ -54,9 +54,9 @@
   --shade-obsidian-200-rgb: 217, 217, 217;
   --shade-obsidian-200-glass: rgba(217, 217, 217, 0.34);
 
-  --shade-obsidian-000-hex: #FFFFFF;
-  --shade-obsidian-000-rgb: 255, 255, 255;
-  --shade-obsidian-000-glass: rgba(255, 255, 255, 0.26);
+  --shade-obsidian-000-hex: #EDEDED;
+  --shade-obsidian-000-rgb: 237, 237, 237;
+  --shade-obsidian-000-glass: rgba(237, 237, 237, 0.22);
 
   /* FAMILY 3: CYBER TEAL GLASS (6 Shades — Brand Accents & Neon-Dusk Theme) */
   --shade-teal-950-hex: #05161A;
@@ -101,7 +101,7 @@
   --glass-obsidian-800: #333333;
   --glass-obsidian-500: #6B6B6B;
   --glass-obsidian-200: #D9D9D9;
-  --glass-obsidian-000: #FFFFFF;
+  --glass-obsidian-000: #EDEDED;
 
   --glass-teal-950: #05161A;
   --glass-teal-900: #072E33;
@@ -120,8 +120,8 @@
   --vyron-ng-violet-mid: var(--glass-teal-950);   /* #05161A */
 
   /* Typography Defaults */
-  --vyron-ng-text: var(--glass-slate-50);         /* #F8FAFC */
-  --vyron-ng-muted: var(--glass-slate-200);       /* #E2E8F0 */
+  --vyron-ng-text: var(--glass-slate-200);         /* #E2E8F0 (softened pearl-white, anti-glare) */
+  --vyron-ng-muted: var(--glass-slate-400);       /* #94A3B8 (subdued slate) */
 
   /* Signature Gradients */
   --vyron-ng-royal-gradient: linear-gradient(180deg, #0F969C 0%, #072E33 50%, #1A1A1A 100%);
@@ -152,18 +152,18 @@
     );
 
   --vyron-ng-glass-border: rgba(109, 165, 192, 0.38);
-  --vyron-ng-glass-highlight: rgba(248, 250, 252, 0.32);
+  --vyron-ng-glass-highlight: rgba(237, 237, 237, 0.18);
 
-  /* 3D Molded Bevel Rim & Caustic Under-Glow Shadow */
+  /* 3D Molded Bevel Rim & Caustic Under-Glow Shadow (Reduced Specular Glare) */
   --vyron-ng-shadow:
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.65),
+    inset 0 1.5px 2px rgba(237, 237, 237, 0.28),
     inset 0 -2px 6px rgba(0, 0, 0, 0.58),
     inset 0 0 0 1px rgba(109, 165, 192, 0.26),
     0 20px 46px -20px rgba(5, 22, 26, 0.88),
     0 0 30px -10px rgba(15, 150, 156, 0.42);
 
   --vyron-ng-blur: 22px;
-  --vyron-ng-focus: color-mix(in srgb, #0F969C 55%, #F8FAFC);
+  --vyron-ng-focus: color-mix(in srgb, #0F969C 55%, #E2E8F0);
 
   /* 3. Reconciled Intermediate Bridge Variables */
   --vyron-bg-base: var(--vyron-ng-obsidian);
@@ -199,11 +199,11 @@
   --vyron-text: var(--vyron-text-primary);
   --vyron-muted: var(--vyron-text-secondary);
   --vyron-primary: var(--vyron-neon-purple);
-  --vyron-primary-foreground: #FFFFFF;
+  --vyron-primary-foreground: #EDEDED;
   --vyron-secondary: var(--vyron-neon-indigo);
-  --vyron-secondary-foreground: #FFFFFF;
+  --vyron-secondary-foreground: #EDEDED;
   --vyron-accent: var(--glass-teal-700);
-  --vyron-accent-foreground: #FFFFFF;
+  --vyron-accent-foreground: #EDEDED;
   --vyron-focus: var(--vyron-neon-purple);
   --vyron-success: #00C896;
   --vyron-warning: #FACC75;
@@ -253,18 +253,18 @@
   --auth-signin-surface: rgba(26, 26, 26, 0.48);
   --auth-signin-elevated: #1A1A1A;
   --auth-signin-accent: #0F969C;
-  --auth-signin-btn-text: #FFFFFF;
+  --auth-signin-btn-text: #EDEDED;
 
   --auth-signup-bg: #0B0B0B;
   --auth-signup-surface: rgba(15, 23, 42, 0.48);
   --auth-signup-elevated: #0F172A;
   --auth-signup-accent: #0C7075;
   --auth-signup-accent-sub: #6DA5C0;
-  --auth-signup-btn-text: #FFFFFF;
+  --auth-signup-btn-text: #EDEDED;
 
   /* Suspended Identity Flow (Hanging Threads) */
   --thread-anchor: #1A1A1A;
-  --thread-line: rgba(248, 250, 252, 0.15);
+  --thread-line: rgba(226, 232, 240, 0.15);
   --thread-1-identity: #0F969C;
   --thread-2-account: #0C7075;
   --thread-3-workspace: #294D61;
@@ -280,7 +280,7 @@
   --showcase-surface: rgba(15, 23, 42, 0.50);
   --showcase-accent-cyan: #0F969C;
   --showcase-accent-coral: #6DA5C0;
-  --showcase-text: #F8FAFC;
+  --showcase-text: #E2E8F0;
 
   /* 4. Semantic Component Tokens (Consumed by Tailwind @theme inline) */
   --background: var(--vyron-bg-base);
@@ -288,9 +288,9 @@
   --card: var(--vyron-glass-bg);
   --card-foreground: var(--vyron-text-primary);
   --primary: var(--vyron-neon-purple);
-  --primary-foreground: #FFFFFF;
+  --primary-foreground: #EDEDED;
   --secondary: var(--vyron-neon-indigo);
-  --secondary-foreground: #FFFFFF;
+  --secondary-foreground: #EDEDED;
   --border: var(--vyron-glass-border);
   --ring: var(--vyron-neon-purple);
 
@@ -363,6 +363,7 @@
   --color-obsidian-500: var(--glass-obsidian-500);
   --color-obsidian-200: var(--glass-obsidian-200);
   --color-obsidian-000: var(--glass-obsidian-000);
+  --color-white: #EDEDED;
 
   --color-teal-950: var(--glass-teal-950);
   --color-teal-900: var(--glass-teal-900);
@@ -391,17 +392,17 @@
   --vyron-surface: rgba(51, 65, 85, 0.54);
   --vyron-elevated: #334155;
   --vyron-sunken: #090D16;
-  --vyron-text-primary: #F8FAFC;
-  --vyron-text: #F8FAFC;
+  --vyron-text-primary: #E2E8F0;
+  --vyron-text: #E2E8F0;
   --vyron-ng-muted: #94A3B8;
   --vyron-muted: #94A3B8;
   --vyron-glass-bg: rgba(51, 65, 85, 0.54);
   --vyron-neon-purple: #64748B;
   --vyron-primary: #64748B;
-  --vyron-primary-foreground: #FFFFFF;
+  --vyron-primary-foreground: #EDEDED;
   --vyron-neon-indigo: #334155;
   --vyron-secondary: #334155;
-  --vyron-secondary-foreground: #FFFFFF;
+  --vyron-secondary-foreground: #EDEDED;
   --vyron-accent: #94A3B8;
   --vyron-accent-foreground: #0F172A;
   --vyron-focus: #94A3B8;
@@ -415,9 +416,9 @@
     radial-gradient(ellipse 60% 50% at 85% 75%, rgba(51, 65, 85, 0.35), transparent 75%),
     linear-gradient(155deg, #0F172A 0%, #334155 56%, #0F172A 100%);
   --vyron-ng-shadow:
-    inset 0 1.5px 2px rgba(248, 250, 252, 0.68),
+    inset 0 1.5px 2px rgba(226, 232, 240, 0.28),
     inset 0 -2px 6px rgba(15, 23, 42, 0.65),
-    inset 0 0 0 1px rgba(226, 232, 240, 0.28),
+    inset 0 0 0 1px rgba(226, 232, 240, 0.24),
     0 20px 46px -20px rgba(15, 23, 42, 0.90),
     0 0 28px -10px rgba(148, 163, 184, 0.38);
 }
@@ -433,17 +434,17 @@
   --vyron-surface: rgba(7, 46, 51, 0.58);
   --vyron-elevated: #072E33;
   --vyron-sunken: #02090B;
-  --vyron-text-primary: #F8FAFC;
-  --vyron-text: #F8FAFC;
+  --vyron-text-primary: #E2E8F0;
+  --vyron-text: #E2E8F0;
   --vyron-ng-muted: #6DA5C0;
   --vyron-muted: #6DA5C0;
   --vyron-glass-bg: rgba(7, 46, 51, 0.58);
   --vyron-neon-purple: #0F969C;
   --vyron-primary: #0F969C;
-  --vyron-primary-foreground: #FFFFFF;
+  --vyron-primary-foreground: #EDEDED;
   --vyron-neon-indigo: #0C7075;
   --vyron-secondary: #0C7075;
-  --vyron-secondary-foreground: #FFFFFF;
+  --vyron-secondary-foreground: #EDEDED;
   --vyron-accent: #6DA5C0;
   --vyron-accent-foreground: #05161A;
   --vyron-focus: #0F969C;
@@ -457,9 +458,9 @@
     radial-gradient(ellipse 60% 55% at 88% 75%, rgba(109, 165, 192, 0.28), transparent 75%),
     linear-gradient(155deg, #05161A 0%, #072E33 56%, #05161A 100%);
   --vyron-ng-shadow:
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.70),
+    inset 0 1.5px 2px rgba(226, 232, 240, 0.28),
     inset 0 -2px 6px rgba(5, 22, 26, 0.70),
-    inset 0 0 0 1px rgba(109, 165, 192, 0.34),
+    inset 0 0 0 1px rgba(109, 165, 192, 0.30),
     0 20px 46px -20px rgba(5, 22, 26, 0.92),
     0 0 32px -8px rgba(15, 150, 156, 0.54);
 }
@@ -475,23 +476,23 @@
   --vyron-surface: rgba(26, 26, 26, 0.62);
   --vyron-elevated: #1A1A1A;
   --vyron-sunken: #050505;
-  --vyron-text-primary: #FFFFFF;
-  --vyron-text: #FFFFFF;
-  --vyron-ng-muted: #D9D9D9;
-  --vyron-muted: #D9D9D9;
+  --vyron-text-primary: #EDEDED;
+  --vyron-text: #EDEDED;
+  --vyron-ng-muted: #94A3B8;
+  --vyron-muted: #94A3B8;
   --vyron-glass-bg: rgba(26, 26, 26, 0.62);
   --vyron-neon-purple: #D9D9D9;
   --vyron-primary: #D9D9D9;
   --vyron-primary-foreground: #0B0B0B;
   --vyron-neon-indigo: #333333;
   --vyron-secondary: #333333;
-  --vyron-secondary-foreground: #FFFFFF;
+  --vyron-secondary-foreground: #EDEDED;
   --vyron-accent: #6B6B6B;
-  --vyron-accent-foreground: #FFFFFF;
-  --vyron-focus: #FFFFFF;
-  --vyron-border: rgba(255, 255, 255, 0.34);
-  --vyron-glass-border: rgba(255, 255, 255, 0.34);
-  --vyron-ng-glass-border: rgba(255, 255, 255, 0.34);
+  --vyron-accent-foreground: #EDEDED;
+  --vyron-focus: #EDEDED;
+  --vyron-border: rgba(237, 237, 237, 0.28);
+  --vyron-glass-border: rgba(237, 237, 237, 0.28);
+  --vyron-ng-glass-border: rgba(237, 237, 237, 0.28);
   --vyron-gradient: linear-gradient(180deg, #333333 0%, #1A1A1A 50%, #0B0B0B 100%);
   --vyron-glow: rgba(217, 217, 217, 0.32);
   --vyron-ng-ambient:
@@ -499,9 +500,9 @@
     radial-gradient(ellipse 60% 55% at 88% 75%, rgba(51, 51, 51, 0.32), transparent 75%),
     linear-gradient(155deg, #0B0B0B 0%, #1A1A1A 56%, #0B0B0B 100%);
   --vyron-ng-shadow:
-    inset 0 1.5px 2px rgba(255, 255, 255, 0.75),
+    inset 0 1.5px 2px rgba(237, 237, 237, 0.30),
     inset 0 -2px 6px rgba(0, 0, 0, 0.78),
-    inset 0 0 0 1px rgba(217, 217, 217, 0.28),
+    inset 0 0 0 1px rgba(217, 217, 217, 0.24),
     0 20px 46px -20px rgba(0, 0, 0, 0.95),
     0 0 28px -10px rgba(217, 217, 217, 0.28);
 }
@@ -517,19 +518,19 @@
   --vyron-surface: rgba(41, 77, 97, 0.52);
   --vyron-elevated: #1A1A1A;
   --vyron-sunken: #05161A;
-  --vyron-text-primary: #F8FAFC;
-  --vyron-text: #F8FAFC;
-  --vyron-ng-muted: #E2E8F0;
-  --vyron-muted: #E2E8F0;
+  --vyron-text-primary: #E2E8F0;
+  --vyron-text: #E2E8F0;
+  --vyron-ng-muted: #94A3B8;
+  --vyron-muted: #94A3B8;
   --vyron-glass-bg: rgba(41, 77, 97, 0.52);
   --vyron-neon-purple: #6DA5C0;
   --vyron-primary: #6DA5C0;
   --vyron-primary-foreground: #0B0B0B;
   --vyron-neon-indigo: #294D61;
   --vyron-secondary: #294D61;
-  --vyron-secondary-foreground: #FFFFFF;
+  --vyron-secondary-foreground: #EDEDED;
   --vyron-accent: #0F969C;
-  --vyron-accent-foreground: #FFFFFF;
+  --vyron-accent-foreground: #EDEDED;
   --vyron-focus: #6DA5C0;
   --vyron-border: rgba(109, 165, 192, 0.40);
   --vyron-glass-border: rgba(109, 165, 192, 0.40);
@@ -541,9 +542,9 @@
     radial-gradient(ellipse 60% 55% at 88% 75%, rgba(51, 65, 85, 0.30), transparent 75%),
     linear-gradient(155deg, #0B0B0B 0%, #1A1A1A 56%, #05161A 100%);
   --vyron-ng-shadow:
-    inset 0 1.5px 2px rgba(248, 250, 252, 0.66),
+    inset 0 1.5px 2px rgba(226, 232, 240, 0.28),
     inset 0 -2px 6px rgba(11, 11, 11, 0.68),
-    inset 0 0 0 1px rgba(109, 165, 192, 0.30),
+    inset 0 0 0 1px rgba(109, 165, 192, 0.26),
     0 20px 46px -20px rgba(11, 11, 11, 0.90),
     0 0 30px -10px rgba(109, 165, 192, 0.38);
 }
@@ -564,7 +565,7 @@
   --vyron-secondary: #1C1C1C;
   --vyron-secondary-foreground: #F0FDF4;
   --vyron-accent: #0F969C;
-  --vyron-accent-foreground: #FFFFFF;
+  --vyron-accent-foreground: #EDEDED;
   --vyron-focus: #00C896;
   --vyron-glow: rgba(0, 200, 150, 0.28);
   --vyron-gradient: linear-gradient(180deg, #00C896 0%, #040404 100%);
@@ -604,11 +605,11 @@
   --vyron-text: #050505;
   --vyron-muted: #475569;
   --vyron-primary: #0F969C;
-  --vyron-primary-foreground: #FFFFFF;
+  --vyron-primary-foreground: #EDEDED;
   --vyron-secondary: #E2E8F0;
   --vyron-secondary-foreground: #050505;
   --vyron-accent: #0C7075;
-  --vyron-accent-foreground: #FFFFFF;
+  --vyron-accent-foreground: #EDEDED;
   --vyron-focus: #0F969C;
   --surface-base: var(--vyron-bg);
   --surface-raised: var(--vyron-surface);
@@ -647,14 +648,14 @@
   border-radius: inherit;
   background: linear-gradient(
     125deg,
-    rgba(255, 255, 255, 0.32) 0%,
-    rgba(255, 255, 255, 0.08) 44%,
+    rgba(237, 237, 237, 0.12) 0%,
+    rgba(237, 237, 237, 0.03) 44%,
     transparent 45%,
     rgba(0, 0, 0, 0.14) 100%
   );
 }
 
-/* Corner Star-Burst Specular Bevel Glints */
+/* Corner Star-Burst Specular Bevel Glints (Subdued Anti-Glare Sheen) */
 .glass-3d-surface::after {
   content: "";
   position: absolute;
@@ -662,8 +663,8 @@
   pointer-events: none;
   border-radius: inherit;
   background:
-    radial-gradient(circle at 10% 8%, rgba(255, 255, 255, 0.85) 0%, transparent 15%),
-    radial-gradient(circle at 90% 92%, rgba(255, 255, 255, 0.58) 0%, transparent 13%);
+    radial-gradient(circle at 10% 8%, rgba(237, 237, 237, 0.22) 0%, transparent 15%),
+    radial-gradient(circle at 90% 92%, rgba(237, 237, 237, 0.12) 0%, transparent 13%);
 }
 
 /* ==============================================================================
