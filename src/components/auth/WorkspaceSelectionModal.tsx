@@ -93,16 +93,16 @@ export function WorkspaceSelectionModal({
   return (
     <div
       className={cn(
-        "w-full max-w-xl mx-auto rounded-2xl border border-white/10 bg-[#050505]/90 p-6 sm:p-8 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(106,13,173,0.15)] relative",
+        "w-full max-w-xl mx-auto rounded-2xl border border-white/10 bg-[#0B0B0B]/90 p-6 sm:p-8 backdrop-blur-2xl shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(15,150,156,0.15)] relative glass-3d-surface",
         className,
       )}
     >
-      {/* Top Accent Royal Purple Activation Bar */}
-      <div className="absolute top-0 left-8 right-8 h-1 rounded-b bg-gradient-to-r from-transparent via-[#6A0DAD] to-transparent" />
+      {/* Top Accent Cyber Teal Activation Bar */}
+      <div className="absolute top-0 left-8 right-8 h-1 rounded-b bg-gradient-to-r from-transparent via-[#0F969C] to-transparent" />
 
       <div className="mb-6 space-y-1">
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-mono font-bold tracking-wider px-2 py-0.5 rounded border uppercase text-[#6A0DAD] border-[#6A0DAD]/40 bg-[#6A0DAD]/10">
+          <span className="text-[10px] font-mono font-bold tracking-wider px-2 py-0.5 rounded border uppercase text-[#0F969C] border-[#0F969C]/40 bg-[#0F969C]/10">
             Workspace Activation
           </span>
           <span className="text-[10px] text-muted-foreground font-mono">Role Context Switcher</span>
@@ -130,9 +130,9 @@ export function WorkspaceSelectionModal({
               className={cn(
                 "p-3.5 rounded-xl border text-left transition-all relative flex flex-col justify-between group",
                 isSelected
-                  ? "bg-[#3A0CA3]/25 shadow-lg ring-1 border-[#3A0CA3]"
+                  ? "bg-[#0C7075]/25 shadow-lg ring-1 border-[#0C7075]"
                   : opt.permitted
-                    ? "bg-[#1C1C1C]/40 border-white/10 hover:border-white/20 hover:bg-[#1C1C1C]/60"
+                    ? "bg-[#1A1A1A]/40 border-white/10 hover:border-white/20 hover:bg-[#1A1A1A]/60"
                     : "opacity-40 cursor-not-allowed bg-black/20 border-white/5",
               )}
               style={{
@@ -201,9 +201,9 @@ export function WorkspaceSelectionModal({
           disabled={loading}
           className="text-xs font-semibold py-2 px-4 flex items-center gap-2"
           style={{
-            backgroundColor: "#6A0DAD",
+            backgroundColor: "#0F969C",
             color: "#FFFFFF",
-            boxShadow: "0 4px 16px -2px rgba(106, 13, 173, 0.4)",
+            boxShadow: "0 4px 16px -2px rgba(15, 150, 156, 0.4)",
           }}
         >
           {loading ? (

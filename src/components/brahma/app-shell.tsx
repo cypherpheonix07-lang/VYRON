@@ -853,8 +853,8 @@ function NavList({
                       className={cn(
                         "relative flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all duration-200",
                         active
-                          ? "bg-[#6A0DAD]/20 text-white font-semibold shadow-[0_0_18px_rgba(106,13,173,0.35),inset_0_0_0_1px_rgba(106,13,173,0.5)]"
-                          : "text-sidebar-foreground/75 hover:bg-white/[0.04] hover:text-white hover:shadow-[inset_0_0_0_1px_rgba(58,12,163,0.35)]",
+                          ? "bg-[#0F969C]/20 text-white font-semibold shadow-[0_0_18px_rgba(15,150,156,0.35),inset_0_0_0_1px_rgba(15,150,156,0.5)]"
+                          : "text-sidebar-foreground/75 hover:bg-white/[0.04] hover:text-white hover:shadow-[inset_0_0_0_1px_rgba(15,150,156,0.35)]",
                       )}
                     >
                       <item.icon className="size-4 shrink-0" aria-hidden />
@@ -1612,7 +1612,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* SIDEBAR FOR DESKTOP */}
       <aside
         className={cn(
-          "sticky top-0 hidden h-screen shrink-0 border-r border-white/10 bg-[#050505]/75 backdrop-blur-xl shadow-[4px_0_24px_rgba(58,12,163,0.15)] transition-[width] duration-200 lg:block",
+          "sticky top-0 hidden h-screen shrink-0 border-r border-white/10 bg-[#0B0B0B]/75 backdrop-blur-xl shadow-[4px_0_24px_rgba(15,150,156,0.15)] transition-[width] duration-200 lg:block glass-3d-surface",
           collapsed ? "w-[72px]" : "w-64",
         )}
       >
@@ -1624,7 +1624,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <DemoBanner />
 
         {/* HEADER */}
-        <header className="sticky top-0 z-30 border-b border-white/10 bg-[#050505]/65 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+        <header className="sticky top-0 z-30 border-b border-white/10 bg-[#0B0B0B]/65 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.4)] glass-3d-surface">
           <div className="flex items-center gap-2 px-3 py-2.5 sm:px-5">
             {/* MOBILE SHEET TRIGGER */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -1640,7 +1640,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               </SheetTrigger>
               <SheetContent
                 side="left"
-                className="w-72 bg-[#050505]/90 backdrop-blur-2xl p-0 border-r border-white/10 shadow-[4px_0_30px_rgba(58,12,163,0.25)]"
+                className="w-72 bg-[#0B0B0B]/90 backdrop-blur-2xl p-0 border-r border-white/10 shadow-[4px_0_30px_rgba(15,150,156,0.25)] glass-3d-surface"
               >
                 <SheetTitle className="sr-only">Navigation</SheetTitle>
                 <SidebarBody onNavigate={() => setMobileOpen(false)} />
@@ -1810,7 +1810,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Button
                 asChild
                 size="sm"
-                className="h-8 gap-1.5 bg-gradient-to-r from-indigo-600 via-indigo-500 to-purple-600 hover:opacity-95 text-white font-bold text-xs shadow-md shadow-primary/25 border border-white/20"
+                className="h-8 gap-1.5 bg-gradient-to-r from-teal-600 via-teal-500 to-cyan-600 hover:opacity-95 text-white font-bold text-xs shadow-md shadow-primary/25 border border-white/20"
               >
                 <Link to="/app/analysis">
                   <Play className="size-3.5 fill-current text-white" />
@@ -1920,7 +1920,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                     }}
                     className="flex items-center gap-2 text-xs cursor-pointer"
                   >
-                    <span className="size-2.5 rounded-full bg-[#6A0DAD]" />
+                    <span className="size-2.5 rounded-full bg-[#6DA5C0]" />
                     <span>Royal Smoke (AI & ATHER)</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem
@@ -1931,7 +1931,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                     }}
                     className="flex items-center gap-2 text-xs cursor-pointer"
                   >
-                    <span className="size-2.5 rounded-full bg-[#3A0CA3]" />
+                    <span className="size-2.5 rounded-full bg-[#D9D9D9]" />
                     <span>Obsidian Glow (ATLAS Studio)</span>
                   </DropdownMenuItem>
                   <DropdownMenuItem

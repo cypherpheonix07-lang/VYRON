@@ -58,7 +58,7 @@ export function SuspendedIdentityThreads({
       <div className="relative flex items-center justify-center">
         {/* Horizontal suspended track */}
         <div className="w-full h-px bg-gradient-to-r from-transparent via-white/15 to-transparent relative">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-0.5 bg-gradient-to-r from-transparent via-[#6A0DAD]/60 to-transparent" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-0.5 bg-gradient-to-r from-transparent via-[#0F969C]/60 to-transparent" />
         </div>
       </div>
 
@@ -75,7 +75,7 @@ export function SuspendedIdentityThreads({
                 className={cn(
                   "w-px transition-all duration-300",
                   isActive
-                    ? "h-4 sm:h-5 bg-gradient-to-b from-purple-500/50 via-current to-current"
+                    ? "h-4 sm:h-5 bg-gradient-to-b from-teal-500/50 via-current to-current"
                     : "h-3 sm:h-4 bg-white/15 group-hover:bg-white/30",
                 )}
                 style={{ color: isActive ? thread.accent : undefined }}
@@ -87,7 +87,7 @@ export function SuspendedIdentityThreads({
                 className={cn(
                   "size-1.5 rounded-full mb-1 transition-all duration-300",
                   isActive
-                    ? "ring-2 ring-offset-1 ring-offset-[#050505]"
+                    ? "ring-2 ring-offset-1 ring-offset-[#0B0B0B]"
                     : "bg-white/30 group-hover:bg-white/60",
                 )}
                 style={{
@@ -104,8 +104,8 @@ export function SuspendedIdentityThreads({
                 className={cn(
                   "w-full rounded-xl p-2.5 sm:p-3 text-left transition-all duration-200 border relative overflow-hidden focus:outline-none focus:ring-1",
                   isActive
-                    ? "bg-[#1C1C1C]/80 backdrop-blur-xl shadow-lg transform -translate-y-0.5 border-white/20"
-                    : "bg-[#1C1C1C]/40 backdrop-blur-md hover:bg-[#1C1C1C]/65 text-muted-foreground hover:text-foreground border-white/10 hover:border-white/20",
+                    ? "bg-[#1A1A1A]/80 backdrop-blur-xl shadow-lg transform -translate-y-0.5 border-white/20 glass-3d-surface"
+                    : "bg-[#1A1A1A]/40 backdrop-blur-md hover:bg-[#1A1A1A]/65 text-muted-foreground hover:text-foreground border-white/10 hover:border-white/20",
                 )}
                 style={{
                   borderColor: isActive ? thread.accent : undefined,

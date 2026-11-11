@@ -115,7 +115,7 @@ export function MidnightCoralSignIn({
 
   return (
     <div
-      className="w-full max-w-md mx-auto rounded-2xl border p-6 sm:p-8 backdrop-blur-xl transition-all shadow-2xl relative"
+      className="w-full max-w-md mx-auto rounded-2xl border p-6 sm:p-8 backdrop-blur-xl transition-all shadow-2xl relative glass-3d-surface"
       style={{
         backgroundColor: SIGN_IN_TOKENS.surface,
         borderColor: SIGN_IN_TOKENS.border,
@@ -240,7 +240,7 @@ export function MidnightCoralSignIn({
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="developer@institution.edu"
                 disabled={loading}
-                className="pl-9 bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-1 focus-visible:ring-[#6A0DAD]"
+                className="pl-9 bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-1 focus-visible:ring-[#0F969C]"
                 required
               />
             </div>
@@ -255,7 +255,7 @@ export function MidnightCoralSignIn({
               <button
                 type="button"
                 onClick={() => setShowForgotPassword(true)}
-                className="text-[11px] font-medium text-[#6A0DAD] hover:underline"
+                className="text-[11px] font-medium text-[#0F969C] hover:underline"
               >
                 Forgot password?
               </button>
@@ -269,7 +269,7 @@ export function MidnightCoralSignIn({
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
                 disabled={loading}
-                className="pl-9 pr-9 bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-1 focus-visible:ring-[#6A0DAD]"
+                className="pl-9 pr-9 bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-1 focus-visible:ring-[#0F969C]"
                 required
               />
               <button
@@ -310,7 +310,7 @@ export function MidnightCoralSignIn({
               <div className="w-full border-t border-white/10" />
             </div>
             <div className="relative flex justify-center text-[10px] uppercase">
-              <span className="bg-[#1C1C1C]/90 px-2 text-muted-foreground font-mono">
+              <span className="bg-[#1A1A1A]/90 px-2 text-muted-foreground font-mono">
                 Or authenticate with
               </span>
             </div>

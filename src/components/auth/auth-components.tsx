@@ -1485,7 +1485,7 @@ export function DemoAccessButton({
           type="button"
           variant="outline"
           onClick={() => onSelect("Admin")}
-          className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-purple-400 text-xs font-semibold py-1 px-2 rounded-lg"
+          className="border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-teal-400 text-xs font-semibold py-1 px-2 rounded-lg"
         >
           Admin
         </Button>

@@ -72,9 +72,9 @@ export function GraphiteOceanShowcase() {
       {/* Top Header */}
       <div className="relative z-10 space-y-3">
         <div className="flex items-center gap-2">
-          <div className="size-2 rounded-full bg-[#6A0DAD] animate-pulse shadow-[0_0_8px_#6A0DAD]" />
-          <span className="text-[10px] font-mono tracking-widest text-[#A855F7] uppercase">
-            ROYAL SMOKE · OBSIDIAN GLOW · ENGINEERING THEATER
+          <div className="size-2 rounded-full bg-[#0F969C] animate-pulse shadow-[0_0_8px_#0F969C]" />
+          <span className="text-[10px] font-mono tracking-widest text-[#6DA5C0] uppercase">
+            18-SHADE VOLUMETRIC GLASS · ENGINEERING THEATER
           </span>
         </div>
 
@@ -84,7 +84,7 @@ export function GraphiteOceanShowcase() {
           <span
             className="text-transparent bg-clip-text"
             style={{
-              backgroundImage: "linear-gradient(135deg, #A855F7, #6A0DAD, #3A0CA3)",
+              backgroundImage: "linear-gradient(135deg, #6DA5C0, #0F969C, #0C7075)",
             }}
           >
             from idea to deployment.
@@ -99,7 +99,7 @@ export function GraphiteOceanShowcase() {
 
       {/* Interactive Architecture Preview Box */}
       <div className="relative z-10 my-8">
-        <div className="rounded-2xl border border-white/10 bg-[#1C1C1C]/50 p-5 backdrop-blur-xl shadow-[0_15px_35px_rgba(58,12,163,0.2)] relative overflow-hidden">
+        <div className="rounded-2xl border border-white/10 bg-[#1A1A1A]/50 p-5 backdrop-blur-xl shadow-[0_15px_35px_rgba(15,150,156,0.2)] relative overflow-hidden glass-3d-surface">
           {/* Top Window Bar */}
           <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/5 text-[11px] font-mono text-muted-foreground">
             <div className="flex items-center gap-1.5">
@@ -119,7 +119,7 @@ export function GraphiteOceanShowcase() {
           <div className="space-y-4">
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-[9px] font-mono tracking-wider text-[#A855F7] uppercase">
+                <span className="text-[9px] font-mono tracking-wider text-[#6DA5C0] uppercase">
                   {capabilities[activeTab]?.tag}
                 </span>
                 <h3 className="text-base font-bold text-foreground">
@@ -137,17 +137,17 @@ export function GraphiteOceanShowcase() {
 
             {/* Architecture Node Diagram Simulation */}
             <div className="grid grid-cols-3 gap-2 pt-2">
-              <div className="rounded-lg border border-white/10 bg-[#050505]/80 p-2.5 text-center">
+              <div className="rounded-lg border border-white/10 bg-[#0B0B0B]/80 p-2.5 text-center">
                 <span className="text-[9px] text-muted-foreground font-mono block">Node A (AST)</span>
-                <span className="text-xs font-bold text-[#A855F7] font-mono">Clean Tree</span>
+                <span className="text-xs font-bold text-[#6DA5C0] font-mono">Clean Tree</span>
               </div>
-              <div className="rounded-lg border border-white/10 bg-[#050505]/80 p-2.5 text-center">
+              <div className="rounded-lg border border-white/10 bg-[#0B0B0B]/80 p-2.5 text-center">
                 <span className="text-[9px] text-muted-foreground font-mono block">Node B (Twin)</span>
                 <span className="text-xs font-bold text-emerald-400 font-mono">Synchronized</span>
               </div>
-              <div className="rounded-lg border border-white/10 bg-[#050505]/80 p-2.5 text-center">
+              <div className="rounded-lg border border-white/10 bg-[#0B0B0B]/80 p-2.5 text-center">
                 <span className="text-[9px] text-muted-foreground font-mono block">Node C (Gate)</span>
-                <span className="text-xs font-bold text-purple-300 font-mono">24/25 PASS</span>
+                <span className="text-xs font-bold text-teal-300 font-mono">24/25 PASS</span>
               </div>
             </div>
           </div>
@@ -167,11 +167,11 @@ export function GraphiteOceanShowcase() {
                 className={cn(
                   "p-2 rounded-lg border text-left transition-all flex flex-col justify-between text-[10px]",
                   isSelected
-                    ? "border-[#6A0DAD] bg-[#6A0DAD]/20 text-foreground font-semibold shadow-[0_0_12px_rgba(106,13,173,0.3)]"
+                    ? "border-[#0F969C] bg-[#0F969C]/20 text-foreground font-semibold shadow-[0_0_12px_rgba(15,150,156,0.3)]"
                     : "border-white/10 bg-white/[0.03] text-muted-foreground hover:text-foreground hover:bg-white/[0.06] hover:border-white/20",
                 )}
               >
-                <Icon className={cn("size-3.5 mb-1", isSelected ? "text-[#A855F7]" : "")} />
+                <Icon className={cn("size-3.5 mb-1", isSelected ? "text-[#6DA5C0]" : "")} />
                 <span className="truncate leading-tight">{c.title.split(" ")[0]}</span>
               </button>
             );
