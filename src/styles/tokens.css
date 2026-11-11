@@ -1,50 +1,176 @@
-/* VYRON NEONGLASS MERGE V1 — TOKENS BEGIN */
-/* Additive Royal Smoke + Obsidian Glow treatment.
-   Existing --auth-*, --thread-*, --role-*, --showcase-*, .light,
-   and other theme presets remain unchanged. */
+/* ══════════════════════════════════════════════════════════════════════════════
+   VYRON / ATHER — 18-SHADE 3D VOLUMETRIC GLASSMORPHISM DESIGN SYSTEM
+   Visual Reference: 18-Shade 3D Volumetric Glass Shades Project Preview
+   Architecture: React 19 + Vite 8 + TanStack Start + Tailwind CSS 4 + shadcn/ui
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ==============================================================================
+   PART 1: COLOUR CODE SET 1B — STANDALONE 18-SHADE MASTER TOKENS
+   ============================================================================== */
 :root {
-  --vyron-ng-royal: #6A0DAD;
-  --vyron-ng-charcoal: #1C1C1C;
-  --vyron-ng-royal-mid: #4A1478; /* Derived intermediate shade */
-  --vyron-ng-obsidian: #050505;
-  --vyron-ng-violet: #3A0CA3;
-  --vyron-ng-violet-mid: #1F0A57; /* Derived intermediate shade */
-  --vyron-ng-text: #F8FAFC;
-  --vyron-ng-muted: #CBD5E1;
-  --vyron-ng-royal-gradient: linear-gradient(180deg, #6A0DAD 0%, #4A1478 50%, #1C1C1C 100%);
-  --vyron-ng-obsidian-gradient: linear-gradient(180deg, #3A0CA3 0%, #1F0A57 50%, #050505 100%);
+  /* FAMILY 1: SLATE DUSK GLASS (6 Shades — Structural Surfaces & Midnight Theme) */
+  --shade-slate-900-hex: #0F172A;
+  --shade-slate-900-rgb: 15, 23, 42;
+  --shade-slate-900-glass: rgba(15, 23, 42, 0.58);
+
+  --shade-slate-700-hex: #334155;
+  --shade-slate-700-rgb: 51, 65, 85;
+  --shade-slate-700-glass: rgba(51, 65, 85, 0.52);
+
+  --shade-slate-500-hex: #64748B;
+  --shade-slate-500-rgb: 100, 116, 139;
+  --shade-slate-500-glass: rgba(100, 116, 139, 0.46);
+
+  --shade-slate-400-hex: #94A3B8;
+  --shade-slate-400-rgb: 148, 163, 184;
+  --shade-slate-400-glass: rgba(148, 163, 184, 0.40);
+
+  --shade-slate-200-hex: #E2E8F0;
+  --shade-slate-200-rgb: 226, 232, 240;
+  --shade-slate-200-glass: rgba(226, 232, 240, 0.34);
+
+  --shade-slate-50-hex: #F8FAFC;
+  --shade-slate-50-rgb: 248, 250, 252;
+  --shade-slate-50-glass: rgba(248, 250, 252, 0.28);
+
+  /* FAMILY 2: OBSIDIAN MONOCHROME GLASS (6 Shades — Base Canvas & Obsidian-Glow Theme) */
+  --shade-obsidian-950-hex: #0B0B0B;
+  --shade-obsidian-950-rgb: 11, 11, 11;
+  --shade-obsidian-950-glass: rgba(11, 11, 11, 0.66);
+
+  --shade-obsidian-900-hex: #1A1A1A;
+  --shade-obsidian-900-rgb: 26, 26, 26;
+  --shade-obsidian-900-glass: rgba(26, 26, 26, 0.60);
+
+  --shade-obsidian-800-hex: #333333;
+  --shade-obsidian-800-rgb: 51, 51, 51;
+  --shade-obsidian-800-glass: rgba(51, 51, 51, 0.52);
+
+  --shade-obsidian-500-hex: #6B6B6B;
+  --shade-obsidian-500-rgb: 107, 107, 107;
+  --shade-obsidian-500-glass: rgba(107, 107, 107, 0.44);
+
+  --shade-obsidian-200-hex: #D9D9D9;
+  --shade-obsidian-200-rgb: 217, 217, 217;
+  --shade-obsidian-200-glass: rgba(217, 217, 217, 0.34);
+
+  --shade-obsidian-000-hex: #FFFFFF;
+  --shade-obsidian-000-rgb: 255, 255, 255;
+  --shade-obsidian-000-glass: rgba(255, 255, 255, 0.26);
+
+  /* FAMILY 3: CYBER TEAL GLASS (6 Shades — Brand Accents & Neon-Dusk Theme) */
+  --shade-teal-950-hex: #05161A;
+  --shade-teal-950-rgb: 5, 22, 26;
+  --shade-teal-950-glass: rgba(5, 22, 26, 0.62);
+
+  --shade-teal-900-hex: #072E33;
+  --shade-teal-900-rgb: 7, 46, 51;
+  --shade-teal-900-glass: rgba(7, 46, 51, 0.56);
+
+  --shade-teal-700-hex: #0C7075;
+  --shade-teal-700-rgb: 12, 112, 117;
+  --shade-teal-700-glass: rgba(12, 112, 117, 0.50);
+
+  --shade-teal-500-hex: #0F969C;
+  --shade-teal-500-rgb: 15, 150, 156;
+  --shade-teal-500-glass: rgba(15, 150, 156, 0.46);
+
+  --shade-teal-300-hex: #6DA5C0;
+  --shade-teal-300-rgb: 109, 165, 192;
+  --shade-teal-300-glass: rgba(109, 165, 192, 0.40);
+
+  --shade-teal-800-hex: #294D61;
+  --shade-teal-800-rgb: 41, 77, 97;
+  --shade-teal-800-glass: rgba(41, 77, 97, 0.52);
+}
+
+/* ==============================================================================
+   PART 2: COMPLETE PRODUCTION TOKENS & CASCADE RECONCILIATION
+   ============================================================================== */
+:root {
+  /* 1. Raw 18-Shade Palette Foundation */
+  --glass-slate-900: #0F172A;
+  --glass-slate-700: #334155;
+  --glass-slate-500: #64748B;
+  --glass-slate-400: #94A3B8;
+  --glass-slate-200: #E2E8F0;
+  --glass-slate-50:  #F8FAFC;
+
+  --glass-obsidian-950: #0B0B0B;
+  --glass-obsidian-900: #1A1A1A;
+  --glass-obsidian-800: #333333;
+  --glass-obsidian-500: #6B6B6B;
+  --glass-obsidian-200: #D9D9D9;
+  --glass-obsidian-000: #FFFFFF;
+
+  --glass-teal-950: #05161A;
+  --glass-teal-900: #072E33;
+  --glass-teal-700: #0C7075;
+  --glass-teal-500: #0F969C;
+  --glass-teal-300: #6DA5C0;
+  --glass-teal-800: #294D61;
+
+  /* 2. Reconciled Vyron Neon-Glass Tokens (Replaces Purple/Violet with 3D Glass) */
+  --vyron-ng-royal: var(--glass-teal-500);        /* #0F969C */
+  --vyron-ng-charcoal: var(--glass-obsidian-900); /* #1A1A1A */
+  --vyron-ng-royal-mid: var(--glass-teal-900);    /* #072E33 */
+
+  --vyron-ng-obsidian: var(--glass-obsidian-950); /* #0B0B0B */
+  --vyron-ng-violet: var(--glass-teal-700);       /* #0C7075 */
+  --vyron-ng-violet-mid: var(--glass-teal-950);   /* #05161A */
+
+  /* Typography Defaults */
+  --vyron-ng-text: var(--glass-slate-50);         /* #F8FAFC */
+  --vyron-ng-muted: var(--glass-slate-200);       /* #E2E8F0 */
+
+  /* Signature Gradients */
+  --vyron-ng-royal-gradient: linear-gradient(180deg, #0F969C 0%, #072E33 50%, #1A1A1A 100%);
+  --vyron-ng-obsidian-gradient: linear-gradient(180deg, #0C7075 0%, #05161A 50%, #0B0B0B 100%);
+
+  /* Ambient Caustic Background */
   --vyron-ng-ambient:
-    radial-gradient(ellipse 58% 48% at 15% 15%, rgba(106, 13, 173, .28), transparent 75%),
-    radial-gradient(ellipse 60% 55% at 88% 75%, rgba(58, 12, 163, .27), transparent 75%),
-    linear-gradient(155deg, #050505 0%, #1C1C1C 56%, #050505 100%);
-  --vyron-ng-glass-background: rgba(28, 28, 28, .62);
-  --vyron-ng-glass-strong: rgba(28, 28, 28, .82);
-  --vyron-ng-glass-border: rgba(192, 132, 252, .24);
-  --vyron-ng-glass-highlight: rgba(255, 255, 255, .065);
+    radial-gradient(ellipse 58% 48% at 15% 15%, rgba(15, 150, 156, 0.30), transparent 75%),
+    radial-gradient(ellipse 60% 55% at 88% 75%, rgba(12, 112, 117, 0.28), transparent 75%),
+    radial-gradient(ellipse 50% 45% at 50% 50%, rgba(51, 65, 85, 0.24), transparent 70%),
+    linear-gradient(155deg, #0B0B0B 0%, #0F172A 56%, #05161A 100%);
+
+  /* Volumetric 3D Glass Surfaces */
+  --vyron-ng-glass-background:
+    linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.58) 0%,
+      rgba(26, 26, 26, 0.48) 52%,
+      rgba(7, 46, 51, 0.42) 100%
+    );
+
+  --vyron-ng-glass-strong:
+    linear-gradient(
+      135deg,
+      rgba(15, 23, 42, 0.82) 0%,
+      rgba(26, 26, 26, 0.78) 52%,
+      rgba(5, 22, 26, 0.74) 100%
+    );
+
+  --vyron-ng-glass-border: rgba(109, 165, 192, 0.38);
+  --vyron-ng-glass-highlight: rgba(248, 250, 252, 0.32);
+
+  /* 3D Molded Bevel Rim & Caustic Under-Glow Shadow */
   --vyron-ng-shadow:
-    0 1px 0 rgba(255, 255, 255, .065) inset,
-    0 18px 46px -24px rgba(58, 12, 163, .60),
-    0 0 28px -12px rgba(106, 13, 173, .33);
-  --vyron-ng-blur: 18px;
-  --vyron-ng-focus: color-mix(in srgb, #6A0DAD 45%, white);
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.65),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.58),
+    inset 0 0 0 1px rgba(109, 165, 192, 0.26),
+    0 20px 46px -20px rgba(5, 22, 26, 0.88),
+    0 0 30px -10px rgba(15, 150, 156, 0.42);
 
-  /* Unified alias mappings for --vyron-neon-* architecture */
-  --vyron-neon-purple: var(--vyron-ng-royal);
-  --vyron-neon-purple-mid: var(--vyron-ng-royal-mid);
-  --vyron-neon-charcoal: var(--vyron-ng-charcoal);
+  --vyron-ng-blur: 22px;
+  --vyron-ng-focus: color-mix(in srgb, #0F969C 55%, #F8FAFC);
 
-  --vyron-neon-indigo: var(--vyron-ng-violet);
-  --vyron-neon-indigo-mid: var(--vyron-ng-violet-mid);
-  --vyron-neon-black: var(--vyron-ng-obsidian);
-
-  --vyron-gradient-royal-smoke: var(--vyron-ng-royal-gradient);
-  --vyron-gradient-obsidian-glow: var(--vyron-ng-obsidian-gradient);
-
+  /* 3. Reconciled Intermediate Bridge Variables */
   --vyron-bg-base: var(--vyron-ng-obsidian);
   --vyron-bg-elevated: var(--vyron-ng-charcoal);
   --vyron-bg-overlay: #14141E;
 
-  --vyron-glass-bg: var(--vyron-ng-glass-background);
+  --vyron-glass-bg: rgba(15, 23, 42, 0.58);
   --vyron-glass-bg-strong: var(--vyron-ng-glass-strong);
   --vyron-glass-border: var(--vyron-ng-glass-border);
   --vyron-glass-highlight: var(--vyron-ng-glass-highlight);
@@ -52,6 +178,17 @@
 
   --vyron-text-primary: var(--vyron-ng-text);
   --vyron-text-secondary: var(--vyron-ng-muted);
+
+  --vyron-neon-purple: var(--glass-teal-500);
+  --vyron-neon-purple-mid: var(--glass-teal-900);
+  --vyron-neon-charcoal: var(--glass-obsidian-900);
+
+  --vyron-neon-indigo: var(--glass-teal-800);
+  --vyron-neon-indigo-mid: var(--glass-teal-950);
+  --vyron-neon-black: var(--glass-obsidian-950);
+
+  --vyron-gradient-royal-smoke: var(--vyron-ng-royal-gradient);
+  --vyron-gradient-obsidian-glow: var(--vyron-ng-obsidian-gradient);
 
   /* Backward Compatibility & Semantic Bridges */
   --vyron-bg: var(--vyron-bg-base);
@@ -65,16 +202,16 @@
   --vyron-primary-foreground: #FFFFFF;
   --vyron-secondary: var(--vyron-neon-indigo);
   --vyron-secondary-foreground: #FFFFFF;
-  --vyron-accent: var(--vyron-neon-indigo);
+  --vyron-accent: var(--glass-teal-700);
   --vyron-accent-foreground: #FFFFFF;
   --vyron-focus: var(--vyron-neon-purple);
   --vyron-success: #00C896;
   --vyron-warning: #FACC75;
   --vyron-error: #F87171;
-  --vyron-glow: rgba(106, 13, 173, 0.35);
+  --vyron-glow: rgba(15, 150, 156, 0.40);
   --vyron-gradient: var(--vyron-gradient-royal-smoke);
 
-  /* Background surfaces (dynamically linked to active --vyron-* theme) */
+  /* Background surfaces (dynamically linked to active theme) */
   --surface-base: var(--vyron-bg-base);
   --surface-raised: var(--vyron-bg-elevated);
   --surface-overlay: var(--vyron-bg-overlay);
@@ -104,7 +241,7 @@
   --text-secondary: var(--vyron-text-secondary);
   --text-tertiary: color-mix(in oklab, var(--vyron-text-secondary) 70%, var(--vyron-bg-base));
   --text-disabled: color-mix(in oklab, var(--vyron-text-secondary) 40%, var(--vyron-bg-base));
-  --text-gradient: linear-gradient(135deg, var(--vyron-neon-purple) 0%, var(--vyron-neon-indigo) 100%);
+  --text-gradient: linear-gradient(135deg, var(--glass-teal-300) 0%, var(--glass-teal-700) 100%);
 
   /* Border tokens */
   --border-default: var(--vyron-glass-border);
@@ -112,40 +249,50 @@
   --border-focus: var(--vyron-neon-purple);
 
   /* ═══ AUTHENTICATION DESIGN SYSTEM TOKENS ═══ */
-  /* Sign-In: Royal Smoke Leaning */
-  --auth-signin-bg: #050505;
-  --auth-signin-surface: rgba(28, 28, 28, 0.45);
-  --auth-signin-elevated: #1C1C1C;
-  --auth-signin-accent: #6A0DAD;
+  --auth-signin-bg: #0B0B0B;
+  --auth-signin-surface: rgba(26, 26, 26, 0.48);
+  --auth-signin-elevated: #1A1A1A;
+  --auth-signin-accent: #0F969C;
   --auth-signin-btn-text: #FFFFFF;
 
-  /* Sign-Up: Obsidian Glow Leaning */
-  --auth-signup-bg: #050505;
-  --auth-signup-surface: rgba(20, 20, 30, 0.45);
-  --auth-signup-elevated: #14141E;
-  --auth-signup-accent: #3A0CA3;
-  --auth-signup-accent-sub: #6A0DAD;
+  --auth-signup-bg: #0B0B0B;
+  --auth-signup-surface: rgba(15, 23, 42, 0.48);
+  --auth-signup-elevated: #0F172A;
+  --auth-signup-accent: #0C7075;
+  --auth-signup-accent-sub: #6DA5C0;
   --auth-signup-btn-text: #FFFFFF;
 
   /* Suspended Identity Flow (Hanging Threads) */
-  --thread-anchor: #1C1C1C;
-  --thread-line: rgba(255, 255, 255, 0.12);
-  --thread-1-identity: #6A0DAD;
-  --thread-2-account: #3A0CA3;
-  --thread-3-workspace: #4A1478;
+  --thread-anchor: #1A1A1A;
+  --thread-line: rgba(248, 250, 252, 0.15);
+  --thread-1-identity: #0F969C;
+  --thread-2-account: #0C7075;
+  --thread-3-workspace: #294D61;
 
   /* Workspace Role Accents */
-  --role-student: #3A0CA3;
-  --role-faculty: #6A0DAD;
-  --role-professional: #4A1478;
-  --role-admin: #1F0A57;
+  --role-student: #0C7075;
+  --role-faculty: #0F969C;
+  --role-professional: #6DA5C0;
+  --role-admin: #294D61;
 
   /* Product Showcase */
-  --showcase-bg: #050505;
-  --showcase-surface: rgba(28, 28, 28, 0.50);
-  --showcase-accent-cyan: #3A0CA3;
-  --showcase-accent-coral: #6A0DAD;
+  --showcase-bg: #0B0B0B;
+  --showcase-surface: rgba(15, 23, 42, 0.50);
+  --showcase-accent-cyan: #0F969C;
+  --showcase-accent-coral: #6DA5C0;
   --showcase-text: #F8FAFC;
+
+  /* 4. Semantic Component Tokens (Consumed by Tailwind @theme inline) */
+  --background: var(--vyron-bg-base);
+  --foreground: var(--vyron-text-primary);
+  --card: var(--vyron-glass-bg);
+  --card-foreground: var(--vyron-text-primary);
+  --primary: var(--vyron-neon-purple);
+  --primary-foreground: #FFFFFF;
+  --secondary: var(--vyron-neon-indigo);
+  --secondary-foreground: #FFFFFF;
+  --border: var(--vyron-glass-border);
+  --ring: var(--vyron-neon-purple);
 
   /* ═══ TYPOGRAPHY ═══ */
   --font-sans: "Inter", "Geist", system-ui, sans-serif;
@@ -190,7 +337,7 @@
   --motion-slow: 400ms ease-out;
 
   /* ═══ GRID BACKDROP ═══ */
-  --grid-backdrop: url("data:image/svg+xml,%3Csvg width='56' height='56' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M56 0H0v56' fill='none' stroke='rgba(106,13,173,0.12)' stroke-width='0.5'/%3E%3C/svg%3E");
+  --grid-backdrop: url("data:image/svg+xml,%3Csvg width='56' height='56' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M56 0H0v56' fill='none' stroke='rgba(15,150,156,0.12)' stroke-width='0.5'/%3E%3C/svg%3E");
 
   /* ═══ SHADOWS ═══ */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.45);
@@ -199,97 +346,210 @@
   --shadow-glow: var(--vyron-glass-shadow);
 }
 
-/* ═══ MULTI-PALETTE THEME PROFILES (PROJECT BRAHMA) ═══ */
+/* ==============================================================================
+   PART 3: TAILWIND V4 @THEME INLINE EXPOSURE
+   ============================================================================== */
+@theme inline {
+  --color-slate-900: var(--glass-slate-900);
+  --color-slate-700: var(--glass-slate-700);
+  --color-slate-500: var(--glass-slate-500);
+  --color-slate-400: var(--glass-slate-400);
+  --color-slate-200: var(--glass-slate-200);
+  --color-slate-50:  var(--glass-slate-50);
 
-/* PALETTE 01 — ROYAL SMOKE (#6A0DAD, #4A1478, #1C1C1C) */
-[data-vyron-theme="royal-smoke"],
-:root[data-vyron-theme="royal-smoke"] {
-  --vyron-bg: #1C1C1C;
-  --vyron-surface: rgba(28, 28, 28, 0.45);
-  --vyron-elevated: #242424;
-  --vyron-sunken: #121212;
-  --vyron-border: rgba(106, 13, 173, 0.25);
-  --vyron-text: #F8FAFC;
-  --vyron-muted: #D8B4FE;
-  --vyron-primary: #6A0DAD;
-  --vyron-primary-foreground: #FFFFFF;
-  --vyron-secondary: #4A1478;
-  --vyron-secondary-foreground: #FFFFFF;
-  --vyron-accent: #3A0CA3;
-  --vyron-accent-foreground: #FFFFFF;
-  --vyron-focus: #6A0DAD;
-  --vyron-glow: rgba(106, 13, 173, 0.38);
-  --vyron-gradient: linear-gradient(180deg, #6A0DAD 0%, #4A1478 50%, #1C1C1C 100%);
+  --color-obsidian-950: var(--glass-obsidian-950);
+  --color-obsidian-900: var(--glass-obsidian-900);
+  --color-obsidian-800: var(--glass-obsidian-800);
+  --color-obsidian-500: var(--glass-obsidian-500);
+  --color-obsidian-200: var(--glass-obsidian-200);
+  --color-obsidian-000: var(--glass-obsidian-000);
+
+  --color-teal-950: var(--glass-teal-950);
+  --color-teal-900: var(--glass-teal-900);
+  --color-teal-700: var(--glass-teal-700);
+  --color-teal-500: var(--glass-teal-500);
+  --color-teal-300: var(--glass-teal-300);
+  --color-teal-800: var(--glass-teal-800);
 }
 
-/* PALETTE 02 — OBSIDIAN GLOW (#3A0CA3, #1F0A57, #050505) */
-[data-vyron-theme="obsidian-glow"],
-:root[data-vyron-theme="obsidian-glow"] {
-  --vyron-bg: #050505;
-  --vyron-surface: rgba(20, 20, 30, 0.45);
-  --vyron-elevated: #14141E;
-  --vyron-sunken: #020024;
-  --vyron-border: rgba(58, 12, 163, 0.30);
-  --vyron-text: #F5F3FF;
-  --vyron-muted: #C4B5FD;
-  --vyron-primary: #3A0CA3;
-  --vyron-primary-foreground: #FFFFFF;
-  --vyron-secondary: #1F0A57;
-  --vyron-secondary-foreground: #FFFFFF;
-  --vyron-accent: #6A0DAD;
-  --vyron-accent-foreground: #FFFFFF;
-  --vyron-focus: #3A0CA3;
-  --vyron-glow: rgba(58, 12, 163, 0.40);
-  --vyron-gradient: linear-gradient(180deg, #3A0CA3 0%, #1F0A57 50%, #050505 100%);
-}
+/* ==============================================================================
+   PART 4: DISTINCT THEME PRESET SELECTORS (4 CORE + 2 COMPATIBILITY)
+   ============================================================================== */
 
-/* PALETTE 03 — DARK NAVY / MIDNIGHT (Remapped to Glassy Indigo Foundation) */
+/* 1. MIDNIGHT PRESET: Slate Dusk Volumetric Glass (#0F172A -> #F8FAFC) */
+[data-theme="midnight"],
 [data-vyron-theme="midnight"],
 :root[data-vyron-theme="midnight"],
 [data-vyron-theme="dark-navy"],
 :root[data-vyron-theme="dark-navy"],
 [data-vyron-theme="navy"],
-:root[data-vyron-theme="navy"] {
-  --vyron-bg: #050505;
-  --vyron-surface: rgba(28, 28, 28, 0.42);
-  --vyron-elevated: #1C1C1C;
-  --vyron-sunken: #050505;
-  --vyron-border: rgba(255, 255, 255, 0.10);
+:root[data-vyron-theme="navy"],
+.theme-midnight,
+.midnight {
+  --vyron-bg-base: #0F172A;
+  --vyron-bg: #0F172A;
+  --vyron-surface: rgba(51, 65, 85, 0.54);
+  --vyron-elevated: #334155;
+  --vyron-sunken: #090D16;
+  --vyron-text-primary: #F8FAFC;
   --vyron-text: #F8FAFC;
-  --vyron-muted: #CBD5E1;
-  --vyron-primary: #6A0DAD;
+  --vyron-ng-muted: #94A3B8;
+  --vyron-muted: #94A3B8;
+  --vyron-glass-bg: rgba(51, 65, 85, 0.54);
+  --vyron-neon-purple: #64748B;
+  --vyron-primary: #64748B;
   --vyron-primary-foreground: #FFFFFF;
-  --vyron-secondary: #3A0CA3;
+  --vyron-neon-indigo: #334155;
+  --vyron-secondary: #334155;
   --vyron-secondary-foreground: #FFFFFF;
-  --vyron-accent: #3A0CA3;
-  --vyron-accent-foreground: #FFFFFF;
-  --vyron-focus: #6A0DAD;
-  --vyron-glow: rgba(106, 13, 173, 0.28);
-  --vyron-gradient: linear-gradient(180deg, #6A0DAD 0%, #4A1478 50%, #1C1C1C 100%);
+  --vyron-accent: #94A3B8;
+  --vyron-accent-foreground: #0F172A;
+  --vyron-focus: #94A3B8;
+  --vyron-border: rgba(226, 232, 240, 0.38);
+  --vyron-glass-border: rgba(226, 232, 240, 0.38);
+  --vyron-ng-glass-border: rgba(226, 232, 240, 0.38);
+  --vyron-gradient: linear-gradient(180deg, #64748B 0%, #334155 50%, #0F172A 100%);
+  --vyron-glow: rgba(100, 116, 139, 0.38);
+  --vyron-ng-ambient:
+    radial-gradient(ellipse 60% 50% at 20% 20%, rgba(100, 116, 139, 0.32), transparent 75%),
+    radial-gradient(ellipse 60% 50% at 85% 75%, rgba(51, 65, 85, 0.35), transparent 75%),
+    linear-gradient(155deg, #0F172A 0%, #334155 56%, #0F172A 100%);
+  --vyron-ng-shadow:
+    inset 0 1.5px 2px rgba(248, 250, 252, 0.68),
+    inset 0 -2px 6px rgba(15, 23, 42, 0.65),
+    inset 0 0 0 1px rgba(226, 232, 240, 0.28),
+    0 20px 46px -20px rgba(15, 23, 42, 0.90),
+    0 0 28px -10px rgba(148, 163, 184, 0.38);
 }
 
-/* PALETTE 04 — NEON DUSK (Electric Indigo & Purple Glass) */
+/* 2. NEON-DUSK PRESET: Cyber Teal Volumetric Glass (#05161A -> #6DA5C0) */
+[data-theme="neon-dusk"],
 [data-vyron-theme="neon-dusk"],
-:root[data-vyron-theme="neon-dusk"] {
-  --vyron-bg: #050505;
-  --vyron-surface: rgba(31, 10, 87, 0.25);
-  --vyron-elevated: #14141E;
-  --vyron-sunken: #020024;
-  --vyron-border: rgba(58, 12, 163, 0.40);
-  --vyron-text: #F0F9FF;
-  --vyron-muted: #C4B5FD;
-  --vyron-primary: #3A0CA3;
+:root[data-vyron-theme="neon-dusk"],
+.theme-neon-dusk,
+.neon-dusk {
+  --vyron-bg-base: #05161A;
+  --vyron-bg: #05161A;
+  --vyron-surface: rgba(7, 46, 51, 0.58);
+  --vyron-elevated: #072E33;
+  --vyron-sunken: #02090B;
+  --vyron-text-primary: #F8FAFC;
+  --vyron-text: #F8FAFC;
+  --vyron-ng-muted: #6DA5C0;
+  --vyron-muted: #6DA5C0;
+  --vyron-glass-bg: rgba(7, 46, 51, 0.58);
+  --vyron-neon-purple: #0F969C;
+  --vyron-primary: #0F969C;
   --vyron-primary-foreground: #FFFFFF;
-  --vyron-secondary: #6A0DAD;
+  --vyron-neon-indigo: #0C7075;
+  --vyron-secondary: #0C7075;
   --vyron-secondary-foreground: #FFFFFF;
-  --vyron-accent: #6A0DAD;
-  --vyron-accent-foreground: #FFFFFF;
-  --vyron-focus: #3A0CA3;
-  --vyron-glow: rgba(58, 12, 163, 0.45);
-  --vyron-gradient: linear-gradient(180deg, #3A0CA3 0%, #1F0A57 50%, #050505 100%);
+  --vyron-accent: #6DA5C0;
+  --vyron-accent-foreground: #05161A;
+  --vyron-focus: #0F969C;
+  --vyron-border: rgba(109, 165, 192, 0.46);
+  --vyron-glass-border: rgba(109, 165, 192, 0.46);
+  --vyron-ng-glass-border: rgba(109, 165, 192, 0.46);
+  --vyron-gradient: linear-gradient(180deg, #0F969C 0%, #072E33 50%, #05161A 100%);
+  --vyron-glow: rgba(15, 150, 156, 0.54);
+  --vyron-ng-ambient:
+    radial-gradient(ellipse 58% 48% at 15% 15%, rgba(15, 150, 156, 0.36), transparent 75%),
+    radial-gradient(ellipse 60% 55% at 88% 75%, rgba(109, 165, 192, 0.28), transparent 75%),
+    linear-gradient(155deg, #05161A 0%, #072E33 56%, #05161A 100%);
+  --vyron-ng-shadow:
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.70),
+    inset 0 -2px 6px rgba(5, 22, 26, 0.70),
+    inset 0 0 0 1px rgba(109, 165, 192, 0.34),
+    0 20px 46px -20px rgba(5, 22, 26, 0.92),
+    0 0 32px -8px rgba(15, 150, 156, 0.54);
 }
 
-/* PALETTE 05 — EMERALD DARK (Preserved with Glass Foundation) */
+/* 3. OBSIDIAN-GLOW PRESET: Monochrome Smoked Volumetric Glass (#0B0B0B -> #FFFFFF) */
+[data-theme="obsidian-glow"],
+[data-vyron-theme="obsidian-glow"],
+:root[data-vyron-theme="obsidian-glow"],
+.theme-obsidian-glow,
+.obsidian-glow {
+  --vyron-bg-base: #0B0B0B;
+  --vyron-bg: #0B0B0B;
+  --vyron-surface: rgba(26, 26, 26, 0.62);
+  --vyron-elevated: #1A1A1A;
+  --vyron-sunken: #050505;
+  --vyron-text-primary: #FFFFFF;
+  --vyron-text: #FFFFFF;
+  --vyron-ng-muted: #D9D9D9;
+  --vyron-muted: #D9D9D9;
+  --vyron-glass-bg: rgba(26, 26, 26, 0.62);
+  --vyron-neon-purple: #D9D9D9;
+  --vyron-primary: #D9D9D9;
+  --vyron-primary-foreground: #0B0B0B;
+  --vyron-neon-indigo: #333333;
+  --vyron-secondary: #333333;
+  --vyron-secondary-foreground: #FFFFFF;
+  --vyron-accent: #6B6B6B;
+  --vyron-accent-foreground: #FFFFFF;
+  --vyron-focus: #FFFFFF;
+  --vyron-border: rgba(255, 255, 255, 0.34);
+  --vyron-glass-border: rgba(255, 255, 255, 0.34);
+  --vyron-ng-glass-border: rgba(255, 255, 255, 0.34);
+  --vyron-gradient: linear-gradient(180deg, #333333 0%, #1A1A1A 50%, #0B0B0B 100%);
+  --vyron-glow: rgba(217, 217, 217, 0.32);
+  --vyron-ng-ambient:
+    radial-gradient(ellipse 58% 48% at 15% 15%, rgba(107, 107, 107, 0.26), transparent 75%),
+    radial-gradient(ellipse 60% 55% at 88% 75%, rgba(51, 51, 51, 0.32), transparent 75%),
+    linear-gradient(155deg, #0B0B0B 0%, #1A1A1A 56%, #0B0B0B 100%);
+  --vyron-ng-shadow:
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.75),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.78),
+    inset 0 0 0 1px rgba(217, 217, 217, 0.28),
+    0 20px 46px -20px rgba(0, 0, 0, 0.95),
+    0 0 28px -10px rgba(217, 217, 217, 0.28);
+}
+
+/* 4. ROYAL-SMOKE PRESET: Steel-Teal & Obsidian Hybrid Volumetric Glass */
+[data-theme="royal-smoke"],
+[data-vyron-theme="royal-smoke"],
+:root[data-vyron-theme="royal-smoke"],
+.theme-royal-smoke,
+.royal-smoke {
+  --vyron-bg-base: #0B0B0B;
+  --vyron-bg: #0B0B0B;
+  --vyron-surface: rgba(41, 77, 97, 0.52);
+  --vyron-elevated: #1A1A1A;
+  --vyron-sunken: #05161A;
+  --vyron-text-primary: #F8FAFC;
+  --vyron-text: #F8FAFC;
+  --vyron-ng-muted: #E2E8F0;
+  --vyron-muted: #E2E8F0;
+  --vyron-glass-bg: rgba(41, 77, 97, 0.52);
+  --vyron-neon-purple: #6DA5C0;
+  --vyron-primary: #6DA5C0;
+  --vyron-primary-foreground: #0B0B0B;
+  --vyron-neon-indigo: #294D61;
+  --vyron-secondary: #294D61;
+  --vyron-secondary-foreground: #FFFFFF;
+  --vyron-accent: #0F969C;
+  --vyron-accent-foreground: #FFFFFF;
+  --vyron-focus: #6DA5C0;
+  --vyron-border: rgba(109, 165, 192, 0.40);
+  --vyron-glass-border: rgba(109, 165, 192, 0.40);
+  --vyron-ng-glass-border: rgba(109, 165, 192, 0.40);
+  --vyron-gradient: linear-gradient(180deg, #6DA5C0 0%, #294D61 50%, #0B0B0B 100%);
+  --vyron-glow: rgba(109, 165, 192, 0.40);
+  --vyron-ng-ambient:
+    radial-gradient(ellipse 58% 48% at 15% 15%, rgba(41, 77, 97, 0.36), transparent 75%),
+    radial-gradient(ellipse 60% 55% at 88% 75%, rgba(51, 65, 85, 0.30), transparent 75%),
+    linear-gradient(155deg, #0B0B0B 0%, #1A1A1A 56%, #05161A 100%);
+  --vyron-ng-shadow:
+    inset 0 1.5px 2px rgba(248, 250, 252, 0.66),
+    inset 0 -2px 6px rgba(11, 11, 11, 0.68),
+    inset 0 0 0 1px rgba(109, 165, 192, 0.30),
+    0 20px 46px -20px rgba(11, 11, 11, 0.90),
+    0 0 30px -10px rgba(109, 165, 192, 0.38);
+}
+
+/* 5. EMERALD DARK PRESET (Preserved with Glass Foundation) */
+[data-theme="emerald-dark"],
 [data-vyron-theme="emerald-dark"],
 :root[data-vyron-theme="emerald-dark"] {
   --vyron-bg: #040404;
@@ -303,14 +563,15 @@
   --vyron-primary-foreground: #040404;
   --vyron-secondary: #1C1C1C;
   --vyron-secondary-foreground: #F0FDF4;
-  --vyron-accent: #6A0DAD;
+  --vyron-accent: #0F969C;
   --vyron-accent-foreground: #FFFFFF;
   --vyron-focus: #00C896;
   --vyron-glow: rgba(0, 200, 150, 0.28);
   --vyron-gradient: linear-gradient(180deg, #00C896 0%, #040404 100%);
 }
 
-/* PALETTE 06 — WARM BREEZE (Compatibility) */
+/* 6. WARM BREEZE PRESET (Compatibility) */
+[data-theme="warm-breeze"],
 [data-vyron-theme="warm-breeze"],
 :root[data-vyron-theme="warm-breeze"] {
   --vyron-bg: #EACEAA;
@@ -331,7 +592,9 @@
   --vyron-gradient: linear-gradient(180deg, #EACEAA 0%, #D39858 100%);
 }
 
-/* ═══ LIGHT THEME OVERRIDES ═══ */
+/* ==============================================================================
+   PART 5: LIGHT THEME OVERRIDES
+   ============================================================================== */
 .light {
   --vyron-bg: #F8FAFC;
   --vyron-surface: rgba(255, 255, 255, 0.85);
@@ -340,13 +603,13 @@
   --vyron-border: #CBD5E1;
   --vyron-text: #050505;
   --vyron-muted: #475569;
-  --vyron-primary: #6A0DAD;
+  --vyron-primary: #0F969C;
   --vyron-primary-foreground: #FFFFFF;
   --vyron-secondary: #E2E8F0;
   --vyron-secondary-foreground: #050505;
-  --vyron-accent: #3A0CA3;
+  --vyron-accent: #0C7075;
   --vyron-accent-foreground: #FFFFFF;
-  --vyron-focus: #6A0DAD;
+  --vyron-focus: #0F969C;
   --surface-base: var(--vyron-bg);
   --surface-raised: var(--vyron-surface);
   --surface-overlay: var(--vyron-elevated);
@@ -362,7 +625,50 @@
   --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.16);
 }
 
-/* ═══ ACCESSIBILITY ═══ */
+/* ==============================================================================
+   PART 6: VOLUMETRIC 3D GLASS SHADER UTILITY CLASSES (MATCHES PREVIEW IMAGE)
+   ============================================================================== */
+.glass-3d-surface {
+  position: relative;
+  overflow: hidden;
+  background: var(--vyron-ng-glass-background);
+  backdrop-filter: blur(var(--vyron-ng-blur)) saturate(185%) brightness(1.06);
+  -webkit-backdrop-filter: blur(var(--vyron-ng-blur)) saturate(185%) brightness(1.06);
+  border: 1px solid var(--vyron-ng-glass-border);
+  box-shadow: var(--vyron-ng-shadow);
+}
+
+/* Sharp Diagonal Specular Gloss Cut */
+.glass-3d-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.32) 0%,
+    rgba(255, 255, 255, 0.08) 44%,
+    transparent 45%,
+    rgba(0, 0, 0, 0.14) 100%
+  );
+}
+
+/* Corner Star-Burst Specular Bevel Glints */
+.glass-3d-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 10% 8%, rgba(255, 255, 255, 0.85) 0%, transparent 15%),
+    radial-gradient(circle at 90% 92%, rgba(255, 255, 255, 0.58) 0%, transparent 13%);
+}
+
+/* ==============================================================================
+   PART 7: ACCESSIBILITY & PRINT ENGINE
+   ============================================================================== */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -372,7 +678,6 @@
   }
 }
 
-/* ═══ PRINT ENGINE ═══ */
 @media print {
   @page {
     size: A4 portrait;

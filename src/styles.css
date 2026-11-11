@@ -84,17 +84,17 @@
   --warning: #FACC75;
   --critical: oklch(0.62 0.21 25);
   --info: var(--vyron-neon-indigo);
-  --chart-1: #6A0DAD; /* Royal Purple */
-  --chart-2: #3A0CA3; /* Deep Indigo */
-  --chart-3: #4A1478; /* Mid Purple */
-  --chart-4: #1F0A57; /* Mid Indigo */
-  --chart-5: #00D4FF; /* Neon Cyan */
+  --chart-1: #0F969C; /* Cyber Teal 500 */
+  --chart-2: #0C7075; /* Cyber Teal 700 */
+  --chart-3: #6DA5C0; /* Cyber Teal 300 */
+  --chart-4: #294D61; /* Cyber Teal 800 */
+  --chart-5: #64748B; /* Slate Dusk 500 */
   --chart-6: #00C896; /* Emerald */
-  --sidebar: rgba(5, 5, 5, 0.78);
+  --sidebar: rgba(11, 11, 11, 0.82);
   --sidebar-foreground: var(--vyron-text-primary);
   --sidebar-primary: var(--vyron-neon-purple);
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: rgba(106, 13, 173, 0.18);
+  --sidebar-accent: rgba(15, 150, 156, 0.18);
   --sidebar-border: var(--vyron-glass-border);
   --sidebar-ring: var(--vyron-neon-purple);
   --gradient-hero: var(--vyron-ng-ambient);
@@ -110,8 +110,8 @@
 :root.dark[data-vyron-theme="obsidian-glow"] {
   --vyron-bg: var(--vyron-ng-obsidian);
   --vyron-surface: var(--vyron-ng-charcoal);
-  --vyron-elevated: #242029;
-  --vyron-sunken: #0D0811;
+  --vyron-elevated: #1A1A1A;
+  --vyron-sunken: #0B0B0B;
   --vyron-border: var(--vyron-ng-glass-border);
   --vyron-text: var(--vyron-ng-text);
   --vyron-muted: var(--vyron-ng-muted);
@@ -122,7 +122,7 @@
   --vyron-accent: var(--vyron-ng-violet);
   --vyron-accent-foreground: #FFFFFF;
   --vyron-focus: var(--vyron-ng-focus);
-  --vyron-glow: rgba(106, 13, 173, .35);
+  --vyron-glow: rgba(15, 150, 156, .35);
   --vyron-gradient: var(--vyron-ng-royal-gradient);
 
   /* Tailwind v4 and shadcn component bridge. */
@@ -136,18 +136,18 @@
   --primary-foreground: #FFFFFF;
   --secondary: var(--vyron-ng-violet-mid);
   --secondary-foreground: #FFFFFF;
-  --muted: #242029;
+  --muted: #1A1A1A;
   --muted-foreground: var(--vyron-ng-muted);
   --accent: var(--vyron-ng-violet);
   --accent-foreground: #FFFFFF;
   --border: var(--vyron-ng-glass-border);
   --input: rgba(255, 255, 255, .18);
   --ring: var(--vyron-ng-focus);
-  --sidebar: rgba(14, 9, 21, .94);
+  --sidebar: rgba(11, 11, 11, .94);
   --sidebar-foreground: var(--vyron-ng-text);
   --sidebar-primary: var(--vyron-ng-royal);
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: rgba(106, 13, 173, .18);
+  --sidebar-accent: rgba(15, 150, 156, .18);
   --sidebar-accent-foreground: var(--vyron-ng-text);
   --sidebar-border: var(--vyron-ng-glass-border);
   --sidebar-ring: var(--vyron-ng-focus);
@@ -227,17 +227,17 @@
   --card-foreground: var(--vyron-text);
   --popover: var(--vyron-surface);
   --popover-foreground: var(--vyron-text);
-  --primary: #6A0DAD;
+  --primary: #0F969C;
   --primary-foreground: #FFFFFF;
   --secondary: #E2E8F0;
   --secondary-foreground: #050505;
   --muted: #F1F5F9;
   --muted-foreground: #475569;
-  --accent: #3A0CA3;
+  --accent: #0C7075;
   --accent-foreground: #FFFFFF;
   --border: #CBD5E1;
   --input: #E2E8F0;
-  --ring: #6A0DAD;
+  --ring: #0F969C;
   --sidebar: #F1F5F9;
   --sidebar-foreground: #050505;
   --sidebar-accent: #E2E8F0;
@@ -273,8 +273,8 @@
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 
   &:hover {
-    border-color: rgba(106, 13, 173, 0.45);
-    box-shadow: 0 12px 35px rgba(58, 12, 163, 0.30), 0 0 28px rgba(106, 13, 173, 0.24);
+    border-color: rgba(109, 165, 192, 0.55);
+    box-shadow: 0 12px 35px rgba(5, 22, 26, 0.40), 0 0 28px rgba(15, 150, 156, 0.35);
     transform: translateY(-1px);
   }
 }
@@ -298,12 +298,12 @@
   background-image:
     linear-gradient(
       to right,
-      rgba(106, 13, 173, 0.12) 1px,
+      rgba(15, 150, 156, 0.12) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      rgba(106, 13, 173, 0.12) 1px,
+      rgba(15, 150, 156, 0.12) 1px,
       transparent 1px
     );
   background-size: 56px 56px;
