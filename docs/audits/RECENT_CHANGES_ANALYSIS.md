@@ -17,6 +17,22 @@
     - `#D9D9D9` -> `#E0E0E0` (balanced mid-tone glass)
   - Maintained WCAG 2.2 AA contrast standards across dark obsidian backgrounds while eliminating eye fatigue.
 
+### Workstream: S27–S29 Connectors & Data Ingestion Suite (Part G)
+- **FastAPI Router (`app/api/v1/connectors.py`)**:
+  - Implemented `GitHubBindRequest`, `receive_github_webhook` (HMAC-SHA256 signature verification, deduplication, 2000ms debouncing for `code_health`, `security_reviewer`, `test_coverage`, `bundle_analyzer`), `configure_integration`, and dataset management endpoints (`/upload`, `/synthetic`).
+- **TypeScript Contracts (`src/types/connectors.ts`)**:
+  - Declared `ProviderId`, `LockReason`, `ConnectorConnectionStatus`, `SectionError`, `SectionState<T>`, `BoundRepository`, `PullRequestAnalysis`, `CommitScanFinding`, `MarketplaceIntegration`, `ProjectDataset`, and `ConnectorRealtimeEvent`.
+- **Volumetric Glass Primitives (`src/components/connectors/ConnectorGlassPrimitives.tsx`)**:
+  - Implemented `GlassCard3D` with `slate`, `obsidian`, and `teal` 3D glass material families, `ProvenanceBadge`, `ConnectionStatusPill`, and `SectionStateBoundary`.
+- **S27 GitHub Connector Hub (`src/components/connectors/github/GitHubConnectorHub.tsx`)**:
+  - S27.1–S27.8 full implementation: account connection, repository browser, bound repos list, PR analyzer, commit scanner with secret redaction, branch protection audit, issue sync, and push webhook correlation.
+- **S28 Integrations Marketplace (`src/components/connectors/integrations/IntegrationsMarketplace.tsx`)**:
+  - S28.1–S28.8 full implementation: integrations gallery with category filters, active connection list, config drawer, Jira requirements sync, Slack alerts, Sentry error telemetry, Figma spec importer, and custom webhook builder.
+- **S29 Dataset Manager (`src/components/connectors/datasets/DatasetManager.tsx`)**:
+  - S29.1–S29.8 full implementation: dataset library table, Kaggle importer, custom upload zone, schema inspector, data preview, quality metrics report, analysis module binding, and synthetic data generator.
+- **TanStack Router Architecture**:
+  - Added `/connectors` shell layout route and child routes (`/connectors/github`, `/connectors/integrations`, `/connectors/datasets`, and index redirect).
+
 ### Workstream: TypeScript Compiler Diagnostics & Strict Type Repairs
 - **Scope**: Full audit of strict TypeScript compiler diagnostics via `npx tsc --noEmit`.
 - **Repaired Defects**:

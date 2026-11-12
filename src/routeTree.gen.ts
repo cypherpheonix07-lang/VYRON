@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ConnectorsRouteImport } from './routes/connectors'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as DevelopersRouteImport } from './routes/developers'
@@ -82,6 +83,10 @@ import { Route as AppTestingRouteImport } from './routes/app.testing'
 import { Route as AppWorkpulseRouteImport } from './routes/app.workpulse'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthGithubCallbackRouteImport } from './routes/auth.github-callback'
+import { Route as ConnectorsIndexRouteImport } from './routes/connectors.index'
+import { Route as ConnectorsDatasetsRouteImport } from './routes/connectors.datasets'
+import { Route as ConnectorsGithubRouteImport } from './routes/connectors.github'
+import { Route as ConnectorsIntegrationsRouteImport } from './routes/connectors.integrations'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard.index'
 import { Route as DashboardFacultyRouteImport } from './routes/dashboard.faculty'
 import { Route as DashboardProfessionalRouteImport } from './routes/dashboard.professional'
@@ -203,6 +208,11 @@ const AppRoute = AppRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConnectorsRoute = ConnectorsRouteImport.update({
+  id: '/connectors',
+  path: '/connectors',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardRoute = DashboardRouteImport.update({
@@ -549,6 +559,26 @@ const AuthGithubCallbackRoute = AuthGithubCallbackRouteImport.update({
   id: '/github-callback',
   path: '/github-callback',
   getParentRoute: () => AuthRoute,
+} as any)
+const ConnectorsIndexRoute = ConnectorsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ConnectorsRoute,
+} as any)
+const ConnectorsDatasetsRoute = ConnectorsDatasetsRouteImport.update({
+  id: '/datasets',
+  path: '/datasets',
+  getParentRoute: () => ConnectorsRoute,
+} as any)
+const ConnectorsGithubRoute = ConnectorsGithubRouteImport.update({
+  id: '/github',
+  path: '/github',
+  getParentRoute: () => ConnectorsRoute,
+} as any)
+const ConnectorsIntegrationsRoute = ConnectorsIntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
+  getParentRoute: () => ConnectorsRoute,
 } as any)
 const DashboardIndexRoute = DashboardIndexRouteImport.update({
   id: '/',
@@ -1082,6 +1112,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/connectors': typeof ConnectorsRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/demo': typeof DemoRoute
   '/developers': typeof DevelopersRoute
@@ -1149,12 +1180,16 @@ export interface FileRoutesByFullPath {
   '/app/workpulse': typeof AppWorkpulseRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
+  '/connectors/datasets': typeof ConnectorsDatasetsRoute
+  '/connectors/github': typeof ConnectorsGithubRoute
+  '/connectors/integrations': typeof ConnectorsIntegrationsRoute
   '/dashboard/faculty': typeof DashboardFacultyRoute
   '/dashboard/professional': typeof DashboardProfessionalRoute
   '/dashboard/student': typeof DashboardStudentRoute
   '/github/callback': typeof GithubCallbackRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
+  '/connectors/': typeof ConnectorsIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/app/admin/audit': typeof AppAdminAuditRoute
   '/app/admin/models': typeof AppAdminModelsRoute
@@ -1322,12 +1357,16 @@ export interface FileRoutesByTo {
   '/app/workpulse': typeof AppWorkpulseRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
+  '/connectors/datasets': typeof ConnectorsDatasetsRoute
+  '/connectors/github': typeof ConnectorsGithubRoute
+  '/connectors/integrations': typeof ConnectorsIntegrationsRoute
   '/dashboard/faculty': typeof DashboardFacultyRoute
   '/dashboard/professional': typeof DashboardProfessionalRoute
   '/dashboard/student': typeof DashboardStudentRoute
   '/github/callback': typeof GithubCallbackRoute
   '/admin': typeof AdminIndexRoute
   '/app': typeof AppIndexRoute
+  '/connectors': typeof ConnectorsIndexRoute
   '/dashboard': typeof DashboardIndexRoute
   '/app/admin/audit': typeof AppAdminAuditRoute
   '/app/admin/models': typeof AppAdminModelsRoute
@@ -1431,6 +1470,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/app': typeof AppRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/connectors': typeof ConnectorsRouteWithChildren
   '/dashboard': typeof DashboardRouteWithChildren
   '/demo': typeof DemoRoute
   '/developers': typeof DevelopersRoute
@@ -1498,12 +1538,16 @@ export interface FileRoutesById {
   '/app/workpulse': typeof AppWorkpulseRouteWithChildren
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/github-callback': typeof AuthGithubCallbackRoute
+  '/connectors/datasets': typeof ConnectorsDatasetsRoute
+  '/connectors/github': typeof ConnectorsGithubRoute
+  '/connectors/integrations': typeof ConnectorsIntegrationsRoute
   '/dashboard/faculty': typeof DashboardFacultyRoute
   '/dashboard/professional': typeof DashboardProfessionalRoute
   '/dashboard/student': typeof DashboardStudentRoute
   '/github/callback': typeof GithubCallbackRoute
   '/admin/': typeof AdminIndexRoute
   '/app/': typeof AppIndexRoute
+  '/connectors/': typeof ConnectorsIndexRoute
   '/dashboard/': typeof DashboardIndexRoute
   '/app/admin/audit': typeof AppAdminAuditRoute
   '/app/admin/models': typeof AppAdminModelsRoute
@@ -1610,6 +1654,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/auth'
+    | '/connectors'
     | '/dashboard'
     | '/demo'
     | '/developers'
@@ -1677,12 +1722,16 @@ export interface FileRouteTypes {
     | '/app/workpulse'
     | '/auth/callback'
     | '/auth/github-callback'
+    | '/connectors/datasets'
+    | '/connectors/github'
+    | '/connectors/integrations'
     | '/dashboard/faculty'
     | '/dashboard/professional'
     | '/dashboard/student'
     | '/github/callback'
     | '/admin/'
     | '/app/'
+    | '/connectors/'
     | '/dashboard/'
     | '/app/admin/audit'
     | '/app/admin/models'
@@ -1850,12 +1899,16 @@ export interface FileRouteTypes {
     | '/app/workpulse'
     | '/auth/callback'
     | '/auth/github-callback'
+    | '/connectors/datasets'
+    | '/connectors/github'
+    | '/connectors/integrations'
     | '/dashboard/faculty'
     | '/dashboard/professional'
     | '/dashboard/student'
     | '/github/callback'
     | '/admin'
     | '/app'
+    | '/connectors'
     | '/dashboard'
     | '/app/admin/audit'
     | '/app/admin/models'
@@ -1958,6 +2011,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/app'
     | '/auth'
+    | '/connectors'
     | '/dashboard'
     | '/demo'
     | '/developers'
@@ -2025,12 +2079,16 @@ export interface FileRouteTypes {
     | '/app/workpulse'
     | '/auth/callback'
     | '/auth/github-callback'
+    | '/connectors/datasets'
+    | '/connectors/github'
+    | '/connectors/integrations'
     | '/dashboard/faculty'
     | '/dashboard/professional'
     | '/dashboard/student'
     | '/github/callback'
     | '/admin/'
     | '/app/'
+    | '/connectors/'
     | '/dashboard/'
     | '/app/admin/audit'
     | '/app/admin/models'
@@ -2136,6 +2194,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   AppRoute: typeof AppRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
+  ConnectorsRoute: typeof ConnectorsRouteWithChildren
   DashboardRoute: typeof DashboardRouteWithChildren
   DemoRoute: typeof DemoRoute
   DevelopersRoute: typeof DevelopersRoute
@@ -2183,6 +2242,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/connectors': {
+      id: '/connectors'
+      path: '/connectors'
+      fullPath: '/connectors'
+      preLoaderRoute: typeof ConnectorsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard': {
@@ -2667,6 +2733,34 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/github-callback'
       preLoaderRoute: typeof AuthGithubCallbackRouteImport
       parentRoute: typeof AuthRoute
+    }
+    '/connectors/': {
+      id: '/connectors/'
+      path: '/'
+      fullPath: '/connectors/'
+      preLoaderRoute: typeof ConnectorsIndexRouteImport
+      parentRoute: typeof ConnectorsRoute
+    }
+    '/connectors/datasets': {
+      id: '/connectors/datasets'
+      path: '/datasets'
+      fullPath: '/connectors/datasets'
+      preLoaderRoute: typeof ConnectorsDatasetsRouteImport
+      parentRoute: typeof ConnectorsRoute
+    }
+    '/connectors/github': {
+      id: '/connectors/github'
+      path: '/github'
+      fullPath: '/connectors/github'
+      preLoaderRoute: typeof ConnectorsGithubRouteImport
+      parentRoute: typeof ConnectorsRoute
+    }
+    '/connectors/integrations': {
+      id: '/connectors/integrations'
+      path: '/integrations'
+      fullPath: '/connectors/integrations'
+      preLoaderRoute: typeof ConnectorsIntegrationsRouteImport
+      parentRoute: typeof ConnectorsRoute
     }
     '/dashboard/': {
       id: '/dashboard/'
@@ -3786,6 +3880,24 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
+interface ConnectorsRouteChildren {
+  ConnectorsDatasetsRoute: typeof ConnectorsDatasetsRoute
+  ConnectorsGithubRoute: typeof ConnectorsGithubRoute
+  ConnectorsIntegrationsRoute: typeof ConnectorsIntegrationsRoute
+  ConnectorsIndexRoute: typeof ConnectorsIndexRoute
+}
+
+const ConnectorsRouteChildren: ConnectorsRouteChildren = {
+  ConnectorsDatasetsRoute: ConnectorsDatasetsRoute,
+  ConnectorsGithubRoute: ConnectorsGithubRoute,
+  ConnectorsIntegrationsRoute: ConnectorsIntegrationsRoute,
+  ConnectorsIndexRoute: ConnectorsIndexRoute,
+}
+
+const ConnectorsRouteWithChildren = ConnectorsRoute._addFileChildren(
+  ConnectorsRouteChildren,
+)
+
 interface DashboardRouteChildren {
   DashboardFacultyRoute: typeof DashboardFacultyRoute
   DashboardProfessionalRoute: typeof DashboardProfessionalRoute
@@ -3820,6 +3932,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   AppRoute: AppRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
+  ConnectorsRoute: ConnectorsRouteWithChildren,
   DashboardRoute: DashboardRouteWithChildren,
   DemoRoute: DemoRoute,
   DevelopersRoute: DevelopersRoute,
