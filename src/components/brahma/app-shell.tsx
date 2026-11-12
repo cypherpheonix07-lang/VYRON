@@ -55,7 +55,7 @@ import {
   SlidersHorizontal,
   Palette,
 } from "lucide-react";
-import { useEffect, useMemo, useState, type ReactNode, useRef } from "react";
+import { useCallback, useEffect, useMemo, useState, type ReactNode, useRef } from "react";
 import { toast } from "sonner";
 
 import { BrahmaLogo } from "@/components/brahma/logo";
@@ -818,17 +818,17 @@ function NavList({
               <button
                 type="button"
                 onClick={() => toggleDomain(domain.id)}
-                className="w-full flex items-center justify-between px-2.5 py-1 text-[10px] font-bold text-muted-foreground/75 hover:text-foreground tracking-wider uppercase transition-colors rounded hover:bg-white/[0.02]"
+                className="w-full flex items-center justify-between px-3 py-1.5 text-[10px] font-bold text-muted-foreground/75 hover:text-foreground tracking-wider uppercase transition-colors rounded hover:bg-white/[0.03]"
               >
-                <span className="flex items-center gap-1.5">
-                  <DomainIcon className="h-3 w-3 text-primary/70" />
-                  <span className={hasActiveChild ? "text-primary font-bold" : ""}>
+                <span className="flex items-center gap-2 min-w-0">
+                  <DomainIcon className="h-3.5 w-3.5 text-primary/70 shrink-0" />
+                  <span className={cn("truncate", hasActiveChild ? "text-primary font-bold" : "")}>
                     {domain.label}
                   </span>
                 </span>
                 <ChevronDown
                   className={cn(
-                    "h-3 w-3 transition-transform duration-200 opacity-60",
+                    "h-3 w-3 transition-transform duration-200 opacity-60 shrink-0",
                     isExpanded ? "transform rotate-0" : "transform -rotate-90",
                   )}
                 />
@@ -838,7 +838,7 @@ function NavList({
             )}
 
             {(isExpanded || collapsed) && (
-              <div className="space-y-0.5 pl-1 sm:pl-1.5">
+              <div className={cn("space-y-0.5", !collapsed && "pl-1 sm:pl-1.5")}>
                 {domain.items.map((item) => {
                   const active = item.exact
                     ? pathname === item.to
@@ -851,7 +851,10 @@ function NavList({
                       onClick={onNavigate}
                       title={collapsed ? item.label : undefined}
                       className={cn(
-                        "relative flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-xs font-medium transition-all duration-200",
+                        "relative flex items-center rounded-lg text-xs font-medium transition-all duration-200",
+                        collapsed
+                          ? "justify-center px-0 py-2.5 w-full"
+                          : "px-3 py-2 gap-2.5",
                         active
                           ? "bg-[#0F969C]/20 text-white font-semibold shadow-[0_0_18px_rgba(15,150,156,0.35),inset_0_0_0_1px_rgba(15,150,156,0.5)]"
                           : "text-sidebar-foreground/75 hover:bg-white/[0.04] hover:text-white hover:shadow-[inset_0_0_0_1px_rgba(15,150,156,0.35)]",
@@ -890,13 +893,19 @@ function SidebarBody({
   onNavigate?: (() => void) | undefined;
 }) {
   return (
-    <div className="flex h-full flex-col gap-5 py-4">
-      <div className={cn("px-4", collapsed && "px-3")}>
-        <BrahmaLogo compact={collapsed} />
+    <div className="flex h-full flex-col justify-between py-4 select-none">
+      <div className={cn("px-4", collapsed && "flex justify-center px-0")}>
+        <BrahmaLogo compact={collapsed} className={collapsed ? "justify-center" : ""} />
       </div>
-      <div className="flex-1 overflow-y-auto space-y-4">
+      <div className="flex-1 overflow-y-auto space-y-4 my-2 px-1">
         <NavList collapsed={collapsed} onNavigate={onNavigate} />
       </div>
+      {!collapsed ? (
+        <div className="px-4 pt-2 border-t border-white/5 flex items-center justify-between text-[10px] text-muted-foreground/60 font-mono">
+          <span>COMMAND CENTER</span>
+          <span className="text-[#0F969C]">v2.0</span>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -1079,7 +1088,79 @@ function Breadcrumbs() {
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const [collapsed, setCollapsed] = useState(false);
+  // Persistent Sidebar Width State (Clamped between 220px and 420px, default 280px to align with Command Center)
+  const [sidebarWidth, setSidebarWidth] = useState<number>(() => {
+    try {
+      const stored = localStorage.getItem("vyron_sidebar_width");
+      if (stored) {
+        const val = parseInt(stored, 10);
+        if (!isNaN(val) && val >= 220 && val <= 420) return val;
+      }
+    } catch {
+      // ignore
+    }
+    return 280; // Optimal default width matching Command Center proportions
+  });
+
+  const [isResizing, setIsResizing] = useState(false);
+
+  // Persistent Sidebar Collapsed State
+  const [collapsed, setCollapsed] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem("vyron_sidebar_collapsed") === "true";
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("vyron_sidebar_collapsed", String(collapsed));
+    } catch {
+      // ignore
+    }
+  }, [collapsed]);
+
+  // Drag Resize Handlers
+  const handleMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizing(true);
+  }, []);
+
+  const handleDoubleClick = useCallback(() => {
+    setSidebarWidth(280);
+    try {
+      localStorage.setItem("vyron_sidebar_width", "280");
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!isResizing) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const newWidth = Math.min(Math.max(e.clientX, 220), 420);
+      setSidebarWidth(newWidth);
+    };
+
+    const handleMouseUp = () => {
+      setIsResizing(false);
+      try {
+        localStorage.setItem("vyron_sidebar_width", String(sidebarWidth));
+      } catch {
+        // ignore
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isResizing, sidebarWidth]);
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, ready, logout } = useAuth();
   const { theme, toggle } = useTheme();
@@ -1092,6 +1173,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   } = useActiveProject();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isCommandCenter = pathname === "/app" || pathname === "/app/";
 
   // UI state for search dropdown
   const [searchQuery, setSearchQuery] = useState("");
@@ -1170,6 +1252,17 @@ export function AppShell({ children }: { children: ReactNode }) {
         e.preventDefault();
         toggle();
         toast.info(`Theme toggled to ${theme === "light" ? "dark" : "light"} Mode`);
+      }
+
+      // Sidebar collapse toggle: Ctrl+B or Cmd+B or "["
+      if (
+        (e.key === "b" && (e.metaKey || e.ctrlKey)) ||
+        (e.key === "[" &&
+          document.activeElement?.tagName !== "INPUT" &&
+          document.activeElement?.tagName !== "TEXTAREA")
+      ) {
+        e.preventDefault();
+        setCollapsed((v) => !v);
       }
 
       // New project shortcut "n"
@@ -1611,12 +1704,32 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen w-full bg-transparent text-foreground selection:bg-primary/25">
       {/* SIDEBAR FOR DESKTOP */}
       <aside
+        style={{ width: collapsed ? 72 : sidebarWidth }}
         className={cn(
-          "sticky top-0 hidden h-screen shrink-0 border-r border-white/10 bg-[#0B0B0B]/75 backdrop-blur-xl shadow-[4px_0_24px_rgba(15,150,156,0.15)] transition-[width] duration-200 lg:block glass-3d-surface",
-          collapsed ? "w-[72px]" : "w-64",
+          "sticky top-0 hidden h-screen shrink-0 border-r border-white/10 bg-[#0B0B0B]/75 backdrop-blur-xl shadow-[4px_0_24px_rgba(15,150,156,0.15)] lg:block glass-3d-surface relative group/sidebar",
+          isResizing ? "transition-none select-none" : "transition-[width] duration-200",
         )}
       >
         <SidebarBody collapsed={collapsed} />
+
+        {/* DRAG-TO-RESIZE HANDLE ACCORDING TO COMMAND CENTER */}
+        {!collapsed && (
+          <div
+            onMouseDown={handleMouseDown}
+            onDoubleClick={handleDoubleClick}
+            className="absolute top-0 right-0 w-2.5 h-full -mr-1 z-30 cursor-col-resize select-none group/resizer flex items-center justify-center transition-colors"
+            title="Drag to resize sidebar relative to Command Center (Double-click to reset to 280px)"
+          >
+            <div
+              className={cn(
+                "w-[2px] h-full transition-all duration-150",
+                isResizing
+                  ? "bg-[#0F969C] shadow-[0_0_10px_#0F969C]"
+                  : "bg-transparent group-hover/resizer:bg-[#0F969C]/60 group-hover/resizer:shadow-[0_0_8px_rgba(15,150,156,0.4)]",
+              )}
+            />
+          </div>
+        )}
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -1653,6 +1766,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               size="icon"
               className="hidden lg:inline-flex"
               onClick={() => setCollapsed((v) => !v)}
+              title={collapsed ? "Expand sidebar (Ctrl+B)" : "Collapse sidebar (Ctrl+B)"}
               aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             >
               {collapsed ? (
@@ -2051,7 +2165,14 @@ export function AppShell({ children }: { children: ReactNode }) {
         </header>
 
         {/* CONTENT PANEL */}
-        <main className="mx-auto w-full max-w-[1500px] flex-1 space-y-6 px-4 py-6 pb-24 sm:px-6 lg:pb-8">
+        <main
+          className={cn(
+            "mx-auto w-full flex-1 space-y-6 px-4 py-6 pb-24 sm:px-6 lg:pb-8 transition-[max-width] duration-200",
+            isCommandCenter
+              ? "max-w-[1720px] 2xl:max-w-[1920px]"
+              : "max-w-[1500px]",
+          )}
+        >
           {children}
         </main>
 
