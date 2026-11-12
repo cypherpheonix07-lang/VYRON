@@ -109,6 +109,11 @@ function OnboardingPage() {
     if (ready && !user) {
       navigate({ to: "/login", replace: true });
     } else if (ready && user) {
+      if (user.onboarded) {
+        const destRoute = resolvePostLoginRoute(user.role);
+        navigate({ to: destRoute as never, replace: true });
+        return;
+      }
       setSelectedRole(user.role || "Student");
     }
   }, [ready, user, navigate]);

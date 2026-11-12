@@ -70,6 +70,70 @@ export const SUSPENDED_THREAD_TOKENS = {
   },
 } as const;
 
+export const AUTH_MOTION_TIMINGS = {
+  threadProgressMs: 260,
+  outgoingCardMs: 160,
+  incomingCardMs: 320,
+  orbitalCompletionMs: 360,
+  nodeActivationMs: 200,
+  ambientGlowMs: 450,
+  volumetricRevealMs: 320,
+  portalSlideMs: 380,
+} as const;
+
+export const FIVE_STAGE_ONBOARDING_TOKENS = {
+  stage1: {
+    number: "01",
+    id: "identity",
+    name: "Identity",
+    fullName: "01 — Identity",
+    summary: "Account credentials and SSO",
+    accent: "#0F969C",
+    glow: "rgba(15, 150, 156, 0.40)",
+    border: "rgba(15, 150, 156, 0.35)",
+  },
+  stage2: {
+    number: "02",
+    id: "verification",
+    name: "Verification",
+    fullName: "02 — Verification",
+    summary: "Email OTP & cryptographic confirmation",
+    accent: "#0C7075",
+    glow: "rgba(12, 112, 117, 0.40)",
+    border: "rgba(12, 112, 117, 0.35)",
+  },
+  stage3: {
+    number: "03",
+    id: "workspace",
+    name: "Workspace",
+    fullName: "03 — Workspace",
+    summary: "Role context & organizational tenancy",
+    accent: "#294D61",
+    glow: "rgba(41, 77, 97, 0.40)",
+    border: "rgba(41, 77, 97, 0.35)",
+  },
+  stage4: {
+    number: "04",
+    id: "security",
+    name: "Security",
+    fullName: "04 — Security",
+    summary: "MFA enrollment, passkeys & recovery key",
+    accent: "#6DA5C0",
+    glow: "rgba(109, 165, 192, 0.40)",
+    border: "rgba(109, 165, 192, 0.35)",
+  },
+  stage5: {
+    number: "05",
+    id: "personalization",
+    name: "Launch",
+    fullName: "05 — Launch",
+    summary: "Engineering focus, telemetry & studio launch",
+    accent: "#00C896",
+    glow: "rgba(0, 200, 150, 0.40)",
+    border: "rgba(0, 200, 150, 0.35)",
+  },
+} as const;
+
 export const WORKSPACE_ROLE_TOKENS = {
   student: {
     role: "Student",

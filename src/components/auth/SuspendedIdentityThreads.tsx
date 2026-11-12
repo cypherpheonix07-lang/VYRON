@@ -35,7 +35,7 @@ export function SuspendedIdentityThreads({
     {
       id: "signup" as const,
       title: "2. CREATE ACCOUNT",
-      subtitle: "3-stage setup",
+      subtitle: "5-stage journey",
       accent: SUSPENDED_THREAD_TOKENS.thread2.accent,
       glow: SUSPENDED_THREAD_TOKENS.thread2.glow,
       icon: UserPlus,

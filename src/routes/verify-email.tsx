@@ -6,7 +6,7 @@ import { z } from "zod";
 
 import { AuthLayout } from "../components/auth/auth-components";
 import { authService } from "../services/authService";
-import { useAuth } from "../lib/auth";
+import { useAuth, resolvePostLoginRoute } from "../lib/auth";
 import { OtpInput, ResendCountdown } from "../components/auth/auth-components";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -33,7 +33,7 @@ export const Route = createFileRoute("/verify-email")({
 function VerifyEmailPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
-  const { refresh } = useAuth();
+  const { user, refresh } = useAuth();
 
   const [email, setEmail] = useState(search.email || "");
   const [otpCode, setOtpCode] = useState("");
@@ -72,7 +72,12 @@ function VerifyEmailPage() {
       } else {
         toast.success("Verification successful!");
         await refresh();
-        navigate({ to: "/onboarding" });
+        if (user?.onboarded) {
+          const dest = resolvePostLoginRoute(user.role);
+          navigate({ to: dest as never });
+        } else {
+          navigate({ to: "/onboarding" });
+        }
       }
     } catch (err) {
       setError("An unexpected error occurred during verification.");

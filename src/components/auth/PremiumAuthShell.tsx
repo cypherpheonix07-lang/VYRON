@@ -16,6 +16,7 @@ export function PremiumAuthShell({ initialMode = "signin" }: PremiumAuthShellPro
   const navigate = useNavigate();
   const { user, refresh } = useAuth();
   const [activeMode, setActiveMode] = useState<AuthThreadMode>(initialMode);
+  const [slideDirection, setSlideDirection] = useState<"left" | "right" | "none">("none");
   const [completedStages, setCompletedStages] = useState<{
     signin?: boolean;
     signup?: boolean;
@@ -26,12 +27,10 @@ export function PremiumAuthShell({ initialMode = "signin" }: PremiumAuthShellPro
     await refresh?.();
     setCompletedStages((prev) => ({ ...prev, [activeMode]: true }));
 
-    // If user signs in or completes signup, offer brief workspace selection or route directly
+    // Fast-path for returning or successfully authenticated users:
+    // If destination provided, go directly there; otherwise route based on role
     if (destination) {
       navigate({ to: destination as never });
-    } else if (activeMode === "signin") {
-      // Transition to workspace selection or dashboard
-      setActiveMode("workspace");
     } else {
       const dest = resolvePostLoginRoute(user?.role);
       navigate({ to: dest as never });
@@ -42,6 +41,18 @@ export function PremiumAuthShell({ initialMode = "signin" }: PremiumAuthShellPro
     setCompletedStages((prev) => ({ ...prev, workspace: true }));
     const dest = resolvePostLoginRoute(role);
     navigate({ to: dest as never });
+  };
+
+  const switchToMode = (mode: AuthThreadMode) => {
+    if (mode === activeMode) return;
+    if (mode === "signup") {
+      setSlideDirection("right");
+    } else if (mode === "signin") {
+      setSlideDirection("left");
+    } else {
+      setSlideDirection("none");
+    }
+    setActiveMode(mode);
   };
 
   return (
@@ -85,7 +96,7 @@ export function PremiumAuthShell({ initialMode = "signin" }: PremiumAuthShellPro
           <div className="my-6">
             <SuspendedIdentityThreads
               activeMode={activeMode}
-              onSelectMode={(mode) => setActiveMode(mode)}
+              onSelectMode={switchToMode}
               completedStages={completedStages}
             />
 
@@ -94,16 +105,17 @@ export function PremiumAuthShell({ initialMode = "signin" }: PremiumAuthShellPro
               {activeMode === "signin" && (
                 <MidnightCoralSignIn
                   onSuccess={handleAuthSuccess}
-                  onSwitchToSignUp={() => setActiveMode("signup")}
-                  onSwitchToWorkspace={() => setActiveMode("workspace")}
+                  onSwitchToSignUp={() => switchToMode("signup")}
+                  onSwitchToWorkspace={() => switchToMode("workspace")}
+                  slideDirection={slideDirection}
                 />
               )}
 
               {activeMode === "signup" && (
                 <IndigoAuroraSignUp
                   onSuccess={handleAuthSuccess}
-                  onSwitchToSignIn={() => setActiveMode("signin")}
-                  onSwitchToWorkspace={() => setActiveMode("workspace")}
+                  onSwitchToSignIn={() => switchToMode("signin")}
+                  onSwitchToWorkspace={() => switchToMode("workspace")}
                 />
               )}
 

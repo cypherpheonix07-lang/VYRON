@@ -9,6 +9,7 @@ import {
   AlertCircle,
   Sparkles,
   ShieldCheck,
+  CheckCircle2,
 } from "lucide-react";
 import { toast } from "sonner";
 import { authService } from "@/services/authService";
@@ -23,17 +24,20 @@ interface MidnightCoralSignInProps {
   onSuccess: (destination?: string) => void;
   onSwitchToSignUp: () => void;
   onSwitchToWorkspace?: () => void;
+  slideDirection?: "left" | "right" | "none";
 }
 
 export function MidnightCoralSignIn({
   onSuccess,
   onSwitchToSignUp,
   onSwitchToWorkspace,
+  slideDirection = "none",
 }: MidnightCoralSignInProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [oauthLoading, setOauthLoading] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
@@ -42,7 +46,7 @@ export function MidnightCoralSignIn({
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (loading) return;
+    if (loading || isSuccess) return;
 
     setFormError(null);
     const cleanEmail = email.trim();
@@ -60,19 +64,23 @@ export function MidnightCoralSignIn({
       const res = await authService.signInWithPassword(cleanEmail, password);
       if (!res.ok) {
         setFormError(res.error?.message || "Sign in failed. Please verify credentials.");
+        setLoading(false);
         return;
       }
+      setIsSuccess(true);
       toast.success("Welcome back to VYRON Workspace!");
-      onSuccess();
+      // Effect C: brief completion highlight before route transition
+      setTimeout(() => {
+        onSuccess();
+      }, 280);
     } catch (err) {
       setFormError(err instanceof Error ? err.message : "An unexpected error occurred.");
-    } finally {
       setLoading(false);
     }
   };
 
   const handleOAuth = async (provider: "google" | "github" | "gitlab") => {
-    if (oauthLoading || loading) return;
+    if (oauthLoading || loading || isSuccess) return;
     setOauthLoading(provider);
     setFormError(null);
     try {
@@ -113,42 +121,58 @@ export function MidnightCoralSignIn({
     }
   };
 
+  // Determine motion class (Effect A & B)
+  const motionClass =
+    slideDirection === "left"
+      ? "vyron-portal-slide-in-left"
+      : slideDirection === "right"
+        ? "vyron-portal-slide-in-right"
+        : "vyron-glass-reveal";
+
   return (
     <div
-      className="w-full max-w-md mx-auto rounded-2xl border p-6 sm:p-8 backdrop-blur-xl transition-all shadow-2xl relative glass-3d-surface"
+      className={cn(
+        "w-full max-w-md mx-auto rounded-2xl border p-6 sm:p-8 backdrop-blur-xl transition-all shadow-2xl relative glass-3d-surface",
+        motionClass,
+        isSuccess && "vyron-auth-success-highlight",
+      )}
       style={{
         backgroundColor: SIGN_IN_TOKENS.surface,
-        borderColor: SIGN_IN_TOKENS.border,
+        borderColor: isSuccess ? "#00C896" : SIGN_IN_TOKENS.border,
       }}
     >
       {/* Top Accent Coral Bar */}
       <div
-        className="absolute top-0 left-8 right-8 h-1 rounded-b"
+        className="absolute top-0 left-8 right-8 h-1 rounded-b transition-all duration-300"
         style={{
-          background: `linear-gradient(90deg, transparent, ${SIGN_IN_TOKENS.accent}, transparent)`,
+          background: isSuccess
+            ? "linear-gradient(90deg, transparent, #00C896, transparent)"
+            : `linear-gradient(90deg, transparent, ${SIGN_IN_TOKENS.accent}, transparent)`,
         }}
       />
 
-      {/* Header */}
-      <div className="mb-6 space-y-1.5">
+      {/* Header — Stagger 1 */}
+      <div className="mb-6 space-y-1.5 vyron-glass-reveal stagger-1">
         <div className="flex items-center gap-2">
           <span
-            className="text-[10px] font-mono font-bold tracking-wider px-2 py-0.5 rounded border uppercase"
+            className="text-[10px] font-mono font-bold tracking-wider px-2 py-0.5 rounded border uppercase transition-colors"
             style={{
-              color: SIGN_IN_TOKENS.accent,
-              borderColor: `${SIGN_IN_TOKENS.accent}40`,
-              backgroundColor: `${SIGN_IN_TOKENS.accent}12`,
+              color: isSuccess ? "#00C896" : SIGN_IN_TOKENS.accent,
+              borderColor: isSuccess ? "#00C89640" : `${SIGN_IN_TOKENS.accent}40`,
+              backgroundColor: isSuccess ? "#00C89615" : `${SIGN_IN_TOKENS.accent}12`,
             }}
           >
-            {SIGN_IN_TOKENS.themeName}
+            {isSuccess ? "AUTHENTICATED" : SIGN_IN_TOKENS.themeName}
           </span>
           <span className="text-[10px] text-muted-foreground font-mono">Secured AST Access</span>
         </div>
         <h2 className="text-2xl font-bold tracking-tight text-[#F3F7F5]">
-          Welcome Back to VYRON
+          {isSuccess ? "Access Confirmed" : "Welcome Back to VYRON"}
         </h2>
         <p className="text-xs text-[#BAC8C0]">
-          Enter your credentials to access engineering intelligence and digital twin telemetry.
+          {isSuccess
+            ? "Routing to your verified workspace environment..."
+            : "Enter your credentials to access engineering intelligence and digital twin telemetry."}
         </p>
       </div>
 
@@ -162,7 +186,7 @@ export function MidnightCoralSignIn({
 
       {showForgotPassword ? (
         /* Forgot Password View */
-        <div className="space-y-4">
+        <div className="space-y-4 vyron-glass-reveal">
           {forgotSuccess ? (
             <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-center space-y-2">
               <ShieldCheck className="size-8 text-emerald-400 mx-auto" />
@@ -193,7 +217,7 @@ export function MidnightCoralSignIn({
                   value={forgotEmail}
                   onChange={(e) => setForgotEmail(e.target.value)}
                   placeholder="architect@domain.com"
-                  className="bg-[#070C0B] border-[#2A3A35] text-xs text-[#F3F7F5]"
+                  className="bg-[#070C0B] border-[#2A3A35] text-xs text-[#F3F7F5] vyron-focus-highlight"
                   required
                 />
               </div>
@@ -226,8 +250,8 @@ export function MidnightCoralSignIn({
       ) : (
         /* Standard Sign-In Form */
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email Input */}
-          <div className="space-y-1.5">
+          {/* Email Input — Stagger 2 + Effect C Focus Highlight */}
+          <div className="space-y-1.5 vyron-glass-reveal stagger-2">
             <Label htmlFor="signin-email" className="text-xs font-medium text-muted-foreground">
               Work / Academic Email
             </Label>
@@ -239,15 +263,15 @@ export function MidnightCoralSignIn({
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="developer@institution.edu"
-                disabled={loading}
-                className="pl-9 bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-1 focus-visible:ring-[#0F969C]"
+                disabled={loading || isSuccess}
+                className="pl-9 bg-black/40 border-white/10 text-xs text-foreground vyron-focus-highlight"
                 required
               />
             </div>
           </div>
 
-          {/* Password Input */}
-          <div className="space-y-1.5">
+          {/* Password Input — Stagger 3 + Effect C Focus Highlight */}
+          <div className="space-y-1.5 vyron-glass-reveal stagger-3">
             <div className="flex items-center justify-between">
               <Label htmlFor="signin-password" className="text-xs font-medium text-muted-foreground">
                 Password
@@ -268,8 +292,8 @@ export function MidnightCoralSignIn({
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
-                disabled={loading}
-                className="pl-9 pr-9 bg-black/40 border-white/10 text-xs text-foreground focus-visible:ring-1 focus-visible:ring-[#0F969C]"
+                disabled={loading || isSuccess}
+                className="pl-9 pr-9 bg-black/40 border-white/10 text-xs text-foreground vyron-focus-highlight"
                 required
               />
               <button
@@ -283,29 +307,41 @@ export function MidnightCoralSignIn({
             </div>
           </div>
 
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            disabled={loading}
-            className="w-full text-xs font-semibold py-2.5 transition-all shadow-md mt-2 flex items-center justify-center gap-2"
-            style={{
-              backgroundColor: SIGN_IN_TOKENS.accent,
-              color: SIGN_IN_TOKENS.btnForeground,
-              boxShadow: `0 4px 16px -2px ${SIGN_IN_TOKENS.accentGlow}`,
-            }}
-          >
-            {loading ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <>
-                <span>Sign In to VYRON Workspace</span>
-                <ArrowRight className="size-3.5" />
-              </>
-            )}
-          </Button>
+          {/* Submit Button — Stagger 4 */}
+          <div className="vyron-glass-reveal stagger-4">
+            <Button
+              type="submit"
+              disabled={loading || isSuccess}
+              className="w-full text-xs font-semibold py-2.5 transition-all shadow-md mt-2 flex items-center justify-center gap-2"
+              style={{
+                backgroundColor: isSuccess ? "#00C896" : SIGN_IN_TOKENS.accent,
+                color: isSuccess ? "#0B0B0B" : SIGN_IN_TOKENS.btnForeground,
+                boxShadow: isSuccess
+                  ? "0 4px 16px -2px rgba(0, 200, 150, 0.45)"
+                  : `0 4px 16px -2px ${SIGN_IN_TOKENS.accentGlow}`,
+              }}
+            >
+              {loading ? (
+                <div className="flex items-center gap-2">
+                  <Loader2 className="size-4 animate-spin" />
+                  <span>Verifying Credentials...</span>
+                </div>
+              ) : isSuccess ? (
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="size-4 text-emerald-950" />
+                  <span>Verified — Launching...</span>
+                </div>
+              ) : (
+                <>
+                  <span>Sign In to VYRON Workspace</span>
+                  <ArrowRight className="size-3.5" />
+                </>
+              )}
+            </Button>
+          </div>
 
-          {/* OAuth Providers Divider */}
-          <div className="relative my-4">
+          {/* OAuth Providers Divider — Stagger 5 */}
+          <div className="relative my-4 vyron-glass-reveal stagger-5">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-white/10" />
             </div>
@@ -317,15 +353,15 @@ export function MidnightCoralSignIn({
           </div>
 
           {/* OAuth Provider Buttons */}
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-3 gap-2 vyron-glass-reveal stagger-5">
             <Button
               type="button"
               variant="outline"
               size="sm"
-              disabled={loading || Boolean(oauthLoading)}
+              disabled={loading || Boolean(oauthLoading) || isSuccess}
               onClick={() => handleOAuth("google")}
               aria-label="Sign in with Google"
-              className="text-xs border-[#2A3A35] bg-[#070C0B]/60 hover:bg-[#162321] text-[#F3F7F5] flex items-center justify-center gap-1.5 px-2"
+              className="text-xs border-[#2A3A35] bg-[#070C0B]/60 hover:bg-[#162321] text-[#F3F7F5] flex items-center justify-center gap-1.5 px-2 vyron-focus-highlight"
             >
               {oauthLoading === "google" ? (
                 <Loader2 className="size-3.5 animate-spin" />
@@ -356,10 +392,10 @@ export function MidnightCoralSignIn({
               type="button"
               variant="outline"
               size="sm"
-              disabled={loading || Boolean(oauthLoading)}
+              disabled={loading || Boolean(oauthLoading) || isSuccess}
               onClick={() => handleOAuth("github")}
               aria-label="Sign in with GitHub"
-              className="text-xs border-[#2A3A35] bg-[#070C0B]/60 hover:bg-[#162321] text-[#F3F7F5] flex items-center justify-center gap-1.5 px-2"
+              className="text-xs border-[#2A3A35] bg-[#070C0B]/60 hover:bg-[#162321] text-[#F3F7F5] flex items-center justify-center gap-1.5 px-2 vyron-focus-highlight"
             >
               {oauthLoading === "github" ? (
                 <Loader2 className="size-3.5 animate-spin" />
@@ -375,10 +411,10 @@ export function MidnightCoralSignIn({
               type="button"
               variant="outline"
               size="sm"
-              disabled={loading || Boolean(oauthLoading)}
+              disabled={loading || Boolean(oauthLoading) || isSuccess}
               onClick={() => handleOAuth("gitlab")}
               aria-label="Sign in with GitLab"
-              className="text-xs border-[#2A3A35] bg-[#070C0B]/60 hover:bg-[#162321] text-[#F3F7F5] flex items-center justify-center gap-1.5 px-2"
+              className="text-xs border-[#2A3A35] bg-[#070C0B]/60 hover:bg-[#162321] text-[#F3F7F5] flex items-center justify-center gap-1.5 px-2 vyron-focus-highlight"
             >
               {oauthLoading === "gitlab" ? (
                 <Loader2 className="size-3.5 animate-spin" />
@@ -403,9 +439,9 @@ export function MidnightCoralSignIn({
             <button
               type="button"
               onClick={onSwitchToSignUp}
-              className="text-[#FF9A8B] hover:underline font-semibold"
+              className="text-[#6DA5C0] hover:text-[#0F969C] hover:underline font-semibold transition-colors"
             >
-              Create one now (3-Stage)
+              Create one now (Five-Stage Journey)
             </button>
           </div>
 
