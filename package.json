@@ -28,7 +28,10 @@
     "verify:two-phase": "npx tsx \"51 — TESTING PLATFORM/scripts/testing/run-two-phase-verification.mjs\"",
     "test:ather": "node test-ather-conversation-suite.mjs",
     "verify:readme": "node scripts/verify-readme.mjs",
-    "audit:520": "node scripts/audit-master-sdlc-520.mjs"
+    "audit:520": "node scripts/audit-master-sdlc-520.mjs",
+    "loop:verify": "bash ./.loop_verifier.sh",
+    "loop:install-hook": "chmod +x ./.loop_verifier.sh && cp ./.git_pre_commit_gate.sh ./.git/hooks/pre-commit && chmod +x ./.git/hooks/pre-commit",
+    "loop:accept": "bash ./.loop_verifier.sh && git add STATUS.md"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
