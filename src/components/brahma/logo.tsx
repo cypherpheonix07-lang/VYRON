@@ -1,15 +1,18 @@
 import { Link } from "@tanstack/react-router";
 import { Hexagon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export function BrahmaLogo({
   compact,
   to = "/app",
+  className,
 }: {
   compact?: boolean | undefined;
   to?: string | undefined;
+  className?: string | undefined;
 }) {
   return (
-    <Link to={to} className="flex items-center gap-2.5" aria-label="VYRON product showcase">
+    <Link to={to} className={cn("flex items-center gap-2.5", className)} aria-label="VYRON product showcase">
       <span className="relative grid size-8 shrink-0 place-items-center rounded-lg bg-primary/15 text-primary ring-1 ring-primary/30">
         <Hexagon className="size-4" aria-hidden />
       </span>

@@ -78,8 +78,8 @@ export function MidnightCoralSignIn({
     try {
       let res;
       if (provider === "google") res = await authService.signInWithGoogle();
-      else if (provider === "github") res = await authService.signInWithGithub();
-      else res = await authService.signInWithGitlab();
+      else if (provider === "github") res = await authService.signInWithGitHub();
+      else res = await authService.signInWithGitLab();
 
       if (!res.ok) {
         setFormError(res.error?.message || `OAuth sign-in with ${provider} failed.`);
@@ -412,8 +412,8 @@ export function MidnightCoralSignIn({
           {/* Offline / Demo God-Mode Access */}
           <div className="pt-2 border-t border-[#2A3A35]/60">
             <DemoAccessButton
-              onSelect={(demoSession) => {
-                toast.success(`Access granted as ${demoSession.user.name} (${demoSession.user.role})`);
+              onSelect={(role) => {
+                toast.success(`Access granted as demo ${role}`);
                 onSuccess();
               }}
             />

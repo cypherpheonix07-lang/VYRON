@@ -215,7 +215,7 @@ export function SubpageWorkspace({
         </div>
 
         {/* TAB 1: PRIMARY OPERATIONAL TABLE */}
-        <TabsContent value={def.defaultTabs[0]} className="space-y-3 m-0">
+        <TabsContent value={def.defaultTabs[0] ?? "overview"} className="space-y-3 m-0">
           <Card className="bg-card/70 border-border/70 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">

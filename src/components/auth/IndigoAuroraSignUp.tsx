@@ -62,8 +62,8 @@ export function IndigoAuroraSignUp({
     try {
       let res;
       if (provider === "google") res = await authService.signInWithGoogle();
-      else if (provider === "github") res = await authService.signInWithGithub();
-      else res = await authService.signInWithGitlab();
+      else if (provider === "github") res = await authService.signInWithGitHub();
+      else res = await authService.signInWithGitLab();
 
       if (!res.ok) {
         setStageError(res.error?.message || `OAuth sign-up with ${provider} failed.`);

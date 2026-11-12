@@ -27,8 +27,8 @@ export type SupportedOAuthProvider = "google" | "github" | "gitlab";
 
 export async function handleOAuth(provider: "google" | "github" | "gitlab") {
   if (provider === "google") return authService.signInWithGoogle();
-  if (provider === "github") return authService.signInWithGithub();
-  return authService.signInWithGitlab();
+  if (provider === "github") return authService.signInWithGitHub();
+  return authService.signInWithGitLab();
 }
 
 function AuthPage() {

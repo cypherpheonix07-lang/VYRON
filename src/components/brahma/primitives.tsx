@@ -269,7 +269,16 @@ export function ErrorState({
   );
 }
 
-export function LoadingSkeleton({ variant = "cards" }: { variant?: "cards" | "table" | "chart" }) {
+export function LoadingSkeleton({
+  variant,
+  className,
+}: {
+  variant?: "cards" | "table" | "chart";
+  className?: string;
+}) {
+  if (className) {
+    return <Skeleton className={className} />;
+  }
   if (variant === "table") {
     return (
       <Card className="surface">

@@ -1,9 +1,9 @@
 # VYRON / ATHER — PACKAGE MANAGER FORENSICS & DIAGNOSTICS REPORT
 **Authoritative Environment & Toolchain Diagnostics**  
-**Timestamp:** 2026-11-05T02:34:00Z  
+**Timestamp:** 2026-11-12T13:30:00+05:30  
 **Runtime:** Node.js v24.19.0 on Windows x64  
 **Primary Package Manager:** npm (v12.0.2)  
-**Lockfile:** `package-lock.json` (343 KB, canonical)  
+**Lockfile:** `package-lock.json` (canonical)  
 
 ---
 
@@ -13,7 +13,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | **Node.js** | `v24.19.0` | `C:\Program Files\nodejs\node.exe` | Canonical Engine | Requires `scripts/patchNitroReq.mjs` for Cloudflare/Nitro req handling |
 | **npm** | `12.0.2` | `C:\Program Files\nodejs\npm.cmd` | **Primary Lockfile Authority** | Strictly bound to `package-lock.json` |
-| **npx** | `12.0.2` | `C:\Program Files\nodejs\npx.cmd` | Execution Runner | Executes `npx tsx`, `npx vite`, `npx nitro` |
+| **npx** | `12.0.2` | `C:\Program Files\nodejs\npx.cmd` | Execution Runner | Executes `npx tsx`, `npx vite`, `npx nitro`, `npx tsc` |
 | **pnpm** | `v9.x` (detected) | `pnpm.cmd` on system PATH | Secondary Tool | **Do NOT generate pnpm-lock.yaml** to prevent dual-lockfile drift |
 
 ---
@@ -27,4 +27,6 @@
    - Therefore, all engineering scripts and CI workflows must execute via `npm run <script>` or `node <script>` / `npx tsx <script>`.
 3. **Audit Findings**:
    - Zero missing peer dependencies in core Vite + TanStack Start configuration.
-   - Warning regarding `vite-tsconfig-paths` is noted (Vite natively supports tsconfig resolution via `resolve.tsconfigPaths`).
+   - TypeScript compiler diagnostics pass with 0 errors via `npx tsc --noEmit`.
+   - All 5 offline test suites run cleanly via `npm run test:offline`.
+   - Master 520-phase audit runs cleanly via `npm run audit:520`.

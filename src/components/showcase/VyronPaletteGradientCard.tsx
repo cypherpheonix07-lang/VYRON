@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 interface VyronPaletteGradientCardProps {
   themeId: VyronTheme;
   isActive?: boolean;
-  onSelect?: (themeId: VyronTheme) => void;
+  onSelect?: ((themeId: VyronTheme) => void) | undefined;
   className?: string;
 }
 
