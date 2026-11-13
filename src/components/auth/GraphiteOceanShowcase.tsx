@@ -145,17 +145,17 @@ export function GraphiteOceanShowcase() {
       <div className="relative z-10 my-8">
         <div className="rounded-2xl border border-white/10 bg-[#1A1A1A]/60 p-5 backdrop-blur-xl shadow-[0_15px_35px_rgba(15,150,156,0.2)] relative overflow-hidden glass-3d-surface">
           {/* Top Window Bar */}
-          <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/5 text-[11px] font-mono text-muted-foreground">
-            <div className="flex items-center gap-1.5">
-              <div className="size-2.5 rounded-full bg-red-500/70" />
-              <div className="size-2.5 rounded-full bg-amber-500/70" />
-              <div className="size-2.5 rounded-full bg-emerald-500/70" />
-              <span className="ml-2 text-foreground font-semibold">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-white/5 text-[11px] font-mono text-muted-foreground">
+            <div className="flex items-center gap-1.5 min-w-0">
+              <div className="size-2.5 rounded-full bg-red-500/70 shrink-0" />
+              <div className="size-2.5 rounded-full bg-amber-500/70 shrink-0" />
+              <div className="size-2.5 rounded-full bg-emerald-500/70 shrink-0" />
+              <span className="ml-1 sm:ml-2 text-foreground font-semibold truncate text-[10px] sm:text-xs">
                 vyron.engine::telemetry_fabric
               </span>
             </div>
             {/* Zero-Fiction Grounded Label */}
-            <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
+            <span className="text-[9px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30 whitespace-nowrap shrink-0">
               ● SAMPLE BENCHMARK (ZERO-FICTION)
             </span>
           </div>

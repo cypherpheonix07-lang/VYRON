@@ -695,7 +695,7 @@ function Dashboard() {
         title="Engineering intelligence overview"
         description="Portfolio-wide health, security posture and delivery risk, recalculated on every analysis run."
         actions={
-          <>
+          <div className="flex flex-wrap items-center gap-2 sm:justify-end">
             <Tabs value={state} onValueChange={(v) => setState(v as ViewState)}>
               <TabsList aria-label="Preview dashboard states">
                 <TabsTrigger value="loaded">Loaded</TabsTrigger>
@@ -704,16 +704,6 @@ function Dashboard() {
                 <TabsTrigger value="error">Error</TabsTrigger>
               </TabsList>
             </Tabs>
-
-            {/* EXIT WORKSPACE ACTION */}
-            {activeProject && (
-              <WorkspaceExitButton
-                projectId={activeProject.id}
-                projectName={activeProject.name}
-                variant="outline"
-                className="border-border text-xs"
-              />
-            )}
 
             {/* CONTEXT-SENSITIVE RUN ANALYSIS BUTTON (WORKSTREAM I & K) */}
             <Button
@@ -742,12 +732,12 @@ function Dashboard() {
               RUN ANALYSIS
             </Button>
 
-            <Button asChild variant="outline">
+            <Button asChild variant="outline" size="sm">
               <Link to="/app/projects/new">
-                <PlusCircle className="size-4" aria-hidden /> New project
+                <PlusCircle className="size-4 mr-1" aria-hidden /> New project
               </Link>
             </Button>
-          </>
+          </div>
         }
       />
 

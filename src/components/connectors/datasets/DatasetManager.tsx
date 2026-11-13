@@ -186,6 +186,9 @@ export const DatasetManager: React.FC<{ projectId: string }> = ({ projectId }) =
           </p>
           <div className="mt-3 flex gap-2">
             <input
+              id="kaggle-dataset-slug"
+              name="kaggleDatasetSlug"
+              aria-label="Kaggle dataset slug"
               value={kaggleSlug}
               onChange={(e) => setKaggleSlug(e.target.value)}
               className="w-full rounded-lg border border-[#6DA5C0]/40 bg-[#05161A]/80 px-2.5 py-1.5 font-mono text-xs text-[#F8FAFC]"
@@ -210,7 +213,7 @@ export const DatasetManager: React.FC<{ projectId: string }> = ({ projectId }) =
             <span className="mt-0.5 font-mono text-[10px] text-[#94A3B8]">
               Auto-runs malware scan & schema inference
             </span>
-            <input type="file" accept=".csv,.json,.xlsx" className="hidden" />
+            <input id="custom-dataset-file" name="datasetFile" aria-label="Upload dataset file" type="file" accept=".csv,.json,.xlsx" className="hidden" />
           </label>
         </GlassCard3D>
 
@@ -226,6 +229,9 @@ export const DatasetManager: React.FC<{ projectId: string }> = ({ projectId }) =
           </div>
           <div className="mt-3 flex items-center gap-2">
             <input
+              id="synthetic-row-count"
+              name="syntheticRows"
+              aria-label="Synthetic row count"
               type="number"
               min={10}
               max={10000}

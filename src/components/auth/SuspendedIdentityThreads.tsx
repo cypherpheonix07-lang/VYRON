@@ -26,6 +26,7 @@ export function SuspendedIdentityThreads({
     {
       id: "signin" as const,
       title: "1. SIGN IN",
+      shortTitle: "1. SIGN IN",
       subtitle: "Identity & entry",
       accent: SUSPENDED_THREAD_TOKENS.thread1.accent,
       glow: SUSPENDED_THREAD_TOKENS.thread1.glow,
@@ -35,6 +36,7 @@ export function SuspendedIdentityThreads({
     {
       id: "signup" as const,
       title: "2. CREATE ACCOUNT",
+      shortTitle: "2. SIGN UP",
       subtitle: "5-stage journey",
       accent: SUSPENDED_THREAD_TOKENS.thread2.accent,
       glow: SUSPENDED_THREAD_TOKENS.thread2.glow,
@@ -44,6 +46,7 @@ export function SuspendedIdentityThreads({
     {
       id: "workspace" as const,
       title: "3. CHOOSE WORKSPACE",
+      shortTitle: "3. WORKSPACE",
       subtitle: "Role activation",
       accent: SUSPENDED_THREAD_TOKENS.thread3.accent,
       glow: SUSPENDED_THREAD_TOKENS.thread3.glow,
@@ -135,11 +138,12 @@ export function SuspendedIdentityThreads({
                     </div>
                     <span
                       className={cn(
-                        "text-[10px] sm:text-xs font-mono font-bold tracking-wider truncate",
+                        "text-[9px] sm:text-xs font-mono font-bold tracking-wider truncate",
                         isActive ? "text-foreground" : "text-muted-foreground",
                       )}
                     >
-                      {thread.title}
+                      <span className="hidden sm:inline">{thread.title}</span>
+                      <span className="inline sm:hidden">{thread.shortTitle}</span>
                     </span>
                   </div>
 
@@ -150,7 +154,7 @@ export function SuspendedIdentityThreads({
                   )}
                 </div>
 
-                <p className="text-[9px] sm:text-[10px] text-muted-foreground/80 truncate pl-7">
+                <p className="hidden sm:block text-[9px] sm:text-[10px] text-muted-foreground/80 truncate pl-7">
                   {thread.subtitle}
                 </p>
               </button>

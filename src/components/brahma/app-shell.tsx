@@ -825,7 +825,7 @@ function NavList({
               >
                 <span className="flex items-center gap-2 min-w-0">
                   <DomainIcon className="h-3.5 w-3.5 text-primary/70 shrink-0" />
-                  <span className={cn("truncate", hasActiveChild ? "text-primary font-bold" : "")}>
+                  <span className={cn("truncate", hasActiveChild ? "text-primary font-bold" : "")} title={domain.label}>
                     {domain.label}
                   </span>
                 </span>
@@ -1740,7 +1740,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <DemoBanner />
 
         {/* HEADER */}
-        <header className="sticky top-0 z-30 border-b border-white/10 bg-[#0B0B0B]/65 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.4)] glass-3d-surface">
+        <header className="sticky top-0 z-30 border-b border-white/10 bg-[#0B0B0B]/65 backdrop-blur-xl shadow-[0_4px_20px_rgba(0,0,0,0.4)] glass-3d-surface max-w-full overflow-x-clip">
           <div className="flex items-center gap-2 px-3 py-2.5 sm:px-5">
             {/* MOBILE SHEET TRIGGER */}
             <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -1837,7 +1837,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             {/* GLOBAL SEARCH IN HEADER WITH AUTOCOMPLETE RESULTS */}
             <div
               ref={searchContainerRef}
-              className="relative hidden min-w-0 flex-1 md:block max-w-md"
+              className="relative hidden min-w-0 flex-1 xl:block max-w-xs 2xl:max-w-md"
             >
               <form onSubmit={handleSearchSubmit}>
                 <Search
@@ -1845,6 +1845,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                   aria-hidden
                 />
                 <Input
+                  id="global-header-search"
+                  name="globalSearch"
                   value={searchQuery}
                   onChange={(e) => {
                     setSearchQuery(e.target.value);
@@ -1922,16 +1924,16 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
 
             {/* HEADER RIGHT ACTIONS */}
-            <div className="ml-auto flex shrink-0 items-center gap-2">
+            <div className="ml-auto flex items-center gap-1.5 sm:gap-2 min-w-0">
               {/* Prominent RUN ANALYSIS Action */}
               <Button
                 asChild
                 size="sm"
-                className="h-8 gap-1.5 bg-gradient-to-r from-teal-600 via-teal-500 to-cyan-600 hover:opacity-95 text-white font-bold text-xs shadow-md shadow-primary/25 border border-white/20"
+                className="h-8 gap-1.5 bg-gradient-to-r from-teal-600 via-teal-500 to-cyan-600 hover:opacity-95 text-white font-bold text-xs shadow-md shadow-primary/25 border border-white/20 shrink-0"
               >
                 <Link to="/app/analysis">
                   <Play className="size-3.5 fill-current text-white" />
-                  <span>Run Analysis</span>
+                  <span className="hidden sm:inline">Run Analysis</span>
                 </Link>
               </Button>
 
@@ -1939,11 +1941,11 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Button
                 asChild
                 size="sm"
-                className="h-8 gap-1.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/25 text-xs font-semibold"
+                className="h-8 gap-1.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/25 text-xs font-semibold shrink-0"
               >
                 <Link to="/app/projects/new">
                   <PlusCircle className="size-3.5" />
-                  <span className="hidden md:inline">New Project</span>
+                  <span className="hidden xl:inline">New Project</span>
                   {draftCount > 0 && (
                     <span className="px-1.5 py-0.2 rounded-full bg-amber-500/25 text-amber-300 border border-amber-500/50 text-[10px] font-mono">
                       {draftCount}
@@ -1953,11 +1955,11 @@ export function AppShell({ children }: { children: ReactNode }) {
               </Button>
 
               {/* Workspace Exit Button */}
-              <WorkspaceExitButton />
+              <WorkspaceExitButton className="shrink-0" />
 
               {/* FIGMA NEON SPECTRUM STATUS */}
               <div
-                className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-sky-500/40 bg-sky-950/30 text-[10px] font-mono text-sky-300 shadow-[0_0_12px_rgba(0,180,216,0.2)] select-none"
+                className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-sky-500/40 bg-sky-950/30 text-[10px] font-mono text-sky-300 shadow-[0_0_12px_rgba(0,180,216,0.2)] select-none shrink-0"
                 title="Figma Design Tokens Spectrum: Neon Blue variations, Crimson Red, Dark Green, and Solar Gold"
               >
                 <div className="flex items-center gap-1">
@@ -1976,7 +1978,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-muted-foreground hover:text-foreground hidden sm:inline-flex"
+                className="h-8 w-8 text-muted-foreground hover:text-foreground hidden 2xl:inline-flex shrink-0"
                 onClick={() => setShortcutsOpen(true)}
                 title="Keyboard Shortcuts (?)"
               >
@@ -1987,7 +1989,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 text-muted-foreground hover:text-foreground hidden sm:inline-flex"
+                className="h-8 w-8 text-muted-foreground hover:text-foreground hidden 2xl:inline-flex shrink-0"
                 onClick={() => {
                   setPaletteOpen(true);
                   setPaletteFilter("");
@@ -2006,11 +2008,11 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-8 gap-1.5 px-2 text-xs font-mono text-muted-foreground hover:text-foreground"
+                    className="h-8 gap-1.5 px-2 text-xs font-mono text-muted-foreground hover:text-foreground shrink-0"
                     title="Switch Five-Palette Theme Preset"
                   >
                     <Palette className="size-3.5 text-primary" />
-                    <span className="hidden lg:inline text-[11px] font-semibold">Palette</span>
+                    <span className="hidden 2xl:inline text-[11px] font-semibold">Palette</span>
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 bg-zinc-950 border-border">

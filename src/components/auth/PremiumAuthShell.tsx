@@ -71,7 +71,7 @@ export function PremiumAuthShell({ initialMode = "signin" }: PremiumAuthShellPro
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 min-h-screen">
         {/* Left Interactive Authentication Column */}
-        <div className="flex flex-col justify-between p-4 sm:p-8 lg:p-12 overflow-y-auto relative z-10">
+        <div className="flex flex-col justify-between p-4 sm:p-6 lg:p-8 xl:p-12 overflow-y-auto relative z-10">
           {/* Header Branding */}
           <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-white/5">
             <div className="flex items-center gap-3">

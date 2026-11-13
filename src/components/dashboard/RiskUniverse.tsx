@@ -197,7 +197,7 @@ export function RiskUniverse() {
     <div className="space-y-4">
       {/* HEADER CONTROLS: CATEGORIES & VIEW SWITCHER */}
       <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-lg border border-border/40 bg-zinc-950/40 text-xs">
-        <div className="flex items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1">
           <Filter className="size-3 text-muted-foreground mr-1" />
           {["ALL", "Security", "Complexity", "Reliability", "Compliance"].map((cat) => (
             <Button
@@ -212,7 +212,7 @@ export function RiskUniverse() {
           ))}
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex flex-wrap items-center gap-1">
           <Button
             variant={viewMode === "distribution" ? "default" : "outline"}
             size="sm"
