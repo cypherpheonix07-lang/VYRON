@@ -253,7 +253,10 @@ export const NAV_DOMAINS: NavDomain[] = [
     items: [
       { to: "/app/integrations", label: "Ecosystem Control Plane", icon: Cable, exact: true },
       { to: "/app/github", label: "GitHub Mirror & App", icon: Github, exact: false },
-      { to: "/app/connectors", label: "MCP Connectors", icon: Cable, exact: false },
+      { to: "/app/connectors", label: "MCP Connectors Hub", icon: Cable, exact: false },
+      { to: "/connectors/github", label: "S27 GitHub Hub", icon: Github, exact: false },
+      { to: "/connectors/integrations", label: "S28 Integrations Marketplace", icon: Network, exact: false },
+      { to: "/connectors/datasets", label: "S29 Dataset Manager", icon: Database, exact: false },
       { to: "/app/plugins", label: "Plugin Center", icon: Puzzle, exact: false },
       { to: "/app/api-gateway", label: "Enterprise API Gateway", icon: Server, exact: false },
       { to: "/app/datasets", label: "Kaggle & Data Sources", icon: Database, exact: false },

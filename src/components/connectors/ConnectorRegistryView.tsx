@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Link } from "@tanstack/react-router";
 import {
   Plug,
   Shield,
@@ -12,6 +13,9 @@ import {
   GitBranch,
   CheckCircle2,
   Sparkles,
+  Github,
+  Database,
+  Network,
 } from "lucide-react";
 import { connectorStore, ConnectorState, AuditLogEntry } from "@/state/connectors/connectorStore";
 import { Button } from "@/components/ui/button";
@@ -200,6 +204,41 @@ export function ConnectorRegistryView({ className }: { className?: string }) {
           <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-primary/20 text-primary">
             {connectors.filter((c) => c.isEnabled).length} / {connectors.length} ACTIVE
           </span>
+        </div>
+      </div>
+
+      {/* Part G: S27–S29 Connector Intelligence Navigation Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-2xl border border-white/10 bg-[#0B0B0B]/75 backdrop-blur-xl shadow-md">
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[10px] font-bold uppercase tracking-wider text-[#6DA5C0] px-2 py-0.5 rounded bg-[#0F969C]/15 border border-[#0F969C]/30">
+            DOMAIN G
+          </span>
+          <span className="text-xs font-semibold text-foreground">
+            Connector Intelligence & Ingestion Platforms:
+          </span>
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            to="/connectors/github"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.03] text-xs font-semibold hover:border-[#0F969C]/60 hover:text-white hover:bg-[#0F969C]/10 transition-all text-[#94A3B8]"
+          >
+            <Github className="size-3.5 text-[#0F969C]" />
+            <span>S27 GitHub Hub</span>
+          </Link>
+          <Link
+            to="/connectors/integrations"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.03] text-xs font-semibold hover:border-[#0F969C]/60 hover:text-white hover:bg-[#0F969C]/10 transition-all text-[#94A3B8]"
+          >
+            <Network className="size-3.5 text-[#0F969C]" />
+            <span>S28 Integrations Marketplace</span>
+          </Link>
+          <Link
+            to="/connectors/datasets"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-white/10 bg-white/[0.03] text-xs font-semibold hover:border-[#0F969C]/60 hover:text-white hover:bg-[#0F969C]/10 transition-all text-[#94A3B8]"
+          >
+            <Database className="size-3.5 text-[#0F969C]" />
+            <span>S29 Dataset Manager</span>
+          </Link>
         </div>
       </div>
 
